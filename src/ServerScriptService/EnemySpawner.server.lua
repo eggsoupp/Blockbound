@@ -48,6 +48,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
+
+-- Islands are home: nothing spawns there on its own. The enemy system itself
+-- still runs, so a boss summoned or an enemy spawned by command still works.
+if require(Shared:WaitForChild("PlaceConfig")).isIsland() then
+	return
+end
+
 local EnemyConfig = require(Shared:WaitForChild("Enemies"):WaitForChild("EnemyConfig"))
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
 local BiomeMap = require(Shared.Terrain:WaitForChild("BiomeMap"))

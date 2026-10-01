@@ -14,6 +14,7 @@
 	  Terrain.StrataConfig       what the world is made of as you go down
 	  Terrain.OreConfig          which ores exist and at what depths
 	  Terrain.BiomeMap           position -> height + biome
+	  Terrain.IslandShape        the same, for the Island place (see PlaceConfig)
 	  Terrain.StructureRegistry  position -> what gets built there
 	  Terrain.OreRegistry        position -> which ore, if any
 	  Terrain.ChunkEdits         what players have changed
@@ -58,6 +59,16 @@ local TerrainMesher = require(TerrainShared:WaitForChild("TerrainMesher"))
 local LandformConfig = require(TerrainShared:WaitForChild("LandformConfig"))
 local BlockConfig = require(Shared:WaitForChild("Blocks"):WaitForChild("BlockConfig"))
 local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
+local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
+local IslandShape = require(TerrainShared:WaitForChild("IslandShape"))
+
+--[[
+	Where columns come from: the open world's BiomeMap, or in the Island place
+	the island template. Both answer sampleColumn with the same six values, so
+	nothing below this line knows which place it is in. TerrainConfig and
+	OreConfig make the matching size, depth and ore adjustments themselves.
+]]
+local ColumnSource = if PlaceConfig.isIsland() then IslandShape else BiomeMap
 
 local TerrainManager = {}
 
@@ -368,7 +379,7 @@ local function getGeneratedColumn(blockX, blockZ)
 	end
 
 	local biome, top, under, variant, water
-	height, biome, top, under, variant, water = BiomeMap.sampleColumn(blockX, blockZ)
+	height, biome, top, under, variant, water = ColumnSource.sampleColumn(blockX, blockZ)
 
 	genHeight[key] = height
 	genBiome[key] = biome
@@ -2904,7 +2915,7 @@ function TerrainManager:Init()
 		baseSeed = math.floor(os.clock() * 1000000) % 2147483647
 	end
 
-	BiomeMap.init(baseSeed)
+	ColumnSource.init(baseSeed)
 	OreRegistry.init(baseSeed)
 	ensureGeneratedTemplates()
 
@@ -2939,6 +2950,10 @@ function TerrainManager:Init()
 		end,
 
 		isInWorld = isBlockInWorld,
+
+		-- Optional: the island keeps its spawn clearing and beach free of
+		-- trees. BiomeMap has no such rule and leaves this nil.
+		allowStructureAt = ColumnSource.allowStructureAt,
 	})
 
 	warnForMissingTemplates()
@@ -3159,7 +3174,7 @@ function TerrainManager:GetStats()
 		-- retuned, and "how much of this is water" and "how tall did it get"
 		-- are the two questions a tuning pass keeps asking.
 		surface = surfaceStats(),
-		biome = BiomeMap.getStats(),
+		biome = ColumnSource.getStats(),
 		structures = StructureRegistry.getStats(),
 		ores = OreRegistry.getStats(),
 		edits = ChunkEdits.getStats(),
@@ -3288,7 +3303,7 @@ function TerrainManager:_FlushAll(alsoDropPools)
 	table.clear(oldWater)
 	oldGenCount = 0
 
-	BiomeMap.clearCaches()
+	ColumnSource.clearCaches()
 
 	if alsoDropPools then
 		for name, pool in pairs(partPool) do

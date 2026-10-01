@@ -191,6 +191,23 @@ OreConfig.Definitions = {
 OreConfig.Order = { "Coal", "Copper", "Iron", "Gold", "Magma", "Mythril", "Void" }
 
 --[[
+	Set of ore ids allowed to GENERATE, or nil for all of them. Ores left out
+	are still registered as blocks - one carried in from elsewhere still mines
+	and drops normally - they just never appear in the ground.
+
+	nil in the open world. The Island place sets it from IslandConfig.Ores, so
+	rare ores stay something you go out into the world for.
+]]
+OreConfig.GenerateOnly = nil
+
+do
+	local PlaceConfig = require(script.Parent.Parent:WaitForChild("PlaceConfig"))
+	if PlaceConfig.isIsland() then
+		OreConfig.GenerateOnly = require(script.Parent:WaitForChild("IslandConfig")).Ores
+	end
+end
+
+--[[
 	Structural sanity check. Runs at init.
 ]]
 function OreConfig.validate()

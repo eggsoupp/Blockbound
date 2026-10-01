@@ -29,3 +29,14 @@ Extensions set the class: `.server.lua` = Script, `.client.lua` = LocalScript, `
 Sync is one-way (files → Studio). Edit scripts here, not in Studio, or your Studio edits will be overwritten.
 
 New scripts need an entry in `default.project.json` (or put them under a folder you map with `$path`).
+
+## Places
+
+BlockBound is one game with two places, both synced from this same project:
+
+- **World**: the procedurally generated open world (start place).
+- **Island**: each player's own persistent island, one private server per island.
+
+`src/ReplicatedStorage/Shared/PlaceConfig.lua` holds both Place IDs and decides which place the code is running in. Systems that only belong in one place check `PlaceConfig.isIsland()`. To test the island in Studio without publishing, add a string attribute `PlaceKind` = `Island` to Workspace (Studio only; ignored in live servers).
+
+The island's shape and the terrain overrides it needs live in `src/ReplicatedStorage/Shared/Terrain/IslandConfig.lua`.

@@ -295,6 +295,28 @@ TerrainConfig.CastStructureShadows = true
 TerrainConfig.BlockFallbackOrder = { "Dirt", "Grass", "Sand", "Snow", "Sandstone", "Water" }
 
 -- ===========================================================================
+-- ISLAND PLACE
+-- ===========================================================================
+
+--[[
+	In the Island place the same engine builds one small island instead of the
+	open world: a far smaller grid, a shallower floor and a fixed seed, so every
+	island's untouched ground is identical and only players' changes need to be
+	saved. The values live in IslandConfig.Terrain.
+
+	Applied here, before anything is derived, so the client and every server
+	module read one consistent set of numbers.
+]]
+local PlaceConfig = require(script.Parent.Parent:WaitForChild("PlaceConfig"))
+if PlaceConfig.isIsland() then
+	local IslandConfig = require(script.Parent:WaitForChild("IslandConfig"))
+	for key, value in pairs(IslandConfig.Terrain) do
+		assert(TerrainConfig[key] ~= nil, "[TerrainConfig] IslandConfig.Terrain sets unknown key " .. key)
+		TerrainConfig[key] = value
+	end
+end
+
+-- ===========================================================================
 -- DERIVED
 -- ===========================================================================
 

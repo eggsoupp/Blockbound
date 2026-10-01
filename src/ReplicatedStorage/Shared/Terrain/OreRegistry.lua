@@ -125,29 +125,10 @@ local function buildTables()
 	local defaultHost = StrataConfig.getDeepBlock()
 	local multiplier = OreConfig.GlobalDensityMultiplier
 
-	for _, name in ipairs(order) do
+	local generateOnly = OreConfig.GenerateOnly
+
+	for rank, name in ipairs(order) do
 		local def = OreConfig.Definitions[name]
-
-		oreCount += 1
-		oreBlock[oreCount] = def.block
-		oreMinDepth[oreCount] = def.minDepth
-		orePeakDepth[oreCount] = def.peakDepth
-		oreMaxDepth[oreCount] = def.maxDepth
-		oreCellChance[oreCount] = math.min(1, def.cellChance * multiplier)
-		oreInvVeinSize[oreCount] = 1 / def.veinSize
-		oreFillRatio[oreCount] = def.fillRatio
-		oreHosts[oreCount] = def.hosts or { [defaultHost] = true }
-
-		-- Distinct salt per ore so two ores never share a vein layout. The
-		-- stride of 2 leaves room for the fill hash at salt + 1.
-		oreSalt[oreCount] = 1000 + oreCount * 2
-
-		if def.minDepth < globalMinDepth then
-			globalMinDepth = def.minDepth
-		end
-		if def.maxDepth > globalMaxDepth then
-			globalMaxDepth = def.maxDepth
-		end
 
 		-- An ore block is not named after the item it yields, and is tougher than
 		-- the rock around it. Tell BlockConfig both, rather than making mining
@@ -161,6 +142,35 @@ local function buildTables()
 		-- one gets built. An authored part in TerrainAssets.Blocks still wins.
 		if def.appearance then
 			BlockConfig.registerGenerated(def.block, def.appearance)
+		end
+
+		-- Registered above either way, so an ore that does not generate here is
+		-- still a real block if one is carried in. See OreConfig.GenerateOnly.
+		if generateOnly and not generateOnly[name] then
+			continue
+		end
+
+		oreCount += 1
+		oreBlock[oreCount] = def.block
+		oreMinDepth[oreCount] = def.minDepth
+		orePeakDepth[oreCount] = def.peakDepth
+		oreMaxDepth[oreCount] = def.maxDepth
+		oreCellChance[oreCount] = math.min(1, def.cellChance * multiplier)
+		oreInvVeinSize[oreCount] = 1 / def.veinSize
+		oreFillRatio[oreCount] = def.fillRatio
+		oreHosts[oreCount] = def.hosts or { [defaultHost] = true }
+
+		-- Distinct salt per ore so two ores never share a vein layout. The
+		-- stride of 2 leaves room for the fill hash at salt + 1. Keyed on the
+		-- ore's rank in the full list, so filtering ores out never moves the
+		-- veins of the ones that remain.
+		oreSalt[oreCount] = 1000 + rank * 2
+
+		if def.minDepth < globalMinDepth then
+			globalMinDepth = def.minDepth
+		end
+		if def.maxDepth > globalMaxDepth then
+			globalMaxDepth = def.maxDepth
 		end
 	end
 end

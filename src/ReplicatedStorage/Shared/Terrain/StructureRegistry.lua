@@ -601,6 +601,7 @@ local function getCandidates(cx, cz)
 								blockX >= minBlockX and blockX <= maxBlockX
 								and blockZ >= minBlockZ and blockZ <= maxBlockZ
 								and options.isInWorld(blockX, blockZ)
+								and (options.allowStructureAt == nil or options.allowStructureAt(blockX, blockZ))
 							then
 								local surfaceY, biome, variant, waterTop, surfaceBlock =
 									options.getColumn(blockX, blockZ)
@@ -1195,6 +1196,8 @@ end
 	                       is what `surfaces` is checked against; a provider
 	                       that does not report it simply cannot use `surfaces`.
 	  isInWorld            function(blockX, blockZ) -> boolean
+	  allowStructureAt     optional function(blockX, blockZ) -> boolean; a
+	                       structure is only ever rooted where it says true
 	}
 ]]
 function StructureRegistry.init(opts)

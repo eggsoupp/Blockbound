@@ -258,6 +258,12 @@
           },
           "LandformConfig": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/LandformConfig.lua"
+          },
+          "IslandConfig": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/IslandConfig.lua"
+          },
+          "IslandShape": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/IslandShape.lua"
           }
         },
         "Blocks": {
@@ -457,6 +463,9 @@
         },
         "Permissions": {
           "$path": "src/ReplicatedStorage/Shared/Permissions.lua"
+        },
+        "PlaceConfig": {
+          "$path": "src/ReplicatedStorage/Shared/PlaceConfig.lua"
         }
       }
     },

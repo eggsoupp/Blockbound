@@ -1,0 +1,17 @@
+# Place files live outside the repo; never commit binaries/exports here
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+*.rbxlx.lock
+*.rbxm
+*.rbxmx
+
+# Rojo / tooling output
+sourcemap.json
+/build/
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/

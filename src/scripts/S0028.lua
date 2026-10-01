@@ -1,0 +1,98 @@
+--[[
+	EnemyDrops
+
+	What each enemy leaves behind. One entry per enemy, keyed by the same name
+	as Shared.Enemies.EnemyConfig.Definitions.
+
+	  item     a key in ItemDefinitions
+	  chance   0..1, rolled per kill, per line
+	  min/max  how many, inclusive, when it does drop
+
+	Every line is rolled independently, so an enemy can drop all of its table,
+	some of it, or nothing.
+
+	WHAT THIS FILE USED TO BE
+
+	Four rows naming items and enemies that do not exist - VoidReaver from a
+	"Void Overlord", a FlameHammer from an "Inferno Dragon" - in a shape nothing
+	read, keyed by the ITEM rather than by the creature. It was a sketch of a
+	loot system from before there were enemies to hang it on, and nothing ever
+	required it. It is now keyed by the enemy, because that is the question the
+	code actually asks: something died, what does it leave?
+
+	THE CONTENTS ARE PLACEHOLDER AND SAY SO
+
+	Elias asked for wood off a slime "just for the sake of testing", and that is
+	what this is: a real drop pipeline with a deliberately silly table on the
+	end of it. Slimes do not carry logs. Change the rows; the pipeline does not
+	care what is in them.
+
+	Read by ServerScriptService.EnemyService, which rolls this on a kill, and by
+	nothing else - it is in ReplicatedStorage rather than ServerScriptService so
+	the client could show a "drops" list later without a remote for it.
+]]
+
+local EnemyDrops = {}
+
+EnemyDrops.Tables = {
+	--[[
+		Both slimes drop the same thing for now.
+
+		Common on purpose: this is the drop being used to prove the projectile,
+		the trail colour and the arrival line all work, and a one-in-fifty drop
+		would take a long afternoon to see twice.
+	]]
+	BlueSlime = {
+		{ item = "Wood", chance = 0.8, min = 1, max = 2 },
+	},
+
+	GreenSlime = {
+		{ item = "Wood", chance = 0.8, min = 1, max = 2 },
+	},
+
+	--[[
+		Nothing yet.
+
+		Deliberately empty rather than absent, so that "the Ghost has no drops"
+		is a decision somebody wrote down and not an entry somebody forgot.
+	]]
+	Ghost = {},
+
+	-- A boss should be worth the fight. Guaranteed, and a lot of it: the
+	-- quantities are the only thing separating this from farming slimes.
+	SlimeEmperor = {
+		{ item = "Wood", chance = 1, min = 20, max = 32 },
+	},
+}
+
+--[[
+	Rolls one enemy's table.
+
+	Returns an array of { item, amount }, which may be empty. The random source
+	is passed in rather than made here so a caller that wants a reproducible
+	kill - a test, a seeded replay - can have one.
+]]
+function EnemyDrops.roll(enemyName: string, random: Random): { { item: string, amount: number } }
+	local rows = EnemyDrops.Tables[enemyName]
+	local dropped = {}
+
+	if type(rows) ~= "table" then
+		return dropped
+	end
+
+	for _, row in ipairs(rows) do
+		if random:NextNumber() <= (row.chance or 0) then
+			local low = math.max(1, math.floor(row.min or 1))
+			local high = math.max(low, math.floor(row.max or low))
+
+			table.insert(dropped, {
+				item = row.item,
+				amount = random:NextInteger(low, high),
+			})
+		end
+	end
+
+	return dropped
+end
+
+return EnemyDrops

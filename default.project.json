@@ -7,7 +7,7 @@
       "$className": "Workspace",
       "$ignoreUnknownInstances": true,
       "ToDo": {
-        "$path": "src/scripts/S0001.server.lua",
+        "$path": "src/Workspace/ToDo.server.lua",
         "$properties": {
           "Disabled": false
         }
@@ -20,133 +20,133 @@
         "$className": "StarterPlayerScripts",
         "$ignoreUnknownInstances": true,
         "PauseMenu": {
-          "$path": "src/scripts/S0002.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/PauseMenu.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "TestPartScript": {
-          "$path": "src/scripts/S0003.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/TestPartScript.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "InventoryClient": {
-          "$path": "src/scripts/S0004.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/InventoryClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "SoundHandler": {
-          "$path": "src/scripts/S0005.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/SoundHandler.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "Initialisation": {
-          "$path": "src/scripts/S0006.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/Initialisation.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "PlacementClient": {
-          "$path": "src/scripts/S0007.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/PlacementClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "MiningClient": {
-          "$path": "src/scripts/S0008.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/MiningClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "HallowTreeRainbow": {
-          "$path": "src/scripts/S0009.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/HallowTreeRainbow.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "CraftingClient": {
-          "$path": "src/scripts/S0010.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/CraftingClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "ToolFeedback": {
-          "$path": "src/scripts/S0011.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/ToolFeedback.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "BenchClient": {
-          "$path": "src/scripts/S0012.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/BenchClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "HealthClient": {
-          "$path": "src/scripts/S0013.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/HealthClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "AbilityClient": {
-          "$path": "src/scripts/S0014.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/AbilityClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "HarvestClient": {
-          "$path": "src/scripts/S0015.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/HarvestClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "FontController": {
-          "$path": "src/scripts/S0016.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/FontController.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "DropFlight": {
-          "$path": "src/scripts/S0017.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/DropFlight.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "CommandFeedback": {
-          "$path": "src/scripts/S0018.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/CommandFeedback.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "SettingsButton": {
-          "$path": "src/scripts/S0019.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/SettingsButton.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "ManaClient": {
-          "$path": "src/scripts/S0020.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/ManaClient.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "BossBar": {
-          "$path": "src/scripts/S0021.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/BossBar.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "ItemFeedback": {
-          "$path": "src/scripts/S0022.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/ItemFeedback.client.lua",
           "$properties": {
             "Disabled": false
           }
         },
         "PrivateScroll": {
-          "$path": "src/scripts/S0023.client.lua",
+          "$path": "src/StarterPlayer/StarterPlayerScripts/PrivateScroll.client.lua",
           "$properties": {
             "Disabled": false
           }
@@ -156,7 +156,7 @@
         "$className": "StarterCharacterScripts",
         "$ignoreUnknownInstances": true,
         "spring-crouch-walk": {
-          "$path": "src/scripts/S0024.client.lua",
+          "$path": "src/StarterPlayer/StarterCharacterScripts/spring-crouch-walk.client.lua",
           "$properties": {
             "Disabled": false
           }
@@ -167,22 +167,22 @@
       "$className": "ReplicatedStorage",
       "$ignoreUnknownInstances": true,
       "Perlin": {
-        "$path": "src/scripts/S0025.lua"
+        "$path": "src/ReplicatedStorage/Perlin.lua"
       },
       "ItemDefinitions": {
-        "$path": "src/scripts/S0026.lua"
+        "$path": "src/ReplicatedStorage/ItemDefinitions.lua"
       },
       "InventoryConstants": {
-        "$path": "src/scripts/S0027.lua"
+        "$path": "src/ReplicatedStorage/InventoryConstants.lua"
       },
       "EnemyDrops": {
-        "$path": "src/scripts/S0028.lua"
+        "$path": "src/ReplicatedStorage/EnemyDrops.lua"
       },
       "CraftingRecipes": {
-        "$path": "src/scripts/S0029.lua"
+        "$path": "src/ReplicatedStorage/CraftingRecipes.lua"
       },
       "PromptItemMappings": {
-        "$path": "src/scripts/S0030.lua"
+        "$path": "src/ReplicatedStorage/PromptItemMappings.lua"
       },
       "Tools": {
         "$className": "Folder",
@@ -191,13 +191,13 @@
           "$className": "Tool",
           "$ignoreUnknownInstances": true,
           "MouseIcon": {
-            "$path": "src/scripts/S0031.client.lua",
+            "$path": "src/ReplicatedStorage/Tools/TestSword/MouseIcon.client.lua",
             "$properties": {
               "Disabled": false
             }
           },
           "LocalScript": {
-            "$path": "src/scripts/S0032.client.lua",
+            "$path": "src/ReplicatedStorage/Tools/TestSword/LocalScript.client.lua",
             "$properties": {
               "Disabled": false
             }
@@ -207,7 +207,7 @@
           "$className": "Tool",
           "$ignoreUnknownInstances": true,
           "LocalScript": {
-            "$path": "src/scripts/S0033.client.lua",
+            "$path": "src/ReplicatedStorage/Tools/TestAxe/LocalScript.client.lua",
             "$properties": {
               "Disabled": false
             }
@@ -221,242 +221,242 @@
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "TerrainConfig": {
-            "$path": "src/scripts/S0034.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/TerrainConfig.lua"
           },
           "BiomeConfig": {
-            "$path": "src/scripts/S0035.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/BiomeConfig.lua"
           },
           "NoiseField": {
-            "$path": "src/scripts/S0036.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/NoiseField.lua"
           },
           "BiomeMap": {
-            "$path": "src/scripts/S0037.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/BiomeMap.lua"
           },
           "StructureConfig": {
-            "$path": "src/scripts/S0038.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/StructureConfig.lua"
           },
           "StructureRegistry": {
-            "$path": "src/scripts/S0039.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/StructureRegistry.lua"
           },
           "StrataConfig": {
-            "$path": "src/scripts/S0040.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/StrataConfig.lua"
           },
           "OreConfig": {
-            "$path": "src/scripts/S0041.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/OreConfig.lua"
           },
           "OreRegistry": {
-            "$path": "src/scripts/S0042.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/OreRegistry.lua"
           },
           "ChunkEdits": {
-            "$path": "src/scripts/S0043.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/ChunkEdits.lua"
           },
           "TerrainMesher": {
-            "$path": "src/scripts/S0044.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/TerrainMesher.lua"
           },
           "Landform": {
-            "$path": "src/scripts/S0045.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/Landform.lua"
           },
           "LandformConfig": {
-            "$path": "src/scripts/S0046.lua"
+            "$path": "src/ReplicatedStorage/Shared/Terrain/LandformConfig.lua"
           }
         },
         "Blocks": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "BlockConfig": {
-            "$path": "src/scripts/S0047.lua"
+            "$path": "src/ReplicatedStorage/Shared/Blocks/BlockConfig.lua"
           }
         },
         "Crafting": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "StationConfig": {
-            "$path": "src/scripts/S0048.lua"
+            "$path": "src/ReplicatedStorage/Shared/Crafting/StationConfig.lua"
           },
           "RecipeBook": {
-            "$path": "src/scripts/S0049.lua"
+            "$path": "src/ReplicatedStorage/Shared/Crafting/RecipeBook.lua"
           }
         },
         "Debug": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "Profiler": {
-            "$path": "src/scripts/S0050.lua"
+            "$path": "src/ReplicatedStorage/Shared/Debug/Profiler.lua"
           }
         },
         "Net": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "Remotes": {
-            "$path": "src/scripts/S0051.lua"
+            "$path": "src/ReplicatedStorage/Shared/Net/Remotes.lua"
           }
         },
         "Audio": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "SoundConfig": {
-            "$path": "src/scripts/S0052.lua"
+            "$path": "src/ReplicatedStorage/Shared/Audio/SoundConfig.lua"
           },
           "Sounds": {
-            "$path": "src/scripts/S0053.lua"
+            "$path": "src/ReplicatedStorage/Shared/Audio/Sounds.lua"
           },
           "Music": {
-            "$path": "src/scripts/S0054.lua"
+            "$path": "src/ReplicatedStorage/Shared/Audio/Music.lua"
           }
         },
         "UI": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "Theme": {
-            "$path": "src/scripts/S0055.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/Theme.lua"
           },
           "Motion": {
-            "$path": "src/scripts/S0056.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/Motion.lua"
           },
           "MenuState": {
-            "$path": "src/scripts/S0057.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/MenuState.lua"
           },
           "ItemModels": {
-            "$path": "src/scripts/S0058.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/ItemModels.lua"
           },
           "ItemThumbnails": {
-            "$path": "src/scripts/S0059.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/ItemThumbnails.lua"
           },
           "ItemPreview": {
-            "$path": "src/scripts/S0060.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/ItemPreview.lua"
           },
           "MenuBackdrop": {
-            "$path": "src/scripts/S0061.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/MenuBackdrop.lua"
           },
           "AbilityPanel": {
-            "$path": "src/scripts/S0062.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/AbilityPanel.lua"
           },
           "Confirm": {
-            "$path": "src/scripts/S0063.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/Confirm.lua"
           },
           "Feedback": {
-            "$path": "src/scripts/S0064.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/Feedback.lua"
           },
           "AbilityStorage": {
-            "$path": "src/scripts/S0065.lua"
+            "$path": "src/ReplicatedStorage/Shared/UI/AbilityStorage.lua"
           }
         },
         "Tools": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "ToolConfig": {
-            "$path": "src/scripts/S0066.lua"
+            "$path": "src/ReplicatedStorage/Shared/Tools/ToolConfig.lua"
           }
         },
         "Inventory": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "InventoryMirror": {
-            "$path": "src/scripts/S0067.lua"
+            "$path": "src/ReplicatedStorage/Shared/Inventory/InventoryMirror.lua"
           }
         },
         "Enemies": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "EnemyConfig": {
-            "$path": "src/scripts/S0068.lua"
+            "$path": "src/ReplicatedStorage/Shared/Enemies/EnemyConfig.lua"
           }
         },
         "Combat": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "CombatConfig": {
-            "$path": "src/scripts/S0069.lua"
+            "$path": "src/ReplicatedStorage/Shared/Combat/CombatConfig.lua"
           },
           "WeaponConfig": {
-            "$path": "src/scripts/S0070.lua"
+            "$path": "src/ReplicatedStorage/Shared/Combat/WeaponConfig.lua"
           }
         },
         "Abilities": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
           "AbilityConfig": {
-            "$path": "src/scripts/S0071.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/AbilityConfig.lua"
           },
           "AbilityScope": {
-            "$path": "src/scripts/S0072.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/AbilityScope.lua"
           },
           "SacredRainPlan": {
-            "$path": "src/scripts/S0073.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/SacredRainPlan.lua"
           },
           "VFX": {
             "$className": "Folder",
             "$ignoreUnknownInstances": true,
             "FXBuilder": {
-              "$path": "src/scripts/S0074.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/FXBuilder.lua"
             },
             "SacredRainData": {
-              "$path": "src/scripts/S0075.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SacredRainData.lua"
             },
             "SacredRainVFX": {
-              "$path": "src/scripts/S0076.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SacredRainVFX.lua"
             },
             "VFXPalette": {
-              "$path": "src/scripts/S0077.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/VFXPalette.lua"
             },
             "EclipseVFX": {
-              "$path": "src/scripts/S0078.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/EclipseVFX.lua"
             },
             "AnnihilationVFX": {
-              "$path": "src/scripts/S0079.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationVFX.lua"
             },
             "AnnihilationMeshes": {
-              "$path": "src/scripts/S0080.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationMeshes.lua"
             },
             "AnnihilationMeshData": {
-              "$path": "src/scripts/S0081.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationMeshData.lua"
             },
             "AnnihilationBeamData": {
-              "$path": "src/scripts/S0082.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationBeamData.lua"
             },
             "AnnihilationBeam": {
-              "$path": "src/scripts/S0083.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationBeam.lua"
             },
             "AnnihilationImported": {
-              "$path": "src/scripts/S0084.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationImported.lua"
             },
             "AnnihilationCamera": {
-              "$path": "src/scripts/S0085.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationCamera.lua"
             },
             "AnnihilationDebris": {
-              "$path": "src/scripts/S0086.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationDebris.lua"
             },
             "ElementalVFX": {
-              "$path": "src/scripts/S0087.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/ElementalVFX.lua"
             },
             "AstralCollapseVFX": {
-              "$path": "src/scripts/S0088.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AstralCollapseVFX.lua"
             },
             "StormWellVFX": {
-              "$path": "src/scripts/S0089.lua"
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/StormWellVFX.lua"
             }
           },
           "EclipsePlan": {
-            "$path": "src/scripts/S0090.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/EclipsePlan.lua"
           },
           "AnnihilationPlan": {
-            "$path": "src/scripts/S0091.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/AnnihilationPlan.lua"
           },
           "ElementalPlan": {
-            "$path": "src/scripts/S0092.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/ElementalPlan.lua"
           },
           "AstralCollapsePlan": {
-            "$path": "src/scripts/S0093.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/AstralCollapsePlan.lua"
           },
           "StormWellPlan": {
-            "$path": "src/scripts/S0094.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/StormWellPlan.lua"
           },
           "StorageConfig": {
-            "$path": "src/scripts/S0095.lua"
+            "$path": "src/ReplicatedStorage/Shared/Abilities/StorageConfig.lua"
           }
         },
         "Permissions": {
-          "$path": "src/scripts/S0096.lua"
+          "$path": "src/ReplicatedStorage/Shared/Permissions.lua"
         }
       }
     },
@@ -464,179 +464,179 @@
       "$className": "ServerScriptService",
       "$ignoreUnknownInstances": true,
       "Day/Night Cycle": {
-        "$path": "src/scripts/S0097.server.lua",
+        "$path": "src/ServerScriptService/Day-Night Cycle.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "InventoryClass": {
-        "$path": "src/scripts/S0098.lua"
+        "$path": "src/ServerScriptService/InventoryClass.lua"
       },
       "InventoryManager": {
-        "$path": "src/scripts/S0099.server.lua",
+        "$path": "src/ServerScriptService/InventoryManager.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "InitTerrain": {
-        "$path": "src/scripts/S0100.server.lua",
+        "$path": "src/ServerScriptService/InitTerrain.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "TerrainManager": {
-        "$path": "src/scripts/S0101.lua"
+        "$path": "src/ServerScriptService/TerrainManager.lua"
       },
       "AdminHandler": {
-        "$path": "src/scripts/S0102.server.lua",
+        "$path": "src/ServerScriptService/AdminHandler.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "InventoryService": {
-        "$path": "src/scripts/S0103.lua"
+        "$path": "src/ServerScriptService/InventoryService.lua"
       },
       "PlacementServer": {
-        "$path": "src/scripts/S0104.server.lua",
+        "$path": "src/ServerScriptService/PlacementServer.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "HallowTreeRainbowThing": {
-        "$path": "src/scripts/S0105.server.lua",
+        "$path": "src/ServerScriptService/HallowTreeRainbowThing.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "MiningServer": {
-        "$path": "src/scripts/S0106.server.lua",
+        "$path": "src/ServerScriptService/MiningServer.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "EquipServer": {
-        "$path": "src/scripts/S0107.server.lua",
+        "$path": "src/ServerScriptService/EquipServer.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "DebugConsole": {
-        "$path": "src/scripts/S0108.server.lua",
+        "$path": "src/ServerScriptService/DebugConsole.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "CraftingServer": {
-        "$path": "src/scripts/S0109.server.lua",
+        "$path": "src/ServerScriptService/CraftingServer.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "HarvestServer": {
-        "$path": "src/scripts/S0110.server.lua",
+        "$path": "src/ServerScriptService/HarvestServer.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "StationService": {
-        "$path": "src/scripts/S0111.lua"
+        "$path": "src/ServerScriptService/StationService.lua"
       },
       "SpawnServer": {
-        "$path": "src/scripts/S0112.server.lua",
+        "$path": "src/ServerScriptService/SpawnServer.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "ToolFactory": {
-        "$path": "src/scripts/S0113.lua"
+        "$path": "src/ServerScriptService/ToolFactory.lua"
       },
       "InventoryStore": {
-        "$path": "src/scripts/S0114.lua"
+        "$path": "src/ServerScriptService/InventoryStore.lua"
       },
       "TerrainBench": {
-        "$path": "src/scripts/S0115.lua"
+        "$path": "src/ServerScriptService/TerrainBench.lua"
       },
       "InitEnemies": {
-        "$path": "src/scripts/S0116.server.lua",
+        "$path": "src/ServerScriptService/InitEnemies.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "EnemyService": {
-        "$path": "src/scripts/S0117.lua"
+        "$path": "src/ServerScriptService/EnemyService.lua"
       },
       "InitCombat": {
-        "$path": "src/scripts/S0118.server.lua",
+        "$path": "src/ServerScriptService/InitCombat.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "CombatService": {
-        "$path": "src/scripts/S0119.lua"
+        "$path": "src/ServerScriptService/CombatService.lua"
       },
       "Abilities": {
         "$className": "Folder",
         "$ignoreUnknownInstances": true,
         "SacredRain": {
-          "$path": "src/scripts/S0120.lua"
+          "$path": "src/ServerScriptService/Abilities/SacredRain.lua"
         },
         "Eclipse": {
-          "$path": "src/scripts/S0121.lua"
+          "$path": "src/ServerScriptService/Abilities/Eclipse.lua"
         },
         "Annihilation": {
-          "$path": "src/scripts/S0122.lua"
+          "$path": "src/ServerScriptService/Abilities/Annihilation.lua"
         },
         "ElementalAttack": {
-          "$path": "src/scripts/S0123.lua"
+          "$path": "src/ServerScriptService/Abilities/ElementalAttack.lua"
         },
         "AstralCollapse": {
-          "$path": "src/scripts/S0124.lua"
+          "$path": "src/ServerScriptService/Abilities/AstralCollapse.lua"
         },
         "StormWell": {
-          "$path": "src/scripts/S0125.lua"
+          "$path": "src/ServerScriptService/Abilities/StormWell.lua"
         }
       },
       "InitAbilities": {
-        "$path": "src/scripts/S0126.server.lua",
+        "$path": "src/ServerScriptService/InitAbilities.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "AbilityService": {
-        "$path": "src/scripts/S0127.lua"
+        "$path": "src/ServerScriptService/AbilityService.lua"
       },
       "WeaponServer": {
-        "$path": "src/scripts/S0128.server.lua",
+        "$path": "src/ServerScriptService/WeaponServer.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "AbilityLoadout": {
-        "$path": "src/scripts/S0129.lua"
+        "$path": "src/ServerScriptService/AbilityLoadout.lua"
       },
       "SettingsServer": {
-        "$path": "src/scripts/S0130.server.lua",
+        "$path": "src/ServerScriptService/SettingsServer.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "AbilityCommands": {
-        "$path": "src/scripts/S0131.server.lua",
+        "$path": "src/ServerScriptService/AbilityCommands.server.lua",
         "$properties": {
           "Disabled": false
         }
       },
       "CommandFeedback": {
-        "$path": "src/scripts/S0132.lua"
+        "$path": "src/ServerScriptService/CommandFeedback.lua"
       },
       "SlimeBody": {
-        "$path": "src/scripts/S0133.lua"
+        "$path": "src/ServerScriptService/SlimeBody.lua"
       },
       "ManaService": {
-        "$path": "src/scripts/S0134.lua"
+        "$path": "src/ServerScriptService/ManaService.lua"
       },
       "EnemySpawner": {
-        "$path": "src/scripts/S0135.server.lua",
+        "$path": "src/ServerScriptService/EnemySpawner.server.lua",
         "$properties": {
           "Disabled": false
         }
@@ -645,17 +645,17 @@
         "$className": "Folder",
         "$ignoreUnknownInstances": true,
         "SlimeEmperor": {
-          "$path": "src/scripts/S0136.lua"
+          "$path": "src/ServerScriptService/Bosses/SlimeEmperor.lua"
         }
       },
       "BossService": {
-        "$path": "src/scripts/S0137.lua"
+        "$path": "src/ServerScriptService/BossService.lua"
       },
       "ScrollService": {
-        "$path": "src/scripts/S0138.lua"
+        "$path": "src/ServerScriptService/ScrollService.lua"
       },
       "ScrollChest": {
-        "$path": "src/scripts/S0139.server.lua",
+        "$path": "src/ServerScriptService/ScrollChest.server.lua",
         "$properties": {
           "Disabled": false
         }

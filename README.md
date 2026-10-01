@@ -1,10 +1,31 @@
-# BlockBound Rojo source
+# BlockBound
 
-This folder contains every Script, LocalScript, and ModuleScript exported from `blockbound(rbxlx).rbxlx`.
+Rojo source for BlockBound's Scripts, LocalScripts and ModuleScripts.
 
-- `default.project.json` preserves the original Roblox hierarchy and script names for Rojo.
-- `src/scripts` contains the exact script source text.
-- `scripts-manifest.json` records each original Roblox path, class, source file, and SHA-256 hash.
-- `$ignoreUnknownInstances` is enabled on containers so connecting Rojo to the original place does not delete non-code instances.
+## Layout
 
-Use `rojo serve` from this directory, then connect with the Rojo Studio plugin.
+`src/` mirrors the Roblox tree, one file per script:
+
+| Folder | Roblox location |
+| --- | --- |
+| `src/ServerScriptService/` | ServerScriptService |
+| `src/ReplicatedStorage/` | ReplicatedStorage (shared modules live in `Shared/`) |
+| `src/StarterPlayer/StarterPlayerScripts/` | client LocalScripts |
+| `src/StarterPlayer/StarterCharacterScripts/` | per-character LocalScripts |
+| `src/Workspace/` | Workspace |
+
+Extensions set the class: `.server.lua` = Script, `.client.lua` = LocalScript, `.lua` = ModuleScript.
+
+- `default.project.json` maps each file to its Roblox name (e.g. `Day-Night Cycle.server.lua` → `Day/Night Cycle`).
+- `$ignoreUnknownInstances` is on for every container, so models, VFX, GUIs and other non-code instances stay in the place file and are never touched by Rojo.
+- `scripts-manifest.json` is the record of the original export (Roblox path, class, file, SHA-256 of the exported source).
+
+## Workflow
+
+1. Open the place in Studio.
+2. From this folder: `C:/Users/Elias/Documents/Rojo/rojo.exe serve`
+3. Connect with the Rojo Studio plugin.
+
+Sync is one-way (files → Studio). Edit scripts here, not in Studio, or your Studio edits will be overwritten.
+
+New scripts need an entry in `default.project.json` (or put them under a folder you map with `$path`).

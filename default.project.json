@@ -25,12 +25,6 @@
             "Disabled": false
           }
         },
-        "TestPartScript": {
-          "$path": "src/StarterPlayer/StarterPlayerScripts/TestPartScript.client.lua",
-          "$properties": {
-            "Disabled": false
-          }
-        },
         "InventoryClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/InventoryClient.client.lua",
           "$properties": {

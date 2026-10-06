@@ -310,8 +310,17 @@ TerrainConfig.BlockFallbackOrder = { "Dirt", "Grass", "Sand", "Snow", "Sandstone
 local PlaceConfig = require(script.Parent.Parent:WaitForChild("PlaceConfig"))
 if PlaceConfig.isIsland() then
 	local IslandConfig = require(script.Parent:WaitForChild("IslandConfig"))
+	-- Checked against a list rather than "already has a value", because some
+	-- settings (WorldSeed) are legitimately nil in the open world.
+	local overridable = {
+		GridChunksX = true,
+		GridChunksZ = true,
+		WorldFloorY = true,
+		WorldSeed = true,
+		EdgeFalloffBlocks = true,
+	}
 	for key, value in pairs(IslandConfig.Terrain) do
-		assert(TerrainConfig[key] ~= nil, "[TerrainConfig] IslandConfig.Terrain sets unknown key " .. key)
+		assert(overridable[key], "[TerrainConfig] IslandConfig.Terrain cannot override " .. key)
 		TerrainConfig[key] = value
 	end
 end

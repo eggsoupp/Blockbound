@@ -24,6 +24,11 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local BlockConfig = require(Shared:WaitForChild("Blocks"):WaitForChild("BlockConfig"))
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
+local ChunkEdits = require(Shared.Terrain:WaitForChild("ChunkEdits"))
+local IslandConfig = require(Shared.Terrain:WaitForChild("IslandConfig"))
+local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
+
+local IS_ISLAND = PlaceConfig.isIsland()
 
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
@@ -94,6 +99,13 @@ RequestPlaceBlock.OnServerEvent:Connect(function(player, slotIndex, a, b, c)
 	local itemName, count = InventoryService.GetSlot(player, slotIndex)
 	if not itemName or count <= 0 then
 		sendResult(player, false, "Empty slot")
+		return
+	end
+
+	-- An island stores every change in one save, which has a size limit. Mining
+	-- is never refused - the island bounds it - but building past the limit is.
+	if IS_ISLAND and ChunkEdits.getStats().totalEdits >= IslandConfig.MaxEdits then
+		sendResult(player, false, "Your island has reached its build limit")
 		return
 	end
 

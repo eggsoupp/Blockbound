@@ -163,9 +163,13 @@ function IslandShape.sampleColumn(bx, bz)
 	local x, z = bx + 0.5, bz + 0.5
 	local r, inland = placeOf(x, z)
 
+	-- Water level: the floor, for every column, which means "dry" however far
+	-- down it is dug. NOT 0, BiomeMap's dry value: a sky column's ground is the
+	-- floor, which is below 0, and TerrainManager would read 0 as water standing
+	-- above it.
 	if inland <= 0 then
 		-- Open sky. A column whose height is the floor holds nothing at all.
-		return FLOOR_Y, IslandConfig.Biome, IslandConfig.TopBlock, IslandConfig.UnderBlock, IslandConfig.Variant, 0
+		return FLOOR_Y, IslandConfig.Biome, IslandConfig.TopBlock, IslandConfig.UnderBlock, IslandConfig.Variant, FLOOR_Y
 	end
 
 	return topHeight(x, z, r, inland),
@@ -173,7 +177,7 @@ function IslandShape.sampleColumn(bx, bz)
 		IslandConfig.TopBlock,
 		IslandConfig.UnderBlock,
 		IslandConfig.Variant,
-		0
+		FLOOR_Y
 end
 
 --[[

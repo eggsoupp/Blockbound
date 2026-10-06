@@ -662,6 +662,12 @@
         "$properties": {
           "Disabled": false
         }
+      },
+      "IslandStore": {
+        "$path": "src/ServerScriptService/IslandStore.lua"
+      },
+      "IslandService": {
+        "$path": "src/ServerScriptService/IslandService.server.lua"
       }
     }
   }

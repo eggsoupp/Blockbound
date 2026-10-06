@@ -55,6 +55,24 @@ function ChunkEdits.setResidencyCheck(predicate)
 	isChunkResident = predicate
 end
 
+--[[
+	Called with no arguments whenever a player's edit is recorded or forgotten.
+	Lets a place that saves its edits (an island) know it has unsaved work
+	without polling. Not called for imports or for replay onto a regenerated
+	chunk, which change nothing that is not already saved.
+]]
+local changeListener = nil
+
+function ChunkEdits.setChangeListener(listener)
+	changeListener = listener
+end
+
+local function notifyChanged()
+	if changeListener then
+		changeListener()
+	end
+end
+
 -- Scratch buffer for the descending-order removal replay. Reused; never
 -- survives a yield.
 local scratchLevels = {}
@@ -183,6 +201,7 @@ function ChunkEdits.recordRemoval(chunkKey, cell, by)
 	setIn(entry.removed, cell, by, true)
 	entry.count += 1
 	totalEdits += 1
+	notifyChanged()
 end
 
 function ChunkEdits.recordPlacement(chunkKey, cell, by, blockName)
@@ -194,6 +213,7 @@ function ChunkEdits.recordPlacement(chunkKey, cell, by, blockName)
 	end
 
 	setIn(entry.placed, cell, by, blockName)
+	notifyChanged()
 end
 
 -- The placement is forgotten entirely rather than turned into a removal, so
@@ -214,6 +234,7 @@ function ChunkEdits.clearPlacement(chunkKey, cell, by)
 	lastTouched[chunkKey] = os.clock()
 
 	releaseIfEmpty(chunkKey, entry)
+	notifyChanged()
 end
 
 -- Mining needs to know: breaking a placed block and a structure block are
@@ -274,6 +295,67 @@ function ChunkEdits.applyTo(chunkKey, removeBlock, placeBlock)
 			placeBlock(cell, by, name)
 		end
 	end
+end
+
+-- ---------------------------------------------------------------------------
+-- Saving
+-- ---------------------------------------------------------------------------
+
+--[[
+	Visits every chunk that has edits:
+
+	  visit(chunkKey, removed, placed)
+	    removed[cell][by] = true
+	    placed[cell][by]  = blockName
+
+	The maps are the live ones, handed over to be READ: copy out of them, never
+	write into them, and do not yield inside visit.
+]]
+function ChunkEdits.forEachChunk(visit)
+	for chunkKey, entry in pairs(chunkStore) do
+		if entry.count > 0 then
+			visit(chunkKey, entry.removed, entry.placed)
+		end
+	end
+end
+
+--[[
+	Loads saved edits for one chunk, as a list of { cell, by, blockName|false }
+	where false means "removed". Returns how many were new.
+
+	Only meaningful before the chunk is generated: edits are replayed when a
+	chunk is built, so importing into a chunk that is already standing changes
+	nothing until it next streams in. The island holds generation until its
+	import has finished for exactly this reason.
+]]
+function ChunkEdits.importChunk(chunkKey, edits)
+	local entry = getOrCreate(chunkKey)
+	local added = 0
+
+	for _, edit in ipairs(edits) do
+		local cell, by, name = edit[1], edit[2], edit[3]
+
+		if type(cell) == "number" and type(by) == "number" then
+			if name == false then
+				if not getIn(entry.removed, cell, by) then
+					setIn(entry.removed, cell, by, true)
+					entry.count += 1
+					totalEdits += 1
+					added += 1
+				end
+			elseif type(name) == "string" and name ~= "" then
+				if getIn(entry.placed, cell, by) == nil then
+					entry.count += 1
+					totalEdits += 1
+					added += 1
+				end
+				setIn(entry.placed, cell, by, name)
+			end
+		end
+	end
+
+	releaseIfEmpty(chunkKey, entry)
+	return added
 end
 
 -- ---------------------------------------------------------------------------

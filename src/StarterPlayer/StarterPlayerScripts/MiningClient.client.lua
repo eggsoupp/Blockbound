@@ -33,6 +33,7 @@ local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local MenuState = require(Shared.UI:WaitForChild("MenuState"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
+local Feedback = require(Shared.UI:WaitForChild("Feedback"))
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
@@ -340,7 +341,58 @@ MiningStarted.OnClientEvent:Connect(function(duration, blockName)
 	end)
 end)
 
-MiningResult.OnClientEvent:Connect(function(success, itemName)
+--[[
+	What to tell the player when the server says no.
+
+	Every refusal used to be silent: the bar flickered and nothing happened,
+	which looks exactly like a bug in the terrain. A refusal is the server
+	working as designed, so the reason goes on screen. "cancelled" and
+	"already_mining" are left out - the player caused both on purpose.
+]]
+local REFUSALS = {
+	inventory_full = "Inventory full",
+	too_far = "Too far away to mine that",
+	moved_too_far = "Moved out of reach",
+	no_pickaxe = "Hold a pickaxe to mine",
+	unbreakable = "That can't be broken",
+	no_block = "Nothing to mine there",
+	bad_target = "Nothing to mine there",
+	target_lost = "That block changed before you finished",
+	break_failed = "That block wouldn't break",
+	terrain_error = "Mining failed (see the Output window)",
+	no_character = "No character to mine with",
+}
+
+-- Holding the button into a wall of refusals should not fill the feed with
+-- the same line.
+local REFUSAL_REPEAT_SECONDS = 2
+local lastRefusal, lastRefusalAt = nil, 0
+
+local function reportRefusal(reason, itemName)
+	local text = REFUSALS[reason]
+	if not text then
+		return
+	end
+
+	if reason == "inventory_full" and type(itemName) == "string" then
+		local def = ItemDefinitions[itemName]
+		text = string.format("Inventory full: no room for %s", def and def.displayName or itemName)
+	end
+
+	local now = os.clock()
+	if text == lastRefusal and now - lastRefusalAt < REFUSAL_REPEAT_SECONDS then
+		return
+	end
+	lastRefusal, lastRefusalAt = text, now
+
+	Feedback.show(text, "bad")
+end
+
+MiningResult.OnClientEvent:Connect(function(success, itemName, reason)
+	if not success then
+		reportRefusal(reason, itemName)
+	end
+
 	local position = targetPosition()
 	local color = targetColor()
 
@@ -463,6 +515,7 @@ function beginMining()
 			setProgress(0)
 			clearTarget()
 			warn("[MiningClient] Server did not start the mining request; swing reset")
+			Feedback.show("The server didn't answer that swing", "bad")
 		end
 	end)
 end

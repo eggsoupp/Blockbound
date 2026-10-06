@@ -40,3 +40,9 @@ BlockBound is one game with two places, both synced from this same project:
 `src/ReplicatedStorage/Shared/PlaceConfig.lua` holds both Place IDs and decides which place the code is running in. Systems that only belong in one place check `PlaceConfig.isIsland()`. To test the island in Studio without publishing, add a string attribute `PlaceKind` = `Island` to Workspace (Studio only; ignored in live servers).
 
 The island's shape and the terrain overrides it needs live in `src/ReplicatedStorage/Shared/Terrain/IslandConfig.lua`.
+
+### Island saving
+
+`ServerScriptService/IslandService` runs an island server: the first player to arrive is the owner (until teleports exist), terrain generation is held until their save is loaded, and the island autosaves every minute, when the owner leaves, and on shutdown. `ServerScriptService/IslandStore` owns the DataStore (`PlayerIslands_v1`, key `island_<userId>`), session locking and the compact save format. Only changes from the shared template are stored: mined and placed blocks, and crafting stations.
+
+To test saving in Studio, turn on **Game Settings > Security > Enable Studio Access to API Services**. Studio then reads and writes the live game's island saves.

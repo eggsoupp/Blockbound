@@ -219,7 +219,10 @@ local function mine(player, target, hitPos)
 	-- looks exactly like the item having been eaten.
 	local drop = BlockConfig.getDrop(blockName)
 	if drop and not InventoryService.CanAddItem(player, drop, 1) then
-		sendResult(player, false, nil, "inventory_full")
+		-- The drop rides along so the player is told WHAT has no room. A full
+		-- bag can still take more of what it already has a part-stack of,
+		-- which is how grass can mine fine while the dirt under it refuses.
+		sendResult(player, false, drop, "inventory_full")
 		return
 	end
 

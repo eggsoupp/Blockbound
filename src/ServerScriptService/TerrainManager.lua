@@ -29,6 +29,8 @@
 	  TerrainManager:PlaceBlock(player, blockX, by, blockZ, name) -> ok, reason
 	  TerrainManager:IsSolidAt(blockX, by, blockZ) -> boolean
 	  TerrainManager:GetChunk(cx, cz)
+	  TerrainManager:HoldGeneration(reason) / :ReleaseGeneration(reason)
+	  TerrainManager:ChunkKey(cx, cz) -> key / :ChunkCoords(key) -> cx, cz
 	  TerrainManager:GetStats()
 
 	COORDINATE SYSTEMS
@@ -380,6 +382,18 @@ local function getGeneratedColumn(blockX, blockZ)
 
 	local biome, top, under, variant, water
 	height, biome, top, under, variant, water = ColumnSource.sampleColumn(blockX, blockZ)
+
+	--[[
+		A dry column reports its water at or below its ground (BiomeMap uses 0).
+		Pinned to the floor here so it stays dry however deep the column is dug:
+		the renderer draws water wherever waterTop is above the CURRENT height,
+		so a dry shaft dug below y = 0 used to grow a phantom water block, and an
+		island's sky columns - whose ground IS the floor, below 0 - drew a ring
+		of water around the island.
+	]]
+	if water <= height then
+		water = FLOOR_Y
+	end
 
 	genHeight[key] = height
 	genBiome[key] = biome
@@ -2397,8 +2411,12 @@ end
 ]]
 local pumping = false
 
+-- reason -> true while something has asked for generation to wait. See
+-- TerrainManager:HoldGeneration.
+local generationHolds = {}
+
 function pumpGeneration()
-	if pumping then
+	if pumping or next(generationHolds) ~= nil then
 		return
 	end
 	pumping = true
@@ -3015,6 +3033,36 @@ end
 
 function TerrainManager:GetChunk(cx, cz)
 	return chunks[chunkKey(cx, cz)]
+end
+
+--[[
+	Pauses chunk generation until every hold is released. Chunks players walk
+	toward are still queued; they are simply not built yet.
+
+	For a server that has to put stored edits into ChunkEdits before any chunk
+	is generated - an island loading its owner's save - since edits replay only
+	when a chunk is built. Holds are keyed by reason so two callers cannot
+	release each other's.
+]]
+function TerrainManager:HoldGeneration(reason)
+	generationHolds[reason or "default"] = true
+end
+
+function TerrainManager:ReleaseGeneration(reason)
+	generationHolds[reason or "default"] = nil
+end
+
+--[[
+	The key ChunkEdits stores a chunk under, and back. ChunkEdits only ever
+	sees these opaque numbers, so anything saving its contents needs the
+	coordinates to write something that survives a change to the packing.
+]]
+function TerrainManager:ChunkKey(cx, cz)
+	return chunkKey(cx, cz)
+end
+
+function TerrainManager:ChunkCoords(key)
+	return key // CHUNK_KEY_STRIDE - CHUNK_KEY_OFFSET, key % CHUNK_KEY_STRIDE - CHUNK_KEY_OFFSET
 end
 
 --[[

@@ -44,6 +44,19 @@ local worldFolder = nil
 local templateCache = {}
 local stationCount = 0
 
+-- Forward declared: place and restore both build through it, and it is
+-- defined below them with the rest of the public API.
+local spawnStation
+
+-- See StationService.setChangeListener.
+local changeListener = nil
+
+local function notifyChanged()
+	if changeListener then
+		changeListener()
+	end
+end
+
 -- ---------------------------------------------------------------------------
 -- Keys
 -- ---------------------------------------------------------------------------
@@ -279,18 +292,84 @@ function StationService.place(player, blockX, by, blockZ, stationId)
 		return false, "Needs support"
 	end
 
+	local ok, reason = spawnStation(def, blockX, by, blockZ, player.UserId)
+	if ok then
+		notifyChanged()
+	end
+	return ok, reason
+end
+
+--[[
+	Puts back a station a save says was here, without any of place's player
+	checks: nobody is placing it, and the terrain it stands on may not have
+	been generated yet. The cell still has to be free of other stations.
+
+	Returns ok, reason.
+]]
+function StationService.restore(stationId, blockX, by, blockZ, ownerUserId)
+	local def = StationConfig.get(stationId)
+	if not def then
+		return false, "Unknown station"
+	end
+
+	if type(blockX) ~= "number" or type(by) ~= "number" or type(blockZ) ~= "number" then
+		return false, "Bad position"
+	end
+
+	blockX, by, blockZ = math.floor(blockX), math.floor(by), math.floor(blockZ)
+
+	if stationsByCell[gridKey(blockX, by, blockZ)] then
+		return false, "Cell occupied"
+	end
+
+	return spawnStation(def, blockX, by, blockZ, ownerUserId)
+end
+
+--[[
+	Every station standing right now, as plain data for a save:
+	{ { id = "Workbench", x = 3, y = 38, z = -2 }, ... }
+]]
+function StationService.exportAll()
+	local list = {}
+	for _, station in pairs(stationsByCell) do
+		if station.instance.Parent then
+			table.insert(list, {
+				id = station.stationId,
+				x = station.x,
+				y = station.y,
+				z = station.z,
+			})
+		end
+	end
+	return list
+end
+
+--[[
+	Called with no arguments whenever a player places or picks up a station.
+	Restores do not count: they change nothing that is not already saved.
+]]
+function StationService.setChangeListener(listener)
+	changeListener = listener
+end
+
+--[[
+	Builds a station into the world and registers it. Every check is the
+	caller's: place validates a player's request, restore a save's.
+]]
+function spawnStation(def, blockX, by, blockZ, ownerUserId)
 	local template = getTemplate(def)
 	if not template then
 		return false, "Missing template"
 	end
 
+	local centre = cellCentre(blockX, by, blockZ)
 	local instance = template:Clone()
 	local key = gridKey(blockX, by, blockZ)
 
 	instance.Name = def.id
 	instance:SetAttribute("StationId", def.id)
 	instance:SetAttribute("StationCellKey", key)
-	instance:SetAttribute("OwnerUserId", player.UserId)
+	instance:SetAttribute("OwnerUserId", ownerUserId)
 
 	-- GetDescendants does not include the instance itself, so a single-part
 	-- station would otherwise miss all of this.
@@ -344,7 +423,7 @@ function StationService.place(player, blockX, by, blockZ, stationId)
 		x = blockX,
 		y = by,
 		z = blockZ,
-		ownerUserId = player.UserId,
+		ownerUserId = ownerUserId,
 	})
 
 	return true, "Placed"
@@ -375,6 +454,7 @@ function StationService.tryBreak(player, target)
 
 	unregister(station)
 	station.instance:Destroy()
+	notifyChanged()
 
 	return true, station.stationId
 end

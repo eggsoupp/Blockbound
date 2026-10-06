@@ -55,13 +55,15 @@ IslandConfig.Seed = 718201
 	and a wide margin of sky around it to build out into. Nothing outside the
 	island generates, so the margin costs nothing until someone builds there.
 
-	The floor sits just under the island's lowest point. Below it nothing can
-	exist, so it is also how far down anyone can build.
+	The floor sits just under the tip of the island's spike. Below it nothing
+	can exist, so it is also how far down anyone can build. It has to stay
+	below the tip (SurfaceHeight + CentreRise - RimThickness - CoreDepth -
+	UndersideLumps), which IslandShape clamps to two blocks above the floor.
 ]]
 IslandConfig.Terrain = {
 	GridChunksX = 13,
 	GridChunksZ = 13,
-	WorldFloorY = -4,
+	WorldFloorY = -12,
 	WorldSeed = IslandConfig.Seed,
 
 	-- Only used by the open world's BiomeMap, but TerrainConfig.validate
@@ -117,17 +119,27 @@ IslandConfig.UnderBlock = "Dirt"
 
 -- How thick the island is at its edge, in blocks, and how much thicker it gets
 -- toward the middle. RimThickness + CoreDepth is roughly the depth under the
--- centre, before the lumps.
+-- centre, before the lumps: 44 blocks, 176 studs, of spike.
 IslandConfig.RimThickness = 4
-IslandConfig.CoreDepth = 24
+IslandConfig.CoreDepth = 40
 
--- Shape of the taper. Below 1 the underside bulges (a bowl); above 1 it
--- narrows quickly into a spike.
-IslandConfig.TaperPower = 0.75
+--[[
+	Shape of the taper, as thickness = RimThickness + CoreDepth * inland^power,
+	where inland runs from 0 at the edge to 1 at the centre.
+
+	  below 1   the underside bulges into a rounded bowl
+	  1         a straight cone
+	  above 1   shallow under most of the island, then plunging into a spike
+	            under the middle - the classic floating-island point
+
+	At 1.8 the island is 16 blocks thick halfway in, 31 at four-fifths of the
+	way, and 44 under the very middle.
+]]
+IslandConfig.TaperPower = 1.8
 
 -- Rocky lumps hanging off the underside: how many blocks they reach, and how
 -- wide they are. Faded out toward the rim so the edge stays a clean line.
-IslandConfig.UndersideLumps = 4
+IslandConfig.UndersideLumps = 3
 IslandConfig.UndersideScale = 6
 
 -- ===========================================================================
@@ -145,5 +157,25 @@ IslandConfig.ClearingRadius = 8
 
 -- Trees keep this fraction of the radius back from the edge.
 IslandConfig.TreeEdgeMargin = 0.12
+
+-- ===========================================================================
+-- SAVING
+-- ===========================================================================
+
+--[[
+	The most block changes one island may hold: every block placed, and every
+	natural block mined, counts as one. Placing more is refused once it is
+	reached; mining is not, since the island itself bounds it.
+
+	A save stores six characters per change, so this is about 1.2 MB of the
+	4 MB a DataStore entry may hold - room to spare. It must also stay under
+	TerrainConfig.MaxStoredEdits, or ChunkEdits would start forgetting edits
+	to make room.
+]]
+IslandConfig.MaxEdits = 200000
+
+-- How often an island with unsaved changes is written back, in seconds. It is
+-- also saved when its owner leaves and when the server shuts down.
+IslandConfig.AutosaveInterval = 60
 
 return IslandConfig

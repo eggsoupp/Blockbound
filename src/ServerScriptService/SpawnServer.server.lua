@@ -23,6 +23,12 @@ local TerrainConfig = require(
 	ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Terrain"):WaitForChild("TerrainConfig")
 )
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
+local PlaceConfig = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("PlaceConfig"))
+
+-- An island is a building plot: no stone pad, and a spawn point nobody can
+-- see or bump into, so the middle of the island is as buildable as the rest.
+-- Falling off the island still lands you back here (see the rescue below).
+local IS_ISLAND = PlaceConfig.isIsland()
 
 -- The platform is a flat disc of the same block grid, so it reads as part of
 -- the world rather than as a dropped prop.
@@ -68,6 +74,10 @@ platform.Color = Color3.fromRGB(122, 128, 118)
 platform.TopSurface = Enum.SurfaceType.Smooth
 platform.BottomSurface = Enum.SurfaceType.Smooth
 
+if IS_ISLAND then
+	platform:Destroy()
+end
+
 -- Reuses whatever SpawnLocation is already in the place, so a hand-placed one
 -- keeps its settings and only its position is taken over.
 local spawn = workspace:FindFirstChildOfClass("SpawnLocation")
@@ -87,10 +97,26 @@ end
 -- Only the things that must be true are forced. An existing SpawnLocation keeps
 -- its size, look and team settings - this moves it and makes sure it works.
 local height = spawn.Size.Y
-spawn.CFrame = CFrame.new(0, surfaceY + PLATFORM_THICKNESS + height * 0.5, 0)
 spawn.Anchored = true
-spawn.CanCollide = true
 spawn.Enabled = true
+
+if IS_ISLAND then
+	-- Sunk into the ground, invisible and untouchable: players still appear
+	-- on top of it, but it never gets in the way of a block or a raycast.
+	spawn.CFrame = CFrame.new(0, surfaceY - height * 0.5, 0)
+	spawn.Transparency = 1
+	spawn.CanCollide = false
+	spawn.CanQuery = false
+	spawn.CanTouch = false
+	for _, child in ipairs(spawn:GetChildren()) do
+		if child:IsA("Decal") or child:IsA("Texture") then
+			child.Transparency = 1
+		end
+	end
+else
+	spawn.CFrame = CFrame.new(0, surfaceY + PLATFORM_THICKNESS + height * 0.5, 0)
+	spawn.CanCollide = true
+end
 
 -- Belt and braces: a player who ends up under the world - spawning before the
 -- platform existed, or through a chunk that had not loaded - is put back

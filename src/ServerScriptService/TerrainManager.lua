@@ -867,8 +867,23 @@ local function isBlockPresent(cx, cz, bx, bz, by)
 		return isPresentInData(data, bx * CHUNK_SIZE + bz + 1, by)
 	end
 
-	local height = getGeneratedColumn(cx * CHUNK_SIZE + bx, cz * CHUNK_SIZE + bz)
-	return by < height
+	local blockX = cx * CHUNK_SIZE + bx
+	local blockZ = cz * CHUNK_SIZE + bz
+	local height = getGeneratedColumn(blockX, blockZ)
+	if by >= height then
+		return false
+	end
+
+	-- The island carves out the space under itself at generation (see
+	-- IslandShape.applyBlocks), which the heightmap alone does not show.
+	if ColumnSource.baseAt then
+		local base = ColumnSource.baseAt(blockX, blockZ)
+		if base and by < base then
+			return false
+		end
+	end
+
+	return true
 end
 
 --[[
@@ -2050,6 +2065,15 @@ local function generateChunk(cx, cz)
 	-- Phase 1: structure terrain edits, before anything is rendered, so the
 	-- chunk is built once rather than built and then patched.
 	phaseStart = chunkCpuSpent(ctx)
+
+	-- The column source's own carving, before structures so a tree can still
+	-- stand on what is left. Only the island has any (the space under it);
+	-- BiomeMap leaves this nil.
+	if ColumnSource.applyBlocks then
+		ColumnSource.applyBlocks(cx, cz, writer)
+		yieldIfOverBudget(ctx)
+	end
+
 	StructureRegistry.applyBlocks(cx, cz, writer)
 	Profiler.sample("Terrain.gen.2structures", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
 	yieldIfOverBudget(ctx)

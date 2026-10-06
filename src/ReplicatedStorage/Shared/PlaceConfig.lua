@@ -36,10 +36,10 @@ local RunService = game:GetService("RunService")
 local PlaceConfig = {}
 
 -- The open world. Also the game's start place.
-PlaceConfig.WorldPlaceId = 0
+PlaceConfig.WorldPlaceId = 82014616047124
 
--- The island place. 0 until it has been created; nothing is an island then.
-PlaceConfig.IslandPlaceId = 0
+-- The island place.
+PlaceConfig.IslandPlaceId = 123514939860898
 
 local KINDS = { World = true, Island = true }
 

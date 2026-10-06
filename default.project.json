@@ -668,6 +668,12 @@
       },
       "IslandService": {
         "$path": "src/ServerScriptService/IslandService.server.lua"
+      },
+      "IslandDirectory": {
+        "$path": "src/ServerScriptService/IslandDirectory.lua"
+      },
+      "TravelCommands": {
+        "$path": "src/ServerScriptService/TravelCommands.server.lua"
       }
     }
   }

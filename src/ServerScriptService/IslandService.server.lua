@@ -22,10 +22,10 @@
 
 	WHOSE ISLAND
 
-	For now, the first player to arrive: in Studio, and until teleporting
-	exists, that is always the owner. Teleporting replaces this with the island
-	the server was reserved for, so a visitor who happens to arrive first can
-	never claim someone else's island as their own.
+	A reserved server (where /island sends you) looks its owner up in
+	IslandDirectory by its own PrivateServerId, so a visitor who happens to
+	arrive first can never claim someone else's island. Anywhere else - Studio,
+	or a plain server of the island place - the first player to arrive owns it.
 
 	SAVING
 
@@ -64,6 +64,7 @@ local BlockConfig = require(Shared:WaitForChild("Blocks"):WaitForChild("BlockCon
 local StationService = require(ServerScriptService:WaitForChild("StationService"))
 local IslandStore = require(ServerScriptService:WaitForChild("IslandStore"))
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
+local IslandDirectory = require(ServerScriptService:WaitForChild("IslandDirectory"))
 
 -- Restoring a station needs its world folder, which init creates. Idempotent,
 -- so it does not matter who calls it first.
@@ -101,6 +102,8 @@ local function readOnlyMessage()
 			.. "Game Settings > Security > Enable Studio Access to API Services."
 	elseif readOnlyReason == "locked" then
 		return "This island is open on another server, so changes made here won't be saved."
+	elseif readOnlyReason == "owner unknown" then
+		return "Couldn't tell whose island this is, so changes made here won't be saved."
 	end
 	return "This island couldn't be opened for saving, so changes made here won't be saved."
 end
@@ -227,8 +230,45 @@ local function finishLoading()
 	end
 end
 
-local function beginLoading()
+--[[
+	Whose island this server is.
+
+	A reserved server - which is what /island teleports into - looks its owner
+	up in IslandDirectory, keyed by its own PrivateServerId, so nobody can claim
+	it by arriving first. Anything else (Studio, a public server of the island
+	place) falls back to the first player in. If the lookup fails the island
+	still loads for the first player, but read-only, since it may not be theirs.
+]]
+local function resolveOwner(firstPlayer)
+	local serverId = game.PrivateServerId
+	if serverId ~= "" and game.PrivateServerOwnerId == 0 then
+		local owner, err = IslandDirectory.ownerOfServer(serverId)
+		if owner then
+			return owner, false
+		end
+		warn("[IslandService] Could not tell whose island this server is:", err)
+		return firstPlayer.UserId, true
+	end
+	return firstPlayer.UserId, false
+end
+
+local function beginLoading(firstPlayer)
 	task.spawn(function()
+		local resolved, owner, unknown = pcall(resolveOwner, firstPlayer)
+		if not resolved then
+			warn("[IslandService] Owner lookup errored:", owner)
+			owner, unknown = firstPlayer.UserId, true
+		end
+		ownerUserId = owner
+		log(string.format("This server is island %d.", ownerUserId))
+
+		if unknown then
+			readOnly = true
+			readOnlyReason = "owner unknown"
+			finishLoading()
+			return
+		end
+
 		local ok, err = pcall(loadIsland)
 		if not ok then
 			warn("[IslandService] Loading the island failed; it will not be saved this session:", err)
@@ -368,11 +408,12 @@ end)
 -- Players
 -- ---------------------------------------------------------------------------
 
+local loadStarted = false
+
 local function onPlayerAdded(player)
-	if ownerUserId == nil then
-		ownerUserId = player.UserId
-		log(string.format("This server is %s's island.", player.Name))
-		beginLoading()
+	if not loadStarted then
+		loadStarted = true
+		beginLoading(player)
 	elseif loaded and readOnly then
 		task.delay(MESSAGE_DELAY, CommandFeedback.tell, player, readOnlyMessage(), "bad")
 	end

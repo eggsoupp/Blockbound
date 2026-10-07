@@ -90,8 +90,10 @@ local CONFIG = {
 	SessionLockTimeout = 900,
 	StudioSessionLockTimeout = 30,
 
-	-- How long to wait for another server to let go before loading read-only.
-	LockWaitAttempts = 5,
+	-- How long to wait for another server to let go before loading read-only:
+	-- about twenty seconds, enough for a server that is shutting down to land
+	-- its final save.
+	LockWaitAttempts = 10,
 	LockWaitDelay = 2,
 
 	-- A DataStore value may be 4,000,000 characters of JSON. A save over this
@@ -191,7 +193,10 @@ local function lockIsForeign(record)
 	end
 
 	local lockedAt = tonumber(record.lockedAt) or 0
-	local timeout = if RunService:IsStudio()
+	-- A lock written BY Studio expires as fast as one seen from Studio: a
+	-- playtest often dies before releasing, and must not keep the live game off
+	-- the island for fifteen minutes. See the same rule in InventoryStore.
+	local timeout = if RunService:IsStudio() or string.sub(lockId, 1, 7) == "studio-"
 		then CONFIG.StudioSessionLockTimeout
 		else CONFIG.SessionLockTimeout
 

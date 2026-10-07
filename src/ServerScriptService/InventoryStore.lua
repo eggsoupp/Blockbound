@@ -86,8 +86,10 @@ local CONFIG = {
 	StudioSessionLockTimeout = 30,
 
 	-- How long to wait for another server to let go of a live lock before
-	-- giving up and loading read-only.
-	LockWaitAttempts = 5,
+	-- giving up and loading read-only. Teleporting between places makes this
+	-- the normal case rather than a rare one: the server being left is still
+	-- writing its final save when the next one asks. About twenty seconds.
+	LockWaitAttempts = 10,
 	LockWaitDelay = 2,
 }
 
@@ -531,7 +533,19 @@ local function lockIsForeign(record)
 	end
 
 	local lockedAt = tonumber(record.lockedAt) or 0
-	local timeout = if RunService:IsStudio()
+
+	--[[
+		The short timeout applies to a lock WRITTEN by Studio as well as to every
+		lock seen FROM Studio.
+
+		Studio and live servers share one DataStore. A playtest stopped in Studio
+		often dies before its leave-save finishes, and the lock it leaves behind
+		used to hold the live game off the player's inventory for the full
+		fifteen minutes - a live session then loaded an empty, unsaveable bag,
+		which looks exactly like "my inventory never saves". A Studio session is
+		one developer at a keyboard; thirty seconds is plenty.
+	]]
+	local timeout = if RunService:IsStudio() or string.sub(lockId, 1, 7) == "studio-"
 		then CONFIG.StudioSessionLockTimeout
 		else CONFIG.SessionLockTimeout
 
@@ -828,34 +842,77 @@ function InventoryStore.release(player, inventory, reason)
 	end
 
 	local saved, err = false, nil
-	if inventory and session and not session.readOnly then
-		saved, err = InventoryStore.save(player, inventory, reason or "release")
-	end
-
-	--[[
-		Drop the lock whenever this server still holds it - not only after a
-		successful save.
-
-		Holding on after a failed save was the tempting option, but it protects
-		nothing: whatever was in memory is gone either way, and the record in the
-		store is still the last good save. All a retained lock would achieve is
-		forcing this player's NEXT session to run read-only until the 15 minute
-		timeout expires. The UpdateAsync guard below still refuses to touch a lock
-		that has since been claimed by someone else.
-	]]
 	local store = getStore()
+
 	if store then
 		beginSave(userId)
-		withRetry("release/UpdateAsync", function()
-			store:UpdateAsync(keyFor(userId), function(old)
-				if type(old) ~= "table" or old.lockId ~= SERVER_ID then
-					return nil
-				end
-				old.lockId = nil
-				old.lockedAt = nil
-				return old
+
+		if inventory and session and not session.readOnly then
+			--[[
+				The final save and the unlock in ONE write.
+
+				They used to be two back-to-back UpdateAsyncs on the same key, and
+				DataStores hold a second write to a key for about six seconds - so
+				the lock stayed up long after the save, and the server the player
+				was teleporting to waited it out or gave up and loaded read-only.
+			]]
+			local payload = serialize(inventory, player)
+			if session.granted then
+				payload.granted = true
+			end
+
+			local ok, result = withRetry("release/UpdateAsync", function()
+				local wrote = false
+
+				store:UpdateAsync(keyFor(userId), function(old)
+					wrote = false
+					if lockIsForeign(old) then
+						-- Another server owns this player now. Ours is the stale copy.
+						return nil
+					end
+
+					payload.lockId = nil
+					payload.lockedAt = nil
+					wrote = true
+					return payload
+				end)
+
+				return wrote
 			end)
-		end)
+
+			if not ok then
+				err = tostring(result)
+			elseif not result then
+				err = "lock lost"
+				swarn(string.format(
+					"Skipped the final save for %s (%s): the lock is held by another server.",
+					player.Name, tostring(reason)
+				))
+			else
+				saved = true
+			end
+		else
+			--[[
+				Nothing to save, but drop the lock if this server still holds it.
+
+				Holding on after a failed load protects nothing: the record in the
+				store is still the last good save. All a retained lock would achieve
+				is forcing this player's NEXT session to run read-only until the
+				timeout expires. The guard still refuses to touch a lock that has
+				since been claimed by someone else.
+			]]
+			withRetry("release/UpdateAsync", function()
+				store:UpdateAsync(keyFor(userId), function(old)
+					if type(old) ~= "table" or old.lockId ~= SERVER_ID then
+						return nil
+					end
+					old.lockId = nil
+					old.lockedAt = nil
+					return old
+				end)
+			end)
+		end
+
 		endSave(userId)
 	end
 
@@ -891,6 +948,40 @@ end
 function InventoryStore.isReadOnly(player)
 	local session = sessions[player.UserId]
 	return session ~= nil and session.readOnly
+end
+
+--[[
+	Whether any save or release is still being written, for anyone.
+
+	BindToClose needs this, not just the list of players: when the last player
+	leaves, their leave-save is already in flight by the time the server starts
+	closing, and they are no longer in Players to be waited on by name.
+]]
+function InventoryStore.hasPendingWrites()
+	return next(savesInFlight) ~= nil
+end
+
+--[[
+	A one-line description of a player's save state, for /savestatus.
+]]
+function InventoryStore.describe(player)
+	if storeUnavailableReason then
+		return "OFF - DataStores unavailable (" .. storeUnavailableReason .. ")"
+	end
+
+	local session = sessions[player.UserId]
+	if not session then
+		return "not loaded"
+	end
+	if session.readOnly then
+		return "OFF - this session is read-only (save was locked or unreadable when you joined)"
+	end
+
+	local since = if session.lastSaveAt > 0
+		then string.format("last saved %ds ago", math.floor(os.clock() - session.lastSaveAt))
+		else "not saved yet this session"
+
+	return string.format("on, %s%s", since, if session.dirty then ", unsaved changes" else "")
 end
 
 --[[

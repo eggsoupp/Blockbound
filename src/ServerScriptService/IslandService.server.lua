@@ -219,6 +219,7 @@ local function finishLoading()
 
 	workspace:SetAttribute("IslandOwnerId", ownerUserId)
 	workspace:SetAttribute("IslandSaving", not readOnly)
+	workspace:SetAttribute("IslandSaveProblem", if readOnly then readOnlyReason or "unknown" else nil)
 
 	TerrainManager:ReleaseGeneration(LOAD_HOLD)
 
@@ -253,6 +254,17 @@ local function resolveOwner(firstPlayer)
 end
 
 local function beginLoading(firstPlayer)
+	-- Usually done in a second or two. When it is not - another server still
+	-- finishing its save of this island - say so, rather than leaving players
+	-- frozen in an empty sky wondering whether anything is happening.
+	task.delay(MESSAGE_DELAY, function()
+		if not loaded then
+			for _, player in ipairs(Players:GetPlayers()) do
+				CommandFeedback.tell(player, "Loading the island... (waiting for its last save to finish)")
+			end
+		end
+	end)
+
 	task.spawn(function()
 		local resolved, owner, unknown = pcall(resolveOwner, firstPlayer)
 		if not resolved then
@@ -328,7 +340,10 @@ end
 -- ---------------------------------------------------------------------------
 
 local function markDirty()
-	dirty = true
+	if not dirty then
+		dirty = true
+		workspace:SetAttribute("IslandUnsaved", true)
+	end
 end
 
 ChunkEdits.setChangeListener(markDirty)
@@ -377,6 +392,8 @@ local function saveNow(reason, release)
 
 	if saved then
 		lastSaveAt = os.clock()
+		workspace:SetAttribute("IslandLastSaved", os.time())
+		workspace:SetAttribute("IslandUnsaved", dirty)
 	else
 		dirty = true
 		warn(string.format("[IslandService] Island %d was not saved (%s): %s", ownerUserId, reason, tostring(err)))

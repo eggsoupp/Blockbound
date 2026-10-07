@@ -156,6 +156,19 @@ local function onPlayerAdded(player)
 				.. "locked by another server). Nothing they do this session will be kept.",
 			player.Name
 		))
+
+		-- Said to the player too. Silent, this looked exactly like "my inventory
+		-- never saves". Delayed so their client is listening by then.
+		task.delay(4, function()
+			if player.Parent then
+				CommandFeedback.tell(
+					player,
+					"Your saved inventory couldn't be loaded (it may still be open on another server). "
+						.. "Nothing you collect now will be saved - rejoin in a minute.",
+					"bad"
+				)
+			end
+		end)
 	end
 end
 
@@ -203,9 +216,6 @@ end)
 ]]
 game:BindToClose(function()
 	local players = Players:GetPlayers()
-	if #players == 0 then
-		return
-	end
 
 	log(string.format("Shutdown: saving %d inventories", #players))
 
@@ -218,13 +228,23 @@ game:BindToClose(function()
 		end)
 	end
 
+	--[[
+		Also wait for saves that are ALREADY running.
+
+		This used to return straight away when nobody was left - but a server
+		only closes because the last player left, and that player's leave-save
+		is in flight at exactly this moment. Returning let the server die
+		mid-write, which lost the save and left the session lock behind, so the
+		next server (the place they teleported to, or their next visit) loaded
+		an empty, unsaveable bag.
+	]]
 	local deadline = os.clock() + SHUTDOWN_TIMEOUT
-	while remaining > 0 and os.clock() < deadline do
+	while (remaining > 0 or InventoryStore.hasPendingWrites()) and os.clock() < deadline do
 		task.wait(0.1)
 	end
 
-	if remaining > 0 then
-		swarn(string.format("Shutdown timed out with %d save(s) unfinished.", remaining))
+	if remaining > 0 or InventoryStore.hasPendingWrites() then
+		swarn("Shutdown timed out with inventory saves unfinished.")
 	end
 end)
 

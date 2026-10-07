@@ -5,6 +5,7 @@
 
 	  /island, /home   to your own island
 	  /world           to the open world
+	  /savestatus      whether your inventory and this island are saving
 
 	ADMIN ONLY FOR NOW
 
@@ -36,6 +37,7 @@ local Permissions = require(Shared:WaitForChild("Permissions"))
 
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 local IslandDirectory = require(ServerScriptService:WaitForChild("IslandDirectory"))
+local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
 
 local tell = CommandFeedback.tell
 
@@ -43,6 +45,7 @@ local COMMANDS = {
 	["/island"] = "island",
 	["/home"] = "island",
 	["/world"] = "world",
+	["/savestatus"] = "status",
 }
 
 -- Seconds between travel requests from one player. A teleport takes longer
@@ -101,6 +104,33 @@ local function travel(player, destination)
 	teleport(player, PlaceConfig.IslandPlaceId, code)
 end
 
+-- The island half of /savestatus, read off the attributes IslandService keeps
+-- on Workspace. nil in the open world.
+local function describeIsland()
+	if not PlaceConfig.isIsland() then
+		return nil
+	end
+
+	local owner = workspace:GetAttribute("IslandOwnerId")
+	if owner == nil then
+		return "Island: still loading"
+	end
+
+	if not workspace:GetAttribute("IslandSaving") then
+		return string.format(
+			"Island %d: saving OFF (%s)", owner, tostring(workspace:GetAttribute("IslandSaveProblem"))
+		)
+	end
+
+	local lastSaved = workspace:GetAttribute("IslandLastSaved")
+	return string.format(
+		"Island %d: saving on, %s%s",
+		owner,
+		if lastSaved then string.format("last saved %ds ago", os.time() - lastSaved) else "not saved yet this session",
+		if workspace:GetAttribute("IslandUnsaved") then ", unsaved changes" else ""
+	)
+end
+
 local function onChatted(player, message)
 	local command = string.match(message, "^%s*(/%a+)%s*$")
 	local destination = command and COMMANDS[string.lower(command)]
@@ -110,6 +140,15 @@ local function onChatted(player, message)
 
 	if not Permissions.isAdmin(player) then
 		tell(player, "Travel is limited to the game owner for now.", "bad")
+		return
+	end
+
+	if destination == "status" then
+		tell(player, "Inventory: " .. InventoryStore.describe(player))
+		local island = describeIsland()
+		if island then
+			tell(player, island)
+		end
 		return
 	end
 

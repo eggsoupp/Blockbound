@@ -80,8 +80,10 @@ function Main(Player) -- this code is called for each player joining
 	Player.Chatted:Connect(function(Message)
 		local SplittedMessage = string.split(Message, " ")
 		local Command = string.lower(SplittedMessage[1])
-		local PlayerName = string.lower(SplittedMessage[2])
-		local Arg1 = string.lower(SplittedMessage[3]) or ""
+		-- Every chat line an admin types arrives here, and most have fewer than
+		-- three words: string.lower(nil) used to throw on "/island" and the like.
+		local PlayerName = string.lower(SplittedMessage[2] or "")
+		local Arg1 = string.lower(SplittedMessage[3] or "")
 		local Arg2 = SplittedMessage[4] and string.lower(SplittedMessage[4]) or ""
 		
 		if Command == "/givestats" then -- /givestats PlayerName StatName Amount

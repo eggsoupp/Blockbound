@@ -41,6 +41,12 @@ local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"
 
 local tell = CommandFeedback.tell
 
+-- First thing in every server's log: which place this is and which PUBLISHED
+-- version it runs. A server keeps the version it started with, and Studio
+-- edits only reach live servers through File > Publish - so when live
+-- behaves like old code, this line is how to tell.
+print(string.format("[BlockBound] %s place (id %d), published version %d", PlaceConfig.kind(), game.PlaceId, game.PlaceVersion))
+
 local COMMANDS = {
 	["/island"] = "island",
 	["/home"] = "island",
@@ -144,6 +150,7 @@ local function onChatted(player, message)
 	end
 
 	if destination == "status" then
+		tell(player, string.format("Place: %s, published version %d", PlaceConfig.kind(), game.PlaceVersion))
 		tell(player, "Inventory: " .. InventoryStore.describe(player))
 		local island = describeIsland()
 		if island then

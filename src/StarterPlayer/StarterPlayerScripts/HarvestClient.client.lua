@@ -91,6 +91,7 @@ end
 
 local rayParams = RaycastParams.new()
 rayParams.FilterType = Enum.RaycastFilterType.Exclude
+rayParams.IgnoreWater = true -- water is Terrain; aim through it
 
 local function chop(tool)
 	local character = player.Character

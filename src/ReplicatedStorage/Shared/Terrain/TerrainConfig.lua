@@ -290,6 +290,22 @@ TerrainConfig.ConvertDecalsToTextures = true
 TerrainConfig.CastTerrainShadows = false
 TerrainConfig.CastStructureShadows = true
 
+--[[
+	How water looks. Water is Roblox Terrain (see TerrainManager, WATER), so
+	these are Terrain's own water settings, applied when the terrain starts.
+
+	Waves are kept small: in a world of square blocks a gentle shimmer reads as
+	water, a rolling sea reads as a different game. Colour and transparency
+	were picked to match the old water blocks.
+]]
+TerrainConfig.Water = {
+	Color = Color3.fromRGB(38, 104, 164),
+	Transparency = 0.55,
+	Reflectance = 0.35,
+	WaveSize = 0.05,
+	WaveSpeed = 8,
+}
+
 -- Tried in order when a biome asks for a template that is not in
 -- ReplicatedStorage.TerrainAssets.Blocks.
 TerrainConfig.BlockFallbackOrder = { "Dirt", "Grass", "Sand", "Snow", "Sandstone", "Water" }

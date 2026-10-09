@@ -469,6 +469,9 @@ function beginMining()
 	local ray = mouse.UnitRay
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
+	-- Aim through water at the block behind it: water is Terrain now, and a
+	-- ray stops at Terrain water unless told not to.
+	params.IgnoreWater = true
 	local excluded = { targetProxy }
 	if player.Character then table.insert(excluded, player.Character) end
 	params.FilterDescendantsInstances = excluded

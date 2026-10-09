@@ -23,6 +23,7 @@ local CHOP_RANGE = 12
 
 local rayParams = RaycastParams.new()
 rayParams.FilterType = Enum.RaycastFilterType.Exclude
+rayParams.IgnoreWater = true -- water is Terrain; aim through it
 
 tool.Activated:Connect(function()
 	local player = Players.LocalPlayer

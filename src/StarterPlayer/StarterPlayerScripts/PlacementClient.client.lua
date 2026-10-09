@@ -83,6 +83,9 @@ local resultFlashSuccess = true
 
 local raycastParams = RaycastParams.new()
 raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+-- Aim through water: water is Terrain, and placing a block INTO a lake means
+-- pointing at the bed through the surface.
+raycastParams.IgnoreWater = true
 
 local overlapParams = OverlapParams.new()
 overlapParams.FilterType = Enum.RaycastFilterType.Exclude

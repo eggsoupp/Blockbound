@@ -1135,17 +1135,40 @@ end
 -- cubes: five entries each, same layout as layerRects.
 local finalRects = {}
 
---[[
-	Rebuilds the Parts for one Y layer of a chunk from its visible set.
+local function rectKey(bx, bz, sizeX, sizeZ)
+	-- Sizes run 1..ChunkSize, so 32 leaves room; bx/bz are 0..ChunkSize-1.
+	return ((bx * CHUNK_SIZE + bz) * 32 + sizeX) * 32 + sizeZ
+end
 
-	Two passes. The first turns the visible set into the final list of
-	rectangles. The second walks that list against the parts already drawing this
-	layer, reusing each in order where the block type still matches, and only
-	falling back to pool traffic where it does not. A layer that did not really
-	change therefore costs a handful of property writes rather than a full
-	teardown.
+local function overlapArea(rect, bx, bz, sizeX, sizeZ)
+	local overlapX = math.min(rect.bx + rect.sizeX, bx + sizeX) - math.max(rect.bx, bx)
+	local overlapZ = math.min(rect.bz + rect.sizeZ, bz + sizeZ) - math.max(rect.bz, bz)
+	if overlapX <= 0 or overlapZ <= 0 then
+		return 0
+	end
+	return overlapX * overlapZ
+end
+
+--[[
+	Works out how one Y layer of a chunk should be drawn, WITHOUT touching any
+	Part yet. applyLayerPlans does the touching, for every layer of an edit at
+	once - see there for why the order matters.
+
+	The visible set becomes a list of rectangles (the mesher), and each one is
+	matched to a Part already drawing this layer, in order of preference:
+
+	  1. a Part drawing EXACTLY that rectangle - left completely alone;
+	  2. the same block's Part that overlaps it most - reshaped;
+	  3. any spare Part of the same block - reshaped;
+	  4. nothing - a new Part from the pool.
+
+	It used to match in list order: rectangle 7 got whatever Part was 7th. One
+	block mined out of a slab shifts every rectangle after it in the list, so a
+	single edit moved and resized Parts all over the layer, even where nothing
+	had changed - which is the jitter you could see around every edit. Matching
+	by shape means an edit only touches the rectangles it actually changed.
 ]]
-local function remeshLayer(data, by)
+local function planLayer(data, by)
 	table.clear(layerGrid)
 
 	local visible = data.visible
@@ -1160,21 +1183,26 @@ local function remeshLayer(data, by)
 		end
 	end
 
+	local plan = {
+		data = data,
+		by = by,
+		rects = {}, -- five entries per rectangle: bx, bz, sizeX, sizeZ, name
+		count = 0,
+		parts = {}, -- rectangle -> the Part that will draw it
+		reshape = {}, -- rectangle -> true when that Part has to move
+		leftover = {}, -- existing Parts nothing wanted
+	}
+
 	local existing = data.layerParts[by]
-	local existingCount = if existing then #existing else 0
 
 	if not anything then
 		if existing then
-			for i = existingCount, 1, -1 do
-				releasePart(existing[i])
-				existing[i] = nil
-			end
-			data.layerParts[by] = nil
+			table.move(existing, 1, #existing, 1, plan.leftover)
 		end
-		return
+		return plan
 	end
 
-	-- Pass 1: rectangles.
+	-- Rectangles.
 	table.clear(layerRects)
 	local count = TerrainMesher.meshLayer(
 		layerGrid, CHUNK_SIZE, TerrainConfig.MergeSurfaceRuns, layerRects
@@ -1214,83 +1242,195 @@ local function remeshLayer(data, by)
 		end
 	end
 
-	-- Pass 2: reconcile against what is already drawn.
-	local bucket = existing
-	if not bucket then
-		bucket = {}
-		data.layerParts[by] = bucket
+	-- Copied out of the scratch buffer: plans are applied after every dirty
+	-- layer has been planned, and the next planLayer reuses finalRects.
+	local rects = plan.rects
+	table.move(finalRects, 1, write, 1, rects)
+	plan.count = write // 5
+
+	if not existing or #existing == 0 then
+		return plan
 	end
 
-	local kept = 0
-	local rectCount = write // 5
+	local parts = plan.parts
+	local taken = {}
 
-	for index = 0, rectCount - 1 do
-		local base = index * 5
-		local bx = finalRects[base + 1]
-		local bz = finalRects[base + 2]
-		local sizeX = finalRects[base + 3]
-		local sizeZ = finalRects[base + 4]
-		local name = finalRects[base + 5]
-
-		local slot = index + 1
-		local reuse = bucket[slot]
-		local part
-
-		-- Consumed the moment it is read. `kept` can fall behind `slot` when a
-		-- block has no usable template, and without this the part would be
-		-- written to a lower slot while its original slot still referenced it -
-		-- the tail sweep below would then release a part that is still in play.
-		bucket[slot] = nil
-
-		if reuse and reuse.Name == name then
-			reshapeMeshPart(data, reuse, bx, bz, sizeX, sizeZ, by)
-			part = reuse
-		else
-			if reuse then
-				-- Wrong block type for this slot; it goes back to its own pool.
-				releasePart(reuse)
+	-- 1. Exact matches, through a lookup so a big layer is not n * m.
+	local byShape = {}
+	for index, part in ipairs(existing) do
+		local rect = partRect[part]
+		if rect then
+			local key = rectKey(rect.bx, rect.bz, rect.sizeX, rect.sizeZ)
+			local list = byShape[key]
+			if not list then
+				list = {}
+				byShape[key] = list
 			end
-			part = emitMeshPart(data, bx, bz, sizeX, sizeZ, by, name)
-		end
-
-		-- part is nil only when the block has no usable template, which warns
-		-- elsewhere. Skipping the slot keeps the bucket a dense array.
-		if part then
-			kept += 1
-			bucket[kept] = part
+			table.insert(list, index)
 		end
 	end
 
-	for i = existingCount, kept + 1, -1 do
-		local leftover = bucket[i]
-		if leftover then
-			releasePart(leftover)
+	for r = 1, plan.count do
+		local base = (r - 1) * 5
+		local list = byShape[rectKey(rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4])]
+		if list then
+			for _, index in ipairs(list) do
+				local part = existing[index]
+				if not taken[index] and part.Name == rects[base + 5] then
+					taken[index] = true
+					parts[r] = part
+					break
+				end
+			end
 		end
-		bucket[i] = nil
 	end
 
-	Profiler.count("Terrain.layerMeshed")
+	-- 2. Largest overlap with a Part of the same block.
+	for r = 1, plan.count do
+		if not parts[r] then
+			local base = (r - 1) * 5
+			local bx, bz, sizeX, sizeZ, name =
+				rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4], rects[base + 5]
+
+			local best, bestArea = nil, 0
+			for index, part in ipairs(existing) do
+				if not taken[index] and part.Name == name then
+					local rect = partRect[part]
+					local area = if rect then overlapArea(rect, bx, bz, sizeX, sizeZ) else 0
+					if area > bestArea then
+						best, bestArea = index, area
+					end
+				end
+			end
+
+			if best then
+				taken[best] = true
+				parts[r] = existing[best]
+				plan.reshape[r] = true
+			end
+		end
+	end
+
+	-- 3. Any spare Part of the same block. Moving an existing Part is a
+	-- property change; a new one is a new Instance for every client, which is
+	-- the slower of the two to arrive.
+	for r = 1, plan.count do
+		if not parts[r] then
+			local name = rects[(r - 1) * 5 + 5]
+			for index, part in ipairs(existing) do
+				if not taken[index] and part.Name == name then
+					taken[index] = true
+					parts[r] = part
+					plan.reshape[r] = true
+					break
+				end
+			end
+		end
+	end
+
+	for index, part in ipairs(existing) do
+		if not taken[index] then
+			table.insert(plan.leftover, part)
+		end
+	end
+
+	return plan
 end
 
 --[[
-	Rebuilds every layer that changed since the last flush.
+	Applies a set of layer plans, ADDING BEFORE REMOVING:
 
-	Visibility is decided per column, but a Part now spans columns, so the two
+	  1. every new Part, on every layer
+	  2. every reshape
+	  3. every Part that is no longer wanted
+
+	Mining one block typically shrinks or splits the slab it was part of AND
+	reveals the block underneath, which needs a Part that did not exist. Each
+	client receives those changes over the network, and a new Part is the
+	slowest kind to arrive. Removing first left a moment where the player's
+	client had the slab gone and nothing under it yet - long enough to fall
+	through the world if you mined fast enough. Creating first gives the new
+	ground the head start. (TerrainManager also lifts anyone who does end up
+	inside the ground; see rescueBuriedPlayers.)
+]]
+local function applyLayerPlans(plans)
+	-- 1. New Parts.
+	for _, plan in ipairs(plans) do
+		local rects = plan.rects
+		for r = 1, plan.count do
+			if not plan.parts[r] then
+				local base = (r - 1) * 5
+				-- nil only when the block has no usable template, which warns
+				-- elsewhere.
+				plan.parts[r] = emitMeshPart(
+					plan.data, rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4],
+					plan.by, rects[base + 5]
+				) or false
+			end
+		end
+	end
+
+	-- 2. Reshapes.
+	for _, plan in ipairs(plans) do
+		local rects = plan.rects
+		for r in pairs(plan.reshape) do
+			local base = (r - 1) * 5
+			reshapeMeshPart(
+				plan.data, plan.parts[r], rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4],
+				plan.by
+			)
+		end
+	end
+
+	-- 3. Removals, and the new layer lists.
+	for _, plan in ipairs(plans) do
+		for _, part in ipairs(plan.leftover) do
+			releasePart(part)
+		end
+
+		local bucket = {}
+		for r = 1, plan.count do
+			local part = plan.parts[r]
+			if part then
+				table.insert(bucket, part)
+			end
+		end
+
+		plan.data.layerParts[plan.by] = if #bucket > 0 then bucket else nil
+		Profiler.count("Terrain.layerMeshed")
+	end
+end
+
+--[[
+	Rebuilds every layer that changed since the last flush, across every chunk
+	given - an edit on a chunk border changes two chunks, and they have to be
+	applied together for the add-before-remove order to hold across the border.
+
+	Visibility is decided per column, but a Part spans columns, so the two
 	cannot be done in one step: the whole column pass has to finish before the
 	layers it touched can be meshed. Callers do a batch of column updates and
 	then flush once.
 ]]
+local function flushChunks(list)
+	local plans = {}
+
+	for _, data in ipairs(list) do
+		if data.dirtyCount > 0 then
+			for by in pairs(data.dirtyLayers) do
+				table.insert(plans, planLayer(data, by))
+			end
+			table.clear(data.dirtyLayers)
+			data.dirtyCount = 0
+		end
+	end
+
+	if #plans > 0 then
+		applyLayerPlans(plans)
+	end
+end
+
 local function flushChunkMesh(data)
-	if data.dirtyCount == 0 then
-		return
-	end
-
-	for by in pairs(data.dirtyLayers) do
-		remeshLayer(data, by)
-	end
-
-	table.clear(data.dirtyLayers)
-	data.dirtyCount = 0
+	flushChunks({ data })
 end
 
 --[[
@@ -1736,9 +1876,13 @@ local function refreshAdjacentColumns(cx, cz, bx, bz)
 		end
 	end
 
+	-- Together, so new Parts in one chunk are made before old ones in the
+	-- other are removed. See applyLayerPlans.
+	local list = {}
 	for data in pairs(touched) do
-		flushChunkMesh(data)
+		table.insert(list, data)
 	end
+	flushChunks(list)
 end
 
 --[[
@@ -2583,7 +2727,72 @@ local function onHeartbeatGenerate(dt)
 	trimPoolsIfNeeded()
 end
 
+--[[
+	Lifts a player who has ended up INSIDE solid ground back on top of it.
+
+	Nobody can legitimately be inside a block: every solid cell that touches air
+	is drawn, and drawn blocks collide. A player whose body is in one has
+	slipped through a gap - in practice the moment between an edit taking
+	ground away on their client and the replacement Part arriving (see
+	applyLayerPlans) - and is falling through the world. Their client runs
+	their physics, so it cannot be stopped there; but the server knows where
+	the ground really is, so it puts them back on it within a frame or two
+	instead of at the bottom of the world.
+
+	Checked every frame because it is a handful of table reads per player, and
+	a falling body crosses a thin floor quickly.
+]]
+local function rescueBuriedPlayer(player)
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not (root and humanoid) or humanoid.Health <= 0 or root.Anchored then
+		return
+	end
+
+	local position = root.Position
+	local blockX = math.floor(position.X / STUD_SIZE)
+	local blockZ = math.floor(position.Z / STUD_SIZE)
+	local by = math.floor(position.Y / STUD_SIZE)
+
+	local cx, cz, bx, bz = normalizeCell(
+		blockX // CHUNK_SIZE, blockZ // CHUNK_SIZE, blockX % CHUNK_SIZE, blockZ % CHUNK_SIZE
+	)
+	local key = chunkKey(cx, cz)
+	local data = chunks[key]
+
+	-- A chunk still being built may not have its edits replayed yet, so what it
+	-- says is solid is not final.
+	if not data or generatingChunks[key] then
+		return
+	end
+
+	local cell = cellOf(bx, bz)
+	if by < FLOOR_Y or by > MAX_BLOCK_Y or not isPresentInData(data, cell, by) then
+		return
+	end
+
+	-- The first gap above them two blocks tall: room to stand, with ground
+	-- under it, since everything scanned past on the way was solid.
+	local feet = by + 1
+	while feet <= MAX_BLOCK_Y and (isPresentInData(data, cell, feet) or isPresentInData(data, cell, feet + 1)) do
+		feet += 1
+	end
+	if feet > MAX_BLOCK_Y then
+		return
+	end
+
+	local lift = root.Size.Y * 0.5 + humanoid.HipHeight
+	root.AssemblyLinearVelocity = Vector3.zero
+	root.CFrame = CFrame.new(position.X, feet * STUD_SIZE + lift + 0.05, position.Z) * root.CFrame.Rotation
+	Profiler.count("Terrain.playerRescued")
+end
+
 local function onHeartbeatMovement(dt)
+	for _, player in ipairs(Players:GetPlayers()) do
+		rescueBuriedPlayer(player)
+	end
+
 	movementAccumulator += dt
 	if movementAccumulator < TerrainConfig.MovementCheckInterval then
 		return

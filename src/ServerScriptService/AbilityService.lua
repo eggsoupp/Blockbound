@@ -52,6 +52,8 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"
 local AbilityLoadout = require(ServerScriptService:WaitForChild("AbilityLoadout"))
 local ManaService = require(ServerScriptService:WaitForChild("ManaService"))
 local CombatService = require(ServerScriptService:WaitForChild("CombatService"))
+local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
+local GearService = require(ServerScriptService:WaitForChild("GearService"))
 
 local AbilityService = {}
 
@@ -459,6 +461,17 @@ local function onRequest(player: Player, abilityName: any, target: any)
 		seed = math.random(1, 2147483647),
 
 		scope = scope,
+
+		--[[
+			How an ability hurts an enemy. Every ability goes through this
+			rather than calling EnemyService itself, so anything that scales a
+			player's ability damage - a Spell Ring, for now - applies to every
+			ability, including the ones not written yet. Read at the moment of
+			each hit, so it matches what the player is wearing then.
+		]]
+		damage = function(model, amount)
+			return EnemyService.damage(model, amount * GearService.abilityMultiplier(player), player)
+		end,
 
 		broadcast = function(payload)
 			payload.ability = abilityName

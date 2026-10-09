@@ -674,6 +674,9 @@
       },
       "TravelCommands": {
         "$path": "src/ServerScriptService/TravelCommands.server.lua"
+      },
+      "GearService": {
+        "$path": "src/ServerScriptService/GearService.lua"
       }
     }
   }

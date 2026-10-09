@@ -32,9 +32,9 @@
 	WHERE DEFENSE COMES FROM
 
 	Summed from `buffs.defense` on whatever sits in the player's gear slots -
-	the armour and accessory slots defined by InventoryConstants. That is the
-	shape the item table already used (LeatherArmor 5, IronArmor 15), so
-	nothing here invents a second one, and a new piece of armour is an item
+	the armour and accessory slots defined by InventoryConstants - by
+	GearService, which totals every stat gear can raise. Max health comes from
+	the same place (`buffs.maxHealth`), so an amulet that adds health is an item
 	entry rather than a code change.
 ]]
 
@@ -47,10 +47,7 @@ local CombatConfig = require(Shared:WaitForChild("Combat"):WaitForChild("CombatC
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
-local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
-local InventoryConstants = require(ReplicatedStorage:WaitForChild("InventoryConstants"))
-
-local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
+local GearService = require(ServerScriptService:WaitForChild("GearService"))
 
 local CombatStatsRE = Remotes.ensure("CombatStats", "RemoteEvent")
 
@@ -86,35 +83,14 @@ local invulnerable = setmetatable({}, { __mode = "k" })
 	showing somebody the armour they took off ten minutes ago.
 ]]
 function CombatService.getDefense(player)
-	local defense = CombatConfig.BaseDefense
+	-- Only gear slots count; GearService owns that walk, shared with every
+	-- other stat gear can raise.
+	return CombatConfig.BaseDefense + GearService.get(player).defense
+end
 
-	local inventory = InventoryService.GetInventory(player)
-	if not inventory then
-		return defense
-	end
-
-	local slots = inventory:GetAll()
-
-	for index = 1, #slots do
-		-- Only slots that are gear. A sword in the hotbar is not armour, even
-		-- though ItemDefinitions would happily give it a buffs table.
-		if InventoryConstants.getSlotRestriction(index) ~= nil then
-			local slot = slots[index]
-			local name = slot and slot.name
-
-			if name then
-				local definition = ItemDefinitions[name]
-				local buffs = definition and definition.buffs
-				local bonus = buffs and tonumber(buffs.defense)
-
-				if bonus then
-					defense += bonus
-				end
-			end
-		end
-	end
-
-	return defense
+-- Base health plus whatever the player is wearing (a Vitality Amulet, say).
+function CombatService.getMaxHealth(player)
+	return math.max(1, CombatConfig.BaseMaxHealth + GearService.get(player).maxHealth)
 end
 
 local function getHumanoid(player)
@@ -291,10 +267,12 @@ local function onCharacterAdded(player, character)
 		return
 	end
 
-	-- The game's own number, not Roblox's default. Set before Health, or the
-	-- new maximum would clamp a full bar down to the old one.
-	humanoid.MaxHealth = CombatConfig.BaseMaxHealth
-	humanoid.Health = CombatConfig.BaseMaxHealth
+	-- The game's own number, not Roblox's default, and including whatever gear
+	-- the player is wearing. Set before Health, or the new maximum would clamp
+	-- a full bar down to the old one.
+	local maxHealth = CombatService.getMaxHealth(player)
+	humanoid.MaxHealth = maxHealth
+	humanoid.Health = maxHealth
 
 	humanoid.HealthChanged:Connect(function()
 		pushStats(player)
@@ -330,6 +308,33 @@ function CombatService.init()
 	for _, player in ipairs(Players:GetPlayers()) do
 		bind(player)
 	end
+
+	--[[
+		Gear that adds health takes effect the moment it is put on or taken off.
+
+		The bar keeps its FRACTION across the change rather than gaining or
+		losing the difference. Adding the difference to current health would let
+		a player heal 25 by taking an amulet off and putting it back on, as often
+		as they liked; scaling means a full bar stays full and a half-empty one
+		stays half-empty, whatever they wear.
+	]]
+	GearService.onChanged(function(player)
+		local humanoid = getHumanoid(player)
+		if not humanoid or humanoid.Health <= 0 then
+			return
+		end
+
+		local newMax = CombatService.getMaxHealth(player)
+		local oldMax = humanoid.MaxHealth
+		if newMax == oldMax then
+			return
+		end
+
+		local fraction = if oldMax > 0 then humanoid.Health / oldMax else 1
+		humanoid.MaxHealth = newMax
+		humanoid.Health = math.clamp(newMax * fraction, 1, newMax)
+		pushStats(player)
+	end)
 
 	--[[
 		Defense changes when gear moves, and gear moves through the inventory,

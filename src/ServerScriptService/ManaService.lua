@@ -9,7 +9,7 @@
 
 	The size of the pool and the rate it fills at are AbilityConfig.MaxMana and
 	AbilityConfig.ManaRegenPerSecond, next to the costs they are balanced
-	against.
+	against. Gear can enlarge the pool (`buffs.maxMana`, via GearService).
 
 	IT IS NOT TICKED
 
@@ -41,6 +41,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CombatService = require(game:GetService("ServerScriptService"):WaitForChild("CombatService"))
+local GearService = require(game:GetService("ServerScriptService"):WaitForChild("GearService"))
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
@@ -50,16 +51,23 @@ local ManaService = {}
 
 local ManaChanged = Remotes.ensure("ManaChanged", "RemoteEvent")
 
-local MAX = AbilityConfig.MaxMana
 local REGEN = AbilityConfig.ManaRegenPerSecond
 
--- player -> { mana, at }. Weak-keyed as a backstop; PlayerRemoving clears it.
+-- The pool's size: AbilityConfig.MaxMana plus whatever gear adds (a Mana
+-- Amulet, say). Asked fresh every time, so putting gear on or off needs no
+-- bookkeeping beyond the scaling in refresh.
+local function maxFor(player: Player): number
+	return math.max(1, AbilityConfig.MaxMana + GearService.get(player).maxMana)
+end
+
+-- player -> { mana, max, at }. Weak-keyed as a backstop; PlayerRemoving clears it.
 local pools = setmetatable({}, { __mode = "k" })
 
 local function poolFor(player: Player)
 	local entry = pools[player]
 	if not entry then
-		entry = { mana = MAX, at = os.clock() }
+		local max = maxFor(player)
+		entry = { mana = max, max = max, at = os.clock() }
 		pools[player] = entry
 	end
 	return entry
@@ -76,10 +84,18 @@ local function refresh(player: Player)
 	local entry = poolFor(player)
 	local now = os.clock()
 
+	-- Gear changed the size of the pool. It keeps its FRACTION, like the health
+	-- bar does, so taking an amulet off and on again is never a free refill.
+	local max = maxFor(player)
+	if max ~= entry.max then
+		entry.mana = if entry.max > 0 then entry.mana * max / entry.max else max
+		entry.max = max
+	end
+
 	if CombatService.isInvulnerable(player) then
-		entry.mana = MAX
-	elseif entry.mana < MAX then
-		entry.mana = math.min(MAX, entry.mana + (now - entry.at) * REGEN)
+		entry.mana = max
+	elseif entry.mana < max then
+		entry.mana = math.min(max, entry.mana + (now - entry.at) * REGEN)
 	end
 
 	entry.at = now
@@ -95,11 +111,12 @@ end
 ]]
 local function push(player: Player)
 	local entry = refresh(player)
-	ManaChanged:FireClient(player, entry.mana, MAX, REGEN)
+	ManaChanged:FireClient(player, entry.mana, entry.max, REGEN)
 end
 
 function ManaService.get(player: Player): (number, number)
-	return refresh(player).mana, MAX
+	local entry = refresh(player)
+	return entry.mana, entry.max
 end
 
 --[[
@@ -135,7 +152,8 @@ end
 
 function ManaService.refill(player: Player)
 	local entry = poolFor(player)
-	entry.mana = MAX
+	entry.max = maxFor(player)
+	entry.mana = entry.max
 	entry.at = os.clock()
 	push(player)
 end
@@ -173,6 +191,15 @@ local function onPlayerAdded(player: Player)
 		end
 	end)
 end
+
+-- Gear that changes the pool's size is shown at once, not at the next cast.
+-- push goes through refresh, which does the scaling.
+GearService.onChanged(function(player)
+	local entry = pools[player]
+	if entry and maxFor(player) ~= entry.max then
+		push(player)
+	end
+end)
 
 Players.PlayerAdded:Connect(onPlayerAdded)
 

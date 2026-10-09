@@ -29,7 +29,7 @@ function Attack.cast(context)
    if seen[model] then return end
    seen[model]=true
    local damage=amount(position)
-   if damage>0 then EnemyService.damage(model,damage,context.player) end
+   if damage>0 then context.damage(model,damage) end
   end)
   for _,player in ipairs(Players:GetPlayers()) do
    if player==context.player then continue end

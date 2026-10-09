@@ -88,6 +88,12 @@ local CraftingRecipes = {
 	GoldSword   = { ingredients = { GoldIngot = 2, Stick = 1 }, station = "Anvil" },
 	ArcaneForge = { ingredients = { Stone = 8, GoldIngot = 2 }, station = "Anvil" },
 
+	-- Accessories, worn in the accessory column. See ItemDefinitions.
+	VitalityAmulet = { ingredients = { GoldIngot = 2, Herb = 4 }, station = "Anvil" },
+	ManaAmulet     = { ingredients = { GoldIngot = 2, Bottle = 2 }, station = "Anvil" },
+	SpellRing      = { ingredients = { GoldIngot = 3, IronIngot = 1 }, station = "Anvil" },
+	BattleRing     = { ingredients = { IronIngot = 4, GoldIngot = 1 }, station = "Anvil" },
+
 	-- =======================================================================
 	-- Alchemy bench. Consumables, and the essence the deep recipes need.
 	-- =======================================================================

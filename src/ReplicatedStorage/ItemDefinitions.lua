@@ -421,6 +421,59 @@ local ItemDefinitions = {
 		buffs = { defense = 15 },
 	},
 
+	-- === Accessories ===
+	-- Worn in the accessory column at the bottom right of the screen. Only
+	-- count while worn there, and the same accessory twice counts once - see
+	-- GearService, which reads `buffs`:
+	--   maxHealth / maxMana             flat amounts
+	--   abilityDamage / weaponDamage    fractions: 0.15 is +15%
+	-- No art exists yet, so `look` has Shared.UI.ItemModels build a simple
+	-- model in code for the slot and the tooltip to show.
+	VitalityAmulet = {
+		displayName = "Vitality Amulet",
+		description = "+25 max health while worn.",
+		rarity = "Uncommon",
+		maxStack = 1,
+		classification = "Accessory",
+		value = 60,
+		buffs = { maxHealth = 25 },
+		look = { shape = "Amulet", metal = Color3.fromRGB(214, 176, 82), gem = Color3.fromRGB(222, 54, 66) },
+		iconPose = "block",
+	},
+	ManaAmulet = {
+		displayName = "Mana Amulet",
+		description = "+25 max mana while worn.",
+		rarity = "Uncommon",
+		maxStack = 1,
+		classification = "Accessory",
+		value = 60,
+		buffs = { maxMana = 25 },
+		look = { shape = "Amulet", metal = Color3.fromRGB(196, 200, 214), gem = Color3.fromRGB(66, 128, 255) },
+		iconPose = "block",
+	},
+	SpellRing = {
+		displayName = "Spell Ring",
+		description = "+15% ability damage while worn.",
+		rarity = "Rare",
+		maxStack = 1,
+		classification = "Accessory",
+		value = 90,
+		buffs = { abilityDamage = 0.15 },
+		look = { shape = "Ring", metal = Color3.fromRGB(196, 200, 214), gem = Color3.fromRGB(176, 86, 255) },
+		iconPose = "block",
+	},
+	BattleRing = {
+		displayName = "Battle Ring",
+		description = "+15% weapon damage while worn.",
+		rarity = "Rare",
+		maxStack = 1,
+		classification = "Accessory",
+		value = 90,
+		buffs = { weaponDamage = 0.15 },
+		look = { shape = "Ring", metal = Color3.fromRGB(214, 176, 82), gem = Color3.fromRGB(255, 136, 40) },
+		iconPose = "block",
+	},
+
 	-- === Workbenches ===
 	CraftingTable = {
 		icon = "rbxassetid://3000000500",

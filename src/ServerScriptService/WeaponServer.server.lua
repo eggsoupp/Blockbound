@@ -33,6 +33,7 @@ local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
+local GearService = require(ServerScriptService:WaitForChild("GearService"))
 
 local DEBUG = false
 local function log(...)
@@ -143,7 +144,8 @@ local function swing(player, tool)
 	end
 
 	local name = EnemyService.describe(bestModel)
-	local alive = EnemyService.damage(bestModel, stats.damage, player)
+	-- Weapon damage gear (a Battle Ring) applies here, at the moment of the hit.
+	local alive = EnemyService.damage(bestModel, stats.damage * GearService.weaponMultiplier(player), player)
 
 	Profiler.count("Weapon.hit")
 	if not alive then

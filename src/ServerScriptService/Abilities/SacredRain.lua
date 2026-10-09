@@ -100,7 +100,7 @@ local function resolveStrike(context, hitCFrame: CFrame, params: OverlapParams, 
 	EnemyService.forEachNear(hitCFrame.Position, reach, function(model)
 		if not struck[model] then
 			struck[model] = true
-			EnemyService.damage(model, damage, context.player)
+			context.damage(model, damage)
 			Profiler.count("Ability.sacredRain.hit")
 		end
 	end)

@@ -69,7 +69,7 @@ local function resolve(context)
 
 		local damage = EclipsePlan.damageAt((position - centre).Magnitude)
 		if damage > 0 then
-			EnemyService.damage(model, damage, context.player)
+			context.damage(model, damage)
 			hits += 1
 		end
 	end)

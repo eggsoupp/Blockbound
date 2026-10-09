@@ -23,7 +23,7 @@ local function strike(context, ground, amount)
 		struck[model] = true
 		local offset = position - ground
 		local multiplier = Plan.damageMultiplier(offset.X, offset.Y, offset.Z)
-		if multiplier > 0 then EnemyService.damage(model, amount * multiplier, context.player) end
+		if multiplier > 0 then context.damage(model, amount * multiplier) end
 	end)
 	-- Iterate players directly so dense terrain cannot consume a spatial query cap.
 	for _, victim in ipairs(Players:GetPlayers()) do

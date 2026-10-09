@@ -8,7 +8,8 @@
 	There are two places a model can be, both already built and replicated for
 	reasons unrelated to the UI: ReplicatedStorage.Tools[item] and
 	ReplicatedStorage.TerrainAssets.Blocks[item]. So nothing extra has to be
-	authored for an item to be previewable.
+	authored for an item to be previewable. Failing both, an item with a `look`
+	in ItemDefinitions gets a simple model built from it (see buildFromLook).
 
 	Nothing here is ever parented anywhere. `find` returns the live template and
 	callers clone it - reparenting one would empty the folder the terrain builds
@@ -16,6 +17,7 @@
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
 local ItemModels = {}
 
@@ -28,6 +30,95 @@ end
 local function blocksFolder(): Instance?
 	local assets = ReplicatedStorage:FindFirstChild("TerrainAssets")
 	return assets and assets:FindFirstChild("Blocks")
+end
+
+-- ---------------------------------------------------------------------------
+-- Models built from a description
+-- ---------------------------------------------------------------------------
+
+--[[
+	The third place a model can come from: an item's own `look` in
+	ItemDefinitions, for things with no art at all yet - the accessories.
+
+		look = { shape = "Ring" | "Amulet", metal = Color3, gem = Color3 }
+
+	Built once per item, from plain parts, and never parented: callers clone it
+	like any other template. Rough on purpose - enough to tell a ring from an
+	amulet and one gem from another, until real models exist. Dropping a real
+	model into ReplicatedStorage.Tools under the item's name replaces this.
+]]
+local function lookPart(size: Vector3, color: Color3, material: Enum.Material): Part
+	local part = Instance.new("Part")
+	part.Anchored = true
+	part.CanCollide = false
+	part.CanQuery = false
+	part.CanTouch = false
+	part.CastShadow = false
+	part.TopSurface = Enum.SurfaceType.Smooth
+	part.BottomSurface = Enum.SurfaceType.Smooth
+	part.Size = size
+	part.Color = color
+	part.Material = material
+	return part
+end
+
+local RING_SEGMENTS = 16
+local RING_RADIUS = 0.9
+
+local function buildFromLook(itemName: string): Instance?
+	local definition = ItemDefinitions[itemName]
+	local look = definition and definition.look
+	if type(look) ~= "table" then
+		return nil
+	end
+
+	local metal = if typeof(look.metal) == "Color3" then look.metal else Color3.fromRGB(200, 200, 200)
+	local gemColor = if typeof(look.gem) == "Color3" then look.gem else Color3.fromRGB(255, 255, 255)
+
+	local model = Instance.new("Model")
+	model.Name = itemName
+
+	local gem = lookPart(Vector3.new(0.7, 0.7, 0.7), gemColor, Enum.Material.Neon)
+	gem.Name = "Gem"
+	gem.Shape = Enum.PartType.Ball
+
+	if look.shape == "Ring" then
+		-- A band of short segments around a circle in the XY plane, with the gem
+		-- set on top of it.
+		for index = 0, RING_SEGMENTS - 1 do
+			local angle = index / RING_SEGMENTS * math.pi * 2
+			local segment = lookPart(Vector3.new(0.42, 0.24, 0.3), metal, Enum.Material.Metal)
+			segment.Name = "Band"
+			segment.CFrame = CFrame.Angles(0, 0, angle) * CFrame.new(0, RING_RADIUS, 0)
+			segment.Parent = model
+		end
+
+		gem.CFrame = CFrame.new(0, RING_RADIUS + 0.35, 0)
+	else
+		-- An amulet: a round plate facing forward, the gem in its middle, and a
+		-- loop of chain above it.
+		local plate = lookPart(Vector3.new(0.25, 1.6, 1.6), metal, Enum.Material.Metal)
+		plate.Name = "Plate"
+		plate.Shape = Enum.PartType.Cylinder
+		-- A cylinder runs along its X axis; turned so the flat face points along Z.
+		plate.CFrame = CFrame.Angles(0, math.rad(90), 0)
+		plate.Parent = model
+
+		for side = -1, 1, 2 do
+			local chain = lookPart(Vector3.new(0.12, 1.0, 0.12), metal, Enum.Material.Metal)
+			chain.Name = "Chain"
+			chain.CFrame = CFrame.new(side * 0.3, 1.15, 0) * CFrame.Angles(0, 0, math.rad(side * 24))
+			chain.Parent = model
+		end
+
+		gem.Size = Vector3.new(0.75, 0.75, 0.75)
+		gem.CFrame = CFrame.new(0, 0, 0)
+	end
+
+	gem.Parent = model
+	model.PrimaryPart = gem
+
+	return model
 end
 
 -- Tools first: an item that is both holdable and placeable should preview as
@@ -48,6 +139,10 @@ function ItemModels.find(itemName: string?): Instance?
 	if not found then
 		local blocks = blocksFolder()
 		found = blocks and blocks:FindFirstChild(itemName)
+	end
+
+	if not found then
+		found = buildFromLook(itemName)
 	end
 
 	-- A miss is deliberately NOT cached. ToolFactory builds missing tools at

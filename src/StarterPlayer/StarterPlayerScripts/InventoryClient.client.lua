@@ -173,8 +173,18 @@ end
 -- hotbar and nothing else.
 local HOTBAR_SLOTS = InventoryConstants.HotbarSlots
 
+local ACCESSORY_FIRST = InventoryConstants.AccessoryRange.first
+local ACCESSORY_LAST = InventoryConstants.AccessoryRange.last
+
+-- The row the accessory tiles were authored in. Emptied when they move to the
+-- accessory column, and kept hidden after that; see THE ACCESSORY COLUMN.
+local accessoryRowFrame: GuiObject? = nil
+
 local function slotIsVisible(index: number): boolean
-	return index <= HOTBAR_SLOTS or inventoryVisible
+	return index <= HOTBAR_SLOTS
+		or inventoryVisible
+		-- Always on screen: accessories only work while worn.
+		or (index >= ACCESSORY_FIRST and index <= ACCESSORY_LAST)
 end
 
 -- Split out of updateSlots so a one-slot change costs one slot of work: mining
@@ -280,7 +290,10 @@ end
 local function updateCoordinateRanges()
 	for i = 1, #slots do
 		local slot = slots[i]
-		if slot then
+		-- A slot that is not on screen is not somewhere to drop things. Hidden
+		-- rows still report where they would be, so without this a drag on the
+		-- hotbar could land in an invisible inventory slot.
+		if slot and slotIsVisible(i) then
 			local absPos = slot.AbsolutePosition
 			local absSize = slot.AbsoluteSize
 			coordinateRanges[i] = {
@@ -305,7 +318,7 @@ local function toggleInventory()
 	clearHover()
 	for row = 2, 7 do
 		local rowFrame = invUI:FindFirstChild("Row"..row)
-		if rowFrame then
+		if rowFrame and rowFrame ~= accessoryRowFrame then
 			rowFrame.Visible = inventoryVisible
 		end
 	end
@@ -350,6 +363,74 @@ for row = 1, 6 do
 		}
 		slotItemNames[index] = nil
 		index = index + 1
+	end
+end
+
+--[[
+	THE ACCESSORY COLUMN.
+
+	The accessory slots are authored as a row of the grid, hidden with the rest
+	of the inventory. But an accessory only does anything while it is worn, so
+	the slots that wear them belong on screen all the time - a column in the
+	bottom-right corner, where an item can be dragged in from the hotbar even
+	with the inventory shut.
+
+	The authored TILES are moved, not copied: same instances, same slot
+	indices. Dragging, the server's slot rules (only an Accessory fits), the
+	tooltip and the save format all work on indices and never notice the move.
+	Sized from Theme, which holds the grid's own slot measurements.
+]]
+do
+	local count = ACCESSORY_LAST - ACCESSORY_FIRST + 1
+	local titleHeight = Theme.TextSize.Small + 6
+
+	local column = Instance.new("Frame")
+	column.Name = "AccessoryColumn"
+	column.BackgroundTransparency = 1
+	column.AnchorPoint = Vector2.new(1, 1)
+	column.Position = UDim2.new(1, -Theme.Spacing.Edge, 1, -Theme.Spacing.Edge)
+	column.Size = UDim2.fromOffset(Theme.SlotSize, titleHeight + (count - 1) * Theme.SlotPitch + Theme.SlotSize)
+	column.Parent = invUI
+
+	local title = Instance.new("TextLabel")
+	title.Name = "Title"
+	title.BackgroundTransparency = 1
+	-- Wider than the column and centred on it, so the word is never clipped by
+	-- a slot-wide box.
+	title.AnchorPoint = Vector2.new(0.5, 0)
+	title.Position = UDim2.fromScale(0.5, 0)
+	title.Size = UDim2.fromOffset(Theme.SlotSize * 2, titleHeight)
+	title.FontFace = Theme.Fonts.Heading
+	title.TextSize = Theme.TextSize.Small
+	title.TextColor3 = Theme.Color.Text
+	title.TextStrokeTransparency = 0.4
+	title.Text = "ACCESSORIES"
+	title.Parent = column
+
+	for i = ACCESSORY_FIRST, ACCESSORY_LAST do
+		local tile = slots[i]
+		if tile then
+			accessoryRowFrame = accessoryRowFrame or tile.Parent
+
+			tile.AnchorPoint = Vector2.zero
+			tile.Size = UDim2.fromOffset(Theme.SlotSize, Theme.SlotSize)
+			tile.Position = UDim2.fromOffset(0, titleHeight + (i - ACCESSORY_FIRST) * Theme.SlotPitch)
+			tile.Parent = column
+
+			-- The hover swell restores to these, so they have to describe where
+			-- the tile rests now rather than where it was authored.
+			local orig = slotOrigSizes[i]
+			if orig then
+				orig.slotSize = tile.Size
+				orig.slotPos = tile.Position
+				orig.slotAbs = nil
+			end
+		end
+	end
+
+	-- Empty now. Hidden for good: toggleInventory skips it.
+	if accessoryRowFrame then
+		accessoryRowFrame.Visible = false
 	end
 end
 
@@ -747,7 +828,7 @@ UserInputService.InputChanged:Connect(function(input)
 		if dragNum then dragNum.Position  = UDim2.fromOffset(x + dragIcon.AbsoluteSize.X/2 - dragNum.AbsoluteSize.X, y + dragIcon.AbsoluteSize.Y/2 - dragNum.AbsoluteSize.Y) end
 
 		local overSlot = nil
-		for _, range in ipairs(coordinateRanges) do
+		for _, range in pairs(coordinateRanges) do
 			if range and x >= range.x1 and x <= range.x2 and y >= range.y1 and y <= range.y2 then
 				overSlot = range.index
 				break
@@ -808,7 +889,7 @@ UserInputService.InputEnded:Connect(function(input)
 		updateCoordinateRanges()
 		local mx, my = getMouseXY()
 		local targetIndex
-		for _, range in ipairs(coordinateRanges) do
+		for _, range in pairs(coordinateRanges) do
 			if range and mx >= range.x1 and mx <= range.x2 and my >= range.y1 and my <= range.y2 then
 				targetIndex = range.index
 				break

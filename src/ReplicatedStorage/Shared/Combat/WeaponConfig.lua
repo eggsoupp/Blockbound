@@ -91,6 +91,11 @@ local function tierFor(itemName)
 	return best
 end
 
+-- The `buffs` keys WeaponConfig.get reads below, and only from a Weapon.
+-- ContentAudit reports any other buff on a weapon as doing nothing. Keep this
+-- in step with the code that reads them.
+WeaponConfig.BuffsRead = { "damage", "attackSpeed" }
+
 -- Cached: asked on every swing, and the answer cannot change without a code
 -- change. Non-weapons cache as `false` so a pickaxe swung a hundred times a
 -- minute does not re-walk the tier table.

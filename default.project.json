@@ -677,6 +677,12 @@
       },
       "GearService": {
         "$path": "src/ServerScriptService/GearService.lua"
+      },
+      "ContentAudit": {
+        "$path": "src/ServerScriptService/ContentAudit.lua"
+      },
+      "ContentAuditCommand": {
+        "$path": "src/ServerScriptService/ContentAuditCommand.server.lua"
       }
     }
   }

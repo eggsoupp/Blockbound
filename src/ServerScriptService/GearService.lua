@@ -52,6 +52,10 @@ local GearService = {}
 -- The buffs this module adds up, and so the fields every bonuses table has.
 local STATS = { "defense", "maxHealth", "maxMana", "abilityDamage", "weaponDamage" }
 
+-- Read-only, for ServerScriptService.ContentAudit: which buffs gear actually does
+-- something with, so a buff nothing reads can be reported.
+GearService.Stats = STATS
+
 local SWEEP_INTERVAL = 0.5
 
 local listeners = {}

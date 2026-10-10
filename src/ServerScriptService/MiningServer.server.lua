@@ -231,6 +231,11 @@ local function mine(player, target, hitPos)
 		target = nil
 		targetPos = cellCentre
 	end
+
+	-- Draw the ground around the target block by block, and the layer under
+	-- it, NOW: the swing is the head start clients get to receive those Parts
+	-- before the break needs them. See TerrainManager, EDIT ZONES.
+	TerrainManager:OpenEditZone(targetPos)
 	local speed = tonumber(pickaxeDef.miningSpeed) or 1
 	if speed <= 0 then
 		speed = 1

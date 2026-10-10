@@ -282,6 +282,31 @@ TerrainConfig.MaxStoredEdits = 400000
 ]]
 TerrainConfig.MergeSurfaceRuns = true
 
+--[[
+	Edit zones: around wherever a player is mining or building, blocks are
+	drawn one Part each instead of merged, and a little deeper than they need
+	to be, so editing never has to wait for new Parts to reach a client. See
+	TerrainManager, EDIT ZONES.
+
+	  Radius         columns either side of the edit; 3 is a 7 x 7 patch
+	  Depth          extra layers drawn under the exposed ones
+	  Seconds        how long a zone outlives the last edit in it, before it
+	                 merges back into slabs
+	  RetireSeconds  how long a replaced Part stays on screen under its
+	                 replacement, so the replacement has time to reach every
+	                 client first. Longer is safer and costs a few overlapping
+	                 Parts for a moment.
+
+	Bigger Radius and Depth trade more Parts near the player for more warning
+	at higher mining speeds.
+]]
+TerrainConfig.EditZone = {
+	Radius = 3,
+	Depth = 2,
+	Seconds = 30,
+	RetireSeconds = 0.35,
+}
+
 -- Rewrite Decal faces on block templates as tiled Textures at startup, which
 -- is what makes MergeSurfaceRuns possible for decalled blocks. Lossless on a
 -- single cube - same image, face, colour and transparency, one tile per block.

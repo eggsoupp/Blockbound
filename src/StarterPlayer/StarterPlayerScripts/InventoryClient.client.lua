@@ -180,11 +180,11 @@ local ACCESSORY_LAST = InventoryConstants.AccessoryRange.last
 -- accessory column, and kept hidden after that; see THE ACCESSORY COLUMN.
 local accessoryRowFrame: GuiObject? = nil
 
+-- The column itself, shown and hidden with the rest of the inventory.
+local accessoryColumn: GuiObject? = nil
+
 local function slotIsVisible(index: number): boolean
-	return index <= HOTBAR_SLOTS
-		or inventoryVisible
-		-- Always on screen: accessories only work while worn.
-		or (index >= ACCESSORY_FIRST and index <= ACCESSORY_LAST)
+	return index <= HOTBAR_SLOTS or inventoryVisible
 end
 
 -- Split out of updateSlots so a one-slot change costs one slot of work: mining
@@ -322,6 +322,9 @@ local function toggleInventory()
 			rowFrame.Visible = inventoryVisible
 		end
 	end
+	if accessoryColumn then
+		accessoryColumn.Visible = inventoryVisible
+	end
 
 	-- Rows appearing moves nothing that was already on screen, but the hit boxes
 	-- for the rows that just became visible have to be measured now.
@@ -369,11 +372,11 @@ end
 --[[
 	THE ACCESSORY COLUMN.
 
-	The accessory slots are authored as a row of the grid, hidden with the rest
-	of the inventory. But an accessory only does anything while it is worn, so
-	the slots that wear them belong on screen all the time - a column in the
-	bottom-right corner, where an item can be dragged in from the hotbar even
-	with the inventory shut.
+	The accessory slots are authored as a row of the grid. They are shown
+	instead as their own column in the bottom-right corner, so what you are
+	wearing reads as a separate thing from what you are carrying. Like the rest
+	of the inventory below the hotbar, the column only appears while the
+	inventory is open (E).
 
 	The authored TILES are moved, not copied: same instances, same slot
 	indices. Dragging, the server's slot rules (only an Accessory fits), the
@@ -387,6 +390,10 @@ do
 	local column = Instance.new("Frame")
 	column.Name = "AccessoryColumn"
 	column.BackgroundTransparency = 1
+	-- Part of the inventory: shown when it opens (E), like every row but the
+	-- hotbar.
+	column.Visible = false
+	accessoryColumn = column
 	column.AnchorPoint = Vector2.new(1, 1)
 	column.Position = UDim2.new(1, -Theme.Spacing.Edge, 1, -Theme.Spacing.Edge)
 	column.Size = UDim2.fromOffset(Theme.SlotSize, titleHeight + (count - 1) * Theme.SlotPitch + Theme.SlotSize)

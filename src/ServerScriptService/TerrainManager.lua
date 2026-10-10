@@ -1135,51 +1135,82 @@ end
 -- cubes: five entries each, same layout as layerRects.
 local finalRects = {}
 
+--[[
+	EDIT ZONES
+
+	Merging is what keeps the part count affordable, and it is also what makes
+	editing jitter: break one block out of a slab and the slab has to become
+	several new Parts, which every client receives a moment after the old slab
+	went. At an end-game mining speed that is a visible flicker every swing, and
+	a floor that can vanish under you.
+
+	So the ground around an edit is drawn differently for a while:
+
+	  * every block is its own Part - breaking one removes exactly that Part,
+	    and nothing else on screen changes;
+	  * the layers just under the exposed ones are drawn too (EditZone.Depth),
+	    hidden behind the surface. The block a break uncovers is therefore
+	    already standing on every client before the break happens; the only
+	    new Parts an edit needs are the ones it will uncover NEXT time.
+
+	A zone is opened around a mining target when the swing starts (MiningServer)
+	and around every break and placement, and lasts EditZone.Seconds after the
+	last one, after which it merges back into slabs.
+
+	data.hot[cell] is when that column's zone time runs out.
+]]
+local EDIT_ZONE = TerrainConfig.EditZone
+local EDIT_RADIUS = EDIT_ZONE.Radius
+local EDIT_DEPTH = EDIT_ZONE.Depth
+local EDIT_SECONDS = EDIT_ZONE.Seconds
+local RETIRE_SECONDS = EDIT_ZONE.RetireSeconds
+
 local function rectKey(bx, bz, sizeX, sizeZ)
 	-- Sizes run 1..ChunkSize, so 32 leaves room; bx/bz are 0..ChunkSize-1.
 	return ((bx * CHUNK_SIZE + bz) * 32 + sizeX) * 32 + sizeZ
 end
 
-local function overlapArea(rect, bx, bz, sizeX, sizeZ)
-	local overlapX = math.min(rect.bx + rect.sizeX, bx + sizeX) - math.max(rect.bx, bx)
-	local overlapZ = math.min(rect.bz + rect.sizeZ, bz + sizeZ) - math.max(rect.bz, bz)
-	if overlapX <= 0 or overlapZ <= 0 then
-		return 0
+local function markLayerDirty(data, by)
+	if not data.dirtyLayers[by] then
+		data.dirtyLayers[by] = true
+		data.dirtyCount += 1
 	end
-	return overlapX * overlapZ
 end
 
 --[[
-	Works out how one Y layer of a chunk should be drawn, WITHOUT touching any
-	Part yet. applyLayerPlans does the touching, for every layer of an edit at
-	once - see there for why the order matters.
+	Works out how one Y layer of a chunk should be drawn, without touching any
+	Part yet - applyLayerPlans does that, for every layer of an edit at once.
 
-	The visible set becomes a list of rectangles (the mesher), and each one is
-	matched to a Part already drawing this layer, in order of preference:
+	A Part already drawing EXACTLY one of the new rectangles is kept, untouched.
+	Every other rectangle gets a new Part. Existing Parts are never moved or
+	resized: a Part moving under a client is visible as jitter, and shrinking a
+	slab before the pieces replacing it have arrived opens a hole.
 
-	  1. a Part drawing EXACTLY that rectangle - left completely alone;
-	  2. the same block's Part that overlaps it most - reshaped;
-	  3. any spare Part of the same block - reshaped;
-	  4. nothing - a new Part from the pool.
-
-	It used to match in list order: rectangle 7 got whatever Part was 7th. One
-	block mined out of a slab shifts every rectangle after it in the list, so a
-	single edit moved and resized Parts all over the layer, even where nothing
-	had changed - which is the jitter you could see around every edit. Matching
-	by shape means an edit only touches the rectangles it actually changed.
+	A Part nothing wants any more is either released at once - when none of
+	the ground it covered is still drawn (a mined block) - or RETIRED: left in
+	place a moment longer because the ground it covers is still there and the
+	Parts now drawing it are new and may not have reached every client yet.
 ]]
 local function planLayer(data, by)
 	table.clear(layerGrid)
 
 	local visible = data.visible
-	local anything = false
+	local hot = data.hot
+
+	-- cell -> name of every block drawn on this layer, zone or not, for
+	-- deciding below whether an old Part still covers anything.
+	local drawn = {}
+	local hotCells = {}
 
 	for cell = 1, CHUNK_AREA do
-		local column = visible[cell]
-		local name = column[by]
+		local name = visible[cell][by]
 		if name ~= nil then
-			layerGrid[cell] = name
-			anything = true
+			drawn[cell] = name
+			if hot[cell] then
+				table.insert(hotCells, cell)
+			else
+				layerGrid[cell] = name
+			end
 		end
 	end
 
@@ -1189,20 +1220,11 @@ local function planLayer(data, by)
 		rects = {}, -- five entries per rectangle: bx, bz, sizeX, sizeZ, name
 		count = 0,
 		parts = {}, -- rectangle -> the Part that will draw it
-		reshape = {}, -- rectangle -> true when that Part has to move
-		leftover = {}, -- existing Parts nothing wanted
+		release = {}, -- old Parts covering nothing that is still drawn
+		retire = {}, -- old Parts covering ground that is still drawn
 	}
 
-	local existing = data.layerParts[by]
-
-	if not anything then
-		if existing then
-			table.move(existing, 1, #existing, 1, plan.leftover)
-		end
-		return plan
-	end
-
-	-- Rectangles.
+	-- Rectangles: merged outside edit zones, one per block inside them.
 	table.clear(layerRects)
 	local count = TerrainMesher.meshLayer(
 		layerGrid, CHUNK_SIZE, TerrainConfig.MergeSurfaceRuns, layerRects
@@ -1210,6 +1232,15 @@ local function planLayer(data, by)
 
 	table.clear(finalRects)
 	local write = 0
+
+	local function push(bx, bz, sizeX, sizeZ, name)
+		finalRects[write + 1] = bx
+		finalRects[write + 2] = bz
+		finalRects[write + 3] = sizeX
+		finalRects[write + 4] = sizeZ
+		finalRects[write + 5] = name
+		write += 5
+	end
 
 	for index = 0, count - 1 do
 		local base = index * 5
@@ -1224,22 +1255,17 @@ local function planLayer(data, by)
 			-- decal across the whole run.
 			for dx = 0, sizeX - 1 do
 				for dz = 0, sizeZ - 1 do
-					finalRects[write + 1] = bx + dx
-					finalRects[write + 2] = bz + dz
-					finalRects[write + 3] = 1
-					finalRects[write + 4] = 1
-					finalRects[write + 5] = name
-					write += 5
+					push(bx + dx, bz + dz, 1, 1, name)
 				end
 			end
 		else
-			finalRects[write + 1] = bx
-			finalRects[write + 2] = bz
-			finalRects[write + 3] = sizeX
-			finalRects[write + 4] = sizeZ
-			finalRects[write + 5] = name
-			write += 5
+			push(bx, bz, sizeX, sizeZ, name)
 		end
+	end
+
+	for _, cell in ipairs(hotCells) do
+		local index = cell - 1
+		push(index // CHUNK_SIZE, index % CHUNK_SIZE, 1, 1, drawn[cell])
 	end
 
 	-- Copied out of the scratch buffer: plans are applied after every dirty
@@ -1248,14 +1274,12 @@ local function planLayer(data, by)
 	table.move(finalRects, 1, write, 1, rects)
 	plan.count = write // 5
 
+	local existing = data.layerParts[by]
 	if not existing or #existing == 0 then
 		return plan
 	end
 
-	local parts = plan.parts
-	local taken = {}
-
-	-- 1. Exact matches, through a lookup so a big layer is not n * m.
+	-- Exact matches, through a lookup so a big layer is not n * m.
 	local byShape = {}
 	for index, part in ipairs(existing) do
 		local rect = partRect[part]
@@ -1270,6 +1294,7 @@ local function planLayer(data, by)
 		end
 	end
 
+	local taken = {}
 	for r = 1, plan.count do
 		local base = (r - 1) * 5
 		local list = byShape[rectKey(rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4])]
@@ -1278,50 +1303,7 @@ local function planLayer(data, by)
 				local part = existing[index]
 				if not taken[index] and part.Name == rects[base + 5] then
 					taken[index] = true
-					parts[r] = part
-					break
-				end
-			end
-		end
-	end
-
-	-- 2. Largest overlap with a Part of the same block.
-	for r = 1, plan.count do
-		if not parts[r] then
-			local base = (r - 1) * 5
-			local bx, bz, sizeX, sizeZ, name =
-				rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4], rects[base + 5]
-
-			local best, bestArea = nil, 0
-			for index, part in ipairs(existing) do
-				if not taken[index] and part.Name == name then
-					local rect = partRect[part]
-					local area = if rect then overlapArea(rect, bx, bz, sizeX, sizeZ) else 0
-					if area > bestArea then
-						best, bestArea = index, area
-					end
-				end
-			end
-
-			if best then
-				taken[best] = true
-				parts[r] = existing[best]
-				plan.reshape[r] = true
-			end
-		end
-	end
-
-	-- 3. Any spare Part of the same block. Moving an existing Part is a
-	-- property change; a new one is a new Instance for every client, which is
-	-- the slower of the two to arrive.
-	for r = 1, plan.count do
-		if not parts[r] then
-			local name = rects[(r - 1) * 5 + 5]
-			for index, part in ipairs(existing) do
-				if not taken[index] and part.Name == name then
-					taken[index] = true
-					parts[r] = part
-					plan.reshape[r] = true
+					plan.parts[r] = part
 					break
 				end
 			end
@@ -1330,7 +1312,24 @@ local function planLayer(data, by)
 
 	for index, part in ipairs(existing) do
 		if not taken[index] then
-			table.insert(plan.leftover, part)
+			local rect = partRect[part]
+			local stillDrawn = false
+
+			if rect then
+				for dx = 0, rect.sizeX - 1 do
+					for dz = 0, rect.sizeZ - 1 do
+						if drawn[cellOf(rect.bx + dx, rect.bz + dz)] then
+							stillDrawn = true
+							break
+						end
+					end
+					if stillDrawn then
+						break
+					end
+				end
+			end
+
+			table.insert(if stillDrawn then plan.retire else plan.release, part)
 		end
 	end
 
@@ -1338,30 +1337,33 @@ local function planLayer(data, by)
 end
 
 --[[
-	Applies a set of layer plans, ADDING BEFORE REMOVING:
-
-	  1. every new Part, on every layer
-	  2. every reshape
-	  3. every Part that is no longer wanted
-
-	Mining one block typically shrinks or splits the slab it was part of AND
-	reveals the block underneath, which needs a Part that did not exist. Each
-	client receives those changes over the network, and a new Part is the
-	slowest kind to arrive. Removing first left a moment where the player's
-	client had the slab gone and nothing under it yet - long enough to fall
-	through the world if you mined fast enough. Creating first gives the new
-	ground the head start. (TerrainManager also lifts anyone who does end up
-	inside the ground; see rescueBuriedPlayers.)
+	A Part leaving the screen a moment from now rather than at once - see
+	planLayer. Kept parented and drawing its old rectangle until then; tracked
+	on the chunk so an unload can release it early.
 ]]
-local function applyLayerPlans(plans)
-	-- 1. New Parts.
+local function retirePart(data, part)
+	data.retiring[part] = true
+	task.delay(RETIRE_SECONDS, function()
+		if data.retiring[part] then
+			data.retiring[part] = nil
+			releasePart(part)
+		end
+	end)
+end
+
+--[[
+	Applies a set of layer plans: every new Part first, on every layer, then
+	removals. `immediate` releases retiring Parts at once instead of after the
+	delay - for an ability crater, where the hole should open with the blast.
+]]
+local function applyLayerPlans(plans, immediate)
 	for _, plan in ipairs(plans) do
 		local rects = plan.rects
 		for r = 1, plan.count do
 			if not plan.parts[r] then
 				local base = (r - 1) * 5
-				-- nil only when the block has no usable template, which warns
-				-- elsewhere.
+				-- false only when the block has no usable template, which
+				-- warns elsewhere.
 				plan.parts[r] = emitMeshPart(
 					plan.data, rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4],
 					plan.by, rects[base + 5]
@@ -1370,22 +1372,17 @@ local function applyLayerPlans(plans)
 		end
 	end
 
-	-- 2. Reshapes.
 	for _, plan in ipairs(plans) do
-		local rects = plan.rects
-		for r in pairs(plan.reshape) do
-			local base = (r - 1) * 5
-			reshapeMeshPart(
-				plan.data, plan.parts[r], rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4],
-				plan.by
-			)
-		end
-	end
-
-	-- 3. Removals, and the new layer lists.
-	for _, plan in ipairs(plans) do
-		for _, part in ipairs(plan.leftover) do
+		for _, part in ipairs(plan.release) do
 			releasePart(part)
+		end
+
+		for _, part in ipairs(plan.retire) do
+			if immediate then
+				releasePart(part)
+			else
+				retirePart(plan.data, part)
+			end
 		end
 
 		local bucket = {}
@@ -1404,14 +1401,14 @@ end
 --[[
 	Rebuilds every layer that changed since the last flush, across every chunk
 	given - an edit on a chunk border changes two chunks, and they have to be
-	applied together for the add-before-remove order to hold across the border.
+	applied together for new-before-old to hold across the border.
 
 	Visibility is decided per column, but a Part spans columns, so the two
 	cannot be done in one step: the whole column pass has to finish before the
 	layers it touched can be meshed. Callers do a batch of column updates and
 	then flush once.
 ]]
-local function flushChunks(list)
+local function flushChunks(list, immediate)
 	local plans = {}
 
 	for _, data in ipairs(list) do
@@ -1425,7 +1422,7 @@ local function flushChunks(list)
 	end
 
 	if #plans > 0 then
-		applyLayerPlans(plans)
+		applyLayerPlans(plans, immediate)
 	end
 end
 
@@ -1505,7 +1502,7 @@ end
 	updateColumnVisibility: that runs once per column per chunk load, and a
 	closure there would allocate on every single call.
 ]]
-local function scanColumnRange(data, cx, cz, bx, bz, cell, column, low, high, waterLow, waterHigh)
+local function scanColumnRange(data, cx, cz, bx, bz, cell, column, low, high, waterLow, waterHigh, force)
 	for by = low, high do
 		if not isPresentInData(data, cell, by) then
 			-- Anything in the water band belongs to the water pass below, which
@@ -1518,7 +1515,9 @@ local function scanColumnRange(data, cx, cz, bx, bz, cell, column, low, high, wa
 				clearVisible(data, cell, by)
 			end
 		else
-			local visible = not isBlockPresent(cx, cz, bx, bz, by + 1)
+			-- In an edit zone every block in the band is drawn, exposed or not:
+			-- that is the layer of warning a fast edit needs. See EDIT ZONES.
+			local visible = force or not isBlockPresent(cx, cz, bx, bz, by + 1)
 
 			if not visible and by > FLOOR_Y and not isBlockPresent(cx, cz, bx, bz, by - 1) then
 				visible = true
@@ -1559,6 +1558,11 @@ local function updateColumnVisibility(cx, cz, bx, bz)
 	local cell = cellOf(bx, bz)
 	local column = data.visible[cell]
 	local currentHeight = data.currentHeight[cell]
+
+	-- In an edit zone: drawn a little deeper, every block in the bands. Always
+	-- the general path, which is the one that knows how to.
+	local zoned = data.hot[cell] ~= nil
+	local extra = if zoned then EDIT_DEPTH else 0
 
 	local minNeighbour = math.huge
 	local bandLow = data.distLow[cell]
@@ -1614,7 +1618,7 @@ local function updateColumnVisibility(cx, cz, bx, bz)
 	]]
 	local waterLow, waterHigh = 1, 0 -- empty
 
-	if not data.complex[cell] and not neighbourComplex then
+	if not data.complex[cell] and not neighbourComplex and not zoned then
 		if currentHeight <= FLOOR_Y then
 			for by in pairs(column) do
 				clearVisible(data, cell, by)
@@ -1654,12 +1658,15 @@ local function updateColumnVisibility(cx, cz, bx, bz)
 	-- hole from below and above.
 	local scanTop = data.topScan[cell]
 
-	local lowA, highA = surfaceLow, scanTop - 1
+	local lowA, highA = surfaceLow - extra, scanTop - 1
+	if lowA < FLOOR_Y then
+		lowA = FLOOR_Y
+	end
 	local lowB, highB = 1, 0 -- empty by default
 
 	if bandLow <= bandHigh then
-		lowB = bandLow - 1
-		highB = bandHigh + 1
+		lowB = bandLow - 1 - extra
+		highB = bandHigh + 1 + extra
 		if lowB < FLOOR_Y then
 			lowB = FLOOR_Y
 		end
@@ -1685,8 +1692,8 @@ local function updateColumnVisibility(cx, cz, bx, bz)
 		end
 	end
 
-	scanColumnRange(data, cx, cz, bx, bz, cell, column, lowB, highB, waterLow, waterHigh)
-	scanColumnRange(data, cx, cz, bx, bz, cell, column, lowA, highA, waterLow, waterHigh)
+	scanColumnRange(data, cx, cz, bx, bz, cell, column, lowB, highB, waterLow, waterHigh, zoned)
+	scanColumnRange(data, cx, cz, bx, bz, cell, column, lowA, highA, waterLow, waterHigh, zoned)
 
 	Profiler.count("Terrain.columnSlowPath")
 	Profiler.leave("Terrain.columnVisibility")
@@ -1852,7 +1859,7 @@ end
 	meshing one before the other had finished would build a rectangle out of a
 	half-updated layer.
 ]]
-local function refreshAdjacentColumns(cx, cz, bx, bz)
+local function refreshAdjacentColumns(cx, cz, bx, bz, immediate)
 	local touched = {}
 
 	local own = chunks[chunkKey(cx, cz)]
@@ -1882,7 +1889,90 @@ local function refreshAdjacentColumns(cx, cz, bx, bz)
 	for data in pairs(touched) do
 		table.insert(list, data)
 	end
+	flushChunks(list, immediate)
+end
+
+-- ---------------------------------------------------------------------------
+-- Edit zones (see EDIT ZONES above)
+-- ---------------------------------------------------------------------------
+
+-- Redraws one column for a zone opening or closing on it: the visibility
+-- pass picks up the change in depth, and every layer it draws is remeshed so
+-- its blocks are split out of (or merged back into) the slabs around them.
+local function redrawZoneColumn(data, cell, touched)
+	local index = cell - 1
+	updateColumnVisibility(data.cx, data.cz, index // CHUNK_SIZE, index % CHUNK_SIZE)
+	for by in pairs(data.visible[cell]) do
+		markLayerDirty(data, by)
+	end
+	touched[data] = true
+end
+
+local function flushTouched(touched)
+	local list = {}
+	for data in pairs(touched) do
+		table.insert(list, data)
+	end
 	flushChunks(list)
+end
+
+--[[
+	Opens (or extends) an edit zone around a block position. Columns already
+	in a zone just get more time; only newly zoned ones are redrawn, so calling
+	this on every swing costs next to nothing once the zone exists.
+]]
+local function openEditZone(blockX, blockZ)
+	local expiresAt = os.clock() + EDIT_SECONDS
+	local touched = {}
+
+	for dx = -EDIT_RADIUS, EDIT_RADIUS do
+		for dz = -EDIT_RADIUS, EDIT_RADIUS do
+			local x, z = blockX + dx, blockZ + dz
+			local cx, cz, bx, bz = normalizeCell(x // CHUNK_SIZE, z // CHUNK_SIZE, x % CHUNK_SIZE, z % CHUNK_SIZE)
+			local key = chunkKey(cx, cz)
+			local data = chunks[key]
+
+			if data and not generatingChunks[key] then
+				local cell = cellOf(bx, bz)
+				local was = data.hot[cell]
+				data.hot[cell] = expiresAt
+
+				if not was then
+					data.hotCount += 1
+					redrawZoneColumn(data, cell, touched)
+				end
+			end
+		end
+	end
+
+	flushTouched(touched)
+end
+
+-- Merges zones nobody has edited in EditZone.Seconds back into slabs.
+local lastZoneSweep = 0
+
+local function closeExpiredEditZones()
+	local now = os.clock()
+	if now - lastZoneSweep < 1 then
+		return
+	end
+	lastZoneSweep = now
+
+	local touched = {}
+
+	for key, data in pairs(chunks) do
+		if data.hotCount > 0 and not generatingChunks[key] then
+			for cell, expiresAt in pairs(data.hot) do
+				if expiresAt <= now then
+					data.hot[cell] = nil
+					data.hotCount -= 1
+					redrawZoneColumn(data, cell, touched)
+				end
+			end
+		end
+	end
+
+	flushTouched(touched)
 end
 
 --[[
@@ -2342,6 +2432,12 @@ local function generateChunk(cx, cz)
 		extra = {},
 		override = {},
 		complex = {},
+
+		-- Edit zones (see EDIT ZONES): cell -> when its zone time runs out,
+		-- and the Parts on their way off screen.
+		hot = {},
+		hotCount = 0,
+		retiring = {},
 	}
 
 	chunks[key] = data
@@ -2436,6 +2532,14 @@ function TerrainManager:_UnloadChunk(cx, cz)
 		end
 		data.layerParts[by] = nil
 	end
+
+	-- Parts on their way off screen go now, before the folder they are in is
+	-- destroyed - their timers would otherwise hand a destroyed Part back to
+	-- the pool.
+	for part in pairs(data.retiring) do
+		releasePart(part)
+	end
+	table.clear(data.retiring)
 
 	if data.model then
 		data.model:Destroy()
@@ -2725,6 +2829,7 @@ local function onHeartbeatGenerate(dt)
 
 	processPendingUnloads()
 	trimPoolsIfNeeded()
+	closeExpiredEditZones()
 end
 
 --[[
@@ -3102,8 +3207,26 @@ function TerrainManager:BreakBlock(wx, wy, wz, initiator)
 		return finish(false, nil, "no_block")
 	end
 
+	-- Usually already open from when the swing started (OpenEditZone); this
+	-- covers anything that breaks blocks without one, and keeps it alive.
+	local index = cell - 1
+	openEditZone(data.minBlockX + index // CHUNK_SIZE, data.minBlockZ + index % CHUNK_SIZE)
+
 	local ok, item, reason = removeResolvedBlock(data, cell, by)
 	return finish(ok, item, reason)
+end
+
+--[[
+	Opens an edit zone around a world position (see EDIT ZONES). MiningServer
+	calls it when a swing STARTS, so the ground around the target is already
+	split into single blocks - and the layer under it drawn - by the time the
+	block breaks, and the swing time is the warning clients get.
+]]
+function TerrainManager:OpenEditZone(position: Vector3)
+	if typeof(position) ~= "Vector3" then
+		return
+	end
+	openEditZone(math.floor(position.X / STUD_SIZE), math.floor(position.Z / STUD_SIZE))
 end
 
 -- Server-only ability excavation. Exact loaded cells, no mining-reach override on
@@ -3153,7 +3276,8 @@ function TerrainManager:MineAbilityCrater(centre, canCollect, collect, beamHeigh
 		end
 	end
 	for _,column in pairs(dirty) do
-		refreshAdjacentColumns(column[1],column[2],column[3],column[4])
+		-- Immediate: a crater should open with the blast, not a moment after it.
+		refreshAdjacentColumns(column[1],column[2],column[3],column[4],true)
 	end
 	-- Keep ground fragments visible even when a dense overhead shaft fills the cap.
 	local groundLimit=math.min(#groundDebris,math.max(32,64-#shaftDebris))
@@ -3263,6 +3387,10 @@ function TerrainManager:PlaceBlock(player, blockX, by, blockZ, blockName)
 	if not getBlockPartTemplate(blockName) then
 		return finish(false, "Missing template")
 	end
+
+	-- Before the edit, so the ground around it is already drawn block by block
+	-- when it changes. See EDIT ZONES.
+	openEditZone(blockX, blockZ)
 
 	applyPlacement(data, cell, by, blockName)
 	ChunkEdits.recordPlacement(key, cell, by, blockName)

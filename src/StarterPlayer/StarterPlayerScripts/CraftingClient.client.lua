@@ -34,6 +34,7 @@ local InventoryMirror =
 local MenuState = require(Shared.UI:WaitForChild("MenuState"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
+local WeaponClasses = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponClasses"))
 
 -- The same resolver the inventory slots use, so an item is drawn the same way
 -- on both screens. See Shared.UI.ItemThumbnails.
@@ -794,7 +795,8 @@ function refreshDetail()
 	detailName.Text = recipe.output.item
 	detailName.TextColor3 = rarityColor(recipe.output.item)
 	detailStation.Text = StationConfig.getDisplayName(recipe.station)
-	detailDescription.Text = (def and def.description) or ""
+	-- A weapon's class line ("Sword -> Longsword") heads its description.
+	detailDescription.Text = WeaponClasses.description(def)
 	requiresLabel.Visible = true
 
 	refreshIngredients(recipe)
@@ -1056,6 +1058,7 @@ CraftingResult.OnClientEvent:Connect(function(ok, _recipeId, message)
 		-- rather than to a line of text at the bottom of the panel.
 		Motion.flash(detailTile, Theme.Color.Good)
 		Motion.flash(detailIcon, Theme.Color.Good)
+		Motion.pulse(detailTile, 1.12)
 	else
 		setStatus(message, "bad")
 		Sounds.play("craft.fail")

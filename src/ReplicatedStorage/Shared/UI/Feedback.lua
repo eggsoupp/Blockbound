@@ -36,6 +36,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Theme = require(script.Parent:WaitForChild("Theme"))
+local Motion = require(script.Parent:WaitForChild("Motion"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
 local Feedback = {}
@@ -251,6 +252,13 @@ function Feedback.item(itemName: string, delta: number)
 		"%s%d %s", if entry.total > 0 then "+" else "", entry.total, label
 	)
 	entry.label.TextColor3 = color
+
+	-- A gain bumps the line, so "+6 Stone" becoming "+7 Stone" is seen to
+	-- happen rather than having to be read. Losses stay still: spending is
+	-- not news.
+	if delta > 0 then
+		Motion.pulse(entry.label, 1.08)
+	end
 
 	hold(entry)
 end

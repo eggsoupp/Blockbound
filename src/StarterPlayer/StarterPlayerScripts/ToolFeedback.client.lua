@@ -15,8 +15,10 @@
 	`animation` in its own ItemDefinitions entry. No rigging, no per-tool
 	script, no server involvement.
 
-	Both are empty because this project has no swing animation yet. A tool with
-	none still makes its sound and still hits; it simply does not move.
+	Weapons and axes have none yet. A tool with none still makes its sound and
+	still hits; it simply does not move. Pickaxes do have one, but it is the
+	mining swing and MiningClient plays it - looped while held, timed to the
+	pickaxe's miningSpeed - so this script leaves pickaxes alone.
 
 	NO PROCEDURAL FALLBACK, DELIBERATELY. Tweening the Tool's Grip needs no
 	asset, which was its appeal - but Grip changes made on a CLIENT do not
@@ -31,22 +33,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local ToolConfig = require(Shared:WaitForChild("Tools"):WaitForChild("ToolConfig"))
+local ToolAnimation = require(Shared.Tools:WaitForChild("ToolAnimation"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
 local player = Players.LocalPlayer
 
 -- tool -> { track: AnimationTrack? }, for the tools currently in the character.
 local activeTools = {}
-
---[[
-	character -> animation id -> AnimationTrack, or false for one that failed.
-
-	Loading an animation is a round trip to the asset and a tool can be clicked
-	several times a second, so each is loaded once per body. Weak-keyed on the
-	character, so a respawn drops the whole set rather than leaving tracks bound
-	to a corpse.
-]]
-local tracksByCharacter = setmetatable({}, { __mode = "k" })
 
 local function itemNameFor(tool)
 	local attribute = tool:GetAttribute("ItemName") or tool:GetAttribute("itemName")
@@ -63,67 +56,34 @@ local function itemNameFor(tool)
 end
 
 --[[
-	The animation this tool should play, or nil for one with none configured.
+	The animation this tool should play on a click, or nil for one with none
+	configured.
+
+	Nil for a pickaxe whatever is configured: its swing is MiningClient's, which
+	loops it for as long as the button is held and times it to the pickaxe's
+	miningSpeed. Playing it here as well would start a second copy on every
+	click and fight that loop.
 ]]
 local function animationIdFor(tool)
 	local definition = ItemDefinitions[itemNameFor(tool)]
+	if definition and definition.classification == "Pickaxe" then
+		return nil
+	end
 
 	return ToolConfig.animationFor(definition and definition.classification, definition)
 end
 
 --[[
-	A loaded, ready-to-play track for an id on this character.
+	Whether this script stays out of a tool's swing entirely, sound included.
 
-	Failures are remembered as `false` rather than retried: an id that does not
-	load will not start loading because somebody clicked again, and warning once
-	per body per id is the difference between a message and a flood.
+	The axe ("Tool"): HarvestClient swings it once per StructureConfig.
+	ChopSeconds, playing the animation and the sound itself, so they match the
+	chops rather than the clicks. A sound here on every click would put the
+	click speed straight back into what the player hears.
 ]]
-local function trackFor(character, id)
-	local perCharacter = tracksByCharacter[character]
-	if not perCharacter then
-		perCharacter = {}
-		tracksByCharacter[character] = perCharacter
-	end
-
-	local cached = perCharacter[id]
-	if cached ~= nil then
-		return cached or nil
-	end
-
-	local humanoid = character:FindFirstChildOfClass("Humanoid")
-	local animator = humanoid and humanoid:FindFirstChildOfClass("Animator")
-	if not animator then
-		return nil
-	end
-
-	local animation = Instance.new("Animation")
-	animation.AnimationId = id
-
-	local ok, loaded = pcall(animator.LoadAnimation, animator, animation)
-	animation:Destroy()
-
-	if not ok or not loaded then
-		warn(string.format(
-			"[ToolFeedback] could not load the swing animation '%s' - check the id is an "
-				.. "Animation you own. Tools using it will not move.",
-			id
-		))
-		perCharacter[id] = false
-		return nil
-	end
-
-	--[[
-		Action priority, so the swing plays OVER walking and idling rather than
-		being blended into a shrug by them. Set here rather than expected of the
-		asset, because an animation uploaded with the wrong priority is the most
-		common reason a swing does not appear to play at all.
-	]]
-	pcall(function()
-		loaded.Priority = Enum.AnimationPriority.Action
-	end)
-
-	perCharacter[id] = loaded
-	return loaded
+local function swingOwnedElsewhere(tool)
+	local definition = ItemDefinitions[itemNameFor(tool)]
+	return definition ~= nil and definition.classification == "Tool"
 end
 
 --[[
@@ -135,7 +95,7 @@ end
 ]]
 local function swing(tool)
 	local state = activeTools[tool]
-	if not state then
+	if not state or swingOwnedElsewhere(tool) then
 		return
 	end
 
@@ -151,7 +111,7 @@ local function swing(tool)
 		return
 	end
 
-	local track = trackFor(character, id)
+	local track = ToolAnimation.track(character, id)
 	if not track then
 		return
 	end

@@ -100,16 +100,115 @@ ToolConfig.DefaultShape = "Pickaxe"
 	when they click. An item can overrule its class with `animation` in its own
 	ItemDefinitions entry.
 
-	Blank on purpose - there is no swing animation in this project, and an
-	invented id would either fail to load or play something nobody chose. A tool
-	with none still makes its sound and still hits; it just does not move. See
-	ToolFeedback for why a procedural swing is not the fallback.
+	The pickaxe's is the mining swing, and it is played differently: not per
+	click by ToolFeedback but by MiningClient, LOOPED for as long as the button
+	is held, at ToolConfig.miningAnimationRate of the pickaxe's miningSpeed.
+
+	The axe ("Tool") uses the same swing, once per chop, played by ToolFeedback
+	like any other click.
+
+	Weapon is blank - there is no attack swing yet, and an invented id would
+	either fail to load or play something nobody chose. A weapon still makes
+	its sound and still hits; it just does not move. See ToolFeedback for why a
+	procedural swing is not the fallback.
 ]]
+local MINING_SWING = "rbxassetid://95795656805717"
+
 ToolConfig.Animations = {
-	Pickaxe = "",
+	Pickaxe = MINING_SWING,
 	Weapon = "",
-	Tool = "",
+	Tool = MINING_SWING,
 }
+
+--[[
+	How a pickaxe's miningSpeed becomes the mining swing's playback rate.
+
+	A square root rather than straight across: speed runs from 0.6 (wood) to 5.5
+	(skybreaker), and a swing played five times faster stops reading as a swing.
+	This keeps the ladder visible - every tier swings a little quicker than the
+	one before - inside a range that still looks like arms.
+
+	    wood 0.77  copper 1.00  stone 1.18  iron 1.41  gold 1.64
+	    mythril 1.90  void 2.24  skybreaker 2.25 (capped)
+]]
+ToolConfig.MiningSwing = {
+	exponent = 0.5,
+	minRate = 0.75,
+	maxRate = 2.25,
+}
+
+function ToolConfig.miningAnimationRate(miningSpeed)
+	local speed = tonumber(miningSpeed) or 1
+	if speed <= 0 then
+		speed = 1
+	end
+
+	local swing = ToolConfig.MiningSwing
+	return math.clamp(speed ^ swing.exponent, swing.minRate, swing.maxRate)
+end
+
+--[[
+	How a held tool is carried while WALKING, played by StarterPlayerScripts.
+	ToolWalk in place of the ordinary walk for as long as the player walks with
+	it out. Weapons go by their ItemDefinitions `weaponClass` (see Shared.Combat.
+	WeaponClasses); a pickaxe, an axe, or anything else held uses Default.
+	Nothing held: the ordinary Roblox walk, untouched.
+]]
+ToolConfig.WalkAnimations = {
+	Default = "rbxassetid://107768818175051",
+	Sword = "rbxassetid://89137147173428",
+	HeavySword = "rbxassetid://134341579640714",
+	Lance = "rbxassetid://114635571790712",
+}
+
+-- The walking speed the walks were made for. Played at (speed / this), so a
+-- crouch-walk at 8 strides at half pace instead of skating.
+ToolConfig.WalkReferenceSpeed = 16
+
+function ToolConfig.walkAnimationFor(definition)
+	local class = definition and definition.weaponClass
+	return (type(class) == "string" and ToolConfig.WalkAnimations[class]) or ToolConfig.WalkAnimations.Default
+end
+
+--[[
+	The same, for SPRINTING with a tool out: ToolWalk plays these in place of the
+	walks once the player is sprinting (spring-crouch-walk raises WalkSpeed past
+	WalkReferenceSpeed) and actually moving at a run. Swords, pickaxes, axes and
+	anything else held share one run; heavy swords and lances have their own.
+	Sprinting empty-handed keeps spring-crouch-walk's own run.
+]]
+local RUN = "rbxassetid://132843119533694"
+
+ToolConfig.RunAnimations = {
+	Default = RUN,
+	Sword = RUN,
+	HeavySword = "rbxassetid://136519978443390",
+	Lance = "rbxassetid://100319399166871",
+}
+
+-- The sprinting speed the runs were made for: spring-crouch-walk's RUN_SPEED.
+ToolConfig.RunReferenceSpeed = 25
+
+-- Below this, a sprinting player is not actually running (pushing into a wall,
+-- slowed on a slope) and walks instead - spring-crouch-walk's own threshold
+-- for its run, so the two always agree on which one the player is doing.
+ToolConfig.RunMinimumSpeed = 10
+
+-- Standing still with a tool out. Only classes listed here get one; the rest
+-- keep the default idle.
+ToolConfig.IdleAnimations = {
+	Lance = "rbxassetid://82133398926621",
+}
+
+function ToolConfig.idleAnimationFor(definition)
+	local class = definition and definition.weaponClass
+	return type(class) == "string" and ToolConfig.IdleAnimations[class] or nil
+end
+
+function ToolConfig.runAnimationFor(definition)
+	local class = definition and definition.weaponClass
+	return (type(class) == "string" and ToolConfig.RunAnimations[class]) or ToolConfig.RunAnimations.Default
+end
 
 function ToolConfig.animationFor(classification, definition)
 	local own = definition and definition.animation

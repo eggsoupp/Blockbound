@@ -29,7 +29,22 @@
 	                      1.40  stone     5.00  void
 	                      2.00  iron      5.50  skybreaker
 	                  and 40.0 for TestPickaxe, which is not on the ladder and
-	                  is not meant to be - see its entry.
+	                  is not meant to be - see its entry. Also how fast the
+	                  mining swing plays (ToolConfig.miningAnimationRate).
+	  miningPower     ON A PICKAXE: WHAT it can mine, where miningSpeed is how
+	                  FAST. A block whose power (BlockConfig; ores set theirs
+	                  in OreConfig) is above this refuses to break. The ladder:
+	                      1  wood            4  gold
+	                      2  copper, stone   5  mythril
+	                      3  iron            6  void, skybreaker
+	                  and 99 for TestPickaxe. Missing means 1.
+	  weaponClass     ON A WEAPON: its main class, a key of Shared.Combat.
+	                  WeaponClasses - Sword, HeavySword or Lance. Decides the
+	                  walk it is carried with (ToolConfig.WalkAnimations) and
+	                  heads its description in the UI.
+	  weaponSubclass  ON A WEAPON: what kind within the class - Longsword,
+	                  Katana, Broadsword, Spear. Shown after the class:
+	                  "Sword -> Katana".
 	  rarity          drives the colour of the name in the UI. The ladder, and
 	                  which tier is the top one, live in Shared.UI.Theme.
 	  animation       an rbxassetid:// played on the wielder when this item is
@@ -146,6 +161,8 @@ local ItemDefinitions = {
 		rarity = "Unobtainable",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Longsword",
 		value = 999,
 	},
 	TestPickaxe = {
@@ -160,6 +177,7 @@ local ItemDefinitions = {
 		-- than the development tool it is for. At 40 every ordinary block hits
 		-- BlockConfig.MinBreakSeconds and the deepest ore is a fifth of a second.
 		miningSpeed = 40.0,
+		miningPower = 99,
 	},
 	TestAxe = {
 		icon = "rbxassetid://15599043650",
@@ -180,6 +198,7 @@ local ItemDefinitions = {
 		-- The reference tool: every block hardness in the game is written as
 		-- "how long this should take with a copper pickaxe".
 		miningSpeed = 1.00,
+		miningPower = 2,
 	},
 	CopperSword = {
 		icon = "rbxassetid://3000000001",
@@ -187,6 +206,8 @@ local ItemDefinitions = {
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Longsword",
 		value = 8,
 	},
 	-- The wood tier. Weakest of everything, and the first tools a player can
@@ -212,6 +233,7 @@ local ItemDefinitions = {
 		value = 2,
 		-- Below CopperPickaxe, so the copper tier is still an upgrade.
 		miningSpeed = 0.60,
+		miningPower = 1,
 		iconAngle = Vector3.new(170, 0, 0),
 	},
 	WoodSword = {
@@ -221,6 +243,8 @@ local ItemDefinitions = {
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Longsword",
 		value = 3,
 		iconAngle = Vector3.new(0, 0, 0),
 	},
@@ -232,6 +256,7 @@ local ItemDefinitions = {
 		classification = "Pickaxe",
 		value = 10,
 		miningSpeed = 1.40,
+		miningPower = 2,
 	},
 	StoneSword = {
 		icon = "rbxassetid://3000000010",
@@ -239,6 +264,8 @@ local ItemDefinitions = {
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Longsword",
 		value = 12,
 	},
 
@@ -393,6 +420,7 @@ local ItemDefinitions = {
 		classification = "Pickaxe",
 		value = 15,
 		miningSpeed = 2.00,
+		miningPower = 3,
 	},
 	IronSword = {
 		icon = "rbxassetid://3000000402",
@@ -400,6 +428,8 @@ local ItemDefinitions = {
 		rarity = "Uncommon",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Longsword",
 		value = 30,
 	},
 	LeatherArmor = {
@@ -536,6 +566,7 @@ local ItemDefinitions = {
 		classification = "Pickaxe",
 		value = 55,
 		miningSpeed = 2.70,
+		miningPower = 4,
 	},
 	GoldSword = {
 		icon = "rbxassetid://3000000421",
@@ -543,6 +574,8 @@ local ItemDefinitions = {
 		rarity = "Rare",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Longsword",
 		value = 60,
 	},
 	MythrilPickaxe = {
@@ -553,6 +586,7 @@ local ItemDefinitions = {
 		classification = "Pickaxe",
 		value = 140,
 		miningSpeed = 3.60,
+		miningPower = 5,
 	},
 	VoidPickaxe = {
 		icon = "rbxassetid://3000000423",
@@ -562,6 +596,7 @@ local ItemDefinitions = {
 		classification = "Pickaxe",
 		value = 400,
 		miningSpeed = 5.00,
+		miningPower = 6,
 	},
 
 	-- === Building Blocks ===
@@ -619,6 +654,8 @@ local ItemDefinitions = {
 		rarity = "Rare",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Longsword",
 		value = 120,
 		buffs = { attackSpeed = 0.2 },
 	},
@@ -630,14 +667,18 @@ local ItemDefinitions = {
 		rarity = "Legendary",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Lance",
+		weaponSubclass = "Spear",
 		dropOnly = true,
 		iconAngle = Vector3.new(0, 0, -100),
 	},
 	Thunderveil = {
 		description = "A sword of crackling thunder. Deals high damage and has a chance to stun enemies.",
-		rariry = "Legendary",
+		rarity = "Legendary",
 		maxStack = 1,
-		classigication = "Weapon",
+		classification = "Weapon",
+		weaponClass = "HeavySword",
+		weaponSubclass = "Broadsword",
 		dropOnly = true,
 		iconAngle = Vector3.new(0, 0, 0),
 	},
@@ -646,6 +687,8 @@ local ItemDefinitions = {
 		rarity = "Epic",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Katana",
 		dropOnly = true,
 		iconAngle = Vector3.new(0, 0, 0),
 	},
@@ -657,6 +700,8 @@ local ItemDefinitions = {
 		rarity = "Legendary",
 		maxStack = 1,
 		classification = "Weapon",
+		weaponClass = "Sword",
+		weaponSubclass = "Longsword",
 		value = 300,
 		buffs = { lifesteal = 0.1, damage = 50 },
 		dropOnly = true,
@@ -670,6 +715,7 @@ local ItemDefinitions = {
 		value = 250,
 		buffs = { breakRadius = 1 },
 		miningSpeed = 5.50,
+		miningPower = 6,
 		dropOnly = true,
 	},
 	BuilderWand = {

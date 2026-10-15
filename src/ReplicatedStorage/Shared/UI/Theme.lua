@@ -121,10 +121,13 @@ Theme.Transparency = {
 	Selection = 0.35, -- matches the hotbar highlight
 }
 
+-- Grey, green, blue, purple, gold: the ladder players already know from other
+-- games. Ground drops glow in these, so each step has to be told apart at a
+-- glance on the floor as well as in the bag.
 Theme.Rarity = {
 	Common = Color3.fromRGB(163, 163, 163),
 	Uncommon = Color3.fromRGB(120, 190, 120),
-	Rare = Color3.fromRGB(63, 154, 48),
+	Rare = Color3.fromRGB(52, 132, 236),
 	Epic = Color3.fromRGB(128, 53, 182),
 	Legendary = Color3.fromRGB(255, 204, 0),
 	Unobtainable = Color3.fromRGB(0, 0, 0),

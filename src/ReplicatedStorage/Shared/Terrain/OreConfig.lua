@@ -57,6 +57,11 @@
 	               depth, which is what keeps the progression flat in FEEL while
 	               the numbers climb. Void at 8.00 is at BlockConfig.MaxBreakSeconds
 	               deliberately - with a wooden pickaxe it clamps, and it should.
+	  power        the pickaxe miningPower needed to break it (ItemDefinitions
+	               has the ladder). Each ore asks for the tier BEFORE the one it
+	               is smelted into, so progression cannot lock: wood mines coal
+	               and copper, copper or stone mines iron, iron mines gold, gold
+	               mines magma and mythril, mythril mines void.
 	  priority     higher wins when two ores claim the same block. Keep rare ores
 	               above common ones so a mythril vein is not eaten by coal.
 	  hosts        set of base block names it may replace. Defaults to the
@@ -91,6 +96,7 @@ OreConfig.Definitions = {
 		veinSize = 3,
 		fillRatio = 0.58,
 		breakSeconds = 2.00,
+		power = 1,
 		priority = 10,
 		appearance = { color = Color3.fromRGB(58, 58, 62), material = Enum.Material.Slate },
 	},
@@ -106,6 +112,7 @@ OreConfig.Definitions = {
 		veinSize = 3,
 		fillRatio = 0.55,
 		breakSeconds = 2.40,
+		power = 1,
 		priority = 20,
 		appearance = { color = Color3.fromRGB(196, 118, 66), material = Enum.Material.Metal },
 	},
@@ -121,6 +128,7 @@ OreConfig.Definitions = {
 		veinSize = 3,
 		fillRatio = 0.52,
 		breakSeconds = 3.20,
+		power = 2,
 		priority = 30,
 		appearance = { color = Color3.fromRGB(206, 190, 176), material = Enum.Material.Metal },
 	},
@@ -136,6 +144,7 @@ OreConfig.Definitions = {
 		veinSize = 2,
 		fillRatio = 0.45,
 		breakSeconds = 4.20,
+		power = 3,
 		priority = 40,
 		appearance = { color = Color3.fromRGB(226, 184, 62), material = Enum.Material.Metal },
 	},
@@ -151,6 +160,7 @@ OreConfig.Definitions = {
 		veinSize = 2,
 		fillRatio = 0.42,
 		breakSeconds = 5.50,
+		power = 4,
 		priority = 50,
 		appearance = { color = Color3.fromRGB(214, 82, 38), material = Enum.Material.Neon },
 	},
@@ -166,6 +176,7 @@ OreConfig.Definitions = {
 		veinSize = 2,
 		fillRatio = 0.40,
 		breakSeconds = 6.50,
+		power = 4,
 		priority = 60,
 		appearance = { color = Color3.fromRGB(104, 214, 206), material = Enum.Material.Foil },
 	},
@@ -181,6 +192,7 @@ OreConfig.Definitions = {
 		veinSize = 2,
 		fillRatio = 0.32,
 		breakSeconds = 8.00,
+		power = 5,
 		priority = 70,
 		appearance = { color = Color3.fromRGB(96, 52, 148), material = Enum.Material.Neon },
 	},

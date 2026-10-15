@@ -163,6 +163,8 @@ local function updateItemLabelFromEquipped()
 		local def = ItemDefinitions[name]
 		local rarity = (def and def.rarity) or "Common"
 		itemLabel.TextColor3 = Theme.rarityColor(rarity)
+		-- A swap reads as a new name arriving rather than a hard text swap.
+		Motion.fadeInText(itemLabel)
 	else
 		itemLabel.Text = ""
 	end
@@ -808,6 +810,12 @@ UserInputService.InputBegan:Connect(function(input, processed)
 
 	updateHotbarHighlight(equippedSlot)
 	updateItemLabelFromEquipped()
+
+	-- The slot taken up bumps, so the eye lands on what is now in hand. Not on
+	-- putting things away: empty hands are not an event.
+	if equippedSlot and slots[equippedSlot] then
+		Motion.pulse(slots[equippedSlot], 1.1)
+	end
 
 	player:SetAttribute(EQUIPPED_SLOT_ATTRIBUTE, equippedSlot)
 end)

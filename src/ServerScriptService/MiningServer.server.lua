@@ -10,10 +10,13 @@
 	  * the tool must be a real Pickaxe by ItemDefinitions, held right now
 	  * the target must resolve to a block the terrain actually has
 	  * the block must be breakable at all (bedrock is not)
+	  * the pickaxe's miningPower must reach the block's power (ores ask more)
 	  * how long it takes comes from the BLOCK's hardness and the TOOL's speed
 	  * the player must stay in range for the whole duration
 	  * the item awarded comes from BlockConfig, not from the client and not
 	    from the part's name
+	  * that item lands on the ground where the block was (GroundDrops) and is
+	    picked up by walking to it - decided here on the server, never asked for
 
 	This is also the one place mining edits are applied, so player-placed blocks,
 	structure blocks and generated terrain all break through the same path.
@@ -29,8 +32,8 @@ local BlockConfig = require(Shared:WaitForChild("Blocks"):WaitForChild("BlockCon
 local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
-local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local StationService = require(ServerScriptService:WaitForChild("StationService"))
+local GroundDrops = require(ServerScriptService:WaitForChild("GroundDrops"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
 local RequestMineRE = Remotes.ensure("RequestMineBlock", "RemoteEvent")
@@ -127,19 +130,17 @@ local function getTargetPosition(target, hitPos)
 	return nil
 end
 
-local function awardItem(player, itemName)
-	if not itemName or itemName == "" then
+--[[
+	Puts what the block was worth on the ground where it stood. The player
+	collects it by walking to it; GroundDrops decides that, server-side, and
+	holds it there for as long as their bag has no room.
+]]
+local function awardItem(player, itemName, position)
+	if not itemName or itemName == "" or typeof(position) ~= "Vector3" then
 		return
 	end
 
-	local ok = InventoryService.AddItemByName(player, itemName, 1)
-	if not ok then
-		-- Full bag. The block is already gone, so say so rather than silently
-		-- dropping the item on the floor of a system that has no floor.
-		warn(string.format(
-			"[MiningServer] %s had no room for %s.", player.Name, tostring(itemName)
-		))
-	end
+	GroundDrops.spawn(itemName, 1, position, player)
 end
 
 CancelMineRE.OnServerEvent:Connect(function(player)
@@ -185,7 +186,12 @@ local function mine(player, target, hitPos)
 	-- terrain, and quietly ignored when the target is not one.
 	local isStation, stationItem, stationReason = StationService.tryBreak(player, target)
 	if isStation then
-		awardItem(player, stationItem)
+		-- The struck part sits inside the station's cell; the click point may be
+		-- on its surface, half in the next cell over.
+		local where = if typeof(target) == "Instance" and target:IsA("BasePart")
+			then target.Position
+			else targetPos
+		awardItem(player, stationItem, where)
 		sendResult(player, true, stationItem, "ok")
 		return
 	elseif stationReason then
@@ -214,17 +220,16 @@ local function mine(player, target, hitPos)
 		return
 	end
 
-	-- Asked before the swing starts, not after the block is gone. Breaking a
-	-- block the player has nowhere to put deletes it and pays nothing, which
-	-- looks exactly like the item having been eaten.
-	local drop = BlockConfig.getDrop(blockName)
-	if drop and not InventoryService.CanAddItem(player, drop, 1) then
-		-- The drop rides along so the player is told WHAT has no room. A full
-		-- bag can still take more of what it already has a part-stack of,
-		-- which is how grass can mine fine while the dirt under it refuses.
-		sendResult(player, false, drop, "inventory_full")
+	-- Power decides WHAT a pickaxe can break, as speed decides how fast. Both
+	-- come from the server's own ItemDefinitions and BlockConfig.
+	if not BlockConfig.canMine(blockName, pickaxeDef) then
+		sendResult(player, false, nil, "too_weak")
 		return
 	end
+
+	-- No room-in-the-bag check any more. It existed because a mined item had
+	-- nowhere to go but the bag; now it lands on the ground and waits there
+	-- until the player has room, so a full bag no longer stops a swing.
 
 	-- Freeze the resolved voxel, not a pooled rendering Part that may be reshaped.
 	if cellCentre then
@@ -316,7 +321,10 @@ local function mine(player, target, hitPos)
 		return
 	end
 
-	awardItem(player, itemName)
+	-- Drops that were resting on this block fall first, so the new one lands
+	-- beside them (and stacks with them) rather than above a hole.
+	GroundDrops.blockRemovedAt(targetPos)
+	awardItem(player, itemName, targetPos)
 	sendResult(player, true, itemName, "ok")
 end
 RequestMineRE.OnServerEvent:Connect(function(player, target, hitPos)

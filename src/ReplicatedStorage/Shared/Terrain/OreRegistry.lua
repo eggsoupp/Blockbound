@@ -136,6 +136,7 @@ local function buildTables()
 		BlockConfig.registerBlock(def.block, {
 			drop = def.item,
 			breakSeconds = def.breakSeconds,
+			power = def.power,
 		})
 
 		-- Ores usually have no authored part; hand BlockConfig a description so

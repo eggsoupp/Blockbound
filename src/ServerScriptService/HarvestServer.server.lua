@@ -15,6 +15,9 @@
 
 	The fall happens HERE rather than on the clients - see `fell` - because
 	every player has to watch the same tree go down.
+
+	The wood lands on the ground beside the trunk (GroundDrops) rather than in
+	the bag, and is picked up by walking over to it.
 ]]
 
 local Players = game:GetService("Players")
@@ -27,7 +30,7 @@ local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local StructureConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("StructureConfig"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
-local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
+local GroundDrops = require(ServerScriptService:WaitForChild("GroundDrops"))
 
 local RequestHarvest = Remotes.ensure("RequestHarvest", "RemoteEvent")
 
@@ -40,8 +43,47 @@ local RequestHarvest = Remotes.ensure("RequestHarvest", "RemoteEvent")
 ]]
 local HarvestEffect = Remotes.ensure("HarvestEffect", "RemoteEvent")
 
-local MAX_REACH = 20
+--[[
+	How far from the character a struck part may be, measured to the NEAREST
+	POINT of that part rather than its centre.
+
+	It used to be the centre, with a reach of 20 - and a tree is a few big
+	parts whose centres sit high up and far in, so a chop at a trunk right in
+	front of the player could be measured as out of reach and dropped without a
+	word. The nearest point is what the player actually swung at.
+
+	StructureConfig.HarvestReach is the reach the client aims with; the slack is
+	for a player who stepped back while the request was in flight.
+]]
+local REACH_SLACK = 4
+local MAX_REACH = StructureConfig.HarvestReach + REACH_SLACK
 local MIN_REQUEST_INTERVAL = 0.25
+
+--[[
+	The chop rhythm: one landed chop per StructureConfig.ChopSeconds per player.
+
+	Separate from MIN_REQUEST_INTERVAL, which only stops a flood of requests.
+	This is the gameplay rule, and it is why clicking faster no longer chops
+	faster. Stamped when a chop LANDS, so a request that fails for any other
+	reason (out of reach, wrong tool) does not cost the player their next one.
+
+	The grace absorbs network jitter: the client sends exactly once per
+	ChopSeconds, and a request that arrives a hair early must not be dropped.
+]]
+local CHOP_GRACE = 0.1
+local CHOP_INTERVAL = StructureConfig.ChopSeconds - CHOP_GRACE
+
+-- Distance from a point to the nearest point of a part's box.
+local function distanceToPart(part: BasePart, point: Vector3): number
+	local half = part.Size * 0.5
+	local localPoint = part.CFrame:PointToObjectSpace(point)
+	local nearest = Vector3.new(
+		math.clamp(localPoint.X, -half.X, half.X),
+		math.clamp(localPoint.Y, -half.Y, half.Y),
+		math.clamp(localPoint.Z, -half.Z, half.Z)
+	)
+	return (localPoint - nearest).Magnitude
+end
 
 -- How far a chop is drawn and heard. A little past the distance a tree is
 -- recognisable from, so nothing pops silently at the edge of view.
@@ -73,6 +115,7 @@ local AUTO_HEALTH_MAX = 6
 
 local rulesByTag = {}
 local lastRequestAt = {}
+local lastChopAt = {}
 local rng = Random.new()
 
 for _, def in ipairs(StructureConfig.Definitions) do
@@ -232,6 +275,11 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 	if last and now - last < MIN_REQUEST_INTERVAL then
 		return
 	end
+
+	local lastChop = lastChopAt[player]
+	if lastChop and now - lastChop < CHOP_INTERVAL then
+		return
+	end
 	lastRequestAt[player] = now
 
 	local spec = rulesFor(target)
@@ -255,7 +303,7 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 
 	local character = player.Character
 	local hrp = character and character:FindFirstChild("HumanoidRootPart")
-	if not hrp or (hrp.Position - target.Position).Magnitude > MAX_REACH then
+	if not hrp or distanceToPart(target, hrp.Position) > MAX_REACH then
 		return
 	end
 
@@ -284,16 +332,10 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 	local damage = rules.damage or 1
 	local amount = rng:NextInteger(rules.min or 1, rules.max or rules.min or 1)
 
-	-- The killing chop is the one that pays out, so it is refused outright when
-	-- there is nowhere to put the wood. Felling the tree and then discovering
-	-- the bag is full destroys both the tree and the reward.
-	if
-		health.Value - damage <= 0
-		and not InventoryService.CanAddItem(player, rules.item, amount)
-	then
-		return
-	end
+	-- No room-in-the-bag refusal any more: the wood lands on the ground and
+	-- waits there, so a full bag can no longer destroy it.
 
+	lastChopAt[player] = now
 	health.Value -= damage
 
 	-- The chip colour is the wood's own, taken from the part that was actually
@@ -327,19 +369,29 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 
 	fell(model, hrp.Position)
 
-	InventoryService.AddItemByName(player, rules.item, amount)
+	-- On the chopper's side of the trunk, a step out from it: straight down
+	-- from the trunk would leave the wood floating inside the falling tree.
+	local where = target.Position
+	local toward = (hrp.Position - where) * Vector3.new(1, 0, 1)
+	if toward.Magnitude > 0.1 then
+		where += toward.Unit * 3
+	end
+
+	GroundDrops.spawn(rules.item, amount, where, player)
 
 	-- Optional second drop, rolled on the server like everything else.
 	local bonus = rules.bonus
 	if bonus and ItemDefinitions[bonus.item] and rng:NextNumber() < (bonus.chance or 0) then
-		InventoryService.AddItemByName(
-			player,
+		GroundDrops.spawn(
 			bonus.item,
-			rng:NextInteger(bonus.min or 1, bonus.max or bonus.min or 1)
+			rng:NextInteger(bonus.min or 1, bonus.max or bonus.min or 1),
+			where,
+			player
 		)
 	end
 end)
 
 Players.PlayerRemoving:Connect(function(player)
 	lastRequestAt[player] = nil
+	lastChopAt[player] = nil
 end)

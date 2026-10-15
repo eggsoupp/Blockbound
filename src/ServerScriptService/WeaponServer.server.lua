@@ -34,6 +34,15 @@ local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 local GearService = require(ServerScriptService:WaitForChild("GearService"))
+local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
+
+--[[
+	Tells the swinger how a swing that did NOT land went, so their client can
+	tell "too soon" and "nothing there" apart from a hit. Hits and kills are
+	reported by EnemyService once the damage is real; see the note there. A
+	receipt only - the decisions above are made exactly as before.
+]]
+local CombatFeedback = Remotes.ensure("CombatFeedback", "RemoteEvent")
 
 local DEBUG = false
 local function log(...)
@@ -104,6 +113,7 @@ local function swing(player, tool)
 	local now = os.clock()
 	local last = lastSwingAt[player]
 	if last and now - last < stats.cooldown then
+		CombatFeedback:FireClient(player, "refused")
 		return
 	end
 
@@ -140,6 +150,7 @@ local function swing(player, tool)
 	if not bestModel then
 		Profiler.count("Weapon.miss")
 		Profiler.leave("Weapon.swing")
+		CombatFeedback:FireClient(player, "miss")
 		return
 	end
 

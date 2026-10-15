@@ -36,6 +36,7 @@ local RunService = game:GetService("RunService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
+local Motion = require(Shared.UI:WaitForChild("Motion"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local ManaChanged = Remotes.wait("ManaChanged")
@@ -209,6 +210,11 @@ ManaChanged.OnClientEvent:Connect(function(value, max, rate)
 		carry a reason that only this one animation reads.
 	]]
 	if maximum > 0 and known >= before - 0.01 and known < maximum then
+		-- The bar shakes too, once per refusal rather than once per push while
+		-- the flash is still up: red says "no", the shake says "this bar".
+		if denied < 0.5 then
+			Motion.shake(track, 4)
+		end
 		denied = 1
 	end
 end)

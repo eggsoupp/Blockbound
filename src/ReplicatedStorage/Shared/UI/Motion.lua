@@ -227,16 +227,40 @@ end
 -- Emphasis
 -- ---------------------------------------------------------------------------
 
--- A short horizontal wobble: "that did not work", without a colour or a word.
+--[[
+	A short horizontal wobble: "that did not work", without a colour or a word.
+
+	The resting position is remembered per element while a shake runs, so a
+	second shake started mid-wobble shakes about the real position rather than
+	about wherever the first had got to - which used to leave the element
+	stranded a few pixels off. The token lets only the latest shake put it back.
+]]
+local shakeState = setmetatable({}, { __mode = "k" })
+
 function Motion.shake(element, magnitude)
 	magnitude = magnitude or 6
 
-	local base = element.Position
+	local state = shakeState[element]
+	if not state then
+		state = { base = element.Position, token = 0 }
+		shakeState[element] = state
+	end
+	state.token += 1
+	local token = state.token
+	local base = state.base
+
 	local steps = { magnitude, -magnitude * 0.7, magnitude * 0.4, 0 }
 	local info = TweenInfo.new(0.05, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
 	task.spawn(function()
 		for _, offset in ipairs(steps) do
+			-- A newer shake owns the element now, and will put it back itself.
+			if state.token ~= token then
+				return
+			end
+			if not element.Parent then
+				break
+			end
 			tween(element, info, {
 				Position = UDim2.new(
 					base.X.Scale, base.X.Offset + offset,
@@ -245,7 +269,11 @@ function Motion.shake(element, magnitude)
 			})
 			task.wait(0.05)
 		end
-		element.Position = base
+
+		if state.token == token then
+			element.Position = base
+			shakeState[element] = nil
+		end
 	end)
 end
 

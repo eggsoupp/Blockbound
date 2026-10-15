@@ -5,7 +5,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local CombatService = require(ServerScriptService:WaitForChild("CombatService"))
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
-local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
+local GroundDrops = require(ServerScriptService:WaitForChild("GroundDrops"))
 
 local Annihilation = {}
 
@@ -53,19 +53,17 @@ function Annihilation.cast(context): boolean
 	context.scope:delay(Plan.hitAt(), function()
 		strike(context, ground, Plan.Tuning.ImpactDamage)
 		local rewards={}
+		-- Everything blasted out is kept: it lands on the ground rather than
+		-- needing room in the bag, so nothing is refused here any more.
 		local _,debris=TerrainManager:MineAbilityCrater(ground,
-			function(item) return InventoryService.CanAddItem(context.player,item,1) end,
+			function() return true end,
 			function(item) rewards[item]=(rewards[item] or 0)+1 end,
 			Plan.Tuning.BeamHeight, Plan.Tuning.ExcavationRadius)
 		if debris and #debris>0 then context.broadcastDebris(debris,ground) end
-		-- One inventory update per block type, after terrain and debris are delivered.
+		-- One stack per block type at the bottom of the crater, after terrain and
+		-- debris are delivered; GroundDrops lets it fall to the new floor.
 		for item,count in pairs(rewards) do
-			local low,high=0,count
-			while low<high do
-				local mid=math.ceil((low+high)/2)
-				if InventoryService.CanAddItem(context.player,item,mid) then low=mid else high=mid-1 end
-			end
-			if low>0 then InventoryService.AddItemByName(context.player,item,low) end
+			GroundDrops.spawn(item,count,ground,context.player)
 		end
 	end)
 	for tickIndex = 1, Plan.Tuning.TickCount do

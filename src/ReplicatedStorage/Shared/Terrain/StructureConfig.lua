@@ -120,6 +120,23 @@ StructureConfig.GlobalDensityMultiplier = 1.0
 StructureConfig.MaxRadiusBlocks = 8
 
 --[[
+	How far a chop reaches, in studs from the character's root to the nearest
+	point of the part struck. The same as mining's reach (MiningServer's
+	MAX_MINE_DISTANCE), so a tree is exactly as easy to reach as a block.
+
+	HarvestClient uses it to decide what a click aims at and outlines;
+	HarvestServer enforces it, with a little slack for lag.
+]]
+StructureConfig.HarvestReach = 34
+
+--[[
+	One chop per this many seconds, however fast the clicks come. Holding the
+	button chops at exactly this rhythm (HarvestClient); HarvestServer refuses
+	anything quicker, so clicking faster gains nothing.
+]]
+StructureConfig.ChopSeconds = 1.0
+
+--[[
 	THE TREE NAMING CONVENTION
 
 	Which pool a tree model belongs to is decided by its NAME. Put a fragment

@@ -2,6 +2,8 @@
 	spring-crouch-walk
 
 	Sprint on Shift, crouch on C, with the field of view widening as you run.
+	The run animation here is for empty hands; with a tool out, ToolWalk plays
+	that tool's own run instead.
 
 	StarterCharacterScripts, so it re-runs per character and every reference
 	below belongs to the body it is holding.
@@ -68,6 +70,54 @@ local tweenNormal = TweenService:Create(camera, tweenInfo, { FieldOfView = NORMA
 local isSprinting = false
 local isCrouching = false
 
+--[[
+	Whether the player is in the run - sprinting and actually moving at it.
+
+	Its own flag rather than runTrack.IsPlaying, which it used to be: the run
+	ANIMATION now only plays with empty hands, because a held tool has a run of
+	its own (StarterPlayerScripts.ToolWalk, ToolConfig.RunAnimations). The field
+	of view still follows running whatever is held, so it needs a state that
+	does not depend on the animation.
+]]
+local runMode = false
+
+local function holdingTool()
+	return character:FindFirstChildOfClass("Tool") ~= nil
+end
+
+--[[
+	ToolWalk now plays a run for empty hands too (ToolConfig.RunAnimations.
+	Default), so this script's own run animation never plays; it is kept
+	stopped rather than deleted so switching back is one line.
+]]
+local OWN_RUN_ANIMATION = false
+
+local function syncRunAnimation()
+	local wanted = OWN_RUN_ANIMATION and runMode and not holdingTool()
+	if wanted and not runTrack.IsPlaying then
+		runTrack:Play()
+	elseif not wanted and runTrack.IsPlaying then
+		runTrack:Stop()
+	end
+end
+
+local function setRunMode(on)
+	runMode = on
+	syncRunAnimation()
+end
+
+-- Taking a tool out mid-run hands the run to ToolWalk; putting it away takes it back.
+character.ChildAdded:Connect(function(child)
+	if child:IsA("Tool") then
+		syncRunAnimation()
+	end
+end)
+character.ChildRemoved:Connect(function(child)
+	if child:IsA("Tool") then
+		syncRunAnimation()
+	end
+end)
+
 -- The one place WalkSpeed is written, so crouching while sprinting and
 -- releasing either one cannot leave the two states disagreeing about it.
 local function applySpeed()
@@ -90,14 +140,10 @@ local function setSprinting(sprinting)
 
 	if sprinting then
 		tweenSprint:Play()
-		if not runTrack.IsPlaying then
-			runTrack:Play()
-		end
+		setRunMode(true)
 	else
 		tweenNormal:Play()
-		if runTrack.IsPlaying then
-			runTrack:Stop()
-		end
+		setRunMode(false)
 	end
 end
 
@@ -153,19 +199,19 @@ end)
 -- of Shift - walking into a wall, or being caught on terrain.
 humanoid.Running:Connect(function(speed)
 	if speed >= RUN_ANIMATION_SPEED and isSprinting then
-		if not runTrack.IsPlaying then
-			runTrack:Play()
+		if not runMode then
+			setRunMode(true)
 			tweenSprint:Play()
 		end
-	elseif speed < RUN_ANIMATION_SPEED and runTrack.IsPlaying then
-		runTrack:Stop()
+	elseif speed < RUN_ANIMATION_SPEED and runMode then
+		setRunMode(false)
 		tweenNormal:Play()
 	end
 end)
 
 humanoid.Jumping:Connect(function()
-	if runTrack.IsPlaying then
-		runTrack:Stop()
+	if runMode then
+		setRunMode(false)
 	end
 end)
 

@@ -25,6 +25,7 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local ItemModels = require(script.Parent:WaitForChild("ItemModels"))
+local WeaponClasses = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponClasses"))
 
 local ItemPreview = {}
 
@@ -530,8 +531,8 @@ function ItemPreview.show(itemName: string?, slot: GuiObject?): boolean
 		nameLabel.Text = itemName
 		nameLabel.TextColor3 = Theme.rarityColor(definition and definition.rarity or "Common")
 
-		local text = definition and definition.description
-		descriptionLabel.Text = if type(text) == "string" then text else ""
+		-- A weapon's class line ("Sword -> Katana") heads its description.
+		descriptionLabel.Text = WeaponClasses.description(definition)
 		descriptionLabel.Visible = descriptionLabel.Text ~= ""
 
 		shownItem = itemName

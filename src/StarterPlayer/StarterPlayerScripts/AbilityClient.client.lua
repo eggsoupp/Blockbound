@@ -31,6 +31,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
 local Theme = require(Shared.UI:WaitForChild("Theme"))
+local Motion = require(Shared.UI:WaitForChild("Motion"))
 local MenuBackdrop = require(Shared.UI:WaitForChild("MenuBackdrop"))
 local AbilityPanel = require(Shared.UI:WaitForChild("AbilityPanel"))
 
@@ -286,10 +287,19 @@ local function updateHud()
 		local since = now - (castAt[abilityName] or -math.huge)
 
 		if cooldown <= 0 or since >= cooldown then
+			-- Ready again: the row lights up and bumps once, on the frame it
+			-- comes off cooldown, so the moment is noticed without being watched.
+			if row.cooling then
+				row.cooling = false
+				Motion.flash(row.row, Theme.Color.Accent, "BackgroundColor3")
+				Motion.pulse(row.row, 1.06)
+			end
+
 			row.fill.Size = UDim2.fromScale(0, 1)
 			row.label.Text = row.name
 			row.label.TextColor3 = Theme.Color.Text
 		else
+			row.cooling = true
 			local remaining = cooldown - since
 			row.fill.Size = UDim2.fromScale(remaining / cooldown, 1)
 			row.label.Text = string.format("%s  %.1fs", row.name, remaining)
@@ -350,6 +360,12 @@ local function cast(abilityName: string, definition)
 	local now = os.clock()
 	local last = requestedAt[abilityName]
 	if not player:GetAttribute("GodMode") and last and now - last < (definition.cooldown or 0) then
+		-- Pressed too soon: the row says "not yet" in red rather than the key
+		-- simply doing nothing.
+		local row = hudRows[abilityName]
+		if row then
+			Motion.flash(row.row, Theme.Color.Bad, "BackgroundColor3")
+		end
 		return
 	end
 	requestedAt[abilityName] = if player:GetAttribute("GodMode") then nil else now

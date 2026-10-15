@@ -73,6 +73,12 @@
             "Disabled": false
           }
         },
+        "ToolWalk": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/ToolWalk.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
         "BenchClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/BenchClient.client.lua",
           "$properties": {
@@ -135,6 +141,18 @@
         },
         "ItemFeedback": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/ItemFeedback.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
+        "TargetFeedback": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/TargetFeedback.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
+        "GroundDropClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/GroundDropClient.client.lua",
           "$properties": {
             "Disabled": false
           }
@@ -271,6 +289,9 @@
           "$ignoreUnknownInstances": true,
           "BlockConfig": {
             "$path": "src/ReplicatedStorage/Shared/Blocks/BlockConfig.lua"
+          },
+          "BreakOverlay": {
+            "$path": "src/ReplicatedStorage/Shared/Blocks/BreakOverlay.lua"
           }
         },
         "Crafting": {
@@ -319,6 +340,9 @@
           "Motion": {
             "$path": "src/ReplicatedStorage/Shared/UI/Motion.lua"
           },
+          "WorldFeedback": {
+            "$path": "src/ReplicatedStorage/Shared/UI/WorldFeedback.lua"
+          },
           "MenuState": {
             "$path": "src/ReplicatedStorage/Shared/UI/MenuState.lua"
           },
@@ -352,6 +376,9 @@
           "$ignoreUnknownInstances": true,
           "ToolConfig": {
             "$path": "src/ReplicatedStorage/Shared/Tools/ToolConfig.lua"
+          },
+          "ToolAnimation": {
+            "$path": "src/ReplicatedStorage/Shared/Tools/ToolAnimation.lua"
           }
         },
         "Inventory": {
@@ -359,6 +386,9 @@
           "$ignoreUnknownInstances": true,
           "InventoryMirror": {
             "$path": "src/ReplicatedStorage/Shared/Inventory/InventoryMirror.lua"
+          },
+          "DropConfig": {
+            "$path": "src/ReplicatedStorage/Shared/Inventory/DropConfig.lua"
           }
         },
         "Enemies": {
@@ -376,6 +406,9 @@
           },
           "WeaponConfig": {
             "$path": "src/ReplicatedStorage/Shared/Combat/WeaponConfig.lua"
+          },
+          "WeaponClasses": {
+            "$path": "src/ReplicatedStorage/Shared/Combat/WeaponClasses.lua"
           }
         },
         "Abilities": {
@@ -549,6 +582,9 @@
       },
       "StationService": {
         "$path": "src/ServerScriptService/StationService.lua"
+      },
+      "GroundDrops": {
+        "$path": "src/ServerScriptService/GroundDrops.lua"
       },
       "SpawnServer": {
         "$path": "src/ServerScriptService/SpawnServer.server.lua",

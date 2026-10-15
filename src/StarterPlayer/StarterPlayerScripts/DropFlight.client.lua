@@ -1,12 +1,21 @@
 --[[
 	DropFlight
 
-	The thing a kill drops, flying to you: a small cube on a curve with a trail
-	behind it, coloured by the item's rarity.
+	A drop you walked up to, flying to you: a small cube on a curve with a
+	trail behind it, coloured by the item's rarity.
 
-		EnemyService, on a kill  ->  EnemyDropFlight(from, item, amount)
-		                             ...and the item lands in the bag
-		                             EnemyConfig.DropFlightSeconds later
+		GroundDrops, on a pickup  ->  EnemyDropFlight(from, item, amount)
+		                              ...and the item lands in the bag
+		                              EnemyConfig.DropFlightSeconds later
+
+	(The remote keeps its old name from when enemy loot flew straight from the
+	corpse. All loot lands on the ground now, enemy loot included.)
+
+	The floating cube GroundDropClient draws is DropConfig.Size too, and `from`
+	is the middle of its bob, and the server removes it in the same step it
+	sends this - so the cube seems to lift off and fly rather than vanish and
+	reappear. Purely a picture: the server has already decided the pickup, and
+	grants it whether or not this ever draws.
 
 	THE ARRIVAL AND THE LINE ARE THE SAME MOMENT, WITHOUT BEING TOLD SO
 
@@ -47,6 +56,8 @@ local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local EnemyConfig = require(Shared:WaitForChild("Enemies"):WaitForChild("EnemyConfig"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
+local WorldFeedback = require(Shared.UI:WaitForChild("WorldFeedback"))
+local DropConfig = require(Shared:WaitForChild("Inventory"):WaitForChild("DropConfig"))
 
 local DropFlight = Remotes.wait("EnemyDropFlight")
 
@@ -54,7 +65,11 @@ local player = Players.LocalPlayer
 
 local FLIGHT = EnemyConfig.DropFlightSeconds
 
-local CUBE_SIZE = 0.7
+-- The same cube that was floating on the ground.
+local CUBE_SIZE = DropConfig.Size
+
+-- The small puff of the item's colour where the cube is caught.
+local CATCH_SHELL_SIZE = 1.6
 
 -- How high the curve bulges, as a fraction of how far it has to travel, and
 -- the floor under that so a drop at your feet still arcs.
@@ -180,6 +195,7 @@ local function fly(from: Vector3, itemName: string, color: Color3)
 			-- nothing to announce, and the item is still on its way to the bag.
 			if target then
 				Sounds.play("ui.click")
+				WorldFeedback.impact(target, color, CATCH_SHELL_SIZE, "Ball", 0.4)
 			end
 			return
 		end

@@ -8,6 +8,11 @@
 	placement the block pops in with a short scale and a thump, so building has
 	some weight to it.
 
+	The ghost also carries Shared.UI.WorldFeedback's focus outline, claimed as
+	"place": green where the cell is free, red where it is not, blended rather
+	than blinked between the two. A refused click flashes it, and a refusal
+	from the server says why in the feedback column.
+
 	Input is read through UserInputService rather than Mouse.Button1Down so the
 	`gameProcessed` flag can be honoured; without it, clicking a button in the
 	crafting window also tried to place a block behind it.
@@ -23,6 +28,8 @@ local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
+local WorldFeedback = require(Shared.UI:WaitForChild("WorldFeedback"))
+local Feedback = require(Shared.UI:WaitForChild("Feedback"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local InventoryMirror =
 	require(Shared:WaitForChild("Inventory"):WaitForChild("InventoryMirror"))
@@ -185,6 +192,7 @@ local function setPreviewTransparency(part, alpha)
 end
 
 local function destroyPreview()
+	WorldFeedback.release("place", true)
 	if preview then
 		preview:Destroy()
 		preview = nil
@@ -234,6 +242,10 @@ local function setPreviewState(canPlace)
 	else
 		preview.Color = Color3.fromRGB(255, 95, 95)
 	end
+
+	-- A repeat of the same verdict returns at once inside WorldFeedback, so
+	-- this costs nothing at thirty calls a second.
+	WorldFeedback.focus("place", preview, if canPlace then "PlaceValid" else "PlaceInvalid")
 end
 
 -- The character is deliberately filtered out of the overlap query, so it is
@@ -271,6 +283,9 @@ local function isCellBlocked(worldCenter)
 end
 
 local function hidePreview()
+	-- At once: a hidden ghost is parked far below the world, and an outline
+	-- fading on the way there would streak across the screen.
+	WorldFeedback.release("place", true)
 	if preview then
 		preview.CFrame = HIDDEN_CFRAME
 	end
@@ -401,6 +416,9 @@ local function playPlacementEffect(itemName, worldCenter)
 
 	Debris:AddItem(ghost, 0.4)
 
+	-- A green edge on the settling ghost: "that one is yours now".
+	WorldFeedback.flash(ghost, "Confirm", 0.3)
+
 	-- Workbenches are furniture, not masonry, so they get their own thunk;
 	-- everything else uses its material group.
 	local def = ItemDefinitions[itemName]
@@ -416,8 +434,26 @@ end
 local pendingItemName = nil
 local pendingCenter = nil
 
+-- A held click into a wall of refusals should not fill the feed with one line.
+local REFUSAL_REPEAT_SECONDS = 2
+local lastRefusal, lastRefusalAt = nil, 0
+
+local function reportRefusal(message)
+	if type(message) ~= "string" or message == "" then
+		return
+	end
+
+	local now = os.clock()
+	if message == lastRefusal and now - lastRefusalAt < REFUSAL_REPEAT_SECONDS then
+		return
+	end
+	lastRefusal, lastRefusalAt = message, now
+
+	Feedback.show(message, "bad")
+end
+
 if PlacementResult and PlacementResult:IsA("RemoteEvent") then
-	PlacementResult.OnClientEvent:Connect(function(success)
+	PlacementResult.OnClientEvent:Connect(function(success, message)
 		resultFlashSuccess = success == true
 		resultFlashUntil = os.clock() + 0.18
 		setPreviewState(resultFlashSuccess)
@@ -426,6 +462,10 @@ if PlacementResult and PlacementResult:IsA("RemoteEvent") then
 			playPlacementEffect(pendingItemName, pendingCenter)
 		elseif not success then
 			Sounds.play("ui.denied")
+			-- The reason was always sent and never shown; a build limit that
+			-- only says "no" looks exactly like a broken preview.
+			reportRefusal(message)
+			WorldFeedback.flash(preview, "Invalid")
 		end
 
 		pendingItemName, pendingCenter = nil, nil
@@ -459,6 +499,7 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	if not lastCanPlace then
 		-- Say no out loud rather than silently ignoring the click.
 		Sounds.play("ui.denied")
+		WorldFeedback.flash(preview, "Invalid")
 		return
 	end
 

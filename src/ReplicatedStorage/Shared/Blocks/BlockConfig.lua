@@ -42,10 +42,19 @@ BlockConfig.MinBreakSeconds = 0.05
 BlockConfig.MaxBreakSeconds = 8
 
 --[[
+	The pickaxe miningPower a block asks for when nothing says otherwise, and
+	the power a pickaxe has when its definition does not say. Every pickaxe
+	mines ordinary ground; ores ask for more (OreConfig `power`).
+]]
+BlockConfig.DefaultRequiredPower = 1
+BlockConfig.DefaultPickaxePower = 1
+
+--[[
 	drop          item granted on break; nil means the block's own name, false
 	              means nothing.
 	breakSeconds  overrides the item's miningTime.
 	unbreakable   refuse mining entirely.
+	power         the pickaxe miningPower needed to break it.
 ]]
 BlockConfig.Overrides = {
 	Water = { drop = false, unbreakable = true },
@@ -136,6 +145,28 @@ function BlockConfig.isUnbreakable(blockName)
 	return override ~= nil and override.unbreakable == true
 end
 
+-- The miningPower a block asks of a pickaxe.
+function BlockConfig.getRequiredPower(blockName)
+	local override = BlockConfig.Overrides[blockName]
+	local power = override and tonumber(override.power)
+	return power or BlockConfig.DefaultRequiredPower
+end
+
+-- The miningPower a pickaxe definition carries.
+function BlockConfig.pickaxePower(definition)
+	local power = definition and tonumber(definition.miningPower)
+	return power or BlockConfig.DefaultPickaxePower
+end
+
+--[[
+	Whether this pickaxe is strong enough for this block. Strength only -
+	unbreakable blocks are asked about separately. MiningServer decides with
+	this; MiningClient asks the same question only to colour its outline.
+]]
+function BlockConfig.canMine(blockName, pickaxeDefinition)
+	return BlockConfig.pickaxePower(pickaxeDefinition) >= BlockConfig.getRequiredPower(blockName)
+end
+
 -- ItemDefinitions stores miningTime in MILLISECONDS; converted here so no call
 -- site has to remember to.
 function BlockConfig.getBreakSeconds(blockName)
@@ -186,6 +217,9 @@ function BlockConfig.registerBlock(blockName, facts)
 	end
 	if override.unbreakable == nil and facts.unbreakable ~= nil then
 		override.unbreakable = facts.unbreakable
+	end
+	if override.power == nil and facts.power ~= nil then
+		override.power = facts.power
 	end
 end
 

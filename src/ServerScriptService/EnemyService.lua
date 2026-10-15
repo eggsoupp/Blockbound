@@ -49,15 +49,20 @@ local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
 local CombatService = require(ServerScriptService:WaitForChild("CombatService"))
-local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local BossService = require(ServerScriptService:WaitForChild("BossService"))
+local GroundDrops = require(ServerScriptService:WaitForChild("GroundDrops"))
 
 --[[
-	"Something dropped, and here is where it came from." Sent only to the player
-	who earned it; a drop is a private event and everyone else's client has
-	nothing to draw.
+	"Your blow landed", sent only to the player who dealt it, AFTER the damage
+	has been applied here. The attacker's client uses it to emphasise the hit
+	(TargetFeedback); it is a receipt, never a request, and nothing on the
+	client can make one arrive.
+
+		CombatFeedback(kind, model, position, enemyName, height)   kind: "hit" | "kill"
+
+	WeaponServer sends "miss" and "refused" down the same remote.
 ]]
-local DropFlight = Remotes.ensure("EnemyDropFlight", "RemoteEvent")
+local CombatFeedback = Remotes.ensure("CombatFeedback", "RemoteEvent")
 
 -- Its own source, so the drop rolls cannot be shifted by anything else pulling
 -- numbers out of a shared generator - the spawner, the size jitter.
@@ -76,6 +81,7 @@ local DAMAGE_TEXT = {
 	width = 90,
 	height = 28,
 	size = 24,
+	killSize = 28,
 	rise = 3.4,
 	spread = 2.2,
 	life = 0.85,
@@ -338,8 +344,11 @@ end
 	One part, one label, gone in under a second. The rise is a tween on the part
 	rather than on StudsOffset so the text drifts in world space and hits from
 	two directions do not stack into an unreadable pile.
+
+	The killing blow's number is a size up and in the accent colour: the one
+	hit worth telling apart from the rest, without adding anything to the pile.
 ]]
-local function damageNumber(position, amount, height)
+local function damageNumber(position, amount, height, killing)
 	local anchor = Instance.new("Part")
 	anchor.Name = "DamageNumber"
 	anchor.Size = Vector3.one * 0.2
@@ -371,8 +380,8 @@ local function damageNumber(position, amount, height)
 	label.Size = UDim2.fromScale(1, 1)
 	label.BackgroundTransparency = 1
 	label.FontFace = Theme.Fonts.Number
-	label.TextSize = DAMAGE_TEXT.size
-	label.TextColor3 = Theme.Color.Text
+	label.TextSize = if killing then DAMAGE_TEXT.killSize else DAMAGE_TEXT.size
+	label.TextColor3 = if killing then Theme.Color.Accent else Theme.Color.Text
 	label.TextStrokeColor3 = Color3.new(0, 0, 0)
 	label.TextStrokeTransparency = 0.2
 	label.Text = tostring(math.max(1, math.floor(amount + 0.5)))
@@ -522,25 +531,16 @@ local function behaviourFor(def)
 end
 
 --[[
-	Hands the killer whatever the thing was carrying, and tells them it is
-	coming.
+	Drops whatever the thing was carrying where it died, for the killer only.
 
-	THE ITEM ARRIVES LATE, ON PURPOSE
+	PRIVATE LOOT. The drops are GroundDrops' private kind: only the killer's
+	client is told they exist, and only the killer can pick them up - by
+	walking over, at which point they fly in along DropFlight's curve. Another
+	player standing on the corpse sees nothing and gets nothing. See
+	ServerScriptService.GroundDrops for how that is enforced.
 
-	The client flies a projectile from the corpse to the player, and the grant
-	is held back for exactly as long as that takes. So the item lands in the bag
-	at the moment the projectile lands on the player, the inventory watcher
-	notices and writes the line, and all three agree without any of them being
-	told about the others.
-
-	The alternative - grant now, and have the client hold its own notification
-	back - needs the two messages to arrive in a known order, which nothing
-	guarantees across two remotes. Here the only shared fact is a constant they
-	both read.
-
-	The wait is why the player is re-checked before granting: half a second is
-	long enough to leave in. An item lost that way is lost, which is the right
-	outcome for somebody who is not there.
+	A kill by something with no dealer drops nothing; there is nobody for it to
+	belong to.
 ]]
 local function awardDrops(entry, position)
 	local dealer = entry.dealer
@@ -551,13 +551,7 @@ local function awardDrops(entry, position)
 	local rolled = EnemyDrops.roll(entry.name, dropRandom)
 
 	for _, drop in ipairs(rolled) do
-		DropFlight:FireClient(dealer, position, drop.item, drop.amount)
-
-		task.delay(EnemyConfig.DropFlightSeconds, function()
-			if dealer.Parent then
-				InventoryService.AddItemByName(dealer, drop.item, drop.amount)
-			end
-		end)
+		GroundDrops.spawn(drop.item, drop.amount, position, dealer, true)
 	end
 end
 
@@ -1416,7 +1410,20 @@ function EnemyService.damage(model, amount, dealer)
 	-- it hit for. A killing hit that shows nothing is the one hit a player most
 	-- wants the number from.
 	if dealt > 0 then
-		damageNumber(model:GetPivot().Position, dealt, entry.height)
+		damageNumber(model:GetPivot().Position, dealt, entry.height, entry.health <= 0)
+
+		-- Before removeEntry destroys the model: the position travels with the
+		-- message so a kill can still be drawn where it happened.
+		if typeof(dealer) == "Instance" and dealer:IsA("Player") then
+			CombatFeedback:FireClient(
+				dealer,
+				if entry.health <= 0 then "kill" else "hit",
+				model,
+				model:GetPivot().Position,
+				entry.name,
+				entry.height
+			)
+		end
 	end
 
 	if entry.humanoid then

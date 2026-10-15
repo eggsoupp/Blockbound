@@ -404,6 +404,9 @@ BiomeConfig.Definitions = {
 		available at every distance from spawn.
 	]]
 	Plains = {
+		-- Keep this the largest weight. The other six were raised together by
+		-- ~12% to make them a little more common; scale them as a set, so
+		-- their shares relative to each other stay where they were.
 		regionWeight = 1.55,
 		temperature = 0.50,
 		humidity = 0.48,
@@ -487,7 +490,7 @@ BiomeConfig.Definitions = {
 		marsh-grass block would be one line here and one asset.
 	]]
 	Swamp = {
-		regionWeight = 0.95,
+		regionWeight = 1.06,
 		temperature = 0.72,
 		humidity = 0.86,
 		topBlock = "Grass",
@@ -521,7 +524,7 @@ BiomeConfig.Definitions = {
 		landmark affinity gives the flat-topped rock.
 	]]
 	Desert = {
-		regionWeight = 1.15,
+		regionWeight = 1.29,
 		temperature = 0.82,
 		humidity = 0.20,
 		topBlock = "Sand",
@@ -596,7 +599,7 @@ BiomeConfig.Definitions = {
 		always this big, they were simply not being let in.
 	]]
 	Snow = {
-		regionWeight = 1.35,
+		regionWeight = 1.51,
 		temperature = 0.14,
 		humidity = 0.42,
 		topBlock = "Snow",
@@ -637,7 +640,7 @@ BiomeConfig.Definitions = {
 	-- Bright, strange, and moderately mountainous: tall narrow spires on
 	-- otherwise gentle ground.
 	Hallow = {
-		regionWeight = 0.90,
+		regionWeight = 1.01,
 		temperature = 0.50,
 		humidity = 0.86,
 		topBlock = "HallowedDirt",
@@ -670,7 +673,7 @@ BiomeConfig.Definitions = {
 		-- Twice the climate territory it had. At the old 0.40 it was winning a
 		-- sliver even where it was available, and the sliver was then split
 		-- again by the buffer strips against Hallow.
-		regionWeight = 0.95,
+		regionWeight = 1.06,
 		temperature = 0.84,
 		humidity = 0.62,
 		topBlock = "CrimsonDirt",
@@ -708,7 +711,7 @@ BiomeConfig.Definitions = {
 		instead of as slivers, because size stopped being a function of rarity.
 	]]
 	Corruption = {
-		regionWeight = 1.05,
+		regionWeight = 1.18,
 		temperature = 0.22,
 		humidity = 0.76,
 		topBlock = "CorruptedDirt",

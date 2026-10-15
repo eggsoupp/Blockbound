@@ -36,8 +36,11 @@
 	                      chunk borders, spawn protection, cover and floor
 	                      thickness, small-vs-large rarity. See CaveAudit
 	  /bbcaves here       what cave you are in, or where the nearest one is
-	  /bbcaves tp [large] teleport to the nearest cave mouth (or nearest plan
-	                      origin when it has no mouth), for a look inside
+	  /tp <biome>         teleport to the nearest dry ground of that biome;
+	                      /tp list for the names
+	  /tp cave [large|small]  teleport to the nearest cave mouth (or nearest
+	                      plan origin when it has no mouth), for a look inside
+	  /coords             your position in blocks, relative to spawn
 	  /bbcaves edit       standing in a cave: place, mine and refill through
 	                      the real terrain API and confirm it is all recorded
 
@@ -70,6 +73,9 @@ local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"
 local TerrainBench = require(ServerScriptService:WaitForChild("TerrainBench"))
 local CaveAudit = require(ServerScriptService:WaitForChild("CaveAudit"))
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
+local BiomeConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("BiomeConfig"))
+local BiomeMap = require(Shared:WaitForChild("Terrain"):WaitForChild("BiomeMap"))
+local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
 local CaveMap = require(Shared:WaitForChild("Terrain"):WaitForChild("CaveMap"))
 local StationService = require(ServerScriptService:WaitForChild("StationService"))
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
@@ -364,6 +370,73 @@ local function printThumbnailReport()
 	return #rendered, #imaged, #empty
 end
 
+local BIOME_SEARCH_RADIUS = 4000 -- blocks
+local BIOME_SEARCH_STEP = 16 -- blocks between samples on each ring
+
+local function teleportToBlock(root, x, z)
+	local studs = TerrainConfig.StudSize
+	local worldX, worldZ = x * studs + studs * 0.5, z * studs + studs * 0.5
+	local surfaceY = TerrainManager:GetSurfaceY(worldX, worldZ) or 0
+	root.CFrame = CFrame.new(worldX, surfaceY + 6, worldZ)
+end
+
+--[[
+	Nearest column of a biome, searched in square rings outward from the
+	player. Dry land wins; a column under water is only kept as a fallback so
+	a biome that is mostly lake still has an answer. Yields every few hundred
+	samples - the far rings are tens of thousands of columns.
+]]
+local function findNearestBiome(biomeName, fromX, fromZ)
+	local wet = nil
+	local samples = 0
+	local step = BIOME_SEARCH_STEP
+
+	local function visit(x, z)
+		local _, name, _, _, _, waterTop = BiomeMap.sampleColumn(x, z)
+		samples += 1
+		if samples % 400 == 0 then
+			task.wait()
+		end
+		if name ~= biomeName then
+			return false
+		end
+		if waterTop == 0 then
+			return true
+		end
+		wet = wet or { x, z }
+		return false
+	end
+
+	for ring = 0, BIOME_SEARCH_RADIUS // step do
+		local r = ring * step
+		-- The square ring at this radius: top and bottom rows in full, the
+		-- side columns without their corners.
+		local cells = {}
+		if ring == 0 then
+			cells[1] = { 0, 0 }
+		else
+			for i = -ring, ring do
+				table.insert(cells, { i, -ring })
+				table.insert(cells, { i, ring })
+			end
+			for i = -ring + 1, ring - 1 do
+				table.insert(cells, { -ring, i })
+				table.insert(cells, { ring, i })
+			end
+		end
+		for _, cell in ipairs(cells) do
+			local x, z = fromX + cell[1] * step, fromZ + cell[2] * step
+			if visit(x, z) then
+				return x, z, r
+			end
+		end
+		if wet then
+			return wet[1], wet[2], r
+		end
+	end
+	return nil
+end
+
 local function onChatted(player, message)
 	local words = string.split(string.lower(message), " ")
 	local command = words[1]
@@ -544,6 +617,88 @@ local function onChatted(player, message)
 		-- and the chat handler is not somewhere to block for that long.
 		task.spawn(TerrainBench.run, options)
 		reply(player, "bbbench", "Started. Results land in the output window.", "good")
+	elseif command == "/coords" then
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if not root then
+			reply(player, "coords", "No character.", "bad")
+		else
+			-- Spawn sits on the world origin, so blocks from spawn is just the
+			-- position in blocks.
+			local studs = TerrainConfig.StudSize
+			local p = root.Position
+			local x, y, z = math.floor(p.X / studs), math.floor(p.Y / studs), math.floor(p.Z / studs)
+			reply(player, "coords", string.format(
+				"X %d, Y %d, Z %d (blocks). %d blocks from spawn.",
+				x, y, z, math.floor(math.sqrt(x * x + z * z))
+			))
+		end
+	elseif command == "/tp" then
+		local argument = words[2]
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		local studs = TerrainConfig.StudSize
+
+		local biomeName = nil
+		for _, candidate in ipairs(BiomeConfig.Order) do
+			if argument and string.lower(candidate) == argument then
+				biomeName = candidate
+				break
+			end
+		end
+
+		if not root then
+			reply(player, "tp", "No character.", "bad")
+		elseif argument == "cave" or argument == "caves" then
+			if not TerrainManager:CavesEnabled() then
+				reply(player, "tp", "Caves are off in this place.", "bad")
+				return
+			end
+			local category = if words[3] == "large" then "Large" elseif words[3] == "small" then "Small" else nil
+			local plan = CaveMap.findNearestPlan(
+				math.floor(root.Position.X / studs), math.floor(root.Position.Z / studs), 1500, category
+			)
+			if not plan then
+				reply(player, "tp", "No cave plan within 1500 blocks.", "bad")
+			else
+				local x, z = plan.originX, plan.originZ
+				if plan.entrance then
+					x, z = plan.entrance.x, plan.entrance.z
+				end
+				teleportToBlock(root, x, z)
+				reply(player, "tp", string.format(
+					"Teleported to %s cave %s (%s), %s.", string.lower(plan.category), plan.id, plan.biome,
+					if plan.entrance then "at its mouth" else "above its origin (no mouth; dig down)"
+				), "good")
+			end
+		elseif biomeName then
+			if PlaceConfig.isIsland() then
+				reply(player, "tp", "There are no biomes to search in the Island place.", "bad")
+				return
+			end
+			reply(player, "tp", "Searching for " .. biomeName .. "...")
+			-- Spawned: a far biome is thousands of samples, too long to block chat.
+			task.spawn(function()
+				local fromX = math.floor(root.Position.X / studs)
+				local fromZ = math.floor(root.Position.Z / studs)
+				local x, z, distance = findNearestBiome(biomeName, fromX, fromZ)
+				if not x then
+					reply(player, "tp", string.format(
+						"No %s within %d blocks.", biomeName, BIOME_SEARCH_RADIUS
+					), "bad")
+				elseif root.Parent then
+					teleportToBlock(root, x, z)
+					reply(player, "tp", string.format(
+						"Teleported to %s at X %d, Z %d (about %d blocks away).", biomeName, x, z, distance
+					), "good")
+				end
+			end)
+		else
+			reply(player, "tp", string.format(
+				"Usage: /tp <biome> or /tp cave [large|small]. Biomes: %s",
+				table.concat(BiomeConfig.Order, ", ")
+			), if argument == "list" then nil else "bad")
+		end
 	elseif command == "/bbcaves" then
 		local argument = words[2]
 		local character = player.Character
@@ -556,30 +711,6 @@ local function onChatted(player, message)
 				reply(player, "bbcaves", "No character.", "bad")
 			else
 				reply(player, "bbcaves", CaveAudit.describe(root.Position))
-			end
-		elseif argument == "tp" then
-			if not root then
-				reply(player, "bbcaves", "No character.", "bad")
-			else
-				local studs = TerrainConfig.StudSize
-				local category = if words[3] == "large" then "Large" elseif words[3] == "small" then "Small" else nil
-				local plan = CaveMap.findNearestPlan(
-					math.floor(root.Position.X / studs), math.floor(root.Position.Z / studs), 1500, category
-				)
-				if not plan then
-					reply(player, "bbcaves", "No cave plan within 1500 blocks.", "bad")
-				else
-					local x, z = plan.originX, plan.originZ
-					if plan.entrance then
-						x, z = plan.entrance.x, plan.entrance.z
-					end
-					local surfaceY = TerrainManager:GetSurfaceY(x * studs + 2, z * studs + 2) or 0
-					root.CFrame = CFrame.new(x * studs + 2, surfaceY + 6, z * studs + 2)
-					reply(player, "bbcaves", string.format(
-						"Teleported to %s cave %s (%s), %s.", string.lower(plan.category), plan.id, plan.biome,
-						if plan.entrance then "at its mouth" else "above its origin (no mouth; dig down)"
-					), "good")
-				end
 			end
 		elseif argument == "edit" then
 			local ok, outcome = CaveAudit.editRoundTrip(player)

@@ -1,72 +1,101 @@
 --[[
 	SlimeEmperor
 
-	A gigantic blob of slime that can reshape itself, wearing a crown.
+	A monarch made entirely of living slime, wearing a crown.
 
-	THE ONE IDEA THIS FIGHT IS BUILT ON: HIS BODY IS THE WEAPON, AND IT IS FINITE
+	FOUR THINGS HE IS, AND EVERY ATTACK IS ONE OF THEM
 
-	He has MASS. Everything he throws is made of him and costs mass; everything
-	he takes back returns it. Mass is his size, his reach, his contact hitbox
-	and how hard he is to fight - all of it read live off the body part rather
-	than from numbers written down beside it.
+	  HIS BODY IS THE WEAPON, AND IT IS FINITE.  He has MASS. Everything he
+	    throws is made of him and costs mass; everything he takes back returns
+	    it. Mass is his size, his reach, his contact hitbox and how hard he is
+	    to fight - all read live off the body part, never from a number
+	    written beside it.
 
-	So the fight has an economy the player can play against:
+	  HE RULES LESSER SLIMES.  The handfuls he sheds get up and walk. They are
+	    his subjects: he can command them down a lane at you (ROYAL DECREE) or
+	    take them back into himself and heal (REABSORB). The player decides
+	    whether a slime dies now or becomes an attack and a heal later.
 
-	    CANNON / RAIN            spend mass. He visibly shrinks - and so does
-	                             his crown, because there is less king.
-	    REABSORB                 takes it back, and HEALS him for it.
+	  THE CROWN IS HIS AUTHORITY.  It burns when he commands, it leans toward
+	    ground he is about to take, and in CORONATION it leaves his head and
+	    he rebuilds himself around where it lands.
 
-	Killing the slimes he sheds is not busywork - it is the difference between
-	a boss who gets smaller all fight and one who keeps rebuilding himself. That
-	is the strategic layer, and it exists because he is made of slime.
+	  HE EATS THE WORLD.  CLAIM THE REALM sends veins of him through the
+	    terrain and bites the floor out at their ends. The blocks are swallowed
+	    and he grows. The arena is a second source of mass, which is the one
+	    thing a slime king could do in THIS game and nowhere else.
 
-	EVERY ATTACK USES A PROPERTY OF BEING A BLOB
+	THE ECONOMY
 
-	  PANCAKE      loses shape entirely and spreads. The damage area IS his
-	               flattened body, measured off the part. Then flows away as a
-	               puddle and stands back up somewhere else.
-	  CANNON       rears back, gathers a mass of himself on the far side, and
-	               throws it. It arcs, sheds droplets, and bursts into pools.
-	  RAIN         hauls his mass upward and throws it over the arena in
-	               handfuls - and SOME OF THEM GET UP. This is how he breeds.
-	  REABSORB     ropes a survivor back in on a tether of slime, shrinking it
-	               as it comes, and swells as it lands. He heals for it.
-	  CORONATION   flattens, fires the crown straight up, flows under wherever
-	               it is going to land, and erupts around it as it comes down.
-	  RICOCHET     compresses and becomes the projectile. Three bounces, each
-	               landing marked before he leaves for it.
+	    RAIN / DECREE BLOBS      spend mass. He visibly shrinks, crown and all.
+	    CLAIM THE REALM          gains a little mass from the ground. Never health.
+	    REABSORB                 gains mass AND HEALS. The only heal he has.
 
-	SIX, AND FOUR WERE CUT TO GET THERE
+	So his subjects are a three-way relationship the player has to manage:
+	Slime Rain produces them, Royal Decree weaponises them, Reabsorb reclaims
+	them. Killing them is the difference between a boss who gets smaller all
+	fight and one who keeps rebuilding himself - and killing the one he is
+	reaching for, mid-reach, interrupts him outright.
 
-	DIVIDE was a windup and then some slimes, which is every summon in every
-	game - SLIME RAIN took its job, so the attack you dodge and the attack that
-	fills the room are one attack. SURGE threw a wall across the floor, which a
-	dragon could do with its tail. PLUMMET was a good attack that did not earn
-	its slot next to Ricochet.
+	THE DECK
 
-	ENGULF was cut for a reason worth writing down: its whole content was
-	RESTRAINING the player, and a Roblox server cannot hold a character still -
-	movement is client-owned. So "you are caught" could only ever be a box
-	appearing and some damage, with an escape nobody could see the rules of. An
-	attack whose core verb the engine will not let you perform is not an attack
-	that needs another pass.
+	  BODY COLLAPSE    loses shape entirely and spreads. The damage area IS
+	                   his flattened body, measured off the part.
+	  CLAIM THE REALM  plants; veins spread toward you along the floor, bite
+	                   the ground at their ends, and the ground is pulled back
+	                   through them and swallowed. He swells.
+	  SLIME RAIN       hauls himself up and throws handfuls over the arena.
+	                   Some get up. This is how he breeds.
+	  REABSORB         ropes a survivor back in on a tether, shrinking it as it
+	                   comes, and swells and heals as it lands. Kill the slime
+	                   on the rope and nothing lands: no mass, no heal.
+	  ROYAL DECREE     rises tall, crown burning, links up to three subjects
+	                   and sends each down a marked lane as a surge of slime. A
+	                   subject killed before the command loses its lane. With
+	                   no subjects he tears one or two small blobs off himself
+	                   instead - weaker, and it costs him.
+	  CORONATION       flattens, fires the crown straight up, flows under where
+	                   it will land, and erupts around it as it comes down.
 
-	None of these is an ability a knight could perform. Take away "is made of
-	slime" and there is no attack left in the list.
+	WHAT WAS CUT, AND WHY
 
-	WHY THERE IS NO GENERIC SLAM
+	SLIME CANNON was a projectile: ninety studs in a straight line, step
+	sideways. A dragon could do it. RICOCHET was three big hops with landing
+	circles, and since he hops to get about anyway it was his walk, louder,
+	and it carried him out of the fight. Neither used a property of being
+	slime that something else here did not use better, and neither was fixed
+	by a bigger number. Claim the Realm and Royal Decree took their slots.
 
-	There was, in the version before this one, along with a projectile volley, a
-	charge and a spinning ring. They were fine and they were anybody's. The test
-	applied to every attack here was: could a dragon do this? If yes, it was cut
-	or rebuilt until the answer was no.
+	Hopping stays as LOCOMOTION. The problem was never that he hops; it was
+	that a series of hops was an attack.
 
 	SHAPE-BASED ATTACKS NEED A DEFORMABLE BODY
 
 	SlimeBody can only truly deform a body that is ONE BasePart. If the artist
-	built him from several, it falls back to uniform scaling and the attacks
-	whose whole content is a SHAPE - pancake and coronation - are dropped
-	from the deck rather than played invisibly. See `deckFor`.
+	built him from several it falls back to uniform scaling, and the attacks
+	whose whole content is a SHAPE - Body Collapse and Coronation - are dropped
+	from the deck rather than played invisibly. See `deckFor`. Claim, Rain,
+	Reabsorb and Decree do not depend on it, so the deck is never empty.
+
+	TERRAIN
+
+	The ground he eats goes through TerrainManager's own authority
+	(PlanExcavation / ExecuteExcavation): natural, breakable, loaded, dry
+	ground only - never a placed block, a structure, a cave wall or bedrock -
+	under hard caps, with no loot, and with the cells frozen BEFORE the warning
+	is drawn. Clients are then told which blocks really went and animate copies
+	being swallowed. The terrain rules are documented over there; this file
+	only chooses where to bite.
+
+	CLEANUP
+
+	Every attack runs inside an AbilityScope (`entry.scope`): temporary parts,
+	tethers, tweens, delayed tasks, the grip on any slime he is commanding and
+	the crown's pose all go into it, and performAttack destroys it when the
+	attack ends however it ended. `finish` destroys it on death. Older helpers
+	(telegraph discs, ripples, splatter) are on Debris timers measured in
+	seconds and need nothing. Every wait goes through `pause`, which stops the
+	moment `entry.slimeFinished` is set.
 
 	IT DRIVES ITSELF
 
@@ -90,6 +119,23 @@ local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 local CombatService = require(ServerScriptService:WaitForChild("CombatService"))
 local BossService = require(ServerScriptService:WaitForChild("BossService"))
 local SlimeBody = require(ServerScriptService:WaitForChild("SlimeBody"))
+local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
+
+local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
+local AbilityScope = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityScope"))
+local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
+
+-- Told to clients AFTER the ground has changed, with what really went; see
+-- claimRealm and StarterPlayerScripts.BossTerrainClient.
+-- Ensured by BossService at server start as well, so it exists before any
+-- boss does; ensure is idempotent and this is the one that names it here.
+local BossTerrain = Remotes.ensure("BossTerrain", "RemoteEvent")
+
+-- How far from him a client has to be to be told about swallowed ground.
+-- Generous: it is a few dozen small parts, and watching from a hill is fine.
+local DEBRIS_BROADCAST_RADIUS = 320
+
+local STUD_SIZE = TerrainConfig.StudSize
 
 local SlimeEmperor = {}
 
@@ -140,6 +186,10 @@ local Tuning = {
 	]]
 	breatherChance = 0.25,
 	breatherExtra = 2.6,
+
+	-- Added to the rest after Coronation, whatever the phase. The centrepiece
+	-- gets a beat of silence after it rather than the next tell on top of it.
+	afterCoronation = 1.4,
 
 	--[[
 		HOW HE MOVES: he hops, like the slime he is.
@@ -235,22 +285,34 @@ local Tuning = {
 		rest = 1,
 		min = 0.55,
 		max = 1.25,
-		-- PER SLIME, not per attack: a three-way split really does cost him
-		-- three times as much as a two-way one. Small, because it is charged
-		-- several times at once - at 0.11 a single division took a third of
-		-- him and two of them put him on the floor for the rest of the fight.
-		perCannon = 0.06,
+		-- Rain is charged once for the throw and then again PER handful that
+		-- lands alive: a slime that gets up and walks off really is a piece of
+		-- him that left. Small, because it is charged several times at once.
 		perRain = 0.05,
-		-- Charged again for each handful that lands alive. A slime that gets up
-		-- and walks off really is a piece of him that left.
 		perSlime = 0.05,
 		perAbsorb = 0.13,
 		-- Four per cent of his health, which is about two seconds of swinging
 		-- at him. Enough that letting him do it four times over costs a
 		-- noticeable stretch of the fight, and not so much that one missed
-		-- slime undoes a phase. Halved with his health; it is a FRACTION of it,
-		-- not an absolute.
+		-- slime undoes a phase. It is a FRACTION of his health, not an
+		-- absolute; retune it with EnemyConfig.
 		healPerAbsorb = 60,
+		-- A decree blob is a piece of him torn off to stand in for a subject
+		-- he does not have. It costs nearly as much as a shed slime and gives
+		-- nothing back: that is the price of having let the room be emptied.
+		perDecreeBlob = 0.04,
+		--[[
+			THE GROUND, per block swallowed, and the ceiling per cast.
+
+			A full three-vein bite into solid ground is about thirty blocks,
+			so the cap sits right where a full bite lands: a complete claim is
+			worth a little less than one reabsorb (0.13), a half bite into
+			mined-out ground is worth half that, and a bite into nothing is
+			worth nothing and still hurt. It can never heal him. That is the
+			whole difference between the world and his children as a resource.
+		]]
+		perClaimBlock = 0.004,
+		claimCap = 0.12,
 	},
 
 	--[[
@@ -276,19 +338,40 @@ local Tuning = {
 		damage = 30,
 	},
 
-	cannon = {
-		gather = 0.95,     -- he rears back, then whips through
-		-- How high the shot arcs on its way over. It is thrown, not rolled.
-		arc = 26,
-		speed = 62,
-		damage = 24,
-		blobRadius = 5,
-		splashes = 3,
-		splashRadius = 5,
-		splashSeconds = 3.5,
-		splashDamage = 6,
-		splashInterval = 0.9,
-		range = 90,
+	--[[
+		CLAIM THE REALM - he eats the floor.
+
+		He plants, the crown leans toward you, and two or three veins of him
+		spread along the ground to spots around where you are standing. The
+		whole path of every vein and the bite at its end are drawn for
+		`warning` seconds before anything happens; then the veins surge, the
+		ends bite one or two blocks out of the ground, and the ground is
+		pulled back through the veins and swallowed. He swells by what he ate.
+
+		Why it exists: it is the one attack a slime king could only have in a
+		game where the ground is made of blocks, and it makes the world a
+		second source of mass - a player who kills every slime still faces a
+		boss who can grow, and a player who watches the floor knows where he
+		is about to grow from.
+
+		Dodge: do not stand on a vein when it surges, do not stand at its end
+		when it bites. Every vein is drawn full length before it moves.
+	]]
+	claim = {
+		settle = 0.55,       -- he plants and the crown leans: the first tell
+		warning = 1.35,      -- veins drawn to full length, ends ringed
+		surge = 0.4,         -- the veins thicken and run; crossing one hurts
+		swallow = 0.9,       -- the ground flies back along them and goes in
+		veins = { 2, 3, 3 }, -- by phase
+		reach = 58,          -- furthest a vein end may be from him
+		ringRadius = 9,      -- vein ends sit this far from the target, around them
+		width = 5,           -- how wide a vein is, which is what it hits
+		biteRadius = 6,      -- the eruption and the bite footprint at a vein end
+		veinDamage = 14,
+		biteDamage = 16,
+		-- A player who crosses two veins and stands in a bite is clipped
+		-- once or twice, not three times. Per player, per cast.
+		capPerCast = 24,
 	},
 
 	absorb = {
@@ -345,40 +428,44 @@ local Tuning = {
 	},
 
 	--[[
-		RICOCHET, and the problem it had.
+		ROYAL DECREE - the crown commands.
 
-		Once he HOPS to get about - which he now does - a bounce attack is the
-		same verb as walking, only faster, and it read as a dash rather than as
-		an attack. Everything here is set to make the difference obvious at a
-		glance rather than after being hit by it:
+		He rises tall and the crown lifts and burns. Up to `subjects` of his
+		surviving slimes are linked to it by gold tethers and ringed, and each
+		is given a lane - drawn full length toward a player - for `warning`
+		seconds. On the command every linked slime still alive flattens into
+		a surge, runs its lane, and stands back up at the end, where it stays
+		and can later be reabsorbed.
 
-		  compress  more than twice as long as a hop's crouch. He visibly winds
-		            up, and the first landing is marked before he leaves.
-		  height    three times a hop's arc, so he goes genuinely overhead.
-		  stride    nearly three times a hop, so he crosses the arena rather
-		            than shuffling toward you.
-		  bounces   three, not four. It was a chase; now it is a sequence with
-		            an end you can count.
+		KILL A LINKED SLIME AND ITS LANE IS GONE. That is the point: the
+		slimes were already a reason to clear the room before Reabsorb; now
+		they are a reason in the other direction too, and a slime with a ring
+		over it is a target the player has been handed.
 
-		If it still reads as a dash it is one line in `deckFor` to remove - the
-		fight has eight other attacks and loses nothing structural without it.
+		With no subjects alive he tears `fallbackBlobs` small blobs off
+		himself at a mass cost and sends those instead: shorter lanes, less
+		damage, and they dissolve afterwards rather than becoming slimes. It
+		is visibly the lesser version, so having cleared the room still paid.
 	]]
-	ricochet = {
-		compress = 0.55,
-		mark = 0.45,       -- each landing is marked this long before he arrives
-		bounces = 3,
-		flight = 0.62,
-		-- Also a control height, and also measured against him: three times
-		-- his own height of control, so he peaks at about one and a half times
-		-- it - comfortably over a hop, which is the point.
-		lift = 6,
-		minLift = 40,
-		stride = 34,
-		-- Degrees he may re-aim per bounce. Wider than a hop's 55, because a
-		-- committed attack is allowed to track harder than a stroll.
-		turn = 75,
-		radius = 12,
-		damage = 26,
+	decree = {
+		rise = 0.7,
+		warning = 1.5,
+		surge = 0.55,
+		reform = 0.35,
+		subjects = 3,
+		reach = 70,          -- how far away a subject may be
+		laneMin = 14,
+		laneMax = 46,
+		overshoot = 8,       -- a lane runs this far past where you were
+		width = 5,
+		damage = 16,
+		fallbackBlobs = { 0, 1, 2 }, -- by phase; it is not in the phase-one deck
+		fallbackLane = 24,
+		fallbackDamage = 9,
+		-- Two lanes converging on one player are one and a half hits, not
+		-- two. Per player, per cast. Lanes are also dealt round the room,
+		-- so three lanes only all point at one person when there is one.
+		capPerCast = 24,
 	},
 
 	--[[
@@ -824,6 +911,9 @@ local function turnOver(entry, direction: Vector3, seconds: number)
 	local start = os.clock()
 
 	while os.clock() - start < seconds do
+		if entry.slimeFinished then
+			return
+		end
 		local alpha = (os.clock() - start) / seconds
 		local eased = alpha * alpha * (3 - 2 * alpha)
 
@@ -867,6 +957,274 @@ local function gainMass(entry, amount: number)
 end
 
 -- ---------------------------------------------------------------------------
+-- Attack plumbing
+-- ---------------------------------------------------------------------------
+
+--[[
+	Waits, unless he is finished.
+
+	Returns false if the fight ended during the wait, so a caller stops in one
+	line. Every wait inside an attack goes through this rather than task.wait,
+	which is what makes "every coroutine stops when slimeFinished is set" a
+	property of the file rather than a thing each attack remembers to check.
+]]
+local function pause(entry, seconds: number): boolean
+	local deadline = os.clock() + seconds
+	repeat
+		if entry.slimeFinished then
+			return false
+		end
+		task.wait()
+	until os.clock() >= deadline
+	return not entry.slimeFinished
+end
+
+--[[
+	Who an aimed attack goes for.
+
+	Not the nearest, and not whoever hit him last: the one he has gone for
+	LEAST RECENTLY, with enough randomness that he is not a round robin you can
+	count. In a group this spreads the pressure; alone it is simply you.
+	Movement still chases the nearest player (see step), so where he aims and
+	where he walks can differ, which is what a room full of people should feel
+	like.
+
+	`from` and `within` restrict it to players an attack can actually reach.
+]]
+local function pickTarget(entry, from: Vector3?, within: number?): Player?
+	local now = os.clock()
+	local best, bestScore = nil, -math.huge
+
+	for _, player in ipairs(livingPlayers()) do
+		local root = rootOf(player)
+		if root and not (from and within and (root.Position - from).Magnitude > within) then
+			local since = math.min(20, now - (entry.pressure[player] or -math.huge))
+			local score = since + math.random() * 6
+			if score > bestScore then
+				best, bestScore = player, score
+			end
+		end
+	end
+
+	if best then
+		entry.pressure[best] = now
+	end
+	return best
+end
+
+--[[
+	Damage with a memory.
+
+	`ledger` is one cast's record of who it has hurt and for how much. Each
+	`key` - a vein, a lane, a bite - hits a player once, and the whole cast
+	never deals more than `cap` to anyone. Returns what was actually dealt.
+
+	"Crossing a tendril damages once, not every frame" and "overlapping lanes
+	have a sensible combined cap" are the same rule, so they are one function.
+]]
+local function hitOnce(ledger, key, player: Player, amount: number, cap: number): number
+	local hits = ledger[player]
+	if not hits then
+		hits = { total = 0 }
+		ledger[player] = hits
+	end
+	if hits[key] then
+		return 0
+	end
+	hits[key] = true
+
+	local dealt = math.min(amount, math.max(0, cap - hits.total))
+	if dealt <= 0 then
+		return 0
+	end
+	hits.total += dealt
+	CombatService.applyDamage(player, dealt, SOURCE)
+	return dealt
+end
+
+-- Is this position on the flat strip from `from` to `to`? Flat, like every
+-- other hit test here: height is not part of any of these attacks.
+local function onLane(position: Vector3, from: Vector3, to: Vector3, halfWidth: number): boolean
+	local lane = Vector3.new(to.X - from.X, 0, to.Z - from.Z)
+	local length = lane.Magnitude
+	if length < 0.01 then
+		return false
+	end
+	local direction = lane / length
+	local offset = Vector3.new(position.X - from.X, 0, position.Z - from.Z)
+	local along = offset:Dot(direction)
+	if along < -halfWidth or along > length + halfWidth then
+		return false
+	end
+	local across = (offset - direction * along).Magnitude
+	return across <= halfWidth
+end
+
+-- Where things he swallows go in.
+local function mouthOf(entry): Vector3
+	return feetOf(entry) + Vector3.new(0, entry.height * 0.45, 0)
+end
+
+--[[
+	A rope of slime between two points, re-laid by the caller every frame.
+
+	Reabsorb's whole readability and Decree's "these are his" are the same
+	object in two colours: a part stretched between two points says "these are
+	connected" in its first frame, and it is made of the same slime as
+	everything else he throws.
+]]
+local function newTether(scope, color: Color3, thickness: number): Part
+	local part = scope:add(newPart(Vector3.new(thickness, thickness, 1), color, 0.25))
+	part.Parent = workspace
+	return part
+end
+
+local function layTether(part: Part, from: Vector3, to: Vector3, thickness: number)
+	if not part.Parent then
+		return
+	end
+	local span = (to - from).Magnitude
+	part.Size = Vector3.new(thickness, thickness, math.max(1, span))
+	part.CFrame = CFrame.lookAt((from + to) * 0.5, to)
+end
+
+-- A ring hanging over something he has chosen. Repositioned by the caller.
+local function newRing(scope, radius: number, color: Color3): Part
+	local ring = scope:add(newPart(Vector3.one, color, 0.3))
+	ring.Shape = Enum.PartType.Cylinder
+	ring.Size = Vector3.new(TELEGRAPH_HEIGHT, radius * 2, radius * 2)
+	ring.Parent = workspace
+	return ring
+end
+
+local function layRing(ring: Part, over: Vector3)
+	if ring.Parent then
+		ring.CFrame = CFrame.new(over) * CFrame.Angles(0, 0, math.rad(90))
+	end
+end
+
+--[[
+	A LANE on the ground: a strip from `from` to `to`, drawn as a faint
+	full-length outline at once and a brighter fill that runs its length over
+	`seconds`. The same promise a disc telegraph makes, stretched: where it
+	ENDS is visible from the first frame, and the fill is how long you have.
+
+	Laid in short segments that each sit on their own ground height, so a lane
+	across a slope follows the slope rather than knifing through it. Everything
+	goes into `scope`. `surge` thickens it into the vein or running slime it
+	announced; `fade` takes it away.
+]]
+local LANE_SEGMENT = 9
+
+local function laneTelegraph(scope, from: Vector3, to: Vector3, width: number, seconds: number, color: Color3)
+	local flat = Vector3.new(to.X - from.X, 0, to.Z - from.Z)
+	local length = flat.Magnitude
+	if length < 1 then
+		return nil
+	end
+	local direction = flat / length
+	local count = math.max(1, math.ceil(length / LANE_SEGMENT))
+	local step = length / count
+	local each = seconds / count
+	local up = Vector3.new(0, TELEGRAPH_HEIGHT * 0.5, 0)
+
+	local lane = { from = from, to = to, width = width, edges = {}, fills = {} }
+
+	for index = 1, count do
+		local a = from + direction * (step * (index - 1))
+		local b = from + direction * (step * index)
+		local middle = groundUnder((a + b) * 0.5)
+		-- lookAt points the part's -Z at the far end, so "toward `to`" is
+		-- negative Z in the part's own frame below.
+		local look = CFrame.lookAt(middle + up, middle + up + direction)
+
+		local edge = scope:add(newPart(Vector3.new(width, TELEGRAPH_HEIGHT, step), color, TELEGRAPH_EDGE_TRANSPARENCY))
+		edge.CFrame = look
+		edge.Parent = workspace
+		lane.edges[index] = edge
+
+		-- The fill starts as nothing at the NEAR end of its segment and grows
+		-- to cover it, each segment in turn, so the lane fills from `from`
+		-- toward `to` over `seconds`.
+		local fill = scope:add(newPart(Vector3.new(width, TELEGRAPH_HEIGHT, 0.05), color, TELEGRAPH_TRANSPARENCY))
+		fill.CFrame = look * CFrame.new(0, DISC_STACK, step * 0.5)
+		fill.Parent = workspace
+		lane.fills[index] = fill
+
+		scope:delay(each * (index - 1), function()
+			scope:tween(fill, TweenInfo.new(each, Enum.EasingStyle.Linear), {
+				Size = Vector3.new(width, TELEGRAPH_HEIGHT, step),
+				CFrame = look * CFrame.new(0, DISC_STACK, 0),
+			})
+		end)
+	end
+
+	-- The announced thing arriving: the fill rises into a solid strip.
+	function lane:surge(height: number, transparency: number, over: number)
+		for _, fill in ipairs(self.fills) do
+			if fill.Parent then
+				scope:tween(fill, TweenInfo.new(over, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+					Size = Vector3.new(self.width, height, step),
+					CFrame = fill.CFrame * CFrame.new(0, (height - TELEGRAPH_HEIGHT) * 0.5, 0),
+					Transparency = transparency,
+				})
+			end
+		end
+	end
+
+	-- Gone, over `over` seconds. The parts are destroyed at the end of the
+	-- fade and again by the scope, whichever comes first.
+	function lane:fade(over: number)
+		local out = TweenInfo.new(over, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+		for _, list in ipairs({ self.edges, self.fills }) do
+			for _, part in ipairs(list) do
+				if part.Parent then
+					scope:tween(part, out, { Transparency = 1 })
+				end
+			end
+		end
+		scope:delay(over, function()
+			for _, list in ipairs({ self.edges, self.fills }) do
+				for _, part in ipairs(list) do
+					part:Destroy()
+				end
+			end
+		end)
+	end
+
+	return lane
+end
+
+--[[
+	Tells nearby clients which blocks the server just took, so they can draw
+	copies being swallowed.
+
+	After the fact and only what really went: `blocks` is the sample
+	TerrainManager.ExecuteExcavation returned, never something this file made
+	up, and a client that ignores the message is simply a client that did not
+	see some cubes fly. See TerrainDebris for the other half.
+]]
+local function broadcastDebris(mouth: Vector3, blocks, seconds: number)
+	if #blocks == 0 then
+		return
+	end
+
+	local payload = {
+		blocks = blocks,
+		centre = mouth,
+		startedAt = workspace:GetServerTimeNow(),
+		seconds = seconds,
+	}
+
+	for _, player in ipairs(Players:GetPlayers()) do
+		local root = rootOf(player)
+		if root and (root.Position - mouth).Magnitude <= DEBRIS_BROADCAST_RADIUS then
+			BossTerrain:FireClient(player, payload)
+		end
+	end
+end
+
+-- ---------------------------------------------------------------------------
 -- The attacks
 -- ---------------------------------------------------------------------------
 
@@ -896,10 +1254,14 @@ local function pancake(entry)
 	telegraph(here, reach, P.rear, Theme.Color.Bad)
 
 	body:ease(SlimeBody.Column.width, SlimeBody.Column.height, P.rear)
-	task.wait(P.rear)
+	if not pause(entry, P.rear) then
+		return
+	end
 
 	body:ease(SlimeBody.Pancake.width, SlimeBody.Pancake.height, P.fall)
-	task.wait(P.fall)
+	if not pause(entry, P.fall) then
+		return
+	end
 
 	damageCircle(here, body:radius(), P.damage)
 
@@ -924,8 +1286,9 @@ local function pancake(entry)
 		and the flatten; the move afterwards was a second idea bolted to the
 		end of a finished one.
 	]]
-	task.wait(P.spread)
-
+	if not pause(entry, P.spread) then
+		return
+	end
 
 	--[[
 		HE LEAVES NOTHING BEHIND.
@@ -938,9 +1301,9 @@ local function pancake(entry)
 		like a move of its own that nobody had announced.
 
 		The rule it broke is worth keeping: a hazard has to be attached to the
-		thing that made it, in time and in space. Cannon splashes and rain drops
-		still leave slicks and both are fine, because they land where you
-		watched them land and while the attack is still happening.
+		thing that made it, in time and in space. Rain drops still leave
+		slicks and that is fine, because they land where you watched them land
+		and while the attack is still happening.
 	]]
 
 	body:ease(1, 1, 0.35)
@@ -949,146 +1312,201 @@ local function pancake(entry)
 end
 
 --[[
-	SLIME CANNON
+	CLAIM THE REALM
 
-	He gathers a mass of himself into a bulge reaching AT you - a real stretch
-	along his facing, because his body part is turned to look at whoever he is
-	fighting - then fires it. He is measurably smaller afterwards.
+	He settles low and plants himself; the crown leans toward you and burns.
+	Two or three veins of him spread along the floor to spots around where you
+	were standing when he committed, drawn full length with their bites ringed
+	at the ends. Then they surge, the ends bite the ground, the bitten blocks
+	fly back along the veins into him, and he swells by what he ate. The veins
+	drain away and he sits back up.
 
-	The shot travels along the ground and splatters into pools where it stops.
+	THE GROUND IS CHOSEN BEFORE THE WARNING. The exact cells each bite will
+	take are resolved by TerrainManager.PlanExcavation at the moment he
+	commits, so the mark on the floor is a promise about THOSE cells; nothing
+	re-aims after you have read it. Execution re-checks every cell - the world
+	is allowed to have changed in the meantime - and removes nothing the plan
+	did not name.
 
-	Dodge: the bulge is nearly a second of him visibly aiming, and the shot goes
-	in a straight line. Step out of it.
+	WHAT HE WILL NOT EAT: placed blocks, structures, cave walls, bedrock, wet
+	ground, ground that is not loaded, and the ground under his own feet.
+	The first six rules live in TerrainManager and are not this file's to
+	get wrong. The last is here: no vein ends inside his own footprint, so he
+	cannot dig the floor out from under himself - and he re-reads his footing
+	afterwards regardless, because the ground is the ground as it now is.
+
+	NO LOOT, NO HEALING. The ground is mass only, capped per cast; health is
+	Reabsorb's alone. A bite into nothing earns nothing and still hurts.
+
+	Dodge: step off a vein before it surges; step out of a ring before it
+	bites. Both are drawn for well over a second.
 ]]
-local function slimeCannon(entry, target: Player)
-	local C = Tuning.cannon
-	local root = rootOf(target)
+local function claimRealm(entry, phase: number)
+	local C = Tuning.claim
+	local M = Tuning.mass
+	local body = entry.body
+	local scope = entry.scope
+
+	local here = feetOf(entry)
+	local target = pickTarget(entry, here, C.reach + 40) or nearestPlayer(here)
+	local root = target and rootOf(target)
 	if not root then
 		return
 	end
 
-	local body = entry.body
-	local from = feetOf(entry)
+	-- WHERE THE VEINS END, frozen now: a ring of spots around where you are,
+	-- pulled in to his reach if you are further than that.
+	local aim = root.Position
+	local toAim = Vector3.new(aim.X - here.X, 0, aim.Z - here.Z)
+	if toAim.Magnitude > C.reach then
+		aim = here + toAim.Unit * C.reach
+	end
+	local facing = if toAim.Magnitude > 1 then toAim.Unit else entry.facing
 
-	local offset = root.Position - from
-	local direction = Vector3.new(offset.X, 0, offset.Z)
-	if direction.Magnitude < 1 then
+	local veinCount = C.veins[phase] or 2
+	local ends = {}
+	local base = math.random() * math.pi * 2
+	local ownFootprint = body:radius() + C.biteRadius + 2
+	for index = 1, veinCount do
+		local angle = base + (index - 1) / veinCount * math.pi * 2
+		local spot = aim + Vector3.new(math.cos(angle), 0, math.sin(angle)) * C.ringRadius
+
+		-- Never within his own footprint; see above.
+		local fromHim = Vector3.new(spot.X - here.X, 0, spot.Z - here.Z)
+		if fromHim.Magnitude < ownFootprint then
+			local outward = if fromHim.Magnitude > 0.1 then fromHim.Unit else facing
+			spot = here + outward * ownFootprint
+		end
+		ends[index] = groundUnder(spot)
+	end
+
+	-- THE CELLS, frozen now. The centre column of each bite goes two blocks
+	-- down and its ring one: shallow and readable, a trench not a crater,
+	-- and the floor stays walkable. The caps are TerrainManager's.
+	local columns = {}
+	for _, spot in ipairs(ends) do
+		for dx = -1, 1 do
+			for dz = -1, 1 do
+				table.insert(columns, {
+					x = spot.X + dx * STUD_SIZE,
+					z = spot.Z + dz * STUD_SIZE,
+					y = spot.Y,
+					depth = if dx == 0 and dz == 0 then 2 else 1,
+				})
+			end
+		end
+	end
+	local plan = TerrainManager:PlanExcavation(columns)
+
+	-- SETTLE: low and wide, planted, coming round to face you. The crown
+	-- leans toward the ground he has chosen and starts to burn. The pose is
+	-- in the scope, so it is cleared however this ends.
+	scope:add(function()
+		body:setCrownPose(nil, nil)
+		body:setCrownGlow(false)
+	end)
+	body:ease(1.35, 0.62, C.settle)
+	body:setCrownGlow(true, Theme.Color.Accent)
+	body:setCrownPose(0.6, CFrame.Angles(math.rad(22), 0, 0))
+	turnOver(entry, facing, C.settle)
+	if entry.slimeFinished then
 		return
 	end
-	direction = direction.Unit
 
-	--[[
-		THE WIND-UP: he comes round to face you, leaning away and swelling on
-		the far side.
-
-		The turn happens DURING the lean rather than before it, so the aim is
-		part of the tell - watching him rotate toward you is the earliest
-		warning the attack gives, and it is the same speed he turns at
-		everywhere else.
-
-		Rearing BACK is the shape that says a throw is coming - it is the same
-		reason a person steps back before pitching - and the sideways swell is
-		the mass visibly gathering somewhere before it leaves. An earlier
-		version pulled thin and poked forward, which read as a nudge.
-	]]
-	body:ease(1.32, 1.12, C.gather * 0.7, 0.66)
-	turnOver(entry, direction, C.gather * 0.7)
-
-	-- Then whips through: thin across, long toward them.
-	body:ease(0.72, 0.8, C.gather * 0.3, 1.9)
-	task.wait(C.gather * 0.3)
-
-	spendMass(entry, Tuning.mass.perCannon)
-	body:ease(1, 1, 0.35)
-
-	--[[
-		THE SHOT: an arc, not a slide, and stretched along its own flight.
-
-		A sphere skimming the floor at constant height was the worst-looking
-		thing in the fight - it read as a marble rolling, and nothing about it
-		said it had come out of a body. This is a teardrop: scaled long on the
-		axis it is travelling, turned to face where it is going, tumbling, and
-		on a real ballistic arc so it rises out of him and falls onto the floor.
-	]]
-	local flight = C.range / C.speed
-
-	local shot = newPart(
-		Vector3.new(C.blobRadius * 1.5, C.blobRadius * 1.5, C.blobRadius * 3.2),
-		Theme.Color.Good, 0.05
-	)
-	shot.Material = Enum.Material.SmoothPlastic
-	local mesh = Instance.new("SpecialMesh")
-	mesh.MeshType = Enum.MeshType.Sphere
-	mesh.Parent = shot
-	projectileTrail(shot, Theme.Color.Good, C.blobRadius)
-	shot.Parent = workspace
-	Debris:AddItem(shot, flight + 0.5)
-
-	local from3 = from + Vector3.new(0, entry.height * 0.55, 0) + direction * 4
-	local landed = groundUnder(from + direction * C.range)
-	local apex = (from3 + landed) * 0.5 + Vector3.new(0, C.arc, 0)
-	-- Announce every pool at its actual location before the projectile lands.
-	local splashSpots = table.create(C.splashes)
-	for index = 1, C.splashes do
-		local angle = index / C.splashes * math.pi * 2
-		local spot = groundUnder(landed + Vector3.new(
-			math.cos(angle) * C.splashRadius, 0, math.sin(angle) * C.splashRadius
-		))
-		splashSpots[index] = spot
-		telegraph(spot, C.splashRadius, flight, Theme.Color.Bad)
+	-- THE WARNING: every vein drawn full length from his feet, every bite
+	-- ringed, nothing moving yet.
+	-- `lanes` is keyed by vein index and may have holes: a vein end that
+	-- somehow sits on top of him has no lane to draw and nothing to hit with,
+	-- so everything below walks it with pairs.
+	local origin = feetOf(entry)
+	local lanes = {}
+	for index, spot in ipairs(ends) do
+		lanes[index] = laneTelegraph(scope, origin, spot, C.width, C.warning, Theme.Color.Bad)
+		telegraph(spot, C.biteRadius, C.warning, Theme.Color.Bad)
+	end
+	if not pause(entry, C.warning) then
+		return
 	end
 
-	local hit = {}
-	local start = os.clock()
+	-- THE SURGE: the veins thicken into running slime. Standing on one is a
+	-- hit, once per vein, under the cast's cap.
+	local ledger = {}
+	for _, lane in pairs(lanes) do
+		lane:surge(1.1, 0.1, C.surge * 0.5)
+	end
+	body:flash(Theme.Color.Good, C.surge)
 
-	while os.clock() - start < flight do
+	local surgeStart = os.clock()
+	while os.clock() - surgeStart < C.surge do
 		if entry.slimeFinished then
-			shot:Destroy()
 			return
 		end
-		local alpha = (os.clock() - start) / flight
-		local inverse = 1 - alpha
-
-		local at = from3 * (inverse * inverse)
-			+ apex * (2 * inverse * alpha)
-			+ landed * (alpha * alpha)
-
-		-- Aimed along its own velocity, which is what makes a stretched blob
-		-- read as flying rather than as a sausage sliding sideways.
-		shot.CFrame = CFrame.lookAt(at, at + direction + Vector3.new(0, -alpha, 0))
-			* CFrame.Angles(0, 0, os.clock() * 6)
-
 		for _, player in ipairs(livingPlayers()) do
 			local victim = rootOf(player)
-
-			if victim and not hit[player] then
-				if (victim.Position - at).Magnitude <= C.blobRadius * 1.6 then
-					hit[player] = true
-					CombatService.applyDamage(player, C.damage, SOURCE)
+			if victim then
+				for index, lane in pairs(lanes) do
+					if onLane(victim.Position, lane.from, lane.to, C.width * 0.5) then
+						hitOnce(ledger, "vein" .. index, player, C.veinDamage, C.capPerCast)
+					end
 				end
 			end
 		end
-
 		task.wait()
 	end
-
-	shot:Destroy()
-	if entry.slimeFinished then return end
-
-	ripple(landed, C.splashRadius, 0.42, Theme.Color.Good)
-	splatter(landed, C.blobRadius * 2, 10)
-
-	-- It bursts into smaller pools rather than simply vanishing: the shot was
-	-- made of him, and it is still made of him where it stopped.
-	for index = 1, C.splashes do
-		local spot = splashSpots[index]
-		slick(entry, spot, C.splashRadius, C.splashSeconds, C.splashDamage, C.splashInterval)
+	if entry.slimeFinished then
+		return
 	end
 
+	-- THE BITE: every end erupts, and the ground under it goes.
+	for index, spot in ipairs(ends) do
+		for _, player in ipairs(livingPlayers()) do
+			local victim = rootOf(player)
+			if victim then
+				local offset = victim.Position - spot
+				if Vector3.new(offset.X, 0, offset.Z).Magnitude <= C.biteRadius then
+					hitOnce(ledger, "bite" .. index, player, C.biteDamage, C.capPerCast)
+				end
+			end
+		end
+		ripple(spot, C.biteRadius, 0.4, Theme.Color.Good)
+		splatter(spot, C.biteRadius, 6)
+	end
+
+	local removed, samples = TerrainManager:ExecuteExcavation(plan)
+
+	-- His footing first, on the ground as it now is: the next thing he does
+	-- starts from the real floor, whatever just happened to it.
+	place(entry, groundUnder(feetOf(entry)))
+
+	local mouth = mouthOf(entry)
+	broadcastDebris(mouth, samples, C.swallow)
+
+	-- The veins drain back toward him while the ground flies in along them.
+	for _, lane in pairs(lanes) do
+		lane:fade(C.swallow)
+	end
+	if not pause(entry, C.swallow) then
+		return
+	end
+
+	-- AND HE EATS IT. Mass only, capped, scaled by what actually went.
+	local gained = math.min(M.claimCap, removed * M.perClaimBlock)
+	if gained > 0 then
+		gainMass(entry, gained)
+		body:shape(1.2, 1.16)
+		body:wobble(0.6, 0.35)
+		splatter(mouth, entry.height * 0.6, 10)
+	else
+		body:ease(1, 1, 0.3)
+	end
+
+	body:setCrownPose(nil, nil)
+	body:setCrownGlow(false)
+	if not pause(entry, 0.35) then
+		return
+	end
 	body:ease(1, 1, 0.3)
 end
-
-
 
 --[[
 	REABSORB
@@ -1097,25 +1515,32 @@ end
 	swells, and he HEALS.
 
 	THIS IS THE STRATEGIC LAYER OF THE FIGHT. Everything else can be beaten by
-	dodging well; this can only be beaten by having killed the slimes. It is
-	also the only thing in the fight that undoes damage the player has already
-	done, which is what makes ignoring the adds a decision rather than an
-	oversight.
+	dodging well; this can only be beaten by having killed the slimes - or by
+	killing THIS one, now. It is the only thing in the fight that undoes damage
+	the player has already done, which is what makes ignoring the adds a
+	decision rather than an oversight.
 
-	It is deliberately slow and loud - a second of him reaching, then the add
-	visibly flying in - so that the answer ("kill them next time") is legible.
+	IT CAN BE INTERRUPTED, AND THAT IS THE POINT. He gains nothing until the
+	slime physically arrives at his mouth. Kill it on the rope - during the
+	reach or during the pull - and the rope snaps, he sits back up, and there
+	is no mass and no heal. The tether is drawn precisely so a player can see
+	which slime to hit; the second of reaching is the window to hit it in.
+
+	It is deliberately slow and loud so that both answers - "kill them next
+	time" and "kill that one now" - are legible.
 ]]
 local function reabsorb(entry)
 	local A = Tuning.absorb
 	local body = entry.body
+	local scope = entry.scope
 	local centre = feetOf(entry)
 
-	-- The nearest of his own children. Nil is the good outcome for the player
-	-- and simply ends the attack.
+	-- The nearest FREE child: never one Royal Decree is commanding. Nil is
+	-- the good outcome for the player and simply ends the attack.
 	local prey, preyDistance = nil, math.huge
 
 	EnemyService.forEachNear(centre, A.reach, function(model, position)
-		if model.Name == SPAWN_NAME then
+		if model.Name == SPAWN_NAME and EnemyService.heldBy(model) == nil then
 			local distance = (position - centre).Magnitude
 			if distance < preyDistance then
 				prey, preyDistance = model, distance
@@ -1127,101 +1552,116 @@ local function reabsorb(entry)
 		return
 	end
 
-	local mouth = centre + Vector3.new(0, entry.height * 0.45, 0)
+	--[[
+		HELD for the whole reach. Its own brain is off while he has it - it
+		cannot hop away, and Decree cannot take it - and the grip goes dead
+		the instant it dies, which is the interruption below. Released by the
+		scope whatever happens, so an error cannot leave a slime frozen.
+	]]
+	local grip = EnemyService.hold(prey, entry)
+	if not grip then
+		return
+	end
+	scope:add(function()
+		grip:release()
+	end)
+
+	local mouth = mouthOf(entry)
 
 	--[[
 		THE TETHER IS THE WHOLE READABILITY OF THIS ATTACK.
 
-		Without it, a slime slid across the floor and vanished and the boss got
-		a bit bigger, and nobody could tell what had happened or that it had
-		cost them anything. A visible rope of slime between the two says
-		"these are connected, that one is going into this one" in the first
-		frame - and it thickens as the slime gets closer, so the moment of
-		arrival is the moment it is thickest.
-
-		A part stretched between two points, re-laid every frame. Cheap, and it
-		is made of the same slime as everything else he throws.
+		A visible rope of slime between the two says "these are connected,
+		that one is going into this one" in the first frame - and it thickens
+		as the slime gets closer, so the moment of arrival is the moment it is
+		thickest. It is also the thing that tells a player which slime to hit.
 	]]
-	local tether = newPart(Vector3.new(A.tether, A.tether, 1), Theme.Color.Accent, 0.25)
-	tether.Parent = workspace
+	local tether = newTether(scope, Theme.Color.Accent, A.tether)
 
-	local function layTether(at: Vector3, thickness: number)
-		local span = (at - mouth).Magnitude
-		local middle = (at + mouth) * 0.5
-
-		tether.Size = Vector3.new(thickness, thickness, math.max(1, span))
-		tether.CFrame = CFrame.lookAt(middle, at)
-	end
-
-	--[[
-		A mark on HIM, not a disc the width of the arena.
-
-		It was sized to the distance to the prey, which with a reach of seventy
-		meant a hundred-and-forty-stud circle across the whole floor whenever he
-		reached for something far away. The thing being communicated is "he is
-		pulling something in", and that is the tether's job - this only needs to
-		say where he is while he does it.
-	]]
-	telegraph(centre, math.max(10, entry.body:radius() * 1.6), A.windup, Theme.Color.Accent)
+	-- A mark on HIM, not a disc the width of the arena: the tether says what
+	-- is being pulled; this only says where he is while he pulls.
+	telegraph(centre, math.max(10, body:radius() * 1.6), A.windup, Theme.Color.Accent)
 
 	-- Reaching: he opens out toward it, and the rope goes taut.
 	body:ease(1.15, 0.9, A.windup)
 
+	--[[
+		THE INTERRUPTION. If the slime on the rope is no longer his - dead,
+		despawned - at any moment before it arrives, the rope snaps, he
+		flinches back to his resting shape, and this returns having given him
+		NOTHING. The grip is the single source of truth for "still his".
+	]]
+	local function interrupted(): boolean
+		if entry.slimeFinished then
+			return true
+		end
+		if grip:alive() then
+			return false
+		end
+		tether:Destroy()
+		body:ease(1, 1, 0.3)
+		body:flash(Color3.new(1, 1, 1), 0.15)
+		body:wobble(0.45, 0.25)
+		return true
+	end
+
 	local reach = os.clock()
 	while os.clock() - reach < A.windup do
-		if not prey.Parent then
-			break
+		if interrupted() then
+			return
 		end
-
 		local alpha = (os.clock() - reach) / A.windup
-		layTether(prey:GetPivot().Position, A.tether * (0.35 + alpha * 0.65))
+		layTether(tether, mouth, grip:feet() + Vector3.new(0, grip.height * 0.5, 0), A.tether * (0.35 + alpha * 0.65))
 		task.wait()
+	end
+	if interrupted() then
+		return
 	end
 
 	local from = prey:GetPivot().Position
-	local preyScale = if prey:IsA("Model") then prey:GetScale() else 1
+	local preyScale = prey:GetScale()
 	local start = os.clock()
 
 	while os.clock() - start < A.pull do
-		if not prey.Parent then
-			break
+		if interrupted() then
+			return
 		end
 
 		local alpha = (os.clock() - start) / A.pull
 		local at = from:Lerp(mouth, alpha)
 
+		-- Through the air, straight at his mouth. The hold keeps its own
+		-- hopping off, so this is the only thing moving it.
 		prey:PivotTo(CFrame.new(at))
 
-		--[[
-			It shrinks as it goes in, which is the second half of the reading:
-			the slime is not being teleported, it is being consumed. By the time
-			it reaches him it is a third of its size and the swallow is over.
-		]]
-		if prey:IsA("Model") then
-			prey:ScaleTo(preyScale * (1 - alpha * 0.7))
-		end
+		-- It shrinks as it goes in: the slime is not being teleported, it is
+		-- being consumed. By the time it reaches him it is a third of its
+		-- size and the swallow is over.
+		prey:ScaleTo(preyScale * (1 - alpha * 0.7))
 
 		-- Thickening, and shortening on its own as the two ends converge.
-		layTether(at, A.tether * (1 + alpha * 1.4))
+		layTether(tether, mouth, at, A.tether * (1 + alpha * 1.4))
 		task.wait()
+	end
+
+	-- ARRIVED. Only now, and only because it is still his.
+	if interrupted() then
+		return
 	end
 
 	tether:Destroy()
 
-	if prey.Parent then
-		-- Through the service, so its own bookkeeping - the alive count, the
-		-- name plate, the drop tables - all happen exactly as they would for a
-		-- kill. It is gone from the world either way.
-		EnemyService.despawn(prey)
-	end
+	-- Through the service, so its own bookkeeping - the alive count, the
+	-- name plate - happens exactly as for a kill, without the drop table:
+	-- "absorbed" is not "died".
+	EnemyService.despawn(prey)
 
 	--[[
-		And he visibly takes it in: a hard swell, a flash of his own colour and
-		a burst of slime at the mouth, all on the same frame.
-
-		The swell overshoots and settles rather than easing to the new size,
-		because a body absorbing something bulges and then recovers. It is the
-		clearest signal in the fight that the player just lost something.
+		And he visibly takes it in: a hard swell, a flash of his own colour
+		and a burst of slime at the mouth, all on the same frame. The swell
+		overshoots and settles rather than easing to the new size, because a
+		body absorbing something bulges and then recovers. It is the clearest
+		signal in the fight that the player just lost something.
 	]]
 	gainMass(entry, Tuning.mass.perAbsorb)
 	EnemyService.heal(entry.model, Tuning.mass.healPerAbsorb)
@@ -1231,8 +1671,6 @@ local function reabsorb(entry)
 
 	splatter(mouth, entry.height * 0.8, 22)
 end
-
-
 
 --[[
 	CORONATION
@@ -1258,11 +1696,18 @@ local function coronation(entry)
 		return
 	end
 
+	-- In the scope as well as called below: if he dies with the crown in the
+	-- air, the scope is torn down and the crown is back on his head before
+	-- the corpse is drawn. Calling it twice is harmless.
+	entry.scope:add(restore)
+
 	local ok = pcall(function()
 		local from = feetOf(entry)
 
 		body:ease(SlimeBody.Pancake.width, SlimeBody.Pancake.height, C.flatten)
-		task.wait(C.flatten)
+		if not pause(entry, C.flatten) then
+			return
+		end
 
 		-- Where it will come down: near a player, but not on them - they are
 		-- given a place to run to rather than a coin flip.
@@ -1289,13 +1734,18 @@ local function coronation(entry)
 
 		local rise = os.clock()
 		while os.clock() - rise < C.rise do
+			if entry.slimeFinished then
+				return
+			end
 			local alpha = (os.clock() - rise) / C.rise
 			body:moveCrown(CFrame.new(crownStart:Lerp(apex, alpha))
 				* CFrame.Angles(0, alpha * 12, 0))
 			task.wait()
 		end
 
-		task.wait(C.hang)
+		if not pause(entry, C.hang) then
+			return
+		end
 
 		-- The shadow: a mark that CLOSES as the crown falls, so the countdown
 		-- and the danger zone are the same object.
@@ -1310,6 +1760,9 @@ local function coronation(entry)
 		local fall = os.clock()
 
 		while os.clock() - fall < C.fall do
+			if entry.slimeFinished then
+				return
+			end
 			local alpha = (os.clock() - fall) / C.fall
 
 			body:moveCrown(CFrame.new(apex:Lerp(landing + Vector3.new(0, 2, 0), alpha * alpha))
@@ -1324,14 +1777,18 @@ local function coronation(entry)
 
 		-- And erupts around it.
 		body:ease(SlimeBody.Column.width, SlimeBody.Column.height, 0.12)
-		task.wait(0.12)
+		if not pause(entry, 0.12) then
+			return
+		end
 
 		damageCircle(landing, C.radius, C.damage)
 		ripple(landing, C.radius, 0.45, Theme.Color.Accent)
 		splatter(landing, C.radius, 18)
 
 		body:ease(1, 1, 0.3)
-		task.wait(0.3)
+		if not pause(entry, 0.3) then
+			return
+		end
 		body:wobble(0.6, 0.4)
 	end)
 
@@ -1369,8 +1826,9 @@ local function slimeRain(entry, phase: number)
 	local centre = feetOf(entry)
 
 	body:ease(SlimeBody.Column.width, SlimeBody.Column.height, R.draw)
-	task.wait(R.draw)
-	if entry.slimeFinished then return end
+	if not pause(entry, R.draw) then
+		return
+	end
 
 	--[[
 		Which of the handfuls come down alive.
@@ -1486,115 +1944,332 @@ local function slimeRain(entry, phase: number)
 			end
 		end)
 
-		task.wait(R.spacing)
+		if not pause(entry, R.spacing) then
+			return
+		end
 	end
 
 	-- The last flight finishes before recovery and the next attack's tell.
-	task.wait(math.max(0, R.flight - R.spacing))
-	if entry.slimeFinished then return end
+	if not pause(entry, math.max(0, R.flight - R.spacing)) then
+		return
+	end
 	body:ease(1, 1, 0.35)
-	task.wait(0.35)
+	if not pause(entry, 0.35) then
+		return
+	end
 	body:wobble(0.5, 0.3)
 end
 
 --[[
-	RICOCHET
+	ROYAL DECREE
 
-	He compresses himself into a disc and becomes the projectile: four bounces
-	across the arena, stretching in the air and splatting flat on every landing.
+	He rises into a tall royal posture and the crown lifts off his head and
+	burns gold. Up to three of his surviving slimes are linked to it by
+	tethers and ringed, and each is given a lane toward a player - drawn full
+	length, filling over the warning. On the command every linked slime still
+	alive flattens into a fast surge of slime, runs its lane, and stands back
+	up at the far end, where it stays - and can later be reabsorbed.
 
-	The player is dodging THE BOSS, not a hitbox he emitted. Each landing is
-	marked one bounce ahead, so the whole sequence is readable from the first
-	compression - and the first bounce goes where you are standing, so standing
-	still is the one thing that never works.
+	A SUBJECT KILLED BEFORE THE COMMAND LOSES ITS LANE. Its tether snaps and
+	its lane fades the moment it dies. The adds were already a reason to clear
+	the room before Reabsorb; now they are a reason in the other direction as
+	well, and a ringed slime is a target the player has been handed.
+
+	WITH NO SUBJECTS he tears one or two small blobs off himself at a visible
+	mass cost and sends those instead: shorter lanes, less damage, and they
+	dissolve afterwards rather than becoming slimes. Visibly the lesser
+	version - clearing the room still paid.
+
+	THE CROWN NEVER LEAVES HIM here; it is posed, not detached, so there is
+	nothing to restore. Subjects are HELD through EnemyService for the whole
+	attack, which is what stops Reabsorb and Decree ever choosing the same
+	slime and what stops a commanded slime hopping off its own lane.
+
+	Dodge: a lane is drawn full length for a second and a half. Step off it,
+	or kill the slime at the start of it.
 ]]
-local function ricochet(entry, target: Player)
-	local R = Tuning.ricochet
+local function royalDecree(entry, phase: number)
+	local D = Tuning.decree
 	local body = entry.body
+	local scope = entry.scope
+	local here = feetOf(entry)
 
-	local root = rootOf(target)
-	if not root then
+	local players = livingPlayers()
+	if #players == 0 then
 		return
 	end
 
-	local offset = root.Position - feetOf(entry)
-	local direction = Vector3.new(offset.X, 0, offset.Z)
-	direction = if direction.Magnitude > 1 then direction.Unit else entry.facing
+	-- RISE: tall and royal, the crown lifting and burning. Pose and glow are
+	-- in the scope, so they are cleared however this ends.
+	scope:add(function()
+		body:setCrownPose(nil, nil)
+		body:setCrownGlow(false)
+	end)
+	body:ease(SlimeBody.Column.width * 1.35, SlimeBody.Column.height * 0.8, D.rise)
+	body:setCrownPose(2.5, nil)
+	body:setCrownGlow(true, Theme.Color.Accent)
+	if not pause(entry, D.rise) then
+		return
+	end
 
-	body:ease(SlimeBody.SquashJump.width, SlimeBody.SquashJump.height, R.compress)
-	task.wait(R.compress)
+	--[[
+		WHO EACH LANE GOES FOR: the players shuffled once and dealt round the
+		subjects, so three lanes go to three people where there are three
+		people and only all point at one person when there is one. Aim is
+		frozen here, before anything is drawn.
+	]]
+	for index = #players, 2, -1 do
+		local swap = math.random(1, index)
+		players[index], players[swap] = players[swap], players[index]
+	end
+	local dealt = 0
+	local function nextAim(): Vector3?
+		for _ = 1, #players do
+			dealt += 1
+			local root = rootOf(players[(dealt - 1) % #players + 1])
+			if root then
+				return root.Position
+			end
+		end
+		return nil
+	end
 
-	for bounce = 1, R.bounces do
-		local here = feetOf(entry)
+	local function laneEnd(from: Vector3, aim: Vector3, maxLength: number): Vector3
+		local flat = Vector3.new(aim.X - from.X, 0, aim.Z - from.Z)
+		local distance = flat.Magnitude
+		local direction = if distance > 1 then flat.Unit else entry.facing
+		local length = math.clamp(distance + D.overshoot, D.laneMin, maxLength)
+		return groundUnder(from + direction * length)
+	end
 
-		-- Toward whoever is nearest, re-aimed each bounce, but only by so much:
-		-- a bounce that turned to follow perfectly would be undodgeable.
-		local chase = nearestPlayer(here)
-		if chase then
-			local chaseRoot = rootOf(chase)
-			if chaseRoot then
-				local want = chaseRoot.Position - here
-				local flat = Vector3.new(want.X, 0, want.Z)
-				--[[
-					Capped, like every other turn he makes.
+	-- THE SUBJECTS: the nearest free children, up to the count.
+	local candidates = {}
+	EnemyService.forEachNear(here, D.reach, function(model, position)
+		if model.Name == SPAWN_NAME and EnemyService.heldBy(model) == nil then
+			table.insert(candidates, { model = model, distance = (position - here).Magnitude })
+		end
+	end)
+	table.sort(candidates, function(a, b)
+		return a.distance < b.distance
+	end)
 
-					A blend of the old and new headings looks like steering, but
-					it can still swing him a long way in one bounce when the
-					player has run round behind him. Going through turnToward
-					means a bounce sequence curves rather than kinking, and it
-					is the same rule his hops obey.
-				]]
-				if flat.Magnitude > 1 then
-					direction = turnToward(direction, flat.Unit, R.turn)
+	local links = {}
+	for _, candidate in ipairs(candidates) do
+		if #links >= D.subjects then
+			break
+		end
+		local aim = nextAim()
+		if not aim then
+			break
+		end
+		local grip = EnemyService.hold(candidate.model, entry)
+		if grip then
+			scope:add(function()
+				grip:release()
+			end)
+			local from = grip:feet()
+			local to = laneEnd(from, aim, D.laneMax)
+			table.insert(links, {
+				grip = grip,
+				from = from,
+				to = to,
+				lane = laneTelegraph(scope, from, to, D.width, D.warning, Theme.Color.Accent),
+				tether = newTether(scope, Theme.Color.Accent, 0.9),
+				ring = newRing(scope, math.max(2, grip.height * 0.6), Theme.Color.Accent),
+				damage = D.damage,
+			})
+		end
+	end
+
+	-- NO SUBJECTS: pieces of himself instead. Fewer, shorter, weaker, and
+	-- each one is a visible cost.
+	if #links == 0 then
+		local count = D.fallbackBlobs[phase] or 1
+		local base = math.random() * math.pi * 2
+		for index = 1, count do
+			local aim = nextAim()
+			if not aim then
+				break
+			end
+			local angle = base + (index - 1) * math.pi
+			local side = Vector3.new(math.cos(angle), 0, math.sin(angle))
+			local from = groundUnder(here + side * (body:radius() + 3))
+
+			local blob = scope:add(newPart(Vector3.one * 3.2, Theme.Color.Good, 0.1))
+			blob.Shape = Enum.PartType.Ball
+			blob.Material = Enum.Material.SmoothPlastic
+			blob.CFrame = CFrame.new(mouthOf(entry))
+			blob.Parent = workspace
+			scope:tween(blob, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				CFrame = CFrame.new(from + Vector3.new(0, 1.6, 0)),
+			})
+			spendMass(entry, Tuning.mass.perDecreeBlob)
+
+			local to = laneEnd(from, aim, D.fallbackLane)
+			table.insert(links, {
+				blob = blob,
+				from = from,
+				to = to,
+				lane = laneTelegraph(scope, from, to, D.width, D.warning, Theme.Color.Accent),
+				tether = newTether(scope, Theme.Color.Accent, 0.6),
+				damage = D.fallbackDamage,
+			})
+		end
+	end
+
+	if #links == 0 then
+		body:ease(1, 1, 0.3)
+		return
+	end
+
+	-- THE WARNING: tethers held from the crown, rings over the subjects,
+	-- lanes filling. A linked subject that dies loses everything the moment
+	-- it does.
+	local function crownPoint(): Vector3
+		return mouthOf(entry) + Vector3.new(0, entry.height * 0.65, 0)
+	end
+
+	local function cancel(link)
+		link.cancelled = true
+		link.tether:Destroy()
+		if link.ring then
+			link.ring:Destroy()
+		end
+		if link.lane then
+			link.lane:fade(0.25)
+		end
+	end
+
+	local warnStart = os.clock()
+	while os.clock() - warnStart < D.warning do
+		if entry.slimeFinished then
+			return
+		end
+		local crown = crownPoint()
+		for _, link in ipairs(links) do
+			if link.cancelled then
+				continue
+			end
+			if link.grip and not link.grip:alive() then
+				cancel(link)
+				continue
+			end
+			local at = if link.grip
+				then link.grip:feet() + Vector3.new(0, link.grip.height * 0.5, 0)
+				else link.blob.Position
+			layTether(link.tether, crown, at, if link.grip then 0.9 else 0.6)
+			if link.ring then
+				layRing(link.ring, link.grip:feet() + Vector3.new(0, link.grip.height + 1.5, 0))
+			end
+		end
+		task.wait()
+	end
+	if entry.slimeFinished then
+		return
+	end
+
+	-- THE COMMAND. Every surviving link surges; the rest were cancelled.
+	body:flash(Theme.Color.Accent, 0.2)
+
+	local running = {}
+	for _, link in ipairs(links) do
+		if link.cancelled or (link.grip and not link.grip:alive()) then
+			if not link.cancelled then
+				cancel(link)
+			end
+			continue
+		end
+		link.tether:Destroy()
+		if link.ring then
+			link.ring:Destroy()
+		end
+		if link.lane then
+			link.lane:surge(0.9, 0.15, D.surge * 0.4)
+		end
+		if link.grip and link.grip.body then
+			-- Flattens into the surge as it leaves.
+			link.grip.body:ease(1.7, 0.35, D.surge * 0.3)
+		end
+		local flat = Vector3.new(link.to.X - link.from.X, 0, link.to.Z - link.from.Z)
+		link.direction = if flat.Magnitude > 0.01 then flat.Unit else entry.facing
+		table.insert(running, link)
+	end
+
+	-- Every subject killed during the warning: the decree is over before it
+	-- began, which is the player's reward for having done that.
+	if #running == 0 then
+		body:setCrownPose(nil, nil)
+		body:setCrownGlow(false)
+		body:ease(1, 1, 0.35)
+		return
+	end
+
+	local ledger = {}
+	local start = os.clock()
+	while os.clock() - start < D.surge do
+		if entry.slimeFinished then
+			return
+		end
+		local alpha = (os.clock() - start) / D.surge
+		local eased = alpha * alpha * (3 - 2 * alpha)
+
+		for _, link in ipairs(running) do
+			local at = groundUnder(link.from:Lerp(link.to, eased))
+
+			if link.grip then
+				-- Dead mid-lane: nothing more moves, and nothing more hits.
+				if not link.grip:alive() then
+					continue
+				end
+				link.grip:place(at, link.direction)
+			elseif link.blob.Parent then
+				link.blob.Size = Vector3.new(4.4, 1.5, 4.4)
+				link.blob.CFrame = CFrame.new(at + Vector3.new(0, 0.9, 0))
+			end
+
+			-- The lane behind the head of the surge is where the slime has
+			-- been; anybody on it has been run through. Once per lane, under
+			-- the cast's cap.
+			for _, player in ipairs(livingPlayers()) do
+				local victim = rootOf(player)
+				if victim and onLane(victim.Position, link.from, at, D.width * 0.5) then
+					hitOnce(ledger, link, player, link.damage, D.capPerCast)
 				end
 			end
 		end
-
-		local landing = groundUnder(here + direction * R.stride)
-
-		--[[
-			The mark goes down BEFORE he leaves, and he sits compressed on it
-			for a moment.
-
-			That pause is what separates this from his walk: a hop happens, this
-			is announced. It also means the whole three-bounce sequence can be
-			read one landing ahead the entire way through.
-		]]
-		telegraph(landing, R.radius, R.mark + R.flight, Theme.Color.Bad)
-		task.wait(R.mark)
-
-		local lift = math.max(R.minLift, entry.height * R.lift)
-		local apex = (here + landing) * 0.5 + Vector3.new(0, lift, 0)
-		local start = os.clock()
-
-		body:ease(SlimeBody.StretchFly.width, SlimeBody.StretchFly.height, R.flight * 0.4)
-		body:setTrail(true)
-
-		while os.clock() - start < R.flight do
-			if entry.slimeFinished then return end
-			local alpha = (os.clock() - start) / R.flight
-			local inverse = 1 - alpha
-
-			place(entry, here * (inverse * inverse)
-				+ apex * (2 * inverse * alpha)
-				+ landing * (alpha * alpha), direction)
-
-			task.wait()
-		end
-
-		place(entry, landing, direction)
-		body:setTrail(false)
-
-		body:shape(SlimeBody.SquashJump.width * 1.1, SlimeBody.SquashJump.height * 0.9)
-		damageCircle(landing, R.radius, R.damage)
-		ripple(landing, R.radius, 0.32, Theme.Color.Bad)
-		splatter(landing, R.radius, 10)
-
-		body:wobble(0.28, 0.4)
-		task.wait(0.28)
+		task.wait()
+	end
+	if entry.slimeFinished then
+		return
 	end
 
-	body:ease(1, 1, 0.3)
+	-- REFORM at the end of the lane. Subjects stand back up and are handed
+	-- back to themselves; blobs dissolve. The lanes go.
+	for _, link in ipairs(running) do
+		if link.grip then
+			if link.grip:alive() then
+				link.grip:place(link.to, link.direction)
+				if link.grip.body then
+					link.grip.body:wobble(D.reform + 0.2, 0.4)
+				end
+				link.grip:release()
+			end
+		elseif link.blob.Parent then
+			scope:tween(link.blob, TweenInfo.new(D.reform, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+				Transparency = 1,
+				Size = Vector3.new(5, 0.3, 5),
+			})
+		end
+		ripple(link.to, D.width, 0.3, Theme.Color.Accent)
+		if link.lane then
+			link.lane:fade(D.reform)
+		end
+	end
+
+	body:setCrownPose(nil, nil)
+	body:setCrownGlow(false)
+	body:ease(1, 1, 0.35)
+	pause(entry, D.reform)
 end
 
 -- ---------------------------------------------------------------------------
@@ -1660,11 +2335,15 @@ local function phaseShift(entry, phase: number)
 
 	-- Straining: he pulls in tight and then swells past his own size.
 	body:ease(0.82, 0.88, S.swell * 0.45)
-	task.wait(S.swell * 0.45)
+	if not pause(entry, S.swell * 0.45) then
+		return
+	end
 
 	body:ease(1.34, 1.3, S.swell * 0.55)
 	body:flash(Theme.Color.Accent, S.swell * 0.55)
-	task.wait(S.swell * 0.55)
+	if not pause(entry, S.swell * 0.55) then
+		return
+	end
 
 	--[[
 		And comes apart.
@@ -1701,7 +2380,7 @@ local function phaseShift(entry, phase: number)
 		spendMass(entry, Tuning.mass.perSlime)
 	end
 
-	task.wait(S.burst)
+	pause(entry, S.burst)
 end
 
 local function phaseOf(entry): number
@@ -1719,60 +2398,49 @@ end
 --[[
 	What he is capable of, by phase.
 
-	PHASE 1 - A STABLE BLOB. He holds one shape and changes it deliberately.
-	Pancake, Cannon, Rain, Ricochet: four ways of using a body that keeps its
-	volume. This phase teaches the vocabulary - flatten, gather, throw, become
-	the projectile - and every later attack is built out of those verbs.
+	Built around escalating INSTABILITY, not bigger numbers: nothing hits
+	harder in a later phase than it did in the first. What changes is how much
+	of the room he is using.
 
-	PHASE 2 - UNSTABLE. He starts coming apart and putting himself back
-	together. Slime Rain starts landing LIVING handfuls and Reabsorb arrives to
-	take them back, and between them they are the mass economy: from here the
-	arena has slimes in it, and whether it still does in thirty seconds is the
-	player's decision.
+	PHASE 1 - THE BODY CLAIMS. Body Collapse, Claim the Realm, Slime Rain on
+	its restrained counts. Teaches flattening, shedding mass, eating the
+	ground, and that the handfuls get up.
 
-	PHASE 3 - VOLATILE. He stops holding a shape at all. Ricochet turns his
-	whole body into the projectile and Coronation takes him apart and rebuilds
-	him around his own crown. Nothing hits harder than it did in phase one; the
-	transformations simply stop pausing.
+	PHASE 2 - THE SUBJECTS OBEY. Everything above, plus Reabsorb when a free
+	child exists and Royal Decree. The phase change itself sheds slimes so
+	the subject mechanics have something to use. The player now has to manage
+	the lesser slimes, not only dodge him.
+
+	PHASE 3 - THE CROWN RULES. Everything above, plus Coronation. Shorter
+	rests and wider targeting; the same damage.
 
 	The attacks whose entire content is a SHAPE are dropped if the model cannot
-	deform - see SlimeBody. Better a smaller deck than an attack that plays as a
-	sphere sitting still.
+	deform - see SlimeBody. Claim, Rain, Reabsorb and Decree are all playable
+	on a rigid model, so the deck is never empty.
 ]]
-local function deckFor(entry, phase: number, distance: number): { string }
+local function deckFor(entry, phase: number): { string }
 	local deformable = entry.body.deformable
-	--[[
-		RICOCHET IS THE FLOOR, not cannon.
 
-		Something has to be in the deck at every range and in every phase, and
-		it has to be an attack that works from anywhere. The cannon needs room
-		to throw and is filtered out up close, so it cannot be the fallback -
-		which is what it was, propped up by an Engulf that no longer exists.
+	--[[
+		CLAIM THE REALM IS THE FLOOR.
+
+		Something has to be in the deck at every range, in every phase and on
+		every body, and it has to be an attack that works from anywhere. The
+		veins reach, a target past their reach is pulled in to it, a rigid
+		model can play it, and it still attacks when there is nothing to eat.
 	]]
-	local deck = { "cannon", "ricochet" }
+	local deck = { "claim", "rain" }
 
 	if deformable then
 		table.insert(deck, "pancake")
 	end
 
-	--[[
-		Rain is in from the START now.
-
-		It was held back to phase two when there were nine attacks and phase one
-		had four of its own. With Engulf and Plummet cut it had two, which
-		alternate visibly, so the attack that already had a phase-one count in
-		its table takes the slot. It sheds one living slime in phase one against
-		three in phase three - so the arena starts filling immediately and
-		REABSORB, which is still phase two, arrives to a room that already has
-		something in it.
-	]]
-	table.insert(deck, "rain")
-
 	if phase >= 2 then
-		-- Only worth reaching for if there is something out there to reach.
+		-- Only worth reaching for if there is a FREE child out there - one
+		-- Decree is not already commanding.
 		local children = 0
 		EnemyService.forEachNear(feetOf(entry), Tuning.absorb.reach, function(model)
-			if model.Name == SPAWN_NAME then
+			if model.Name == SPAWN_NAME and EnemyService.heldBy(model) == nil then
 				children += 1
 			end
 		end)
@@ -1780,17 +2448,23 @@ local function deckFor(entry, phase: number, distance: number): { string }
 		if children > 0 then
 			table.insert(deck, "absorb")
 		end
+
+		table.insert(deck, "decree")
 	end
 
 	if phase >= 3 and deformable then
 		table.insert(deck, "coronation")
 	end
 
-	-- The cannon wants somewhere to throw; up close it is a whiff. Ricochet is
-	-- always in the deck, so this can never empty it.
-	if distance < Tuning.standoff * 1.4 then
+	--[[
+		CORONATION IS THE CENTREPIECE, and it is not chained straight into
+		another big area attack: the move after it is drawn from the half of
+		the deck that is about his subjects and his reach, not his footprint.
+		Rain always survives this, so it can never empty the deck.
+	]]
+	if entry.lastAttack == "coronation" then
 		for index = #deck, 1, -1 do
-			if deck[index] == "cannon" then
+			if deck[index] == "pancake" or deck[index] == "claim" then
 				table.remove(deck, index)
 			end
 		end
@@ -1803,7 +2477,8 @@ end
 	Never the same attack twice running.
 
 	Exclude the last move outright and discourage an A/B/A loop. Surviving
-	children make reabsorption more tempting after rain, without a fixed combo.
+	children make reabsorption and a decree more tempting after rain, without
+	a fixed combo.
 ]]
 local function chooseAttack(entry, deck: { string }): string
 	local weights = table.create(#deck, 0)
@@ -1811,10 +2486,11 @@ local function chooseAttack(entry, deck: { string }): string
 	for index, pick in ipairs(deck) do
 		if pick ~= entry.lastAttack or #deck == 1 then
 			local weight = if pick == entry.previousAttack then 0.35 else 1
-			-- Reclaiming mass matters most after shedding it; killing the adds
-			-- removes this option through deckFor before the lottery runs.
-			if pick == "absorb" and entry.lastAttack == "rain" then
-				weight *= 2
+			-- Using what he just shed matters most right after shedding it;
+			-- killing the adds removes these options through deckFor before
+			-- the lottery runs.
+			if (pick == "absorb" or pick == "decree") and entry.lastAttack == "rain" then
+				weight *= 1.8
 			end
 			weights[index] = weight
 			total += weight
@@ -1836,21 +2512,21 @@ end
 local ATTACK_NAMES = {
 	shift = "Unstable",
 	pancake = "Body Collapse",
-	cannon = "Slime Cannon",
+	claim = "Claim the Realm",
 	absorb = "Reabsorb",
+	decree = "Royal Decree",
 	coronation = "Coronation",
 	rain = "Slime Rain",
-	ricochet = "Ricochet",
 }
 
 local ATTACKS = {
 	shift = function(entry, phase) phaseShift(entry, phase) end,
 	pancake = function(entry) pancake(entry) end,
-	cannon = function(entry, phase, target) slimeCannon(entry, target) end,
+	claim = function(entry, phase) claimRealm(entry, phase) end,
 	absorb = function(entry) reabsorb(entry) end,
+	decree = function(entry, phase) royalDecree(entry, phase) end,
 	coronation = function(entry) coronation(entry) end,
 	rain = function(entry, phase) slimeRain(entry, phase) end,
-	ricochet = function(entry, phase, target) ricochet(entry, target) end,
 }
 
 --[[
@@ -1865,7 +2541,7 @@ local ATTACKS = {
 	thread that set it, whatever happened, so an attack that errors does not
 	leave him standing still forever.
 ]]
-local function performAttack(entry, phase: number, target: Player, distance: number)
+local function performAttack(entry, phase: number, target: Player)
 	--[[
 		A phase change pre-empts whatever he was going to do.
 
@@ -1876,7 +2552,7 @@ local function performAttack(entry, phase: number, target: Player, distance: num
 	local shifting = phase > (entry.seenPhase or 1)
 	entry.seenPhase = math.max(entry.seenPhase or 1, phase)
 
-	local pick = if shifting then "shift" else chooseAttack(entry, deckFor(entry, phase, distance))
+	local pick = if shifting then "shift" else chooseAttack(entry, deckFor(entry, phase))
 
 	if not shifting then
 		entry.previousAttack = entry.lastAttack
@@ -1895,8 +2571,27 @@ local function performAttack(entry, phase: number, target: Player, distance: num
 	]]
 	BossService.update(entry)
 
+	--[[
+		EVERYTHING THE ATTACK MAKES GOES IN HERE, and goes when it ends.
+
+		Parts, tethers, lane marks, tweens, delayed tasks, the grip on any
+		slime he is commanding, the crown's pose. Destroyed below whether the
+		attack returned, errored or was cut short by his death (see finish),
+		so no attack can leave anything behind by forgetting - the only way
+		to leak is to not put something in the scope, and the helpers put
+		things in it for you.
+	]]
+	local scope = AbilityScope.new()
+	entry.scope = scope
+
 	task.spawn(function()
 		local ok, err = pcall(ATTACKS[pick], entry, phase, target)
+
+		if entry.scope == scope then
+			entry.scope = nil
+		end
+		scope:destroy()
+
 		if entry.slimeFinished then
 			return
 		end
@@ -1904,15 +2599,17 @@ local function performAttack(entry, phase: number, target: Player, distance: num
 		if not ok then
 			warn("[SlimeEmperor]", pick, "failed:", err)
 
-			-- Whatever it was doing to his shape and his streaks, it is not
-			-- doing any more. An attack that throws him and dies mid-flight
-			-- would otherwise leave a ribbon hanging off him for the rest of
-			-- the fight, which is the sort of thing that outlives the bug that
-			-- caused it and gets reported as its own.
+			-- Whatever it was doing to his shape, his streaks and his crown,
+			-- it is not doing any more. An attack that dies halfway would
+			-- otherwise leave a ribbon hanging off him or his crown burning
+			-- for the rest of the fight, which is the sort of thing that
+			-- outlives the bug that caused it and gets reported as its own.
 			pcall(function()
 				entry.body:ease(1, 1, 0.2)
 				entry.body:setTrail(false)
 				entry.body:setCrownTrail(false)
+				entry.body:setCrownPose(nil, nil)
+				entry.body:setCrownGlow(false)
 			end)
 		end
 
@@ -1922,6 +2619,12 @@ local function performAttack(entry, phase: number, target: Player, distance: num
 		-- And sometimes he simply stops for a while. See breatherChance.
 		if math.random() < Tuning.breatherChance then
 			rest += Tuning.breatherExtra
+		end
+
+		-- The centrepiece gets its own silence after it. See deckFor for the
+		-- other half of that rule.
+		if pick == "coronation" then
+			rest += Tuning.afterCoronation
 		end
 
 		entry.nextAttackAt = os.clock() + rest
@@ -2104,6 +2807,13 @@ function SlimeEmperor.start(entry)
 	entry.lastAttack = nil
 	entry.contactAt = setmetatable({}, { __mode = "k" })
 
+	-- player -> when an aimed attack last went for them; see pickTarget. Weak,
+	-- so a player leaving takes their record with them.
+	entry.pressure = setmetatable({}, { __mode = "k" })
+
+	-- The running attack's scope, if one is running; see performAttack.
+	entry.scope = nil
+
 	-- `until_` rather than `until`, which is a Lua keyword.
 	entry.hop = { state = "wait", until_ = 0, from = Vector3.zero, to = Vector3.zero, started = 0 }
 
@@ -2206,7 +2916,7 @@ function SlimeEmperor.step(entry, dt: number, now: number)
 		look like a state machine rather than a creature.
 	]]
 	if now >= (entry.nextAttackAt or 0) and hop.state == "wait" then
-		performAttack(entry, phase, target, distance)
+		performAttack(entry, phase, target)
 		return
 	end
 
@@ -2348,10 +3058,29 @@ end
 
 function SlimeEmperor.finish(entry, reason: string?)
 	entry.slimeFinished = true
-	-- Everything he makes is on a Debris timer already, so there is nothing to
-	-- tear down: the flag is only so a thread still in flight when he dies
-	-- stops as soon as it looks.
 	entry.busy = false
+
+	--[[
+		The attack in flight, if any, is torn down NOW rather than when its
+		thread next looks: its tethers and lane marks go, any slime it was
+		holding is handed back, and a thrown crown is put back on his head
+		before the corpse below is cloned from him. The flag above is what
+		stops the thread itself the next time it checks. Everything older is
+		on a Debris timer measured in seconds.
+	]]
+	if entry.scope then
+		entry.scope:destroy()
+		entry.scope = nil
+	end
+
+	if entry.body then
+		pcall(function()
+			entry.body:setTrail(false)
+			entry.body:setCrownTrail(false)
+			entry.body:setCrownPose(nil, nil)
+			entry.body:setCrownGlow(false)
+		end)
+	end
 
 	-- Only a death gets a death. Despawning, or the world being cleared, should
 	-- leave nothing behind at all.
@@ -2359,5 +3088,32 @@ function SlimeEmperor.finish(entry, reason: string?)
 		pcall(dissolve, entry)
 	end
 end
+
+--[[
+	FUTURE, NOT IMPLEMENTED: "USURPER'S CORONATION", a legendary boss drop.
+
+	Kept here as a design note only, so the idea survives beside the attack it
+	is learned from. Nothing below exists in code: it is not in AbilityConfig,
+	has no server module, VFX module, plan module or scroll asset, and neither
+	EnemyDrops nor this file's death logic know about it.
+
+	A player-adapted Coronation:
+	  - the player throws a spectral slime crown toward a server-validated
+	    target point;
+	  - the descending crown draws the same shrinking-shadow countdown the
+	    boss's crown does;
+	  - the caster briefly liquefies (visually) and reforms beside the crown
+	    on a safe, valid surface;
+	  - reformation is a slime eruption that damages nearby enemies;
+	  - with no safe destination the caster stays put and the eruption still
+	    happens at the validated target.
+	Suggested opening balance: Legendary, 35-45 second cooldown, 55-65 mana,
+	about 120 studs of cast range. It should feel recognisably learned from
+	the Emperor without replaying his whole sequence.
+
+	When it is built, the physical reward goes down through
+	ScrollService.place(...): ability scrolls are world objects, not
+	EnemyDrops inventory items.
+]]
 
 return SlimeEmperor

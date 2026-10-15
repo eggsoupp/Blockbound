@@ -23,6 +23,8 @@
 		body:setMass(0.7)             -- he is smaller now, and stays smaller
 		body:flash(color, 0.15)       -- and the light he casts flashes with him
 		body:setTrail(true)           -- the streak, while he is off the ground
+		body:setCrownPose(3, tilt)    -- the crown lifted and leaning, still on him
+		body:setCrownGlow(true)       -- and burning
 
 	WIDTH AND HEIGHT ARE MULTIPLIERS OF HIS RESTING SHAPE, not sizes. 1, 1 is
 	whatever the artist built; 1.6, 0.4 is that same body pushed flat. Nothing
@@ -418,6 +420,36 @@ function SlimeBody:lightUp()
 
 		self.crownTrail = streak
 	end
+
+	--[[
+		And a light IN the crown, off until an attack asks for it.
+
+		The crown is the one thing about him that is not slime, and two of his
+		attacks are about it exercising authority: it should be able to burn
+		gold for a moment when it commands something. Built once here, like
+		the trail, and switched by setCrownGlow; a crown built as a model
+		hangs it off its first part, which for a glow - unlike a trail - is a
+		perfectly good answer.
+	]]
+	if self.crown then
+		local crownHost = if self.crown:IsA("BasePart")
+			then self.crown
+			else self.crown:FindFirstChildWhichIsA("BasePart", true)
+
+		if crownHost then
+			local glow = Instance.new("PointLight")
+			glow.Name = "CrownGlow"
+			glow.Color = crownHost.Color
+			glow.Brightness = 0
+			glow.Range = math.clamp(reach * 1.5, 8, 30)
+			glow.Shadows = false
+			glow.Enabled = false
+			glow.Parent = crownHost
+
+			self.crownLight = glow
+			self.crownLightColor = crownHost.Color
+		end
+	end
 end
 
 --[[
@@ -437,6 +469,38 @@ end
 function SlimeBody:setCrownTrail(on: boolean)
 	if self.crownTrail then
 		self.crownTrail.Enabled = on
+	end
+end
+
+-- The crown burning. `color` is optional; nil is the crown's own colour.
+-- Idempotent and silently nothing without lightUp, like the trails.
+function SlimeBody:setCrownGlow(on: boolean, color: Color3?)
+	local glow = self.crownLight
+	if not (glow and glow.Parent) then
+		return
+	end
+	glow.Enabled = on
+	glow.Brightness = if on then 3 else 0
+	glow.Color = color or self.crownLightColor or glow.Color
+end
+
+--[[
+	Poses the crown ON HIS HEAD without taking it off: lifted by `lift` studs
+	and turned by `tilt`, applied on top of its resting seat by every reseat
+	from now on, so it rides every squash and stretch exactly as before - just
+	higher, or leaning.
+
+	For the attacks where the crown does something but stays his: it rises
+	when he commands, it leans toward the ground he is about to take. Clear
+	with no arguments. Unlike detachCrown there is nothing to restore, which
+	is the point: a pose cannot be left half-done by an error, the next
+	setCrownPose() puts everything back.
+]]
+function SlimeBody:setCrownPose(lift: number?, tilt: CFrame?)
+	self.crownLift = if lift and lift ~= 0 then lift else nil
+	self.crownTilt = tilt
+	if not self.crownDetached then
+		self:reseatCrown()
 	end
 end
 
@@ -488,7 +552,17 @@ function SlimeBody:reseatCrown()
 		offset.Z * (size.Z / base.Z)
 	)
 
-	self:moveCrown(part.CFrame * CFrame.new(scaled) * self.crownOffset.Rotation)
+	-- The pose, if any, sits between the seat and the crown's own rotation:
+	-- lifted straight up his axis, then leaned, then the artist's rotation.
+	local seat = part.CFrame * CFrame.new(scaled)
+	if self.crownLift then
+		seat = seat * CFrame.new(0, self.crownLift, 0)
+	end
+	if self.crownTilt then
+		seat = seat * self.crownTilt
+	end
+
+	self:moveCrown(seat * self.crownOffset.Rotation)
 
 	-- Rigid, so only mass touches it - never the squash.
 	if self.crownBaseSize then

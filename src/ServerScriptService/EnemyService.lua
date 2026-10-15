@@ -122,6 +122,18 @@ local worldFolder = nil
 local entries = {}
 local aliveCount = 0
 
+--[[
+	model -> holder, for a creature something else is driving.
+
+	A boss that commands or consumes its own children needs the child's
+	ordinary brain switched off while it does: a slime being reeled in or sent
+	down a lane must not also be hopping at a player on its own tick. The
+	holder is an opaque token; two commanders cannot hold one creature at once,
+	which is how "Royal Decree and Reabsorb never take the same slime" is
+	enforced here rather than remembered over there. See EnemyService.hold.
+]]
+local held = {}
+
 local tickAccumulator = 0
 
 -- ---------------------------------------------------------------------------
@@ -960,6 +972,7 @@ local function removeEntry(model, reason)
 	end
 
 	entries[model] = nil
+	held[model] = nil
 	aliveCount -= 1
 
 	-- Before the model goes, so a behaviour still has something to tidy up
@@ -1531,6 +1544,98 @@ function EnemyService.despawn(model, reason: string?)
 end
 
 --[[
+	Takes a creature out of its own hands and into a commander's.
+
+	Returns a HANDLE, or nil if the model is not a live enemy, is already held
+	by somebody else, or drives itself (a boss cannot be held). The handle is
+	the only way to move a held creature, and it goes dead the moment the
+	creature dies, despawns, or is released - so a commander that keeps
+	driving after a player kills its subject moves nothing.
+
+		local grip = EnemyService.hold(model, me)
+		grip:place(ground, facing)     -- stand it at a point, like placeModel
+		grip:feet()                    -- where its feet are now
+		grip.body                      -- its SlimeBody, if it has one
+		grip:alive()                   -- still mine and still in the world?
+		grip:release()                 -- hand it back; it lands and resumes
+
+	Why a handle and not the entry: the entry is this service's own record,
+	and lending it out is how a second file ends up depending on fields that
+	were only ever meant to be read here. The handle lends exactly the four
+	things a commander needs.
+]]
+function EnemyService.hold(model, holder)
+	local entry = entries[model]
+	if not entry or holder == nil or entry.behaviour then
+		return nil
+	end
+	if held[model] ~= nil then
+		return nil
+	end
+
+	held[model] = holder
+
+	local grip = {}
+	grip.model = model
+	grip.body = entry.body
+	grip.height = entry.height
+
+	function grip:alive(): boolean
+		return entries[model] == entry and model.Parent ~= nil and held[model] == holder
+	end
+
+	function grip:feet(): Vector3
+		return model:GetPivot().Position - Vector3.new(0, entry.feetOffset, 0)
+	end
+
+	function grip:place(ground: Vector3, facing: Vector3?)
+		if self:alive() then
+			EnemyService.placeModel(entry, ground, facing)
+		end
+	end
+
+	function grip:release()
+		if held[model] ~= holder then
+			return
+		end
+		held[model] = nil
+
+		if entries[model] ~= entry or not model.Parent then
+			return
+		end
+
+		--[[
+			Put down, grounded, with a short sit before it decides anything.
+
+			Its hop state is whatever it was when it was grabbed - possibly
+			mid-air, with a velocity aimed somewhere it no longer is - and
+			finishing that arc from where the commander left it would throw
+			it in a random direction. A fresh grounded wait is the same seam
+			the boss uses between an attack and its next hop.
+		]]
+		entry.state = HOP_GROUNDED
+		entry.stateUntil = os.clock() + 0.4
+		entry.velocity = Vector3.zero
+		entry.lunging = false
+		entry.lastSeenPlayerAt = os.clock()
+	end
+
+	return grip
+end
+
+-- Who, if anyone, is driving this creature. nil for a free one.
+function EnemyService.heldBy(model)
+	return held[model]
+end
+
+-- Is this still a live, registered enemy? For a commander checking on a
+-- creature it chose a moment ago.
+function EnemyService.isAlive(model): boolean
+	local entry = entries[model]
+	return entry ~= nil and model.Parent ~= nil
+end
+
+--[[
 	Gives health back.
 
 	Clamped to the definition's maximum, so nothing can inflate an enemy past
@@ -1643,6 +1748,7 @@ local function stepAll(dt)
 			-- Something else destroyed it. Drop the record rather than moving a
 			-- part that is no longer in the world.
 			entries[model] = nil
+			held[model] = nil
 			aliveCount -= 1
 			continue
 		end
@@ -1666,6 +1772,19 @@ local function stepAll(dt)
 		]]
 		if entry.body and not entry.behaviour then
 			entry.body:step()
+		end
+
+		--[[
+			HELD: somebody else is moving it this frame.
+
+			Its jelly was stepped above so it still deforms; nothing else of
+			its own runs - no aggro, no hop, no contact damage (the holder's
+			attack decides what it hurts) and no give-up timer, because a
+			creature in a boss's grip has not lost interest in anyone.
+		]]
+		if held[model] then
+			entry.lastSeenPlayerAt = now
+			continue
 		end
 
 		-- The PIVOT, not the root part. PivotTo writes the pivot, feetOffset is

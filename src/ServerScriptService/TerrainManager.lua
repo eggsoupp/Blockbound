@@ -3560,6 +3560,251 @@ function TerrainManager:MineAbilityCrater(centre, canCollect, collect, beamHeigh
 end
 
 --[[
+	BOUNDED SERVER-OWNED EXCAVATION - a boss eating the ground.
+
+	MineAbilityCrater above is shaped around one thing: a 280-stud beam shaft
+	and a six-layer tapered crater. A boss that takes shallow bites out of the
+	floor at the ends of a few tendrils wants none of that shape, so this is the
+	general operation underneath: "here are some columns, remove the top block
+	or two of each, tell me what actually went".
+
+	It is in TWO STEPS on purpose. The caller plans first and executes later,
+	because a telegraph has to promise the ground that will actually be hit:
+	the plan is the frozen list of cells the warning is drawn from, and the
+	execution removes exactly those cells - re-validated, because a player may
+	have mined or built there during the warning - and nothing else.
+
+	TERRAIN SAFETY RULES, all enforced here rather than trusted to the caller:
+
+	  loaded only       a column whose chunk is not resident, or is still being
+	                    generated, is skipped. Nothing is ever written into
+	                    chunk data that is about to be replaced.
+	  world bounds      chunk bounds, the world floor and the ceiling.
+	  unbreakable       BlockConfig.isUnbreakable wins over everything.
+	  natural only      by default a cell is skipped if it is an ADDED block
+	                    (data.extra: a structure's block or a player's
+	                    placement - ChunkEdits tells them apart, and neither is
+	                    the boss's to eat) or a RESTYLED one (data.override: a
+	                    structure's restyle of the ground under it, or a cave
+	                    wall). Overrides cannot be told apart from each other,
+	                    so both are protected; the cost is that he bites less
+	                    around caves, which is fine.
+	  dry only          by default a column under standing water is skipped. A
+	                    bite under a lake would be invisible and the water sync
+	                    would have to redraw for nothing.
+	  no loot           the item a removed block would have dropped is thrown
+	                    away. This is not mining; a boss must not be a farm.
+	  hard caps         on columns considered, cells planned, cells removed and
+	                    samples returned, whatever the caller asks for.
+	  no reach check    this is a server-owned action, not a player's request.
+	                    Nothing here reads a client, and no client chooses a
+	                    cell or reports a removal.
+
+	Removal goes through removeResolvedBlock, so ChunkEdits records it exactly
+	as a mined block and the renderer re-derives the column - and dirty columns
+	are deduplicated and refreshed once each at the end rather than per block.
+
+	The sample records are `{ position = Vector3, block = name }` of blocks
+	that were REALLY removed, for clients to animate copies of. A client never
+	sees a block the server did not take.
+]]
+local EXCAVATE_MAX_COLUMNS = 48
+local EXCAVATE_MAX_CELLS = 64
+local EXCAVATE_MAX_SAMPLES = 24
+local EXCAVATE_MAX_DEPTH = 3
+
+local function isFiniteNumber(value)
+	return type(value) == "number" and value == value and math.abs(value) < 1e6
+end
+
+-- Natural, expendable ground: not added, not restyled. See the rules above.
+local function isNaturalCell(data, cell, by)
+	local extra = data.extra[cell]
+	if extra and extra[by] then
+		return false
+	end
+	local override = data.override[cell]
+	if override and override[by] then
+		return false
+	end
+	return true
+end
+
+local function cellAllowed(data, cell, by, options)
+	if not isPresentInData(data, cell, by) then
+		return false
+	end
+	if options.naturalOnly ~= false and not isNaturalCell(data, cell, by) then
+		return false
+	end
+	if BlockConfig.isUnbreakable(blockNameFor(data, cell, by)) then
+		return false
+	end
+	return true
+end
+
+--[[
+	Resolves a set of columns into the exact cells a later ExecuteExcavation
+	will remove.
+
+	  columns  { { x = worldX, z = worldZ, y = worldY, depth = n }, ... }
+	           y is where to start looking for the top of the ground (the
+	           caller's idea of the floor there); depth is how many blocks
+	           down from that top block to take, 1..EXCAVATE_MAX_DEPTH.
+	  options  naturalOnly (default true), skipWet (default true),
+	           maxCells (clamped to EXCAVATE_MAX_CELLS)
+
+	Returns an array of cell records, top-down within each column so that
+	removing them in order lowers the column the way mining it would.
+]]
+function TerrainManager:PlanExcavation(columns, options)
+	options = options or {}
+	local maxCells = math.clamp(tonumber(options.maxCells) or EXCAVATE_MAX_CELLS, 0, EXCAVATE_MAX_CELLS)
+	local plan = {}
+
+	if type(columns) ~= "table" then
+		return plan
+	end
+
+	for index, column in ipairs(columns) do
+		if index > EXCAVATE_MAX_COLUMNS or #plan >= maxCells then
+			break
+		end
+		if type(column) ~= "table" or not (isFiniteNumber(column.x) and isFiniteNumber(column.z) and isFiniteNumber(column.y)) then
+			continue
+		end
+
+		local cx, cz, bx, bz = worldToChunkLocal(column.x, column.z)
+		if not isChunkInBounds(cx, cz) then
+			continue
+		end
+		local key = chunkKey(cx, cz)
+		local data = chunks[key]
+		if not data or generatingChunks[key] then
+			continue
+		end
+
+		local cell = cellOf(bx, bz)
+
+		if options.skipWet ~= false and data.waterTop[cell] > data.currentHeight[cell] then
+			continue
+		end
+
+		-- The top solid block near the caller's floor height: a short scan,
+		-- two blocks up for a step and four down for a hollow, never further.
+		local from = math.min(MAX_BLOCK_Y, math.floor(column.y / STUD_SIZE) + 2)
+		local to = math.max(FLOOR_Y, from - 6)
+		local top = nil
+		for by = from, to, -1 do
+			if isPresentInData(data, cell, by) then
+				top = by
+				break
+			end
+		end
+		if not top then
+			continue
+		end
+
+		local depth = math.clamp(math.floor(tonumber(column.depth) or 1), 1, EXCAVATE_MAX_DEPTH)
+		local ox, oz = getChunkWorldOrigin(cx, cz)
+
+		for step = 0, depth - 1 do
+			local by = top - step
+			if #plan >= maxCells then
+				break
+			end
+			-- A protected block ends the column: biting out from under an
+			-- unbreakable or placed block would leave it floating, and a
+			-- bite is a surface thing anyway.
+			if not cellAllowed(data, cell, by, options) then
+				break
+			end
+			table.insert(plan, {
+				cx = cx, cz = cz, cell = cell, by = by,
+				bx = bx, bz = bz,
+				position = Vector3.new(ox + (bx + 0.5) * STUD_SIZE, (by + 0.5) * STUD_SIZE, oz + (bz + 0.5) * STUD_SIZE),
+				block = blockNameFor(data, cell, by),
+			})
+		end
+	end
+
+	return plan
+end
+
+--[[
+	Removes the cells of a plan from PlanExcavation. Every cell is checked
+	again - still loaded, still present, still natural, still breakable -
+	because the world may have moved between the plan and now.
+
+	Returns the number of blocks actually removed and a capped sample of
+	`{ position, block }` records for the blocks that really went.
+]]
+function TerrainManager:ExecuteExcavation(plan, options)
+	options = options or {}
+	local maxRemoved = math.clamp(tonumber(options.maxRemoved) or EXCAVATE_MAX_CELLS, 0, EXCAVATE_MAX_CELLS)
+	local maxSamples = math.clamp(tonumber(options.maxSamples) or EXCAVATE_MAX_SAMPLES, 0, EXCAVATE_MAX_SAMPLES)
+
+	local removed, samples, dirty = 0, {}, {}
+	local gone = {}
+
+	if type(plan) ~= "table" then
+		return 0, samples
+	end
+
+	Profiler.enter("Terrain.excavate")
+
+	for index, record in ipairs(plan) do
+		if index > EXCAVATE_MAX_CELLS or removed >= maxRemoved then
+			break
+		end
+		if type(record) ~= "table" then
+			continue
+		end
+
+		local key = chunkKey(record.cx, record.cz)
+		local data = chunks[key]
+		if not data or generatingChunks[key] or not isChunkInBounds(record.cx, record.cz) then
+			continue
+		end
+		if not cellAllowed(data, record.cell, record.by, options) then
+			continue
+		end
+
+		local name = blockNameFor(data, record.cell, record.by)
+		local ok = removeResolvedBlock(data, record.cell, record.by, false)
+		if ok then
+			removed += 1
+			-- The drop is deliberately not collected: see the rules above.
+			dirty[key .. ":" .. record.cell] = { record.cx, record.cz, record.bx, record.bz }
+			table.insert(gone, { position = record.position, block = name })
+		end
+	end
+
+	-- Once per column, immediately: the bite opens with the attack that made
+	-- it, and a column with two blocks gone is rebuilt once, not twice.
+	for _, column in pairs(dirty) do
+		refreshAdjacentColumns(column[1], column[2], column[3], column[4], true)
+	end
+
+	-- Spread the samples over everything that went rather than taking the
+	-- first N, so the debris comes from the whole bite and not one corner.
+	if maxSamples > 0 and #gone > 0 then
+		local stride = math.max(1, math.ceil(#gone / maxSamples))
+		for index = 1, #gone, stride do
+			if #samples >= maxSamples then
+				break
+			end
+			table.insert(samples, gone[index])
+		end
+	end
+
+	Profiler.leave("Terrain.excavate")
+	Profiler.count("Terrain.excavated", removed)
+
+	return removed, samples
+end
+
+--[[
 	Puts a block down.
 
 	Player placement goes through the same chunk data and the same renderer as

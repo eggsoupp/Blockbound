@@ -80,6 +80,17 @@ local LOW_FRACTION = 0.3
 -- so this is only here to turn the STEP a cast makes into a slide.
 local DRAIN_SPEED = 9
 
+--[[
+	How close to full counts as full, in mana.
+
+	`shown` chases its target by a fraction each frame, so it approaches the
+	maximum without ever reaching it, and rounding down would then read 99 / 100
+	forever. Within this distance the pool IS full: at any sane regen rate it is
+	well under a millisecond of filling, far below anything a cast could race.
+	Anything further from the top is still rounded down.
+]]
+local FULL_EPSILON = 1e-3
+
 -- The refusal flash: how bright, and how fast it decays.
 local DENIED_FLASH = 0.75
 local DENIED_DECAY = 3.5
@@ -215,6 +226,9 @@ RunService.Heartbeat:Connect(function(deltaTime)
 	local target = if godMode then maximum else predict()
 	if godMode then shown = maximum; denied = 0 end
 	shown += (target - shown) * math.min(deltaTime * DRAIN_SPEED, 1)
+	if math.abs(target - shown) <= FULL_EPSILON then
+		shown = target
+	end
 
 	if denied > 0 then
 		denied -= denied * math.min(deltaTime * DENIED_DECAY, 1)
@@ -232,7 +246,17 @@ RunService.Heartbeat:Connect(function(deltaTime)
 
 	flash.BackgroundTransparency = 1 - DENIED_FLASH * denied
 
-	-- Rounded down, so a bar that says 30 can always pay for something costing
-	-- 30. Rounding to nearest would let it claim mana the server does not have.
-	amount.Text = if godMode then "Unlimited" else string.format("%d / %d", math.floor(shown), math.floor(maximum))
+	--[[
+		Rounded down, so a bar that says 30 can always pay for something costing
+		30. Rounding to nearest would let it claim mana the server does not have.
+
+		The lower of the drawn and predicted values, so the number never runs
+		ahead of the prediction while the bar is still sliding down after a
+		cast. The one exception to rounding down is a pool within FULL_EPSILON
+		of its maximum, which reads as full rather than one short of it.
+	]]
+	local whole = math.floor(maximum)
+	local current = math.min(shown, target)
+	local display = if current >= whole - FULL_EPSILON then whole else math.floor(current)
+	amount.Text = if godMode then "Unlimited" else string.format("%d / %d", display, whole)
 end)

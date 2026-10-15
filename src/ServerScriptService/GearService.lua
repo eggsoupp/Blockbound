@@ -23,11 +23,11 @@
 	here. Items in ordinary slots count for nothing: a ring in your bag is not a
 	ring on your finger.
 
-	THE SAME ACCESSORY TWICE COUNTS ONCE
+	EVERY WORN SLOT COUNTS
 
-	Otherwise the best build is five copies of the strongest ring, and every
-	accessory after the first decision is just more of it. Different accessories
-	stack freely.
+	Each gear slot adds its own item's buffs, so two of the same accessory give
+	twice the bonus - the same as two different accessories would. Accessories
+	never merge (maxStack 1), so a slot is always exactly one item.
 
 	WHO HEARS ABOUT CHANGES
 
@@ -81,25 +81,19 @@ function GearService.get(player)
 	end
 
 	local slots = inventory:GetAll()
-	local counted = {}
 
 	for index = 1, #slots do
 		if InventoryConstants.getSlotRestriction(index) ~= nil then
 			local slot = slots[index]
 			local name = slot and slot.name
+			local definition = name and ItemDefinitions[name]
+			local buffs = definition and definition.buffs
 
-			if name and not counted[name] then
-				counted[name] = true
-
-				local definition = ItemDefinitions[name]
-				local buffs = definition and definition.buffs
-
-				if type(buffs) == "table" then
-					for _, stat in ipairs(STATS) do
-						local value = tonumber(buffs[stat])
-						if value then
-							bonuses[stat] += value
-						end
+			if type(buffs) == "table" then
+				for _, stat in ipairs(STATS) do
+					local value = tonumber(buffs[stat])
+					if value then
+						bonuses[stat] += value
 					end
 				end
 			end

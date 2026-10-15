@@ -17,10 +17,13 @@
 	  Terrain.IslandShape        the same, for the Island place (see PlaceConfig)
 	  Terrain.StructureRegistry  position -> what gets built there
 	  Terrain.OreRegistry        position -> which ore, if any
+	  Terrain.CaveConfig         how caves occur and how each biome shapes them
+	  Terrain.CaveMap            position -> cave air, plans, content candidates
 	  Terrain.ChunkEdits         what players have changed
 	  Blocks.BlockConfig         what a block drops and how hard it is
 
-	Adding a biome, ore, block or structure never requires touching this file.
+	Adding a biome, ore, block, structure or cave profile never requires
+	touching this file.
 
 	PUBLIC API
 	  TerrainManager:Init()
@@ -28,6 +31,7 @@
 	  TerrainManager:BreakBlock(part | x, y, z, initiator) -> ok, itemName, reason
 	  TerrainManager:PlaceBlock(player, blockX, by, blockZ, name) -> ok, reason
 	  TerrainManager:IsSolidAt(blockX, by, blockZ) -> boolean
+	  TerrainManager:GetCaveInfo(worldPosition) -> info?
 	  TerrainManager:GetChunk(cx, cz)
 	  TerrainManager:HoldGeneration(reason) / :ReleaseGeneration(reason)
 	  TerrainManager:ChunkKey(cx, cz) -> key / :ChunkCoords(key) -> cx, cz
@@ -63,6 +67,8 @@ local BlockConfig = require(Shared:WaitForChild("Blocks"):WaitForChild("BlockCon
 local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
 local IslandShape = require(TerrainShared:WaitForChild("IslandShape"))
+local CaveConfig = require(TerrainShared:WaitForChild("CaveConfig"))
+local CaveMap = require(TerrainShared:WaitForChild("CaveMap"))
 
 --[[
 	Where columns come from: the open world's BiomeMap, or in the Island place
@@ -71,6 +77,21 @@ local IslandShape = require(TerrainShared:WaitForChild("IslandShape"))
 	OreConfig make the matching size, depth and ore adjustments themselves.
 ]]
 local ColumnSource = if PlaceConfig.isIsland() then IslandShape else BiomeMap
+
+--[[
+	CAVES
+
+	The heightmap says a column is solid from the floor to its height. Caves
+	are the second thing, after the island's underside, that make that untrue
+	for GENERATED ground - so every place that reads the heightmap for a chunk
+	that is not loaded also asks CaveMap, and a loaded chunk has its cave
+	cells marked removed at generation, before structures and before player
+	edits are replayed. From then on cave air is mined-out space, which the
+	renderer, mining, placement, support queries and persistence already
+	understand: nothing stores it, and a chunk carves it again identically
+	every time it streams in.
+]]
+local CAVES_ENABLED = CaveConfig.Enabled and (CaveConfig.EnabledOnIsland or not PlaceConfig.isIsland())
 
 local TerrainManager = {}
 
@@ -897,6 +918,11 @@ local function isBlockPresent(cx, cz, bx, bz, by)
 		end
 	end
 
+	-- Nor does it show the caves, which the chunk will carve when it loads.
+	if CAVES_ENABLED and CaveMap.isAirAt(blockX, by, blockZ) then
+		return false
+	end
+
 	return true
 end
 
@@ -928,8 +954,25 @@ local function neighbourColumn(cx, cz, bx, bz)
 			data.waterTop[cell]
 	end
 
-	local height, _biome, _top, _under, _variant, water =
-		getGeneratedColumn(cx * CHUNK_SIZE + bx, cz * CHUNK_SIZE + bz)
+	local blockX = cx * CHUNK_SIZE + bx
+	local blockZ = cz * CHUNK_SIZE + bz
+	local height, _biome, _top, _under, _variant, water = getGeneratedColumn(blockX, blockZ)
+
+	-- An unloaded neighbour with a cave under it reports the cave as its
+	-- disturbed band, exactly as it will once it loads. That puts this
+	-- column on the general path now, so the wall it shares with the cave is
+	-- drawn from the first frame instead of when the neighbour arrives.
+	if CAVES_ENABLED then
+		local record = CaveMap.getRecord(cx, cz)
+		if not record.empty then
+			local cell = bx * CHUNK_SIZE + bz + 1
+			local low = record.low[cell]
+			if low then
+				return record.surface[cell] or height, true, low, record.high[cell], water
+			end
+		end
+	end
+
 	return height, false, math.huge, -math.huge, water
 end
 
@@ -2351,6 +2394,151 @@ local function strataJitter(blockX, blockZ)
 	return math.floor(v * (2 * STRATA_JITTER + 1)) - STRATA_JITTER
 end
 
+--[[
+	Restyles one natural block, for a cave floor, ceiling or wall. Never a
+	bedrock layer, never a block that is already air, never anything above the
+	column's current top.
+]]
+local function overrideNatural(data, cell, by, name)
+	if by <= BEDROCK_TOP_Y or by >= data.currentHeight[cell] then
+		return
+	end
+	local removed = data.removed[cell]
+	if removed and removed[by] then
+		return
+	end
+	local override = data.override[cell]
+	if not override then
+		override = {}
+		data.override[cell] = override
+	end
+	override[by] = name
+end
+
+local function restyleWall(data, cell, intervals, name)
+	for i = 1, #intervals, 2 do
+		for by = intervals[i], intervals[i + 1] do
+			overrideNatural(data, cell, by, name)
+		end
+	end
+end
+
+-- The wall at our border cell (bx, bz) facing the halo column (hx, hz) just
+-- outside, in the material of the plan that carved that column.
+local function restyleHaloEdge(data, record, hx, hz, bx, bz)
+	local intervals, owner = CaveMap.haloIntervals(record, hx, hz)
+	if intervals and owner then
+		local wallBlock = record.plans[owner].profile.materials.wall
+		if wallBlock then
+			restyleWall(data, bx * CHUNK_SIZE + bz + 1, intervals, wallBlock)
+		end
+	end
+end
+
+--[[
+	Carves a chunk's caves into its data from the CaveMap record, then applies
+	the biome profile's materials to the surfaces that now face the air.
+
+	Air is marked top-down per column through markRemoved, so an entrance that
+	reaches the surface lowers the column exactly as mining its top would, and
+	a tunnel below the surface becomes a disturbed band the general visibility
+	path scans. Materials are plain overrides on the blocks around each
+	interval; walls shared with the next chunk are found through the record's
+	halo, so both sides of a border wall agree.
+]]
+local function applyCaves(data, record)
+	local plans = record.plans
+	local cells = record.cells
+	local carved = 0
+
+	for cell, intervals in pairs(cells) do
+		local currentHeight = data.currentHeight
+		for i = #intervals - 1, 1, -2 do
+			for by = intervals[i + 1], intervals[i], -1 do
+				if by < currentHeight[cell] then
+					markRemoved(data, cell, by)
+					carved += 1
+				end
+			end
+		end
+	end
+
+	for cell, intervals in pairs(cells) do
+		local materials = plans[record.owner[cell]].profile.materials
+		local floorBlock, ceilingBlock, wallBlock = materials.floor, materials.ceiling, materials.wall
+
+		if floorBlock or ceilingBlock or wallBlock then
+			local index = cell - 1
+			local bx, bz = index // CHUNK_SIZE, index % CHUNK_SIZE
+
+			for i = 1, #intervals, 2 do
+				local lo, hi = intervals[i], intervals[i + 1]
+				if floorBlock then
+					overrideNatural(data, cell, lo - 1, floorBlock)
+				end
+				if ceilingBlock then
+					overrideNatural(data, cell, hi + 1, ceilingBlock)
+				end
+			end
+
+			if wallBlock then
+				for d = 1, 4 do
+					local nbx, nbz = bx + DIR_X[d], bz + DIR_Z[d]
+					if nbx >= 0 and nbx < CHUNK_SIZE and nbz >= 0 and nbz < CHUNK_SIZE then
+						restyleWall(data, nbx * CHUNK_SIZE + nbz + 1, intervals, wallBlock)
+					end
+				end
+			end
+		end
+	end
+
+	-- Our border blocks that face air in the chunk next door.
+	for i = 0, CHUNK_SIZE - 1 do
+		restyleHaloEdge(data, record, -1, i, 0, i)
+		restyleHaloEdge(data, record, CHUNK_SIZE, i, CHUNK_SIZE - 1, i)
+		restyleHaloEdge(data, record, i, -1, i, 0)
+		restyleHaloEdge(data, record, i, CHUNK_SIZE, i, CHUNK_SIZE - 1)
+	end
+
+	return carved
+end
+
+--[[
+	May a structure stand here? The column source's own rule first (the
+	island's clearing), then the caves: nothing is seated over cave air within
+	CaveConfig.StructureSupportDepthBlocks of the surface, at the origin or at
+	the corners and edges of the footprint.
+]]
+local function structureHasSupport(blockX, blockZ, radius)
+	if ColumnSource.allowStructureAt and not ColumnSource.allowStructureAt(blockX, blockZ, radius) then
+		return false
+	end
+	if not CAVES_ENABLED then
+		return true
+	end
+
+	local depth = CaveConfig.StructureSupportDepthBlocks
+	if CaveMap.hasAirBelowSurface(blockX, blockZ, depth) then
+		return false
+	end
+
+	radius = math.floor(radius or 0)
+	if radius > 0 then
+		for dx = -radius, radius, radius do
+			for dz = -radius, radius, radius do
+				if (dx ~= 0 or dz ~= 0)
+					and isBlockInWorld(blockX + dx, blockZ + dz)
+					and CaveMap.hasAirBelowSurface(blockX + dx, blockZ + dz, depth)
+				then
+					return false
+				end
+			end
+		end
+	end
+
+	return true
+end
+
 local function generateChunk(cx, cz)
 	if not isChunkInBounds(cx, cz) then
 		return
@@ -2413,6 +2601,37 @@ local function generateChunk(cx, cz)
 		return
 	end
 
+	--[[
+		Phase 0b: plan and carve the caves, still before the chunk is published
+		in `chunks`, so a neighbour reading our cells during the yields below
+		sees generated ground rather than a cave half carved. Nearly every
+		chunk gets the shared empty record back in a few hash lookups; one a
+		cave crosses carves in time slices like everything else.
+	]]
+	local caveRecord = nil
+	if CAVES_ENABLED then
+		phaseStart = chunkCpuSpent(ctx)
+		local function slice()
+			yieldIfOverBudget(ctx)
+		end
+		caveRecord = CaveMap.prepareRecord(cx, cz, slice)
+
+		-- The neighbours' records too, while we can still yield: the
+		-- visibility pass asks about border columns in unloaded chunks, and
+		-- a record built from inside that pass could not be time-sliced.
+		for i = 1, 4 do
+			local ncx, ncz = cx + DIR_X[i], cz + DIR_Z[i]
+			if isChunkInBounds(ncx, ncz) then
+				CaveMap.prepareRecord(ncx, ncz, slice)
+			end
+		end
+		Profiler.sample("Terrain.gen.1b_cavePlan", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
+
+		if not isChunkWanted(key) then
+			return
+		end
+	end
+
 	local model = Instance.new("Folder")
 	model.Name = string.format("Chunk_%d_%d", cx, cz)
 	model.Parent = TerrainRoot
@@ -2472,6 +2691,18 @@ local function generateChunk(cx, cz)
 		yieldIfOverBudget(ctx)
 	end
 
+	-- Caves next: before structures, so nothing is seated over them, and
+	-- before edits, so a player's changes win over the cave. See CAVES.
+	if caveRecord and not caveRecord.empty then
+		phaseStart = chunkCpuSpent(ctx)
+		local carved = applyCaves(data, caveRecord)
+		Profiler.count("Terrain.cave.chunksWithCaves")
+		Profiler.sample("Terrain.cave.carvedBlocks", carved, "blocks")
+		Profiler.sample("Terrain.cave.plansInChunk", caveRecord.planCount, "plans")
+		Profiler.sample("Terrain.gen.1c_caveCarve", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
+		yieldIfOverBudget(ctx)
+	end
+
 	StructureRegistry.applyBlocks(cx, cz, writer)
 	Profiler.sample("Terrain.gen.2structures", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
 	yieldIfOverBudget(ctx)
@@ -2522,6 +2753,14 @@ local function generateChunk(cx, cz)
 	-- lake has to be in place before the water around it is written.
 	syncChunkWater(data)
 	Profiler.sample("Terrain.gen.4render", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
+
+	-- How much more a cave chunk draws than a plain one: the two samples side
+	-- by side are the cost of cave geometry, since nothing else differs.
+	if caveRecord and not caveRecord.empty then
+		Profiler.sample("Terrain.cave.visibleBlocks", data.visibleCount, "blocks")
+	else
+		Profiler.sample("Terrain.plainChunkVisibleBlocks", data.visibleCount, "blocks")
+	end
 
 	-- Phase 4: structure models.
 	phaseStart = chunkCpuSpent(ctx)
@@ -3465,6 +3704,20 @@ function TerrainManager:Init()
 
 	ColumnSource.init(baseSeed)
 	OreRegistry.init(baseSeed)
+
+	-- Caves read the surface through the same cached column path everything
+	-- else uses, so a plan's origin and the cover under a column come from
+	-- exactly the heightmap the chunk will build.
+	if CAVES_ENABLED then
+		CaveMap.init(baseSeed, {
+			sampler = function(blockX, blockZ)
+				local height, biome, _top, _under, _variant, water = getGeneratedColumn(blockX, blockZ)
+				return height, biome, water
+			end,
+			isInWorld = isBlockInWorld,
+		})
+	end
+
 	ensureGeneratedTemplates()
 
 	-- Water is Terrain; its look is Terrain's. See WATER.
@@ -3507,9 +3760,9 @@ function TerrainManager:Init()
 
 		isInWorld = isBlockInWorld,
 
-		-- Optional: the island keeps its spawn clearing and beach free of
-		-- trees. BiomeMap has no such rule and leaves this nil.
-		allowStructureAt = ColumnSource.allowStructureAt,
+		-- The island keeps its spawn clearing and beach free of trees; the
+		-- open world keeps structures off ground a cave has hollowed out.
+		allowStructureAt = structureHasSupport,
 	})
 
 	warnForMissingTemplates()
@@ -3606,7 +3859,47 @@ function TerrainManager:GetSurfaceY(worldX, worldZ)
 	end
 
 	local height, biome = getGeneratedColumn(blockX, blockZ)
+
+	-- A cave mouth lowers its columns when the chunk builds; answer with that
+	-- so nothing is dropped onto air over a hole that is about to open.
+	if CAVES_ENABLED then
+		local opened = CaveMap.surfaceAt(blockX, blockZ)
+		if opened then
+			height = opened
+		end
+	end
+
 	return height * STUD_SIZE, biome
+end
+
+--[[
+	What cave, if any, a world position is inside. nil for solid ground, open
+	air above the surface, or a mined-out hole that no plan carved.
+
+	  { id, category ("Small" | "Large"), biome, kind ("entrance" | "chamber"
+	    | "ledge" | "tunnel"), tag, depth, tags, plan }
+
+	Answers from CaveMap, so it is valid for unloaded chunks and never depends
+	on what has been mined. Future cave content asks here, or CaveMap directly
+	for candidates; see CaveMap.getCandidates.
+]]
+function TerrainManager:GetCaveInfo(worldPosition)
+	if not CAVES_ENABLED or typeof(worldPosition) ~= "Vector3" then
+		return nil
+	end
+
+	local blockX = math.floor(worldPosition.X / STUD_SIZE)
+	local by = math.floor(worldPosition.Y / STUD_SIZE)
+	local blockZ = math.floor(worldPosition.Z / STUD_SIZE)
+	if not isBlockInWorld(blockX, blockZ) then
+		return nil
+	end
+
+	return CaveMap.describeAt(blockX, by, blockZ)
+end
+
+function TerrainManager:CavesEnabled()
+	return CAVES_ENABLED
 end
 
 --[[
@@ -3764,6 +4057,7 @@ function TerrainManager:GetStats()
 		structures = StructureRegistry.getStats(),
 		ores = OreRegistry.getStats(),
 		edits = ChunkEdits.getStats(),
+		caves = if CAVES_ENABLED then CaveMap.getStats() else { enabled = false },
 	}
 end
 
@@ -3890,6 +4184,9 @@ function TerrainManager:_FlushAll(alsoDropPools)
 	oldGenCount = 0
 
 	ColumnSource.clearCaches()
+	if CAVES_ENABLED then
+		CaveMap.clearCaches()
+	end
 
 	if alsoDropPools then
 		for name, pool in pairs(partPool) do

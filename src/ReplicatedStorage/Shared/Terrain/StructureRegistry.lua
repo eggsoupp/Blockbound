@@ -601,7 +601,7 @@ local function getCandidates(cx, cz)
 								blockX >= minBlockX and blockX <= maxBlockX
 								and blockZ >= minBlockZ and blockZ <= maxBlockZ
 								and options.isInWorld(blockX, blockZ)
-								and (options.allowStructureAt == nil or options.allowStructureAt(blockX, blockZ))
+								and (options.allowStructureAt == nil or options.allowStructureAt(blockX, blockZ, entry.radius))
 							then
 								local surfaceY, biome, variant, waterTop, surfaceBlock =
 									options.getColumn(blockX, blockZ)
@@ -1196,8 +1196,11 @@ end
 	                       is what `surfaces` is checked against; a provider
 	                       that does not report it simply cannot use `surfaces`.
 	  isInWorld            function(blockX, blockZ) -> boolean
-	  allowStructureAt     optional function(blockX, blockZ) -> boolean; a
-	                       structure is only ever rooted where it says true
+	  allowStructureAt     optional function(blockX, blockZ, radius) -> boolean;
+	                       a structure is only ever rooted where it says true.
+	                       radius is the definition's footprint radius, so a
+	                       provider can check the ground under the whole base
+	                       (TerrainManager refuses footprints over cave air).
 	}
 ]]
 function StructureRegistry.init(opts)

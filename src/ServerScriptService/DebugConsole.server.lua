@@ -32,6 +32,14 @@
 	  /bbbench            sweep view distance 2..5 and report what each costs
 	  /bbbench quick      the same sweep with shorter windows
 	  /bbbench 2 4        only those view distances
+	  /bbcaves            audit the cave generator on this seed: determinism,
+	                      chunk borders, spawn protection, cover and floor
+	                      thickness, small-vs-large rarity. See CaveAudit
+	  /bbcaves here       what cave you are in, or where the nearest one is
+	  /bbcaves tp [large] teleport to the nearest cave mouth (or nearest plan
+	                      origin when it has no mouth), for a look inside
+	  /bbcaves edit       standing in a cave: place, mine and refill through
+	                      the real terrain API and confirm it is all recorded
 
 	Every one of them answers on screen through CommandFeedback as well as in the
 	output window - a command that printed into Studio and showed nothing in the
@@ -60,6 +68,9 @@ local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"
 -- Required at startup rather than on first use: requiring it is what creates the
 -- BenchTelemetry remote, and the client half waits for that remote as it loads.
 local TerrainBench = require(ServerScriptService:WaitForChild("TerrainBench"))
+local CaveAudit = require(ServerScriptService:WaitForChild("CaveAudit"))
+local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
+local CaveMap = require(Shared:WaitForChild("Terrain"):WaitForChild("CaveMap"))
 local StationService = require(ServerScriptService:WaitForChild("StationService"))
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 local CombatService = require(ServerScriptService:WaitForChild("CombatService"))
@@ -533,6 +544,54 @@ local function onChatted(player, message)
 		-- and the chat handler is not somewhere to block for that long.
 		task.spawn(TerrainBench.run, options)
 		reply(player, "bbbench", "Started. Results land in the output window.", "good")
+	elseif command == "/bbcaves" then
+		local argument = words[2]
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+
+		if not TerrainManager:CavesEnabled() then
+			reply(player, "bbcaves", "Caves are off in this place.", "bad")
+		elseif argument == "here" then
+			if not root then
+				reply(player, "bbcaves", "No character.", "bad")
+			else
+				reply(player, "bbcaves", CaveAudit.describe(root.Position))
+			end
+		elseif argument == "tp" then
+			if not root then
+				reply(player, "bbcaves", "No character.", "bad")
+			else
+				local studs = TerrainConfig.StudSize
+				local category = if words[3] == "large" then "Large" elseif words[3] == "small" then "Small" else nil
+				local plan = CaveMap.findNearestPlan(
+					math.floor(root.Position.X / studs), math.floor(root.Position.Z / studs), 1500, category
+				)
+				if not plan then
+					reply(player, "bbcaves", "No cave plan within 1500 blocks.", "bad")
+				else
+					local x, z = plan.originX, plan.originZ
+					if plan.entrance then
+						x, z = plan.entrance.x, plan.entrance.z
+					end
+					local surfaceY = TerrainManager:GetSurfaceY(x * studs + 2, z * studs + 2) or 0
+					root.CFrame = CFrame.new(x * studs + 2, surfaceY + 6, z * studs + 2)
+					reply(player, "bbcaves", string.format(
+						"Teleported to %s cave %s (%s), %s.", string.lower(plan.category), plan.id, plan.biome,
+						if plan.entrance then "at its mouth" else "above its origin (no mouth; dig down)"
+					), "good")
+				end
+			end
+		elseif argument == "edit" then
+			local ok, outcome = CaveAudit.editRoundTrip(player)
+			reply(player, "bbcaves", outcome, if ok then "good" else "bad")
+		else
+			-- Spawned: the audit carves a few dozen chunks and walks every
+			-- plan cell in the world, which is a second or two of work.
+			task.spawn(function()
+				local report = CaveAudit.printReport()
+				reply(player, "bbcaves", CaveAudit.summarise(report), if report.errors == 0 then "good" else "bad")
+			end)
+		end
 	elseif command == "/bbinv" then
 		local argument = words[2]
 

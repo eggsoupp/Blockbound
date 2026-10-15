@@ -258,6 +258,12 @@
           },
           "IslandShape": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/IslandShape.lua"
+          },
+          "CaveConfig": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/CaveConfig.lua"
+          },
+          "CaveMap": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/CaveMap.lua"
           }
         },
         "Blocks": {
@@ -683,6 +689,9 @@
       },
       "ContentAuditCommand": {
         "$path": "src/ServerScriptService/ContentAuditCommand.server.lua"
+      },
+      "CaveAudit": {
+        "$path": "src/ServerScriptService/CaveAudit.lua"
       }
     }
   }

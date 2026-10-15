@@ -9,6 +9,7 @@
 	  StructureConfig  trees / rocks / ruins and how they scatter
 	  StrataConfig     what the world is made of going down
 	  OreConfig        which ores exist and at what depths
+	  CaveConfig       how often caves occur, how big, and per-biome shape
 
 	The knobs you reach for most: GridChunksX/Z (world size),
 	ViewDistanceChunks (perf dial #1), MaxHeight, WorldFloorY.

@@ -88,7 +88,9 @@ local function refresh(player: Player)
 	-- bar does, so taking an amulet off and on again is never a free refill.
 	local max = maxFor(player)
 	if max ~= entry.max then
-		entry.mana = if entry.max > 0 then entry.mana * max / entry.max else max
+		-- A full pool is set to the new maximum exactly rather than scaled, so
+		-- the multiply-then-divide cannot leave it a rounding error short.
+		entry.mana = if entry.max > 0 and entry.mana < entry.max then entry.mana * max / entry.max else max
 		entry.max = max
 	end
 

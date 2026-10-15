@@ -423,8 +423,8 @@ local ItemDefinitions = {
 
 	-- === Accessories ===
 	-- Worn in the accessory column at the bottom right of the screen. Only
-	-- count while worn there, and the same accessory twice counts once - see
-	-- GearService, which reads `buffs`:
+	-- count while worn there, and every worn copy counts, so the same accessory
+	-- twice gives its bonus twice - see GearService, which reads `buffs`:
 	--   maxHealth / maxMana             flat amounts
 	--   abilityDamage / weaponDamage    fractions: 0.15 is +15%
 	-- No art exists yet, so `look` has Shared.UI.ItemModels build a simple

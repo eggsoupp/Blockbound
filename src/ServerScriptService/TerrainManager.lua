@@ -1875,8 +1875,12 @@ local function refreshAdjacentColumns(cx, cz, bx, bz, immediate)
 	for i = 1, 4 do
 		local ncx, ncz, nbx, nbz = normalizeCell(cx, cz, bx + DIR_X[i], bz + DIR_Z[i])
 		if isChunkInBounds(ncx, ncz) then
-			local neighbour = chunks[chunkKey(ncx, ncz)]
-			if neighbour then
+			local nkey = chunkKey(ncx, ncz)
+			local neighbour = chunks[nkey]
+			if neighbour and generatingChunks[nkey] then
+				-- Never draw a half-built chunk; see refreshChunkBorders.
+				neighbour.bordersStale = true
+			elseif neighbour then
 				touched[neighbour] = true
 				updateColumnVisibility(ncx, ncz, nbx, nbz)
 			end
@@ -1980,14 +1984,25 @@ end
 	appears. Heights alone would not need this (an unloaded neighbour already
 	answers with its generated height), but added blocks would: a boulder that
 	spills across the border only exists once both chunks are built.
+
+	A neighbour that is itself still generating is NOT touched. It sits in
+	`chunks` from its structure phase onward, so flushing it here would mesh and
+	publish whatever part of it was drawn so far - before its structures and
+	replayed edits were in - and its own flush a few frames later would then
+	replace those Parts with differently shaped ones. With two chunks in flight
+	side by side that is the pop and flicker at the streaming edge. It is
+	flagged instead, and re-reads its own borders before its one flush.
 ]]
 local function refreshChunkBorders(cx, cz)
 	for i = 1, 4 do
 		local ncx = cx + DIR_X[i]
 		local ncz = cz + DIR_Z[i]
 
-		local neighbour = isChunkInBounds(ncx, ncz) and chunks[chunkKey(ncx, ncz)]
-		if neighbour then
+		local nkey = chunkKey(ncx, ncz)
+		local neighbour = isChunkInBounds(ncx, ncz) and chunks[nkey]
+		if neighbour and generatingChunks[nkey] then
+			neighbour.bordersStale = true
+		elseif neighbour then
 			for j = 0, CHUNK_SIZE - 1 do
 				local bx, bz
 				if DIR_X[i] == 1 then
@@ -2474,9 +2489,28 @@ local function generateChunk(cx, cz)
 
 	-- Phase 3: render.
 	phaseStart = chunkCpuSpent(ctx)
+
+	-- Neighbours that finished before this point are read in full below.
+	data.bordersStale = nil
 	for index = 0, CHUNK_AREA - 1 do
 		updateColumnVisibility(cx, cz, index // CHUNK_SIZE, index % CHUNK_SIZE)
 		yieldIfOverBudget(ctx)
+	end
+
+	-- One that finished DURING the pass may have changed an edge column after
+	-- it was scanned, and left this flag rather than drawing us half-built (see
+	-- refreshChunkBorders). Re-read the edges until no yield brings another.
+	-- Nothing yields between here and the end of generation, so once this loop
+	-- exits the flush below is the last word.
+	while data.bordersStale do
+		data.bordersStale = nil
+		for j = 0, CHUNK_SIZE - 1 do
+			updateColumnVisibility(cx, cz, 0, j)
+			updateColumnVisibility(cx, cz, CHUNK_SIZE - 1, j)
+			updateColumnVisibility(cx, cz, j, 0)
+			updateColumnVisibility(cx, cz, j, CHUNK_SIZE - 1)
+			yieldIfOverBudget(ctx)
+		end
 	end
 
 	-- Every column has decided what it wants drawn; now turn that into the

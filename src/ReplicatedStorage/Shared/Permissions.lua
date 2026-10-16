@@ -23,9 +23,29 @@ local Permissions = {}
 -- place. 254 is the conventional "high staff, below owner" rank.
 Permissions.GroupRank = 254
 
+--[[
+	Named admins, by UserId, whoever owns the game. Asked first, so the
+	developer is never locked out by a change of owner or a group-rank lookup
+	that fails. Add a line to make someone an admin.
+]]
+Permissions.AdminUserIds = {
+	[11814518684] = "saile_stone",
+	[1879510219] = "lil_elias056",
+}
+
 function Permissions.isAdmin(player: Player?): boolean
 	if not player then
 		return false
+	end
+
+	if Permissions.AdminUserIds[player.UserId] then
+		return true
+	end
+
+	-- A Studio playtest is only ever the developer at their own desk.
+	-- IsStudio is false on every live server.
+	if game:GetService("RunService"):IsStudio() then
+		return true
 	end
 
 	if game.CreatorType == Enum.CreatorType.Group then

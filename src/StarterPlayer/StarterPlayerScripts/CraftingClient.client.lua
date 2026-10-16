@@ -29,6 +29,7 @@ local RecipeBook = require(Shared:WaitForChild("Crafting"):WaitForChild("RecipeB
 local StationConfig = require(Shared.Crafting:WaitForChild("StationConfig"))
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local Motion = require(Shared.UI:WaitForChild("Motion"))
+local SlotArt = require(Shared.UI:WaitForChild("SlotArt"))
 local InventoryMirror =
 	require(Shared:WaitForChild("Inventory"):WaitForChild("InventoryMirror"))
 local MenuState = require(Shared.UI:WaitForChild("MenuState"))
@@ -153,7 +154,7 @@ local function newSlotTile(parent, pixels, interactive)
 	local tile = Instance.new(if interactive then "ImageButton" else "ImageLabel")
 	tile.BackgroundTransparency = 1
 	tile.BorderSizePixel = 0
-	tile.Image = Theme.SlotImage
+	SlotArt.apply(tile)
 	tile.Size = UDim2.fromOffset(pixels, pixels)
 
 	-- AutoButtonColor exists on ImageButton but NOT on ImageLabel, and assigning
@@ -265,7 +266,7 @@ local closeButton = Instance.new("ImageButton")
 closeButton.Name = "Close"
 closeButton.BackgroundTransparency = 1
 closeButton.BorderSizePixel = 0
-closeButton.Image = Theme.SlotImage
+SlotArt.apply(closeButton)
 closeButton.ScaleType = Enum.ScaleType.Slice
 closeButton.SliceCenter = Theme.SlotSlice
 closeButton.Size = UDim2.fromOffset(L.closeSize, L.closeSize)
@@ -484,7 +485,7 @@ local craftButton = Instance.new("ImageButton")
 craftButton.Name = "Craft"
 craftButton.BackgroundTransparency = 1
 craftButton.BorderSizePixel = 0
-craftButton.Image = Theme.SlotImage
+SlotArt.apply(craftButton)
 craftButton.ScaleType = Enum.ScaleType.Slice
 craftButton.SliceCenter = Theme.SlotSlice
 craftButton.Position = UDim2.fromOffset(0, L.bodyHeight - 38)

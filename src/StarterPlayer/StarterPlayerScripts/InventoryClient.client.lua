@@ -13,13 +13,15 @@
 	Hovering a filled slot swells the TILE - not the icon, which the drag system
 	owns - and opens a tooltip under it.
 
+	The screen itself - where every tile sits, and how big - is built by
+	Shared.UI.InventoryLayout. This script only fills it and reacts to it.
+
 	Set DEBUG to true to trace the equip flow.
 ]]
 
 local Players           = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService  = game:GetService("UserInputService")
-local GuiService        = game:GetService("GuiService")
 local TweenService      = game:GetService("TweenService")
 
 local DEBUG = false
@@ -38,6 +40,7 @@ local MenuState = require(Shared.UI:WaitForChild("MenuState"))
 local ItemThumbnails = require(Shared.UI:WaitForChild("ItemThumbnails"))
 local ItemPreview = require(Shared.UI:WaitForChild("ItemPreview"))
 local Motion = require(Shared.UI:WaitForChild("Motion"))
+local InventoryLayout = require(Shared.UI:WaitForChild("InventoryLayout"))
 local Sounds    = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local ToolConfig = require(Shared:WaitForChild("Tools"):WaitForChild("ToolConfig"))
 local InventoryMirror =
@@ -52,10 +55,11 @@ local RequestEquipTool     = remotes:WaitForChild("RequestEquipTool")
 
 local player = Players.LocalPlayer
 local gui    = player:WaitForChild("PlayerGui")
-local invUI  = gui:WaitForChild("InventoryUI")
+local layout = InventoryLayout.build(gui)
+local invUI  = layout.gui
 
 -- Shows the equipped hotbar item.
-local itemLabel = invUI:WaitForChild("ItemLabel")
+local itemLabel = layout.itemLabel
 
 local function playClick()
 	Sounds.play("ui.click")
@@ -108,10 +112,11 @@ local function getSlotElements(slot)
 	return slot:FindFirstChild("icon"), slot:FindFirstChild("num")
 end
 
+-- InventoryUI ignores the GUI inset, so the mouse and the tiles already share
+-- one coordinate space and nothing needs subtracting.
 local function getMouseXY()
 	local raw = UserInputService:GetMouseLocation()
-	local inset = GuiService:GetGuiInset()
-	return raw.X, raw.Y - inset.Y
+	return raw.X, raw.Y
 end
 
 -- nil for an item with no stack size, which is what marks it unstackable in
@@ -174,16 +179,6 @@ end
 -- is what keeps live slot views affordable - a closed inventory renders the
 -- hotbar and nothing else.
 local HOTBAR_SLOTS = InventoryConstants.HotbarSlots
-
-local ACCESSORY_FIRST = InventoryConstants.AccessoryRange.first
-local ACCESSORY_LAST = InventoryConstants.AccessoryRange.last
-
--- The row the accessory tiles were authored in. Emptied when they move to the
--- accessory column, and kept hidden after that; see THE ACCESSORY COLUMN.
-local accessoryRowFrame: GuiObject? = nil
-
--- The column itself, shown and hidden with the rest of the inventory.
-local accessoryColumn: GuiObject? = nil
 
 local function slotIsVisible(index: number): boolean
 	return index <= HOTBAR_SLOTS or inventoryVisible
@@ -318,14 +313,8 @@ local function toggleInventory()
 	-- and its tooltip have to be told directly or they would be left behind on a
 	-- closed inventory.
 	clearHover()
-	for row = 2, 7 do
-		local rowFrame = invUI:FindFirstChild("Row"..row)
-		if rowFrame and rowFrame ~= accessoryRowFrame then
-			rowFrame.Visible = inventoryVisible
-		end
-	end
-	if accessoryColumn then
-		accessoryColumn.Visible = inventoryVisible
+	for _, panel in ipairs(layout.openPanels) do
+		panel.Visible = inventoryVisible
 	end
 
 	-- Rows appearing moves nothing that was already on screen, but the hit boxes
@@ -340,207 +329,26 @@ local function toggleInventory()
 	end
 end
 
--- build slots
-local slotsPerRow = {9, 9, 9, 9, 5, 1}
-local index = 1
-for row = 1, 6 do
-	local rowFrame = invUI:WaitForChild("Row"..row)
-	if row > 1 then
-		rowFrame.Visible = false
-	end
-	local numSlots = slotsPerRow[row]
-	for slot = 1, numSlots do
-		local slotUI = rowFrame:WaitForChild("Slot"..slot)
-		slots[index] = slotUI
-		local icon, num = getSlotElements(slotUI)
-		slotOrigSizes[index] = {
-			iconSize = (icon and icon.Size) or UDim2.new(0,32,0,32),
-			iconPos  = (icon and icon.Position) or UDim2.new(0,0,0,0),
-			numSize  = (num and num.Size) or UDim2.new(0,16,0,16),
-			numPos   = (num and num.Position) or UDim2.new(0,0,0,0),
+-- Every tile, in slot order: the hotbar, the bag, the gear and the bin. Where
+-- each one sits is InventoryLayout's business; this only needs to know which
+-- index it is.
+for index, slotUI in ipairs(layout.slots) do
+	slots[index] = slotUI
+	slotItemNames[index] = nil
 
-			-- The tile's own resting geometry, for the hover swell below. Its
-			-- ABSOLUTE size is measured later, on the first hover, because at
-			-- this point the UI has not been laid out and it would be zero.
-			slotSize = slotUI.Size,
-			slotPos  = slotUI.Position,
-			slotZ    = slotUI.ZIndex,
-		}
-		slotItemNames[index] = nil
-		index = index + 1
-	end
-end
+	local icon, num = getSlotElements(slotUI)
+	slotOrigSizes[index] = {
+		iconSize = icon.Size,
+		iconPos  = icon.Position,
+		numSize  = num.Size,
+		numPos   = num.Position,
 
---[[
-	THE ACCESSORY COLUMN.
-
-	The accessory slots are authored as a row of the grid. They are shown
-	instead as their own column in the bottom-right corner, so what you are
-	wearing reads as a separate thing from what you are carrying. Like the rest
-	of the inventory below the hotbar, the column only appears while the
-	inventory is open (E).
-
-	The authored TILES are moved, not copied: same instances, same slot
-	indices. Dragging, the server's slot rules (only an Accessory fits), the
-	tooltip and the save format all work on indices and never notice the move.
-	Sized from Theme, which holds the grid's own slot measurements.
-]]
-do
-	local count = ACCESSORY_LAST - ACCESSORY_FIRST + 1
-	local titleHeight = Theme.TextSize.Small + 6
-
-	local column = Instance.new("Frame")
-	column.Name = "AccessoryColumn"
-	column.BackgroundTransparency = 1
-	-- Part of the inventory: shown when it opens (E), like every row but the
-	-- hotbar.
-	column.Visible = false
-	accessoryColumn = column
-	column.AnchorPoint = Vector2.new(1, 1)
-	column.Position = UDim2.new(1, -Theme.Spacing.Edge, 1, -Theme.Spacing.Edge)
-	column.Size = UDim2.fromOffset(Theme.SlotSize, titleHeight + (count - 1) * Theme.SlotPitch + Theme.SlotSize)
-	column.Parent = invUI
-
-	local title = Instance.new("TextLabel")
-	title.Name = "Title"
-	title.BackgroundTransparency = 1
-	-- Wider than the column and centred on it, so the word is never clipped by
-	-- a slot-wide box.
-	title.AnchorPoint = Vector2.new(0.5, 0)
-	title.Position = UDim2.fromScale(0.5, 0)
-	title.Size = UDim2.fromOffset(Theme.SlotSize * 2, titleHeight)
-	title.FontFace = Theme.Fonts.Heading
-	title.TextSize = Theme.TextSize.Small
-	title.TextColor3 = Theme.Color.Text
-	title.TextStrokeTransparency = 0.4
-	title.Text = "ACCESSORIES"
-	title.Parent = column
-
-	for i = ACCESSORY_FIRST, ACCESSORY_LAST do
-		local tile = slots[i]
-		if tile then
-			accessoryRowFrame = accessoryRowFrame or tile.Parent
-
-			tile.AnchorPoint = Vector2.zero
-			tile.Size = UDim2.fromOffset(Theme.SlotSize, Theme.SlotSize)
-			tile.Position = UDim2.fromOffset(0, titleHeight + (i - ACCESSORY_FIRST) * Theme.SlotPitch)
-			tile.Parent = column
-
-			-- The hover swell restores to these, so they have to describe where
-			-- the tile rests now rather than where it was authored.
-			local orig = slotOrigSizes[i]
-			if orig then
-				orig.slotSize = tile.Size
-				orig.slotPos = tile.Position
-				orig.slotAbs = nil
-			end
-		end
-	end
-
-	-- Empty now. Hidden for good: toggleInventory skips it.
-	if accessoryRowFrame then
-		accessoryRowFrame.Visible = false
-	end
-end
-
---[[
-	THE BIN, built by CLONING a real slot.
-
-	The grid is authored in the place file, not here, so the only way to be sure
-	the bin matches it - corner radius, stroke, padding, the size of the number,
-	whatever it grows later - is to take one of the authored tiles and copy it.
-	Anything built from scratch here matches the grid on the day it is written
-	and drifts the first time the place file is touched.
-
-	It is parented to the LAST row rather than to the screen, so it inherits
-	that row's visibility and moves with the grid instead of needing its own
-	copy of the show/hide.
-
-	The bin ICON goes BEHIND whatever the slot draws rather than instead of it:
-	an empty bin shows what it is, and a bin holding something shows the item
-	over the picture - so the thing about to be destroyed is never hidden by the
-	label saying it is about to be destroyed.
-]]
-local BIN_SLOT = InventoryConstants.BinSlot
-
--- The same drawing as the ability screen's bin, so the two mean the same thing
--- in both places. Shared.UI.AbilityPanel owns the original.
-local BIN_SPRITE = {
-	"....###....",
-	".#########.",
-	".#########.",
-	"...........",
-	"..#######..",
-	"..#.#.#.#..",
-	"..#.#.#.#..",
-	"..#.#.#.#..",
-	"..#.#.#.#..",
-	"..#.#.#.#..",
-	"..#.#.#.#..",
-	"..#######..",
-}
-
--- A fraction of the tile, so the icon scales with whatever the place file sized
--- a slot as rather than assuming pixels.
-local BIN_ICON_SCALE = 0.62
-local BIN_ICON_TRANSPARENCY = 0.55
-
-local function buildBinIcon(tile)
-	local art = Instance.new("Frame")
-	art.Name = "BinIcon"
-	art.AnchorPoint = Vector2.new(0.5, 0.5)
-	art.Position = UDim2.fromScale(0.5, 0.5)
-	art.Size = UDim2.fromScale(BIN_ICON_SCALE, BIN_ICON_SCALE)
-	art.BackgroundTransparency = 1
-
-	-- Behind the slot's own icon and count, which sit at whatever ZIndex the
-	-- place file gave them - at least the tile's.
-	art.ZIndex = tile.ZIndex
-	art.Parent = tile
-
-	local rows = #BIN_SPRITE
-	local columns = #BIN_SPRITE[1]
-
-	for row, line in ipairs(BIN_SPRITE) do
-		for column = 1, columns do
-			if string.sub(line, column, column) == "#" then
-				local pixel = Instance.new("Frame")
-				pixel.BackgroundColor3 = Theme.Color.TextDim
-				pixel.BackgroundTransparency = BIN_ICON_TRANSPARENCY
-				pixel.BorderSizePixel = 0
-				pixel.ZIndex = art.ZIndex
-				pixel.Position = UDim2.fromScale((column - 1) / columns, (row - 1) / rows)
-				pixel.Size = UDim2.fromScale(1 / columns, 1 / rows)
-				pixel.Parent = art
-			end
-		end
-	end
-end
-
-do
- -- The authored seventh-row tile is the bin. Do not create a second tile.
- local row = invUI:WaitForChild("Row7", 5)
- local tile = row and row:FindFirstChild("Slot1")
- if row then row.Visible = false end
- if tile then
-		buildBinIcon(tile)
-
-		slots[BIN_SLOT] = tile
-		slotItemNames[BIN_SLOT] = nil
-
-		local binIcon, binNum = getSlotElements(tile)
-		slotOrigSizes[BIN_SLOT] = {
-			iconSize = (binIcon and binIcon.Size) or UDim2.new(0, 32, 0, 32),
-			iconPos = (binIcon and binIcon.Position) or UDim2.new(0, 0, 0, 0),
-			numSize = (binNum and binNum.Size) or UDim2.new(0, 16, 0, 16),
-			numPos = (binNum and binNum.Position) or UDim2.new(0, 0, 0, 0),
-			slotSize = tile.Size,
-			slotPos = tile.Position,
-			slotZ = tile.ZIndex,
-		}
-	else
-		warn("[InventoryClient] Row7/Slot1 is missing; the inventory bin cannot be shown")
-	end
+		-- The tile's resting geometry, which the hover swell below grows from
+		-- and puts back exactly.
+		slotSize = slotUI.Size,
+		slotPos  = slotUI.Position,
+		slotZ    = slotUI.ZIndex,
+	}
 end
 updateCoordinateRanges()
 
@@ -586,9 +394,11 @@ end
 	picture bigger and the slot no more noticeable, and it would fight the drag
 	system, which owns icon Size and Position.
 
-	The swell is an OFFSET added to the tile's resting UDim2, so it works
-	whether the place file sized these in pixels or in scale and leaving is an
-	exact restore rather than an inverse guess.
+	The swell is an OFFSET added to the tile's resting UDim2, so leaving is an
+	exact restore rather than an inverse guess. It is a share of the tile's own
+	Offset size, NOT its AbsoluteSize: InventoryLayout scales the tiles to the
+	screen with a UIScale, which multiplies the swell as well, so growing by
+	on-screen pixels would count the screen's scale twice.
 ]]
 local SLOT_HOVER_SWELL = 0.12
 
@@ -603,13 +413,8 @@ local function setSlotSwollen(index: number, swollen: boolean)
 		return
 	end
 
-	-- Measured on the first hover, when the tile is laid out and at rest.
-	if not orig.slotAbs or orig.slotAbs.X <= 0 then
-		orig.slotAbs = slot.AbsoluteSize
-	end
-
-	local growX = orig.slotAbs.X * SLOT_HOVER_SWELL
-	local growY = orig.slotAbs.Y * SLOT_HOVER_SWELL
+	local growX = orig.slotSize.X.Offset * SLOT_HOVER_SWELL
+	local growY = orig.slotSize.Y.Offset * SLOT_HOVER_SWELL
 
 	-- Raised while swollen so it steps in front of its neighbours rather than
 	-- growing underneath them.
@@ -963,10 +768,14 @@ UserInputService.InputEnded:Connect(function(input)
 	end
 end)
 
--- Hit boxes only move when the UI does: rows shown or hidden, or the window
--- resized. This used to be recomputed every frame to catch a change that
--- happens a handful of times a session.
-invUI:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateCoordinateRanges)
+-- Hit boxes only move when the UI does: rows shown or hidden, or the layout
+-- moving or rescaling with the window. This used to be recomputed every frame
+-- to catch a change that happens a handful of times a session. The hotbar
+-- marker is placed in screen pixels too, so it follows the same signal.
+layout.onMoved(function()
+	updateCoordinateRanges()
+	updateHotbarHighlight(equippedSlot)
+end)
 
 clearSlots()
 log("requesting full inventory from server")

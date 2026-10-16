@@ -349,6 +349,12 @@
           "Motion": {
             "$path": "src/ReplicatedStorage/Shared/UI/Motion.lua"
           },
+          "SlotArt": {
+            "$path": "src/ReplicatedStorage/Shared/UI/SlotArt.lua"
+          },
+          "InventoryLayout": {
+            "$path": "src/ReplicatedStorage/Shared/UI/InventoryLayout.lua"
+          },
           "WorldFeedback": {
             "$path": "src/ReplicatedStorage/Shared/UI/WorldFeedback.lua"
           },

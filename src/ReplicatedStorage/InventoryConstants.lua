@@ -2,8 +2,8 @@
 	InventoryConstants
 
 	The shape of a player's bag, shared by the server's Inventory, the client's
-	grid and CombatService's gear walk. The layout matches InventoryUI's rows:
-	9 / 9 / 9 / 9 / 5 / 1, and then the bin.
+	grid and CombatService's gear walk: 9 / 9 / 9 / 9 / 5 / 1, and then the
+	bin. Shared.UI.InventoryLayout draws the screen from these numbers.
 
 	Slots 37-42 are gear. Nothing may be auto-deposited into them and only an
 	item of the matching classification may be dragged in, which is what makes

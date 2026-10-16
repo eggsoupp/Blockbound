@@ -9,10 +9,22 @@
 local Theme = {}
 
 -- ---------------------------------------------------------------------------
--- Assets taken from InventoryUI
+-- Slots
 -- ---------------------------------------------------------------------------
 
-Theme.SlotImage = "rbxassetid://78805897944771"
+--[[
+	The framed square every slot and slot-styled button is drawn with - the
+	inventory, the crafting window. Put on through UI.SlotArt, which draws a
+	plain frame instead if this fails to load, and says so in Output.
+
+	It must be an IMAGE id. Uploading a picture as a Decal gives a Decal id,
+	which a script cannot display: paste that into any ImageLabel's Image in
+	Studio, and Studio swaps it for the image id to put here.
+]]
+Theme.SlotImage = "rbxassetid://90205083529931"
+
+-- What a slot measures on a 1080p screen. The inventory scales these to the
+-- real screen (see UI.InventoryLayout); the gap between slots is the difference.
 Theme.SlotSize = 64
 Theme.SlotPitch = 68
 

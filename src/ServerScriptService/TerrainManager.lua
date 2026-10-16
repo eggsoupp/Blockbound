@@ -152,8 +152,34 @@ local DIR_Z = { 0, 0, 1, -1 }
 -- Assets
 -- ---------------------------------------------------------------------------
 
-local TerrainAssets = ReplicatedStorage:WaitForChild("TerrainAssets")
-local BlocksFolder = TerrainAssets:WaitForChild("Blocks")
+--[[
+	Waited for with a limit. These are authored assets, and assets get lost:
+	waiting forever here froze terrain and, through it, mining, crafting,
+	harvesting, enemies and abilities - a whole server stalled by one missing
+	folder, with nothing on screen saying why. Without them the world is drawn
+	from plain stand-ins (see resolveTemplateName) and Output says what to add.
+]]
+local ASSET_WAIT_SECONDS = 10
+
+local function assetFolder(parent: Instance, name: string): Instance
+	local folder = parent:WaitForChild(name, ASSET_WAIT_SECONDS)
+	if folder then
+		return folder
+	end
+
+	warn(string.format(
+		"[TerrainManager] %s.%s is missing, so every block is drawn as a plain stand-in. "
+			.. "Put the block parts back in ReplicatedStorage.TerrainAssets.Blocks.",
+		parent:GetFullName(), name
+	))
+	folder = Instance.new("Folder")
+	folder.Name = name
+	folder.Parent = parent
+	return folder
+end
+
+local TerrainAssets = assetFolder(ReplicatedStorage, "TerrainAssets")
+local BlocksFolder = assetFolder(TerrainAssets, "Blocks")
 
 local TerrainRoot = workspace:FindFirstChild("GeneratedTerrain")
 if not TerrainRoot then
@@ -572,7 +598,10 @@ local function resolveTemplateName(requested)
 	end
 
 	for _, fallbackName in ipairs(TerrainConfig.BlockFallbackOrder) do
-		if BlocksFolder:FindFirstChild(fallbackName) then
+		-- Never water for a solid block: water is always generated, so with no
+		-- authored blocks at all every missing block would become a sea you
+		-- fall straight through.
+		if fallbackName ~= WATER_BLOCK and BlocksFolder:FindFirstChild(fallbackName) then
 			warn(string.format(
 				"[TerrainManager] Missing block template '%s'; using '%s'.",
 				tostring(requested), fallbackName
@@ -582,10 +611,18 @@ local function resolveTemplateName(requested)
 		end
 	end
 
-	warn(string.format(
-		"[TerrainManager] Missing block template '%s' and no fallback was found.",
-		tostring(requested)
-	))
+	-- Nothing authored to borrow, so a plain grey block under the right name:
+	-- solid, mineable and visibly a stand-in, rather than a hole in the world.
+	if type(requested) == "string" and requested ~= "" then
+		warn(string.format(
+			"[TerrainManager] Missing block template '%s' and no fallback; drawing a grey stand-in.",
+			requested
+		))
+		buildGeneratedTemplate(requested, {})
+		resolvedTemplateName[requested] = requested
+		return requested
+	end
+
 	resolvedTemplateName[requested] = false
 	return false
 end

@@ -123,6 +123,9 @@ local function isApiDisabled(err)
 	local message = string.lower(tostring(err))
 	return string.find(message, "studio access to api", 1, true) ~= nil
 		or string.find(message, "access to apis is not allowed", 1, true) ~= nil
+		-- UpdateAsync's own wording for the same thing.
+		or string.find(message, "api access is not enabled", 1, true) ~= nil
+		or string.find(message, "studioaccesstoapisnotallowed", 1, true) ~= nil
 end
 
 local function markUnavailable(reason)

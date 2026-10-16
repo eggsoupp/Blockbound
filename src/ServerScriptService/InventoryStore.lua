@@ -160,6 +160,10 @@ local function isApiDisabled(err)
 	return string.find(message, "studio access to api", 1, true) ~= nil
 		or string.find(message, "access to apis is not allowed", 1, true) ~= nil
 		or string.find(message, "publish this place", 1, true) ~= nil
+		-- "Cannot write to DataStore from studio if API access is not enabled",
+		-- which is what UpdateAsync says rather than the wording above.
+		or string.find(message, "api access is not enabled", 1, true) ~= nil
+		or string.find(message, "studioaccesstoapisnotallowed", 1, true) ~= nil
 end
 
 local function markUnavailable(reason)

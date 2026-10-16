@@ -112,6 +112,10 @@ local MIN_TOPBAR_HEIGHT = 36
 ]]
 local DESIGN_HEIGHT = 1080
 
+-- THE SIZE DIAL. Multiplies everything above: 1 is the hand-built UI's size,
+-- 0.9 is a tenth smaller, 1.1 a tenth bigger.
+local INVENTORY_SIZE = 0.9
+
 -- 0.55 keeps a 64-pixel slot above 35 on a phone; 2 stops a 4K screen growing
 -- it past where it helps.
 local MIN_SCALE = 0.55
@@ -125,7 +129,7 @@ local function scaleFor(screenSize: Vector2): number
 		math.max(1, screenSize.Y / DESIGN_HEIGHT),
 		screenSize.X * MAX_WIDTH_SHARE / GRID_WIDTH
 	)
-	return math.clamp(scale, MIN_SCALE, MAX_SCALE)
+	return math.clamp(scale * INVENTORY_SIZE, MIN_SCALE, MAX_SCALE)
 end
 
 -- ---------------------------------------------------------------------------

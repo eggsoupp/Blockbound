@@ -151,13 +151,15 @@ end
 
 --[[
 	Studio refuses DataStore calls unless "Enable Studio Access to API Services"
-	is ticked. That is a permanent condition for the session rather than a
-	transient fault, so it is detected and latched instead of retried forever.
+	is ticked, and every server refuses them in a place that has never been
+	published. Both are permanent conditions for the session rather than
+	transient faults, so they are detected and latched instead of retried.
 ]]
 local function isApiDisabled(err)
 	local message = string.lower(tostring(err))
 	return string.find(message, "studio access to api", 1, true) ~= nil
 		or string.find(message, "access to apis is not allowed", 1, true) ~= nil
+		or string.find(message, "publish this place", 1, true) ~= nil
 end
 
 local function markUnavailable(reason)
@@ -595,7 +597,8 @@ function InventoryStore.load(player)
 		-- Memory-only mode. A default bag, and saving is off, so nothing can be
 		-- written over real data if the API comes back later in the session.
 		session.readOnly = true
-		return buildDefaultInventory(), { source = "default", readOnly = true, repairs = 0 }
+		session.readOnlyReason = "DataStores unavailable"
+		return buildDefaultInventory(), { source = "default", readOnly = true, reason = "unavailable", repairs = 0 }
 	end
 
 	local key = keyFor(userId)
@@ -650,9 +653,15 @@ function InventoryStore.load(player)
 		if not ok then
 			-- DataStore is failing outright. Do not guess at their inventory, and
 			-- above all do not write anything back.
+			-- A disabled API is noticed inside withRetry and latched; that is a
+			-- setting, not a fault with this player's save, and is reported so.
+			local reason = if storeUnavailableReason then "unavailable" else "error"
 			session.readOnly = true
+			session.readOnlyReason = if reason == "unavailable"
+				then "DataStores unavailable"
+				else "the save could not be read"
 			swarn(string.format("Could not read save for %s; loading read-only.", player.Name))
-			return Inventory.new(), { source = "fallback", readOnly = true, repairs = 0 }
+			return Inventory.new(), { source = "fallback", readOnly = true, reason = reason, repairs = 0 }
 		end
 
 		blockedBy = result.blocked
@@ -686,12 +695,13 @@ function InventoryStore.load(player)
 		local explanation = if blockedBy == "locked"
 			then "held by another session"
 			else "unreadable"
+		session.readOnlyReason = "the save was " .. explanation .. " when you joined"
 
 		swarn(string.format(
 			"%s's save is %s; loading read-only so nothing can overwrite it.",
 			player.Name, explanation
 		))
-		return Inventory.new(), { source = "fallback", readOnly = true, repairs = 0 }
+		return Inventory.new(), { source = "fallback", readOnly = true, reason = blockedBy, repairs = 0 }
 	end
 
 	--[[
@@ -963,8 +973,13 @@ end
 
 --[[
 	A one-line description of a player's save state, for /savestatus.
+
+	Called summary rather than describe: describe, further down, is the debug
+	console's table of the same facts, and the two used to share a name - the
+	second definition silently replaced the first, and /savestatus errored
+	trying to glue a table onto a string.
 ]]
-function InventoryStore.describe(player)
+function InventoryStore.summary(player)
 	if storeUnavailableReason then
 		return "OFF - DataStores unavailable (" .. storeUnavailableReason .. ")"
 	end
@@ -974,7 +989,7 @@ function InventoryStore.describe(player)
 		return "not loaded"
 	end
 	if session.readOnly then
-		return "OFF - this session is read-only (save was locked or unreadable when you joined)"
+		return "OFF - this session is read-only (" .. tostring(session.readOnlyReason or "unspecified") .. ")"
 	end
 
 	local since = if session.lastSaveAt > 0
@@ -1000,6 +1015,7 @@ function InventoryStore.setReadOnly(player, reason)
 
 	if not session.readOnly then
 		session.readOnly = true
+		session.readOnlyReason = tostring(reason or "unspecified")
 		swarn(string.format(
 			"Saving disabled for %s: %s", player.Name, tostring(reason or "unspecified")
 		))

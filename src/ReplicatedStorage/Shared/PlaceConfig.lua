@@ -35,11 +35,22 @@ local RunService = game:GetService("RunService")
 
 local PlaceConfig = {}
 
--- The open world. Also the game's start place.
-PlaceConfig.WorldPlaceId = 82014616047124
+--[[
+	Both must be places of THIS experience. A reserved server - which is what
+	every island is - can only be made for a place in the experience asking for
+	it, so an Island place from another experience can never be travelled to.
 
--- The island place.
-PlaceConfig.IslandPlaceId = 123514939860898
+	The game moved to a group-owned experience in October 2026. The ids it had
+	before, 82014616047124 (World) and 123514939860898 (Island), belong to the
+	old one and do not work here.
+]]
+
+-- The open world. Also the game's start place.
+PlaceConfig.WorldPlaceId = 127569658424596
+
+-- The island place. 0 until an Island place is added to this experience;
+-- /island says so rather than attempting a teleport that cannot work.
+PlaceConfig.IslandPlaceId = 0
 
 local KINDS = { World = true, Island = true }
 

@@ -151,7 +151,7 @@ local function onChatted(player, message)
 
 	if destination == "status" then
 		tell(player, string.format("Place: %s, published version %d", PlaceConfig.kind(), game.PlaceVersion))
-		tell(player, "Inventory: " .. InventoryStore.describe(player))
+		tell(player, "Inventory: " .. InventoryStore.summary(player))
 		local island = describeIsland()
 		if island then
 			tell(player, island)

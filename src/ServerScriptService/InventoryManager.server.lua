@@ -24,6 +24,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ProximityPromptService = game:GetService("ProximityPromptService")
+local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -117,7 +118,7 @@ local function onPlayerAdded(player)
 		-- a guess and must never be written over their real save.
 		swarn("Inventory load errored for", player.Name, ":", inv)
 		InventoryStore.setReadOnly(player, "load errored")
-		inv, info = nil, { source = "fallback", readOnly = true, repairs = 0 }
+		inv, info = nil, { source = "fallback", readOnly = true, reason = "error", repairs = 0 }
 	end
 
 	loading[player] = nil
@@ -159,14 +160,34 @@ local function onPlayerAdded(player)
 
 		-- Said to the player too. Silent, this looked exactly like "my inventory
 		-- never saves". Delayed so their client is listening by then.
+		--
+		-- Worded per cause. It used to be one message blaming another server for
+		-- everything, which in Studio with API access off - the usual case in a
+		-- new experience - sent the developer looking for a server that did not
+		-- exist, on every single playtest.
+		local reason = info.reason
+		local message, tone
+
+		if reason == "unavailable" and RunService:IsStudio() then
+			message = "Saving is off in this Studio test. To test saving, turn on Game Settings > "
+				.. "Security > Enable Studio Access to API Services."
+			tone = "info"
+		elseif reason == "unavailable" then
+			message = "Saving is unavailable right now, so nothing you collect this session will be kept."
+			tone = "bad"
+		elseif reason == "locked" then
+			message = "Your saved inventory is still open on another server. Nothing you collect now "
+				.. "will be saved - rejoin in a minute."
+			tone = "bad"
+		else
+			message = "Your saved inventory couldn't be read. Nothing you collect now will be saved - "
+				.. "rejoin to try again."
+			tone = "bad"
+		end
+
 		task.delay(4, function()
 			if player.Parent then
-				CommandFeedback.tell(
-					player,
-					"Your saved inventory couldn't be loaded (it may still be open on another server). "
-						.. "Nothing you collect now will be saved - rejoin in a minute.",
-					"bad"
-				)
+				CommandFeedback.tell(player, message, tone)
 			end
 		end)
 	end

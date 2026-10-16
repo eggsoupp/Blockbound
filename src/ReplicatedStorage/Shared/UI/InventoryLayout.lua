@@ -30,8 +30,8 @@
 
 	Everything is laid out in Theme's slot measurements, which are what a slot
 	should be on a 1080p screen, and a UIScale on each group fits that to the
-	real one: bigger at 1440p, smaller on a laptop, and never so small a slot
-	stops being something you can hit. The tiles keep their pixel sizes
+	real one: bigger at 1440p, never smaller than that on a shorter screen, and
+	only shrunk when a window is too narrow to fit it. The tiles keep their pixel sizes
 	underneath the scale, so code that measures a tile in Offset - the drag
 	code does - still gets the numbers it expects.
 
@@ -100,20 +100,29 @@ local MIN_TOPBAR_HEIGHT = 36
 -- Fitting to the screen
 -- ---------------------------------------------------------------------------
 
+--[[
+	Never smaller than the hand-built inventory was. That one was a fixed 64
+	pixels a slot on every screen, and the first version of this scaled it by
+	height from 1080p - which shrank it to two-thirds in a Studio window and on
+	any laptop, and read as the inventory having got smaller. So the Theme
+	size is the floor: a taller screen grows it, a shorter one keeps it.
+
+	The one exception is width. A window too narrow for a 64-pixel grid gets a
+	smaller one rather than a grid that runs off the side, down to MIN_SCALE.
+]]
 local DESIGN_HEIGHT = 1080
 
--- 0.55 keeps a 64-pixel slot above 35 on a small laptop or a phone; 2 stops a
--- 4K screen growing it past where it helps.
+-- 0.55 keeps a 64-pixel slot above 35 on a phone; 2 stops a 4K screen growing
+-- it past where it helps.
 local MIN_SCALE = 0.55
 local MAX_SCALE = 2
 
--- The grid may take at most this share of the screen's width, so a narrow
--- window gets a smaller grid rather than one that runs off the side.
+-- The grid may take at most this share of the screen's width.
 local MAX_WIDTH_SHARE = 0.6
 
 local function scaleFor(screenSize: Vector2): number
 	local scale = math.min(
-		screenSize.Y / DESIGN_HEIGHT,
+		math.max(1, screenSize.Y / DESIGN_HEIGHT),
 		screenSize.X * MAX_WIDTH_SHARE / GRID_WIDTH
 	)
 	return math.clamp(scale, MIN_SCALE, MAX_SCALE)

@@ -765,7 +765,7 @@ local function onChatted(player, message)
 	end
 end
 
-Players.PlayerAdded:Connect(function(player)
+local function watch(player)
 	if not Permissions.isAdmin(player) then
 		return
 	end
@@ -776,4 +776,17 @@ Players.PlayerAdded:Connect(function(player)
 			warn("[DebugConsole]", err)
 		end
 	end)
-end)
+end
+
+--[[
+	Players already in the game as well as those still to come. This script
+	requires most of the server before it reaches this line, so in Studio the
+	player has usually joined by then - PlayerAdded alone never fired for them,
+	and every command in this file silently did nothing. Spawned because
+	isAdmin can ask the web for a group rank, and one slow answer should not
+	hold up the next player.
+]]
+Players.PlayerAdded:Connect(watch)
+for _, player in ipairs(Players:GetPlayers()) do
+	task.spawn(watch, player)
+end

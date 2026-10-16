@@ -25,8 +25,10 @@ end
 
 local ToolFactory = require(ServerScriptService:WaitForChild("ToolFactory"))
 
-local remotes = ReplicatedStorage:WaitForChild("Remotes")
-local RequestEquipTool = remotes:WaitForChild("RequestEquipTool")
+local Remotes = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Net"):WaitForChild("Remotes"))
+
+-- Created rather than waited for: the hand-placed copy in the place file is gone.
+local RequestEquipTool = Remotes.ensure("RequestEquipTool", "RemoteEvent")
 
 -- Builds a template for every holdable item that does not already have one
 -- authored. Before this, only the three Test tools had templates, so every tool

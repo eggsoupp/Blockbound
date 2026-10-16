@@ -59,8 +59,10 @@ end
 
 local remotesFolder = ReplicatedStorage:WaitForChild("Remotes")
 local RequestPlaceBlock = remotesFolder:WaitForChild("RequestPlaceBlock")
-local RequestFullInv = remotesFolder:FindFirstChild("RequestFullInventory")
-local PlacementResult = remotesFolder:FindFirstChild("PlacementResult")
+-- Waited for, not looked up once: the server creates these as it starts, and a
+-- client that arrives first would otherwise go without them for the session.
+local RequestFullInv = remotesFolder:WaitForChild("RequestFullInventory")
+local PlacementResult = remotesFolder:WaitForChild("PlacementResult")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 

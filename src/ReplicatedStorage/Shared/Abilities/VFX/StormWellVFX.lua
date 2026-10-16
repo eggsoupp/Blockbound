@@ -3,8 +3,9 @@
 local RunService=game:GetService('RunService')
 local ContentProvider=game:GetService('ContentProvider')
 local Plan=require(script.Parent.Parent.StormWellPlan)
-local Packs=script.Parent:WaitForChild('ElementalPacks')
-local BeamPacks=script.Parent:WaitForChild('AnnihilationPacks')
+-- Waited for with a limit: a missing pack is an asset to add, and should say so rather than hang the cast.
+local Packs=script.Parent:WaitForChild('ElementalPacks',10) or error('[VFX] Shared.Abilities.VFX.ElementalPacks is missing, so this ability has no effects')
+local BeamPacks=script.Parent:WaitForChild('AnnihilationPacks',10) or error('[VFX] Shared.Abilities.VFX.AnnihilationPacks is missing, so this ability has no effects')
 local VFX={}
 local loaded=false
 local teal=Color3.fromRGB(75,220,215)

@@ -2,7 +2,10 @@
 -- Original textures, flipbooks, sequences and intra-template attachment links survive.
 local ContentProvider = game:GetService("ContentProvider")
 local Plan = require(script.Parent.Parent.AnnihilationPlan)
-local Packs = script.Parent:WaitForChild("AnnihilationPacks")
+-- Waited for with a limit: a missing pack is an asset to add, and should say so
+-- rather than hang the cast.
+local Packs = script.Parent:WaitForChild("AnnihilationPacks", 10)
+	or error("[VFX] Shared.Abilities.VFX.AnnihilationPacks is missing, so this ability has no effects")
 local Imported = {}
 local YELLOW = Color3.fromRGB(255, 235, 0)
 local preloading = false

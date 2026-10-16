@@ -10,8 +10,12 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local remotes = ReplicatedStorage:WaitForChild("Remotes")
-local inventoryUpdate = remotes:WaitForChild("InventoryChanged")
+local Remotes = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Net"):WaitForChild("Remotes"))
+
+-- Created here rather than waited for. It used to be placed by hand in the
+-- place file, and when that copy was lost this line waited forever - and so
+-- did every server system that requires this module, which is most of them.
+local inventoryUpdate = Remotes.ensure("InventoryChanged", "RemoteEvent")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 

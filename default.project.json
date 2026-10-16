@@ -162,6 +162,12 @@
           "$properties": {
             "Disabled": false
           }
+        },
+        "BossTerrainClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/BossTerrainClient.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
         }
       },
       "StarterCharacterScripts": {
@@ -282,6 +288,9 @@
           },
           "CaveMap": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/CaveMap.lua"
+          },
+          "TerrainDebris": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/TerrainDebris.lua"
           }
         },
         "Blocks": {

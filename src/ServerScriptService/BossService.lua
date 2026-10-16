@@ -43,6 +43,16 @@ local BossService = {}
 
 local BossState = Remotes.ensure("BossState", "RemoteEvent")
 
+--[[
+	Also owned here, so it exists from server start: the remote a boss uses to
+	tell clients which blocks it swallowed (see Bosses.SlimeEmperor and
+	StarterPlayerScripts.BossTerrainClient). A behaviour module is only
+	required when its boss first spawns, so a client waiting on a remote that
+	module created would wait - with an infinite-yield warning - until the
+	first boss of the session. Ensuring it here makes it exist with the bar.
+]]
+Remotes.ensure("BossTerrain", "RemoteEvent")
+
 -- Seconds between pushes while health is falling. The trailing send below is
 -- what guarantees the final value arrives whatever this is set to.
 local UPDATE_INTERVAL = 0.1

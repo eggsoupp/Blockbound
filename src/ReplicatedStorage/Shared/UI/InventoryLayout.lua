@@ -48,6 +48,7 @@
 
 local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 
 local InventoryConstants = require(ReplicatedStorage:WaitForChild("InventoryConstants"))
 local Theme = require(script.Parent:WaitForChild("Theme"))
@@ -294,6 +295,133 @@ local function newTitle(parent: Instance, text: string, top: number): TextLabel
 end
 
 -- ---------------------------------------------------------------------------
+-- The hotbar's selection marker
+-- ---------------------------------------------------------------------------
+
+--[[
+	An accent frame AROUND the selected tile, with a soft glow outside it and a
+	small tab under it pointing up at the item.
+
+	It used to be a translucent yellow rectangle laid over the tile, which
+	tinted the very item it was pointing at, and was placed from the tile's
+	on-screen position - so a tile caught mid-hover or mid-pulse put it a few
+	pixels out. This one lives in the hotbar row itself and is placed from the
+	tiles' RESTING offsets, so it lines up exactly at any screen size and never
+	covers what is in the slot: only its border is drawn.
+]]
+local MARKER_OUTSET = 4
+local MARKER_STROKE = 3
+local MARKER_GLOW = 7
+local MARKER_GLOW_TRANSPARENCY = 0.78
+local MARKER_TAB = 8
+local MARKER_SLIDE = TweenInfo.new(0.14, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+local MARKER_POP = TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+
+local function newSelectionMarker(row: Instance)
+	local marker = Instance.new("Frame")
+	marker.Name = "Selection"
+	marker.BackgroundTransparency = 1
+	marker.AnchorPoint = Vector2.new(0.5, 0.5)
+	marker.Size = UDim2.fromOffset(SLOT + MARKER_OUTSET * 2, SLOT + MARKER_OUTSET * 2)
+	-- Above the tiles, swollen ones included (they step up to ZIndex 2), so
+	-- the border is never hidden under a neighbour.
+	marker.ZIndex = 5
+	marker.Visible = false
+	marker.Parent = row
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 8)
+	corner.Parent = marker
+
+	local stroke = Instance.new("UIStroke")
+	stroke.Name = "Border"
+	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	stroke.Color = Theme.Color.Accent
+	stroke.Thickness = MARKER_STROKE
+	stroke.Parent = marker
+
+	-- A lighter edge across the top, so the frame reads as lit rather than as a
+	-- flat outline.
+	local sheen = Instance.new("UIGradient")
+	sheen.Rotation = 90
+	sheen.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(205, 205, 205))
+	sheen.Parent = stroke
+
+	-- The glow: a wider, faint stroke on a slightly larger frame behind it.
+	local glow = Instance.new("Frame")
+	glow.Name = "Glow"
+	glow.BackgroundTransparency = 1
+	glow.AnchorPoint = Vector2.new(0.5, 0.5)
+	glow.Position = UDim2.fromScale(0.5, 0.5)
+	glow.Size = UDim2.new(1, MARKER_GLOW, 1, MARKER_GLOW)
+	glow.ZIndex = 5
+	glow.Parent = marker
+
+	local glowCorner = Instance.new("UICorner")
+	glowCorner.CornerRadius = UDim.new(0, 11)
+	glowCorner.Parent = glow
+
+	local glowStroke = Instance.new("UIStroke")
+	glowStroke.Color = Theme.Color.Accent
+	glowStroke.Thickness = MARKER_GLOW
+	glowStroke.Transparency = MARKER_GLOW_TRANSPARENCY
+	glowStroke.Parent = glow
+
+	-- The tab: a small diamond half-tucked under the bottom edge, short enough
+	-- to clear the bag row that opens beneath the hotbar.
+	local tab = Instance.new("Frame")
+	tab.Name = "Tab"
+	tab.AnchorPoint = Vector2.new(0.5, 0.5)
+	tab.Position = UDim2.new(0.5, 0, 1, -1)
+	tab.Size = UDim2.fromOffset(MARKER_TAB, MARKER_TAB)
+	tab.Rotation = 45
+	tab.BackgroundColor3 = Theme.Color.Accent
+	tab.BorderSizePixel = 0
+	tab.ZIndex = 6
+	tab.Parent = marker
+
+	local tabCorner = Instance.new("UICorner")
+	tabCorner.CornerRadius = UDim.new(0, 2)
+	tabCorner.Parent = tab
+
+	local pop = Instance.new("UIScale")
+	pop.Parent = marker
+
+	local current: number? = nil
+
+	-- Where tile `index` rests, as the marker's centre.
+	local function centreOf(index: number): UDim2
+		return UDim2.fromOffset((index - 1) * PITCH + SLOT / 2, SLOT / 2)
+	end
+
+	return function(index: number?)
+		if index == current then
+			return
+		end
+
+		if index == nil then
+			current = nil
+			marker.Visible = false
+			return
+		end
+
+		local target = centreOf(index)
+
+		if current == nil then
+			-- Appearing from nothing: no slot to slide from, so it pops in place.
+			marker.Position = target
+			marker.Visible = true
+			pop.Scale = 1.18
+			TweenService:Create(pop, MARKER_POP, { Scale = 1 }):Play()
+		else
+			TweenService:Create(marker, MARKER_SLIDE, { Position = target }):Play()
+		end
+
+		current = index
+	end
+end
+
+-- ---------------------------------------------------------------------------
 -- Build
 -- ---------------------------------------------------------------------------
 
@@ -313,6 +441,7 @@ function InventoryLayout.build(playerGui: Instance)
 	bagScale.Parent = bag
 
 	local hotbar = newRow(bag, "Row1", 0, HOTBAR_SLOTS)
+	local selectHotbar = newSelectionMarker(hotbar)
 
 	local bagRows = {}
 	for index = 1, BAG_ROWS do
@@ -406,6 +535,10 @@ function InventoryLayout.build(playerGui: Instance)
 		slots = slots,
 		itemLabel = itemLabel,
 		openPanels = openPanels,
+
+		-- Puts the marker on hotbar slot 1-9, sliding from wherever it was, or
+		-- hides it for nil.
+		selectHotbar = selectHotbar,
 	}
 
 	--[[

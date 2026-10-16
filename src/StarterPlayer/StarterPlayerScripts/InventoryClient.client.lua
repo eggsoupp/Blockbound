@@ -516,48 +516,13 @@ for i = 1, #slots do
 	end
 end
 
-local hotbarHighlight = invUI:FindFirstChild("HotbarHighlight")
-if not hotbarHighlight then
-	hotbarHighlight = Instance.new("Frame")
-	hotbarHighlight.Name = "HotbarHighlight"
-	hotbarHighlight.BorderSizePixel = 0
-	hotbarHighlight.ZIndex = 99
-	hotbarHighlight.Parent = invUI
-end
-hotbarHighlight.BackgroundColor3 = Theme.Color.Accent
-hotbarHighlight.BackgroundTransparency = Theme.Transparency.Selection
-
---[[
-	Moves the selection marker onto a hotbar slot.
-
-	It SLIDES between neighbouring slots rather than jumping, which is what
-	makes running along the hotbar read as one marker moving instead of nine
-	flickering on and off. Appearing from nothing still snaps - there is no
-	previous slot to have come from.
-]]
+-- The selection marker on the hotbar: drawn and moved by InventoryLayout, which
+-- owns where the tiles sit. nil (or anything off the hotbar) hides it.
 local function updateHotbarHighlight(index)
-	if not (index and index >= 1 and index <= HOTBAR_SLOTS and slots[index]) then
-		hotbarHighlight.Visible = false
-		return
-	end
-
-	local slot = slots[index]
-	local origin = invUI.AbsolutePosition
-	local position = UDim2.fromOffset(
-		slot.AbsolutePosition.X - origin.X,
-		slot.AbsolutePosition.Y - origin.Y
-	)
-	local size = UDim2.fromOffset(slot.AbsoluteSize.X, slot.AbsoluteSize.Y)
-
-	if hotbarHighlight.Visible then
-		TweenService:Create(hotbarHighlight, Theme.Tween.Hover, {
-			Position = position,
-			Size = size,
-		}):Play()
+	if index and index >= 1 and index <= HOTBAR_SLOTS then
+		layout.selectHotbar(index)
 	else
-		hotbarHighlight.Position = position
-		hotbarHighlight.Size = size
-		hotbarHighlight.Visible = true
+		layout.selectHotbar(nil)
 	end
 end
 
@@ -770,12 +735,8 @@ end)
 
 -- Hit boxes only move when the UI does: rows shown or hidden, or the layout
 -- moving or rescaling with the window. This used to be recomputed every frame
--- to catch a change that happens a handful of times a session. The hotbar
--- marker is placed in screen pixels too, so it follows the same signal.
-layout.onMoved(function()
-	updateCoordinateRanges()
-	updateHotbarHighlight(equippedSlot)
-end)
+-- to catch a change that happens a handful of times a session.
+layout.onMoved(updateCoordinateRanges)
 
 clearSlots()
 log("requesting full inventory from server")

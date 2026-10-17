@@ -306,6 +306,36 @@ local function updateCoordinateRanges()
 	end
 end
 
+--[[
+	The slot a drag is over, by the cursor.
+
+	Not only the square of a tile: the gap between two tiles, and a margin
+	round the outside of the grid, count as the nearest tile. Letting go
+	anywhere on the inventory lands the item in the slot it looks like it is
+	over, rather than only when the cursor is squarely inside one. Far enough
+	off the grid, it is nothing, and the drag is cancelled.
+]]
+local DROP_REACH = 0.4 -- of a tile's width, past its edge
+
+local function slotAt(x: number, y: number): number?
+	local best, bestDistance = nil, math.huge
+
+	for _, range in pairs(coordinateRanges) do
+		local dx = math.max(range.x1 - x, 0, x - range.x2)
+		local dy = math.max(range.y1 - y, 0, y - range.y2)
+		if dx == 0 and dy == 0 then
+			return range.index
+		end
+
+		local distance = math.sqrt(dx * dx + dy * dy)
+		if distance <= (range.x2 - range.x1) * DROP_REACH and distance < bestDistance then
+			best, bestDistance = range.index, distance
+		end
+	end
+
+	return best
+end
+
 local function toggleInventory()
 	inventoryVisible = not inventoryVisible
 
@@ -480,13 +510,28 @@ for i = 1, #slots do
 	end
 end
 
--- single handler for clicks (start dragging)
+--[[
+	Starting a drag. From anywhere on the tile, not only the item picture in
+	its middle: grabbing a slot by its frame used to do nothing at all.
+
+	Both the tile and the picture listen, since the picture sits on top of the
+	tile, so one click can arrive twice. The second is dropped by time rather
+	than by `dragging`, so a drag whose release was never seen (let go outside
+	the window) cannot block the next one.
+]]
+local dragStartedAt = -math.huge
+
 for i = 1, #slots do
 	local slot = slots[i]
 	local icon, num = getSlotElements(slot)
 	if icon then
-		icon.InputBegan:Connect(function(input)
+		local function beginDrag(input: InputObject)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 and icon.Visible then
+				if dragging and sourceIndex == i and os.clock() - dragStartedAt < 0.1 then
+					return
+				end
+				dragStartedAt = os.clock()
+
 				log(("start drag from slot %d"):format(i))
 				playClick()
 
@@ -512,7 +557,10 @@ for i = 1, #slots do
 				dragNum.Position  = UDim2.fromOffset(x + icon.AbsoluteSize.X/2 - num.AbsoluteSize.X, y + icon.AbsoluteSize.Y/2 - num.AbsoluteSize.Y)
 				dragNum.Size      = UDim2.new(0, num.AbsoluteSize.X, 0, num.AbsoluteSize.Y)
 			end
-		end)
+		end
+
+		slot.InputBegan:Connect(beginDrag)
+		icon.InputBegan:Connect(beginDrag)
 	end
 end
 
@@ -612,13 +660,7 @@ UserInputService.InputChanged:Connect(function(input)
 		if dragIcon then dragIcon.Position = UDim2.fromOffset(x - dragIcon.AbsoluteSize.X/2, y - dragIcon.AbsoluteSize.Y/2) end
 		if dragNum then dragNum.Position  = UDim2.fromOffset(x + dragIcon.AbsoluteSize.X/2 - dragNum.AbsoluteSize.X, y + dragIcon.AbsoluteSize.Y/2 - dragNum.AbsoluteSize.Y) end
 
-		local overSlot = nil
-		for _, range in pairs(coordinateRanges) do
-			if range and x >= range.x1 and x <= range.x2 and y >= range.y1 and y <= range.y2 then
-				overSlot = range.index
-				break
-			end
-		end
+		local overSlot = slotAt(x, y)
 
 		if lastHoverSlot and lastHoverSlot ~= overSlot then
 			resetSlotSize(lastHoverSlot)
@@ -672,14 +714,7 @@ UserInputService.InputEnded:Connect(function(input)
 			lastHoverSlot = nil
 		end
 		updateCoordinateRanges()
-		local mx, my = getMouseXY()
-		local targetIndex
-		for _, range in pairs(coordinateRanges) do
-			if range and mx >= range.x1 and mx <= range.x2 and my >= range.y1 and my <= range.y2 then
-				targetIndex = range.index
-				break
-			end
-		end
+		local targetIndex = slotAt(getMouseXY())
 
 		local willSwap = false
 		local willTransfer = false

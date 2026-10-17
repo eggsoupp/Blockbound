@@ -64,6 +64,15 @@ local SLOT = Theme.SlotSize
 local PITCH = Theme.SlotPitch
 local GAP = PITCH - SLOT
 
+--[[
+	Rows sit closer than columns. Theme's gap across read as too airy going
+	down the bag, so the rows are pulled together; this and SECTION_GAP (the
+	space under the hotbar and over the bin) are the dials for it.
+]]
+local ROW_GAP = 1
+local ROW_PITCH = SLOT + ROW_GAP
+local SECTION_GAP = 6
+
 -- The item picture inside the frame art: the 48-in-64 the tiles always had.
 local ICON = math.round(SLOT * 0.75)
 local ICON_INSET = (SLOT - ICON) / 2
@@ -84,8 +93,8 @@ local GRID_WIDTH = COLUMNS * PITCH - GAP
 
 -- The hotbar stands slightly apart from the bag, so the row that is always
 -- there reads as its own thing when the rest opens under it.
-local BAG_TOP = SLOT + Theme.Spacing.Gap
-local BIN_TOP = BAG_TOP + BAG_ROWS * PITCH + Theme.Spacing.Gap
+local BAG_TOP = SLOT + SECTION_GAP
+local BIN_TOP = BAG_TOP + BAG_ROWS * ROW_PITCH - ROW_GAP + SECTION_GAP
 local BAG_HEIGHT = BIN_TOP + SLOT
 
 local ITEM_LABEL_WIDTH = 280
@@ -268,10 +277,10 @@ end
 
 -- The same running down, Slot1 at the top.
 local function newColumn(parent: Instance, name: string, top: number, count: number): Frame
-	local column = newGroup(parent, name, UDim2.fromOffset(SLOT, count * PITCH - GAP))
+	local column = newGroup(parent, name, UDim2.fromOffset(SLOT, count * ROW_PITCH - ROW_GAP))
 	column.Position = UDim2.fromOffset(0, top)
 	for index = 1, count do
-		newTile(column, "Slot" .. index, UDim2.fromOffset(0, (index - 1) * PITCH))
+		newTile(column, "Slot" .. index, UDim2.fromOffset(0, (index - 1) * ROW_PITCH))
 	end
 	return column
 end
@@ -445,7 +454,7 @@ function InventoryLayout.build(playerGui: Instance)
 
 	local bagRows = {}
 	for index = 1, BAG_ROWS do
-		bagRows[index] = newRow(bag, "Row" .. (index + 1), BAG_TOP + (index - 1) * PITCH, COLUMNS)
+		bagRows[index] = newRow(bag, "Row" .. (index + 1), BAG_TOP + (index - 1) * ROW_PITCH, COLUMNS)
 	end
 
 	local binRow = newRow(bag, "Row7", BIN_TOP, 1)
@@ -468,8 +477,8 @@ function InventoryLayout.build(playerGui: Instance)
 	-- Armor over accessories, scaled about the bottom-right corner it sits in.
 	local armorCount = ARMOR.last - ARMOR.first + 1
 	local accessoryCount = ACCESSORIES.last - ACCESSORIES.first + 1
-	local accessoryTitleTop = TITLE_HEIGHT + armorCount * PITCH - GAP + Theme.Spacing.Section
-	local gearHeight = accessoryTitleTop + TITLE_HEIGHT + accessoryCount * PITCH - GAP
+	local accessoryTitleTop = TITLE_HEIGHT + armorCount * ROW_PITCH - ROW_GAP + Theme.Spacing.Section
+	local gearHeight = accessoryTitleTop + TITLE_HEIGHT + accessoryCount * ROW_PITCH - ROW_GAP
 
 	local gear = newGroup(gui, "Gear", UDim2.fromOffset(SLOT, gearHeight))
 	gear.AnchorPoint = Vector2.new(1, 1)

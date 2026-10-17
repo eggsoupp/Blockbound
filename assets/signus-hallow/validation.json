@@ -1,0 +1,156 @@
+{
+  "title": "Signus - Hallowed Eclipse",
+  "up": "+Z",
+  "forward": "-Y",
+  "palette_colors": 24,
+  "parts": {
+    "04 Right Crescent Sleeve": {
+      "intersecting_voxels_removed": 0,
+      "raster_fragments_removed": 0,
+      "enclosed_air_filled": 0,
+      "name": "04 Right Crescent Sleeve",
+      "size": [
+        38,
+        32,
+        88
+      ],
+      "translation": [
+        27,
+        -2,
+        14
+      ],
+      "pivot_world": [
+        27,
+        -2,
+        94
+      ],
+      "min_world": [
+        18,
+        -18,
+        50
+      ],
+      "voxel_count": 11176,
+      "connected_components": 1,
+      "exposed_unit_faces": 4504
+    },
+    "03 Left Crescent Sleeve": {
+      "intersecting_voxels_removed": 0,
+      "raster_fragments_removed": 0,
+      "enclosed_air_filled": 0,
+      "name": "03 Left Crescent Sleeve",
+      "size": [
+        38,
+        32,
+        88
+      ],
+      "translation": [
+        -27,
+        -2,
+        14
+      ],
+      "pivot_world": [
+        -27,
+        -2,
+        94
+      ],
+      "min_world": [
+        -46,
+        -18,
+        50
+      ],
+      "voxel_count": 11176,
+      "connected_components": 1,
+      "exposed_unit_faces": 4504
+    },
+    "02 Hood and Visage": {
+      "intersecting_voxels_removed": 0,
+      "raster_fragments_removed": 0,
+      "enclosed_air_filled": 0,
+      "name": "02 Hood and Visage",
+      "size": [
+        42,
+        36,
+        90
+      ],
+      "translation": [
+        0,
+        -3,
+        28
+      ],
+      "pivot_world": [
+        0,
+        -3,
+        108
+      ],
+      "min_world": [
+        -21,
+        -21,
+        101
+      ],
+      "voxel_count": 32907,
+      "connected_components": 1,
+      "exposed_unit_faces": 9020
+    },
+    "01 Core and Thorn Mantle": {
+      "intersecting_voxels_removed": 6499,
+      "raster_fragments_removed": 0,
+      "enclosed_air_filled": 5,
+      "name": "01 Core and Thorn Mantle",
+      "size": [
+        100,
+        50,
+        146
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "pivot_world": [
+        0,
+        0,
+        80
+      ],
+      "min_world": [
+        -50,
+        -25,
+        7
+      ],
+      "voxel_count": 112093,
+      "connected_components": 1,
+      "exposed_unit_faces": 32810
+    }
+  },
+  "assembly_enclosed_air_filled": 12,
+  "format": "MagicaVoxel VOX 150 with named scene graph",
+  "occupied_dimensions": [
+    100,
+    50,
+    146
+  ],
+  "world_min": [
+    -50,
+    -25,
+    7
+  ],
+  "world_max_exclusive": [
+    50,
+    25,
+    153
+  ],
+  "voxel_count": 167352,
+  "all_palette_alpha": 255,
+  "duplicate_occupied_positions": 0,
+  "round_trip": "PASS",
+  "centered_horizontal_bounds": true,
+  "root_pivot_world": [
+    0,
+    0,
+    80
+  ],
+  "assembled_connected_components": 1,
+  "enclosed_empty_cells": 0,
+  "assembled_exposed_unit_faces": 44434,
+  "bytes": 672069,
+  "sha256": "959a74e88775ca026613fd888edd7ec22e347e8a2bb00c08fcb41833cb9355e8"
+}

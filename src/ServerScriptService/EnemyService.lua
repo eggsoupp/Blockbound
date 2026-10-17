@@ -1746,10 +1746,10 @@ local function stepAll(dt)
 	for model, entry in pairs(entries) do
 		if not model.Parent or not entry.root.Parent then
 			-- Something else destroyed it. Drop the record rather than moving a
-			-- part that is no longer in the world.
-			entries[model] = nil
-			held[model] = nil
-			aliveCount -= 1
+			-- part that is no longer in the world - through removeEntry, so a
+			-- boss still gets its `finish` and its bar is taken down. Dropping
+			-- it by hand left the boss bar and the Eye's red sky up for good.
+			removeEntry(model, "destroyed")
 			continue
 		end
 

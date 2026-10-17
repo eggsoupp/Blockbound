@@ -447,8 +447,15 @@ EnemyConfig.Definitions = {
 			`mouthRotation` is the same, for the mouthed model, measured
 			relative to the eye: zero if the two were built facing the same
 			way, which they usually are.
+
+			IT IS 180 ON Y because, like the Demon Eye, this model is built
+			with its pupil along +Z: at 0 it hovered, chased and charged with
+			the back of its head toward you. Only the model is turned - where
+			it aims and moves is worked out from its own look direction, so
+			nothing about the fight changes. The mouth is placed on the eye's
+			turned pivot, so it gets the same correction and stays at zero.
 		]]
-		modelRotation = Vector3.new(0, 0, 0),
+		modelRotation = Vector3.new(0, 180, 0),
 		mouthRotation = Vector3.new(0, 0, 0),
 	},
 

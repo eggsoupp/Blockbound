@@ -48,9 +48,14 @@
 	                                  own parts are hidden. One model throughout,
 	                                  so EnemyService's record of it never moves.
 
-	Both should be built facing -Z (the pupil, and later the mouth, toward the
-	model's front). If they are not, EnemyConfig's `modelRotation` corrects the
-	eye and `mouthRotation` the mouth - see the notes there.
+	Roblox's front is -Z, and that is where the pupil (later the mouth) has to
+	end up. These models are built facing +Z, so EnemyConfig's `modelRotation`
+	turns the eye 180 degrees; the mouth is fitted to the eye's turned pivot and
+	needs no turn of its own (`mouthRotation` 0). See the notes there.
+
+	EVERY POSE GOES THROUGH applyPose: hovering, holding, the dashes, the spin
+	and leaving. It aims the model's front along `entry.look`, then applies that
+	correction last - so the correction never touches where it aims or moves.
 
 	Its servants are Demon Eyes - EnemyAssets.DemonEye, the Crimson's own
 	enemy - spawned as EnemyConfig's ServantEye, a lighter version of it.
@@ -1059,7 +1064,7 @@ local function dash(entry, target: Player?, ledger, key: string, options): boole
 		local dt = math.min(now - last, 0.1)
 		last = now
 
-		if not gouge and root.Parent then
+		if not gouge and livingRoot(target) == root then
 			direction = safeLook(root.Position - entry.position)
 		end
 		entry.look = turnToward(entry.look, direction, math.rad(Tuning.charge.lockTurnRate) * dt)
@@ -1071,8 +1076,9 @@ local function dash(entry, target: Player?, ledger, key: string, options): boole
 		task.wait()
 	end
 
-	-- COMMIT.
-	if not gouge and root.Parent then
+	-- COMMIT. A target who died during the wind-up is not re-aimed at; the
+	-- dash goes where it was already locked.
+	if not gouge and livingRoot(target) == root then
 		direction = safeLook(root.Position - entry.position)
 	end
 	entry.look = direction
@@ -1095,7 +1101,7 @@ local function dash(entry, target: Player?, ledger, key: string, options): boole
 		local dt = math.min(now - last, 0.1)
 		last = now
 
-		if options.steer > 0 and root.Parent then
+		if options.steer > 0 and livingRoot(target) == root then
 			direction = turnToward(direction, root.Position - entry.position, math.rad(options.steer) * dt)
 		end
 

@@ -647,17 +647,125 @@ local function findTarget(entry, position)
 end
 
 -- ---------------------------------------------------------------------------
+-- Crowds
+-- ---------------------------------------------------------------------------
+
+--[[
+	A pack is several of the same creature running the same code at the same
+	target, and left alone that converges: every one of them heads for the same
+	point at the same speed, and a few seconds into a fight four slimes are one
+	slime drawn four times. Three things keep them apart.
+
+	  OWN SIDE    each enemy approaches a point beside the target rather than
+	              the target itself, on a side of its own that slowly drifts
+	              round. It is wide while far away, so a pack comes in on
+	              different lines, and narrows to well inside contact range up
+	              close, so none of them is any less able to hurt you.
+	  OWN PACE    each one's speed, and each hop's sit, is a little different,
+	              so they fall out of step instead of moving as one.
+	  ELBOW ROOM  bodies that overlap push apart. A flyer is nudged every tick;
+	              a hopper is genuinely still on the ground, so it is not
+	              shoved - it aims its next hop away from where the others are
+	              standing, and from where any in the air are about to land.
+
+	Bosses are not part of this: they drive themselves, and they are not in
+	anyone's way.
+]]
+local CROWD = {
+	flankShare = 0.3, -- how far to the side, as a share of the distance left
+	flankMax = 10, -- the widest that gets, in studs
+	flankClose = 0.4, -- the narrowest, as a share of contactRange
+	flankDrift = 0.35, -- radians a second a flyer's side slides round
+	speedJitter = 0.12, -- each enemy's speed is its definition's, give or take this
+	sitJitter = 0.2, -- each hop's sit is groundedSeconds, give or take this
+	gap = 0.6, -- studs kept between two bodies
+	push = 0.9, -- how fast a flyer is pushed clear, as a share of its speed
+}
+
+-- Rolled once per enemy at spawn: its side, which way that drifts, and its pace.
+local function rollCrowdTraits(entry, boundsSize: Vector3)
+	entry.flankAngle = math.random() * math.pi * 2
+	entry.flankSpin = (if math.random() < 0.5 then -1 else 1) * CROWD.flankDrift * (0.5 + math.random() * 0.5)
+	entry.flankScale = 0.5 + math.random() * 0.5
+	entry.speedScale = 1 + (math.random() * 2 - 1) * CROWD.speedJitter
+	entry.bodyRadius = math.max(boundsSize.X, boundsSize.Z) * 0.5
+end
+
+-- A random multiplier of 1 give or take `share`.
+local function jitter(share: number): number
+	return 1 + (math.random() * 2 - 1) * share
+end
+
+--[[
+	The point beside the target this enemy is heading for. Its side is its own
+	(see rollCrowdTraits); how far out depends on how far away it still is.
+]]
+local function flankPoint(entry, from: Vector3, targetPosition: Vector3, widest: number?): Vector3
+	local flat = Vector3.new(targetPosition.X - from.X, 0, targetPosition.Z - from.Z)
+	local closest = entry.def.contactRange * CROWD.flankClose
+	local width = math.max(closest, math.min(flat.Magnitude * CROWD.flankShare, CROWD.flankMax) * entry.flankScale)
+	if widest then
+		width = math.min(width, widest)
+	end
+
+	return targetPosition + Vector3.new(math.cos(entry.flankAngle), 0, math.sin(entry.flankAngle)) * width
+end
+
+--[[
+	Which way, and how hard, to move to get clear of the rest of the crowd at
+	`position`: a sum of pushes away from every body overlapping this one, each
+	stronger the deeper the overlap, capped at 1. Zero in open space.
+
+	`flat` measures across the ground only, for hoppers.
+]]
+local function crowdPush(entry, position: Vector3, crowd, flat: boolean): Vector3
+	local push = Vector3.zero
+
+	for _, other in ipairs(crowd) do
+		if other.entry ~= entry then
+			local offset = position - other.position
+			if flat then
+				offset = Vector3.new(offset.X, 0, offset.Z)
+			end
+
+			local reach = entry.bodyRadius + other.entry.bodyRadius + CROWD.gap
+			local squared = offset.X * offset.X + offset.Y * offset.Y + offset.Z * offset.Z
+			if squared < reach * reach then
+				local distance = math.sqrt(squared)
+				local away
+				if distance > 1e-3 then
+					away = offset / distance
+				else
+					-- Exactly on top of each other: any way out will do.
+					local angle = math.random() * math.pi * 2
+					away = Vector3.new(math.cos(angle), 0, math.sin(angle))
+				end
+				push += away * ((reach - distance) / reach)
+			end
+		end
+	end
+
+	if push.Magnitude > 1 then
+		push = push.Unit
+	end
+	return push
+end
+
+-- ---------------------------------------------------------------------------
 -- Movement
 -- ---------------------------------------------------------------------------
 
 --[[
-	Straight at the target, through whatever is in the way.
+	Straight at the target, through whatever is in the way - or rather at its
+	own point beside the target, at its own pace, kept clear of the others.
+	See CROWDS above.
 
 	The bob is what stops it reading as a sliding decal: a constant-height chase
 	looks like a bug even when it is working perfectly.
 ]]
-local function stepFly(entry, position, targetPosition, dt)
+local function stepFly(entry, position, targetPosition, dt, crowd)
 	entry.phase += dt
+	entry.flankAngle += entry.flankSpin * dt
 
 	-- The bob is folded into the point being chased rather than added to the
 	-- result. Adding it afterwards would feed last tick's bob back in as this
@@ -666,16 +774,18 @@ local function stepFly(entry, position, targetPosition, dt)
 	local bob = math.sin(entry.phase * (2 * math.pi) / entry.def.bobPeriod)
 		* entry.def.bobAmplitude
 
-	local desired = targetPosition + Vector3.new(0, entry.def.hoverHeight + bob, 0)
+	local speed = entry.def.speed * entry.speedScale
+	local desired = flankPoint(entry, position, targetPosition)
+		+ Vector3.new(0, entry.def.hoverHeight + bob, 0)
 	local delta = desired - position
 	local distance = delta.Magnitude
 
-	if distance <= 0.05 then
-		return position
+	local moved = position
+	if distance > 0.05 then
+		moved = position + delta.Unit * math.min(speed * dt, distance)
 	end
 
-	local step = math.min(entry.def.speed * dt, distance)
-	return position + delta.Unit * step
+	return moved + crowdPush(entry, moved, crowd, false) * (speed * CROWD.push * dt)
 end
 
 --[[
@@ -781,7 +891,36 @@ local function beginJump(entry, position, targetPosition, isLunge)
 	]]
 	bounceStretch(entry, (2 * power) / def.gravity * 0.35)
 
+	-- Where it is coming down, so the rest of the pack can aim elsewhere.
+	entry.landingAt = position + direction * (speed * airTime)
+
 	Profiler.count(if isLunge then "Enemy.lunge" else "Enemy.hop")
+end
+
+--[[
+	Where a hopper aims its next jump: its own side of the target (see CROWDS),
+	moved clear of where the others are sitting or about to land.
+
+	A lunge keeps to within half its contact range of you. It is the attack,
+	and its aim being off to one side must not make it any easier to dodge
+	than it was.
+]]
+local function hopAim(entry, position: Vector3, targetPosition: Vector3, isLunge: boolean, crowd): Vector3
+	-- A new side now and then rather than drifting every tick: it only
+	-- matters at the moment of a jump.
+	entry.flankAngle += (math.random() - 0.5) * 1.2
+
+	local aim = flankPoint(
+		entry, position, targetPosition,
+		if isLunge then entry.def.contactRange * 0.5 else nil
+	)
+
+	if crowd then
+		local push = crowdPush(entry, aim, crowd, true)
+		aim += push * (entry.bodyRadius * 2 + CROWD.gap)
+	end
+
+	return aim
 end
 
 --[[
@@ -792,7 +931,7 @@ end
 	track the player through the arc is exactly what would make the lunge feel
 	unfair rather than committed.
 ]]
-local function stepHop(entry, position, targetPosition, dt, now)
+local function stepHop(entry, position, targetPosition, dt, now, crowd)
 	local def = entry.def
 
 	if entry.state == HOP_AIRBORNE then
@@ -852,8 +991,11 @@ local function stepHop(entry, position, targetPosition, dt, now)
 
 				entry.velocity = Vector3.zero
 				entry.state = HOP_GROUNDED
-				entry.stateUntil = now + def.groundedSeconds
+				-- Its own sit each time, so a pack that landed together does not
+				-- take off together. See CROWDS.
+				entry.stateUntil = now + def.groundedSeconds * jitter(CROWD.sitJitter)
 				entry.lunging = false
+				entry.landingAt = nil
 				entry.groundY = support
 				entry.nextGroundCheck = now + 0.25
 				return Vector3.new(x, support + entry.feetOffset, z), nil
@@ -892,7 +1034,8 @@ local function stepHop(entry, position, targetPosition, dt, now)
 
 	if entry.state == HOP_WINDUP then
 		if now >= entry.stateUntil then
-			beginJump(entry, position, targetPosition, entry.pendingLunge == true)
+			local isLunge = entry.pendingLunge == true
+			beginJump(entry, position, hopAim(entry, position, targetPosition, isLunge, crowd), isLunge)
 		end
 		return position, facing
 	end
@@ -914,7 +1057,7 @@ local function stepHop(entry, position, targetPosition, dt, now)
 		bounceCrouch(entry, windup)
 
 		if canLunge then
-			entry.nextLungeAt = now + def.lungeCooldown
+			entry.nextLungeAt = now + def.lungeCooldown * jitter(CROWD.sitJitter)
 		end
 	end
 
@@ -1121,6 +1264,9 @@ function EnemyService.spawn(name, position)
 		humanoid.MaxHealth = def.health
 		humanoid.Health = def.health
 	end
+
+	-- Its own side, pace and body size, so a pack does not move as one.
+	rollCrowdTraits(entry, boundsSize)
 
 	entry.behaviour = behaviourFor(def)
 
@@ -1740,8 +1886,28 @@ end
 -- The tick
 -- ---------------------------------------------------------------------------
 
+--[[
+	Where every ordinary enemy is at the start of this tick, for CROWDS: a
+	hopper in the air counts as being where it will land. Bosses are left out.
+]]
+local function crowdSnapshot()
+	local crowd = {}
+
+	for model, entry in pairs(entries) do
+		if not entry.behaviour and model.Parent then
+			local at = if entry.state == HOP_AIRBORNE and entry.landingAt
+				then entry.landingAt
+				else model:GetPivot().Position
+			table.insert(crowd, { entry = entry, position = at })
+		end
+	end
+
+	return crowd
+end
+
 local function stepAll(dt)
 	local now = os.clock()
+	local crowd = crowdSnapshot()
 
 	for model, entry in pairs(entries) do
 		if not model.Parent or not entry.root.Parent then
@@ -1841,14 +2007,14 @@ local function stepAll(dt)
 				local facing
 
 				if entry.def.movement == "Fly" then
-					moved = stepFly(entry, position, targetPosition, dt)
+					moved = stepFly(entry, position, targetPosition, dt, crowd)
 
 					local flat = Vector3.new(
 						targetPosition.X - moved.X, 0, targetPosition.Z - moved.Z
 					)
 					facing = if flat.Magnitude > 0.05 then flat.Unit else nil
 				else
-					moved, facing = stepHop(entry, position, targetPosition, dt, now)
+					moved, facing = stepHop(entry, position, targetPosition, dt, now, crowd)
 				end
 
 				--[[

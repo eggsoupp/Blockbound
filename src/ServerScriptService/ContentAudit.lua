@@ -529,7 +529,7 @@ function ContentAudit.run()
 			local definition = definitions[name]
 			local subject = "EnemyConfig.Definitions." .. name
 			local assetName = definition.asset
-			local asset = assetsFolder and type(assetName) == "string" and assetsFolder:FindFirstChild(assetName)
+			local asset = assetsFolder and type(assetName) == "string" and EnemyConfig.findAsset(assetsFolder, assetName)
 
 			if not asset then
 				add(report, "Errors", "Enemies", subject, string.format(

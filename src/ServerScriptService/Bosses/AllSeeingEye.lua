@@ -52,8 +52,8 @@
 	model's front). If they are not, EnemyConfig's `modelRotation` corrects the
 	eye and `mouthRotation` the mouth - see the notes there.
 
-	Its servants are the eyeball itself, shrunk: if EnemyAssets has no
-	ServantEye of its own, one is made from the eye at the start of the fight.
+	Its servants are Demon Eyes - EnemyAssets.DemonEye, the Crimson's own
+	enemy - spawned as EnemyConfig's ServantEye, a lighter version of it.
 
 	TERRAIN
 
@@ -108,7 +108,8 @@ local AllSeeingEye = {}
 
 local SOURCE = "The All Seeing Eye"
 
--- Its own name in EnemyConfig, the servants' name, and the mouth model's.
+-- Its own name in EnemyConfig, the servants' name (Demon Eyes, tuned for the
+-- fight), and the mouth model's.
 local SELF = "AllSeeingEye"
 local SERVANT = "ServantEye"
 local MOUTH_ASSET = "AllSeeingEyeMouth"
@@ -178,7 +179,6 @@ local Tuning = {
 		maxAlive = 8,
 		gap = 0.35,
 		gather = 0.6,
-		size = 3.4, -- studs across, for a servant made from the eye
 	},
 
 	charge = {
@@ -308,6 +308,17 @@ end
 local function rootOf(player: Player?): BasePart?
 	local character = player and player.Character
 	return character and character:FindFirstChild("HumanoidRootPart")
+end
+
+-- The same, only while they are alive. What an attack aims at: a body lies
+-- where it fell until the respawn, and it is not a target.
+local function livingRoot(player: Player?): BasePart?
+	local character = player and player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid and humanoid.Health > 0 then
+		return character:FindFirstChild("HumanoidRootPart")
+	end
+	return nil
 end
 
 local function nearestPlayer(position: Vector3, within: number?): (Player?, number)
@@ -817,36 +828,6 @@ local function buildMouthForm(entry)
 	entry.eyeParts = visualParts(entry.model, form)
 end
 
---[[
-	Its servants are itself, small - unless somebody has made them a model of
-	their own. Made once into EnemyAssets, where EnemyService spawns from.
-]]
-local function ensureServantTemplate(entry)
-	local folder = assetsFolder()
-	if not folder or folder:FindFirstChild(SERVANT) then
-		return
-	end
-
-	local source = folder:FindFirstChild(entry.def.asset)
-	local copy = source and asModel(source)
-	if not copy then
-		return
-	end
-
-	copy.Name = SERVANT
-	-- Never the mouth: a servant is a plain eye.
-	local mouth = copy:FindFirstChild("MouthForm")
-	if mouth then
-		mouth:Destroy()
-	end
-
-	local size = largest(copy:GetExtentsSize())
-	if size > 0.01 then
-		copy:ScaleTo(copy:GetScale() * Tuning.summon.size / size)
-	end
-	copy.Parent = folder
-end
-
 local function servantsAlive(): number
 	return #EnemyService.allOf(SERVANT)
 end
@@ -892,10 +873,17 @@ local function pupilGlow(entry, scope, color: Color3, size: number): Part
 	return glow
 end
 
+-- Said once per server, so a missing model is reported rather than leaving a
+-- fight with no servants and no explanation.
+local warnedNoServant = false
+
 local function spawnServant(position: Vector3): Model?
-	local model = EnemyService.spawn(SERVANT, position)
+	local model, reason = EnemyService.spawn(SERVANT, position)
 	if model then
 		flare(position, 2.5, 0.35, Colors.gaze)
+	elseif not warnedNoServant then
+		warnedNoServant = true
+		warn("[AllSeeingEye] could not summon a Demon Eye:", reason)
 	end
 	return model
 end
@@ -1037,7 +1025,7 @@ end
 	stepping sideways is the dodge.
 ]]
 local function dash(entry, target: Player?, ledger, key: string, options): boolean
-	local root = rootOf(target)
+	local root = livingRoot(target)
 	if not root then
 		target = nearestPlayer(entry.position)
 		root = rootOf(target)
@@ -1255,7 +1243,7 @@ local function watchfulGaze(entry, _phase: number)
 	local scope = entry.scope
 
 	local target = pickTarget(entry) or nearestPlayer(entry.position)
-	local root = rootOf(target)
+	local root = livingRoot(target)
 	if not root then
 		return
 	end
@@ -1272,7 +1260,9 @@ local function watchfulGaze(entry, _phase: number)
 
 	local began = os.clock()
 	while os.clock() - began < G.lock do
-		if entry.eyeFinished or not root.Parent then
+		-- Stops if they die mid-stare, rather than hitting the body and
+		-- sending servants to circle it.
+		if entry.eyeFinished or not root.Parent or not livingRoot(target) then
 			return
 		end
 
@@ -1335,7 +1325,7 @@ local function uproot(entry, _phase: number)
 	local scope = entry.scope
 
 	local target = pickTarget(entry) or nearestPlayer(entry.position)
-	local root = rootOf(target)
+	local root = livingRoot(target)
 	if not root then
 		return
 	end
@@ -1442,10 +1432,7 @@ local function uproot(entry, _phase: number)
 				position = circling
 				if now >= rock.throwAt then
 					-- Thrown at where you are NOW, and marked there.
-					local victim = rootOf(target)
-					if not (victim and victim.Parent) then
-						victim = rootOf((nearestPlayer(entry.position)))
-					end
+					local victim = livingRoot(target) or rootOf((nearestPlayer(entry.position)))
 					if victim then
 						rock.state = "fly"
 						rock.launchedAt = now
@@ -1566,7 +1553,7 @@ local function bloodTears(entry, _phase: number)
 
 	local ledger = {}
 	for index = 1, T.drops do
-		local root = rootOf(target) or rootOf((nearestPlayer(entry.position)))
+		local root = livingRoot(target) or rootOf((nearestPlayer(entry.position)))
 		if not root then
 			break
 		end
@@ -1818,7 +1805,6 @@ function AllSeeingEye.start(entry)
 	entry.look = safeLook(if first then first.Position - entry.position else Vector3.new(0, -0.5, -1))
 
 	buildMouthForm(entry)
-	ensureServantTemplate(entry)
 
 	-- A light inside it, so it reads at night - which is when it comes.
 	local light = Instance.new("PointLight")
@@ -1867,7 +1853,7 @@ function AllSeeingEye.step(entry, dt: number, now: number)
 	end
 
 	if entry.motion ~= "scripted" then
-		local focus = rootOf(entry.focus) or rootOf(target)
+		local focus = livingRoot(entry.focus) or rootOf(target)
 
 		if entry.motion == "hover" and focus then
 			-- Directly above, drifting a little: never quite still.

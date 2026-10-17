@@ -1023,7 +1023,7 @@ function EnemyService.spawn(name, position)
 		)
 	end
 
-	local template = folder:FindFirstChild(def.asset)
+	local template = EnemyConfig.findAsset(folder, def.asset)
 	if not template then
 		return nil, string.format(
 			"no model called '%s' in ReplicatedStorage.%s", def.asset, EnemyConfig.AssetsFolder

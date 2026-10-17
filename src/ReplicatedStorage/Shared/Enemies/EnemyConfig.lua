@@ -190,6 +190,13 @@ EnemyConfig.Spawning = {
 	hiddenWithin = 120,
 }
 
+--[[
+	Which way EnemyAssets.DemonEye faces, shared by the two enemies drawn with
+	it. The model is built looking along +Z, the opposite of Roblox's forward,
+	so it flew at you backwards until this was 180.
+]]
+local DEMON_EYE_ROTATION = Vector3.new(0, 180, 0)
+
 EnemyConfig.Definitions = {
 	-- Passes through terrain, which falls out of the movement kind rather than
 	-- being a special case: Fly moves straight at the target through anything,
@@ -218,6 +225,37 @@ EnemyConfig.Definitions = {
 		hoverHeight = 2.5,
 		bobAmplitude = 1.2,
 		bobPeriod = 2.4,
+	},
+
+	--[[
+		The Crimson's eye. Flies straight at you through anything, like the
+		Ghost, but quicker and frailer: it keeps up with a walk, not a sprint.
+
+		The model is EnemyAssets.DemonEye. The All Seeing Eye summons this same
+		eye - see ServantEye below for the lighter version it sends.
+	]]
+	DemonEye = {
+		asset = "DemonEye",
+		displayName = "Demon Eye",
+		health = 30,
+		movement = "Fly",
+
+		spawnBiomes = { "Crimson" },
+
+		speed = 13,
+		aggroRange = 100,
+		giveUpRange = 160,
+		despawnSeconds = 30,
+
+		contactRange = 4,
+		contactDamage = 8,
+		contactInterval = 1.0,
+
+		hoverHeight = 1.5,
+		bobAmplitude = 0.9,
+		bobPeriod = 1.8,
+
+		modelRotation = DEMON_EYE_ROTATION,
 	},
 
 	-- The arc IS the movement, not decoration on it: a slime is at ground level
@@ -415,13 +453,14 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
-		Its servants. Small eyes that fly straight at you, through anything,
-		like the Ghost does. The model is the eyeball itself, shrunk, unless
-		EnemyAssets has a ServantEye of its own. Only the Eye makes them.
+		What the All Seeing Eye summons: Demon Eyes, the same model and name as
+		the Crimson's, but lighter and faster, because the boss sends them three
+		or four at a time while it is fighting you. Only the boss makes these;
+		its own Tuning caps how many are out at once.
 	]]
 	ServantEye = {
-		asset = "ServantEye",
-		displayName = "Servant of the Eye",
+		asset = "DemonEye",
+		displayName = "Demon Eye",
 		health = 14,
 		movement = "Fly",
 
@@ -440,8 +479,7 @@ EnemyConfig.Definitions = {
 
 		sizeVariance = 0.12,
 
-		-- The same as the Eye's, since it is the same model.
-		modelRotation = Vector3.new(0, 0, 0),
+		modelRotation = DEMON_EYE_ROTATION,
 	},
 
 	GreenSlime = {
@@ -489,7 +527,27 @@ EnemyConfig.Definitions = {
 
 -- Stable order for anything that lists enemies to a human. The boss last,
 -- because /spawn prints this and it is the one you scroll to on purpose.
-EnemyConfig.Order = { "Ghost", "BlueSlime", "GreenSlime", "SlimeEmperor", "AllSeeingEye", "ServantEye" }
+EnemyConfig.Order = { "Ghost", "DemonEye", "BlueSlime", "GreenSlime", "SlimeEmperor", "AllSeeingEye", "ServantEye" }
+
+--[[
+	The model in `folder` for an `asset` name: the exact name, or failing that
+	one that differs only in spaces and capitals - so "Demon Eye" in the
+	Explorer still answers to "DemonEye" here.
+]]
+function EnemyConfig.findAsset(folder: Instance, asset: string): Instance?
+	local exact = folder:FindFirstChild(asset)
+	if exact then
+		return exact
+	end
+
+	local wanted = string.lower((string.gsub(asset, "%s", "")))
+	for _, child in ipairs(folder:GetChildren()) do
+		if string.lower((string.gsub(child.Name, "%s", ""))) == wanted then
+			return child
+		end
+	end
+	return nil
+end
 
 -- Fails loudly at require time rather than leaving you to work out at runtime
 -- why a spawned enemy is sitting still.

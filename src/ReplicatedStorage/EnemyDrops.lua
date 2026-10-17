@@ -75,7 +75,15 @@ EnemyDrops.Tables = {
 		{ item = "MythrilOre", chance = 0.5, min = 2, max = 5 },
 	},
 
-	-- Now and then, a herb, the way Terraria's servants drop hearts.
+	-- The Crimson's eye. Leather now and then, and rarely a shard of the
+	-- magic the All Seeing Eye is made of.
+	DemonEye = {
+		{ item = "Leather", chance = 0.5, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.06, min = 1, max = 1 },
+	},
+
+	-- The Demon Eyes the All Seeing Eye summons: now and then a herb, the way
+	-- Terraria's servants drop hearts.
 	ServantEye = {
 		{ item = "Herb", chance = 0.25, min = 1, max = 1 },
 	},

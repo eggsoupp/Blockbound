@@ -12,6 +12,7 @@
 		layout.itemLabel   the name of the item in hand
 		layout.openPanels  what is only on screen while the inventory is open
 		layout.onMoved(fn) calls fn whenever the tiles move on screen
+		layout.setOpen(b)  the bag opened or closed (tucks the hotbar marker)
 
 	It used to be hand-placed in StarterGui, and was lost with the place file's
 	other assets. Built here it cannot be lost, and it is made of the same Theme
@@ -67,7 +68,7 @@ local GAP = PITCH - SLOT
 --[[
 	Rows sit closer than columns. Theme's gap across read as too airy going
 	down the bag, so the rows are pulled together; this and SECTION_GAP (the
-	space under the hotbar and over the bin) are the dials for it.
+	space over the bin) are the dials for it.
 ]]
 local ROW_GAP = 1
 local ROW_PITCH = SLOT + ROW_GAP
@@ -91,9 +92,10 @@ local BAG_ROWS = (ACCESSORIES.first - 1 - HOTBAR_SLOTS) // COLUMNS
 
 local GRID_WIDTH = COLUMNS * PITCH - GAP
 
--- The hotbar stands slightly apart from the bag, so the row that is always
--- there reads as its own thing when the rest opens under it.
-local BAG_TOP = SLOT + SECTION_GAP
+-- The bag opens straight under the hotbar, one ROW_GAP down like every other
+-- row: a wider gap here made the first two rows look further apart than the
+-- rest. The bin keeps SECTION_GAP, since it is a different thing.
+local BAG_TOP = ROW_PITCH
 local BIN_TOP = BAG_TOP + BAG_ROWS * ROW_PITCH - ROW_GAP + SECTION_GAP
 local BAG_HEIGHT = BIN_TOP + SLOT
 
@@ -396,6 +398,19 @@ local function newSelectionMarker(row: Instance)
 	local pop = Instance.new("UIScale")
 	pop.Parent = marker
 
+	--[[
+		With the bag open, the next row is only ROW_GAP below the hotbar, and
+		the frame, glow and tab would spill over the top of its tiles. Tucked,
+		the frame is drawn just inside the tile's edge - still clear of the
+		item, which is inset further - and the glow and tab are hidden.
+	]]
+	local function setTucked(tucked: boolean)
+		local outset = if tucked then -MARKER_STROKE else MARKER_OUTSET
+		marker.Size = UDim2.fromOffset(SLOT + outset * 2, SLOT + outset * 2)
+		glow.Visible = not tucked
+		tab.Visible = not tucked
+	end
+
 	local current: number? = nil
 
 	-- Where tile `index` rests, as the marker's centre.
@@ -403,7 +418,7 @@ local function newSelectionMarker(row: Instance)
 		return UDim2.fromOffset((index - 1) * PITCH + SLOT / 2, SLOT / 2)
 	end
 
-	return function(index: number?)
+	local function selectSlot(index: number?)
 		if index == current then
 			return
 		end
@@ -428,6 +443,8 @@ local function newSelectionMarker(row: Instance)
 
 		current = index
 	end
+
+	return selectSlot, setTucked
 end
 
 -- ---------------------------------------------------------------------------
@@ -450,7 +467,7 @@ function InventoryLayout.build(playerGui: Instance)
 	bagScale.Parent = bag
 
 	local hotbar = newRow(bag, "Row1", 0, HOTBAR_SLOTS)
-	local selectHotbar = newSelectionMarker(hotbar)
+	local selectHotbar, tuckSelection = newSelectionMarker(hotbar)
 
 	local bagRows = {}
 	for index = 1, BAG_ROWS do
@@ -548,6 +565,10 @@ function InventoryLayout.build(playerGui: Instance)
 		-- Puts the marker on hotbar slot 1-9, sliding from wherever it was, or
 		-- hides it for nil.
 		selectHotbar = selectHotbar,
+
+		-- Told when the bag opens and closes, so the marker keeps off the row
+		-- under the hotbar while it is there.
+		setOpen = tuckSelection,
 	}
 
 	--[[

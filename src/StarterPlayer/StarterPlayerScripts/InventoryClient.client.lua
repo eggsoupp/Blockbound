@@ -363,6 +363,7 @@ local function toggleInventory()
 	for _, panel in ipairs(layout.openPanels) do
 		panel.Visible = inventoryVisible
 	end
+	layout.setOpen(inventoryVisible)
 
 	-- Rows appearing moves nothing that was already on screen, but the hit boxes
 	-- for the rows that just became visible have to be measured now.

@@ -706,6 +706,9 @@
         "$ignoreUnknownInstances": true,
         "SlimeEmperor": {
           "$path": "src/ServerScriptService/Bosses/SlimeEmperor.lua"
+        },
+        "AllSeeingEye": {
+          "$path": "src/ServerScriptService/Bosses/AllSeeingEye.lua"
         }
       },
       "BossService": {

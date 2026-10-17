@@ -370,6 +370,80 @@ EnemyConfig.Definitions = {
 		]]
 	},
 
+	--[[
+		THE ALL SEEING EYE - a boss after Terraria's Eye of Cthulhu. Everything
+		it does, and every number that tunes it, is in
+		ServerScriptService.Bosses.AllSeeingEye.
+
+		TWO MODELS, both in ReplicatedStorage.EnemyAssets:
+		  AllSeeingEye        the floating eyeball (phase one)
+		  AllSeeingEyeMouth   the eye with a mouth (phase two)
+		The second is fitted to the first's size automatically.
+
+		Like the Slime Emperor: no spawnBiomes, so it never appears on its own.
+		/spawn AllSeeingEye. If it arrives at night it leaves at dawn.
+	]]
+	AllSeeingEye = {
+		asset = "AllSeeingEye",
+		displayName = "The All Seeing Eye",
+		boss = true,
+		behaviour = "AllSeeingEye",
+
+		-- About a minute and a half against an iron or gold sword; see the
+		-- BALANCE note in the behaviour module.
+		health = 2200,
+
+		sizeVariance = 0,
+
+		--[[
+			WHICH WAY THE MODELS FACE, as (pitch, yaw, roll) in degrees.
+
+			Zero means the PUPIL points along -Z, the model's front - which is
+			what "looking at you" is measured from. If it hovers over you
+			looking somewhere else, find the number the way the Slime
+			Emperor's notes describe: 90 at a time, one axis at a time. Try
+			the middle number first (180, then 90, then -90); if the pupil
+			points up or down instead, the first. /bbface AllSeeingEye <n>
+			turns it live for the middle number.
+
+			`mouthRotation` is the same, for the mouthed model, measured
+			relative to the eye: zero if the two were built facing the same
+			way, which they usually are.
+		]]
+		modelRotation = Vector3.new(0, 0, 0),
+		mouthRotation = Vector3.new(0, 0, 0),
+	},
+
+	--[[
+		Its servants. Small eyes that fly straight at you, through anything,
+		like the Ghost does. The model is the eyeball itself, shrunk, unless
+		EnemyAssets has a ServantEye of its own. Only the Eye makes them.
+	]]
+	ServantEye = {
+		asset = "ServantEye",
+		displayName = "Servant of the Eye",
+		health = 14,
+		movement = "Fly",
+
+		speed = 17,
+		aggroRange = 160,
+		giveUpRange = 220,
+		despawnSeconds = 25,
+
+		contactRange = 3.5,
+		contactDamage = 6,
+		contactInterval = 0.8,
+
+		hoverHeight = 1,
+		bobAmplitude = 0.6,
+		bobPeriod = 1.4,
+
+		sizeVariance = 0.12,
+
+		-- The same as the Eye's, since it is the same model.
+		modelRotation = Vector3.new(0, 0, 0),
+	},
+
 	GreenSlime = {
 		asset = "GreenSlime",
 		displayName = "Green Slime",
@@ -415,7 +489,7 @@ EnemyConfig.Definitions = {
 
 -- Stable order for anything that lists enemies to a human. The boss last,
 -- because /spawn prints this and it is the one you scroll to on purpose.
-EnemyConfig.Order = { "Ghost", "BlueSlime", "GreenSlime", "SlimeEmperor" }
+EnemyConfig.Order = { "Ghost", "BlueSlime", "GreenSlime", "SlimeEmperor", "AllSeeingEye", "ServantEye" }
 
 -- Fails loudly at require time rather than leaving you to work out at runtime
 -- why a spawned enemy is sitting still.

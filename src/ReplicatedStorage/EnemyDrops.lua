@@ -63,6 +63,22 @@ EnemyDrops.Tables = {
 	SlimeEmperor = {
 		{ item = "Wood", chance = 1, min = 20, max = 32 },
 	},
+
+	--[[
+		The Eye of Cthulhu drops ore and potions; this drops ore and the
+		game's own magic material. Gold and Essence Shards always, Mythril
+		half the time - a step up from the Slime Emperor, which it is.
+	]]
+	AllSeeingEye = {
+		{ item = "GoldOre", chance = 1, min = 10, max = 18 },
+		{ item = "EssenceShard", chance = 1, min = 4, max = 8 },
+		{ item = "MythrilOre", chance = 0.5, min = 2, max = 5 },
+	},
+
+	-- Now and then, a herb, the way Terraria's servants drop hearts.
+	ServantEye = {
+		{ item = "Herb", chance = 0.25, min = 1, max = 1 },
+	},
 }
 
 --[[

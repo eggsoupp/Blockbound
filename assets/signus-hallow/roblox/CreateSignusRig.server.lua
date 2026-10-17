@@ -166,9 +166,35 @@ local function run()
 	local scale = parts.Core.Size.X / EXPORT.Core.size.X
 	say(string.format("Scale %.4f of the exported size", scale))
 
-	-- The scene origin, worked out from the Core, whose placement in the file is known.
+	--[[
+		The scene origin, worked out from the Core, whose placement in the file
+		is known. Studio's importer can bake a half turn into the meshes while
+		leaving every part's rotation at zero (glTF's front is +Z, Roblox's is
+		-Z). So both ways round are tried, and RootPart is turned to whichever
+		fits: its -Z is then always the side the face is on.
+	]]
 	local core = parts.Core
-	local rootCFrame = core.CFrame * CFrame.new(-EXPORT.Core.center * scale)
+	local function rootFor(turn)
+		return CFrame.new(core.Position) * turn * CFrame.new(-EXPORT.Core.center * scale)
+	end
+	local function fits(rootCFrame)
+		for _, name in ipairs(VISIBLE) do
+			local offset = rootCFrame:PointToObjectSpace(parts[name].Position)
+			if (offset - EXPORT[name].center * scale).Magnitude > POSITION_TOLERANCE * scale then
+				return false
+			end
+		end
+		return true
+	end
+	local coreTurn = core.CFrame.Rotation
+	local rootCFrame = rootFor(coreTurn)
+	if not fits(rootCFrame) then
+		local halfTurn = rootFor(coreTurn * CFrame.Angles(0, math.pi, 0))
+		if fits(halfTurn) then
+			rootCFrame = halfTurn
+			say("The importer turned the model 180 degrees; RootPart is turned to match, so it faces the hood's front.")
+		end
+	end
 
 	for _, name in ipairs(VISIBLE) do
 		local part = parts[name]

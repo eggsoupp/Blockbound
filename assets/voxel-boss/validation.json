@@ -1,0 +1,104 @@
+{
+  "body_format": "MagicaVoxel VOX 150",
+  "palette_colors": 28,
+  "parts": {
+    "head": {
+      "canvas": [
+        64,
+        64,
+        56
+      ],
+      "occupied_min": [
+        4,
+        10,
+        0
+      ],
+      "occupied_max": [
+        59,
+        53,
+        55
+      ],
+      "voxels": 42150,
+      "connected_components": 1,
+      "raster_fragments_removed": 0,
+      "vox_round_trip": "PASS",
+      "bytes": 194014,
+      "sha256": "24853681b176696c6d99b9f91aa45da23fdac7e466739240ad1b9a7a6444a65e"
+    },
+    "body_segment": {
+      "canvas": [
+        64,
+        64,
+        56
+      ],
+      "occupied_min": [
+        9,
+        15,
+        0
+      ],
+      "occupied_max": [
+        54,
+        50,
+        55
+      ],
+      "voxels": 44934,
+      "connected_components": 1,
+      "raster_fragments_removed": 0,
+      "vox_round_trip": "PASS",
+      "bytes": 180832,
+      "sha256": "46fa2a71c0ebd26e1359a485abc76110bf2cb628b2eefcf4be14022ce8218cae"
+    },
+    "tail": {
+      "canvas": [
+        64,
+        64,
+        56
+      ],
+      "occupied_min": [
+        15,
+        17,
+        0
+      ],
+      "occupied_max": [
+        48,
+        46,
+        55
+      ],
+      "voxels": 13874,
+      "connected_components": 1,
+      "raster_fragments_removed": 0,
+      "vox_round_trip": "PASS",
+      "bytes": 56592,
+      "sha256": "27942eb6b1df49341d22f40706394bf547bddcbdabb16a52f867f04bbfc1e66e"
+    }
+  },
+  "head_orientation": {
+    "mouth_direction": "+Z",
+    "body_axis": "+Z",
+    "central_airway_open_to_positive_z": true
+  },
+  "joints": {
+    "identical_geometry_and_color": true,
+    "contact_voxels": 564,
+    "body_pitch": 56,
+    "socket_center_xy": [
+      32,
+      32
+    ],
+    "assembled_components": 1
+  },
+  "body_x_symmetry": {
+    "geometry": true,
+    "colors": true
+  },
+  "preserved_files": {
+    "head": {
+      "byte_identical": true,
+      "sha256": "24853681b176696c6d99b9f91aa45da23fdac7e466739240ad1b9a7a6444a65e"
+    },
+    "tail": {
+      "byte_identical": true,
+      "sha256": "27942eb6b1df49341d22f40706394bf547bddcbdabb16a52f867f04bbfc1e66e"
+    }
+  }
+}

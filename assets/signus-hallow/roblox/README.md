@@ -92,7 +92,10 @@ pivot. Nothing moves when the rig is built. To get the brief's literal
 The script checks everything before changing anything. If a part is missing,
 isn't a MeshPart, is the wrong size, or isn't where the export placed it (a
 wrong forward axis, a mirrored axis, the wrong unit), it stops and says so.
-It then builds:
+Studio's importer may bake a 180° turn into the meshes, so the face points
+along +Z while every part's rotation still reads zero. The script detects this
+and turns RootPart to match. RootPart's front (−Z) always points the way the
+face does, which is the direction EnemyService aims. It then builds:
 
 - the Model renamed to **Signus**, with attribute `ArticulatedRig = true`;
 - **RootPart**: a 1-stud invisible part at the scene origin. It is anchored, has CanCollide, CanTouch and CanQuery off, RootPriority 127, and is the Model's PrimaryPart;

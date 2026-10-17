@@ -1,0 +1,177 @@
+{
+  "format": "MagicaVoxel VOX 150 with named scene nodes",
+  "canvas": [
+    80,
+    80,
+    112
+  ],
+  "up_axis": "+Z",
+  "local_ground_pivot": [
+    40,
+    40,
+    0
+  ],
+  "scene_ground_pivot": [
+    0,
+    0,
+    0
+  ],
+  "normal_parts_overlap_voxels": 0,
+  "normal_parts_transforms_identical": true,
+  "files": {
+    "normal_tree.vox": {
+      "models": {
+        "Trunk and branches": {
+          "voxels": 7548,
+          "occupied_min": [
+            22,
+            21,
+            0
+          ],
+          "occupied_max_exclusive": [
+            60,
+            59,
+            92
+          ],
+          "occupied_size": [
+            38,
+            38,
+            92
+          ],
+          "connected_components": 1
+        },
+        "Leaves": {
+          "voxels": 86999,
+          "occupied_min": [
+            9,
+            11,
+            28
+          ],
+          "occupied_max_exclusive": [
+            71,
+            71,
+            104
+          ],
+          "occupied_size": [
+            62,
+            60,
+            76
+          ],
+          "connected_components": 1
+        }
+      },
+      "binary_roundtrip": "passed",
+      "scene_graph": "passed",
+      "palette": "passed",
+      "sha256": "847aa71114619bcfbb3d9fe57a12cfe8124af09d96d54ec9444a332b74f409d3"
+    },
+    "normal_trunk.vox": {
+      "models": {
+        "Trunk and branches": {
+          "voxels": 7548,
+          "occupied_min": [
+            22,
+            21,
+            0
+          ],
+          "occupied_max_exclusive": [
+            60,
+            59,
+            92
+          ],
+          "occupied_size": [
+            38,
+            38,
+            92
+          ],
+          "connected_components": 1
+        }
+      },
+      "binary_roundtrip": "passed",
+      "scene_graph": "passed",
+      "palette": "passed",
+      "sha256": "dd03a0cc542da73889d52876e11b79790c2a0b7583cc9bb1c29836a78f772d5d"
+    },
+    "normal_leaves.vox": {
+      "models": {
+        "Leaves": {
+          "voxels": 86999,
+          "occupied_min": [
+            9,
+            11,
+            28
+          ],
+          "occupied_max_exclusive": [
+            71,
+            71,
+            104
+          ],
+          "occupied_size": [
+            62,
+            60,
+            76
+          ],
+          "connected_components": 1
+        }
+      },
+      "binary_roundtrip": "passed",
+      "scene_graph": "passed",
+      "palette": "passed",
+      "sha256": "cfc5130ffbe1225ea9ff004a41c9b9e7bace6cde23dcfd138c4f9e9eb1a99ed0"
+    },
+    "corruption_tree.vox": {
+      "models": {
+        "Corruption tree": {
+          "voxels": 72826,
+          "occupied_min": [
+            7,
+            15,
+            0
+          ],
+          "occupied_max_exclusive": [
+            73,
+            70,
+            102
+          ],
+          "occupied_size": [
+            66,
+            55,
+            102
+          ],
+          "connected_components": 1
+        }
+      },
+      "binary_roundtrip": "passed",
+      "scene_graph": "passed",
+      "palette": "passed",
+      "sha256": "b194314dd87872286509a9f85dfd92df3aa03826b8024d3ca6733c408fedcc29"
+    },
+    "crimson_tree.vox": {
+      "models": {
+        "Crimson tree": {
+          "voxels": 96271,
+          "occupied_min": [
+            3,
+            10,
+            0
+          ],
+          "occupied_max_exclusive": [
+            77,
+            71,
+            100
+          ],
+          "occupied_size": [
+            74,
+            61,
+            100
+          ],
+          "connected_components": 1
+        }
+      },
+      "binary_roundtrip": "passed",
+      "scene_graph": "passed",
+      "palette": "passed",
+      "sha256": "d3dea5169b86bf783dd9554a73e25137edb4be632bbee96d485c9656d1c44e26"
+    }
+  }
+}

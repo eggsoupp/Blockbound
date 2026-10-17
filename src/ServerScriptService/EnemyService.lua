@@ -15,12 +15,13 @@
 	lives in ReplicatedStorage.EnemyAssets - so adding a third enemy is a config
 	entry and a model, never a change here.
 
-	NOT HUMANOIDS. Every part is anchored and the server sets the model's
-	position outright on a fixed tick. Both enemies exist to close the distance
-	and touch you; neither opens a door or takes cover, so this costs no physics
-	simulation, imposes nothing on the art (rigged, loose or a single mesh all
-	work), and makes "walks through walls" a property of the movement kind
-	rather than an argument with the collision system.
+	NOT HUMANOIDS. Every part is anchored (in an articulated rig, only the
+	root; see prepareModel) and the server sets the model's position outright
+	on a fixed tick. Both enemies exist to close the distance and touch you;
+	neither opens a door or takes cover, so this costs no physics simulation,
+	imposes nothing on the art (rigged, loose or a single mesh all work), and
+	makes "walks through walls" a property of the movement kind rather than an
+	argument with the collision system.
 
 	  Fly   straight at the target through anything, bobbing
 	  Hop   arcs along the terrain surface, reading ground height from
@@ -171,13 +172,28 @@ end
 	where an enemy is. A stray unanchored part would fall away from the rest of
 	the model on the first tick, and it is the kind of thing that looks like a
 	physics bug rather than a missing property.
+
+	AN ARTICULATED RIG IS THE EXCEPTION. A model with the attribute
+	ArticulatedRig = true is posed by Motor6Ds hanging off its root, and an
+	anchored part cannot be posed - so only the root is anchored. PivotTo still
+	moves the root and the joints carry the rest with it. The root is the
+	PrimaryPart, or a part called RootPart; with neither it is treated like any
+	other model, since a rig with nothing anchored would fall. The Signus rig
+	(assets/signus-hallow/roblox/CreateSignusRig.server.lua) is one.
 ]]
 local function prepareModel(model)
 	local root = model.PrimaryPart
 
+	local articulated = model:GetAttribute("ArticulatedRig") == true
+	if articulated and not root then
+		local named = model:FindFirstChild("RootPart")
+		root = if named and named:IsA("BasePart") then named else nil
+	end
+	articulated = articulated and root ~= nil
+
 	for _, descendant in ipairs(model:GetDescendants()) do
 		if descendant:IsA("BasePart") then
-			descendant.Anchored = true
+			descendant.Anchored = not articulated or descendant == root
 			descendant.CanCollide = EnemyConfig.Collides
 			descendant.CanTouch = false
 

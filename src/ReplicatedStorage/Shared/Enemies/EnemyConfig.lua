@@ -532,6 +532,37 @@ EnemyConfig.Definitions = {
 	},
 }
 
+--[[
+	AUTHORED ANIMATIONS, for an enemy rigged with an AnimationController
+	(ArticulatedRig = true; see EnemyService.prepareModel). Played on the
+	server by ServerScriptService.EnemyAnimator.
+
+	Each entry is a placeholder until its animation is published. Publish it
+	from the Animation Editor UNDER THE GROUP THAT OWNS THE GAME - an animation
+	owned by anyone else will not play here - and replace the placeholder with
+	the number from its rbxassetid:// link. A placeholder is skipped with one
+	warning, so the enemy still works, just without that move.
+
+	  Hover   looped idle float         priority Idle
+	  Lunge   the charge                priority Action
+	  Cast    spell windup and release  priority Action
+	  Hurt    flinch when hit           priority Action2
+	  Death   collapse                  priority Action4
+
+	None of them moves RootPart: animate CoreJoint for a bob or a lean, and
+	leave where the boss actually is to its behaviour and PivotTo.
+	assets/signus-hallow/roblox/README.md has the publishing steps.
+]]
+EnemyConfig.Animations = {
+	Signus = {
+		Hover = "PUBLISH_SIGNUS_HOVER_AND_PASTE_ID",
+		Lunge = "PUBLISH_SIGNUS_LUNGE_AND_PASTE_ID",
+		Cast = "PUBLISH_SIGNUS_CAST_AND_PASTE_ID",
+		Hurt = "PUBLISH_SIGNUS_HURT_AND_PASTE_ID",
+		Death = "PUBLISH_SIGNUS_DEATH_AND_PASTE_ID",
+	},
+}
+
 -- Stable order for anything that lists enemies to a human. The boss last,
 -- because /spawn prints this and it is the one you scroll to on purpose.
 EnemyConfig.Order = { "Ghost", "DemonEye", "BlueSlime", "GreenSlime", "SlimeEmperor", "AllSeeingEye", "ServantEye" }

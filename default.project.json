@@ -714,6 +714,9 @@
       "BossService": {
         "$path": "src/ServerScriptService/BossService.lua"
       },
+      "EnemyAnimator": {
+        "$path": "src/ServerScriptService/EnemyAnimator.lua"
+      },
       "ScrollService": {
         "$path": "src/ServerScriptService/ScrollService.lua"
       },

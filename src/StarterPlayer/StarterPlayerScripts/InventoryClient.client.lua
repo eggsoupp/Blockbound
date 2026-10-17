@@ -112,11 +112,28 @@ local function getSlotElements(slot)
 	return slot:FindFirstChild("icon"), slot:FindFirstChild("num")
 end
 
--- InventoryUI ignores the GUI inset, so the mouse and the tiles already share
--- one coordinate space and nothing needs subtracting.
-local function getMouseXY()
-	local raw = UserInputService:GetMouseLocation()
-	return raw.X, raw.Y
+--[[
+	Where the pointer is, in the space GuiObject.AbsolutePosition is measured in.
+
+	That space starts BELOW Roblox's top bar, even inside a ScreenGui that
+	ignores the inset, while UserInputService:GetMouseLocation() starts at the
+	very top of the window. Hit-testing one against the other put every drop
+	target a top bar's height too high: you had to let go above a slot to land
+	in it. An InputObject's Position is already in the AbsolutePosition space,
+	so the tiles' hit boxes and the pointer are now compared in one space with
+	no inset added or taken away anywhere. (AbilityPanel's notes describe the
+	same trap.)
+]]
+local function pointerOf(input: InputObject): (number, number)
+	return input.Position.X, input.Position.Y
+end
+
+-- From that space to an Offset inside InventoryUI, for placing the drag
+-- preview: measured against the ScreenGui's own AbsolutePosition, so it is
+-- right however the inset is reported.
+local function toGuiOffset(x: number, y: number): (number, number)
+	local origin = invUI.AbsolutePosition
+	return x - origin.X, y - origin.Y
 end
 
 -- nil for an item with no stack size, which is what marks it unstackable in
@@ -551,7 +568,7 @@ for i = 1, #slots do
 				dragNum.Parent = invUI
 				dragNum.ZIndex = 101
 
-				local x, y = getMouseXY()
+				local x, y = toGuiOffset(pointerOf(input))
 				dragIcon.Position = UDim2.fromOffset(x - icon.AbsoluteSize.X/2, y - icon.AbsoluteSize.Y/2)
 				dragIcon.Size     = UDim2.new(0, icon.AbsoluteSize.X, 0, icon.AbsoluteSize.Y)
 				dragNum.Position  = UDim2.fromOffset(x + icon.AbsoluteSize.X/2 - num.AbsoluteSize.X, y + icon.AbsoluteSize.Y/2 - num.AbsoluteSize.Y)
@@ -656,9 +673,17 @@ end)
 
 UserInputService.InputChanged:Connect(function(input)
 	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local x, y = getMouseXY()
-		if dragIcon then dragIcon.Position = UDim2.fromOffset(x - dragIcon.AbsoluteSize.X/2, y - dragIcon.AbsoluteSize.Y/2) end
-		if dragNum then dragNum.Position  = UDim2.fromOffset(x + dragIcon.AbsoluteSize.X/2 - dragNum.AbsoluteSize.X, y + dragIcon.AbsoluteSize.Y/2 - dragNum.AbsoluteSize.Y) end
+		-- The hit test reads the pointer in AbsolutePosition space; the preview
+		-- is placed in the ScreenGui's own. See pointerOf.
+		local x, y = pointerOf(input)
+		local gx, gy = toGuiOffset(x, y)
+		if dragIcon then
+			local size = dragIcon.AbsoluteSize
+			dragIcon.Position = UDim2.fromOffset(gx - size.X/2, gy - size.Y/2)
+			if dragNum then
+				dragNum.Position = UDim2.fromOffset(gx + size.X/2 - dragNum.AbsoluteSize.X, gy + size.Y/2 - dragNum.AbsoluteSize.Y)
+			end
+		end
 
 		local overSlot = slotAt(x, y)
 
@@ -714,7 +739,7 @@ UserInputService.InputEnded:Connect(function(input)
 			lastHoverSlot = nil
 		end
 		updateCoordinateRanges()
-		local targetIndex = slotAt(getMouseXY())
+		local targetIndex = slotAt(pointerOf(input))
 
 		local willSwap = false
 		local willTransfer = false

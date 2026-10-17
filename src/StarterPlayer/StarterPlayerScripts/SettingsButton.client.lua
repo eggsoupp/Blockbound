@@ -481,11 +481,14 @@ end
 --[[
 	Where along the track a pointer is, as 0..1.
 
-	AbsolutePosition and AbsoluteSize are both in the ScreenGui's own space and
-	GetMouseLocation is in the viewport's; this ScreenGui ignores the GUI inset,
-	which is what makes those the same space. The panel's card drag gets away
-	with pure deltas - a slider cannot, because clicking the track has to jump
-	to where the click was.
+	`x` is an InputObject's Position, which is in the same space as
+	AbsolutePosition. UserInputService:GetMouseLocation() is NOT, even in a
+	ScreenGui that ignores the GUI inset: it counts from the window's corner,
+	inset included - the same trap that put the inventory's drop targets a top
+	bar too high. Here only the left inset matters, which is zero on a PC and
+	not on a phone with a notch. The panel's card drag gets away with pure
+	deltas - a slider cannot, because clicking the track has to jump to where
+	the click was.
 ]]
 local function volumeAt(x: number): number
 	local left = volumeTrack.AbsolutePosition.X
@@ -527,9 +530,10 @@ UserInputService.InputChanged:Connect(function(input)
 		return
 	end
 
-	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		applyVolume(UserInputService:GetMouseLocation().X)
-	elseif input.UserInputType == Enum.UserInputType.Touch then
+	if
+		input.UserInputType == Enum.UserInputType.MouseMovement
+		or input.UserInputType == Enum.UserInputType.Touch
+	then
 		applyVolume(input.Position.X)
 	end
 end)

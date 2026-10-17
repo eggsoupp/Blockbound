@@ -383,11 +383,15 @@ end
 	whatever earns them later - without any of them having to remember to.
 
 	nil for the first push, which has nothing to compare against; nil for a
-	removal; and nil when several arrive at once, which is a saved loadout being
-	restored on join and is not something the player just did.
+	removal; and nil when several arrive at once.
+
+	nil for a "restore" too: the saved loadout arriving on join. It lands after
+	an empty push sent while the save was still loading, so a save holding one
+	ability looked exactly like picking one up - and opened the Tab menu with
+	its flourish every time you joined.
 ]]
-local function newlyGained(abilities: { string }): string?
-	if not previousLoadout then
+local function newlyGained(abilities: { string }, reason: string?): string?
+	if not previousLoadout or reason == "restore" then
 		return nil
 	end
 
@@ -496,12 +500,12 @@ AbilityPanel.setHandlers({
 	end,
 })
 
-LoadoutChanged.OnClientEvent:Connect(function(abilities)
+LoadoutChanged.OnClientEvent:Connect(function(abilities, reason)
 	if type(abilities) ~= "table" then
 		return
 	end
 
-	local gained = newlyGained(abilities)
+	local gained = newlyGained(abilities, reason)
 
 	previousLoadout = abilities
 	loadout = abilities

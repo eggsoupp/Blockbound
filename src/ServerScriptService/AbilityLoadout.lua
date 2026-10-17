@@ -120,8 +120,13 @@ end
 	A copy, not the live table: the array is handed to FireClient, and passing
 	the one this module mutates would be a table the caller could still be
 	holding a reference to when it next changes.
+
+	`reason` is "restore" for the saved loadout arriving on join. The client
+	would otherwise compare it with the empty one it was sent first, see an
+	ability appear, and open the Tab menu to celebrate a pickup that never
+	happened.
 ]]
-local function push(player: Player)
+local function push(player: Player, reason: string?)
 	local entry = loadoutFor(player)
 
 	local copy = table.create(#entry)
@@ -129,7 +134,7 @@ local function push(player: Player)
 		copy[index] = name
 	end
 
-	LoadoutChanged:FireClient(player, copy)
+	LoadoutChanged:FireClient(player, copy, reason)
 end
 
 function AbilityLoadout.get(player: Player): { string }
@@ -454,7 +459,7 @@ local function loadSection(player: Player, value)
 	-- The client was told "nothing" a moment ago by onPlayerAdded; this is what
 	-- corrects it. Unconditional, because dropping every stored name is still a
 	-- change worth sending.
-	push(player)
+	push(player, "restore")
 end
 
 InventoryStore.registerSection("abilities", saveSection, loadSection)

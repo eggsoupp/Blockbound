@@ -42,7 +42,8 @@ Theme.SlotPitch = 68
 	ImageLabel's Image in Studio, and Studio swaps it for the image id.
 ]]
 Theme.Pixel = {
-	Atlas = "",
+	-- assets/pixel-ui/atlas/pixel_ui_atlas.png, group-owned Image.
+	Atlas = "rbxassetid://79592529682718",
 	Images = {
 		-- button_green = "rbxassetid://...",
 	},

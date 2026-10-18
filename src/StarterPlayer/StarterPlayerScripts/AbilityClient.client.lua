@@ -32,6 +32,7 @@ local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
 local Theme = require(Shared.UI:WaitForChild("Theme"))
 local Motion = require(Shared.UI:WaitForChild("Motion"))
+local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local MenuBackdrop = require(Shared.UI:WaitForChild("MenuBackdrop"))
 local AbilityPanel = require(Shared.UI:WaitForChild("AbilityPanel"))
 
@@ -131,15 +132,32 @@ end
 --   arrives naming this player as the caster. Starting it on the keypress would
 --   show a cooldown for a cast that was refused, which is the one moment a
 --   player most needs to be told the truth.
+--
+-- DRAWN LIKE THE HEALTH AND MANA BARS
+--   Each row is the pixel kit's wooden bar, with the key that casts it on a
+--   parchment keycap over the left end where those bars have their icons. The
+--   groove CHARGES: it fills in dim gold while the ability cools down and is
+--   full, bright gold, when it is ready - so a usable ability is the brightest
+--   thing in the column.
 
 local HUD = {
-	width = 190,
-	rowHeight = 24,
+	width = 230,
+	-- The bar frame's art with a 4-texel groove, as the mana bar.
+	rowHeight = 33,
 	gap = 4,
-	pad = 10,
-	-- Clear of the mana bar, which sits at 141 and is 33 tall. That in turn
-	-- sits on the health bar at 96. See ManaClient for the whole column.
-	bottom = 176,
+	pad = 16,
+	-- Clear of the mana bar, which sits at 85 and is 33 tall. That in turn sits
+	-- on the health bar at 40. See ManaClient for the whole column.
+	bottom = 126,
+	-- As the health and mana bars: the frame starts under the keycap, and the
+	-- fill starts clear of it.
+	iconInset = 15,
+	iconClear = 10,
+}
+
+local HUD_COLOR = {
+	charging = Color3.fromRGB(196, 168, 112),
+	ready = Theme.PixelColor.Selection,
 }
 
 local hudGui = Instance.new("ScreenGui")
@@ -154,7 +172,7 @@ hudGui.Parent = player:WaitForChild("PlayerGui")
 local hudRoot = Instance.new("Frame")
 hudRoot.Name = "Abilities"
 hudRoot.AnchorPoint = Vector2.new(0, 1)
-hudRoot.Position = UDim2.new(0, HUD.pad + 6, 1, -HUD.bottom)
+hudRoot.Position = UDim2.new(0, HUD.pad, 1, -HUD.bottom)
 hudRoot.Size = UDim2.fromOffset(HUD.width, HUD.rowHeight)
 hudRoot.BackgroundTransparency = 1
 hudRoot.Parent = hudGui
@@ -209,53 +227,71 @@ local function rebuildHud(abilities: { string }?)
 			row.Name = abilityName
 			row.LayoutOrder = index
 			row.Size = UDim2.new(1, 0, 0, HUD.rowHeight)
-			row.BackgroundColor3 = Theme.Color.Panel
-			row.BackgroundTransparency = 0.2
-			row.BorderSizePixel = 0
+			row.BackgroundTransparency = 1
 			row.Parent = hudRoot
 
-			local stroke = Instance.new("UIStroke")
-			stroke.Color = Theme.Color.Stroke
-			stroke.Thickness = 1
-			stroke.Parent = row
-
-			-- The bar drains left to right underneath the text, so the readout
-			-- is legible at a glance without anyone having to read the number.
-			local fill = Instance.new("Frame")
-			fill.Name = "Fill"
-			fill.Size = UDim2.fromScale(0, 1)
-			fill.BackgroundColor3 = Theme.Color.Accent
-			fill.BackgroundTransparency = 0.75
-			fill.BorderSizePixel = 0
-			fill.ZIndex = row.ZIndex
-			fill.Parent = row
+			-- The key that casts it, on a parchment keycap over the bar's end.
+			local keycap = Instance.new("ImageLabel")
+			keycap.Name = "Keycap"
+			keycap.BackgroundTransparency = 1
+			keycap.Size = UDim2.fromOffset(HUD.rowHeight, HUD.rowHeight)
+			keycap.ZIndex = 5
+			keycap.Parent = row
+			PixelUI.apply(keycap, "slot")
 
 			local key = Instance.new("TextLabel")
 			key.Name = "Key"
-			key.Size = UDim2.fromOffset(34, HUD.rowHeight)
+			key.Size = UDim2.fromScale(1, 1)
 			key.BackgroundTransparency = 1
 			key.FontFace = Theme.Fonts.Number
-			key.TextSize = Theme.TextSize.Small
-			key.TextColor3 = Theme.Color.Accent
+			key.TextSize = Theme.TextSize.Body
+			key.TextColor3 = Theme.PixelColor.Ink
 			key.Text = slotKeyLabel(index)
-			key.ZIndex = row.ZIndex + 1
-			key.Parent = row
+			key.Parent = keycap
+
+			local frame = PixelUI.image(row, "bar_frame")
+			frame.Name = "Frame"
+			frame.Position = UDim2.fromOffset(HUD.iconInset, 0)
+			frame.Size = UDim2.new(1, -HUD.iconInset, 1, 0)
+
+			local grooveLeft, grooveTop, grooveRight, grooveBottom = PixelUI.groove("bar_frame")
+			local fillLeft = HUD.iconInset + grooveLeft + HUD.iconClear
+
+			local groove = Instance.new("Frame")
+			groove.Name = "Groove"
+			groove.BackgroundTransparency = 1
+			groove.ClipsDescendants = true
+			groove.Position = UDim2.fromOffset(fillLeft, grooveTop)
+			groove.Size = UDim2.new(1, -(fillLeft + grooveRight), 1, -(grooveTop + grooveBottom))
+			groove.ZIndex = 2
+			groove.Parent = row
+
+			-- Charges left to right underneath the text, so the readout is
+			-- legible at a glance without anyone having to read the number.
+			local fill = PixelUI.image(groove, "bar_fill")
+			fill.Name = "Fill"
+			fill.Size = UDim2.fromScale(1, 1)
+			fill.ImageColor3 = HUD_COLOR.ready
 
 			local label = Instance.new("TextLabel")
 			label.Name = "Label"
-			label.Position = UDim2.fromOffset(38, 0)
-			label.Size = UDim2.new(1, -44, 1, 0)
+			label.Position = groove.Position
+			label.Size = groove.Size
 			label.BackgroundTransparency = 1
 			label.FontFace = Theme.Fonts.BodyBold
 			label.TextSize = Theme.TextSize.Small
 			label.TextXAlignment = Enum.TextXAlignment.Left
-			label.TextColor3 = Theme.Color.Text
+			label.TextColor3 = Theme.PixelColor.OnWood
+			label.TextStrokeColor3 = Theme.PixelColor.Outline
+			label.TextStrokeTransparency = 0
 			label.Text = definition.displayName or abilityName
-			label.ZIndex = row.ZIndex + 1
+			label.ZIndex = 4
 			label.Parent = row
 
 			hudRows[abilityName] = {
 				row = row,
+				frame = frame,
+				keycap = keycap,
 				fill = fill,
 				label = label,
 				definition = definition,
@@ -287,23 +323,28 @@ local function updateHud()
 		local since = now - (castAt[abilityName] or -math.huge)
 
 		if cooldown <= 0 or since >= cooldown then
-			-- Ready again: the row lights up and bumps once, on the frame it
-			-- comes off cooldown, so the moment is noticed without being watched.
+			-- Ready again: the frame flushes gold and the row bumps once, on the
+			-- frame it comes off cooldown, so the moment is noticed without being
+			-- watched.
 			if row.cooling then
 				row.cooling = false
-				Motion.flash(row.row, Theme.Color.Accent, "BackgroundColor3")
+				Motion.flash(row.frame, HUD_COLOR.ready, "ImageColor3")
 				Motion.pulse(row.row, 1.06)
 			end
 
-			row.fill.Size = UDim2.fromScale(0, 1)
+			row.fill.Size = UDim2.fromScale(1, 1)
+			row.fill.ImageColor3 = HUD_COLOR.ready
+			row.keycap.ImageColor3 = Color3.new(1, 1, 1)
 			row.label.Text = row.name
-			row.label.TextColor3 = Theme.Color.Text
+			row.label.TextColor3 = Theme.PixelColor.OnWood
 		else
 			row.cooling = true
 			local remaining = cooldown - since
-			row.fill.Size = UDim2.fromScale(remaining / cooldown, 1)
+			row.fill.Size = UDim2.fromScale(1 - remaining / cooldown, 1)
+			row.fill.ImageColor3 = HUD_COLOR.charging
+			row.keycap.ImageColor3 = Theme.PixelColor.Disabled
 			row.label.Text = string.format("%s  %.1fs", row.name, remaining)
-			row.label.TextColor3 = Theme.Color.TextDim
+			row.label.TextColor3 = Theme.PixelColor.OnWoodDim
 		end
 	end
 end

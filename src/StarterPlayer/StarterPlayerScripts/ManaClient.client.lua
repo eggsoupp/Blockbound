@@ -59,12 +59,11 @@ local playerGui = player:WaitForChild("PlayerGui")
 	the one below it ends:
 
 	    the feedback column 270   (Shared.UI.Feedback owns it)
-	    ability cooldowns 176   (AbilityClient HUD.bottom)
-	    THIS              141   (33 tall, so its top is at 174)
-	    health             96   (HealthClient L.bottom, 39 tall)
+	    ability cooldowns 126   (AbilityClient HUD.bottom, up to three 33-tall rows)
+	    THIS               85   (33 tall, so its top is at 118)
+	    health             40   (HealthClient L.bottom, 39 tall)
 
-	Inserting this pushed the two above it up by 26. If it moves again, they
-	move with it.
+	If one moves, the ones above it move with it.
 
 	It is the health bar's wooden frame on a shorter groove, with a blue star
 	over its left end where the health bar has its heart.
@@ -74,7 +73,7 @@ local L = {
 	-- The frame's art with a 4-texel groove, at 3px a texel.
 	height = 33,
 	pad = 16,
-	bottom = 141,
+	bottom = 85,
 	-- As the health bar: the frame starts under the star, the fill clear of it.
 	iconInset = 15,
 	iconClear = 10,

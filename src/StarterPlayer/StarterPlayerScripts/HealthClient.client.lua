@@ -48,8 +48,9 @@ local L = {
 	-- The frame's art: a 6-texel groove in a 13-texel bar, at 3px a texel.
 	height = 39,
 	pad = 16,
-	-- The bottom of the HUD column; ManaClient stacks on top of this.
-	bottom = 96,
+	-- The bottom of the HUD column; ManaClient stacks on top of this. Low, so
+	-- the ability rows above the mana bar have room to be seen.
+	bottom = 40,
 	-- The frame starts this far in, so the heart can sit over its left end, and
 	-- the fill starts this much further in again, clear of the heart.
 	iconInset = 15,

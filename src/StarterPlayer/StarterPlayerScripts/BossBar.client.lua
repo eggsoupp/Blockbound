@@ -1,7 +1,7 @@
 --[[
 	BossBar
 
-	The boss's health, across the top of the screen.
+	The boss's health, across the bottom of the screen.
 
 	Up whenever ServerScriptService.BossService says there is one and down when
 	it says there is not. Everyone in the server sees it, including somebody who
@@ -13,8 +13,12 @@
 	The player's own bar is in the corner, small and always there, and it is
 	read in peripheral vision. This is the opposite: it is the thing the fight
 	is ABOUT, it is only up during one, and it wants to be looked at directly.
-	So it goes where a player's eyes already are - across the top, under the
-	name - rather than becoming a third row in the bottom-left column.
+	So it is big and in the middle - bottom centre, rather than becoming a
+	third row in the bottom-left column.
+
+	It used to run across the top, and the inventory lives up there now: the
+	hotbar always, the bag when it is open. A boss fight is exactly when a
+	player needs both, so the bar moved down out of their way.
 
 	IT IS BUILT OUT OF FOUR LAYERS, AND EACH ANSWERS A DIFFERENT QUESTION
 
@@ -62,15 +66,18 @@ local P = Theme.PixelColor
 -- ---------------------------------------------------------------------------
 
 --[[
-	640 wide rather than wider: the hotbar shares this band at the top left, and
-	any wider and the skull on the bar's end runs into its last slot.
-
 	The name banner sits on the frame's top rim, overlapping it by 6px, and the
 	move's pill hangs under the frame.
+
+	`bottom` lifts it off the screen's edge; `clear` is how much room it leaves
+	either side for the bottom-left column (health, mana, the ability rows and
+	the defense readout beside the health bar). On a screen too narrow for that
+	it is scaled down, never below MIN_SCALE, rather than drawn over them.
 ]]
 local L = {
 	width = 640,
-	top = 58,
+	bottom = 20,
+	clear = 450,
 	frameTop = 36,
 	-- The frame's art with an 8-texel groove, at 3px a texel.
 	frameHeight = 48,
@@ -92,6 +99,8 @@ local FILL_SPEED = 12
 local GHOST_SPEED = 2.2
 
 local GHOST_TRANSPARENCY = 0.3
+
+local MIN_SCALE = 0.6
 
 local FADE = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
@@ -123,14 +132,30 @@ screen.Parent = playerGui
 ]]
 local root = Instance.new("CanvasGroup")
 root.Name = "Boss"
-root.AnchorPoint = Vector2.new(0.5, 0)
-root.Position = UDim2.new(0.5, 0, 0, L.top)
+root.AnchorPoint = Vector2.new(0.5, 1)
+root.Position = UDim2.new(0.5, 0, 1, -L.bottom)
 root.Size = UDim2.fromOffset(
 	L.width + L.side * 2, L.frameTop + L.frameHeight + L.moveGap + MOVE_HEIGHT
 )
 root.BackgroundTransparency = 1
 root.GroupTransparency = 1
 root.Parent = screen
+
+-- Shrinks it on a screen too narrow to leave the bottom-left column clear.
+local rootScale = Instance.new("UIScale")
+rootScale.Parent = root
+
+local function fit()
+	local width = screen.AbsoluteSize.X
+	if width <= 0 then
+		return
+	end
+	local room = width - L.clear * 2
+	rootScale.Scale = math.clamp(room / root.Size.X.Offset, MIN_SCALE, 1)
+end
+
+fit()
+screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
 
 local banner, title = PixelUI.header(root, "", "header_red")
 banner.Name = "Title"
@@ -287,6 +312,8 @@ local function setVisible(next: boolean)
 
 	if next then
 		screen.Enabled = true
+		-- A disabled ScreenGui may not have reported its size yet.
+		fit()
 		fade = TweenService:Create(root, FADE, { GroupTransparency = 0 })
 		fade:Play()
 		return

@@ -25,6 +25,7 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local ItemModels = require(script.Parent:WaitForChild("ItemModels"))
+local PixelUI = require(script.Parent:WaitForChild("PixelUI"))
 local WeaponClasses = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponClasses"))
 
 local ItemPreview = {}
@@ -33,7 +34,7 @@ local ItemPreview = {}
 -- the panel. `estimate` is only used on the first frame of the first hover,
 -- before there is a measured height to place against.
 local PANEL = {
-	width = 224,
+	width = 240,
 	viewHeight = 104,
 	nameHeight = 20,
 	gap = 10,
@@ -77,33 +78,18 @@ function ItemPreview.mount(parent: Instance)
 		return
 	end
 
-	local frame = Instance.new("Frame")
+	-- The pixel kit's dark tooltip: it sits over parchment, so it has to be the
+	-- one dark thing on that screen to read as floating above it.
+	local frame = PixelUI.image(nil, "tooltip")
 	frame.Name = "ItemPreview"
 	frame.Size = UDim2.fromOffset(PANEL.width, 0)
 	frame.AutomaticSize = Enum.AutomaticSize.Y
-	frame.BackgroundColor3 = Theme.Color.Panel
-	frame.BackgroundTransparency = Theme.Transparency.Panel
-	frame.BorderSizePixel = 0
 	frame.Visible = false
 	-- Above the slots, below the drag icon at 101.
 	frame.ZIndex = 60
 	frame.Parent = parent
 
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 6)
-	corner.Parent = frame
-
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Theme.Color.Stroke
-	stroke.Thickness = 1
-	stroke.Parent = frame
-
-	local padding = Instance.new("UIPadding")
-	padding.PaddingTop = UDim.new(0, PANEL.edge)
-	padding.PaddingBottom = UDim.new(0, PANEL.edge)
-	padding.PaddingLeft = UDim.new(0, PANEL.edge)
-	padding.PaddingRight = UDim.new(0, PANEL.edge)
-	padding.Parent = frame
+	PixelUI.padTo(frame, "tooltip", PANEL.edge - PixelUI.Scale * 2)
 
 	-- Stacked, not positioned: the description's height is its text's, so
 	-- everything under it moves when the text does.
@@ -117,8 +103,8 @@ function ItemPreview.mount(parent: Instance)
 	view.Name = "View"
 	view.LayoutOrder = 1
 	view.Size = UDim2.new(1, 0, 0, PANEL.viewHeight)
-	view.BackgroundColor3 = Theme.Color.Backdrop
-	view.BackgroundTransparency = 0.35
+	view.BackgroundColor3 = Color3.fromRGB(26, 16, 8)
+	view.BackgroundTransparency = 0.25
 	view.BorderSizePixel = 0
 	view.ZIndex = frame.ZIndex + 1
 
@@ -158,7 +144,7 @@ function ItemPreview.mount(parent: Instance)
 	description.BackgroundTransparency = 1
 	description.FontFace = Theme.Fonts.Body
 	description.TextSize = Theme.TextSize.Small
-	description.TextColor3 = Theme.Color.TextDim
+	description.TextColor3 = Theme.PixelColor.OnWoodDim
 	description.TextXAlignment = Enum.TextXAlignment.Left
 	description.TextYAlignment = Enum.TextYAlignment.Top
 	description.TextWrapped = true

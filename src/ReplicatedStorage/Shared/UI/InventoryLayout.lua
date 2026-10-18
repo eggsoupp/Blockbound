@@ -45,6 +45,15 @@
 	  43     Row7 (the bin)
 
 	Kept, so the Explorer reads the same as it always did.
+
+	THE PANELS BEHIND
+
+	Drawn from the pixel-art kit (Shared.UI.PixelUI): opening the bag puts a
+	wood-framed parchment panel behind the hotbar, the bag and the bin, and the
+	gear column sits on a wooden one. Both are open panels, so a closed
+	inventory is still just the hotbar's nine slots. The panels hang OUTSIDE
+	their groups by FRAME_PAD, which is why the groups sit that much further
+	in from the screen's edges than the tiles alone would need.
 ]]
 
 local GuiService = game:GetService("GuiService")
@@ -54,6 +63,7 @@ local TweenService = game:GetService("TweenService")
 local InventoryConstants = require(ReplicatedStorage:WaitForChild("InventoryConstants"))
 local Theme = require(script.Parent:WaitForChild("Theme"))
 local SlotArt = require(script.Parent:WaitForChild("SlotArt"))
+local PixelUI = require(script.Parent:WaitForChild("PixelUI"))
 
 local InventoryLayout = {}
 
@@ -104,6 +114,16 @@ local ITEM_LABEL_HEIGHT = 28
 
 local TITLE_HEIGHT = Theme.TextSize.Small + 6
 
+-- From a group's edge to the edge of the panel behind it: the frame art's
+-- border, and a little parchment before the first tile.
+local FRAME_PAD = (PixelUI.border("frame_parchment")) + 4
+
+-- Between the bottom of Roblox's top bar and the top of the open panel.
+local TOPBAR_CLEARANCE = 4
+
+-- The gear column is wider than its slots, so its titles fit inside its panel.
+local GEAR_WIDTH = 104
+
 -- The height Roblox's top bar is assumed to have when it reports none, the
 -- same floor SettingsButton uses for the button it puts in that bar.
 local MIN_TOPBAR_HEIGHT = 36
@@ -139,7 +159,7 @@ local MAX_WIDTH_SHARE = 0.6
 local function scaleFor(screenSize: Vector2): number
 	local scale = math.min(
 		math.max(1, screenSize.Y / DESIGN_HEIGHT),
-		screenSize.X * MAX_WIDTH_SHARE / GRID_WIDTH
+		screenSize.X * MAX_WIDTH_SHARE / (GRID_WIDTH + FRAME_PAD * 2)
 	)
 	return math.clamp(scale * INVENTORY_SIZE, MIN_SCALE, MAX_SCALE)
 end
@@ -166,7 +186,7 @@ local BIN_SPRITE = {
 }
 
 local BIN_ICON_SCALE = 0.62
-local BIN_ICON_TRANSPARENCY = 0.55
+local BIN_ICON_TRANSPARENCY = 0.45
 
 --[[
 	Drawn BEHIND the slot's icon and count rather than instead of them: an
@@ -191,7 +211,7 @@ local function drawBinIcon(tile: GuiObject)
 		for column = 1, columns do
 			if string.sub(line, column, column) == "#" then
 				local pixel = Instance.new("Frame")
-				pixel.BackgroundColor3 = Theme.Color.TextDim
+				pixel.BackgroundColor3 = Theme.PixelColor.Ink
 				pixel.BackgroundTransparency = BIN_ICON_TRANSPARENCY
 				pixel.BorderSizePixel = 0
 				pixel.ZIndex = 1
@@ -216,7 +236,7 @@ end
 	sinks clicks that would otherwise go through to the world and swing
 	whatever is in hand.
 ]]
-local function newTile(parent: Instance, name: string, position: UDim2): ImageButton
+local function newTile(parent: Instance, name: string, position: UDim2, variant: string?): ImageButton
 	local tile = Instance.new("ImageButton")
 	tile.Name = name
 	tile.AutoButtonColor = false
@@ -226,7 +246,7 @@ local function newTile(parent: Instance, name: string, position: UDim2): ImageBu
 	tile.Position = position
 	tile.ZIndex = 1
 	tile.Parent = parent
-	SlotArt.apply(tile)
+	SlotArt.apply(tile, variant)
 
 	local icon = Instance.new("ImageButton")
 	icon.Name = "icon"
@@ -277,14 +297,27 @@ local function newRow(parent: Instance, name: string, top: number, count: number
 	return row
 end
 
--- The same running down, Slot1 at the top.
+-- The same running down, Slot1 at the top. These are the gear, on wood, so
+-- their slots are the dark ones.
 local function newColumn(parent: Instance, name: string, top: number, count: number): Frame
 	local column = newGroup(parent, name, UDim2.fromOffset(SLOT, count * ROW_PITCH - ROW_GAP))
-	column.Position = UDim2.fromOffset(0, top)
+	column.AnchorPoint = Vector2.new(0.5, 0)
+	column.Position = UDim2.new(0.5, 0, 0, top)
 	for index = 1, count do
-		newTile(column, "Slot" .. index, UDim2.fromOffset(0, (index - 1) * ROW_PITCH))
+		newTile(column, "Slot" .. index, UDim2.fromOffset(0, (index - 1) * ROW_PITCH), "dark")
 	end
 	return column
+end
+
+-- A pixel panel hanging FRAME_PAD outside `group` on every side, behind its
+-- tiles.
+local function newBacking(group: Instance, sprite: string): ImageLabel
+	local backing = PixelUI.image(group, sprite)
+	backing.Name = "Panel"
+	backing.Position = UDim2.fromOffset(-FRAME_PAD, -FRAME_PAD)
+	backing.Size = UDim2.new(1, FRAME_PAD * 2, 1, FRAME_PAD * 2)
+	backing.ZIndex = 0
+	return backing
 end
 
 local function newTitle(parent: Instance, text: string, top: number): TextLabel
@@ -295,11 +328,11 @@ local function newTitle(parent: Instance, text: string, top: number): TextLabel
 	-- a slot-wide box.
 	title.AnchorPoint = Vector2.new(0.5, 0)
 	title.Position = UDim2.new(0.5, 0, 0, top)
-	title.Size = UDim2.fromOffset(SLOT * 2.5, TITLE_HEIGHT)
+	title.Size = UDim2.fromOffset(GEAR_WIDTH, TITLE_HEIGHT)
 	title.FontFace = Theme.Fonts.Heading
 	title.TextSize = Theme.TextSize.Small
-	title.TextColor3 = Theme.Color.Text
-	title.TextStrokeTransparency = 0.4
+	title.TextColor3 = Theme.PixelColor.OnWood
+	title.TextStrokeTransparency = 1
 	title.Text = text
 	title.Parent = parent
 	return title
@@ -310,105 +343,43 @@ end
 -- ---------------------------------------------------------------------------
 
 --[[
-	An accent frame AROUND the selected tile, with a soft glow outside it and a
-	small tab under it pointing up at the item.
+	The pixel kit's slot highlight AROUND the selected tile, tinted gold.
 
 	It used to be a translucent yellow rectangle laid over the tile, which
 	tinted the very item it was pointing at, and was placed from the tile's
 	on-screen position - so a tile caught mid-hover or mid-pulse put it a few
 	pixels out. This one lives in the hotbar row itself and is placed from the
 	tiles' RESTING offsets, so it lines up exactly at any screen size and never
-	covers what is in the slot: only its border is drawn.
+	covers what is in the slot: the art is a ring with nothing in the middle.
 ]]
-local MARKER_OUTSET = 4
-local MARKER_STROKE = 3
-local MARKER_GLOW = 7
-local MARKER_GLOW_TRANSPARENCY = 0.78
-local MARKER_TAB = 8
+local MARKER_OUTSET = 3
 local MARKER_SLIDE = TweenInfo.new(0.14, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 local MARKER_POP = TweenInfo.new(0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 
 local function newSelectionMarker(row: Instance)
-	local marker = Instance.new("Frame")
+	local marker = PixelUI.image(nil, "slot_highlight")
 	marker.Name = "Selection"
-	marker.BackgroundTransparency = 1
+	marker.ImageColor3 = Theme.PixelColor.Selection
 	marker.AnchorPoint = Vector2.new(0.5, 0.5)
 	marker.Size = UDim2.fromOffset(SLOT + MARKER_OUTSET * 2, SLOT + MARKER_OUTSET * 2)
 	-- Above the tiles, swollen ones included (they step up to ZIndex 2), so
-	-- the border is never hidden under a neighbour.
+	-- the ring is never hidden under a neighbour.
 	marker.ZIndex = 5
 	marker.Visible = false
 	marker.Parent = row
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 8)
-	corner.Parent = marker
-
-	local stroke = Instance.new("UIStroke")
-	stroke.Name = "Border"
-	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	stroke.Color = Theme.Color.Accent
-	stroke.Thickness = MARKER_STROKE
-	stroke.Parent = marker
-
-	-- A lighter edge across the top, so the frame reads as lit rather than as a
-	-- flat outline.
-	local sheen = Instance.new("UIGradient")
-	sheen.Rotation = 90
-	sheen.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(205, 205, 205))
-	sheen.Parent = stroke
-
-	-- The glow: a wider, faint stroke on a slightly larger frame behind it.
-	local glow = Instance.new("Frame")
-	glow.Name = "Glow"
-	glow.BackgroundTransparency = 1
-	glow.AnchorPoint = Vector2.new(0.5, 0.5)
-	glow.Position = UDim2.fromScale(0.5, 0.5)
-	glow.Size = UDim2.new(1, MARKER_GLOW, 1, MARKER_GLOW)
-	glow.ZIndex = 5
-	glow.Parent = marker
-
-	local glowCorner = Instance.new("UICorner")
-	glowCorner.CornerRadius = UDim.new(0, 11)
-	glowCorner.Parent = glow
-
-	local glowStroke = Instance.new("UIStroke")
-	glowStroke.Color = Theme.Color.Accent
-	glowStroke.Thickness = MARKER_GLOW
-	glowStroke.Transparency = MARKER_GLOW_TRANSPARENCY
-	glowStroke.Parent = glow
-
-	-- The tab: a small diamond half-tucked under the bottom edge, short enough
-	-- to clear the bag row that opens beneath the hotbar.
-	local tab = Instance.new("Frame")
-	tab.Name = "Tab"
-	tab.AnchorPoint = Vector2.new(0.5, 0.5)
-	tab.Position = UDim2.new(0.5, 0, 1, -1)
-	tab.Size = UDim2.fromOffset(MARKER_TAB, MARKER_TAB)
-	tab.Rotation = 45
-	tab.BackgroundColor3 = Theme.Color.Accent
-	tab.BorderSizePixel = 0
-	tab.ZIndex = 6
-	tab.Parent = marker
-
-	local tabCorner = Instance.new("UICorner")
-	tabCorner.CornerRadius = UDim.new(0, 2)
-	tabCorner.Parent = tab
 
 	local pop = Instance.new("UIScale")
 	pop.Parent = marker
 
 	--[[
-		With the bag open, the next row is only ROW_GAP below the hotbar, and
-		the frame, glow and tab would spill over the top of its tiles. Tucked,
-		the frame is drawn just inside the tile's edge - still clear of the
-		item, which is inset further - and the glow and tab are hidden.
+		With the bag open, the next row is only ROW_GAP below the hotbar, and a
+		ring standing proud of the tile would spill over the top of its tiles.
+		Tucked, the ring is drawn exactly over the tile's own border - still
+		clear of the item, which is inset further.
 	]]
 	local function setTucked(tucked: boolean)
-		local outset = if tucked then -MARKER_STROKE else MARKER_OUTSET
+		local outset = if tucked then 0 else MARKER_OUTSET
 		marker.Size = UDim2.fromOffset(SLOT + outset * 2, SLOT + outset * 2)
-		glow.Visible = not tucked
-		tab.Visible = not tucked
 	end
 
 	local current: number? = nil
@@ -466,6 +437,9 @@ function InventoryLayout.build(playerGui: Instance)
 	local bagScale = Instance.new("UIScale")
 	bagScale.Parent = bag
 
+	-- Behind the hotbar, bag and bin, and only while the bag is open.
+	local bagPanel = newBacking(bag, "frame_parchment")
+
 	local hotbar = newRow(bag, "Row1", 0, HOTBAR_SLOTS)
 	local selectHotbar, tuckSelection = newSelectionMarker(hotbar)
 
@@ -481,12 +455,13 @@ function InventoryLayout.build(playerGui: Instance)
 	itemLabel.Name = "ItemLabel"
 	itemLabel.BackgroundTransparency = 1
 	itemLabel.AnchorPoint = Vector2.new(0, 0.5)
-	itemLabel.Position = UDim2.fromOffset(GRID_WIDTH + Theme.Spacing.Section, SLOT / 2)
+	itemLabel.Position = UDim2.fromOffset(GRID_WIDTH + FRAME_PAD + Theme.Spacing.Section, SLOT / 2)
 	itemLabel.Size = UDim2.fromOffset(ITEM_LABEL_WIDTH, ITEM_LABEL_HEIGHT)
 	itemLabel.FontFace = Theme.Fonts.Heading
 	itemLabel.TextSize = Theme.TextSize.Heading
 	itemLabel.TextColor3 = Theme.Color.Text
-	itemLabel.TextStrokeTransparency = 0.4
+	itemLabel.TextStrokeColor3 = Color3.fromRGB(43, 24, 16)
+	itemLabel.TextStrokeTransparency = 0.2
 	itemLabel.TextXAlignment = Enum.TextXAlignment.Left
 	itemLabel.Text = ""
 	itemLabel.Parent = bag
@@ -497,11 +472,11 @@ function InventoryLayout.build(playerGui: Instance)
 	local accessoryTitleTop = TITLE_HEIGHT + armorCount * ROW_PITCH - ROW_GAP + Theme.Spacing.Section
 	local gearHeight = accessoryTitleTop + TITLE_HEIGHT + accessoryCount * ROW_PITCH - ROW_GAP
 
-	local gear = newGroup(gui, "Gear", UDim2.fromOffset(SLOT, gearHeight))
+	local gear = newGroup(gui, "Gear", UDim2.fromOffset(GEAR_WIDTH, gearHeight))
 	gear.AnchorPoint = Vector2.new(1, 1)
-	gear.Position = UDim2.new(1, -Theme.Spacing.Edge, 1, -Theme.Spacing.Edge)
 	local gearScale = Instance.new("UIScale")
 	gearScale.Parent = gear
+	newBacking(gear, "frame_wood")
 
 	newTitle(gear, "ARMOR", 0)
 	local armorColumn = newColumn(gear, "Row6", TITLE_HEIGHT, armorCount)
@@ -529,7 +504,7 @@ function InventoryLayout.build(playerGui: Instance)
 	)
 
 	-- Everything but the hotbar waits for the inventory to open.
-	local openPanels = { binRow, gear }
+	local openPanels = { bagPanel, binRow, gear }
 	for _, row in ipairs(bagRows) do
 		table.insert(openPanels, row)
 	end
@@ -537,19 +512,28 @@ function InventoryLayout.build(playerGui: Instance)
 		panel.Visible = false
 	end
 
-	-- Under Roblox's top bar, which changes height between devices and when
-	-- Roblox redraws it, and scaled to the screen.
-	local function fit()
-		local inset = GuiService.TopbarInset
-		local top = inset.Min.Y + math.max(inset.Height, MIN_TOPBAR_HEIGHT)
-		bag.Position = UDim2.fromOffset(Theme.Spacing.Edge, top + Theme.Spacing.Gap)
+	--[[
+		Under Roblox's top bar, which changes height between devices and when
+		Roblox redraws it, and scaled to the screen.
 
+		The groups are placed so the panels hanging outside them clear the top
+		bar and the screen's edges. Those panels are inside the scaled groups,
+		so how far they hang out is FRAME_PAD at the group's scale.
+	]]
+	local function fit()
+		local scale = bagScale.Scale
 		local screenSize = gui.AbsoluteSize
 		if screenSize.X > 0 and screenSize.Y > 0 then
-			local scale = scaleFor(screenSize)
+			scale = scaleFor(screenSize)
 			bagScale.Scale = scale
 			gearScale.Scale = scale
 		end
+
+		local hang = FRAME_PAD * scale
+		local inset = GuiService.TopbarInset
+		local top = inset.Min.Y + math.max(inset.Height, MIN_TOPBAR_HEIGHT)
+		bag.Position = UDim2.fromOffset(Theme.Spacing.Edge + hang, top + TOPBAR_CLEARANCE + hang)
+		gear.Position = UDim2.new(1, -(Theme.Spacing.Edge + hang), 1, -(Theme.Spacing.Edge + hang))
 	end
 
 	fit()

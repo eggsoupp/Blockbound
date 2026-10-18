@@ -358,6 +358,12 @@
           "SlotArt": {
             "$path": "src/ReplicatedStorage/Shared/UI/SlotArt.lua"
           },
+          "PixelUI": {
+            "$path": "src/ReplicatedStorage/Shared/UI/PixelUI.lua"
+          },
+          "PixelSprites": {
+            "$path": "src/ReplicatedStorage/Shared/UI/PixelSprites.lua"
+          },
           "InventoryLayout": {
             "$path": "src/ReplicatedStorage/Shared/UI/InventoryLayout.lua"
           },

@@ -12,13 +12,14 @@
 	menu that stops you moving and swings the camera. The Tab menu is where you
 	go to look at your abilities; this is where you go to turn the music off.
 
-	IT IS BUILT TO LOOK LIKE ROBLOX'S OWN
+	THE BUTTON LOOKS LIKE ROBLOX'S OWN; THE PANEL LOOKS LIKE THE GAME'S
 
-	Same size and spacing as the core topbar buttons, the same translucent black
-	rounded square, the same white glyph, and the panel under it is the dark
-	rounded card with light dividers that Roblox's own menus use. The gear is
-	drawn from Frames rather than being an image, like every other icon in this
-	game - see Shared.UI.MenuBackdrop for the same idea at a larger scale.
+	The gear is chrome in Roblox's topbar, so it matches the core buttons beside
+	it: same size and spacing, the same translucent black rounded square, the
+	same white glyph, drawn from Frames rather than being an image. The panel
+	it opens is the game's, so it is drawn from the pixel-art kit like every
+	other window: parchment in a wooden frame, the kit's toggle, slider and
+	arrows (Shared.UI.PixelUI).
 
 	WHERE IT SITS IS ASKED FOR, NOT GUESSED
 
@@ -45,6 +46,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
+local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local Music = require(Shared.Audio:WaitForChild("Music"))
@@ -70,23 +72,19 @@ local BUTTON_CORNER = 8
 local BUTTON_TRANSPARENCY = 0.5
 local BUTTON_HOVER_TRANSPARENCY = 0.3
 
-local PANEL_WIDTH = 268
+local PANEL_WIDTH = 340
 local PANEL_TOP_GAP = 6
-local PANEL_PAD = 12
-local PANEL_ROW_HEIGHT = 44
-local PANEL_CORNER = 10
-local PANEL_TRANSPARENCY = 0.08
+-- Inside the frame art's border.
+local PANEL_PAD = 6
+local PANEL_ROW_HEIGHT = 46
 
--- The pill toggle: Roblox's own is about this shape.
-local TOGGLE_WIDTH = 44
-local TOGGLE_HEIGHT = 24
-local TOGGLE_KNOB = 18
+local VOLUME_WIDTH = 140
 
-local STEP_SIZE = 26
+-- The volume fill is a sliced sprite, and never drawn narrower than its two
+-- rounded ends.
+local VOLUME_FILL_MIN = 6 * PixelUI.Scale
 
-local VOLUME_WIDTH = 108
-local VOLUME_HEIGHT = 6
-local VOLUME_KNOB = 14
+local DISTANCE_BOX_WIDTH = 58
 
 -- Fractions of a view-distance step. The server owns the real bounds and sends
 -- them, so this is only the size of one press.
@@ -224,33 +222,14 @@ GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(place)
 -- The panel
 -- ---------------------------------------------------------------------------
 
-local panel = Instance.new("Frame")
+-- Parchment in a wooden frame, as tall as its rows.
+local panel = PixelUI.image(screen, "frame_parchment")
 panel.Name = "Panel"
 panel.AnchorPoint = Vector2.new(0, 0)
 panel.Size = UDim2.fromOffset(PANEL_WIDTH, 0)
 panel.AutomaticSize = Enum.AutomaticSize.Y
-panel.BackgroundColor3 = Theme.Color.Panel
-panel.BackgroundTransparency = PANEL_TRANSPARENCY
-panel.BorderSizePixel = 0
 panel.Visible = false
-panel.Parent = screen
-
-local panelCorner = Instance.new("UICorner")
-panelCorner.CornerRadius = UDim.new(0, PANEL_CORNER)
-panelCorner.Parent = panel
-
-local panelStroke = Instance.new("UIStroke")
-panelStroke.Color = Theme.Color.Stroke
-panelStroke.Thickness = 1
-panelStroke.Transparency = 0.4
-panelStroke.Parent = panel
-
-local panelPadding = Instance.new("UIPadding")
-panelPadding.PaddingTop = UDim.new(0, PANEL_PAD)
-panelPadding.PaddingBottom = UDim.new(0, PANEL_PAD)
-panelPadding.PaddingLeft = UDim.new(0, PANEL_PAD)
-panelPadding.PaddingRight = UDim.new(0, PANEL_PAD)
-panelPadding.Parent = panel
+PixelUI.padTo(panel, "frame_parchment", PANEL_PAD)
 
 local panelLayout = Instance.new("UIListLayout")
 panelLayout.FillDirection = Enum.FillDirection.Vertical
@@ -269,12 +248,8 @@ local function addRow(text: string): Frame
 	rowCount += 1
 
 	if rowCount > 1 then
-		local divider = Instance.new("Frame")
+		local divider = PixelUI.divider(panel)
 		divider.LayoutOrder = rowCount * 10 - 1
-		divider.Size = UDim2.new(1, 0, 0, 1)
-		divider.BackgroundColor3 = Theme.Color.Divider
-		divider.BorderSizePixel = 0
-		divider.Parent = panel
 	end
 
 	local row = Instance.new("Frame")
@@ -292,7 +267,7 @@ local function addRow(text: string): Frame
 	label.FontFace = Theme.Fonts.Body
 	label.TextSize = Theme.TextSize.Body
 	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.TextColor3 = Theme.Color.Text
+	label.TextColor3 = Theme.PixelColor.Ink
 	label.Text = text
 	label.Parent = row
 
@@ -320,50 +295,21 @@ local mutedMusicVolume = nil
 
 local soundRow = addRow("Sound")
 
-local toggle = Instance.new("TextButton")
+-- The kit's switch: two drawings, knob left on wood and knob right on green.
+local toggle = Instance.new("ImageButton")
 toggle.Name = "Toggle"
-toggle.Text = ""
 toggle.AutoButtonColor = false
 toggle.AnchorPoint = Vector2.new(1, 0.5)
 toggle.Position = UDim2.fromScale(1, 0.5)
-toggle.Size = UDim2.fromOffset(TOGGLE_WIDTH, TOGGLE_HEIGHT)
-toggle.BackgroundColor3 = Theme.Color.Good
+toggle.Size = PixelUI.size("toggle_on")
+toggle.BackgroundTransparency = 1
 toggle.BorderSizePixel = 0
 toggle.Parent = soundRow
 
-local toggleCorner = Instance.new("UICorner")
-toggleCorner.CornerRadius = UDim.new(1, 0)
-toggleCorner.Parent = toggle
-
-local knob = Instance.new("Frame")
-knob.Name = "Knob"
-knob.AnchorPoint = Vector2.new(0.5, 0.5)
-knob.Size = UDim2.fromOffset(TOGGLE_KNOB, TOGGLE_KNOB)
-knob.BackgroundColor3 = Color3.new(1, 1, 1)
-knob.BorderSizePixel = 0
-knob.Parent = toggle
-
-local knobCorner = Instance.new("UICorner")
-knobCorner.CornerRadius = UDim.new(1, 0)
-knobCorner.Parent = knob
-
-local function drawToggle(animate: boolean)
-	local slide = if soundOn then 1 else 0
-	local goal = {
-		Position = UDim2.new(
-			slide, (if soundOn then -1 else 1) * (TOGGLE_KNOB * 0.5 + 3), 0.5, 0
-		),
-	}
-
-	if animate then
-		TweenService:Create(knob, Theme.Tween.Hover, goal):Play()
-		TweenService:Create(toggle, Theme.Tween.Hover, {
-			BackgroundColor3 = if soundOn then Theme.Color.Good else Theme.Color.Stroke,
-		}):Play()
-	else
-		knob.Position = goal.Position
-		toggle.BackgroundColor3 = if soundOn then Theme.Color.Good else Theme.Color.Stroke
-	end
+-- Pixel art does not slide between texels, so the switch flips rather than
+-- tweening; the click sound is what confirms it.
+local function drawToggle(_animate: boolean)
+	PixelUI.apply(toggle, if soundOn then "toggle_on" else "toggle_off")
 end
 
 local function setSound(on: boolean)
@@ -419,48 +365,31 @@ drawToggle(false)
 ]]
 local volumeRow = addRow("Volume")
 
-local volumeTrack = Instance.new("Frame")
+-- The kit's slider: a wooden groove, a green fill in it, and a tan knob. The
+-- knob hangs half its width past the end at full volume, so the track stops
+-- that far short of the row's edge.
+local volumeKnobWidth = PixelUI.get("slider_knob").size.X * PixelUI.Scale
+
+local volumeTrack = PixelUI.image(volumeRow, "slider_track")
 volumeTrack.Name = "Track"
 volumeTrack.AnchorPoint = Vector2.new(1, 0.5)
-volumeTrack.Position = UDim2.fromScale(1, 0.5)
-volumeTrack.Size = UDim2.fromOffset(VOLUME_WIDTH, VOLUME_HEIGHT)
-volumeTrack.BackgroundColor3 = Theme.Color.Stroke
-volumeTrack.BorderSizePixel = 0
-volumeTrack.Parent = volumeRow
+volumeTrack.Position = UDim2.new(1, -volumeKnobWidth / 2, 0.5, 0)
+volumeTrack.Size = UDim2.fromOffset(VOLUME_WIDTH, PixelUI.get("slider_track").size.Y * PixelUI.Scale)
 
-local volumeTrackCorner = Instance.new("UICorner")
-volumeTrackCorner.CornerRadius = UDim.new(1, 0)
-volumeTrackCorner.Parent = volumeTrack
-
-local volumeFill = Instance.new("Frame")
+local volumeFill = PixelUI.image(volumeTrack, "slider_fill")
 volumeFill.Name = "Fill"
 volumeFill.Size = UDim2.fromScale(1, 1)
-volumeFill.BackgroundColor3 = Theme.Color.Good
-volumeFill.BorderSizePixel = 0
-volumeFill.Parent = volumeTrack
 
-local volumeFillCorner = Instance.new("UICorner")
-volumeFillCorner.CornerRadius = UDim.new(1, 0)
-volumeFillCorner.Parent = volumeFill
-
-local volumeKnob = Instance.new("Frame")
+local volumeKnob = PixelUI.image(volumeTrack, "slider_knob")
 volumeKnob.Name = "Knob"
 volumeKnob.AnchorPoint = Vector2.new(0.5, 0.5)
-volumeKnob.Size = UDim2.fromOffset(VOLUME_KNOB, VOLUME_KNOB)
-volumeKnob.BackgroundColor3 = Color3.new(1, 1, 1)
-volumeKnob.BorderSizePixel = 0
 volumeKnob.ZIndex = 2
-volumeKnob.Parent = volumeTrack
-
-local volumeKnobCorner = Instance.new("UICorner")
-volumeKnobCorner.CornerRadius = UDim.new(1, 0)
-volumeKnobCorner.Parent = volumeKnob
 
 --[[
 	The grab area, over the whole row rather than only the knob.
 
-	A 14px circle is a small thing to hit and an unforgiving one to miss, and
-	the row is otherwise doing nothing with the space.
+	A knob is a small thing to hit and an unforgiving one to miss, and the row
+	is otherwise doing nothing with the space.
 ]]
 local volumeGrab = Instance.new("TextButton")
 volumeGrab.Name = "Grab"
@@ -468,13 +397,14 @@ volumeGrab.Text = ""
 volumeGrab.AutoButtonColor = false
 volumeGrab.AnchorPoint = Vector2.new(1, 0.5)
 volumeGrab.Position = UDim2.fromScale(1, 0.5)
-volumeGrab.Size = UDim2.fromOffset(VOLUME_WIDTH + VOLUME_KNOB, PANEL_ROW_HEIGHT)
+volumeGrab.Size = UDim2.fromOffset(VOLUME_WIDTH + volumeKnobWidth, PANEL_ROW_HEIGHT)
 volumeGrab.BackgroundTransparency = 1
 volumeGrab.ZIndex = 3
 volumeGrab.Parent = volumeRow
 
 local function drawVolume(value: number)
-	volumeFill.Size = UDim2.fromScale(value, 1)
+	-- Never narrower than the fill's two ends; the knob covers the difference.
+	volumeFill.Size = UDim2.new(value, (1 - value) * VOLUME_FILL_MIN, 1, 0)
 	volumeKnob.Position = UDim2.new(value, 0, 0.5, 0)
 end
 
@@ -565,40 +495,43 @@ local distanceRow = addRow("View distance")
 
 local distance, distanceMin, distanceMax = nil, nil, nil
 
+-- The kit's green arrows either side of the number, which sits in a text box.
+local arrowWidth = PixelUI.get("icon_arrow_right").size.X * PixelUI.Scale
+
+local distanceBox = PixelUI.image(distanceRow, "input")
+distanceBox.Name = "Distance"
+distanceBox.AnchorPoint = Vector2.new(1, 0.5)
+distanceBox.Position = UDim2.new(1, -(arrowWidth + 6), 0.5, 0)
+distanceBox.Size = UDim2.fromOffset(DISTANCE_BOX_WIDTH, 36)
+
 local distanceValue = Instance.new("TextLabel")
-distanceValue.AnchorPoint = Vector2.new(1, 0.5)
-distanceValue.Position = UDim2.new(1, -(STEP_SIZE + 6), 0.5, 0)
-distanceValue.Size = UDim2.fromOffset(52, PANEL_ROW_HEIGHT)
+distanceValue.Size = UDim2.fromScale(1, 1)
 distanceValue.BackgroundTransparency = 1
 distanceValue.FontFace = Theme.Fonts.Number
 distanceValue.TextSize = Theme.TextSize.Body
-distanceValue.TextColor3 = Theme.Color.TextDim
+distanceValue.TextColor3 = Theme.PixelColor.InkSoft
 distanceValue.Text = "..."
-distanceValue.Parent = distanceRow
+distanceValue.Parent = distanceBox
 
-local function stepButton(text: string, offsetFromRight: number): TextButton
-	local step = Instance.new("TextButton")
-	step.Text = text
+local function stepButton(sprite: string, offsetFromRight: number): ImageButton
+	local step = Instance.new("ImageButton")
+	step.Name = sprite
 	step.AutoButtonColor = false
 	step.AnchorPoint = Vector2.new(1, 0.5)
 	step.Position = UDim2.new(1, -offsetFromRight, 0.5, 0)
-	step.Size = UDim2.fromOffset(STEP_SIZE, STEP_SIZE)
-	step.BackgroundColor3 = Theme.Color.PanelRaised
+	step.Size = PixelUI.size(sprite)
+	step.BackgroundTransparency = 1
 	step.BorderSizePixel = 0
-	step.FontFace = Theme.Fonts.Number
-	step.TextSize = Theme.TextSize.Body
-	step.TextColor3 = Theme.Color.Text
 	step.Parent = distanceRow
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 6)
-	corner.Parent = step
-
+	PixelUI.apply(step, sprite)
 	return step
 end
 
-local minus = stepButton("-", STEP_SIZE + 6 + 52 + 6)
-local plus = stepButton("+", 0)
+local minus = stepButton("icon_arrow_left", arrowWidth + 6 + DISTANCE_BOX_WIDTH + 6)
+local plus = stepButton("icon_arrow_right", 0)
+
+-- How an arrow looks with nowhere left to go.
+local ARROW_SPENT_TRANSPARENCY = 0.6
 
 local function drawDistance()
 	if not distance then
@@ -607,16 +540,16 @@ local function drawDistance()
 	end
 
 	distanceValue.Text = tostring(distance)
-	distanceValue.TextColor3 = Theme.Color.Text
+	distanceValue.TextColor3 = Theme.PixelColor.Ink
 
-	-- Greyed at the ends rather than hidden, so the range is visible without
+	-- Faded at the ends rather than hidden, so the range is visible without
 	-- the row changing shape.
-	minus.TextColor3 = if distanceMin and distance <= distanceMin
-		then Theme.Color.Disabled
-		else Theme.Color.Text
-	plus.TextColor3 = if distanceMax and distance >= distanceMax
-		then Theme.Color.Disabled
-		else Theme.Color.Text
+	minus.ImageTransparency = if distanceMin and distance <= distanceMin
+		then ARROW_SPENT_TRANSPARENCY
+		else 0
+	plus.ImageTransparency = if distanceMax and distance >= distanceMax
+		then ARROW_SPENT_TRANSPARENCY
+		else 0
 end
 
 local function requestDistance(delta: number)

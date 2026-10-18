@@ -65,9 +65,10 @@ local function playClick()
 	Sounds.play("ui.click")
 end
 
--- Slot tile tints. The tile art is a light frame, so "idle" is slightly dimmed
--- and hovering brings it back to full brightness.
-local SLOT_IDLE  = Color3.fromRGB(206, 206, 206)
+-- Slot tile tints. The tile art is light parchment, so "idle" is a touch dimmed
+-- and hovering brings it back to full brightness. Only a touch: dimmed any
+-- further, parchment turns to mud.
+local SLOT_IDLE  = Color3.fromRGB(230, 230, 230)
 local SLOT_HOVER = Color3.fromRGB(255, 255, 255)
 
 --[[

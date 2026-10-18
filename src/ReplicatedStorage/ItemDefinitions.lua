@@ -513,6 +513,15 @@ local ItemDefinitions = {
 		classification = "Workbench",
 		value = 15,
 	},
+	-- A storage station (Shared.Crafting.StationConfig): placed like a bench,
+	-- opened rather than crafted at. Islands only - see its station entry.
+	Chest = {
+		description = "Holds 27 stacks. Place it on your island and open it to store things.",
+		rarity = "Common",
+		maxStack = 16,
+		classification = "Workbench",
+		value = 20,
+	},
 	Furnace = {
 		icon = "rbxassetid://3000000501",
 		description = "Smelts ores into ingots.",

@@ -16,6 +16,14 @@
 
 	Every check runs on the server, and range is re-checked at craft time rather
 	than only when the prompt appears.
+
+	STORAGE STATIONS (a chest: StationConfig `storage`) carry their contents
+	on their own record, `station.items` - { [slot] = { name, count } } - so
+	they are exported, saved and restored with the station rather than kept
+	somewhere that could disagree with it. ChestServer is what changes them.
+	A storage station is marked StorageId instead of StationId, which is what
+	keeps the crafting window from treating it as a bench, and it refuses to
+	be picked up while anything is in it.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -24,6 +32,7 @@ local CollectionService = game:GetService("CollectionService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local StationConfig = require(Shared:WaitForChild("Crafting"):WaitForChild("StationConfig"))
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
+local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
 
 local StationService = {}
 
@@ -88,6 +97,66 @@ local function cellCentre(x, y, z)
 		y * STUD_SIZE + STUD_SIZE * 0.5,
 		z * STUD_SIZE + STUD_SIZE * 0.5
 	)
+end
+
+-- ---------------------------------------------------------------------------
+-- Storage contents
+-- ---------------------------------------------------------------------------
+
+-- Whether a storage station's contents hold anything at all.
+local function holdsItems(items)
+	if type(items) ~= "table" then
+		return false
+	end
+	for _, stack in pairs(items) do
+		if type(stack) == "table" and stack.name and (stack.count or 0) > 0 then
+			return true
+		end
+	end
+	return false
+end
+
+--[[
+	A saved list - { { slot, name, count }, ... } - back into the slot map,
+	dropping anything outside the station's slots or not shaped like a stack.
+	What an item IS is ChestServer's to judge when it is moved; here it only
+	has to be the shape a slot holds.
+]]
+local function itemsFromList(list, size)
+	local items = {}
+	if type(list) ~= "table" then
+		return items
+	end
+	for _, record in ipairs(list) do
+		if type(record) == "table" then
+			local slot, name, count = record[1], record[2], record[3]
+			if
+				type(slot) == "number" and slot % 1 == 0 and slot >= 1 and slot <= size
+				and type(name) == "string" and name ~= ""
+				and type(count) == "number" and count % 1 == 0 and count >= 1
+				and not items[slot]
+			then
+				items[slot] = { name = name, count = count }
+			end
+		end
+	end
+	return items
+end
+
+local function itemsToList(items)
+	local list = {}
+	if type(items) ~= "table" then
+		return list
+	end
+	for slot, stack in pairs(items) do
+		if type(stack) == "table" and stack.name and (stack.count or 0) > 0 then
+			table.insert(list, { slot, stack.name, stack.count })
+		end
+	end
+	table.sort(list, function(a, b)
+		return a[1] < b[1]
+	end)
+	return list
 end
 
 -- ---------------------------------------------------------------------------
@@ -276,6 +345,12 @@ function StationService.place(player, blockX, by, blockZ, stationId)
 		return false, "Too far"
 	end
 
+	-- See StationConfig: out in the open world its contents would not
+	-- outlive the server.
+	if def.islandOnly and not PlaceConfig.isIsland() then
+		return false, string.format("%ss can only be placed on an island", def.displayName or def.id)
+	end
+
 	if stationsByCell[gridKey(blockX, by, blockZ)] then
 		return false, "Cell occupied"
 	end
@@ -292,7 +367,7 @@ function StationService.place(player, blockX, by, blockZ, stationId)
 		return false, "Needs support"
 	end
 
-	local ok, reason = spawnStation(def, blockX, by, blockZ, player.UserId)
+	local ok, reason = spawnStation(def, blockX, by, blockZ, player.UserId, nil)
 	if ok then
 		notifyChanged()
 	end
@@ -304,9 +379,11 @@ end
 	checks: nobody is placing it, and the terrain it stands on may not have
 	been generated yet. The cell still has to be free of other stations.
 
+	`items` is a storage station's saved contents, the list exportAll wrote.
+
 	Returns ok, reason.
 ]]
-function StationService.restore(stationId, blockX, by, blockZ, ownerUserId)
+function StationService.restore(stationId, blockX, by, blockZ, ownerUserId, items)
 	local def = StationConfig.get(stationId)
 	if not def then
 		return false, "Unknown station"
@@ -322,23 +399,30 @@ function StationService.restore(stationId, blockX, by, blockZ, ownerUserId)
 		return false, "Cell occupied"
 	end
 
-	return spawnStation(def, blockX, by, blockZ, ownerUserId)
+	return spawnStation(def, blockX, by, blockZ, ownerUserId, items)
 end
 
 --[[
 	Every station standing right now, as plain data for a save:
 	{ { id = "Workbench", x = 3, y = 38, z = -2 }, ... }
+
+	A storage station that holds anything also has `items`, a list of
+	{ slot, name, count }.
 ]]
 function StationService.exportAll()
 	local list = {}
 	for _, station in pairs(stationsByCell) do
 		if station.instance.Parent then
-			table.insert(list, {
+			local record = {
 				id = station.stationId,
 				x = station.x,
 				y = station.y,
 				z = station.z,
-			})
+			}
+			if holdsItems(station.items) then
+				record.items = itemsToList(station.items)
+			end
+			table.insert(list, record)
 		end
 	end
 	return list
@@ -356,7 +440,7 @@ end
 	Builds a station into the world and registers it. Every check is the
 	caller's: place validates a player's request, restore a save's.
 ]]
-function spawnStation(def, blockX, by, blockZ, ownerUserId)
+function spawnStation(def, blockX, by, blockZ, ownerUserId, items)
 	local template = getTemplate(def)
 	if not template then
 		return false, "Missing template"
@@ -366,8 +450,11 @@ function spawnStation(def, blockX, by, blockZ, ownerUserId)
 	local instance = template:Clone()
 	local key = gridKey(blockX, by, blockZ)
 
+	-- A chest is not a bench: StationId is what the crafting window looks for.
+	local idAttribute = if def.storage then "StorageId" else "StationId"
+
 	instance.Name = def.id
-	instance:SetAttribute("StationId", def.id)
+	instance:SetAttribute(idAttribute, def.id)
 	instance:SetAttribute("StationCellKey", key)
 	instance:SetAttribute("OwnerUserId", ownerUserId)
 
@@ -410,7 +497,7 @@ function spawnStation(def, blockX, by, blockZ, ownerUserId)
 	prompt.HoldDuration = 0
 	prompt.RequiresLineOfSight = false
 	prompt.MaxActivationDistance = def.useRange
-	prompt:SetAttribute("StationId", def.id)
+	prompt:SetAttribute(idAttribute, def.id)
 	prompt.Parent = if instance:IsA("Model")
 		then (instance.PrimaryPart or instance:FindFirstChildWhichIsA("BasePart"))
 		else instance
@@ -424,6 +511,7 @@ function spawnStation(def, blockX, by, blockZ, ownerUserId)
 		y = by,
 		z = blockZ,
 		ownerUserId = ownerUserId,
+		items = if def.storage then itemsFromList(items, def.storage) else nil,
 	})
 
 	return true, "Placed"
@@ -452,11 +540,48 @@ function StationService.tryBreak(player, target)
 		return false, nil, "too_far"
 	end
 
+	-- Like Terraria: a chest comes up empty or not at all, so nothing in it
+	-- can be lost or spilled by a swing.
+	if holdsItems(station.items) then
+		return false, nil, "not_empty"
+	end
+
 	unregister(station)
 	station.instance:Destroy()
 	notifyChanged()
 
 	return true, station.stationId
+end
+
+--[[
+	The live station record a part belongs to, or nil - for ChestServer, which
+	is handed the prompt somebody used. The record is this service's own; a
+	caller may read it and change `items`, and must call markChanged after.
+]]
+function StationService.fromInstance(instance)
+	local station = stationFromInstance(instance)
+	if station and station.instance.Parent then
+		return station
+	end
+	return nil
+end
+
+-- Whether a record from fromInstance is still standing in the world.
+function StationService.isLive(station)
+	return station ~= nil and stationsByCell[station.key] == station and station.instance.Parent ~= nil
+end
+
+-- The world position of a station's cell centre.
+function StationService.centreOf(station)
+	return cellCentre(station.x, station.y, station.z)
+end
+
+--[[
+	Something about a station changed that a save should keep - a chest's
+	contents. Marks the island unsaved, exactly as placing one does.
+]]
+function StationService.markChanged()
+	notifyChanged()
 end
 
 --[[

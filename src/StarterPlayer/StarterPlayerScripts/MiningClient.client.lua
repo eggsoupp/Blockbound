@@ -377,6 +377,7 @@ local REFUSALS = {
 	break_failed = "That block wouldn't break",
 	terrain_error = "Mining failed (see the Output window)",
 	no_character = "No character to mine with",
+	not_empty = "Empty the chest before picking it up",
 }
 
 -- Holding the button into a wall of refusals should not fill the feed with

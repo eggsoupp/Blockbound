@@ -14,6 +14,17 @@
 	               `appearance` entirely.
 	  appearance   stand-in built when there is no authored model.
 
+	A STORAGE STATION is one with `storage`: the number of slots it holds.
+	It is placed, picked up and saved like any other station, but it crafts
+	nothing - the crafting window never sees it - and its prompt opens it
+	(StarterPlayerScripts.ChestClient, ServerScriptService.ChestServer).
+	Its contents are saved with the island, on the station's own record.
+
+	  storage      slots it holds
+	  islandOnly   refuses to be placed outside an island. The open world
+	               saves nothing across servers, so a chest out there would
+	               lose everything in it the moment the server closed.
+
 	Recipes with no `station` are craftable anywhere; HandStation is the
 	internal name for that and is deliberately not a placeable definition.
 ]]
@@ -100,6 +111,22 @@ StationConfig.Definitions = {
 			material = Enum.Material.Marble,
 		},
 	},
+
+	-- Three rows of nine, the bag's width. The model is
+	-- TerrainAssets.Stations.Chest; until there is one it is a wooden box.
+	Chest = {
+		id = "Chest",
+		displayName = "Chest",
+		actionText = "Open",
+		useRange = 12,
+		storage = 27,
+		islandOnly = true,
+		appearance = {
+			color = Color3.fromRGB(122, 84, 46),
+			topColor = Color3.fromRGB(150, 106, 60),
+			material = Enum.Material.WoodPlanks,
+		},
+	},
 }
 
 StationConfig.Order = {
@@ -109,6 +136,7 @@ StationConfig.Order = {
 	"AlchemyBench",
 	"ArcaneForge",
 	"EnchantingTable",
+	"Chest",
 }
 
 function StationConfig.get(stationId)
@@ -131,6 +159,12 @@ function StationConfig.getDisplayName(stationId)
 	return (def and def.displayName) or stationId
 end
 
+-- Whether a station holds items rather than crafting them. See the header.
+function StationConfig.isStorage(stationId)
+	local def = StationConfig.get(stationId)
+	return def ~= nil and def.storage ~= nil
+end
+
 function StationConfig.validate()
 	for _, id in ipairs(StationConfig.Order) do
 		local def = StationConfig.Definitions[id]
@@ -139,6 +173,11 @@ function StationConfig.validate()
 		assert(
 			type(def.useRange) == "number" and def.useRange > 0,
 			string.format("[StationConfig] '%s' needs a positive useRange", id)
+		)
+		assert(
+			def.storage == nil
+				or (type(def.storage) == "number" and def.storage >= 1 and def.storage <= 99 and def.storage % 1 == 0),
+			string.format("[StationConfig] '%s' storage must be a whole number of slots, 1 to 99", id)
 		)
 	end
 end

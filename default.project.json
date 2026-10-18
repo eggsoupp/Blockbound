@@ -139,6 +139,12 @@
             "Disabled": false
           }
         },
+        "ChestClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/ChestClient.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
         "ItemFeedback": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/ItemFeedback.client.lua",
           "$properties": {
@@ -749,6 +755,12 @@
       },
       "ScrollChest": {
         "$path": "src/ServerScriptService/ScrollChest.server.lua",
+        "$properties": {
+          "Disabled": false
+        }
+      },
+      "ChestServer": {
+        "$path": "src/ServerScriptService/ChestServer.server.lua",
         "$properties": {
           "Disabled": false
         }

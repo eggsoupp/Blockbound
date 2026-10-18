@@ -42,6 +42,7 @@ local CraftingRecipes = {
 		station = "CraftingTable",
 	},
 	Furnace       = { ingredients = { Cobblestone = 8 }, station = "CraftingTable" },
+	Chest         = { ingredients = { WoodPlank = 8 }, station = "CraftingTable" },
 	Anvil         = { ingredients = { IronIngot = 5, Stone = 3 }, station = "CraftingTable" },
 	AlchemyBench  = { ingredients = { WoodPlank = 4, Bottle = 2 }, station = "CraftingTable" },
 

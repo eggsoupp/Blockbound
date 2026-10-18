@@ -381,6 +381,44 @@ function Inventory:GetAll()
 	return self.data
 end
 
+-- How many of an item one slot holds.
+function Inventory.MaxStack(itemName)
+	return maxStackOf(ItemDefinitions[itemName])
+end
+
+-- One slot: name and count, or nil and 0 when it is empty or out of range.
+function Inventory:GetSlot(index)
+	if not inRange(index) then
+		return nil, 0
+	end
+	local slot = self.data[index]
+	return slot.name, slot.count
+end
+
+--[[
+	Replaces one ORDINARY slot outright - for something moving items in from
+	outside the bag (a chest), which has already taken them from where they
+	were. Refused for a gear slot or the bin, for an item that does not
+	exist, and for more than a stack: the bag's rules hold whoever asks.
+]]
+function Inventory:SetSlot(index, itemName, count)
+	if not inRange(index) or not InventoryConstants.isGeneralSlot(index) then
+		return false, "Not an ordinary slot"
+	end
+	if itemName == nil or (count or 0) <= 0 then
+		self.data[index] = emptySlot()
+		return true
+	end
+	if not ItemDefinitions[itemName] then
+		return false, "Invalid item"
+	end
+	if type(count) ~= "number" or count % 1 ~= 0 or count > maxStackOf(ItemDefinitions[itemName]) then
+		return false, "Invalid count"
+	end
+	self.data[index] = { name = itemName, count = count }
+	return true
+end
+
 function Inventory:ToJSON()
 	return HttpService:JSONEncode(self.data)
 end

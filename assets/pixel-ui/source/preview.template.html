@@ -425,7 +425,7 @@ states.appendChild(el('<figure><button class="btn off">LOCKED</button><figcaptio
 
 // Catalog of every sprite.
 const catalog = document.getElementById('catalog');
-const groupNames = { window: 'Windows and panels', button: 'Buttons', slot: 'Slots', control: 'Controls', icon: 'Icons' };
+const groupNames = { window: 'Windows and panels', button: 'Buttons', slot: 'Slots', control: 'Controls', icon: 'Icons', hud: 'HUD' };
 for (const [group, title] of Object.entries(groupNames)) {
   catalog.appendChild(el('<h3>' + title + '</h3>'));
   const tiles = el('<div class="tiles"></div>');

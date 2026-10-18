@@ -137,7 +137,7 @@ local HUD = {
 	rowHeight = 24,
 	gap = 4,
 	pad = 10,
-	-- Clear of the mana bar, which sits at 148 and is 20 tall. That in turn
+	-- Clear of the mana bar, which sits at 141 and is 33 tall. That in turn
 	-- sits on the health bar at 96. See ManaClient for the whole column.
 	bottom = 176,
 }

@@ -50,6 +50,15 @@
     "divider": { "rect": [16,67,16,5], "slice": [4,0,12,5] },
     "scroll_bottom": { "rect": [34,67,6,3], "slice": null },
     "scroll_top": { "rect": [42,67,6,3], "slice": null },
-    "scroll_mid": { "rect": [50,67,6,2], "slice": null }
+    "scroll_mid": { "rect": [50,67,6,2], "slice": null },
+    "bar_marker": { "rect": [2,77,5,15], "slice": [0,5,5,10] },
+    "boss_frame": { "rect": [9,77,24,15], "slice": [7,5,18,11] },
+    "header_red": { "rect": [35,77,24,14], "slice": [5,5,19,9] },
+    "bar_frame": { "rect": [61,77,16,13], "slice": [5,5,12,10] },
+    "icon_mana": { "rect": [79,77,13,13], "slice": null },
+    "icon_skull": { "rect": [94,77,13,13], "slice": null },
+    "icon_shield": { "rect": [109,77,11,12], "slice": null },
+    "icon_heart": { "rect": [122,77,11,10], "slice": null },
+    "bar_fill": { "rect": [135,77,8,6], "slice": [1,2,7,4] }
   }
 }

@@ -171,6 +171,9 @@ namespace PixelUI
         public Spr S;
         public int[] Slice; // Roblox SliceCenter: minX, minY, maxX, maxY
         public bool Upload = true;
+        // Sprites pack onto the atlas batch by batch, each batch starting a new row,
+        // so adding a batch never moves a sprite that is already uploaded.
+        public int Batch = 1;
     }
 
     public static class Builder
@@ -201,6 +204,11 @@ namespace PixelUI
         static void Add(string group, string name, Spr s, int[] slice, string note)
         {
             All.Add(new Entry { Group = group, Name = name, S = s, Slice = slice, Note = note });
+        }
+        // The HUD set: health, mana and the boss bar. Batch 2.
+        static void AddHud(string name, Spr s, int[] slice, string note)
+        {
+            All.Add(new Entry { Group = "hud", Name = name, S = s, Slice = slice, Note = note, Batch = 2 });
         }
         static void AddPreview(string name, Spr s, int[] slice = null)
         {
@@ -267,16 +275,16 @@ namespace PixelUI
             return s;
         }
 
-        static Spr Header()
+        static Spr Header(Pal p)
         {
             var s = new Spr(24, 14);
-            s.RRect(0, 0, 24, 14, Green.O, 2);
-            s.RRect(1, 1, 22, 12, Green.H, 1);
-            s.Rect(2, 2, 20, 9, Green.F);
-            s.HLine(2, 21, 2, Green.L);
-            s.HLine(2, 21, 10, Green.M);
-            s.HLine(2, 21, 11, Green.S);
-            s.HLine(2, 21, 12, Green.D);
+            s.RRect(0, 0, 24, 14, p.O, 2);
+            s.RRect(1, 1, 22, 12, p.H, 1);
+            s.Rect(2, 2, 20, 9, p.F);
+            s.HLine(2, 21, 2, p.L);
+            s.HLine(2, 21, 10, p.M);
+            s.HLine(2, 21, 11, p.S);
+            s.HLine(2, 21, 12, p.D);
             return s;
         }
 
@@ -732,6 +740,174 @@ namespace PixelUI
             });
         }
 
+        // --- HUD -------------------------------------------------------------------
+
+        // The groove a bar's fill runs in, darker than any panel so an almost
+        // empty bar still reads as a bar.
+        static readonly int Groove = C("2e1a0e"), GrooveDark = C("1c1008");
+
+        // Gold, for the boss bar's end caps.
+        static readonly int GoldH = C("ffe08a"), Gold = C("e0b040"), GoldM = C("c08a28"), GoldD = C("8a5a14");
+
+        // A wooden bar with a dark groove. Sliced so it stretches to any length
+        // and any groove height: the groove starts 4 texels down and ends 3 up.
+        static Spr BarFrame()
+        {
+            var s = new Spr(16, 13);
+            s.RRect(0, 0, 16, 13, OL, 2);
+            s.RRect(1, 1, 14, 11, W, 1);
+            s.HLine(2, 13, 1, WH);
+            s.VLine(1, 2, 10, WL);
+            s.VLine(14, 2, 10, WS);
+            s.HLine(2, 13, 11, WS);
+            s.RRect(3, 3, 10, 8, OL2, 1);
+            s.Rect(4, 4, 8, 6, Groove);
+            s.HLine(4, 11, 4, GrooveDark);
+            s.VLine(4, 5, 9, GrooveDark);
+            return s;
+        }
+
+        // The fill, in greys so ImageColor3 paints it: a bright top edge, a body,
+        // and a shaded underside, the same in every column.
+        static Spr BarFill()
+        {
+            var s = new Spr(8, 6);
+            int[] rows = { C("ffffff"), C("ececec"), C("d6d6d6"), C("d6d6d6"), C("b2b2b2"), C("969696") };
+            for (int y = 0; y < rows.Length; y++) s.HLine(0, 7, y, rows[y]);
+            return s;
+        }
+
+        // The boss bar's frame: thicker wood, and gold caps on the ends.
+        static Spr BossFrame()
+        {
+            var s = new Spr(24, 15);
+            s.RRect(0, 0, 24, 15, OL, 2);
+            s.RRect(1, 1, 22, 13, W, 1);
+            s.HLine(2, 21, 1, WH);
+            s.HLine(2, 21, 12, W);
+            s.HLine(2, 21, 13, WS);
+            s.RRect(5, 3, 14, 9, OL2, 1);
+            s.Rect(6, 4, 12, 7, Groove);
+            s.HLine(6, 17, 4, GrooveDark);
+            s.VLine(6, 5, 10, GrooveDark);
+
+            foreach (int x0 in new[] { 1, 19 })
+            {
+                s.Rect(x0, 1, 4, 13, Gold);
+                s.HLine(x0, x0 + 3, 1, GoldH);
+                s.VLine(x0, 2, 12, GoldH);
+                s.VLine(x0 + 3, 2, 12, GoldM);
+                s.HLine(x0, x0 + 3, 13, GoldD);
+                // Rivets, in the corners where slicing never stretches them.
+                s.Set(x0 + 1, 3, GoldD);
+                s.Set(x0 + 1, 11, GoldD);
+            }
+            // Re-round the outer corners the caps painted over.
+            s.Set(1, 1, OL); s.Set(22, 1, OL); s.Set(1, 13, OL); s.Set(22, 13, OL);
+            return s;
+        }
+
+        // A phase marker: gold diamonds on the rims, a dark line across the
+        // groove between them.
+        static Spr BarMarker()
+        {
+            return FromArt(5, 15, new[] {
+                "..O..",
+                ".OHO.",
+                "OHGDO",
+                ".ODO.",
+                "..O..",
+                "..K..",
+                "..K..",
+                "..K..",
+                "..K..",
+                "..K..",
+                "..O..",
+                ".OHO.",
+                "OHGDO",
+                ".ODO.",
+                "..O..",
+            }, new Dictionary<char, int> { { 'O', OL }, { 'H', GoldH }, { 'G', Gold }, { 'D', GoldD }, { 'K', C("120a05") } });
+        }
+
+        static Spr OutlinedArt(int w, int h, string[] rows, Dictionary<char, int> pal)
+        {
+            var s = new Spr(w, h);
+            s.Art(rows, pal, 1, 1);
+            s.Outline(OL);
+            return s;
+        }
+
+        static Spr Heart()
+        {
+            return OutlinedArt(11, 10, new[] {
+                ".HH...HH.",
+                "HWHR.HRRR",
+                "HHRRRRRRR",
+                "RRRRRRRRD",
+                ".RRRRRRD.",
+                "..RRRRD..",
+                "...RRD...",
+                "....D....",
+            }, new Dictionary<char, int> {
+                { 'W', C("ffffff") }, { 'H', C("ff9a8a") }, { 'R', C("e0473a") }, { 'D', C("a1261d") },
+            });
+        }
+
+        // A blue five-pointed star, a size up from the other HUD icons so its
+        // points stay sharp at this scale.
+        static Spr ManaStar()
+        {
+            var s = new Spr(13, 13);
+            double cx = 6.5, cy = 7.0, R = 5.6, r = 2.5;
+            var xs = new double[10];
+            var ys = new double[10];
+            for (int k = 0; k < 10; k++)
+            {
+                double a = (-90 + k * 36) * Math.PI / 180, rad = (k % 2 == 0) ? R : r;
+                xs[k] = cx + rad * Math.Cos(a);
+                ys[k] = cy + rad * Math.Sin(a);
+            }
+            int b = C("4b8de0");
+            s.Fill((x, y) => InPoly(xs, ys, x, y), b);
+            s.Bevel(b, C("7fb6ff"), C("2f64b8"), C("cfe6ff"), C("23498a"), cx, cy);
+            s.Outline(OL);
+            return s;
+        }
+
+        static Spr Shield()
+        {
+            var s = new Spr(11, 12);
+            int b = C("8f9bb0");
+            var xs = new[] { 1.2, 9.8, 9.8, 5.5, 1.2 };
+            var ys = new[] { 1.2, 1.2, 6.0, 10.9, 6.0 };
+            s.Fill((x, y) => InPoly(xs, ys, x, y), b);
+            s.Bevel(b, C("b8c3d6"), C("66718a"), C("e3e9f3"), C("4a536a"), 5.5, 5.5);
+            // A gold boss in the middle, so it reads as armour and not a badge.
+            s.Set(5, 5, Gold); s.Set(5, 4, GoldH); s.Set(5, 6, GoldD);
+            s.Outline(C("1e2433"));
+            return s;
+        }
+
+        static Spr Skull()
+        {
+            return OutlinedArt(13, 13, new[] {
+                "...WWWWW...",
+                ".WWWWWWWWS.",
+                "WWWWWWWWWWS",
+                "WWEEEWEEEWS",
+                "WWEEEWEEEWS",
+                "WWEEWWWEEWS",
+                "SWWWWEWWWWS",
+                ".SWWWWWWWS.",
+                "..WEWEWEW..",
+                "..SWSWSWS..",
+                "...SSSSS...",
+            }, new Dictionary<char, int> {
+                { 'W', C("f1ead8") }, { 'S', C("b8ad94") }, { 'E', C("2b1810") },
+            });
+        }
+
         // --- Build --------------------------------------------------------------
 
         static void BuildAll()
@@ -742,7 +918,7 @@ namespace PixelUI
             Add("window", "frame_wood", Frame(false), new[] { 8, 8, 24, 24 }, "Main window with a wooden inside, for windows split into insets.");
             Add("window", "inset_parchment", Inset(true), new[] { 4, 4, 12, 12 }, "Recessed parchment section inside a window.");
             Add("window", "inset_wood", Inset(false), new[] { 4, 4, 12, 12 }, "Recessed wood section inside a window.");
-            Add("window", "header", Header(), new[] { 5, 5, 19, 9 }, "Green title banner over a window's top edge.");
+            Add("window", "header", Header(Green), new[] { 5, 5, 19, 9 }, "Green title banner over a window's top edge.");
             Add("window", "tooltip", Tooltip(), new[] { 4, 4, 8, 8 }, "Dark hover tooltip.");
 
             int[] btn = { 4, 4, 12, 10 };
@@ -796,6 +972,26 @@ namespace PixelUI
             Add("icon", "icon_gem", Gem(), null, "List bullet.");
             Add("icon", "icon_search", Search(), null, "");
 
+            int[] barSlice = { 1, 2, 7, 4 };
+            AddHud("bar_frame", BarFrame(), new[] { 5, 5, 12, 10 }, "Health and mana bar. Its groove is 12px in from the left, top and right and 9px from the bottom.");
+            AddHud("bar_fill", BarFill(), barSlice, "A bar's fill, in greys: tint with ImageColor3.");
+            AddHud("boss_frame", BossFrame(), new[] { 7, 5, 18, 11 }, "Boss bar. Its groove is 18px in from the ends and 12px from the top and bottom.");
+            AddHud("bar_marker", BarMarker(), new[] { 0, 5, 5, 10 }, "Boss phase marker, as tall as the boss bar.");
+            AddHud("header_red", Header(Red), new[] { 5, 5, 19, 9 }, "The boss's name banner.");
+            AddHud("icon_heart", Heart(), null, "Health.");
+            AddHud("icon_mana", ManaStar(), null, "Mana.");
+            AddHud("icon_shield", Shield(), null, "Defense.");
+            AddHud("icon_skull", Skull(), null, "The boss bar's emblem.");
+
+            // The fills as ImageColor3 will paint them, for the preview page.
+            AddPreview("preview_fill_health", BarFill().Tint(C("78dc6e")), barSlice);
+            AddPreview("preview_fill_health_low", BarFill().Tint(C("ff6e5a")), barSlice);
+            AddPreview("preview_fill_mana", BarFill().Tint(C("6eaaff")), barSlice);
+            AddPreview("preview_fill_mana_low", BarFill().Tint(C("8c96e6")), barSlice);
+            AddPreview("preview_fill_boss", BarFill().Tint(C("ff6056")), barSlice);
+            AddPreview("preview_fill_ghost", BarFill().Tint(C("ffe1b4")), barSlice);
+            AddPreview("preview_fill_flash", BarFill().Tint(C("ff5a50")), barSlice);
+
             AddPreview("preview_block", Block());
             AddPreview("preview_sword", Sword());
             AddPreview("preview_ingot", Ingot());
@@ -844,12 +1040,17 @@ namespace PixelUI
             const int atlasW = 256, pad = 2;
             var order = new List<Entry>();
             foreach (var e in All) if (e.Upload) order.Add(e);
-            order.Sort((a, b) => b.S.H != a.S.H ? b.S.H.CompareTo(a.S.H) : string.CompareOrdinal(a.Name, b.Name));
+            order.Sort((a, b) =>
+                a.Batch != b.Batch ? a.Batch.CompareTo(b.Batch)
+                : b.S.H != a.S.H ? b.S.H.CompareTo(a.S.H)
+                : string.CompareOrdinal(a.Name, b.Name));
             var pos = new Dictionary<string, int[]>();
-            int cx = pad, cy = pad, rowH = 0;
+            int cx = pad, cy = pad, rowH = 0, batch = order.Count > 0 ? order[0].Batch : 1;
             foreach (var e in order)
             {
-                if (cx + e.S.W + pad > atlasW) { cx = pad; cy += rowH + pad; rowH = 0; }
+                bool newBatch = e.Batch != batch;
+                if (newBatch || cx + e.S.W + pad > atlasW) { cx = pad; cy += rowH + pad; rowH = 0; }
+                batch = e.Batch;
                 pos[e.Name] = new[] { cx, cy };
                 cx += e.S.W + pad;
                 rowH = Math.Max(rowH, e.S.H);
@@ -880,8 +1081,15 @@ namespace PixelUI
                     ", group: \"" + e.Group + "\", note: \"" + e.Note.Replace("\"", "'") + "\", uri: \"data:image/png;base64," + Convert.ToBase64String(e.S.Png()) + "\" },\n");
             }
             js.Append("};");
-            string template = File.ReadAllText(Path.Combine(Path.Combine(root, "source"), "preview.template.html"));
-            File.WriteAllText(Path.Combine(root, "preview.html"), template.Replace("/*@SPRITES@*/", js.ToString()));
+            string[][] pages = {
+                new[] { "preview.template.html", "preview.html" },
+                new[] { "hud.template.html", "hud_preview.html" },
+            };
+            foreach (var page in pages)
+            {
+                string template = File.ReadAllText(Path.Combine(Path.Combine(root, "source"), page[0]));
+                File.WriteAllText(Path.Combine(root, page[1]), template.Replace("/*@SPRITES@*/", js.ToString()));
+            }
 
             // The game's copy of the same facts: where each sprite is on the atlas,
             // how it slices, and the colours its drawn stand-in uses if the art

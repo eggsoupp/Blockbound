@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blockbound HUD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* The screen is laid out at 1920x1080 - the numbers the game uses - and
+     scaled down to fit, so every position here is the game's own. */
+  :root { --cream: #f6e7c1; --gold: #ffd84a; --ink: #3a2414; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: #1a2a20; color: #e9f1e6;
+    font-family: system-ui, sans-serif;
+  }
+  img { image-rendering: pixelated; display: block; }
+
+  .intro { max-width: 1180px; margin: 0 auto; padding: 24px 16px 12px; }
+  .intro h1 { font: 700 20px 'Silkscreen', monospace; margin: 0 0 10px; letter-spacing: 1px; }
+  .intro p { font-size: 14px; line-height: 1.55; color: #c9d9c6; margin: 0 0 6px; max-width: 780px; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 8px 16px; }
+  .fit { position: relative; width: 100%; overflow: hidden; border-radius: 6px; box-shadow: 0 6px 30px rgba(0,0,0,.45); }
+  .screen {
+    position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0;
+    font-family: 'Silkscreen', monospace; -webkit-font-smoothing: none; overflow: hidden;
+    background:
+      linear-gradient(180deg, #7fb8e0 0%, #b9dcf0 46%, #d9eef7 58%, transparent 58%),
+      linear-gradient(180deg, transparent 58%, #6aa84f 58%, #5a9443 70%, #4d813a 100%);
+  }
+  /* A few blocks, so the HUD sits on something that looks like the game. */
+  .block { position: absolute; width: 96px; height: 96px; border: 6px solid rgba(43,24,16,.55); }
+  .block.grass { background: linear-gradient(180deg, #79c24f 0 28%, #a8743f 28% 100%); }
+  .block.stone { background: #8d8d8d; }
+  .block.wood { background: repeating-linear-gradient(90deg, #8a5530 0 16px, #7a4a28 16px 32px); }
+  .topbar { position: absolute; left: 0; top: 0; right: 0; height: 36px; }
+  .topbar .rbx { position: absolute; top: 2px; width: 32px; height: 32px; border-radius: 8px; background: rgba(0,0,0,.5); }
+
+  .abs { position: absolute; }
+  .n-text { color: var(--cream); text-shadow: 2px 0 #2b1810, -2px 0 #2b1810, 0 2px #2b1810, 0 -2px #2b1810, 2px 2px #2b1810, -2px -2px #2b1810, 2px -2px #2b1810, -2px 2px #2b1810; }
+
+  /* Hotbar, for context only. */
+  .hotbar { position: absolute; display: flex; gap: 4px; }
+  .slot { position: relative; width: 58px; height: 58px; }
+  .slot > img { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  .slot .hl { position: absolute; inset: -3px; }
+
+  /* Bars */
+  .vital { position: absolute; }
+  /* The frame starts 15px in, under the icon; the groove is 12px inside the
+     frame's left, top and right and 9px above its bottom, plus 10px to clear
+     the icon. */
+  .vital .frame { position: absolute; left: 15px; top: 0; bottom: 0; right: 0; }
+  .vital .groove { position: absolute; left: 37px; top: 12px; right: 12px; bottom: 9px; overflow: hidden; }
+  .vital .fill, .vital .ghost, .vital .flash { position: absolute; left: 0; top: 0; bottom: 0; }
+  .vital .fill { transition: width .1s ease-out; z-index: 2; }
+  .vital .ghost { z-index: 1; opacity: .7; transition: width .45s ease-out .15s; }
+  .vital .flash { width: 100%; z-index: 3; opacity: 0; }
+  .vital .icon { position: absolute; left: 0; top: 50%; transform: translateY(-50%); z-index: 5; }
+  .vital .amount { position: absolute; left: 37px; top: 12px; right: 12px; bottom: 9px; display: grid; place-items: center; z-index: 4; font-size: 16px; line-height: 1; }
+  .vital.mana .amount { font-size: 14px; }
+  .frame.hit { animation: hit .45s ease-out; }
+  @keyframes hit { 0% { filter: sepia(1) saturate(6) hue-rotate(-28deg) brightness(.9); } 100% { filter: none; } }
+  .shake { animation: shake .2s linear; }
+  @keyframes shake { 0%,100% { translate: 0 } 25% { translate: 4px } 50% { translate: -3px } 75% { translate: 2px } }
+
+  .defense { position: absolute; display: flex; align-items: center; }
+  .defense .pill { margin-left: -12px; height: 27px; padding: 0 12px 0 18px; display: flex; align-items: center; font-size: 14px; }
+  .damage { position: absolute; font-size: 22px; font-weight: 700; color: #ff6e5a; pointer-events: none; animation: rise .75s ease-out forwards; }
+  @keyframes rise { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-34px); opacity: 0; } }
+
+  .vignette { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+    background:
+      linear-gradient(180deg, rgba(226,92,92,1), transparent 22%),
+      linear-gradient(0deg, rgba(226,92,92,1), transparent 22%),
+      linear-gradient(90deg, rgba(226,92,92,1), transparent 22%),
+      linear-gradient(270deg, rgba(226,92,92,1), transparent 22%); }
+  .vignette.on { animation: vig .4s ease-out; }
+  @keyframes vig { from { opacity: var(--peak, .5); } to { opacity: 0; } }
+
+  /* Boss */
+  .boss { position: absolute; left: 50%; transform: translateX(-50%); transition: opacity .3s; }
+  .boss .banner { position: absolute; left: 50%; top: 0; transform: translateX(-50%); height: 42px; padding: 0 21px 3px; z-index: 6;
+    display: flex; align-items: center; white-space: nowrap; font-size: 22px; font-weight: 700; }
+  /* The banner sits on the frame's top rim, overlapping it by 6px. */
+  .boss .bframe { position: absolute; left: 0; right: 0; top: 36px; height: 48px; }
+  .boss .groove { position: absolute; left: 30px; right: 18px; top: 48px; height: 24px; overflow: hidden; }
+  .boss .fill, .boss .ghost { position: absolute; left: 0; top: 0; bottom: 0; }
+  .boss .fill { z-index: 2; }
+  .boss .ghost { z-index: 1; opacity: .7; }
+  .boss .edge { position: absolute; right: 0; top: 0; bottom: 0; width: 3px; background: #fff6e0; }
+  .boss .marker { position: absolute; top: 36px; height: 48px; width: 15px; z-index: 4; transform: translateX(-50%); }
+  .boss .amount { position: absolute; left: 30px; right: 18px; top: 48px; height: 24px; display: grid; place-items: center; z-index: 5; font-size: 14px; }
+  .boss .skull { position: absolute; left: -15px; top: 60px; transform: translateY(-50%); z-index: 6; }
+  .boss .move { position: absolute; left: 50%; transform: translateX(-50%); top: 90px; height: 27px; padding: 0 14px;
+    display: flex; align-items: center; white-space: nowrap; font-size: 14px; color: var(--gold); font-weight: 700; }
+
+  /* Controls */
+  .controls { max-width: 1180px; margin: 0 auto; padding: 14px 16px 6px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .controls button {
+    font: 600 13px system-ui, sans-serif; color: #1a2a20; background: #e7cf99; border: 2px solid #3b2414;
+    border-radius: 4px; padding: 8px 12px; cursor: pointer;
+  }
+  .controls button:hover { background: #f2dcae; }
+  .controls .sep { width: 100%; height: 0; }
+
+  .sheet { max-width: 1180px; margin: 0 auto; padding: 18px 16px 56px; }
+  .sheet h2 { font: 700 16px 'Silkscreen', monospace; margin: 0 0 6px; }
+  .sheet p { font-size: 14px; color: #c9d9c6; margin: 0 0 16px; max-width: 780px; line-height: 1.5; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .tile { background: rgba(0,0,0,.22); border: 1px solid rgba(255,255,255,.08); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .tile .art { min-height: 96px; display: grid; place-items: center; background: repeating-conic-gradient(rgba(255,255,255,.05) 0 25%, transparent 0 50%) 0 0 / 12px 12px; border-radius: 4px; }
+  .tile code { font: 12px ui-monospace, Consolas, monospace; color: #fff; }
+  .tile .meta { font-size: 11px; line-height: 1.4; color: #9fb59b; }
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <h1>Blockbound HUD</h1>
+  <p>The health, mana and boss bars, drawn from the pixel kit at the game's real positions on a 1080p screen. Use the buttons under it to take hits, heal, cast, get a cast refused, and fight the boss.</p>
+  <p>Text is Silkscreen, the font your game already uses. The fills are one white sprite tinted per bar, so health turning red when low and mana dimming are just colour changes.</p>
+</header>
+
+<div class="wrap">
+  <div class="fit" id="fit">
+    <div class="screen" id="screen">
+      <div class="block grass" style="left:520px; top:540px"></div>
+      <div class="block grass" style="left:616px; top:540px"></div>
+      <div class="block stone" style="left:616px; top:444px"></div>
+      <div class="block wood" style="left:1240px; top:480px; height:156px"></div>
+      <div class="block grass" style="left:1336px; top:600px"></div>
+      <div class="block grass" style="left:1432px; top:600px"></div>
+      <div class="block stone" style="left:1700px; top:560px"></div>
+
+      <div class="topbar"><div class="rbx" style="left:12px"></div><div class="rbx" style="left:52px"></div><div class="rbx" style="left:92px"></div></div>
+
+      <div class="hotbar" id="hotbar" style="left:42px; top:68px"></div>
+
+      <!-- Boss -->
+      <div class="boss" id="boss" style="top:58px; width:640px; height:117px">
+        <div class="banner n-header_red n-text" id="bossName">SIGNUS, THE HALLOWED ECLIPSE</div>
+        <div class="bframe n-boss_frame"></div>
+        <img class="skull" data-s="icon_skull">
+        <div class="groove">
+          <div class="ghost n-preview_fill_ghost" id="bossGhost"></div>
+          <div class="fill n-preview_fill_boss" id="bossFill"><div class="edge" id="bossEdge"></div></div>
+        </div>
+        <div class="amount n-text" id="bossAmount"></div>
+        <div class="move n-badge" id="bossMove">BODY COLLAPSE</div>
+      </div>
+
+      <!-- Mana: bottom 141, above health -->
+      <div class="vital mana" id="mana" style="left:16px; bottom:141px; width:260px; height:33px">
+        <img class="icon" data-s="icon_mana">
+        <div class="frame n-bar_frame"></div>
+        <div class="groove">
+          <div class="fill n-preview_fill_mana" id="manaFill"></div>
+          <div class="flash n-preview_fill_flash" id="manaFlash"></div>
+        </div>
+        <div class="amount n-text" id="manaAmount"></div>
+      </div>
+
+      <!-- Health: bottom 96 -->
+      <div class="vital health" id="health" style="left:16px; bottom:96px; width:260px; height:39px">
+        <img class="icon" data-s="icon_heart">
+        <div class="frame n-bar_frame" id="healthFrame"></div>
+        <div class="groove">
+          <div class="ghost n-preview_fill_ghost" id="healthGhost"></div>
+          <div class="fill n-preview_fill_health" id="healthFill"></div>
+        </div>
+        <div class="amount n-text" id="healthAmount"></div>
+      </div>
+
+      <div class="defense" id="defense" style="left:284px; bottom:97px">
+        <img data-s="icon_shield" style="position:relative; z-index:2">
+        <div class="pill n-badge n-text" id="defenseText">DEF 12 -8%</div>
+      </div>
+
+      <div class="vignette" id="vignette"></div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button data-do="hit">Take 18 damage</button>
+  <button data-do="bighit">Take 40 damage</button>
+  <button data-do="heal">Heal 30</button>
+  <button data-do="defense">Defense on / off</button>
+  <span class="sep"></span>
+  <button data-do="cast">Cast (-24 mana)</button>
+  <button data-do="refuse">Cast with too little mana</button>
+  <span class="sep"></span>
+  <button data-do="boss">Hit the boss</button>
+  <button data-do="bossheal">Boss heals</button>
+  <button data-do="move">Next boss move</button>
+  <button data-do="bosstoggle">Boss bar on / off</button>
+</div>
+
+<section class="sheet">
+  <h2>New sprites</h2>
+  <p>These join the existing kit on the atlas. Every sprite that is already uploaded keeps its place, so the atlas in the game keeps working until the new one replaces it.</p>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<script>
+const SPRITES = {
+  frame_parchment: { w: 32, h: 32, slice: [8,8,24,24], group: "window", note: "Main window: wood frame, parchment inside.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACeSURBVFhHY2BAAtoSAv/pgZHtRLF4e607XTCGQ0CcrlADuuFMWyWEA0CMWYlmGIpoiUEOgDti0DoAPeFQiklyAEjs2IIsqmJkRxDlgDsHuqiKyXLA+zvrqIJHHTDqgFEHjDpg1AGjDhh1wKgDyHYANTFJDoA5gpoY2WyiHEBLPLgcAOsdwQTpheGWI3dO/XUk6IJh9sEdgO4QWmNkOwFA43tL2ZDMvwAAAABJRU5ErkJggg==" },
+  frame_wood: { w: 32, h: 32, slice: [8,8,24,24], group: "window", note: "Main window with a wooden inside, for windows split into insets.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACeSURBVFhHY2BAAtoSAv/pgZHtRLF4e607XTCGQ0CcrlADuuFMWyWEA0CMWYlmGIpoiUEOgDti0DoAPeFQiklyAEjMS0ucqhjZEUQ5IMpUgaqYLAdkO6hRBY86YNQBow4YdcCoA0YdMOqAUQeQ7QBqYpIcAHMENTGy2UQ5gJZ4cDkA1juCCdILwy1H7pz660jQBcPsgzsA3SG0xsh2AgBprfqEZtfRHwAAAABJRU5ErkJggg==" },
+  inset_parchment: { w: 16, h: 16, slice: [4,4,12,12], group: "window", note: "Recessed parchment section inside a window.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABGSURBVDhPY2CAAmsVsf+kYJg+uOZjC7JIwnBDQIw7B7rIwmBDYAa8v7OOJPzj9YlRA0YNGEwGwPIDSIAUDNeMnCNJwTB9AEnp2iYfq9q4AAAAAElFTkSuQmCC" },
+  inset_wood: { w: 16, h: 16, slice: [4,4,12,12], group: "window", note: "Recessed wood section inside a window.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABFSURBVDhPY2CAAmsVsf+kYJg+uGYvLXGSMNwQECPKVIEsDDYEZkC2gxpJuNZHZ9SAUQMGkwGw/AASIAXDNSPnSFIwTB8AxFCkQodmpVcAAAAASUVORK5CYII=" },
+  header: { w: 24, h: 14, slice: [5,5,19,9], group: "window", note: "Green title banner over a window's top edge.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAOCAYAAAA1+Nx+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABXSURBVDhPY2CAAllb7f/UxDBz4YaveLObqhhuCczw2itzqIrhlsAsCNpRT1U8agFBPGoBQYxhgcuCXKpiDAtM2iOoiuEWwHKzWoozVTHccOTyiJoYZi4An3P9t2+tb+QAAAAASUVORK5CYII=" },
+  tooltip: { w: 12, h: 12, slice: [4,4,8,8], group: "window", note: "Dark hover tooltip.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA3SURBVChTY2BgYGDQlhD4TwwGqQUrXl7lRRQGa4JpcDWQwYsxNBgr8OPFoxrI0kAMBmsgNWkAAAKM5XEdvMmXAAAAAElFTkSuQmCC" },
+  button_green: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Primary action. Label text dark.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABJSURBVDhPY2CAAllb7f+kYJg+uOYVb3aThOGGgBi1V+b8D9pRTxJ2WZALMWTUgGFjgEl7BFmYOgbAUqNaijNJGK4ZOT+QgmH6ABGM3OAPQMdVAAAAAElFTkSuQmCC" },
+  button_green_hover: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAllb7f+kYJg+uOYjXy+RhOGGgBgzHm36n3tmKkk4amsjxJBRA4aNAfYzUsjC1DEAlhp1C31IwnDNyPmBFAzTBwCAcwNLahaXQwAAAABJRU5ErkJggg==" },
+  button_green_pressed: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Pressed: move the label down 2 texels.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA/SURBVDhPY2AYNEDWVvs/KRhDs1qKM0kYbgiI4bIg93/QjnqSMEgP2JBRA4aFAbC0YNIeQRKGa0ZOjaRgmD4AhjiJKDhCbM8AAAAASUVORK5CYII=" },
+  button_red: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Destructive action (drop, delete, quit).", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABJSURBVDhPY2CAAjtR4f+kYJg+uOZvmxeQhOGGgBhP67P/Xwm3JwnvdjeGGDJqwLAxYI6pBlmYOgbAUmOJqgxJGK4ZOT+QgmH6AF2hxWBrgxWSAAAAAElFTkSuQmCC" },
+  button_red_hover: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAjtR4f+kYJg+uOY/J3eQhOGGgBjvpzf/f5QTTBI+E+UCMWTUgGFjwBoHA7IwdQyApcYmbQWSMFwzcn4gBcP0AQB4J+Tcl4GgwwAAAABJRU5ErkJggg==" },
+  button_red_pressed: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA/SURBVDhPY2AYNMBOVPg/KRhDc4mqDEkYbgiIsdvd+P+VcHuSMEgP2JBRA4aFAbC0MMdUgyQM14ycGknBMH0A7y50HMq4Zb0AAAAASUVORK5CYII=" },
+  button_tan: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Secondary action, unselected tabs.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAmsVkf+kYJg+uOb/3+6QhOGGgBhfH237//z8TJLwtd1NEENGDRg2BuyYEkMWpo4BsNTYn21LEoZrRs4PpGCYPgB9YUo7q66SngAAAABJRU5ErkJggg==" },
+  button_tan_hover: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAmsVkf+kYJg+uOb/v1+RhOGGgBi/3578/+nOOpLw41NTIYaMGjBsDDi+JJssTB0DYKlxbrkbSRiuGTk/kIJh+gBUYmVDXTOyuQAAAABJRU5ErkJggg==" },
+  button_tan_pressed: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABASURBVDhPY2AYNMBaReQ/KRhDc3+2LUkYbgiIcW130//n52eShEF6wIaMGjAsDIClhR1TYkjCcM3IqZEUDNMHANBN6GT72jNqAAAAAElFTkSuQmCC" },
+  button_disabled: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Unavailable action.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAn1t9f+kYJg+uOYbl0+QhOGGgBhH9m/+v2rpLJLwrKldEENGDRg2BjRUF5GFqWMALDUmxYWThOGakfMDKRimDwB1BxS37CyjxAAAAABJRU5ErkJggg==" },
+  close: { w: 13, h: 13, slice: null, group: "button", note: "Window close button, over the top-right corner.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABcSURBVChTY2CAAmsVkf+EMEwtXMP/b3cIYrhGEOP5+ZlwbKUkCsbobBgGa0TXhKwYXQNeTTCN6GJ4NZFsE9l+wocp07RjSgzRmHxNsAjuz7YliOEakJMSIQxTCwCT9YzkXZe7QAAAAABJRU5ErkJggg==" },
+  close_hover: { w: 13, h: 13, slice: null, group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABcSURBVChTY2CAAmsVkf+EMEwtXMP/368IYrhGEOPTnXVwbKUkCsbobBgGa0TXhKwYXQNeTTCN6GJ4NZFsE9l+wocp03R8STbRmHxNsAieW+5GEMM1ICclQhimFgBotJ2kgIH+0wAAAABJRU5ErkJggg==" },
+  close_pressed: { w: 13, h: 13, slice: null, group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABTSURBVChTY2CgO7BWEflPCGNo6M+2JYjhGkGM5+dnwrGVkigYo7NhGKwRXROyYnQNeDXBNKKL4dVEsk1k+wkfJl8TLNh3TIkhiOEakCOYEIapBQCu0UJRsdZ4GgAAAABJRU5ErkJggg==" },
+  slot: { w: 16, h: 16, slice: [4,4,12,12], group: "slot", note: "Item slot on parchment.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABASURBVDhPY2BgYGCYU+D6nxwM0gvWvHtiFFkYbAjMgPMbKkjGGAY8ODaBaPzlye5RA0YNGIwGwARJwWADKM3OANGs6XYEgXaoAAAAAElFTkSuQmCC" },
+  slot_dark: { w: 16, h: 16, slice: [4,4,12,12], group: "slot", note: "Item slot on wood.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA/SURBVDhPY2BgYGDQk+L7Tw4G6QVrtlIUJguDDYEZ4K4pQTLGMCDcRIFoXOKmNWrAqAGD0QCYICkYbACl2RkAC+aMOP0Qq6sAAAAASUVORK5CYII=" },
+  slot_highlight: { w: 16, h: 16, slice: [4,4,12,12], group: "slot", note: "Overlay laid on a slot. White: tint with ImageColor3 (selection gold, rarity).", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABDSURBVDhPY2BgYGD4TyYA6QVrvnTpElkYbAjMALiJRAAUPTAOuiJCYNSAUQNAgPoGgDlEAhQ9MA45GG4pmEUGAOkFAObIouTmTnAZAAAAAElFTkSuQmCC" },
+  input: { w: 12, h: 12, slice: [4,4,8,8], group: "control", note: "Text box (search).", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA3SURBVChTY2BgYGCwVhH7TwwGqQUrPrGsgCgM1gQiXl5fTRRG0fD74zWCeFQDuiQ2TJ4GUpMGAO58oo78yizNAAAAAElFTkSuQmCC" },
+  checkbox_off: { w: 11, h: 11, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAzSURBVChTY2BgYGCwVhH7TwiD1IEVnlhWQBCDNYCIl9dXE8Qoin9/vIYXjyrGUExKDAIAevVW/XVIePQAAAAASUVORK5CYII=" },
+  checkbox_on: { w: 11, h: 11, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABYSURBVChTY2BgYGCwVhH7TwiD1IEVnlhWQBCDNYCIl9dX48RarcFgGkXx74/XMDBIIQiD2CiKYYLYFGJVDJNEV4ihGFkRukKsimEa0BXiVIwLk66YlBgEAK12PtRjSHGYAAAAAElFTkSuQmCC" },
+  toggle_off: { w: 20, h: 11, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABzSURBVDhPY2CAAmsVsf+4MEwN0QCk6f+3OzgxugXYMIphXx9t+//8/Ey8GKTOS0scJ4Ybim7gjikxKDSygVGmCjhxtoMaxFBSDARpwoeHqIG4MEkGglxDCBMyEGwYctLpz7bFiUHyhDDcMGRDcWF0tfgAAPp6n7393RwFAAAAAElFTkSuQmCC" },
+  toggle_on: { w: 20, h: 11, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABuSURBVDhPY2AgAViriP3HhdHV4lUMw/+/3cGJUQwFcdRSnHFikPzXR9v+Pz8/Ey8GGwoignbU/zdpj8CJ0Q3cMSUGhcZqID48aiBODDYQFsvohqAbCHINIQw3kNh02J9tixOjGEYsQLcAGcPUAADiasEH+0JZQAAAAABJRU5ErkJggg==" },
+  slider_track: { w: 12, h: 8, slice: [3,3,9,5], group: "control", note: "Slider / progress bar background.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAICAYAAADN5B7xAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA7SURBVChTY2CAAmsVsf/4MEwdXLGXljheDNcEYkSZKhCFwZpARLaDGlGYThpg/qj10cGLsYYUPgxTBwDJfovN6XMYmQAAAABJRU5ErkJggg==" },
+  slider_fill: { w: 12, h: 8, slice: [3,3,9,5], group: "control", note: "Slider / progress bar fill, same shape as the track.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAICAYAAADN5B7xAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA6SURBVChTY2CAAmsVsf/4MEwdXPGKN7vxYrgmECNoRz1RGKyJPhpcFuQShVH8YdIegRdjDSl8GKYOAP7stsG2zjN8AAAAAElFTkSuQmCC" },
+  slider_knob: { w: 9, h: 13, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAANCAYAAAB7AEQGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABMSURBVChTY2CAAmsVsf/oGCYHV/D/2x0MDFcIYnx9tO3/8/MzsWKwQmRFO6bEoNBDRhE2DFcE0okLE68IFqD92bYYGK4AOWrQMUwOACBADupgSWjgAAAAAElFTkSuQmCC" },
+  scroll_track: { w: 6, h: 8, slice: [0,3,6,5], group: "control", note: "Behind a ScrollingFrame's bar.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAICAYAAADaxo44AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAvSURBVBhXY2BgYGCwVhH7j4xBYmBBLy1xFAyWBBHZDmoomBYStT46KBjFZejOBQCTmUgJ0PAW6gAAAABJRU5ErkJggg==" },
+  scroll_top: { w: 6, h: 3, slice: null, group: "control", note: "ScrollingFrame.TopImage", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAtSURBVBhXY2BgYGCQtdX+j4xBYmDBFW92o2CwJIiovTLnf9COejB2WZALlgAAd6UjpXMQZW0AAAAASUVORK5CYII=" },
+  scroll_mid: { w: 6, h: 2, slice: null, group: "control", note: "ScrollingFrame.MidImage", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAACCAYAAAB7Xa1eAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAfSURBVBhXY5C11f5fe2XO/6Ad9WDssiD3P0iMAZcEAJX4Gqkz0jEfAAAAAElFTkSuQmCC" },
+  scroll_bottom: { w: 6, h: 3, slice: null, group: "control", note: "ScrollingFrame.BottomImage", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY5C11f5fe2XO/6Ad9WDssiD3P0iMAUSYtEegYLAECIAYyBgkBgAnGB6126UTPwAAAABJRU5ErkJggg==" },
+  divider: { w: 16, h: 5, slice: [4,0,12,5], group: "control", note: "Engraved line across parchment.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAFCAYAAABM6GxJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAuSURBVChTY2CgBlhR4/MfXYwQgOsBMY4tyPoPoknBMD0opv14feI/MRjFBZQCAE/AVhFKMvgiAAAAAElFTkSuQmCC" },
+  tab_idle: { w: 16, h: 14, slice: [4,4,12,10], group: "control", note: "Top tab, not selected.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAySURBVDhPY2AYNMBaRew/KRhD87MzM0jCcENAjCtbasjCYENGDRg1AGbAkUXZZGGQXgCKA/u+jze5DgAAAABJRU5ErkJggg==" },
+  tab_active: { w: 16, h: 14, slice: [4,4,12,10], group: "control", note: "Top tab, selected. Overlap the inset below by 3 texels.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAzSURBVDhPY2CAAmsVsf+kYJg+uOYfr0+QhOGGwDS/v7OOZAw2ZNSAUQOoYgC6IKmYYgMATbG0E7mV3w0AAAAASUVORK5CYII=" },
+  row: { w: 16, h: 12, slice: [4,4,12,8], group: "control", note: "List entry (recipes).", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAvSURBVDhPY2BgYGDY0hX6nxwM0gvW/OXJXrIw2JBRA0YNgBnw+PQMsjDYAEqTMgCfv2wddWTyoQAAAABJRU5ErkJggg==" },
+  row_hover: { w: 16, h: 12, slice: [4,4,12,8], group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAvSURBVDhPY2BgYGDoz7b9Tw4G6QVr/v3hClkYbMioAaMGwAx4dWUxWRhsAKVJGQD+d3EDwrHSpgAAAABJRU5ErkJggg==" },
+  row_selected: { w: 16, h: 12, slice: [4,4,12,8], group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA5SURBVDhPY2BgYGCQtdX+Tw4G6QVrrr0yhywMNgRmwPNvj0jCGAb8/nyHJDxqwKA0gBwMNoDSpAwA4Q40Sx0XFiMAAAAASUVORK5CYII=" },
+  badge: { w: 9, h: 9, slice: [3,3,6,6], group: "control", note: "Count pill. Light text.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAvSURBVChTY2CAAm0Jgf/oGCYHV1DlpYWB4QpBjChTBZwYrHAwKsLneKzBgI5hcgDZ1WyC1CVDtQAAAABJRU5ErkJggg==" },
+  icon_star: { w: 17, h: 17, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACYSURBVDhPY2CgNfDSEvoPw+hyRAOQ5v8fd5BvCMwF/y/HkO8amCtAhpDsGuRwABtwOeb/1jQpuBhOw5AVwF0AcwUMQ8XQ1aIYgqIYWfPlmP9fd1jBMUj+Tr8SGGMYgu4FbAaANBL0GrpB+AxA14sCYIagG4BsCLoeDIBuCMwAsg0BaYJhsgxBD0BkMXQ9GABZI0wDNrHBCQC20B9tSmfuoAAAAABJRU5ErkJggg==" },
+  icon_star_empty: { w: 17, h: 17, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACVSURBVDhPY2CgNfDSEvoPw+hyRAOQ5junV5FvCMwFJzZ0ke8amCtAhpDsGuRwABkAwk1Z3nAxnIYhK4C5AOYKGIaJoatFMQRZMbJmEN46qwSOQfJzmuLBGMMQdC9gMwCkkaDX0A3CZwC6XhQAMwTdAGRD0PVgAHRDYAaQbQhIEwyTZQh6ACKLoevBAMgaYRqwiQ1OAABOlhWYKF9REQAAAABJRU5ErkJggg==" },
+  icon_arrow_left: { w: 8, h: 11, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAALCAYAAABCm8wlAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABSSURBVChTY2AgFcjaav9HxlglV7zZDcZwBcg6QBK1V+aAMVgBuq6gHfWYClwW5IIxSBKGMUwwaY8AYwwF6G6AKUJRgO4LkCKsCpAVwTC6PAYAAAq/c//jR1hiAAAAAElFTkSuQmCC" },
+  icon_arrow_right: { w: 8, h: 11, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAALCAYAAABCm8wlAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABPSURBVChTY2AgBGRttf8jY3R5sIIVb3aDMVZFIIHaK3PAGFkRXCGygqAd9ZimwRSAJGHYZUEuGGNVYNIeAcZYTUCWwHADii50X2DoIgUAANkVc/9qUIBfAAAAAElFTkSuQmCC" },
+  icon_check: { w: 11, h: 11, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABVSURBVChTY2CgFpC11f6PjNHl4QCmYMWb3WCMUzGywqAd9f9N2iMgitGtwqUQrrj2yhwU67AqRLYSpAGkAKdCdDfCNOBUCAPIGuAewgdgGvCaSiwAALPOedFW6stMAAAAAElFTkSuQmCC" },
+  icon_x: { w: 15, h: 15, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACGSURBVDhPY2CgFMipGP9Hx0TLgzgr996BY2QFMDa6PIrm2sm74BjZAJjGqPxpYGzsEItfM7IByBpxasZlADaNKJpxGUCURhhANoAsjehOdYuoAWP0WCCoEWQjTDNOA3BphHkBmwEompH9iexHdAOwRhVIAUgCPXCQDUCWR9GMjuGSRMiTBQCY2TmQ4jC/3AAAAABJRU5ErkJggg==" },
+  icon_gem: { w: 9, h: 9, slice: null, group: "icon", note: "List bullet.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABUSURBVChTY2BAAuJWxv9hGFkcDmCShz49w64QWUHJlb2YCtEV2K+bCsYoCkEESBJZAQjrdJWAMVwRTCGyAvmsCOxWghRiVYDueJgVGApgACaJrgAAsBJ0irNa9UIAAAAASUVORK5CYII=" },
+  icon_search: { w: 11, h: 11, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABESURBVChTY2CAAmsVsf/oGCaHAmCS2Q5qcIxVAzaFODUgKzz/8j0cI2ugk2JcboYppo4GZIyuAa4YHaBrwKsYBNBtAgBa954HNSaJMQAAAABJRU5ErkJggg==" },
+  bar_frame: { w: 16, h: 13, slice: [5,5,12,10], group: "hud", note: "Health and mana bar. Its groove is 12px in from the left, top and right and 9px from the bottom.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAANCAYAAACgu+4kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABcSURBVDhPY2CAAm0Jgf+kYJg+uObtte4kYbghIMasRLP/XaEGJOFMWyWIIegGWKuI4cV4DQApkBHgwIthhuA1QE+KDyceNYCAAWRFIywxgQRIwXDNyMmZFAzTBwBB1zwtE/R8sQAAAABJRU5ErkJggg==" },
+  bar_fill: { w: 8, h: 6, slice: [1,2,7,4], group: "hud", note: "A bar's fill, in greys: tint with ImageColor3.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAqSURBVBhXY/hPADC8efPmPz7McO3atf/4MGEFmzZt+o8PM0ybNu0/PgwA49ukuR7HdLcAAAAASUVORK5CYII=" },
+  boss_frame: { w: 24, h: 15, slice: [7,5,18,11], group: "hud", note: "Boss bar. Its groove is 18px in from the ends and 12px from the top and bottom.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAPCAYAAAD+pA/bAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACJSURBVDhPY2CAAm0Jgf/UxDBz4Yb/f9AFx9tr3cnCyGbALYEZ/mCDAxgf6NL43xVqQBZGNwdsCcyCrigRFAusVcRIwjALkM1BsQDZZpAGGQEOkjBID7o5BC3Qk+IjGo9aQBCPAAvomg/QcyixGN0csAWw4gJkMwxn2iqRhZHNgBuOXOBRE8PMBQCsCZJdxJRqIAAAAABJRU5ErkJggg==" },
+  bar_marker: { w: 5, h: 15, slice: [0,5,5,10], group: "hud", note: "Boss phase marker, as tall as the boss bar.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAPCAYAAAAs9AWDAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA3SURBVChTY2CAAm0Jgf8wNlzg/4Ou/3AJmMCDDQ7/u6JEUCVQBJCNQBEAASEuVvoIYthOZR8BAFDjNdtju1GAAAAAAElFTkSuQmCC" },
+  header_red: { w: 24, h: 14, slice: [5,5,19,9], group: "hud", note: "The boss's name banner.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAOCAYAAAA1+Nx+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABXSURBVDhPY2CAAjtR4f/UxDBz4YZ/27yAqhhuCczwp/XZVMVwS2AWXAm3pyoetYAgHrWAIMawYLe7MVUxhgVzTDWoiuEWwHJziaoMVTHccOTyiJoYZi4A9APbozFpcMwAAAAASUVORK5CYII=" },
+  icon_heart: { w: 11, h: 10, slice: null, group: "hud", note: "Health.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAYAAABi8KSDAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABdSURBVChTY2BgYGDQlhD4j4xxicEF/8/qAmNkBehiYMVgQRCY1fX/gbsVXCGIDcOoitEk0TFcMboEOl6oJotQjE8DTCFYMbInCSqEAXQNOBXCAEySoEIYgCnCphAARBipYNm+2/kAAAAASUVORK5CYII=" },
+  icon_mana: { w: 13, h: 13, slice: null, group: "hud", note: "Mana.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB2SURBVChTY2CgFtCWEPgPw+hyOAFI8fln/4nXBLOhfhtEE06NyM6B2QLSBLMNq3NhJoMUwTSAsHfvA7iYfsoOTE0wjcgaYFjZswvTJnSNRGmAAXRNICfBNKGrBQNkm0AKkTFOm5A1wBTBxDACAVkTMsYlRjYAABXtry7WTUc6AAAAAElFTkSuQmCC" },
+  icon_shield: { w: 11, h: 12, slice: null, group: "hud", note: "Defense.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAMCAYAAAC0qUeeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABsSURBVChTY5BTMf5PLGYAEY9ffiaI4Yp3HL6GFffP3gDGXsFZ+BXDFBJU/P9BF1xhWmEXbsUgBQ82OMAVYiiGaYCZ1hUlgqEQrBgE0DXgVAgDMMUwhSjWowNk0/GaCgMwSZBivAphAKYIm0IA2t7+of97NbsAAAAASUVORK5CYII=" },
+  icon_skull: { w: 13, h: 13, slice: null, group: "hud", note: "The boss bar's emblem.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABnSURBVChTY2BAAtoSAv9xYWR1GIo/vrqBgTE041OMjHesnYLQSIwGdI0omtCdic6nviZkJ+HUBOIgK4QpRhdD0YRLIzYNYE3owY6PhmtAjmCYbdhoDA0wTTCN6BirLTAAk8SGkdUBAFdmaU5hkD7EAAAAAElFTkSuQmCC" },
+  preview_fill_health: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY6i4k/cfH2bIP536Hx9mSNkR8x8fJqwgeKbPf3yYwa3R4T8+DABb93RRBit4OwAAAABJRU5ErkJggg==" },
+  preview_fill_health_low: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY/ifF/UfH2Z4kxr8Hx9muBbj/R8fJqxgk4/df3yYYZqDyX98GADOZ3UpuT27cgAAAABJRU5ErkJggg==" },
+  preview_fill_mana: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY8hb9f8/PsyQOvfNf3yYIabv2n98mLACn7JN//FhBoeUaf/xYQDQWoFppq0v9gAAAABJRU5ErkJggg==" },
+  preview_fill_mana_low: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY+iZ9uw/PszQ2HXlPz7MUFp78D8+TFhBYsaC//gwQ1BE+398GADWy38JuiWjPwAAAABJRU5ErkJggg==" },
+  preview_fill_boss: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY/ifEPYfH2Z4E+H/Hx9muBbg8R8fJqxgk7PNf3yYYZqF0X98GAClmHJ5lygNmQAAAABJRU5ErkJggg==" },
+  preview_fill_ghost: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAtSURBVBhXY/j/cMt/fJjhzYVl//Fhhmt7pv/Hhwkr2DS39j8+zDCtJfM/PgwAEvmUicg83C0AAAAASUVORK5CYII=" },
+  preview_fill_flash: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY/gfFfAfH2Z4E+z1Hx9muObt/B8fJqxgk535f3yYYZqJ/n98GADiGXChyjcZ2wAAAABJRU5ErkJggg==" },
+  preview_block: { w: 13, h: 13, slice: null, group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABuSURBVChTY2DAAbQlBP6ji+EEIMUgvOxBFZjGqxmmoPKQP1gDiIZhDM3IiglhuGYQETrLCozRFSFjmBq4phUl9mCMTTNMrCrIAIwxNKFrBsnBFBPUBMLYNAyAJvSgx6YJJgdXjA5gCpAxuhqyAABj9uz/+oVGgQAAAABJRU5ErkJggg==" },
+  preview_sword: { w: 14, h: 14, slice: null, group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABkSURBVDhPY2AgEmhLCPxHxujyWAFM8Yt3X8GYKI3ImmYt30GcjbTTBBOESRClCabw5hIruAKiNIEATBKmmShNMICumSRN2Q5qGJrR1cIBuiZ0m9HVwwE2G5ANQFcPB0QpoiYAAG7uleGzZrtIAAAAAElFTkSuQmCC" },
+  preview_ingot: { w: 12, h: 12, slice: null, group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABISURBVChTY2CgK9CWEPiPC6OrBSv+f30WVrwiSglVE0zxuykOWDFIA1wTutXYMIYGdBORMUwD3EnIJmDDMFtQ3E8IwxUPTgAAwTCHJtCUtX8AAAAASUVORK5CYII=" },
+  preview_potion: { w: 12, h: 12, slice: null, group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABdSURBVChTY2CgFGhLCPxHxujyGACkaE6KBRgTreHGuw9gTFADzBnIGnBqQlaIjjE0wRSDwM1we6wYRROIg64AHROtYbKBPPEaQIqxaoBpgilAxxiKYQAWjOgYWQ0Af+GrUS71X+sAAAAASUVORK5CYII=" },
+  preview_slot_highlight_gold: { w: 16, h: 16, slice: [4,4,12,12], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABGSURBVDhPY2BgYGD4f8PrPzkYpBes+dJGG7Iw2BCYAXATiQAoemAcdEWEwKgBowaAAPUNAHOIBCh6YBxyMNxSEIMcDNILALriSij8uX7BAAAAAElFTkSuQmCC" },
+  preview_slot_highlight_rare: { w: 16, h: 16, slice: [4,4,12,12], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABGSURBVDhPY2BgYGAwaXnznxwM0gvWrJVziCwMNgRmANxEIgCKHhgHXREhMGrAqAEgQH0DwBwiAYoeGIccDLcUxCAHg/QCAAcoF/A0nsnWAAAAAElFTkSuQmCC" },
+};
+
+const U = 3;
+
+(function applySprites() {
+  const rootStyle = document.documentElement.style;
+  let css = '';
+  for (const [name, s] of Object.entries(SPRITES)) {
+    rootStyle.setProperty('--s-' + name, 'url("' + s.uri + '")');
+    if (!s.slice) continue;
+    const [x0, y0, x1, y1] = s.slice;
+    const t = y0, r = s.w - x1, b = s.h - y1, l = x0;
+    const px = [t, r, b, l].map(v => v * U + 'px').join(' ');
+    css += `.n-${name}{border-style:solid;border-width:${px};border-image:var(--s-${name}) ${t} ${r} ${b} ${l} fill / ${px} stretch;image-rendering:pixelated}\n`;
+  }
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+function sprite(img, name, k) {
+  const s = SPRITES[name];
+  k = k || +(img.dataset.k || U);
+  img.src = s.uri; img.width = s.w * k; img.height = s.h * k; img.alt = '';
+  return img;
+}
+function el(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
+
+// Fit the 1080p screen to the page.
+const fit = document.getElementById('fit'), screen = document.getElementById('screen');
+function refit() {
+  const k = fit.clientWidth / 1920;
+  screen.style.transform = `scale(${k})`;
+  fit.style.height = 1080 * k + 'px';
+}
+addEventListener('resize', refit);
+refit();
+
+// Hotbar, for context.
+const hotbar = document.getElementById('hotbar');
+['preview_sword', 'preview_block', 'preview_potion', 'preview_ingot', '', '', '', '', ''].forEach((n, i) => {
+  const slot = el('<div class="slot n-slot"></div>');
+  if (n) slot.appendChild(sprite(document.createElement('img'), n, 3));
+  if (i === 0) slot.appendChild(el('<div class="hl n-preview_slot_highlight_gold"></div>'));
+  hotbar.appendChild(slot);
+});
+
+document.querySelectorAll('img[data-s]').forEach(img => sprite(img, img.dataset.s));
+
+// ---- Health ------------------------------------------------------------
+let hp = 85, hpMax = 100, defense = true;
+const hFill = document.getElementById('healthFill'), hGhost = document.getElementById('healthGhost');
+const hAmount = document.getElementById('healthAmount'), hFrame = document.getElementById('healthFrame');
+function drawHealth(hit) {
+  const f = hp / hpMax;
+  hFill.style.width = f * 100 + '%';
+  hFill.className = 'fill ' + (f <= 0.3 ? 'n-preview_fill_health_low' : 'n-preview_fill_health');
+  if (hit) {
+    hGhost.style.transition = 'width .45s ease-out .15s';
+  } else {
+    hGhost.style.transition = 'none';
+  }
+  hGhost.style.width = f * 100 + '%';
+  hAmount.textContent = `${Math.round(hp)} / ${hpMax}`;
+  if (hit) {
+    hFrame.classList.remove('hit'); void hFrame.offsetWidth; hFrame.classList.add('hit');
+    const v = document.getElementById('vignette');
+    v.style.setProperty('--peak', Math.min(1, Math.max(0.15, hit / (hpMax * 0.25))) * 0.55);
+    v.classList.remove('on'); void v.offsetWidth; v.classList.add('on');
+    const d = defense ? document.getElementById('defense') : null;
+    const x = d ? 284 + d.offsetWidth + 10 : 286;
+    const dmg = el(`<div class="damage n-text" style="left:${x}px; bottom:100px; color:#ff6e5a">-${hit}</div>`);
+    screen.appendChild(dmg);
+    setTimeout(() => dmg.remove(), 800);
+  }
+}
+function hurt(n) { const before = hp; hp = Math.max(0, hp - n); drawHealth(before - hp); }
+
+// ---- Mana --------------------------------------------------------------
+let mana = 64, manaMax = 100;
+const mFill = document.getElementById('manaFill'), mFlash = document.getElementById('manaFlash');
+const mAmount = document.getElementById('manaAmount'), manaEl = document.getElementById('mana');
+let denied = 0, last = performance.now();
+function tick(now) {
+  const dt = (now - last) / 1000; last = now;
+  mana = Math.min(manaMax, mana + 4 * dt);
+  const f = mana / manaMax;
+  mFill.style.width = f * 100 + '%';
+  mFill.className = 'fill ' + (f <= 0.3 ? 'n-preview_fill_mana_low' : 'n-preview_fill_mana');
+  mAmount.textContent = `${Math.floor(mana)} / ${manaMax}`;
+  if (denied > 0) { denied -= denied * Math.min(dt * 3.5, 1); if (denied < 0.01) denied = 0; }
+  mFlash.style.opacity = 0.75 * denied;
+
+  // Boss chase, as BossBar does it.
+  bossShown += (bossTarget() - bossShown) * Math.min(dt * 12, 1);
+  if (bossGhostF > bossShown) bossGhostF += (bossShown - bossGhostF) * Math.min(dt * 2.2, 1); else bossGhostF = bossShown;
+  bFill.style.width = Math.max(0, bossShown) * 100 + '%';
+  bGhost.style.width = Math.max(0, bossGhostF) * 100 + '%';
+  bEdge.style.display = bossShown > 0.005 && bossShown < 0.995 ? 'block' : 'none';
+  bAmount.textContent = `${Math.round(bossHp)} / ${bossMax}`;
+
+  requestAnimationFrame(tick);
+}
+
+// ---- Boss --------------------------------------------------------------
+let bossHp = 1284, bossMax = 2000, bossShown = 0.642, bossGhostF = 0.642;
+const bossTarget = () => bossHp / bossMax;
+const bFill = document.getElementById('bossFill'), bGhost = document.getElementById('bossGhost');
+const bEdge = document.getElementById('bossEdge'), bAmount = document.getElementById('bossAmount');
+const bossEl = document.getElementById('boss');
+[0.65, 0.3].forEach(f => {
+  const m = el('<div class="marker n-bar_marker"></div>');
+  // Across the groove, which runs from 30px in to 18px from the end.
+  m.style.left = `calc(30px + (100% - 48px) * ${f})`;
+  bossEl.appendChild(m);
+});
+const moves = ['BODY COLLAPSE', '', 'ECLIPSE BEAM', '', 'HALLOWED RAIN', ''];
+let moveAt = 0;
+const moveEl = document.getElementById('bossMove');
+
+requestAnimationFrame(tick);
+drawHealth(0);
+
+document.querySelectorAll('[data-do]').forEach(b => b.addEventListener('click', () => {
+  switch (b.dataset.do) {
+    case 'hit': hurt(18); break;
+    case 'bighit': hurt(40); break;
+    case 'heal': hp = Math.min(hpMax, hp + 30); drawHealth(0); break;
+    case 'defense': defense = !defense; document.getElementById('defense').style.display = defense ? 'flex' : 'none'; break;
+    case 'cast':
+      if (mana >= 24) { mana -= 24; break; }
+      // falls through: not enough
+    case 'refuse':
+      if (denied < 0.5) { manaEl.classList.remove('shake'); void manaEl.offsetWidth; manaEl.classList.add('shake'); }
+      denied = 1; break;
+    case 'boss': bossHp = Math.max(0, bossHp - 140); break;
+    case 'bossheal': bossHp = Math.min(bossMax, bossHp + 90); break;
+    case 'move':
+      moveAt = (moveAt + 1) % moves.length;
+      moveEl.textContent = moves[moveAt];
+      moveEl.style.visibility = moves[moveAt] ? 'visible' : 'hidden';
+      break;
+    case 'bosstoggle': bossEl.style.opacity = bossEl.style.opacity === '0' ? '1' : '0'; break;
+  }
+}));
+
+// New sprites.
+const tiles = document.getElementById('tiles');
+for (const [name, s] of Object.entries(SPRITES)) {
+  if (s.group !== 'hud') continue;
+  const tile = el('<div class="tile"><div class="art"></div><code>' + name + '</code><div class="meta"></div></div>');
+  tile.querySelector('.art').appendChild(sprite(document.createElement('img'), name));
+  tile.querySelector('.meta').textContent = s.w + '×' + s.h + (s.slice ? ' · slice ' + s.slice.join(', ') : '') + (s.note ? ' · ' + s.note : '');
+  tiles.appendChild(tile);
+}
+</script>
+</body>
+</html>

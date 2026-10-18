@@ -542,15 +542,18 @@ end
 -- ---------------------------------------------------------------------------
 
 --[[
-	The green title banner, as wide as its text. Anchored at its centre: laid
-	across a window's top edge it is UDim2.new(0.5, 0, 0, 0) on the window.
-	Returns the banner and its label, so the title can change.
+	The title banner, as wide as its text: green unless `sprite` names another
+	("header_red" is the boss's). Anchored at its centre: laid across a window's
+	top edge it is UDim2.new(0.5, 0, 0, 0) on the window. Returns the banner and
+	its label, so the title can change.
 ]]
-function PixelUI.header(parent: Instance?, text: string): (ImageLabel, TextLabel)
-	local banner = PixelUI.image(nil, "header")
+function PixelUI.header(parent: Instance?, text: string, sprite: string?): (ImageLabel, TextLabel)
+	sprite = sprite or "header"
+
+	local banner = PixelUI.image(nil, sprite)
 	banner.Name = "Header"
 	banner.AnchorPoint = Vector2.new(0.5, 0.5)
-	banner.Size = UDim2.fromOffset(0, PixelUI.get("header").size.Y * SCALE)
+	banner.Size = UDim2.fromOffset(0, PixelUI.get(sprite).size.Y * SCALE)
 	banner.AutomaticSize = Enum.AutomaticSize.X
 
 	local padding = Instance.new("UIPadding")
@@ -572,6 +575,27 @@ function PixelUI.header(parent: Instance?, text: string): (ImageLabel, TextLabel
 
 	banner.Parent = parent
 	return banner, label
+end
+
+-- ---------------------------------------------------------------------------
+-- Bars
+-- ---------------------------------------------------------------------------
+
+--[[
+	Where the dark groove sits inside each bar frame, in texels from its edges:
+	where a fill laid over the frame belongs. These follow the art in
+	assets/pixel-ui/source/build_sprites.cs; change one, change the other.
+]]
+PixelUI.Grooves = {
+	bar_frame = { left = 4, top = 4, right = 4, bottom = 3 },
+	boss_frame = { left = 6, top = 4, right = 6, bottom = 4 },
+}
+
+-- A frame's groove inset on screen, side by side: left, top, right, bottom.
+function PixelUI.groove(name: string): (number, number, number, number)
+	local groove = PixelUI.Grooves[name]
+	assert(groove, string.format("[PixelUI] %q is not a bar frame", tostring(name)))
+	return groove.left * SCALE, groove.top * SCALE, groove.right * SCALE, groove.bottom * SCALE
 end
 
 -- ---------------------------------------------------------------------------

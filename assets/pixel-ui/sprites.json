@@ -50,6 +50,15 @@
     { "name": "icon_check", "group": "icon", "w": 11, "h": 11, "slice": null, "note": "" },
     { "name": "icon_x", "group": "icon", "w": 15, "h": 15, "slice": null, "note": "" },
     { "name": "icon_gem", "group": "icon", "w": 9, "h": 9, "slice": null, "note": "List bullet." },
-    { "name": "icon_search", "group": "icon", "w": 11, "h": 11, "slice": null, "note": "" }
+    { "name": "icon_search", "group": "icon", "w": 11, "h": 11, "slice": null, "note": "" },
+    { "name": "bar_frame", "group": "hud", "w": 16, "h": 13, "slice": [5,5,12,10], "note": "Health and mana bar. Its groove is 12px in from the left, top and right and 9px from the bottom." },
+    { "name": "bar_fill", "group": "hud", "w": 8, "h": 6, "slice": [1,2,7,4], "note": "A bar's fill, in greys: tint with ImageColor3." },
+    { "name": "boss_frame", "group": "hud", "w": 24, "h": 15, "slice": [7,5,18,11], "note": "Boss bar. Its groove is 18px in from the ends and 12px from the top and bottom." },
+    { "name": "bar_marker", "group": "hud", "w": 5, "h": 15, "slice": [0,5,5,10], "note": "Boss phase marker, as tall as the boss bar." },
+    { "name": "header_red", "group": "hud", "w": 24, "h": 14, "slice": [5,5,19,9], "note": "The boss's name banner." },
+    { "name": "icon_heart", "group": "hud", "w": 11, "h": 10, "slice": null, "note": "Health." },
+    { "name": "icon_mana", "group": "hud", "w": 13, "h": 13, "slice": null, "note": "Mana." },
+    { "name": "icon_shield", "group": "hud", "w": 11, "h": 12, "slice": null, "note": "Defense." },
+    { "name": "icon_skull", "group": "hud", "w": 13, "h": 13, "slice": null, "note": "The boss bar's emblem." }
   ]
 }

@@ -11,7 +11,7 @@
 ]]
 
 return {
-	AtlasSize = Vector2.new(256, 77),
+	AtlasSize = Vector2.new(256, 94),
 	Sprites = {
 		frame_parchment = { offset = Vector2.new(2, 2), size = Vector2.new(32, 32), slice = Rect.new(8, 8, 24, 24), fill = Color3.fromRGB(239, 220, 174), edge = Color3.fromRGB(43, 24, 16) },
 		frame_wood = { offset = Vector2.new(36, 2), size = Vector2.new(32, 32), slice = Rect.new(8, 8, 24, 24), fill = Color3.fromRGB(107, 64, 38), edge = Color3.fromRGB(43, 24, 16) },
@@ -62,5 +62,14 @@ return {
 		icon_x = { offset = Vector2.new(198, 2), size = Vector2.new(15, 15), fill = Color3.fromRGB(90, 111, 150), edge = Color3.fromRGB(30, 36, 51), icon = true },
 		icon_gem = { offset = Vector2.new(222, 52), size = Vector2.new(9, 9), fill = Color3.fromRGB(63, 174, 149), edge = Color3.fromRGB(23, 58, 51), icon = true },
 		icon_search = { offset = Vector2.new(154, 52), size = Vector2.new(11, 11), fill = Color3.fromRGB(207, 233, 239), edge = Color3.fromRGB(59, 36, 22), icon = true },
+		bar_frame = { offset = Vector2.new(61, 77), size = Vector2.new(16, 13), slice = Rect.new(5, 5, 12, 10), fill = Color3.fromRGB(46, 26, 14), edge = Color3.fromRGB(43, 24, 16) },
+		bar_fill = { offset = Vector2.new(135, 77), size = Vector2.new(8, 6), slice = Rect.new(1, 2, 7, 4), fill = Color3.fromRGB(214, 214, 214), edge = Color3.fromRGB(214, 214, 214) },
+		boss_frame = { offset = Vector2.new(9, 77), size = Vector2.new(24, 15), slice = Rect.new(7, 5, 18, 11), fill = Color3.fromRGB(46, 26, 14), edge = Color3.fromRGB(43, 24, 16) },
+		bar_marker = { offset = Vector2.new(2, 77), size = Vector2.new(5, 15), slice = Rect.new(0, 5, 5, 10), fill = Color3.fromRGB(18, 10, 5), edge = Color3.fromRGB(18, 10, 5) },
+		header_red = { offset = Vector2.new(35, 77), size = Vector2.new(24, 14), slice = Rect.new(5, 5, 19, 9), fill = Color3.fromRGB(212, 87, 63), edge = Color3.fromRGB(62, 21, 19) },
+		icon_heart = { offset = Vector2.new(122, 77), size = Vector2.new(11, 10), fill = Color3.fromRGB(224, 71, 58), edge = Color3.fromRGB(43, 24, 16) },
+		icon_mana = { offset = Vector2.new(79, 77), size = Vector2.new(13, 13), fill = Color3.fromRGB(75, 141, 224), edge = Color3.fromRGB(43, 24, 16) },
+		icon_shield = { offset = Vector2.new(109, 77), size = Vector2.new(11, 12), fill = Color3.fromRGB(138, 90, 20), edge = Color3.fromRGB(30, 36, 51) },
+		icon_skull = { offset = Vector2.new(94, 77), size = Vector2.new(13, 13), fill = Color3.fromRGB(241, 234, 216), edge = Color3.fromRGB(43, 24, 16) },
 	},
 }

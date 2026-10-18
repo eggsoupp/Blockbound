@@ -1629,7 +1629,22 @@ function EnemyService.damage(model, amount, dealer)
 	-- it hit for. A killing hit that shows nothing is the one hit a player most
 	-- wants the number from.
 	if dealt > 0 then
-		damageNumber(model:GetPivot().Position, dealt, entry.height, entry.health <= 0)
+		--[[
+			Where the blow landed. The pivot, unless the behaviour knows
+			better: the Blightborer is a worm whose pivot is its head, and a
+			number drawn on the head for a hit on the tail eighty studs away
+			is a number nobody reads. pcall'd, like nearestPoint below.
+		]]
+		local landed = model:GetPivot().Position
+		local behaviour = entry.behaviour
+		if behaviour and behaviour.impactPoint then
+			local ok, point = pcall(behaviour.impactPoint, entry, dealer)
+			if ok and typeof(point) == "Vector3" then
+				landed = point
+			end
+		end
+
+		damageNumber(landed, dealt, entry.height, entry.health <= 0)
 
 		-- Before removeEntry destroys the model: the position travels with the
 		-- message so a kill can still be drawn where it happened.
@@ -1638,7 +1653,7 @@ function EnemyService.damage(model, amount, dealer)
 				dealer,
 				if entry.health <= 0 then "kill" else "hit",
 				model,
-				model:GetPivot().Position,
+				landed,
 				entry.name,
 				entry.height
 			)
@@ -1698,9 +1713,26 @@ end
 function EnemyService.forEachNear(position, range, visit)
 	local rangeSquared = range * range
 
-	for model in pairs(entries) do
+	for model, entry in pairs(entries) do
 		if model.Parent then
 			local enemyPosition = model:GetPivot().Position
+
+			--[[
+				A body much bigger than its pivot answers for itself. The
+				Blightborer's pivot is its head, and it is the better part of
+				a hundred studs long; asked here, it gives the point on
+				whichever segment is nearest, so a sword swung at its tail
+				hits its tail. pcall'd: this runs inside every swing and every
+				ability, and a mistake in one boss must not switch them off.
+			]]
+			local behaviour = entry.behaviour
+			if behaviour and behaviour.nearestPoint then
+				local ok, point = pcall(behaviour.nearestPoint, entry, position)
+				if ok and typeof(point) == "Vector3" then
+					enemyPosition = point
+				end
+			end
+
 			local offset = enemyPosition - position
 
 			if offset:Dot(offset) <= rangeSquared then

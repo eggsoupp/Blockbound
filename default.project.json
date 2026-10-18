@@ -503,6 +503,12 @@
             },
             "SignusVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusVFX.lua"
+            },
+            "BlightborerVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/BlightborerVFX.lua"
+            },
+            "BlightborerParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/BlightborerParticles.lua"
             }
           },
           "EclipsePlan": {
@@ -727,6 +733,9 @@
         },
         "Signus": {
           "$path": "src/ServerScriptService/Bosses/Signus.lua"
+        },
+        "Blightborer": {
+          "$path": "src/ServerScriptService/Bosses/Blightborer.lua"
         }
       },
       "BossService": {

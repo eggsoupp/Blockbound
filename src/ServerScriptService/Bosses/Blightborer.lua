@@ -171,7 +171,10 @@ local Tuning = {
 
 	body = {
 		segments = 16, -- body segments between the head and the tail
-		scale = 1, -- uniform scale on all three models
+		-- Head and tail scaled to the segment's length, so all three are on
+		-- one voxel scale again; see kindScales.
+		matchLengths = true,
+		scale = 1.5, -- then the whole worm, uniformly
 		overlap = 0.94, -- share of each piece's length between joints; 1 is exactly flush
 	},
 
@@ -180,7 +183,7 @@ local Tuning = {
 		speed = { 30, 38 },
 		turn = { 140, 180 }, -- degrees a second
 		accel = 70,
-		depth = 14, -- studs under the surface it cruises at
+		depth = 20, -- studs under the surface it cruises at; clear of a body this thick
 		lead = 0.4, -- seconds of target movement it aims ahead by
 	},
 
@@ -206,18 +209,19 @@ local Tuning = {
 		every = { 6.5, 5 }, -- seconds between one head's breaches
 		range = 80, -- horizontal studs from its target before it will
 		warn = { 1.1, 0.85 },
-		depth = 20, -- how far under the exit it lines up before rising
+		depth = 28, -- how far under the exit it lines up before rising
 		rise = { 72, 80 }, -- launch speed
 		drift = 14, -- horizontal speed it carries out of the hole
-		blast = 7, -- radius of the eruption's hit
+		blast = 10, -- radius of the eruption's hit
 		damage = 16,
-		crater = 1.5, -- blocks: radius of the hole it tears coming up
+		crater = 2.5, -- blocks: radius of the hole it tears coming up, about the head's
 		craterDepth = 2,
+		craterCells = 48,
 		maxConcurrent = { 1, 2 }, -- breach warnings on the ground at once
 	},
 
 	dive = {
-		crater = 1,
+		crater = 1.5,
 		craterDepth = 1,
 	},
 
@@ -226,10 +230,10 @@ local Tuning = {
 		overshoot = 16, -- and past you, where it comes up
 		speed = { 42, 50 },
 		warn = 0.8,
-		width = 1, -- columns either side of the line that are torn up
+		width = 2, -- columns either side of the line that are torn up
 		damage = 14,
-		radius = 6,
-		maxCells = 64,
+		radius = 9,
+		maxCells = 110,
 	},
 
 	spit = {
@@ -247,7 +251,7 @@ local Tuning = {
 	},
 
 	sinkhole = {
-		radius = 9, -- studs
+		radius = 12, -- studs
 		depth = 3, -- blocks at the middle, shallower to the rim so you can climb out
 		warn = 1.4,
 		maxCells = 64,
@@ -764,12 +768,50 @@ local function cloneKind(entry, kind: string): Model?
 		return nil
 	end
 	preparePiece(model)
-	local scale = Tuning.body.scale
-	if scale ~= 1 then
-		model:ScaleTo(model:GetScale() * scale)
-	end
 	model.Parent = entry.model
 	return model
+end
+
+local function scaleModel(model: Model?, factor: number?)
+	if model and factor and math.abs(factor - 1) > 1e-3 then
+		model:ScaleTo(model:GetScale() * factor)
+	end
+end
+
+--[[
+	How much each kind of piece is scaled by.
+
+	All three parts are authored the same length - 56 voxels each, made to
+	mate flush (assets/voxel-boss) - but they came into Roblox at three
+	different sizes: the head a little small, the tail a little big. With
+	matchLengths each is first scaled to the body segment's length, which
+	puts all three back on one voxel scale so the joints line up, and then
+	the whole worm by `scale`. Measured on the unscaled models, along each
+	one's own front.
+]]
+local function kindScales(entry, models: { [string]: Model? }): { [string]: number }
+	local B = Tuning.body
+	local scales = { head = B.scale, body = B.scale, tail = B.scale }
+	if not B.matchLengths then
+		return scales
+	end
+
+	local function lengthOf(kind: string): number?
+		local model = models[kind]
+		return if model then measure(model, correctionFor(entry, kind)).half * 2 else nil
+	end
+
+	local reference = lengthOf("body")
+	if not reference then
+		return scales
+	end
+	for kind in pairs(scales) do
+		local length = lengthOf(kind)
+		if length and length > 0 then
+			scales[kind] = B.scale * reference / length
+		end
+	end
+	return scales
 end
 
 --[[
@@ -801,11 +843,6 @@ local function adoptHead(entry): Model
 	local plate = container:FindFirstChild("NamePlate")
 	if plate and plate:IsA("BillboardGui") then
 		plate.Adornee = entry.root
-	end
-
-	local scale = Tuning.body.scale
-	if scale ~= 1 then
-		head:ScaleTo(head:GetScale() * scale)
 	end
 
 	return head
@@ -846,6 +883,7 @@ local function convert(entry, piece, kind: string)
 	if not model then
 		return
 	end
+	scaleModel(model, entry.kindScale and entry.kindScale[kind])
 	local fresh = newPiece(kind, model, correctionFor(entry, kind))
 	piece.model:Destroy()
 	piece.model = model
@@ -1460,7 +1498,7 @@ local function breach(entry, worm, phase: number, scope, options)
 	end
 
 	local exit = options.exit or groundUnder(root.Position + flatVelocity(root) * Tuning.swim.lead)
-	local plan = planBowl(exit, B.crater, B.craterDepth, 40)
+	local plan = planBowl(exit, B.crater, B.craterDepth, B.craterCells)
 	local notice = options.warn or byPhase(B.warn, phase)
 
 	local warning = true
@@ -1511,7 +1549,7 @@ local function furrow(entry, worm, phase: number, scope)
 	local from = here - direction * F.length
 	from = Vector3.new(from.X, surfaceY(from.X, from.Z, here.Y), from.Z)
 	local to = groundUnder(here + direction * F.overshoot)
-	local exitPlan = planBowl(to, B.crater, B.craterDepth, 40)
+	local exitPlan = planBowl(to, B.crater, B.craterDepth, B.craterCells)
 
 	fx("furrowline", from, { to = to, seconds = F.warn, radius = F.width * STUD + 2 })
 
@@ -1897,8 +1935,14 @@ function Blightborer.start(entry)
 	local tailModel = cloneKind(entry, "tail")
 
 	-- Which way the parts are built, read off a body segment before anything
-	-- is measured; see detectCorrection.
+	-- is measured; see detectCorrection. Then their sizes: see kindScales.
 	entry.autoCorrection = detectCorrection(bodyModels[1] or headModel)
+	entry.kindScale = kindScales(entry, { head = headModel, body = bodyModels[1], tail = tailModel })
+	scaleModel(headModel, entry.kindScale.head)
+	for _, model in ipairs(bodyModels) do
+		scaleModel(model, entry.kindScale.body)
+	end
+	scaleModel(tailModel, entry.kindScale.tail)
 
 	local pieces = { newPiece("head", headModel, correctionFor(entry, "head")) }
 	for _, model in ipairs(bodyModels) do
@@ -1934,7 +1978,7 @@ function Blightborer.start(entry)
 	-- tell: you can see it coming at night.
 	local light = Instance.new("PointLight")
 	light.Color = Colors.ichor
-	light.Range = 16
+	light.Range = 16 * Tuning.body.scale
 	light.Brightness = 1.2
 	light.Shadows = false
 	light.Parent = entry.root
@@ -2102,5 +2146,10 @@ function Blightborer.finish(entry, reason: string?)
 		announce("The Blightborer has been defeated!", "good")
 	end
 end
+
+-- Where the fight changes, as health fractions, for the boss bar's markers
+-- (BossService sends it). Two stages: the frenzy at half. The splits are not
+-- stages - the bar's subtitle counts the worms instead.
+Blightborer.phases = { Tuning.phase2At }
 
 return Blightborer

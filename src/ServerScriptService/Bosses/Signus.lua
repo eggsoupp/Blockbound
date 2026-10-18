@@ -2448,4 +2448,8 @@ function Signus.finish(entry, reason: string?)
 	end
 end
 
+-- Where the fight changes, as health fractions, for the boss bar's markers
+-- (BossService sends it): two stages, Totality at half.
+Signus.phases = { Tuning.phase2At }
+
 return Signus

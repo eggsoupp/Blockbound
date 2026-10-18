@@ -66,6 +66,26 @@ local active = nil
 local lastSentAt = 0
 local trailing = nil
 
+--[[
+	Where the fight changes, as health fractions between 0 and 1: the
+	behaviour module's own `phases` list, so the bar's markers are the same
+	numbers the fight actually switches on. A boss with one stage has none,
+	and the bar draws no markers at all.
+]]
+local function phasesOf(entry)
+	local list = {}
+	local behaviour = entry.behaviour
+	local phases = behaviour and behaviour.phases
+	if type(phases) == "table" then
+		for _, fraction in ipairs(phases) do
+			if type(fraction) == "number" and fraction > 0 and fraction < 1 then
+				table.insert(list, fraction)
+			end
+		end
+	end
+	return list
+end
+
 local function payloadFor(entry)
 	return {
 		name = (entry.def and entry.def.displayName) or entry.name,
@@ -75,6 +95,9 @@ local function payloadFor(entry)
 		-- The behaviour module's own word for what it is doing. Optional, and
 		-- the bar simply shows nothing when there is none.
 		phase = entry.bossPhase,
+
+		-- Its stage boundaries, for the markers. See phasesOf.
+		phases = phasesOf(entry),
 	}
 end
 

@@ -1921,4 +1921,8 @@ function AllSeeingEye.finish(entry, reason: string?)
 	end
 end
 
+-- Where the fight changes, as health fractions, for the boss bar's markers
+-- (BossService sends it): two stages, the mouth opening at half.
+AllSeeingEye.phases = { Tuning.phase2At }
+
 return AllSeeingEye

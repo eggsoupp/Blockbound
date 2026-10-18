@@ -123,8 +123,8 @@ screen.Parent = playerGui
 --[[
 	A CanvasGroup, so the whole thing fades in and out on ONE property.
 
-	The alternative is tweening a name, a bar, a ghost, an edge, two phase marks
-	and two labels, and keeping them in step. Here the entrance is one tween and
+	The alternative is tweening a name, a bar, a ghost, an edge, the phase
+	marks and two labels, and keeping them in step. Here the entrance is one tween and
 	nothing inside it has to know the bar is arriving.
 
 	A CanvasGroup clips what it draws to its own box, which is why it is wider
@@ -228,18 +228,46 @@ edge.Parent = fill
 
 	Gold-tipped lines across the bar at the health fractions the fight changes
 	at, so a player can see the next change coming rather than being surprised
-	by it. They are the same numbers the behaviour module splits its deck on; if
-	those move, these move.
+	by it. One fewer than the boss has stages - none for a boss with only one -
+	and they come from the boss itself: BossService sends its behaviour
+	module's `phases`, the same numbers the fight switches on, so if those
+	move, these move.
 ]]
-local PHASE_MARKS = { 0.65, 0.3 }
+local marks = {}
+local markedPhases = nil
 
-for _, fraction in ipairs(PHASE_MARKS) do
-	local mark = PixelUI.image(root, "bar_marker")
-	mark.Name = "Phase"
-	mark.AnchorPoint = Vector2.new(0.5, 0)
-	mark.Position = UDim2.fromOffset(fillLeft + fraction * fillWidth, L.frameTop)
-	mark.Size = UDim2.fromOffset(MARKER_WIDTH, L.frameHeight)
-	mark.ZIndex = 5
+local function setPhases(phases)
+	local fractions = {}
+	if type(phases) == "table" then
+		for _, value in ipairs(phases) do
+			local fraction = tonumber(value)
+			if fraction and fraction > 0 and fraction < 1 then
+				table.insert(fractions, fraction)
+			end
+		end
+	end
+
+	-- Every health update carries them; only a different boss redraws.
+	local key = table.concat(fractions, ",")
+	if key == markedPhases then
+		return
+	end
+	markedPhases = key
+
+	for _, mark in ipairs(marks) do
+		mark:Destroy()
+	end
+	table.clear(marks)
+
+	for _, fraction in ipairs(fractions) do
+		local mark = PixelUI.image(root, "bar_marker")
+		mark.Name = "Phase"
+		mark.AnchorPoint = Vector2.new(0.5, 0)
+		mark.Position = UDim2.fromOffset(fillLeft + fraction * fillWidth, L.frameTop)
+		mark.Size = UDim2.fromOffset(MARKER_WIDTH, L.frameHeight)
+		mark.ZIndex = 5
+		table.insert(marks, mark)
+	end
 end
 
 local amount = Instance.new("TextLabel")
@@ -346,6 +374,7 @@ BossState.OnClientEvent:Connect(function(state)
 	title.Text = string.upper(tostring(state.name or ""))
 	move.Text = if type(state.phase) == "string" then string.upper(state.phase) else ""
 	movePill.Visible = move.Text ~= ""
+	setPhases(state.phases)
 
 	if not visible then
 		-- A fresh fight starts where he actually is rather than sweeping up

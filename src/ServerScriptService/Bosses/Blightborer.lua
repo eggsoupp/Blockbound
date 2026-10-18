@@ -57,12 +57,14 @@
 	its own centre - so the pivot can sit anywhere in the mesh and the
 	spacing still comes out right.
 
-	WHICH WAY THEY FACE. Zero means the piece was built with its front along
-	-Z, Roblox's forward, like every other enemy here. If a piece faces some
-	other way, put a Vector3 attribute called WormRotation on it in
-	EnemyAssets, in degrees (pitch, yaw, roll) - the same numbers and the same
-	meaning as EnemyConfig's modelRotation - and spawn a new one. The output
-	window prints every piece's measured size at spawn.
+	WHICH WAY THEY FACE is read off the body segment's proportions (see
+	detectCorrection): its longest side is the length, front at the positive
+	end; its shortest is belly-to-back, back at the negative end. That is how
+	the MagicaVoxel parts import. If a piece still faces wrong, put a Vector3
+	attribute called WormRotation on it in EnemyAssets, in degrees (pitch,
+	yaw, roll) with modelRotation's meaning, where zero is "built facing
+	-Z" - it replaces the detection for that piece. The output window prints
+	the axes it chose and every piece's size at spawn.
 
 	All three are moved by PivotTo, every tick, as separate models inside the
 	one enemy model EnemyService knows about - so a sword or an ability that
@@ -170,7 +172,7 @@ local Tuning = {
 	body = {
 		segments = 16, -- body segments between the head and the tail
 		scale = 1, -- uniform scale on all three models
-		overlap = 0.82, -- how tightly the pieces nest; 1 is end to end
+		overlap = 0.94, -- share of each piece's length between joints; 1 is exactly flush
 	},
 
 	-- Underground: it steers freely toward a point under its target.
@@ -597,9 +599,71 @@ local function findPieceAsset(folder: Instance, names: { string }): Instance?
 	return nil
 end
 
-local function rotationOf(template: Instance?): Vector3
+--[[
+	Which way a piece's model is built, worked out from the model itself.
+
+	The parts are MagicaVoxel exports (assets/voxel-boss): authored with the
+	worm's length along voxel Z, mouth toward +Z, belly toward -Y. MagicaVoxel
+	is Z-up and Roblox is Y-up, so an import stands every piece on end -
+	length along +Y, mouth at the top, belly toward +Z - which is why they all
+	came out at right angles to the body when this assumed -Z.
+
+	So rather than assume, it reads the proportions: the LONGEST side of the
+	box is the length and its positive end is the front, and the SHORTEST
+	side is belly-to-back with the back on its negative end. That is right
+	for the import above, and stays right if the models are later turned in
+	Studio as long as they are turned together. The body segment is the one
+	measured - its three sides all differ - and the answer is used for all
+	three: the head is exactly as wide as it is long, so on its own it cannot
+	say which of the two is which.
+
+	Returns the correction as a CFrame: it maps the piece's own front to -Z
+	and its back to +Y, the frame the movement thinks in.
+]]
+local function detectCorrection(model: Model): CFrame
+	local _, size = model:GetBoundingBox()
+	local axes = {
+		{ vector = Vector3.xAxis, length = size.X },
+		{ vector = Vector3.yAxis, length = size.Y },
+		{ vector = Vector3.zAxis, length = size.Z },
+	}
+	table.sort(axes, function(a, b)
+		return a.length > b.length
+	end)
+	local front = axes[1].vector
+	local back = -axes[3].vector
+	-- Built as its inverse, column by column: X goes to front x back, Y to
+	-- the back, Z to behind.
+	return CFrame.fromMatrix(Vector3.zero, front:Cross(back), back, -front):Inverse()
+end
+
+local AXIS_NAMES = { [1] = "X", [2] = "Y", [3] = "Z" }
+
+-- The model-space axis a correction treats as `direction`, for the output.
+local function axisName(correction: CFrame, direction: Vector3): string
+	local inPiece = correction:VectorToObjectSpace(direction)
+	local values = { inPiece.X, inPiece.Y, inPiece.Z }
+	local best = 1
+	for index = 2, 3 do
+		if math.abs(values[index]) > math.abs(values[best]) then
+			best = index
+		end
+	end
+	return (if values[best] < 0 then "-" else "+") .. AXIS_NAMES[best]
+end
+
+--[[
+	The correction for one piece: its template's WormRotation attribute when
+	it has one (degrees, pitch/yaw/roll, modelRotation's meaning), and the
+	detected one otherwise.
+]]
+local function correctionFor(entry, kind: string): CFrame
+	local template = entry.templates[kind]
 	local value = template and template:GetAttribute(ROTATION_ATTRIBUTE)
-	return if typeof(value) == "Vector3" then value else Vector3.zero
+	if typeof(value) == "Vector3" then
+		return CFrame.Angles(math.rad(value.X), math.rad(value.Y), math.rad(value.Z))
+	end
+	return entry.autoCorrection or CFrame.identity
 end
 
 --[[
@@ -647,16 +711,15 @@ end
 	Measures a piece where it stands.
 
 	The frame movement thinks in is the piece's bounding-box centre facing
-	its front, with the rotation correction applied; `frameToPivot` turns
-	that into where its pivot has to go. Both the box and the pivot are read
-	in the same moment, so where the model happens to be does not matter.
+	its front, with the correction applied; `frameToPivot` turns that into
+	where its pivot has to go. Both the box and the pivot are read in the
+	same moment, so where the model happens to be does not matter.
 
 	`half` is its half-length along its front, `radius` its half-width
 	across, both in studs.
 ]]
-local function measure(model: Model, rotation: Vector3)
+local function measure(model: Model, correction: CFrame)
 	local boxFrame, size = model:GetBoundingBox()
-	local correction = CFrame.Angles(math.rad(rotation.X), math.rad(rotation.Y), math.rad(rotation.Z))
 
 	local function extent(direction: Vector3): number
 		return 0.5 * (math.abs(direction.X) * size.X + math.abs(direction.Y) * size.Y + math.abs(direction.Z) * size.Z)
@@ -673,8 +736,8 @@ local function measure(model: Model, rotation: Vector3)
 	}
 end
 
-local function newPiece(kind: string, model: Model, rotation: Vector3)
-	local info = measure(model, rotation)
+local function newPiece(kind: string, model: Model, correction: CFrame)
+	local info = measure(model, correction)
 	return {
 		kind = kind,
 		model = model,
@@ -783,7 +846,7 @@ local function convert(entry, piece, kind: string)
 	if not model then
 		return
 	end
-	local fresh = newPiece(kind, model, rotationOf(entry.templates[kind]))
+	local fresh = newPiece(kind, model, correctionFor(entry, kind))
 	piece.model:Destroy()
 	piece.model = model
 	piece.kind = kind
@@ -799,8 +862,17 @@ local function gapBetween(ahead, behind): number
 	return (ahead.half + behind.half) * Tuning.body.overlap
 end
 
--- Follow the leader: each piece keeps its distance from the one in front of
--- it and turns to face it.
+--[[
+	Follow the leader, joint to joint.
+
+	The parts are built to mate flush, socket to socket (assets/voxel-boss),
+	so each piece hangs from the back end of the one in front of it: its
+	front end sits on that joint and it points from where its own back end
+	was toward it. A chain of joints rather than of centres keeps the
+	sockets together round a bend instead of letting them drift apart.
+	Lengths are scaled by `overlap` so a bend closes over rather than opening
+	a gap on its outside.
+]]
 local function stepChain(worm)
 	local pieces = worm.pieces
 	local head = pieces[1]
@@ -809,13 +881,18 @@ local function stepChain(worm)
 		head.look = worm.vel.Unit
 	end
 
+	local overlap = Tuning.body.overlap
+	local joint = head.pos - head.look * (head.half * overlap)
+
 	for index = 2, #pieces do
-		local ahead, piece = pieces[index - 1], pieces[index]
-		local offset = piece.pos - ahead.pos
-		local distance = offset.Magnitude
-		local direction = if distance > 1e-3 then offset / distance else -ahead.look
-		piece.pos = ahead.pos + direction * gapBetween(ahead, piece)
+		local piece = pieces[index]
+		local length = piece.half * 2 * overlap
+		local back = piece.pos - piece.look * piece.half
+		local offset = back - joint
+		local direction = if offset.Magnitude > 1e-3 then offset.Unit else -pieces[index - 1].look
+		piece.pos = joint + direction * (length * 0.5)
 		piece.look = -direction
+		joint += direction * length
 	end
 end
 
@@ -1809,16 +1886,26 @@ function Blightborer.start(entry)
 		tail = tailTemplate or bodyTemplate or headTemplate,
 	}
 
-	local pieces = { newPiece("head", adoptHead(entry), rotationOf(headTemplate)) }
+	local headModel = adoptHead(entry)
+	local bodyModels = {}
 	for _ = 1, Tuning.body.segments do
 		local model = cloneKind(entry, "body")
 		if model then
-			table.insert(pieces, newPiece("body", model, rotationOf(entry.templates.body)))
+			table.insert(bodyModels, model)
 		end
 	end
-	local tail = cloneKind(entry, "tail")
-	if tail then
-		table.insert(pieces, newPiece("tail", tail, rotationOf(entry.templates.tail)))
+	local tailModel = cloneKind(entry, "tail")
+
+	-- Which way the parts are built, read off a body segment before anything
+	-- is measured; see detectCorrection.
+	entry.autoCorrection = detectCorrection(bodyModels[1] or headModel)
+
+	local pieces = { newPiece("head", headModel, correctionFor(entry, "head")) }
+	for _, model in ipairs(bodyModels) do
+		table.insert(pieces, newPiece("body", model, correctionFor(entry, "body")))
+	end
+	if tailModel then
+		table.insert(pieces, newPiece("tail", tailModel, correctionFor(entry, "tail")))
 	end
 
 	-- Laid out straight, out of sight under where it was put, pointed at the
@@ -1860,8 +1947,10 @@ function Blightborer.start(entry)
 		return if piece then string.format("%.1f x %.1f", piece.half * 2, piece.radius * 2) else "-"
 	end
 	print(string.format(
-		"[Blightborer] head %s, segment %s, tail %s studs (length x width); %d pieces, %.0f studs long. "
-			.. "Set a Vector3 '%s' attribute (degrees) on a model in EnemyAssets if it faces the wrong way.",
+		"[Blightborer] parts built front along %s, back along %s. head %s, segment %s, tail %s studs "
+			.. "(length x width); %d pieces, %.0f studs long. A Vector3 '%s' attribute (degrees) on a "
+			.. "model in EnemyAssets overrides the detected facing for that piece.",
+		axisName(entry.autoCorrection, Vector3.new(0, 0, -1)), axisName(entry.autoCorrection, Vector3.yAxis),
 		size(pieces[1]), size(pieces[2]), size(pieces[#pieces]), #pieces, length, ROTATION_ATTRIBUTE
 	))
 

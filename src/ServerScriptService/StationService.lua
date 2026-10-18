@@ -225,6 +225,18 @@ local function getTemplate(def)
 	return template
 end
 
+-- An authored model by name, with no stand-in: a chest's open model, which
+-- is simply not used when it is not there.
+local function getAuthored(name)
+	local assets = ReplicatedStorage:FindFirstChild("TerrainAssets")
+	local folder = assets and assets:FindFirstChild(StationConfig.ModelFolderName)
+	local candidate = folder and type(name) == "string" and folder:FindFirstChild(name)
+	if candidate and (candidate:IsA("Model") or candidate:IsA("BasePart")) then
+		return candidate
+	end
+	return nil
+end
+
 -- ---------------------------------------------------------------------------
 -- Registry
 -- ---------------------------------------------------------------------------
@@ -367,7 +379,18 @@ function StationService.place(player, blockX, by, blockZ, stationId)
 		return false, "Needs support"
 	end
 
-	local ok, reason = spawnStation(def, blockX, by, blockZ, player.UserId, nil)
+	-- A chest turns to face whoever put it down, a quarter turn at a time.
+	local facing = 0
+	if def.facesPlacer then
+		local toward = hrp.Position - centre
+		if math.abs(toward.X) > math.abs(toward.Z) then
+			facing = if toward.X > 0 then 1 else 3
+		else
+			facing = if toward.Z > 0 then 0 else 2
+		end
+	end
+
+	local ok, reason = spawnStation(def, blockX, by, blockZ, player.UserId, nil, facing)
 	if ok then
 		notifyChanged()
 	end
@@ -379,11 +402,12 @@ end
 	checks: nobody is placing it, and the terrain it stands on may not have
 	been generated yet. The cell still has to be free of other stations.
 
-	`items` is a storage station's saved contents, the list exportAll wrote.
+	`items` is a storage station's saved contents, the list exportAll wrote,
+	and `facing` the quarter turns it was placed at (0 to 3).
 
 	Returns ok, reason.
 ]]
-function StationService.restore(stationId, blockX, by, blockZ, ownerUserId, items)
+function StationService.restore(stationId, blockX, by, blockZ, ownerUserId, items, facing)
 	local def = StationConfig.get(stationId)
 	if not def then
 		return false, "Unknown station"
@@ -399,7 +423,7 @@ function StationService.restore(stationId, blockX, by, blockZ, ownerUserId, item
 		return false, "Cell occupied"
 	end
 
-	return spawnStation(def, blockX, by, blockZ, ownerUserId, items)
+	return spawnStation(def, blockX, by, blockZ, ownerUserId, items, facing)
 end
 
 --[[
@@ -407,7 +431,7 @@ end
 	{ { id = "Workbench", x = 3, y = 38, z = -2 }, ... }
 
 	A storage station that holds anything also has `items`, a list of
-	{ slot, name, count }.
+	{ slot, name, count }, and one turned to face its placer has `facing`.
 ]]
 function StationService.exportAll()
 	local list = {}
@@ -421,6 +445,9 @@ function StationService.exportAll()
 			}
 			if holdsItems(station.items) then
 				record.items = itemsToList(station.items)
+			end
+			if station.facing and station.facing ~= 0 then
+				record.facing = station.facing
 			end
 			table.insert(list, record)
 		end
@@ -436,34 +463,14 @@ function StationService.setChangeListener(listener)
 	changeListener = listener
 end
 
---[[
-	Builds a station into the world and registers it. Every check is the
-	caller's: place validates a player's request, restore a save's.
-]]
-function spawnStation(def, blockX, by, blockZ, ownerUserId, items)
-	local template = getTemplate(def)
-	if not template then
-		return false, "Missing template"
-	end
-
-	local centre = cellCentre(blockX, by, blockZ)
-	local instance = template:Clone()
-	local key = gridKey(blockX, by, blockZ)
-
-	-- A chest is not a bench: StationId is what the crafting window looks for.
-	local idAttribute = if def.storage then "StorageId" else "StationId"
-
-	instance.Name = def.id
-	instance:SetAttribute(idAttribute, def.id)
-	instance:SetAttribute("StationCellKey", key)
-	instance:SetAttribute("OwnerUserId", ownerUserId)
-
-	-- GetDescendants does not include the instance itself, so a single-part
+-- Every part of a station: anchored, solid, clickable, and marked with its
+-- cell so a click on any of them finds the station. Scripts are stripped -
+-- an authored model must not smuggle them into the live world.
+local function prepareParts(root, key)
+	-- GetDescendants does not include the root itself, so a single-part
 	-- station would otherwise miss all of this.
-	local parts = instance:GetDescendants()
-	if instance:IsA("BasePart") then
-		table.insert(parts, instance)
-	end
+	local parts = root:GetDescendants()
+	table.insert(parts, root)
 
 	for _, descendant in ipairs(parts) do
 		if descendant:IsA("BasePart") then
@@ -474,21 +481,187 @@ function spawnStation(def, blockX, by, blockZ, ownerUserId, items)
 			descendant:SetAttribute("StationCellKey", key)
 			CollectionService:AddTag(descendant, STATION_TAG)
 		elseif descendant:IsA("LuaSourceContainer") then
-			-- An authored model must not smuggle scripts into the live world.
 			descendant:Destroy()
 		end
 	end
+end
 
+-- A part on its own is put in a Model, so every look moves and measures the
+-- same way.
+local function asModel(instance)
 	if instance:IsA("Model") then
-		-- Centre the model's BOUNDING BOX on the cell rather than its pivot. An
-		-- authored model can have its pivot anywhere, and the stand-in's is on
-		-- its table top; either way what should line up with the grid is the
-		-- shape, not the origin someone happened to build it around.
-		local bounds = instance:GetBoundingBox()
-		instance:PivotTo(instance:GetPivot() + (centre - bounds.Position))
-	else
-		instance.CFrame = CFrame.new(centre)
+		return instance
 	end
+	local model = Instance.new("Model")
+	instance.Parent = model
+	model.PrimaryPart = instance
+	return model
+end
+
+-- The lowest and highest a model reaches along a direction: its bounding
+-- box's eight corners, projected.
+local function reach(model, direction)
+	local frame, size = model:GetBoundingBox()
+	local half = size * 0.5
+	local low, high = math.huge, -math.huge
+	for _, sx in ipairs({ -1, 1 }) do
+		for _, sy in ipairs({ -1, 1 }) do
+			for _, sz in ipairs({ -1, 1 }) do
+				local along = frame:PointToWorldSpace(Vector3.new(half.X * sx, half.Y * sy, half.Z * sz)):Dot(direction)
+				low = math.min(low, along)
+				high = math.max(high, along)
+			end
+		end
+	end
+	return low, high
+end
+
+--[[
+	Turns, sizes and seats one of a storage station's looks.
+
+	Turned about the world's up by `turn` and its own FacingYaw, so its +Z
+	faces the way the chest does; scaled so it is `fitWidth` across; then
+	moved by `seat`, which is handed the turned and sized model and says how
+	far to shift it. Done in that order because the width is only known once
+	it is turned, and where it sits only once it is sized.
+]]
+local function arrangeLook(look, def, turn, across, seat)
+	local yaw = tonumber(look:GetAttribute("FacingYaw")) or 0
+	local pivot = look:GetPivot()
+	look:PivotTo(CFrame.new(pivot.Position) * turn * CFrame.Angles(0, math.rad(yaw), 0) * pivot.Rotation)
+
+	if def.fitWidth then
+		local low, high = reach(look, across)
+		if high - low > 1e-3 then
+			look:ScaleTo(look:GetScale() * def.fitWidth / (high - low))
+		end
+	end
+
+	look:PivotTo(look:GetPivot() + seat(look))
+end
+
+--[[
+	A storage station's body: a Model holding whichever look is showing - the
+	closed one, or while somebody has it open the open one - plus an
+	invisible anchor at the cell centre that carries the prompt, so the
+	prompt does not come and go with the lid.
+
+	The closed look sits centred on its cell, on the cell's floor. The open
+	look sits on the same floor with its FRONT face where the closed look's
+	front face is and centred the same way across: the lid swings back and
+	up, so the open model is deeper and taller than the closed one only
+	behind and above, and lining it up by its middle would shove the body
+	forward when the lid opened.
+]]
+local function buildStorage(def, blockX, by, blockZ, facing, key)
+	local closed = asModel(getTemplate(def):Clone())
+	local openTemplate = getAuthored(def.openModel)
+	local open = openTemplate and asModel(openTemplate:Clone()) or nil
+
+	local turn = CFrame.Angles(0, (facing or 0) * math.pi / 2, 0)
+	local front = turn:VectorToWorldSpace(Vector3.zAxis)
+	local across = turn:VectorToWorldSpace(Vector3.xAxis)
+	local centre = cellCentre(blockX, by, blockZ)
+	local floorY = by * STUD_SIZE
+
+	arrangeLook(closed, def, turn, across, function(look)
+		local frontLow, frontHigh = reach(look, front)
+		local acrossLow, acrossHigh = reach(look, across)
+		local bottom = reach(look, Vector3.yAxis)
+		return front * (centre:Dot(front) - (frontLow + frontHigh) * 0.5)
+			+ across * (centre:Dot(across) - (acrossLow + acrossHigh) * 0.5)
+			+ Vector3.yAxis * (floorY - bottom)
+	end)
+
+	local _, closedFront = reach(closed, front)
+	local closedAcrossLow, closedAcrossHigh = reach(closed, across)
+
+	if open then
+		arrangeLook(open, def, turn, across, function(look)
+			local _, lookFront = reach(look, front)
+			local acrossLow, acrossHigh = reach(look, across)
+			local bottom = reach(look, Vector3.yAxis)
+			return front * (closedFront - lookFront)
+				+ across * ((closedAcrossLow + closedAcrossHigh) * 0.5 - (acrossLow + acrossHigh) * 0.5)
+				+ Vector3.yAxis * (floorY - bottom)
+		end)
+	end
+
+	local container = Instance.new("Model")
+
+	local anchor = Instance.new("Part")
+	anchor.Name = "PromptAnchor"
+	anchor.Size = Vector3.one
+	anchor.Transparency = 1
+	anchor.Anchored = true
+	anchor.CanCollide = false
+	anchor.CanQuery = false
+	anchor.CanTouch = false
+	anchor.CastShadow = false
+	anchor.CFrame = CFrame.new(centre)
+	anchor:SetAttribute("StationCellKey", key)
+	anchor.Parent = container
+	container.PrimaryPart = anchor
+
+	closed.Name = "Closed"
+	prepareParts(closed, key)
+	closed.Parent = container
+
+	if open then
+		open.Name = "Open"
+		prepareParts(open, key)
+		-- Held out of the world until somebody opens the chest.
+	end
+
+	return container, anchor, { closed = closed, open = open }
+end
+
+--[[
+	Builds a station into the world and registers it. Every check is the
+	caller's: place validates a player's request, restore a save's.
+]]
+function spawnStation(def, blockX, by, blockZ, ownerUserId, items, facing)
+	local template = getTemplate(def)
+	if not template then
+		return false, "Missing template"
+	end
+
+	local centre = cellCentre(blockX, by, blockZ)
+	local key = gridKey(blockX, by, blockZ)
+
+	-- A chest is not a bench: StationId is what the crafting window looks for.
+	local idAttribute = if def.storage then "StorageId" else "StationId"
+
+	facing = if type(facing) == "number" and facing % 1 == 0 and facing >= 0 and facing <= 3 then facing else 0
+
+	local instance, promptParent, looks
+	if def.storage then
+		instance, promptParent, looks = buildStorage(def, blockX, by, blockZ, facing, key)
+	else
+		instance = template:Clone()
+		prepareParts(instance, key)
+
+		if instance:IsA("Model") then
+			-- Centre the model's BOUNDING BOX on the cell rather than its
+			-- pivot. An authored model can have its pivot anywhere, and the
+			-- stand-in's is on its table top; either way what should line up
+			-- with the grid is the shape, not the origin someone happened to
+			-- build it around.
+			local bounds = instance:GetBoundingBox()
+			instance:PivotTo(instance:GetPivot() + (centre - bounds.Position))
+		else
+			instance.CFrame = CFrame.new(centre)
+		end
+
+		promptParent = if instance:IsA("Model")
+			then (instance.PrimaryPart or instance:FindFirstChildWhichIsA("BasePart"))
+			else instance
+	end
+
+	instance.Name = def.id
+	instance:SetAttribute(idAttribute, def.id)
+	instance:SetAttribute("StationCellKey", key)
+	instance:SetAttribute("OwnerUserId", ownerUserId)
 
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.Name = "UsePrompt"
@@ -498,9 +671,7 @@ function spawnStation(def, blockX, by, blockZ, ownerUserId, items)
 	prompt.RequiresLineOfSight = false
 	prompt.MaxActivationDistance = def.useRange
 	prompt:SetAttribute(idAttribute, def.id)
-	prompt.Parent = if instance:IsA("Model")
-		then (instance.PrimaryPart or instance:FindFirstChildWhichIsA("BasePart"))
-		else instance
+	prompt.Parent = promptParent
 
 	instance.Parent = worldFolder
 
@@ -511,10 +682,42 @@ function spawnStation(def, blockX, by, blockZ, ownerUserId, items)
 		y = by,
 		z = blockZ,
 		ownerUserId = ownerUserId,
+		facing = if def.facesPlacer then facing else 0,
+		looks = looks,
 		items = if def.storage then itemsFromList(items, def.storage) else nil,
 	})
 
 	return true, "Placed"
+end
+
+-- Takes a station out of the world: every look it has, including the one
+-- held out of the world while it is not showing.
+local function destroyStation(station)
+	if station.looks then
+		for _, look in pairs(station.looks) do
+			look:Destroy()
+		end
+	end
+	station.instance:Destroy()
+end
+
+--[[
+	Shows a storage station open or shut - its open model while anybody has
+	it open. A station with no open model has nothing to show and is left as
+	it is. ChestServer says when.
+]]
+function StationService.setOpen(station, open)
+	local looks = station and station.looks
+	if not (looks and looks.open and station.instance.Parent) then
+		return
+	end
+	if open then
+		looks.closed.Parent = nil
+		looks.open.Parent = station.instance
+	else
+		looks.open.Parent = nil
+		looks.closed.Parent = station.instance
+	end
 end
 
 --[[
@@ -547,7 +750,7 @@ function StationService.tryBreak(player, target)
 	end
 
 	unregister(station)
-	station.instance:Destroy()
+	destroyStation(station)
 	notifyChanged()
 
 	return true, station.stationId

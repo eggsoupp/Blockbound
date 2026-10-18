@@ -167,8 +167,11 @@ local function applySnapshot(snapshot)
 	end
 
 	for _, station in ipairs(snapshot.stations) do
-		-- `items` is a chest's contents, saved on its own station record.
-		if StationService.restore(station.id, station.x, station.y, station.z, ownerUserId, station.items) then
+		-- `items` is a chest's contents and `facing` its turn, both saved on
+		-- its own station record.
+		if StationService.restore(
+			station.id, station.x, station.y, station.z, ownerUserId, station.items, station.facing
+		) then
 			stations += 1
 		else
 			skipped += 1

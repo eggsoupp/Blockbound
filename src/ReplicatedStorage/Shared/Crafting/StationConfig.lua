@@ -24,6 +24,15 @@
 	  islandOnly   refuses to be placed outside an island. The open world
 	               saves nothing across servers, so a chest out there would
 	               lose everything in it the moment the server closed.
+	  facesPlacer  turned, in quarter turns, to face whoever puts it down;
+	               the turn is saved with it. The model's front is its +Z
+	               (what a MagicaVoxel model's -Y front becomes on import);
+	               a FacingYaw attribute on the model, in degrees, corrects
+	               one built facing some other way.
+	  fitWidth     studs across, whatever size the model was imported at.
+	  openModel    a second model in TerrainAssets.Stations shown instead
+	               while anyone has it open - the lid up. Lined up on the
+	               closed one's floor and front, so only the lid moves.
 
 	Recipes with no `station` are craftable anywhere; HandStation is the
 	internal name for that and is deliberately not a placeable definition.
@@ -112,19 +121,62 @@ StationConfig.Definitions = {
 		},
 	},
 
-	-- Three rows of nine, the bag's width. The model is
-	-- TerrainAssets.Stations.Chest; until there is one it is a wooden box.
-	Chest = {
-		id = "Chest",
-		displayName = "Chest",
+	--[[
+		The chests, in three tiers: rows of nine, the bag's width. Each is two
+		models in TerrainAssets.Stations - "<id>" closed and "<id>Open" with
+		the lid up - from assets/voxel-chests (basic, blackish and mythical,
+		rough sketches for now). Until a model is there the chest is a box in
+		`appearance`'s colours, and without an open model the lid simply does
+		not move.
+	]]
+	BasicChest = {
+		id = "BasicChest",
+		displayName = "Basic Chest",
 		actionText = "Open",
 		useRange = 12,
 		storage = 27,
 		islandOnly = true,
+		facesPlacer = true,
+		fitWidth = 3.4,
+		openModel = "BasicChestOpen",
 		appearance = {
 			color = Color3.fromRGB(122, 84, 46),
 			topColor = Color3.fromRGB(150, 106, 60),
 			material = Enum.Material.WoodPlanks,
+		},
+	},
+
+	RareChest = {
+		id = "RareChest",
+		displayName = "Rare Chest",
+		actionText = "Open",
+		useRange = 12,
+		storage = 36,
+		islandOnly = true,
+		facesPlacer = true,
+		fitWidth = 3.4,
+		openModel = "RareChestOpen",
+		appearance = {
+			color = Color3.fromRGB(46, 44, 48),
+			topColor = Color3.fromRGB(150, 150, 160),
+			material = Enum.Material.Metal,
+		},
+	},
+
+	LegendaryChest = {
+		id = "LegendaryChest",
+		displayName = "Legendary Chest",
+		actionText = "Open",
+		useRange = 12,
+		storage = 54,
+		islandOnly = true,
+		facesPlacer = true,
+		fitWidth = 3.4,
+		openModel = "LegendaryChestOpen",
+		appearance = {
+			color = Color3.fromRGB(84, 48, 120),
+			topColor = Color3.fromRGB(222, 178, 70),
+			material = Enum.Material.Metal,
 		},
 	},
 }
@@ -136,7 +188,9 @@ StationConfig.Order = {
 	"AlchemyBench",
 	"ArcaneForge",
 	"EnchantingTable",
-	"Chest",
+	"BasicChest",
+	"RareChest",
+	"LegendaryChest",
 }
 
 function StationConfig.get(stationId)

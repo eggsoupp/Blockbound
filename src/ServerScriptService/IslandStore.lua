@@ -25,8 +25,9 @@
 	  }
 
 	A storage station (a chest) also carries `items = { { slot, name, count },
-	... }` when it holds anything. Optional, so a record from before chests
-	loads exactly as it did.
+	... }` when it holds anything, and `facing` (quarter turns, 1 to 3) when
+	it was turned to face its placer. Both optional, so a record from before
+	chests loads exactly as it did.
 
 	Only what players CHANGED. The island itself is a template every island
 	shares (see IslandConfig), so a fresh island is an empty snapshot and a
@@ -272,6 +273,12 @@ end
 local MAX_STORED_SLOTS = 99
 local MAX_STORED_COUNT = 9999
 
+-- A station's quarter turns, 0 to 3: which way a chest was turned to face
+-- whoever placed it. Absent is 0.
+local function isFacing(value)
+	return isInteger(value) and value >= 0 and value <= 3
+end
+
 local function cleanItems(list)
 	local items = {}
 	local bad = 0
@@ -361,6 +368,9 @@ function IslandStore.encode(snapshot, floorY, templateVersion)
 			skipped += bad
 			if #items > 0 then
 				record.items = items
+			end
+			if isFacing(station.facing) and station.facing ~= 0 then
+				record.facing = station.facing
 			end
 			stations[#stations + 1] = record
 		else
@@ -461,6 +471,7 @@ function IslandStore.decode(record)
 					y = station.y,
 					z = station.z,
 					items = if #items > 0 then items else nil,
+					facing = if isFacing(station.facing) then station.facing else nil,
 				})
 			else
 				problems += 1

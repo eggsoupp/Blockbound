@@ -24,6 +24,8 @@
 
 	The chest is opened by its prompt, server side; a client never says
 	which chest it means, so it cannot ask for one it is not standing at.
+	While anybody has it open it shows its open model - the lid up - and
+	shuts again when the last of them closes it (StationService.setOpen).
 
 	EVERY MOVE IS CHECKED HERE, AND EVERY MOVE IS WHOLE
 
@@ -135,10 +137,28 @@ local function push(station)
 	end
 end
 
+-- The lid is up while anybody at all is looking in, and down once the last
+-- of them is gone. A chest with no open model ignores it.
+local function updateLid(station)
+	if not StationService.isLive(station) then
+		return
+	end
+	local watched = false
+	for _, viewed in pairs(open) do
+		if viewed == station then
+			watched = true
+			break
+		end
+	end
+	StationService.setOpen(station, watched)
+end
+
 local function close(player: Player)
-	if open[player] then
+	local station = open[player]
+	if station then
 		open[player] = nil
 		ChestState:FireClient(player, nil)
+		updateLid(station)
 	end
 end
 
@@ -342,7 +362,11 @@ local function openFor(player: Player, station)
 	if not inReach(player, station) then
 		return
 	end
+	if open[player] and open[player] ~= station then
+		close(player)
+	end
 	open[player] = station
+	updateLid(station)
 	ChestState:FireClient(player, stateFor(station))
 end
 
@@ -434,17 +458,23 @@ ChestRequest.OnServerEvent:Connect(function(player, action, a, b, c, d, e)
 end)
 
 Players.PlayerRemoving:Connect(function(player)
+	local station = open[player]
 	open[player] = nil
 	lastRequest[player] = nil
+	if station then
+		updateLid(station)
+	end
 end)
 
--- Walked off, died, or the chest was picked up: the lid shuts.
+-- Walked off, died, or the chest was picked up: the window closes, and the
+-- lid with it once nobody else is looking.
 task.spawn(function()
 	while true do
 		task.wait(WATCH_INTERVAL)
 		for player, station in pairs(open) do
 			if not player.Parent then
 				open[player] = nil
+				updateLid(station)
 			elseif not StationService.isLive(station) or not inReach(player, station) then
 				close(player)
 			end

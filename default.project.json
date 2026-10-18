@@ -168,6 +168,12 @@
           "$properties": {
             "Disabled": false
           }
+        },
+        "BossEffectClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/BossEffectClient.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
         }
       },
       "StarterCharacterScripts": {
@@ -488,6 +494,9 @@
             },
             "StormWellVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/StormWellVFX.lua"
+            },
+            "SignusVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusVFX.lua"
             }
           },
           "EclipsePlan": {
@@ -709,6 +718,9 @@
         },
         "AllSeeingEye": {
           "$path": "src/ServerScriptService/Bosses/AllSeeingEye.lua"
+        },
+        "Signus": {
+          "$path": "src/ServerScriptService/Bosses/Signus.lua"
         }
       },
       "BossService": {

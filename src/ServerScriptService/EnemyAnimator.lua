@@ -201,6 +201,12 @@ function EnemyAnimator:isPlaying(name: string): boolean
 	return track and track.IsPlaying or false
 end
 
+-- Whether a track loaded for this name at all. A behaviour uses it to fall
+-- back to a procedural pose for a move whose animation is not published yet.
+function EnemyAnimator:has(name: string): boolean
+	return not self.destroyed and self.tracks[name] ~= nil
+end
+
 -- Seconds at speed 1, or 0 until the asset has loaded (or if it never will).
 function EnemyAnimator:length(name: string): number
 	local track = not self.destroyed and self.tracks[name]

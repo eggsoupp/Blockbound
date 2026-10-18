@@ -489,6 +489,43 @@ EnemyConfig.Definitions = {
 		modelRotation = DEMON_EYE_ROTATION,
 	},
 
+	--[[
+		SIGNUS - the Hallowed Eclipse. A hooded lunar spellcaster that fights
+		from range: crescents, a falling moon, ground that tears open, and in
+		its second phase an eclipse nova that only cover stops. Everything it
+		does, and every number that tunes it, is in
+		ServerScriptService.Bosses.Signus.
+
+		The model is ReplicatedStorage.EnemyAssets.Signus, the Motor6D rig
+		built by assets/signus-hallow/roblox/CreateSignusRig.server.lua: an
+		anchored RootPart and four jointed MeshParts, ArticulatedRig = true.
+		Its RootPart's front is already -Z, so modelRotation is zero.
+
+		No spawnBiomes: /spawn Signus, or nothing.
+
+		`hitFlash = "Highlight"` because tinting a textured MeshPart's Color
+		shows nothing; EnemyService flashes it with a Highlight instead.
+		`burstColor` is the death burst, which would otherwise be whatever
+		colour the importer left the largest mesh.
+	]]
+	Signus = {
+		asset = "Signus",
+		displayName = "Signus",
+		boss = true,
+		behaviour = "Signus",
+
+		-- A little under the Eye's: it is in melee reach more of the time,
+		-- but holds still less often. See the BALANCE note in the module.
+		health = 2000,
+
+		sizeVariance = 0,
+		modelRotation = Vector3.new(0, 0, 0),
+
+		hitFlash = "Highlight",
+		hitFlashColor = Color3.fromRGB(255, 236, 246),
+		burstColor = Color3.fromRGB(150, 70, 225),
+	},
+
 	GreenSlime = {
 		asset = "GreenSlime",
 		displayName = "Green Slime",
@@ -565,7 +602,7 @@ EnemyConfig.Animations = {
 
 -- Stable order for anything that lists enemies to a human. The boss last,
 -- because /spawn prints this and it is the one you scroll to on purpose.
-EnemyConfig.Order = { "Ghost", "DemonEye", "BlueSlime", "GreenSlime", "SlimeEmperor", "AllSeeingEye", "ServantEye" }
+EnemyConfig.Order = { "Ghost", "DemonEye", "BlueSlime", "GreenSlime", "SlimeEmperor", "AllSeeingEye", "Signus", "ServantEye" }
 
 --[[
 	The model in `folder` for an `asset` name: the exact name, or failing that

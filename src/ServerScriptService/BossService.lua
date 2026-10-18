@@ -53,6 +53,11 @@ local BossState = Remotes.ensure("BossState", "RemoteEvent")
 ]]
 Remotes.ensure("BossTerrain", "RemoteEvent")
 
+-- The same, for one-shot boss effects drawn on the client (particle bursts,
+-- camera kicks): Bosses.Signus fires it, StarterPlayerScripts.BossEffectClient
+-- listens. See those for the payload.
+Remotes.ensure("BossEffect", "RemoteEvent")
+
 -- Seconds between pushes while health is falling. The trailing send below is
 -- what guarantees the final value arrives whatever this is set to.
 local UPDATE_INTERVAL = 0.1

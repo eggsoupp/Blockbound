@@ -292,6 +292,45 @@ local HIT_FLASH_SECONDS = 0.09
 local HIT_FLASH_COLOR = Color3.fromRGB(255, 236, 236)
 
 --[[
+	The Highlight flash, for an enemy whose definition says `hitFlash =
+	"Highlight"`.
+
+	Tinting Color does nothing visible on a textured MeshPart - Signus is five
+	of them - so such an enemy is flashed with one Highlight instead: a fill
+	that fades back out over the flash. One Highlight per enemy, reused, so a
+	flurry of hits never stacks instances (Roblox draws at most 31 at once).
+	`hitFlashColor` on the definition picks the fill; the outline stays off so
+	the flash reads as light on the body rather than a selection box.
+]]
+local HIGHLIGHT_FLASH_SECONDS = 0.16
+local HIGHLIGHT_FILL = 0.25
+
+local function flashHighlight(entry)
+	local model = entry.model
+	local highlight = entry.hitHighlight
+	if not (highlight and highlight.Parent) then
+		highlight = Instance.new("Highlight")
+		highlight.Name = "HitFlash"
+		highlight.FillColor = entry.def.hitFlashColor or HIT_FLASH_COLOR
+		highlight.OutlineTransparency = 1
+		highlight.FillTransparency = 1
+		highlight.DepthMode = Enum.HighlightDepthMode.Occluded
+		highlight.Adornee = model
+		highlight.Parent = model
+		entry.hitHighlight = highlight
+	end
+
+	-- Snapped to full and faded, rather than tweened both ways: the fade is
+	-- what reads, and a second hit mid-fade simply snaps it back up.
+	highlight.FillTransparency = HIGHLIGHT_FILL
+	TweenService:Create(
+		highlight,
+		TweenInfo.new(HIGHLIGHT_FLASH_SECONDS, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+		{ FillTransparency = 1 }
+	):Play()
+end
+
+--[[
 	Whitens an enemy for a moment, then puts its colours back.
 
 	The resting colours are captured on the FIRST hit and reused after that, so
@@ -302,6 +341,11 @@ local HIT_FLASH_COLOR = Color3.fromRGB(255, 236, 236)
 local function flashHit(entry)
 	local model = entry.model
 	if not model.Parent then
+		return
+	end
+
+	if entry.def.hitFlash == "Highlight" then
+		flashHighlight(entry)
 		return
 	end
 
@@ -1605,10 +1649,27 @@ function EnemyService.damage(model, amount, dealer)
 		entry.humanoid.Health = math.max(0, entry.health)
 	end
 
+	--[[
+		A behaviour that wants to flinch is told, before the death check so a
+		killing blow still reaches it with the model intact. Optional, and a
+		behaviour that errors here costs this message and nothing else.
+	]]
+	if dealt > 0 and entry.behaviour and entry.behaviour.damaged then
+		local ok, err = pcall(entry.behaviour.damaged, entry, dealt, dealer)
+		if not ok then
+			warn(string.format(
+				"[EnemyService] %s behaviour damaged errored: %s", tostring(entry.name), tostring(err)
+			))
+		end
+	end
+
 	if entry.health <= 0 then
 		local where = model:GetPivot().Position
 
-		burst(where, dominantColor(model), entry.height)
+		-- A definition may name its own burst colour: the largest part of a
+		-- textured mesh is whatever colour the importer left it, which is not
+		-- what the creature looks like.
+		burst(where, entry.def.burstColor or dominantColor(model), entry.height)
 
 		-- Before removeEntry, which is what forgets whose kill it was.
 		awardDrops(entry, where)

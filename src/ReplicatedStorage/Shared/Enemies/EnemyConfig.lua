@@ -337,7 +337,8 @@ EnemyConfig.Definitions = {
 
 		NO `spawnBiomes`, deliberately. It must never turn up in the ambient
 		spawner - see EnemyConfig.Spawning. It is placed, or summoned, or
-		nothing: `/spawn SlimeEmperor` today.
+		nothing: a Gelatinous Crown used on an altar (ServerScriptService.
+		AltarSummon), or `/spawn SlimeEmperor`.
 
 		`sizeVariance = 0` because a boss is a landmark. Every other creature
 		here is jittered so a group reads as individuals; there is only ever one

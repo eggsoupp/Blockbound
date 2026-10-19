@@ -93,6 +93,14 @@ local CraftingRecipes = {
 	GoldSword   = { ingredients = { GoldIngot = 2, Stick = 1 }, station = "Anvil" },
 	ArcaneForge = { ingredients = { Stone = 8, GoldIngot = 2 }, station = "Anvil" },
 
+	-- The Slime Emperor's summon. A hundred Gel is fifty to a hundred slimes;
+	-- the gold and iron are what make it a crown and not a lump. Used on an
+	-- altar (StructureConfig.Altar) - see ServerScriptService.AltarSummon.
+	GelatinousCrown = {
+		ingredients = { Gel = 100, GoldIngot = 10, IronIngot = 10 },
+		station = "Anvil",
+	},
+
 	-- Accessories, worn in the accessory column. See ItemDefinitions.
 	VitalityAmulet = { ingredients = { GoldIngot = 2, Herb = 4 }, station = "Anvil" },
 	ManaAmulet     = { ingredients = { GoldIngot = 2, Bottle = 2 }, station = "Anvil" },

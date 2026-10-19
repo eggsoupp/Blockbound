@@ -59,6 +59,11 @@ BlockConfig.DefaultPickaxePower = 1
 BlockConfig.Overrides = {
 	Water = { drop = false, unbreakable = true },
 	Bedrock = { drop = false, unbreakable = true },
+
+	-- An altar comes apart with an iron pickaxe or better, never a wooden one:
+	-- it is the Slime Emperor's door, and a stray swing should not remove it.
+	AltarStone = { power = 3 },
+	AltarCore = { power = 3 },
 }
 
 -- Built at run time when TerrainAssets.Blocks has nothing under that name.
@@ -80,6 +85,22 @@ BlockConfig.Generated = {
 		color = Color3.fromRGB(38, 92, 148),
 		material = Enum.Material.Water,
 		transparency = 0.35,
+	},
+
+	--[[
+		The Altar structure's blocks (StructureConfig), as stand-ins until the
+		real models exist. Dark basalt for the body so it reads as something
+		built rather than a rock, and a neon slime-green core so the one block
+		the crown has to be used on is the one block that glows.
+	]]
+	AltarStone = {
+		color = Color3.fromRGB(58, 54, 66),
+		material = Enum.Material.Basalt,
+	},
+	AltarCore = {
+		color = Color3.fromRGB(124, 232, 96),
+		material = Enum.Material.Neon,
+		transparency = 0.1,
 	},
 }
 

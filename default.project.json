@@ -737,6 +737,12 @@
           "Disabled": false
         }
       },
+      "AltarSummon": {
+        "$path": "src/ServerScriptService/AltarSummon.server.lua",
+        "$properties": {
+          "Disabled": false
+        }
+      },
       "IslandStore": {
         "$path": "src/ServerScriptService/IslandStore.lua"
       },

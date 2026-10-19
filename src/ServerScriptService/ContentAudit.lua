@@ -83,6 +83,7 @@ ContentAudit.TestOnlyItems = {
 ]]
 ContentAudit.UseHandlers = {
 	ScrollChest = { script = "ScrollChest", remote = "ScrollChestRequest" },
+	GelatinousCrown = { script = "AltarSummon", remote = "AltarUseRequest" },
 }
 
 --[[

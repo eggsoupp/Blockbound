@@ -18,9 +18,10 @@
 	is PAUSED rather than played silently - a muted player is not streaming and
 	decoding audio they cannot hear. Raising the slider resumes it.
 
-	No persistence: the game has no settings store, so volume resets each
-	session. setVolume is the single funnel one would hook, and Music.Changed
-	the single place a save would listen.
+	Persistence is Shared.UI.PlayerSettings': it calls setVolume with the
+	player's saved volume once their save loads, and saves what the settings
+	window sets. Until then - and for a player who has never moved the slider -
+	it is DefaultVolume.
 ]]
 
 local Players = game:GetService("Players")
@@ -36,9 +37,9 @@ local Music = {}
 --[[
 	Where the volume starts for a player who has never moved the slider.
 
-	Zero. See PERSISTENCE above: without a settings store this is what every
-	player gets on every join, so it is the volume the game is heard at by
-	default.
+	Zero. A player's own choice is saved (see above), so this is what someone
+	who has never moved the slider hears - and the "DEFAULT" the settings
+	window shows under it.
 ]]
 Music.DefaultVolume = 0
 

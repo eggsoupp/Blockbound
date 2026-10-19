@@ -30,6 +30,7 @@ local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
+local PlayerSettings = require(Shared.UI:WaitForChild("PlayerSettings"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local CombatStats = Remotes.wait("CombatStats", 30)
@@ -291,21 +292,28 @@ end
 	Scaled against a full quarter of the player's health so that a slime's bump
 	and a slime's lunge do not look the same. A hit that takes a quarter of you
 	should be alarming; one that takes two points should be a flicker.
+
+	Both halves can be switched off in the settings window (Shared.UI.
+	PlayerSettings: hitFlash and damageNumbers). The bar itself always moves.
 ]]
 local function flashDamage(damage, maxHealth)
 	local severity = math.clamp(damage / math.max(1, (maxHealth or 100) * 0.25), 0.15, 1)
 	local peak = 1 - severity * 0.55
 
-	for _, strip in ipairs(edges) do
-		strip.BackgroundTransparency = peak
-		TweenService:Create(
-			strip,
-			TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-			{ BackgroundTransparency = 1 }
-		):Play()
+	if PlayerSettings.get("hitFlash") then
+		for _, strip in ipairs(edges) do
+			strip.BackgroundTransparency = peak
+			TweenService:Create(
+				strip,
+				TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+				{ BackgroundTransparency = 1 }
+			):Play()
+		end
 	end
 
-	popDamageNumber(damage)
+	if PlayerSettings.get("damageNumbers") then
+		popDamageNumber(damage)
+	end
 end
 
 -- ---------------------------------------------------------------------------

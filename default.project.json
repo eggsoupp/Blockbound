@@ -370,6 +370,9 @@
           "PixelSprites": {
             "$path": "src/ReplicatedStorage/Shared/UI/PixelSprites.lua"
           },
+          "PlayerSettings": {
+            "$path": "src/ReplicatedStorage/Shared/UI/PlayerSettings.lua"
+          },
           "InventoryLayout": {
             "$path": "src/ReplicatedStorage/Shared/UI/InventoryLayout.lua"
           },

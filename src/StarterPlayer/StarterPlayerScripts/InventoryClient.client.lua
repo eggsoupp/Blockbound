@@ -844,8 +844,19 @@ log("loaded")
 
 -- Scroll chests are used from the selected hotbar slot; the server verifies its contents.
 local ScrollChestRequest=remotes:WaitForChild("ScrollChestRequest")
+--[[
+	The Gelatinous Crown is used the same way, but AT something: the click's
+	target and hit point go up, and ServerScriptService.AltarSummon decides
+	whether that was an altar. Only what was clicked is sent; the slot's
+	contents, the reach and the block are all re-checked there.
+]]
+local AltarUseRequest=remotes:WaitForChild("AltarUseRequest")
+local useMouse=player:GetMouse()
 UserInputService.InputBegan:Connect(function(input,processed)
  if processed or MenuState.isAnyOpen() then return end
  if input.UserInputType~=Enum.UserInputType.MouseButton1 and input.UserInputType~=Enum.UserInputType.Touch then return end
- if equippedSlot and slotItemNames[equippedSlot]=="ScrollChest" then ScrollChestRequest:FireServer("open",equippedSlot) end
+ if not equippedSlot then return end
+ local held=slotItemNames[equippedSlot]
+ if held=="ScrollChest" then ScrollChestRequest:FireServer("open",equippedSlot)
+ elseif held=="GelatinousCrown" then AltarUseRequest:FireServer(equippedSlot,useMouse.Target,useMouse.Hit.Position) end
 end)

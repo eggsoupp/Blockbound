@@ -36,18 +36,19 @@ local EnemyDrops = {}
 
 EnemyDrops.Tables = {
 	--[[
-		Both slimes drop the same thing for now.
+		Slimes drop Gel: what they are made of, and the bulk of the Gelatinous
+		Crown (100 of it, see CraftingRecipes). Guaranteed, one or two a kill,
+		so the crown is a session of slime hunting rather than a lottery.
 
-		Common on purpose: this is the drop being used to prove the projectile,
-		the trail colour and the arrival line all work, and a one-in-fifty drop
-		would take a long afternoon to see twice.
+		This replaced the placeholder Wood drop that was only ever there to prove
+		the drop pipeline worked.
 	]]
 	BlueSlime = {
-		{ item = "Wood", chance = 0.8, min = 1, max = 2 },
+		{ item = "Gel", chance = 1, min = 1, max = 2 },
 	},
 
 	GreenSlime = {
-		{ item = "Wood", chance = 0.8, min = 1, max = 2 },
+		{ item = "Gel", chance = 1, min = 1, max = 2 },
 	},
 
 	--[[
@@ -59,9 +60,11 @@ EnemyDrops.Tables = {
 	Ghost = {},
 
 	-- A boss should be worth the fight. Guaranteed, and a lot of it: the
-	-- quantities are the only thing separating this from farming slimes.
+	-- quantities are the only thing separating this from farming slimes. He is
+	-- made of the same stuff his subjects are, so a good part of the crown
+	-- that called him comes back out of him.
 	SlimeEmperor = {
-		{ item = "Wood", chance = 1, min = 20, max = 32 },
+		{ item = "Gel", chance = 1, min = 40, max = 60 },
 	},
 
 	--[[

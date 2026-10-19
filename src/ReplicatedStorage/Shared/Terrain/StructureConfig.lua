@@ -322,6 +322,68 @@ StructureConfig.Definitions = {
 		},
 	},
 
+	--[[
+		=======================================================================
+		THE ALTAR. Where the Gelatinous Crown is used to call the Slime Emperor
+		(ServerScriptService.AltarSummon).
+
+		A 3x3 plinth of AltarStone with a short pillar at each corner and the
+		glowing AltarCore raised in the middle - a shape that reads as "built"
+		from a distance, out of the two placeholder blocks in BlockConfig.
+		Generated. Both blocks disable the structure if they go missing
+		(requiresBlocks), which they cannot while Generated carries them.
+
+		VERY RARE, AND ONLY ON PLAINS GRASS. Surface Grass only, so it never
+		sits on a ridge's bare stone; flat ground, so it never half-floats. The
+		density works out at about one per 150x150 blocks of open plains: a
+		landmark you remember the way back to, not something you trip over. The
+		variant multipliers undo Plains' own sub-biome structureDensity (Open is
+		0.06, the forests ~1.3) so it prefers the clearings, where it can be
+		seen, over the woods: open ground gets the full rate, the woods a
+		quarter of it.
+
+		Priority above trees, so a tree never wins the altar's footprint; a
+		radius of 2 keeps everything else that far away from the plinth.
+		=======================================================================
+	]]
+	{
+		id = "Altar",
+		kind = "Blocks",
+		priority = 60,
+
+		density = 0.00005,
+		spacing = 16,
+		radius = 2,
+		flatness = 1,
+		minSurfaceHeight = 3,
+		surfaces = { "Grass" },
+		requiresBlocks = { "AltarStone", "AltarCore" },
+
+		biomes = { Plains = 1.0 },
+		variants = {
+			Open = 16.7,
+			OakForest = 0.19,
+			BirchForest = 0.2,
+		},
+
+		blocks = {
+			-- The plinth: a 3x3 slab laid on the grass.
+			{ -1, 0, -1, "AltarStone" }, { 0, 0, -1, "AltarStone" }, { 1, 0, -1, "AltarStone" },
+			{ -1, 0, 0, "AltarStone" }, { 0, 0, 0, "AltarStone" }, { 1, 0, 0, "AltarStone" },
+			{ -1, 0, 1, "AltarStone" }, { 0, 0, 1, "AltarStone" }, { 1, 0, 1, "AltarStone" },
+
+			-- Four corner pillars, one block tall.
+			{ -1, 1, -1, "AltarStone" },
+			{ 1, 1, -1, "AltarStone" },
+			{ -1, 1, 1, "AltarStone" },
+			{ 1, 1, 1, "AltarStone" },
+
+			-- The core, raised in the middle so it stands above the pillars.
+			{ 0, 1, 0, "AltarStone" },
+			{ 0, 2, 0, "AltarCore" },
+		},
+	},
+
 	-- =======================================================================
 	-- Template to copy for ruins / houses / anything hand-authored. Left off so
 	-- it costs nothing; flip enabled and point modelSource at a folder.

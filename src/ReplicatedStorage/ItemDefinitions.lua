@@ -153,6 +153,18 @@ local ItemDefinitions = {
 		value = 2,
 	},
 
+	-- What a slime is made of. Every slime sheds one or two (EnemyDrops), and a
+	-- hundred of them is the body of the Gelatinous Crown.
+	Gel = {
+		-- PLACEHOLDER ICON, in the same made-up series as its neighbours.
+		icon = "rbxassetid://3000000015",
+		description = "A wobbling lump of slime. Sticky, faintly sweet, and oddly warm.",
+		rarity = "Common",
+		maxStack = 999,
+		classification = "Material",
+		value = 1,
+	},
+
 	-- === Basic Tools, Pickaxes & Weapons ===
 	-- NOTE: items that should allow mining must have classification == "Pickaxe".
 	TestSword = {
@@ -290,6 +302,27 @@ local ItemDefinitions = {
 		maxStack = 20,
 		classification = "Consumable",
 		value = 15,
+	},
+
+	--[[
+		The Slime Emperor's summon. A hundred Gel pressed around a ring of gold
+		and iron, crafted at the Anvil.
+
+		Used like the Scroll Chest: select it in the hotbar and click - but on an
+		ALTAR (the Altar structure in StructureConfig). ServerScriptService.
+		AltarSummon checks the click landed on an altar block, takes the crown,
+		and spawns the Slime Emperor beside it. Clicking anywhere else keeps the
+		crown and says so.
+	]]
+	GelatinousCrown = {
+		displayName = "Gelatinous Crown",
+		-- PLACEHOLDER ICON.
+		icon = "rbxassetid://3000000016",
+		description = "A crown of set slime around a band of gold and iron. Use it on an altar to call the Slime Emperor.",
+		rarity = "Epic",
+		maxStack = 1,
+		classification = "Consumable",
+		value = 400,
 	},
 
 	--[[
@@ -619,6 +652,41 @@ local ItemDefinitions = {
 		classification = "Block",
 		value = 8,
 		miningTime = 2500,
+	},
+
+	--[[
+		=== Altar blocks ===
+
+		The two blocks the Altar structure (StructureConfig) is built from. Both
+		are PLACEHOLDERS drawn by BlockConfig.Generated until real parts of the
+		same names are put in TerrainAssets.Blocks, at which point the authored
+		ones win and nothing here changes.
+
+		Mineable, so an altar can be dug up and rebuilt somewhere handier, and
+		hard: both ask for an iron pickaxe (BlockConfig.Overrides) and take a
+		while, so one is never knocked apart by accident mid-fight.
+	]]
+	AltarStone = {
+		displayName = "Altar Stone",
+		-- PLACEHOLDER ICON.
+		icon = "rbxassetid://3000000432",
+		description = "Dark carved stone, older than anything around it. The body of an altar.",
+		rarity = "Rare",
+		maxStack = 999,
+		classification = "Block",
+		value = 12,
+		miningTime = 4000,
+	},
+	AltarCore = {
+		displayName = "Altar Core",
+		-- PLACEHOLDER ICON.
+		icon = "rbxassetid://3000000433",
+		description = "The heart of an altar. It hums when something worthy is set on it.",
+		rarity = "Rare",
+		maxStack = 99,
+		classification = "Block",
+		value = 60,
+		miningTime = 5000,
 	},
 
 	-- === High-End Materials ===

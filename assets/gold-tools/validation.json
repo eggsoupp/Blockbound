@@ -1,0 +1,94 @@
+[
+  {
+    "file": "gold_axe.vox",
+    "format": "MagicaVoxel VOX 150",
+    "dimensions_xyz": [
+      53,
+      15,
+      68
+    ],
+    "voxels": 8960,
+    "connected_components": 1,
+    "roundtrip_identical": true,
+    "rgba_sha256": "974e57f41b791d17d93cd290f2f63d172f3d2aac3d0e61d55a00b3d95d812b0c",
+    "used_palette_indices": [
+      1,
+      4,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      16,
+      17,
+      18
+    ],
+    "grip_center_xyz": [
+      19,
+      7,
+      10
+    ]
+  },
+  {
+    "file": "gold_pickaxe.vox",
+    "format": "MagicaVoxel VOX 150",
+    "dimensions_xyz": [
+      55,
+      11,
+      66
+    ],
+    "voxels": 4504,
+    "connected_components": 1,
+    "roundtrip_identical": true,
+    "rgba_sha256": "974e57f41b791d17d93cd290f2f63d172f3d2aac3d0e61d55a00b3d95d812b0c",
+    "used_palette_indices": [
+      1,
+      2,
+      3,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "grip_center_xyz": [
+      27,
+      5,
+      10
+    ]
+  },
+  {
+    "file": "gold_sword.vox",
+    "format": "MagicaVoxel VOX 150",
+    "dimensions_xyz": [
+      25,
+      11,
+      68
+    ],
+    "voxels": 3826,
+    "connected_components": 1,
+    "roundtrip_identical": true,
+    "rgba_sha256": "974e57f41b791d17d93cd290f2f63d172f3d2aac3d0e61d55a00b3d95d812b0c",
+    "used_palette_indices": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      13,
+      19,
+      20,
+      21,
+      23,
+      24
+    ],
+    "grip_center_xyz": [
+      12,
+      5,
+      10
+    ]
+  }
+]

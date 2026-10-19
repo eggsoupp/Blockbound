@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blockbound Pixel UI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  /* One texel of sprite art is 3px here, exactly as in game at 1080p. */
+  :root {
+    --ink: #3a2414;
+    --ink-soft: #6b4a2c;
+    --teal: #2f5552;
+    --cream: #f6e7c1;
+    --gold: #ffd84a;
+    --rare: #4f9cf5;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    font-family: 'Press Start 2P', monospace;
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(140, 200, 120, .35), transparent 55%),
+      radial-gradient(ellipse at 90% 30%, rgba(90, 150, 200, .25), transparent 50%),
+      linear-gradient(180deg, #2f4a33 0%, #23382a 45%, #1a2a20 100%);
+    -webkit-font-smoothing: none;
+  }
+  img { image-rendering: pixelated; display: block; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; }
+
+  .intro { padding: 28px 16px 8px; max-width: 1180px; margin: 0 auto; color: #e9f1e6; }
+  .intro h1 { font-size: 16px; margin: 0 0 14px; letter-spacing: 1px; }
+  .intro p { font: 14px/1.55 system-ui, sans-serif; margin: 0 0 6px; color: #c9d9c6; max-width: 760px; }
+
+  .stage {
+    display: flex; flex-wrap: wrap; gap: 56px 40px; align-items: flex-start;
+    padding: 40px 16px 56px; max-width: 1180px; margin: 0 auto;
+  }
+  .demo { position: relative; }
+  .cap {
+    font: 600 12px/1 system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase;
+    color: #b9cdb5; margin: 0 0 26px;
+  }
+  .cap span { font-weight: 400; text-transform: none; letter-spacing: 0; color: #8fa78b; margin-left: 6px; }
+
+  /* Windows ------------------------------------------------------------ */
+  .win { position: relative; }
+  .banner {
+    position: absolute; left: 50%; top: -24px; transform: translateX(-50%);
+    height: 42px; border-width: 0 15px !important; padding: 0 6px 3px;
+    font-size: 16px; line-height: 39px; color: #12301f; white-space: nowrap; z-index: 5;
+  }
+  .closebtn {
+    position: absolute; top: -12px; right: -12px; width: 39px; height: 39px; z-index: 6;
+    background: var(--s-close) 0 0 / 100% 100% no-repeat; image-rendering: pixelated;
+  }
+  .closebtn:hover { background-image: var(--s-close_hover); }
+  .closebtn:active { background-image: var(--s-close_pressed); }
+
+  /* Buttons ------------------------------------------------------------- */
+  .btn {
+    height: 42px; border-style: solid; border-width: 0 12px;
+    border-image-source: var(--s-button_tan); border-image-slice: 4 fill;
+    border-image-width: 12px; border-image-repeat: stretch; image-rendering: pixelated;
+    padding: 0 6px 9px; font-size: 16px; line-height: 33px; color: var(--ink); white-space: nowrap;
+  }
+  .btn:hover { border-image-source: var(--s-button_tan_hover); }
+  .btn:active, .btn.is-pressed { border-image-source: var(--s-button_tan_pressed); padding: 6px 6px 3px; }
+  .btn.green { border-image-source: var(--s-button_green); color: #12301f; }
+  .btn.green:hover, .btn.green.is-hover { border-image-source: var(--s-button_green_hover); }
+  .btn.green:active, .btn.green.is-pressed { border-image-source: var(--s-button_green_pressed); }
+  .btn.red { border-image-source: var(--s-button_red); color: #2b0f0c; }
+  .btn.red:hover, .btn.red.is-hover { border-image-source: var(--s-button_red_hover); }
+  .btn.red:active, .btn.red.is-pressed { border-image-source: var(--s-button_red_pressed); }
+  .btn.tan.is-hover { border-image-source: var(--s-button_tan_hover); }
+  .btn.off, .btn.off:hover, .btn.off:active {
+    border-image-source: var(--s-button_disabled); color: #5e5a54; cursor: default; padding: 0 6px 9px;
+  }
+  .btn.small { font-size: 8px; }
+  .btn.wide { width: 100%; }
+
+  /* Slots ---------------------------------------------------------------- */
+  .slot { position: relative; width: 60px; height: 60px; flex: none; }
+  .slot.sm { width: 45px; height: 45px; }
+  .slot.lg { width: 84px; height: 84px; }
+  .slot > img { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  .slot .count {
+    position: absolute; right: -8px; bottom: -9px; font-size: 8px; color: #fff;
+    text-shadow: 1px 0 #2b1810, -1px 0 #2b1810, 0 1px #2b1810, 0 -1px #2b1810;
+  }
+  .slot .key { position: absolute; left: -8px; top: -9px; font-size: 8px; color: var(--ink-soft); }
+  .slot .hl { position: absolute; inset: -12px; pointer-events: none; }
+  .grid { display: grid; gap: 6px; }
+
+  /* Text ---------------------------------------------------------------- */
+  .h { font-size: 8px; color: var(--teal); letter-spacing: 1px; }
+  .body { font-size: 8px; line-height: 15px; color: var(--ink); }
+  .dim { color: var(--ink-soft); }
+  .on-wood { color: var(--cream); }
+
+  /* Crafting ------------------------------------------------------------- */
+  .craft { width: min(920px, calc(100vw - 32px)); }
+  .craft-body { display: grid; grid-template-columns: 176px minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding-top: 18px; }
+  .stations { display: flex; flex-direction: column; gap: 8px; }
+  .station { height: 57px; text-align: left; line-height: 1; padding: 3px 6px 12px; display: flex; flex-direction: column; justify-content: center; gap: 7px; }
+  .station:active { padding: 9px 6px 6px; }
+  .station b { font-weight: normal; font-size: 8px; }
+  .station small { font-size: 8px; opacity: .7; }
+  .list { position: relative; padding: 4px 26px 4px 4px; display: flex; flex-direction: column; gap: 8px; min-height: 420px; }
+  .search { display: flex; align-items: center; gap: 8px; height: 39px; font-size: 8px; color: #a48a63; }
+  .filter { display: flex; align-items: center; gap: 8px; font-size: 8px; cursor: pointer; user-select: none; }
+  .rows { display: flex; flex-direction: column; gap: 4px; }
+  .rowx { display: flex; align-items: center; gap: 10px; height: 57px; cursor: pointer; padding: 0 2px; }
+  .rowx .name { flex: 1; font-size: 8px; line-height: 13px; }
+  .rowx .badge { font-size: 8px; color: var(--cream); line-height: 9px; padding: 0 2px; }
+  .rowx .badge.need { color: #f2a08a; }
+  .scroll { position: absolute; right: 4px; top: 4px; bottom: 4px; width: 18px; }
+  .scroll .thumb { position: absolute; left: 0; top: 30px; width: 18px; }
+  .scroll .thumb img { width: 18px; }
+  .detail { padding: 6px 4px; display: flex; flex-direction: column; gap: 12px; }
+  .item-head { display: flex; gap: 14px; align-items: center; }
+  .item-name { font-size: 16px; line-height: 22px; color: var(--teal); }
+  .rarity { font-size: 8px; color: #2f74c8; margin-top: 8px; }
+  .divider { height: 15px; }
+  .req { display: flex; align-items: center; gap: 10px; }
+  .req .what { flex: 1; font-size: 8px; line-height: 13px; }
+  .req .n { font-size: 8px; }
+  .req .n.ok { color: #2a8553; }
+  .req .n.bad { color: #b8402c; }
+  .gemline { display: flex; align-items: center; gap: 8px; font-size: 8px; }
+
+  /* Inventory ------------------------------------------------------------ */
+  .inv { width: 640px; max-width: calc(100vw - 32px); }
+  .inv-body { display: flex; gap: 14px; padding-top: 16px; }
+  .tabs { display: flex; gap: 2px; padding-left: 9px; position: relative; z-index: 2; margin-bottom: -9px; }
+  .tab { height: 42px; padding: 0 2px; font-size: 8px; line-height: 21px; position: relative; z-index: 0; cursor: pointer; }
+  .tab.active { z-index: 3; line-height: 15px; }
+  .bag { position: relative; z-index: 1; padding: 8px; }
+  .equip { padding: 8px; display: flex; flex-direction: column; gap: 6px; align-self: flex-end; }
+  .hotbar { display: flex; gap: 6px; margin-top: 16px; justify-content: center; }
+  .tip {
+    position: absolute; z-index: 9; left: 236px; top: 212px; width: 214px;
+    padding: 4px 6px; font-size: 8px; line-height: 14px; color: var(--cream); pointer-events: none;
+  }
+  .tip .t { color: var(--gold); }
+  .tip .r { color: var(--rare); }
+
+  /* Settings --------------------------------------------------------------- */
+  .settings { width: 520px; max-width: calc(100vw - 32px); }
+  .set-body { padding: 14px 6px 4px; display: flex; flex-direction: column; gap: 16px; }
+  .setrow { display: flex; align-items: center; gap: 12px; min-height: 39px; }
+  .setrow .lbl { flex: 1; font-size: 8px; line-height: 14px; }
+  .slider { position: relative; width: 190px; height: 24px; cursor: pointer; }
+  .slider .track, .slider .fill { position: absolute; left: 0; top: 0; height: 24px; }
+  .slider .track { right: 0; }
+  .slider .knob { position: absolute; top: -8px; transform: translateX(-50%); }
+  .val { font-size: 8px; width: 40px; text-align: right; }
+  .stepper { display: flex; align-items: center; gap: 6px; }
+  .stepper .box { width: 66px; height: 39px; text-align: center; font-size: 8px; line-height: 15px; }
+  .actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* Small windows ---------------------------------------------------------- */
+  .confirm { width: 400px; max-width: calc(100vw - 32px); }
+  .confirm-body { padding: 18px 6px 2px; display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; }
+  .result { width: 300px; }
+  .result-body { padding: 14px 4px 2px; display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center; }
+  .stars { display: flex; align-items: flex-end; gap: 2px; }
+  .big { font-size: 16px; color: var(--ink); }
+
+  /* Sprite sheet ------------------------------------------------------------ */
+  .sheet { max-width: 1180px; margin: 0 auto; padding: 0 16px 64px; color: #e9f1e6; }
+  .sheet h2 { font-size: 12px; margin: 8px 0 6px; }
+  .sheet .lede { font: 14px/1.55 system-ui, sans-serif; color: #c9d9c6; margin: 0 0 18px; max-width: 760px; }
+  .sheet h3 { font: 600 12px/1 system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #b9cdb5; margin: 26px 0 12px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .tile { background: rgba(0, 0, 0, .22); border: 1px solid rgba(255, 255, 255, .08); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .tile .art { min-height: 108px; display: grid; place-items: center; background: repeating-conic-gradient(rgba(255,255,255,.05) 0 25%, transparent 0 50%) 0 0 / 12px 12px; border-radius: 4px; }
+  .tile code { font: 12px ui-monospace, Consolas, monospace; color: #fff; word-break: break-all; }
+  .tile .meta { font: 11px/1.4 system-ui, sans-serif; color: #9fb59b; }
+  .states { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin-bottom: 8px; }
+  .states figure { margin: 0; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .states figcaption { font: 11px system-ui, sans-serif; color: #9fb59b; }
+
+  @media (max-width: 860px) {
+    .craft-body { grid-template-columns: 1fr; }
+    .stations { flex-direction: row; flex-wrap: wrap; }
+    .station { flex: 1 1 150px; }
+    .list { min-height: 0; }
+    .inv-body { flex-direction: column; }
+    .equip { flex-direction: row; align-self: flex-start; }
+    .tip { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <h1>BLOCKBOUND PIXEL UI KIT</h1>
+  <p>Every screen below is built only from the generated sprites, sliced the same way Roblox's SliceCenter slices them, at the in-game scale (one texel = 3px). Hover and click buttons, tabs, toggles, rows and arrows to see each state.</p>
+  <p>Text uses Press Start 2P, which is Roblox's built-in <b>Arcade</b> font. Item pictures are placeholders; in game the slots keep showing your own item thumbnails.</p>
+</header>
+
+<main class="stage">
+
+  <!-- Crafting ----------------------------------------------------------- -->
+  <section class="demo">
+    <div class="cap">Crafting <span>frame_wood · inset_parchment · row · slot_dark · button_green</span></div>
+    <div class="win craft n-frame_wood">
+      <div class="banner n-header">CRAFTING</div>
+      <button class="closebtn" aria-label="Close"></button>
+      <div class="craft-body">
+
+        <div class="stations" data-group="station">
+          <button class="btn station"><b>HAND</b><small>Anywhere</small></button>
+          <button class="btn green station"><b>WORKBENCH</b><small>In range</small></button>
+          <button class="btn station"><b>FURNACE</b><small>In range</small></button>
+          <button class="btn station"><b>ANVIL</b><small>Not nearby</small></button>
+          <button class="btn station off"><b>ALTAR</b><small>Locked</small></button>
+        </div>
+
+        <div class="list n-inset_parchment">
+          <div class="search n-input"><img data-s="icon_search"> SEARCH RECIPES</div>
+          <label class="filter"><img data-s="checkbox_on" data-toggle="checkbox"> CRAFTABLE</label>
+          <div class="rows" data-group="row">
+            <div class="rowx n-row_selected"><div class="slot sm n-slot"><img data-s="preview_sword"></div><span class="name">IRON SWORD</span><span class="badge n-badge">x2</span></div>
+            <div class="rowx n-row"><div class="slot sm n-slot"><img data-s="preview_ingot"></div><span class="name">COPPER BAR</span><span class="badge n-badge">x14</span></div>
+            <div class="rowx n-row"><div class="slot sm n-slot"><img data-s="preview_block"></div><span class="name">GRASS BLOCK</span><span class="badge n-badge">x40</span></div>
+            <div class="rowx n-row"><div class="slot sm n-slot"><img data-s="preview_potion"></div><span class="name">HEALING POTION</span><span class="badge n-badge need">NEED</span></div>
+            <div class="rowx n-row"><div class="slot sm n-slot"><img data-s="icon_gem"></div><span class="name">HALLOW GEM</span><span class="badge n-badge need">NEED</span></div>
+          </div>
+          <div class="scroll n-scroll_track">
+            <div class="thumb"><img data-s="scroll_top"><img data-s="scroll_mid" style="height:90px"><img data-s="scroll_bottom"></div>
+          </div>
+        </div>
+
+        <div class="detail n-inset_parchment">
+          <div class="item-head">
+            <div class="slot lg n-slot"><img data-s="preview_sword" data-k="4"></div>
+            <div><div class="item-name">IRON<br>SWORD</div><div class="rarity">RARE</div></div>
+          </div>
+          <div class="body">A sturdy blade forged from iron. Swing it at anything that looks at you funny.</div>
+          <div class="gemline"><img data-s="icon_gem"> 12 DAMAGE</div>
+          <div class="gemline"><img data-s="icon_gem"> 0.6s SWING</div>
+          <div class="divider n-divider"></div>
+          <div class="h">REQUIRES</div>
+          <div class="req"><div class="slot sm n-slot_dark"><img data-s="preview_ingot"></div><span class="what">IRON BAR</span><span class="n ok">3/2</span></div>
+          <div class="req"><div class="slot sm n-slot_dark"><img data-s="preview_block"></div><span class="what">OAK PLANK</span><span class="n ok">8/1</span></div>
+          <button class="btn green wide">CRAFT</button>
+          <button class="btn off wide small">NEED MATERIALS</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Inventory ---------------------------------------------------------- -->
+  <section class="demo">
+    <div class="cap">Inventory <span>frame_parchment · tab_active / tab_idle · slot · slot_highlight · tooltip</span></div>
+    <div class="win inv n-frame_parchment">
+      <div class="banner n-header">INVENTORY</div>
+      <button class="closebtn" aria-label="Close"></button>
+      <div class="inv-body">
+        <div style="flex:1; min-width:0">
+          <div class="tabs" data-group="tab">
+            <div class="tab n-tab_active active">ALL</div>
+            <div class="tab n-tab_idle">TOOLS</div>
+            <div class="tab n-tab_idle">BLOCKS</div>
+            <div class="tab n-tab_idle">ITEMS</div>
+          </div>
+          <div class="bag n-inset_parchment">
+            <div class="grid" id="bag" style="grid-template-columns: repeat(6, 60px)"></div>
+          </div>
+        </div>
+        <div class="equip n-inset_wood">
+          <div class="slot n-slot_dark"><img data-s="preview_sword"></div>
+          <div class="slot n-slot_dark"></div>
+          <div class="slot n-slot_dark"></div>
+          <div class="slot n-slot_dark"><img data-s="icon_gem" data-k="4"></div>
+        </div>
+      </div>
+      <div class="hotbar" id="hotbar"></div>
+      <div class="tip n-tooltip"><div class="t">IRON SWORD</div><div class="r">RARE</div><div>12 damage. Right-click to block.</div></div>
+    </div>
+  </section>
+
+  <!-- Settings ----------------------------------------------------------- -->
+  <section class="demo">
+    <div class="cap">Settings <span>slider · toggle · checkbox · arrows · input</span></div>
+    <div class="win settings n-frame_parchment">
+      <div class="banner n-header">SETTINGS</div>
+      <button class="closebtn" aria-label="Close"></button>
+      <div class="set-body">
+        <div class="setrow"><span class="lbl">MUSIC</span><div class="slider" data-v="70"><div class="track n-slider_track"></div><div class="fill n-slider_fill"></div><img class="knob" data-s="slider_knob"></div><span class="val">70%</span></div>
+        <div class="setrow"><span class="lbl">SOUND FX</span><div class="slider" data-v="45"><div class="track n-slider_track"></div><div class="fill n-slider_fill"></div><img class="knob" data-s="slider_knob"></div><span class="val">45%</span></div>
+        <div class="setrow"><span class="lbl">RENDER<br>DISTANCE</span>
+          <div class="stepper"><button data-step="-1"><img data-s="icon_arrow_left"></button><div class="box n-input" id="dist">12</div><button data-step="1"><img data-s="icon_arrow_right"></button></div>
+        </div>
+        <div class="divider n-divider"></div>
+        <div class="setrow"><span class="lbl">DAMAGE NUMBERS</span><img data-s="toggle_on" data-toggle="toggle"></div>
+        <div class="setrow"><span class="lbl">SCREEN SHAKE</span><img data-s="toggle_off" data-toggle="toggle"></div>
+        <div class="setrow"><span class="lbl">SHOW FPS</span><img data-s="checkbox_off" data-toggle="checkbox"></div>
+        <div class="actions"><button class="btn">RESET</button><button class="btn green">DONE</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Confirm -------------------------------------------------------------- -->
+  <section class="demo">
+    <div class="cap">Confirm <span>button_tan · button_red</span></div>
+    <div class="win confirm n-frame_parchment">
+      <div class="banner n-header">DROP ITEM?</div>
+      <div class="confirm-body">
+        <div class="slot lg n-slot"><img data-s="preview_ingot" data-k="4"><span class="count">12</span></div>
+        <div class="body">Drop 12 Copper Bar on the ground? You can pick it back up.</div>
+        <div class="actions" style="justify-content:center"><button class="btn">CANCEL</button><button class="btn red">DROP</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -------------------------------------------------------------- -->
+  <section class="demo">
+    <div class="cap">Results <span>icon_star · icon_x</span></div>
+    <div style="display:flex; gap:40px; flex-wrap:wrap">
+      <div class="win result n-frame_parchment">
+        <button class="closebtn" aria-label="Close"></button>
+        <div class="result-body">
+          <div class="stars"><img data-s="icon_star"><img data-s="icon_star" data-k="4"><img data-s="icon_star_empty"></div>
+          <div class="big">VICTORY!</div>
+          <div class="body dim">SIGNUS DEFEATED</div>
+          <div style="display:flex; gap:6px"><div class="slot n-slot"><img data-s="icon_gem" data-k="4"></div><div class="slot n-slot"><img data-s="preview_potion"><span class="count">3</span></div><div class="slot n-slot"><img data-s="preview_ingot"><span class="count">20</span></div></div>
+          <button class="btn green">CLAIM</button>
+        </div>
+      </div>
+      <div class="win result n-frame_parchment">
+        <button class="closebtn" aria-label="Close"></button>
+        <div class="result-body">
+          <img data-s="icon_x" data-k="5">
+          <div class="big">YOU DIED</div>
+          <div class="body dim">Your items wait where you fell.</div>
+          <button class="btn green">RESPAWN</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<section class="sheet">
+  <h2>EVERY SPRITE</h2>
+  <p class="lede">These are the files in <code>sprites/</code> that get uploaded, drawn at 3x. The slice numbers are what goes in Roblox's SliceCenter. The same set is packed into <code>atlas/pixel_ui_atlas.png</code> in case one upload is easier.</p>
+  <h3>Button states</h3>
+  <div class="states" id="states"></div>
+  <div id="catalog"></div>
+</section>
+
+<script>
+const SPRITES = {
+  frame_parchment: { w: 32, h: 32, slice: [8,8,24,24], group: "window", note: "Main window: wood frame, parchment inside.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACeSURBVFhHY2BAAtoSAv/pgZHtRLF4e607XTCGQ0CcrlADuuFMWyWEA0CMWYlmGIpoiUEOgDti0DoAPeFQiklyAEjs2IIsqmJkRxDlgDsHuqiKyXLA+zvrqIJHHTDqgFEHjDpg1AGjDhh1wKgDyHYANTFJDoA5gpoY2WyiHEBLPLgcAOsdwQTpheGWI3dO/XUk6IJh9sEdgO4QWmNkOwFA43tL2ZDMvwAAAABJRU5ErkJggg==" },
+  frame_wood: { w: 32, h: 32, slice: [8,8,24,24], group: "window", note: "Main window with a wooden inside, for windows split into insets.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACeSURBVFhHY2BAAtoSAv/pgZHtRLF4e607XTCGQ0CcrlADuuFMWyWEA0CMWYlmGIpoiUEOgDti0DoAPeFQiklyAEjMS0ucqhjZEUQ5IMpUgaqYLAdkO6hRBY86YNQBow4YdcCoA0YdMOqAUQeQ7QBqYpIcAHMENTGy2UQ5gJZ4cDkA1juCCdILwy1H7pz660jQBcPsgzsA3SG0xsh2AgBprfqEZtfRHwAAAABJRU5ErkJggg==" },
+  inset_parchment: { w: 16, h: 16, slice: [4,4,12,12], group: "window", note: "Recessed parchment section inside a window.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABGSURBVDhPY2CAAmsVsf+kYJg+uOZjC7JIwnBDQIw7B7rIwmBDYAa8v7OOJPzj9YlRA0YNGEwGwPIDSIAUDNeMnCNJwTB9AEnp2iYfq9q4AAAAAElFTkSuQmCC" },
+  inset_wood: { w: 16, h: 16, slice: [4,4,12,12], group: "window", note: "Recessed wood section inside a window.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABFSURBVDhPY2CAAmsVsf+kYJg+uGYvLXGSMNwQECPKVIEsDDYEZkC2gxpJuNZHZ9SAUQMGkwGw/AASIAXDNSPnSFIwTB8AxFCkQodmpVcAAAAASUVORK5CYII=" },
+  header: { w: 24, h: 14, slice: [5,5,19,9], group: "window", note: "Green title banner over a window's top edge.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAOCAYAAAA1+Nx+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABXSURBVDhPY2CAAllb7f/UxDBz4YaveLObqhhuCczw2itzqIrhlsAsCNpRT1U8agFBPGoBQYxhgcuCXKpiDAtM2iOoiuEWwHKzWoozVTHccOTyiJoYZi4An3P9t2+tb+QAAAAASUVORK5CYII=" },
+  tooltip: { w: 12, h: 12, slice: [4,4,8,8], group: "window", note: "Dark hover tooltip.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA3SURBVChTY2BgYGDQlhD4TwwGqQUrXl7lRRQGa4JpcDWQwYsxNBgr8OPFoxrI0kAMBmsgNWkAAAKM5XEdvMmXAAAAAElFTkSuQmCC" },
+  button_green: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Primary action. Label text dark.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABJSURBVDhPY2CAAllb7f+kYJg+uOYVb3aThOGGgBi1V+b8D9pRTxJ2WZALMWTUgGFjgEl7BFmYOgbAUqNaijNJGK4ZOT+QgmH6ABGM3OAPQMdVAAAAAElFTkSuQmCC" },
+  button_green_hover: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAllb7f+kYJg+uOYjXy+RhOGGgBgzHm36n3tmKkk4amsjxJBRA4aNAfYzUsjC1DEAlhp1C31IwnDNyPmBFAzTBwCAcwNLahaXQwAAAABJRU5ErkJggg==" },
+  button_green_pressed: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Pressed: move the label down 2 texels.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA/SURBVDhPY2AYNEDWVvs/KRhDs1qKM0kYbgiI4bIg93/QjnqSMEgP2JBRA4aFAbC0YNIeQRKGa0ZOjaRgmD4AhjiJKDhCbM8AAAAASUVORK5CYII=" },
+  button_red: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Destructive action (drop, delete, quit).", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABJSURBVDhPY2CAAjtR4f+kYJg+uOZvmxeQhOGGgBhP67P/Xwm3JwnvdjeGGDJqwLAxYI6pBlmYOgbAUmOJqgxJGK4ZOT+QgmH6AF2hxWBrgxWSAAAAAElFTkSuQmCC" },
+  button_red_hover: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAjtR4f+kYJg+uOY/J3eQhOGGgBjvpzf/f5QTTBI+E+UCMWTUgGFjwBoHA7IwdQyApcYmbQWSMFwzcn4gBcP0AQB4J+Tcl4GgwwAAAABJRU5ErkJggg==" },
+  button_red_pressed: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA/SURBVDhPY2AYNMBOVPg/KRhDc4mqDEkYbgiIsdvd+P+VcHuSMEgP2JBRA4aFAbC0MMdUgyQM14ycGknBMH0A7y50HMq4Zb0AAAAASUVORK5CYII=" },
+  button_tan: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Secondary action, unselected tabs.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAmsVkf+kYJg+uOb/3+6QhOGGgBhfH237//z8TJLwtd1NEENGDRg2BuyYEkMWpo4BsNTYn21LEoZrRs4PpGCYPgB9YUo7q66SngAAAABJRU5ErkJggg==" },
+  button_tan_hover: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAmsVkf+kYJg+uOb/v1+RhOGGgBi/3578/+nOOpLw41NTIYaMGjBsDDi+JJssTB0DYKlxbrkbSRiuGTk/kIJh+gBUYmVDXTOyuQAAAABJRU5ErkJggg==" },
+  button_tan_pressed: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABASURBVDhPY2AYNMBaReQ/KRhDc3+2LUkYbgiIcW130//n52eShEF6wIaMGjAsDIClhR1TYkjCcM3IqZEUDNMHANBN6GT72jNqAAAAAElFTkSuQmCC" },
+  button_disabled: { w: 16, h: 14, slice: [4,4,12,10], group: "button", note: "Unavailable action.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABKSURBVDhPY2CAAn1t9f+kYJg+uOYbl0+QhOGGgBhH9m/+v2rpLJLwrKldEENGDRg2BjRUF5GFqWMALDUmxYWThOGakfMDKRimDwB1BxS37CyjxAAAAABJRU5ErkJggg==" },
+  close: { w: 13, h: 13, slice: null, group: "button", note: "Window close button, over the top-right corner.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABcSURBVChTY2CAAmsVkf+EMEwtXMP/b3cIYrhGEOP5+ZlwbKUkCsbobBgGa0TXhKwYXQNeTTCN6GJ4NZFsE9l+wocp07RjSgzRmHxNsAjuz7YliOEakJMSIQxTCwCT9YzkXZe7QAAAAABJRU5ErkJggg==" },
+  close_hover: { w: 13, h: 13, slice: null, group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABcSURBVChTY2CAAmsVkf+EMEwtXMP/368IYrhGEOPTnXVwbKUkCsbobBgGa0TXhKwYXQNeTTCN6GJ4NZFsE9l+wocp03R8STbRmHxNsAieW+5GEMM1ICclQhimFgBotJ2kgIH+0wAAAABJRU5ErkJggg==" },
+  close_pressed: { w: 13, h: 13, slice: null, group: "button", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABTSURBVChTY2CgO7BWEflPCGNo6M+2JYjhGkGM5+dnwrGVkigYo7NhGKwRXROyYnQNeDXBNKKL4dVEsk1k+wkfJl8TLNh3TIkhiOEakCOYEIapBQCu0UJRsdZ4GgAAAABJRU5ErkJggg==" },
+  slot: { w: 16, h: 16, slice: [4,4,12,12], group: "slot", note: "Item slot on parchment.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABASURBVDhPY2BgYGCYU+D6nxwM0gvWvHtiFFkYbAjMgPMbKkjGGAY8ODaBaPzlye5RA0YNGIwGwARJwWADKM3OANGs6XYEgXaoAAAAAElFTkSuQmCC" },
+  slot_dark: { w: 16, h: 16, slice: [4,4,12,12], group: "slot", note: "Item slot on wood.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA/SURBVDhPY2BgYGDQk+L7Tw4G6QVrtlIUJguDDYEZ4K4pQTLGMCDcRIFoXOKmNWrAqAGD0QCYICkYbACl2RkAC+aMOP0Qq6sAAAAASUVORK5CYII=" },
+  slot_highlight: { w: 16, h: 16, slice: [4,4,12,12], group: "slot", note: "Overlay laid on a slot. White: tint with ImageColor3 (selection gold, rarity).", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABDSURBVDhPY2BgYGD4TyYA6QVrvnTpElkYbAjMALiJRAAUPTAOuiJCYNSAUQNAgPoGgDlEAhQ9MA45GG4pmEUGAOkFAObIouTmTnAZAAAAAElFTkSuQmCC" },
+  input: { w: 12, h: 12, slice: [4,4,8,8], group: "control", note: "Text box (search).", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA3SURBVChTY2BgYGCwVhH7TwwGqQUrPrGsgCgM1gQiXl5fTRRG0fD74zWCeFQDuiQ2TJ4GUpMGAO58oo78yizNAAAAAElFTkSuQmCC" },
+  checkbox_off: { w: 11, h: 11, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAzSURBVChTY2BgYGCwVhH7TwiD1IEVnlhWQBCDNYCIl9dXE8Qoin9/vIYXjyrGUExKDAIAevVW/XVIePQAAAAASUVORK5CYII=" },
+  checkbox_on: { w: 11, h: 11, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABYSURBVChTY2BgYGCwVhH7TwiD1IEVnlhWQBCDNYCIl9dX48RarcFgGkXx74/XMDBIIQiD2CiKYYLYFGJVDJNEV4ihGFkRukKsimEa0BXiVIwLk66YlBgEAK12PtRjSHGYAAAAAElFTkSuQmCC" },
+  toggle_off: { w: 20, h: 11, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABzSURBVDhPY2CAAmsVsf+4MEwN0QCk6f+3OzgxugXYMIphXx9t+//8/Ey8GKTOS0scJ4Ybim7gjikxKDSygVGmCjhxtoMaxFBSDARpwoeHqIG4MEkGglxDCBMyEGwYctLpz7bFiUHyhDDcMGRDcWF0tfgAAPp6n7393RwFAAAAAElFTkSuQmCC" },
+  toggle_on: { w: 20, h: 11, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABuSURBVDhPY2AgAViriP3HhdHV4lUMw/+/3cGJUQwFcdRSnHFikPzXR9v+Pz8/Ey8GGwoignbU/zdpj8CJ0Q3cMSUGhcZqID48aiBODDYQFsvohqAbCHINIQw3kNh02J9tixOjGEYsQLcAGcPUAADiasEH+0JZQAAAAABJRU5ErkJggg==" },
+  slider_track: { w: 12, h: 8, slice: [3,3,9,5], group: "control", note: "Slider / progress bar background.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAICAYAAADN5B7xAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA7SURBVChTY2CAAmsVsf/4MEwdXLGXljheDNcEYkSZKhCFwZpARLaDGlGYThpg/qj10cGLsYYUPgxTBwDJfovN6XMYmQAAAABJRU5ErkJggg==" },
+  slider_fill: { w: 12, h: 8, slice: [3,3,9,5], group: "control", note: "Slider / progress bar fill, same shape as the track.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAICAYAAADN5B7xAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA6SURBVChTY2CAAmsVsf/4MEwdXPGKN7vxYrgmECNoRz1RGKyJPhpcFuQShVH8YdIegRdjDSl8GKYOAP7stsG2zjN8AAAAAElFTkSuQmCC" },
+  slider_knob: { w: 9, h: 13, slice: null, group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAANCAYAAAB7AEQGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABMSURBVChTY2CAAmsVsf/oGCYHV/D/2x0MDFcIYnx9tO3/8/MzsWKwQmRFO6bEoNBDRhE2DFcE0okLE68IFqD92bYYGK4AOWrQMUwOACBADupgSWjgAAAAAElFTkSuQmCC" },
+  scroll_track: { w: 6, h: 8, slice: [0,3,6,5], group: "control", note: "Behind a ScrollingFrame's bar.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAICAYAAADaxo44AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAvSURBVBhXY2BgYGCwVhH7j4xBYmBBLy1xFAyWBBHZDmoomBYStT46KBjFZejOBQCTmUgJ0PAW6gAAAABJRU5ErkJggg==" },
+  scroll_top: { w: 6, h: 3, slice: null, group: "control", note: "ScrollingFrame.TopImage", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAtSURBVBhXY2BgYGCQtdX+j4xBYmDBFW92o2CwJIiovTLnf9COejB2WZALlgAAd6UjpXMQZW0AAAAASUVORK5CYII=" },
+  scroll_mid: { w: 6, h: 2, slice: null, group: "control", note: "ScrollingFrame.MidImage", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAACCAYAAAB7Xa1eAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAfSURBVBhXY5C11f5fe2XO/6Ad9WDssiD3P0iMAZcEAJX4Gqkz0jEfAAAAAElFTkSuQmCC" },
+  scroll_bottom: { w: 6, h: 3, slice: null, group: "control", note: "ScrollingFrame.BottomImage", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAADCAYAAACwAX77AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY5C11f5fe2XO/6Ad9WDssiD3P0iMAUSYtEegYLAECIAYyBgkBgAnGB6126UTPwAAAABJRU5ErkJggg==" },
+  divider: { w: 16, h: 5, slice: [4,0,12,5], group: "control", note: "Engraved line across parchment.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAFCAYAAABM6GxJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAuSURBVChTY2CgBlhR4/MfXYwQgOsBMY4tyPoPoknBMD0opv14feI/MRjFBZQCAE/AVhFKMvgiAAAAAElFTkSuQmCC" },
+  tab_idle: { w: 16, h: 14, slice: [4,4,12,10], group: "control", note: "Top tab, not selected.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAySURBVDhPY2AYNMBaRew/KRhD87MzM0jCcENAjCtbasjCYENGDRg1AGbAkUXZZGGQXgCKA/u+jze5DgAAAABJRU5ErkJggg==" },
+  tab_active: { w: 16, h: 14, slice: [4,4,12,10], group: "control", note: "Top tab, selected. Overlap the inset below by 3 texels.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAzSURBVDhPY2CAAmsVsf+kYJg+uOYfr0+QhOGGwDS/v7OOZAw2ZNSAUQOoYgC6IKmYYgMATbG0E7mV3w0AAAAASUVORK5CYII=" },
+  row: { w: 16, h: 12, slice: [4,4,12,8], group: "control", note: "List entry (recipes).", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAvSURBVDhPY2BgYGDY0hX6nxwM0gvW/OXJXrIw2JBRA0YNgBnw+PQMsjDYAEqTMgCfv2wddWTyoQAAAABJRU5ErkJggg==" },
+  row_hover: { w: 16, h: 12, slice: [4,4,12,8], group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAvSURBVDhPY2BgYGDoz7b9Tw4G6QVr/v3hClkYbMioAaMGwAx4dWUxWRhsAKVJGQD+d3EDwrHSpgAAAABJRU5ErkJggg==" },
+  row_selected: { w: 16, h: 12, slice: [4,4,12,8], group: "control", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAYAAABr5z2BAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA5SURBVDhPY2BgYGCQtdX+Tw4G6QVrrr0yhywMNgRmwPNvj0jCGAb8/nyHJDxqwKA0gBwMNoDSpAwA4Q40Sx0XFiMAAAAASUVORK5CYII=" },
+  badge: { w: 9, h: 9, slice: [3,3,6,6], group: "control", note: "Count pill. Light text.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAvSURBVChTY2CAAm0Jgf/oGCYHV1DlpYWB4QpBjChTBZwYrHAwKsLneKzBgI5hcgDZ1WyC1CVDtQAAAABJRU5ErkJggg==" },
+  icon_star: { w: 17, h: 17, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACYSURBVDhPY2CgNfDSEvoPw+hyRAOQ5v8fd5BvCMwF/y/HkO8amCtAhpDsGuRwABtwOeb/1jQpuBhOw5AVwF0AcwUMQ8XQ1aIYgqIYWfPlmP9fd1jBMUj+Tr8SGGMYgu4FbAaANBL0GrpB+AxA14sCYIagG4BsCLoeDIBuCMwAsg0BaYJhsgxBD0BkMXQ9GABZI0wDNrHBCQC20B9tSmfuoAAAAABJRU5ErkJggg==" },
+  icon_star_empty: { w: 17, h: 17, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACVSURBVDhPY2CgNfDSEvoPw+hyRAOQ5junV5FvCMwFJzZ0ke8amCtAhpDsGuRwABkAwk1Z3nAxnIYhK4C5AOYKGIaJoatFMQRZMbJmEN46qwSOQfJzmuLBGMMQdC9gMwCkkaDX0A3CZwC6XhQAMwTdAGRD0PVgAHRDYAaQbQhIEwyTZQh6ACKLoevBAMgaYRqwiQ1OAABOlhWYKF9REQAAAABJRU5ErkJggg==" },
+  icon_arrow_left: { w: 8, h: 11, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAALCAYAAABCm8wlAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABSSURBVChTY2AgFcjaav9HxlglV7zZDcZwBcg6QBK1V+aAMVgBuq6gHfWYClwW5IIxSBKGMUwwaY8AYwwF6G6AKUJRgO4LkCKsCpAVwTC6PAYAAAq/c//jR1hiAAAAAElFTkSuQmCC" },
+  icon_arrow_right: { w: 8, h: 11, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAALCAYAAABCm8wlAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABPSURBVChTY2AgBGRttf8jY3R5sIIVb3aDMVZFIIHaK3PAGFkRXCGygqAd9ZimwRSAJGHYZUEuGGNVYNIeAcZYTUCWwHADii50X2DoIgUAANkVc/9qUIBfAAAAAElFTkSuQmCC" },
+  icon_check: { w: 11, h: 11, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABVSURBVChTY2CgFpC11f6PjNHl4QCmYMWb3WCMUzGywqAd9f9N2iMgitGtwqUQrrj2yhwU67AqRLYSpAGkAKdCdDfCNOBUCAPIGuAewgdgGvCaSiwAALPOedFW6stMAAAAAElFTkSuQmCC" },
+  icon_x: { w: 15, h: 15, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACGSURBVDhPY2CgFMipGP9Hx0TLgzgr996BY2QFMDa6PIrm2sm74BjZAJjGqPxpYGzsEItfM7IByBpxasZlADaNKJpxGUCURhhANoAsjehOdYuoAWP0WCCoEWQjTDNOA3BphHkBmwEompH9iexHdAOwRhVIAUgCPXCQDUCWR9GMjuGSRMiTBQCY2TmQ4jC/3AAAAABJRU5ErkJggg==" },
+  icon_gem: { w: 9, h: 9, slice: null, group: "icon", note: "List bullet.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABUSURBVChTY2BAAuJWxv9hGFkcDmCShz49w64QWUHJlb2YCtEV2K+bCsYoCkEESBJZAQjrdJWAMVwRTCGyAvmsCOxWghRiVYDueJgVGApgACaJrgAAsBJ0irNa9UIAAAAASUVORK5CYII=" },
+  icon_search: { w: 11, h: 11, slice: null, group: "icon", note: "", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABESURBVChTY2CAAmsVsf/oGCaHAmCS2Q5qcIxVAzaFODUgKzz/8j0cI2ugk2JcboYppo4GZIyuAa4YHaBrwKsYBNBtAgBa954HNSaJMQAAAABJRU5ErkJggg==" },
+  bar_frame: { w: 16, h: 13, slice: [5,5,12,10], group: "hud", note: "Health and mana bar. Its groove is 12px in from the left, top and right and 9px from the bottom.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAANCAYAAACgu+4kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABcSURBVDhPY2CAAm0Jgf+kYJg+uObtte4kYbghIMasRLP/XaEGJOFMWyWIIegGWKuI4cV4DQApkBHgwIthhuA1QE+KDyceNYCAAWRFIywxgQRIwXDNyMmZFAzTBwBB1zwtE/R8sQAAAABJRU5ErkJggg==" },
+  bar_fill: { w: 8, h: 6, slice: [1,2,7,4], group: "hud", note: "A bar's fill, in greys: tint with ImageColor3.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAqSURBVBhXY/hPADC8efPmPz7McO3atf/4MGEFmzZt+o8PM0ybNu0/PgwA49ukuR7HdLcAAAAASUVORK5CYII=" },
+  boss_frame: { w: 24, h: 15, slice: [7,5,18,11], group: "hud", note: "Boss bar. Its groove is 18px in from the ends and 12px from the top and bottom.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAPCAYAAAD+pA/bAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACJSURBVDhPY2CAAm0Jgf/UxDBz4Yb/f9AFx9tr3cnCyGbALYEZ/mCDAxgf6NL43xVqQBZGNwdsCcyCrigRFAusVcRIwjALkM1BsQDZZpAGGQEOkjBID7o5BC3Qk+IjGo9aQBCPAAvomg/QcyixGN0csAWw4gJkMwxn2iqRhZHNgBuOXOBRE8PMBQCsCZJdxJRqIAAAAABJRU5ErkJggg==" },
+  bar_marker: { w: 5, h: 15, slice: [0,5,5,10], group: "hud", note: "Boss phase marker, as tall as the boss bar.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAPCAYAAAAs9AWDAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA3SURBVChTY2CAAm0Jgf8wNlzg/4Ou/3AJmMCDDQ7/u6JEUCVQBJCNQBEAASEuVvoIYthOZR8BAFDjNdtju1GAAAAAAElFTkSuQmCC" },
+  header_red: { w: 24, h: 14, slice: [5,5,19,9], group: "hud", note: "The boss's name banner.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAOCAYAAAA1+Nx+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABXSURBVDhPY2CAAjtR4f/UxDBz4YZ/27yAqhhuCczwp/XZVMVwS2AWXAm3pyoetYAgHrWAIMawYLe7MVUxhgVzTDWoiuEWwHJziaoMVTHccOTyiJoYZi4A9APbozFpcMwAAAAASUVORK5CYII=" },
+  icon_heart: { w: 11, h: 10, slice: null, group: "hud", note: "Health.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAYAAABi8KSDAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABdSURBVChTY2BgYGDQlhD4j4xxicEF/8/qAmNkBehiYMVgQRCY1fX/gbsVXCGIDcOoitEk0TFcMboEOl6oJotQjE8DTCFYMbInCSqEAXQNOBXCAEySoEIYgCnCphAARBipYNm+2/kAAAAASUVORK5CYII=" },
+  icon_mana: { w: 13, h: 13, slice: null, group: "hud", note: "Mana.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB2SURBVChTY2CgFtCWEPgPw+hyOAFI8fln/4nXBLOhfhtEE06NyM6B2QLSBLMNq3NhJoMUwTSAsHfvA7iYfsoOTE0wjcgaYFjZswvTJnSNRGmAAXRNICfBNKGrBQNkm0AKkTFOm5A1wBTBxDACAVkTMsYlRjYAABXtry7WTUc6AAAAAElFTkSuQmCC" },
+  icon_shield: { w: 11, h: 12, slice: null, group: "hud", note: "Defense.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAMCAYAAAC0qUeeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABsSURBVChTY5BTMf5PLGYAEY9ffiaI4Yp3HL6GFffP3gDGXsFZ+BXDFBJU/P9BF1xhWmEXbsUgBQ82OMAVYiiGaYCZ1hUlgqEQrBgE0DXgVAgDMMUwhSjWowNk0/GaCgMwSZBivAphAKYIm0IA2t7+of97NbsAAAAASUVORK5CYII=" },
+  icon_skull: { w: 13, h: 13, slice: null, group: "hud", note: "The boss bar's emblem.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABnSURBVChTY2BAAtoSAv9xYWR1GIo/vrqBgTE041OMjHesnYLQSIwGdI0omtCdic6nviZkJ+HUBOIgK4QpRhdD0YRLIzYNYE3owY6PhmtAjmCYbdhoDA0wTTCN6BirLTAAk8SGkdUBAFdmaU5hkD7EAAAAAElFTkSuQmCC" },
+  preview_fill_health: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY6i4k/cfH2bIP536Hx9mSNkR8x8fJqwgeKbPf3yYwa3R4T8+DABb93RRBit4OwAAAABJRU5ErkJggg==" },
+  preview_fill_health_low: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY/ifF/UfH2Z4kxr8Hx9muBbj/R8fJqxgk4/df3yYYZqDyX98GADOZ3UpuT27cgAAAABJRU5ErkJggg==" },
+  preview_fill_mana: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY8hb9f8/PsyQOvfNf3yYIabv2n98mLACn7JN//FhBoeUaf/xYQDQWoFppq0v9gAAAABJRU5ErkJggg==" },
+  preview_fill_mana_low: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY+iZ9uw/PszQ2HXlPz7MUFp78D8+TFhBYsaC//gwQ1BE+398GADWy38JuiWjPwAAAABJRU5ErkJggg==" },
+  preview_fill_boss: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY/ifEPYfH2Z4E+H/Hx9muBbg8R8fJqxgk7PNf3yYYZqF0X98GAClmHJ5lygNmQAAAABJRU5ErkJggg==" },
+  preview_fill_ghost: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAtSURBVBhXY/j/cMt/fJjhzYVl//Fhhmt7pv/Hhwkr2DS39j8+zDCtJfM/PgwAEvmUicg83C0AAAAASUVORK5CYII=" },
+  preview_fill_flash: { w: 8, h: 6, slice: [1,2,7,4], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAsSURBVBhXY/gfFfAfH2Z4E+z1Hx9muObt/B8fJqxgk535f3yYYZqJ/n98GADiGXChyjcZ2wAAAABJRU5ErkJggg==" },
+  preview_block: { w: 13, h: 13, slice: null, group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABuSURBVChTY2DAAbQlBP6ji+EEIMUgvOxBFZjGqxmmoPKQP1gDiIZhDM3IiglhuGYQETrLCozRFSFjmBq4phUl9mCMTTNMrCrIAIwxNKFrBsnBFBPUBMLYNAyAJvSgx6YJJgdXjA5gCpAxuhqyAABj9uz/+oVGgQAAAABJRU5ErkJggg==" },
+  preview_sword: { w: 14, h: 14, slice: null, group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABkSURBVDhPY2AgEmhLCPxHxujyWAFM8Yt3X8GYKI3ImmYt30GcjbTTBBOESRClCabw5hIruAKiNIEATBKmmShNMICumSRN2Q5qGJrR1cIBuiZ0m9HVwwE2G5ANQFcPB0QpoiYAAG7uleGzZrtIAAAAAElFTkSuQmCC" },
+  preview_ingot: { w: 12, h: 12, slice: null, group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABISURBVChTY2CgK9CWEPiPC6OrBSv+f30WVrwiSglVE0zxuykOWDFIA1wTutXYMIYGdBORMUwD3EnIJmDDMFtQ3E8IwxUPTgAAwTCHJtCUtX8AAAAASUVORK5CYII=" },
+  preview_potion: { w: 12, h: 12, slice: null, group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABdSURBVChTY2CgFGhLCPxHxujyGACkaE6KBRgTreHGuw9gTFADzBnIGnBqQlaIjjE0wRSDwM1we6wYRROIg64AHROtYbKBPPEaQIqxaoBpgilAxxiKYQAWjOgYWQ0Af+GrUS71X+sAAAAASUVORK5CYII=" },
+  preview_slot_highlight_gold: { w: 16, h: 16, slice: [4,4,12,12], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABGSURBVDhPY2BgYGD4f8PrPzkYpBes+dJGG7Iw2BCYAXATiQAoemAcdEWEwKgBowaAAPUNAHOIBCh6YBxyMNxSEIMcDNILALriSij8uX7BAAAAAElFTkSuQmCC" },
+  preview_slot_highlight_rare: { w: 16, h: 16, slice: [4,4,12,12], group: "preview", note: "Preview only - not uploaded.", uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABGSURBVDhPY2BgYGAwaXnznxwM0gvWrJVziCwMNgRmANxEIgCKHhgHXREhMGrAqAEgQH0DwBwiAYoeGIccDLcUxCAHg/QCAAcoF/A0nsnWAAAAAElFTkSuQmCC" },
+};
+
+const U = 3;
+
+(function applySprites() {
+  const rootStyle = document.documentElement.style;
+  let css = '';
+  for (const [name, s] of Object.entries(SPRITES)) {
+    rootStyle.setProperty('--s-' + name, 'url("' + s.uri + '")');
+    if (!s.slice) continue;
+    const [x0, y0, x1, y1] = s.slice;
+    const t = y0, r = s.w - x1, b = s.h - y1, l = x0;
+    const px = [t, r, b, l].map(v => v * U + 'px').join(' ');
+    css += `.n-${name}{border-style:solid;border-width:${px};border-image:var(--s-${name}) ${t} ${r} ${b} ${l} fill / ${px} stretch;image-rendering:pixelated}\n`;
+  }
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+})();
+
+function sprite(img, name, k) {
+  const s = SPRITES[name];
+  k = k || +(img.dataset.k || U);
+  img.dataset.s = name;
+  img.src = s.uri;
+  img.width = s.w * k;
+  img.height = s.h * k;
+  img.alt = '';
+  return img;
+}
+function el(html) { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
+
+// Inventory contents.
+const bagItems = { 0: ['preview_sword', ''], 1: ['preview_ingot', '20'], 2: ['preview_block', '64'], 3: ['preview_potion', '3'], 7: ['icon_gem', '5'], 8: ['preview_block', '12'] };
+const bag = document.getElementById('bag');
+for (let i = 0; i < 24; i++) {
+  const it = bagItems[i];
+  const slot = el('<div class="slot n-slot"></div>');
+  if (it) { slot.appendChild(el('<img data-s="' + it[0] + '"' + (it[0] === 'icon_gem' ? ' data-k="4"' : '') + '>')); if (it[1]) slot.appendChild(el('<span class="count">' + it[1] + '</span>')); }
+  if (i === 0) slot.appendChild(el('<div class="hl n-preview_slot_highlight_gold"></div>'));
+  if (i === 7) slot.appendChild(el('<div class="hl n-preview_slot_highlight_rare"></div>'));
+  bag.appendChild(slot);
+}
+const hotbar = document.getElementById('hotbar');
+const hot = ['preview_sword', 'preview_block', 'preview_potion', 'preview_ingot', '', '', '', '', ''];
+hot.forEach((name, i) => {
+  const slot = el('<div class="slot n-slot"><span class="key">' + (i + 1) + '</span></div>');
+  if (name) slot.appendChild(el('<img data-s="' + name + '">'));
+  if (i === 1) slot.appendChild(el('<div class="hl n-preview_slot_highlight_gold"></div>'));
+  hotbar.appendChild(slot);
+});
+
+// Button states, side by side.
+const states = document.getElementById('states');
+[['green', 'CRAFT'], ['red', 'DROP'], ['tan', 'CANCEL']].forEach(([color, label]) => {
+  [['', 'normal'], ['is-hover', 'hover'], ['is-pressed', 'pressed']].forEach(([cls, cap]) => {
+    states.appendChild(el(`<figure><button class="btn ${color} ${cls}">${label}</button><figcaption>${color} · ${cap}</figcaption></figure>`));
+  });
+});
+states.appendChild(el('<figure><button class="btn off">LOCKED</button><figcaption>disabled</figcaption></figure>'));
+['close', 'close_hover', 'close_pressed'].forEach(n => {
+  const f = el('<figure><div></div><figcaption>' + n + '</figcaption></figure>');
+  f.firstChild.appendChild(sprite(document.createElement('img'), n));
+  states.appendChild(f);
+});
+
+// Catalog of every sprite.
+const catalog = document.getElementById('catalog');
+const groupNames = { window: 'Windows and panels', button: 'Buttons', slot: 'Slots', control: 'Controls', icon: 'Icons', hud: 'HUD' };
+for (const [group, title] of Object.entries(groupNames)) {
+  catalog.appendChild(el('<h3>' + title + '</h3>'));
+  const tiles = el('<div class="tiles"></div>');
+  for (const [name, s] of Object.entries(SPRITES)) {
+    if (s.group !== group) continue;
+    const tile = el('<div class="tile"><div class="art"></div><code>' + name + '</code><div class="meta"></div></div>');
+    tile.querySelector('.art').appendChild(sprite(document.createElement('img'), name));
+    tile.querySelector('.meta').textContent = s.w + '×' + s.h + (s.slice ? ' · slice ' + s.slice.join(', ') : '') + (s.note ? ' · ' + s.note : '');
+    tiles.appendChild(tile);
+  }
+  catalog.appendChild(tiles);
+}
+
+document.querySelectorAll('img[data-s]').forEach(img => { if (!img.src) sprite(img, img.dataset.s); });
+
+// Interactions.
+document.querySelectorAll('img[data-toggle]').forEach(img => {
+  img.style.cursor = 'pointer';
+  img.addEventListener('click', () => {
+    const kind = img.dataset.toggle;
+    sprite(img, img.dataset.s === kind + '_on' ? kind + '_off' : kind + '_on');
+  });
+});
+document.querySelectorAll('[data-group="station"] .btn:not(.off)').forEach(b => b.addEventListener('click', () => {
+  b.parentElement.querySelectorAll('.btn:not(.off)').forEach(o => o.classList.remove('green'));
+  b.classList.add('green');
+}));
+document.querySelectorAll('[data-group="row"] .rowx').forEach(r => {
+  r.addEventListener('mouseenter', () => { if (!r.classList.contains('n-row_selected')) r.className = 'rowx n-row_hover'; });
+  r.addEventListener('mouseleave', () => { if (!r.classList.contains('n-row_selected')) r.className = 'rowx n-row'; });
+  r.addEventListener('click', () => {
+    r.parentElement.querySelectorAll('.rowx').forEach(o => o.className = 'rowx n-row');
+    r.className = 'rowx n-row_selected';
+  });
+});
+document.querySelectorAll('[data-group="tab"] .tab').forEach(t => t.addEventListener('click', () => {
+  t.parentElement.querySelectorAll('.tab').forEach(o => o.className = 'tab n-tab_idle');
+  t.className = 'tab n-tab_active active';
+}));
+let dist = 12;
+document.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => {
+  dist = Math.max(4, Math.min(32, dist + +b.dataset.step));
+  document.getElementById('dist').textContent = dist;
+}));
+document.querySelectorAll('.slider').forEach(sl => {
+  const set = v => {
+    v = Math.max(0, Math.min(100, Math.round(v)));
+    sl.dataset.v = v;
+    sl.querySelector('.fill').style.width = `max(24px, ${v}%)`;
+    sl.querySelector('.knob').style.left = v + '%';
+    sl.parentElement.querySelector('.val').textContent = v + '%';
+  };
+  set(+sl.dataset.v);
+  const at = e => { const r = sl.getBoundingClientRect(); set((e.clientX - r.left) / r.width * 100); };
+  sl.addEventListener('pointerdown', e => { sl.setPointerCapture(e.pointerId); at(e); });
+  sl.addEventListener('pointermove', e => { if (sl.hasPointerCapture(e.pointerId)) at(e); });
+});
+</script>
+</body>
+</html>

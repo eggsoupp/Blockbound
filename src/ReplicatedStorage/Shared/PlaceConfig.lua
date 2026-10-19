@@ -48,9 +48,10 @@ local PlaceConfig = {}
 -- The open world. Also the game's start place.
 PlaceConfig.WorldPlaceId = 127569658424596
 
--- The island place. 0 until an Island place is added to this experience;
--- /island says so rather than attempting a teleport that cannot work.
-PlaceConfig.IslandPlaceId = 0
+-- The island place, "Island" in this experience (added 2026-10-18 as a copy of
+-- the World place, assets and all). Set it to 0 to switch islands off: /island
+-- then says so rather than attempting a teleport that cannot work.
+PlaceConfig.IslandPlaceId = 93541670199012
 
 local KINDS = { World = true, Island = true }
 

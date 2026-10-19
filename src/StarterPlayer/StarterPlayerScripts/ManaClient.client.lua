@@ -37,6 +37,7 @@ local RunService = game:GetService("RunService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local Motion = require(Shared.UI:WaitForChild("Motion"))
+local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local ManaChanged = Remotes.wait("ManaChanged")
@@ -58,20 +59,27 @@ local playerGui = player:WaitForChild("PlayerGui")
 	the one below it ends:
 
 	    the feedback column 270   (Shared.UI.Feedback owns it)
-	    ability cooldowns 176   (AbilityClient HUD.bottom)
-	    THIS              148
-	    health             96   (HealthClient L.bottom)
-	    hotbar                  (authored in the place file)
+	    ability cooldowns 126   (AbilityClient HUD.bottom, up to three 33-tall rows)
+	    THIS               85   (33 tall, so its top is at 118)
+	    health             40   (HealthClient L.bottom, 39 tall)
 
-	Inserting this pushed the two above it up by 26. If it moves again, they
-	move with it.
+	If one moves, the ones above it move with it.
+
+	It is the health bar's wooden frame on a shorter groove, with a blue star
+	over its left end where the health bar has its heart.
 ]]
 local L = {
-	width = 232,
-	height = 20,
+	width = 260,
+	-- The frame's art with a 4-texel groove, at 3px a texel.
+	height = 33,
 	pad = 16,
-	bottom = 148,
+	bottom = 85,
+	-- As the health bar: the frame starts under the star, the fill clear of it.
+	iconInset = 15,
+	iconClear = 10,
 }
+
+local P = Theme.PixelColor
 
 -- Below this fraction the bar turns, the same way the health bar does: it is
 -- the point at which the next ability is no longer a given.
@@ -112,55 +120,63 @@ root.Size = UDim2.fromOffset(L.width, L.height)
 root.BackgroundTransparency = 1
 root.Parent = screen
 
--- The track, matched to the health bar's so the two line up exactly.
-local track = Instance.new("Frame")
+local star = PixelUI.image(root, "icon_mana")
+star.Name = "Icon"
+star.AnchorPoint = Vector2.new(0, 0.5)
+star.Position = UDim2.fromScale(0, 0.5)
+star.ZIndex = 5
+
+-- The wooden bar, the same art as the health bar's so the two line up exactly.
+local track = PixelUI.image(root, "bar_frame")
 track.Name = "Track"
-track.Size = UDim2.fromScale(1, 1)
-track.BackgroundColor3 = Theme.Color.Panel
-track.BackgroundTransparency = 0.15
-track.BorderSizePixel = 0
-track.Parent = root
+track.Position = UDim2.fromOffset(L.iconInset, 0)
+track.Size = UDim2.new(1, -L.iconInset, 1, 0)
 
-local trackStroke = Instance.new("UIStroke")
-trackStroke.Color = Theme.Color.Stroke
-trackStroke.Thickness = 2
-trackStroke.Parent = track
+local grooveLeft, grooveTop, grooveRight, grooveBottom = PixelUI.groove("bar_frame")
+local fillLeft = L.iconInset + grooveLeft + L.iconClear
 
-local fill = Instance.new("Frame")
+local groove = Instance.new("Frame")
+groove.Name = "Groove"
+groove.BackgroundTransparency = 1
+groove.ClipsDescendants = true
+groove.Position = UDim2.fromOffset(fillLeft, grooveTop)
+groove.Size = UDim2.new(1, -(fillLeft + grooveRight), 1, -(grooveTop + grooveBottom))
+groove.ZIndex = 2
+groove.Parent = root
+
+local fill = PixelUI.image(groove, "bar_fill")
 fill.Name = "Fill"
 fill.Size = UDim2.fromScale(1, 1)
-fill.BackgroundColor3 = Theme.Color.Mana
-fill.BorderSizePixel = 0
+fill.ImageColor3 = P.ManaFill
 fill.ZIndex = 2
-fill.Parent = track
 
 --[[
-	The refusal flash, over the fill and across the whole track.
+	The refusal flash, over the fill and across the whole groove.
 
-	Its own frame rather than a colour written onto the fill, because a fill
+	Its own image rather than a colour written onto the fill, because a fill
 	that is nearly empty is nearly invisible - and the one moment this has to be
 	seen is when there is not enough mana, which is exactly then.
 ]]
-local flash = Instance.new("Frame")
+local flash = PixelUI.image(groove, "bar_fill")
 flash.Name = "Flash"
 flash.Size = UDim2.fromScale(1, 1)
-flash.BackgroundColor3 = Theme.Color.Bad
-flash.BackgroundTransparency = 1
-flash.BorderSizePixel = 0
+flash.ImageColor3 = P.BarFlash
+flash.ImageTransparency = 1
 flash.ZIndex = 3
-flash.Parent = track
 
 local amount = Instance.new("TextLabel")
 amount.Name = "Amount"
-amount.Size = UDim2.fromScale(1, 1)
+amount.Position = groove.Position
+amount.Size = groove.Size
 amount.BackgroundTransparency = 1
 amount.FontFace = Theme.Fonts.Number
 amount.TextSize = Theme.TextSize.Small
-amount.TextColor3 = Theme.Color.Text
-amount.TextStrokeTransparency = 0.5
+amount.TextColor3 = P.OnWood
+amount.TextStrokeColor3 = P.Outline
+amount.TextStrokeTransparency = 0
 amount.Text = ""
 amount.ZIndex = 4
-amount.Parent = track
+amount.Parent = root
 
 -- ---------------------------------------------------------------------------
 -- State
@@ -213,7 +229,7 @@ ManaChanged.OnClientEvent:Connect(function(value, max, rate)
 		-- The bar shakes too, once per refusal rather than once per push while
 		-- the flash is still up: red says "no", the shake says "this bar".
 		if denied < 0.5 then
-			Motion.shake(track, 4)
+			Motion.shake(root, 4)
 		end
 		denied = 1
 	end
@@ -246,11 +262,9 @@ RunService.Heartbeat:Connect(function(deltaTime)
 	local fraction = shown / maximum
 
 	fill.Size = UDim2.fromScale(fraction, 1)
-	fill.BackgroundColor3 = if fraction <= LOW_FRACTION
-		then Theme.Color.ManaLow
-		else Theme.Color.Mana
+	fill.ImageColor3 = if fraction <= LOW_FRACTION then P.ManaLow else P.ManaFill
 
-	flash.BackgroundTransparency = 1 - DENIED_FLASH * denied
+	flash.ImageTransparency = 1 - DENIED_FLASH * denied
 
 	--[[
 		Rounded down, so a bar that says 30 can always pay for something costing

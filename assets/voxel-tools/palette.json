@@ -1,0 +1,112 @@
+[
+  {
+    "index": 1,
+    "name": "Iron deep",
+    "hex": "#353635"
+  },
+  {
+    "index": 2,
+    "name": "Iron shadow",
+    "hex": "#4c4e4c"
+  },
+  {
+    "index": 3,
+    "name": "Steel dark",
+    "hex": "#626561"
+  },
+  {
+    "index": 4,
+    "name": "Steel body",
+    "hex": "#81847f"
+  },
+  {
+    "index": 5,
+    "name": "Steel light",
+    "hex": "#9b9f98"
+  },
+  {
+    "index": 6,
+    "name": "Honed edge",
+    "hex": "#b9bdb5"
+  },
+  {
+    "index": 7,
+    "name": "Edge glint",
+    "hex": "#d5d8cd"
+  },
+  {
+    "index": 8,
+    "name": "Steel wear",
+    "hex": "#71756f"
+  },
+  {
+    "index": 9,
+    "name": "Wood deep",
+    "hex": "#503019"
+  },
+  {
+    "index": 10,
+    "name": "Wood shadow",
+    "hex": "#754521"
+  },
+  {
+    "index": 11,
+    "name": "Wood warm",
+    "hex": "#9d632d"
+  },
+  {
+    "index": 12,
+    "name": "Wood body",
+    "hex": "#b58445"
+  },
+  {
+    "index": 13,
+    "name": "Wood light",
+    "hex": "#c99a58"
+  },
+  {
+    "index": 14,
+    "name": "End grain",
+    "hex": "#d5ae6b"
+  },
+  {
+    "index": 15,
+    "name": "Leather deep",
+    "hex": "#3b2417"
+  },
+  {
+    "index": 16,
+    "name": "Leather shadow",
+    "hex": "#623a20"
+  },
+  {
+    "index": 17,
+    "name": "Leather body",
+    "hex": "#885026"
+  },
+  {
+    "index": 18,
+    "name": "Leather edge",
+    "hex": "#ac7036"
+  },
+  {
+    "index": 19,
+    "name": "Brass dark",
+    "hex": "#78602b"
+  },
+  {
+    "index": 20,
+    "name": "Brass body",
+    "hex": "#a28740"
+  },
+  {
+    "index": 21,
+    "name": "Brass light",
+    "hex": "#c3a657"
+  },
+  {
+    "index": 22,
+    "name": "Recess",
+    "hex": "#282a27"
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "file": "livingwood_sword.vox",
+  "format": "MagicaVoxel VOX 150",
+  "dimensions_xyz": [
+    29,
+    13,
+    87
+  ],
+  "voxels": 5269,
+  "connected_components": 1,
+  "roundtrip_identical": true,
+  "rgba_sha256": "da6d3565324efd7feac396935374975b81f3ea30d84797357b6b386ce2671cb1",
+  "used_palette_indices": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ]
+}

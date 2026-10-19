@@ -54,6 +54,7 @@ local ManaService = require(ServerScriptService:WaitForChild("ManaService"))
 local CombatService = require(ServerScriptService:WaitForChild("CombatService"))
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 local GearService = require(ServerScriptService:WaitForChild("GearService"))
+local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 
 local AbilityService = {}
 
@@ -67,6 +68,7 @@ end
 local RequestAbility = Remotes.ensure("RequestAbility", "RemoteEvent")
 local AbilityEffect = Remotes.ensure("AbilityEffect", "RemoteEvent")
 local AbilityTerrain = Remotes.ensure("AbilityTerrain", "RemoteEvent")
+local AbilityImpact = Remotes.ensure("AbilityImpact", "RemoteEvent")
 
 local isInitialized = false
 
@@ -407,6 +409,25 @@ local function onRequest(player: Player, abilityName: any, target: any)
 		return
 	end
 
+	-- Optional ability-specific validation must complete before charging a cast.
+	-- The prepared result stays on the server (e.g. an exposed meteor target).
+	local prepared
+	if type(module.validate) == "function" then
+		local ok, accepted, reason, result = pcall(module.validate, {
+			player = player, character = character, origin = origin, abilityName = abilityName,
+			target = point, definition = definition,
+		})
+		if not ok then
+			warn(string.format("[AbilityService] %s validation errored: %s", abilityName, tostring(accepted)))
+			return
+		end
+		if not accepted then
+			if type(reason) == "string" then CommandFeedback.tell(player, reason, "bad") end
+			return
+		end
+		prepared = result
+	end
+
 	--[[
 		Paid for LAST, after every other reason to refuse has been ruled out.
 
@@ -457,6 +478,7 @@ local function onRequest(player: Player, abilityName: any, target: any)
 
 		origin = origin,
 		target = point,
+		prepared = prepared,
 		-- The whole cast in one number; see SacredRainPlan for why.
 		seed = math.random(1, 2147483647),
 
@@ -483,6 +505,10 @@ local function onRequest(player: Player, abilityName: any, target: any)
 		end,
 		broadcastDebris = function(blocks, centre)
 			broadcast(player,point,{blocks=blocks,centre=centre,startedAt=workspace:GetServerTimeNow()},AbilityTerrain)
+		end,
+		impact = function(payload)
+			payload.ability = abilityName
+			broadcast(player, payload.position or point, payload, AbilityImpact)
 		end,
 	}
 

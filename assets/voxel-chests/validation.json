@@ -1,0 +1,62 @@
+[
+  {
+    "file": "basic_closed.vox",
+    "dimensions": [
+      24,
+      19,
+      18
+    ],
+    "voxel_count": 1970,
+    "validated": true
+  },
+  {
+    "file": "basic_open.vox",
+    "dimensions": [
+      24,
+      24,
+      28
+    ],
+    "voxel_count": 1966,
+    "validated": true
+  },
+  {
+    "file": "mythical_closed.vox",
+    "dimensions": [
+      24,
+      19,
+      20
+    ],
+    "voxel_count": 2023,
+    "validated": true
+  },
+  {
+    "file": "mythical_open.vox",
+    "dimensions": [
+      24,
+      26,
+      28
+    ],
+    "voxel_count": 2019,
+    "validated": true
+  },
+  {
+    "file": "blackish_closed.vox",
+    "dimensions": [
+      24,
+      19,
+      20
+    ],
+    "voxel_count": 2011,
+    "validated": true
+  },
+  {
+    "file": "blackish_open.vox",
+    "dimensions": [
+      24,
+      26,
+      28
+    ],
+    "voxel_count": 2007,
+    "validated": true
+  }
+]

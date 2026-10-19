@@ -1,0 +1,28 @@
+GIMP Palette
+Name: Blockbound Gold Tools
+Columns: 8
+#
+ 70   5  31	01 Burgundy outline
+ 70  37  13	02 Umber deep
+113  59  21	03 Umber
+156  66  41	04 Burnished red
+175  85  16	05 Copper
+149 107   9	06 Gold shadow
+207 124  11	07 Gold ochre
+227 156  13	08 Gold amber
+245 191  34	09 Gold
+255 227  43	10 Gold bright
+255 243  91	11 Gold light
+255 242 171	12 Gold glint
+ 84  37  28	13 Leather dark
+128  53  30	14 Leather
+170  82  42	15 Leather light
+103  17 110	16 Amethyst shadow
+175  19 199	17 Amethyst
+228 110 243	18 Amethyst light
+ 48  55  68	19 Steel shadow
+ 88 100 116	20 Steel
+140 156 172	21 Steel light
+195 208 213	22 Steel glint
+109  89  14	23 Old gold shadow
+161 139  36	24 Old gold

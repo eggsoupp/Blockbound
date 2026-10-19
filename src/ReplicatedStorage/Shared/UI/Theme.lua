@@ -12,25 +12,93 @@ local Theme = {}
 -- Slots
 -- ---------------------------------------------------------------------------
 
---[[
-	The framed square every slot and slot-styled button is drawn with - the
-	inventory, the crafting window. Put on through UI.SlotArt, which draws a
-	plain frame instead if this fails to load, and says so in Output.
-
-	It must be an IMAGE id. Uploading a picture as a Decal gives a Decal id,
-	which a script cannot display: paste that into any ImageLabel's Image in
-	Studio, and Studio swaps it for the image id to put here.
-]]
-Theme.SlotImage = "rbxassetid://90205083529931"
+-- The framed square itself is the pixel kit's "slot" sprite, put on through
+-- UI.SlotArt; its asset id is Theme.Pixel's, below.
 
 -- What a slot measures on a 1080p screen. The inventory scales these to the
 -- real screen (see UI.InventoryLayout); the gap between slots is the difference.
 Theme.SlotSize = 64
 Theme.SlotPitch = 68
 
--- Slicing the framed square lets the same art stretch into wide buttons
--- without smearing the border.
-Theme.SlotSlice = Rect.new(20, 20, 44, 44)
+-- ---------------------------------------------------------------------------
+-- Pixel art
+-- ---------------------------------------------------------------------------
+
+--[[
+	The wood-and-parchment pixel-art kit every window except the Tab menu is
+	drawn with: assets/pixel-ui, put on through Shared.UI.PixelUI.
+
+	THE ART HAS TO BE UPLOADED, AND THESE ARE WHERE ITS IDS GO. Until then, or
+	if an upload ever goes missing, PixelUI draws plain frames in the same
+	colours instead and says so once in Output - nothing vanishes.
+
+	Atlas is the easy way: assets/pixel-ui/atlas/pixel_ui_atlas.png, one upload
+	holding every sprite. Images is per sprite, by name (the file names in
+	assets/pixel-ui/sprites), and wins over the atlas for any sprite it lists -
+	so if a sliced sprite ever draws wrongly off the atlas, uploading just that
+	file and listing it here fixes it alone.
+
+	Both want IMAGE ids. A Decal id will not display: paste it into any
+	ImageLabel's Image in Studio, and Studio swaps it for the image id.
+]]
+Theme.Pixel = {
+	-- assets/pixel-ui/atlas/pixel_ui_atlas.png, group-owned Image. Replaced
+	-- 79592529682718 when the HUD sprites were added; every older sprite sits in
+	-- the same place on both, so either id draws the windows.
+	Atlas = "rbxassetid://107667103182017",
+	Images = {
+		-- button_green = "rbxassetid://...",
+	},
+
+	-- How many screen pixels one texel of the art covers, on a 1080p screen.
+	Scale = 3,
+}
+
+-- Text drawn on the pixel panels. Parchment is light, so its text is dark ink;
+-- wood is dark, so its text is cream.
+Theme.PixelColor = {
+	Ink = Color3.fromRGB(58, 36, 20),
+	InkSoft = Color3.fromRGB(107, 74, 44),
+	InkFaint = Color3.fromRGB(150, 118, 82),
+	Heading = Color3.fromRGB(47, 85, 82),
+	OnWood = Color3.fromRGB(246, 231, 193),
+	OnWoodDim = Color3.fromRGB(205, 178, 138),
+	OnGreen = Color3.fromRGB(18, 48, 31),
+	Good = Color3.fromRGB(42, 133, 83),
+	Bad = Color3.fromRGB(184, 64, 44),
+	-- Good and bad on the dark pills and tooltips.
+	GoodLight = Color3.fromRGB(158, 230, 176),
+	BadLight = Color3.fromRGB(242, 160, 138),
+
+	-- The selection highlight's tint: a warm gold that sits with the wood.
+	Selection = Color3.fromRGB(255, 216, 74),
+
+	-- ImageColor3 for a slot or picture that cannot be used right now. Lighter
+	-- than Theme.Color.Disabled, which would turn parchment to mud.
+	Disabled = Color3.fromRGB(178, 170, 160),
+
+	-- The HUD bars' fills: one white sprite, painted with these as ImageColor3.
+	-- Brighter than the colour they end up, since the sprite's body is a light
+	-- grey and multiplying darkens it.
+	HealthFill = Color3.fromRGB(120, 220, 110),
+	HealthLow = Color3.fromRGB(255, 110, 90),
+	ManaFill = Color3.fromRGB(110, 170, 255),
+	ManaLow = Color3.fromRGB(140, 150, 230),
+	BossFill = Color3.fromRGB(255, 96, 86),
+	-- The streak a hit leaves behind the fill, and the red of a refused cast.
+	BarGhost = Color3.fromRGB(255, 225, 180),
+	BarFlash = Color3.fromRGB(255, 90, 80),
+	-- A bar's wooden frame, tinted for a moment when it is hit.
+	HitFlash = Color3.fromRGB(255, 140, 120),
+	-- Text drawn over the bars: cream, outlined in the frame's dark brown.
+	Outline = Color3.fromRGB(43, 24, 16),
+}
+
+-- Rarity colours are tuned for dark panels; on parchment the light ones (gold,
+-- grey) wash out, so text there takes them a shade darker.
+function Theme.rarityInk(rarity)
+	return Theme.rarityColor(rarity):Lerp(Color3.new(0, 0, 0), 0.35)
+end
 
 --[[
 	THE GAME'S FONT. Put your uploaded font family's asset id here and every

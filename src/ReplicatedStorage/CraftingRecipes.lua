@@ -42,6 +42,11 @@ local CraftingRecipes = {
 		station = "CraftingTable",
 	},
 	Furnace       = { ingredients = { Cobblestone = 8 }, station = "CraftingTable" },
+	BasicChest    = { ingredients = { WoodPlank = 8 }, station = "CraftingTable" },
+	-- Each chest is the one below it, improved: nothing is thrown away by
+	-- moving up a tier.
+	RareChest     = { ingredients = { BasicChest = 1, IronIngot = 6 }, station = "Anvil" },
+	LegendaryChest = { ingredients = { RareChest = 1, MythrilIngot = 4, EssenceShard = 3 }, station = "ArcaneForge" },
 	Anvil         = { ingredients = { IronIngot = 5, Stone = 3 }, station = "CraftingTable" },
 	AlchemyBench  = { ingredients = { WoodPlank = 4, Bottle = 2 }, station = "CraftingTable" },
 

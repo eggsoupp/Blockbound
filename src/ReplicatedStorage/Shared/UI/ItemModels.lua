@@ -141,6 +141,14 @@ function ItemModels.find(itemName: string?): Instance?
 		found = blocks and blocks:FindFirstChild(itemName)
 	end
 
+	-- A placeable station's own model (TerrainAssets.Stations), so a chest
+	-- or a bench in the bag looks like the thing it puts down.
+	if not found then
+		local assets = ReplicatedStorage:FindFirstChild("TerrainAssets")
+		local stations = assets and assets:FindFirstChild("Stations")
+		found = stations and stations:FindFirstChild(itemName)
+	end
+
 	if not found then
 		found = buildFromLook(itemName)
 	end

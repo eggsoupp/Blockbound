@@ -4,9 +4,10 @@
 	The health bar, and the defense readout beside it.
 
 	Roblox's own health GUI is switched off in Initialisation, so this is the
-	only thing telling a player they are being hurt. It is drawn from
-	Shared.UI.Theme, so it reads as part of the same interface as the inventory
-	and the crafting window rather than as a widget bolted onto them.
+	only thing telling a player they are being hurt. It is drawn from the
+	pixel-art kit (Shared.UI.PixelUI) - a wooden bar with a heart on its end -
+	so it reads as part of the same interface as the inventory and the crafting
+	window rather than as a widget bolted onto them.
 
 	IT DISPLAYS, IT DOES NOT DECIDE
 
@@ -28,6 +29,8 @@ local TweenService = game:GetService("TweenService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
+local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
+local PlayerSettings = require(Shared.UI:WaitForChild("PlayerSettings"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local CombatStats = Remotes.wait("CombatStats", 30)
@@ -35,21 +38,34 @@ local CombatStats = Remotes.wait("CombatStats", 30)
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+local P = Theme.PixelColor
+
 -- ---------------------------------------------------------------------------
 -- Layout
 -- ---------------------------------------------------------------------------
 
 local L = {
-	width = 232,
-	height = 26,
+	width = 260,
+	-- The frame's art: a 6-texel groove in a 13-texel bar, at 3px a texel.
+	height = 39,
 	pad = 16,
-	bottom = 96, -- clear of the hotbar
-	labelHeight = 16,
+	-- The bottom of the HUD column; ManaClient stacks on top of this. Low, so
+	-- the ability rows above the mana bar have room to be seen.
+	bottom = 40,
+	-- The frame starts this far in, so the heart can sit over its left end, and
+	-- the fill starts this much further in again, clear of the heart.
+	iconInset = 15,
+	iconClear = 10,
+	-- Between the bar and the defense readout beside it.
+	defenceGap = 8,
 }
 
 -- Below this fraction the bar turns; it is the point where the player should
 -- stop mining and start paying attention.
 local LOW_FRACTION = 0.3
+
+-- How see-through the streak a hit leaves behind the fill is.
+local GHOST_TRANSPARENCY = 0.3
 
 local screen = Instance.new("ScreenGui")
 screen.Name = "HealthUI"
@@ -63,25 +79,35 @@ local root = Instance.new("Frame")
 root.Name = "Health"
 root.AnchorPoint = Vector2.new(0, 1)
 root.Position = UDim2.new(0, L.pad, 1, -L.bottom)
-root.Size = UDim2.fromOffset(L.width, L.height + L.labelHeight + 4)
+root.Size = UDim2.fromOffset(L.width, L.height)
 root.BackgroundTransparency = 1
 root.Parent = screen
 
--- The track. Dark, so an almost-empty bar still reads as a bar rather than as
--- nothing at all.
-local track = Instance.new("Frame")
-track.Name = "Track"
-track.Position = UDim2.fromOffset(0, L.labelHeight + 4)
-track.Size = UDim2.fromOffset(L.width, L.height)
-track.BackgroundColor3 = Theme.Color.Panel
-track.BackgroundTransparency = 0.15
-track.BorderSizePixel = 0
-track.Parent = root
+local heart = PixelUI.image(root, "icon_heart")
+heart.Name = "Icon"
+heart.AnchorPoint = Vector2.new(0, 0.5)
+heart.Position = UDim2.fromScale(0, 0.5)
+heart.ZIndex = 5
 
-local trackStroke = Instance.new("UIStroke")
-trackStroke.Color = Theme.Color.Stroke
-trackStroke.Thickness = 2
-trackStroke.Parent = track
+-- The wooden bar. Its groove is dark, so an almost-empty bar still reads as a
+-- bar rather than as nothing at all.
+local track = PixelUI.image(root, "bar_frame")
+track.Name = "Track"
+track.Position = UDim2.fromOffset(L.iconInset, 0)
+track.Size = UDim2.new(1, -L.iconInset, 1, 0)
+
+-- The fill runs in the groove, and is clipped to it.
+local grooveLeft, grooveTop, grooveRight, grooveBottom = PixelUI.groove("bar_frame")
+local fillLeft = L.iconInset + grooveLeft + L.iconClear
+
+local groove = Instance.new("Frame")
+groove.Name = "Groove"
+groove.BackgroundTransparency = 1
+groove.ClipsDescendants = true
+groove.Position = UDim2.fromOffset(fillLeft, grooveTop)
+groove.Size = UDim2.new(1, -(fillLeft + grooveRight), 1, -(grooveTop + grooveBottom))
+groove.ZIndex = 2
+groove.Parent = root
 
 --[[
 	The trailing bar.
@@ -91,58 +117,73 @@ trackStroke.Parent = track
 	legible: the size of the gap IS the size of the hit, with no numbers to
 	read.
 ]]
-local ghost = Instance.new("Frame")
+local ghost = PixelUI.image(groove, "bar_fill")
 ghost.Name = "Ghost"
 ghost.Size = UDim2.fromScale(1, 1)
-ghost.BackgroundColor3 = Theme.Color.Bad
-ghost.BackgroundTransparency = 0.55
-ghost.BorderSizePixel = 0
-ghost.ZIndex = 2
-ghost.Parent = track
+ghost.ImageColor3 = P.BarGhost
+ghost.ImageTransparency = GHOST_TRANSPARENCY
+ghost.ZIndex = 1
 
-local fill = Instance.new("Frame")
+local fill = PixelUI.image(groove, "bar_fill")
 fill.Name = "Fill"
 fill.Size = UDim2.fromScale(1, 1)
-fill.BackgroundColor3 = Theme.Color.Good
-fill.BorderSizePixel = 0
-fill.ZIndex = 3
-fill.Parent = track
+fill.ImageColor3 = P.HealthFill
+fill.ZIndex = 2
 
 local amount = Instance.new("TextLabel")
 amount.Name = "Amount"
 amount.BackgroundTransparency = 1
-amount.Size = UDim2.fromScale(1, 1)
+amount.Position = groove.Position
+amount.Size = groove.Size
 amount.FontFace = Theme.Fonts.Number
 amount.TextSize = Theme.TextSize.Body
-amount.TextColor3 = Theme.Color.Text
-amount.TextStrokeTransparency = 0.5
+amount.TextColor3 = P.OnWood
+amount.TextStrokeColor3 = P.Outline
+amount.TextStrokeTransparency = 0
 amount.Text = ""
 amount.ZIndex = 4
-amount.Parent = track
+amount.Parent = root
 
-local caption = Instance.new("TextLabel")
-caption.Name = "Caption"
-caption.BackgroundTransparency = 1
-caption.Size = UDim2.fromOffset(L.width, L.labelHeight)
-caption.FontFace = Theme.Fonts.Body
-caption.TextSize = Theme.TextSize.Small
-caption.TextColor3 = Theme.Color.TextDim
-caption.TextXAlignment = Enum.TextXAlignment.Left
-caption.Text = "HEALTH"
-caption.Parent = root
+--[[
+	Defense, beside the bar: a shield on the end of one of the kit's dark pills.
+	Hidden while it is zero, because it only matters when it is not.
+]]
+local defence = Instance.new("Frame")
+defence.Name = "Defence"
+defence.BackgroundTransparency = 1
+defence.AnchorPoint = Vector2.new(0, 0.5)
+defence.Position = UDim2.new(0, L.pad + L.width + L.defenceGap, 1, -(L.bottom + L.height / 2))
+defence.Size = PixelUI.size("icon_shield")
+defence.Visible = false
+defence.Parent = screen
 
--- Defense, right-aligned on the same line as the caption. Quiet by default,
--- because it only matters when it is not zero.
+local shield = PixelUI.image(defence, "icon_shield")
+shield.Name = "Icon"
+shield.ZIndex = 2
+
+local pill = PixelUI.image(defence, "badge")
+pill.Name = "Pill"
+pill.AnchorPoint = Vector2.new(0, 0.5)
+-- Tucked under the shield's right edge, like the heart over the bar.
+pill.Position = UDim2.new(0, shield.Size.X.Offset - 12, 0.5, 0)
+pill.Size = UDim2.fromOffset(0, PixelUI.get("badge").size.Y * PixelUI.Scale)
+pill.AutomaticSize = Enum.AutomaticSize.X
+
+local pillPadding = Instance.new("UIPadding")
+pillPadding.PaddingLeft = UDim.new(0, 18)
+pillPadding.PaddingRight = UDim.new(0, 12)
+pillPadding.Parent = pill
+
 local defenceLabel = Instance.new("TextLabel")
-defenceLabel.Name = "Defence"
+defenceLabel.Name = "Label"
 defenceLabel.BackgroundTransparency = 1
-defenceLabel.Size = UDim2.fromOffset(L.width, L.labelHeight)
-defenceLabel.FontFace = Theme.Fonts.Body
+defenceLabel.Size = UDim2.fromScale(0, 1)
+defenceLabel.AutomaticSize = Enum.AutomaticSize.X
+defenceLabel.FontFace = Theme.Fonts.Number
 defenceLabel.TextSize = Theme.TextSize.Small
-defenceLabel.TextColor3 = Theme.Color.TextFaint
-defenceLabel.TextXAlignment = Enum.TextXAlignment.Right
+defenceLabel.TextColor3 = P.OnWood
 defenceLabel.Text = ""
-defenceLabel.Parent = root
+defenceLabel.Parent = pill
 
 -- ---------------------------------------------------------------------------
 -- Hit feedback
@@ -196,24 +237,35 @@ local edges = {
 	makeEdge(UDim2.fromScale(EDGE, 1), UDim2.fromScale(1 - EDGE, 0), 0),
 }
 
+local DAMAGE_HEIGHT = 24
+local DAMAGE_RISE = 34
+
 --[[
-	The number that was just taken, thrown up beside the bar.
+	The number that was just taken, thrown up beside the bar - past the defense
+	readout when that is showing.
 
 	Deliberately not centred on the screen: the damage number and the bar it
 	came out of belong together, and a number in the middle of the view is one
 	more thing covering the world.
 ]]
 local function popDamageNumber(damage)
+	local x = L.pad + L.width + 10
+	if defence.Visible then
+		x = pill.AbsolutePosition.X + pill.AbsoluteSize.X - screen.AbsolutePosition.X + 10
+	end
+	local bottom = L.bottom + (L.height - DAMAGE_HEIGHT) / 2
+
 	local label = Instance.new("TextLabel")
 	label.Name = "Damage"
 	label.BackgroundTransparency = 1
 	label.AnchorPoint = Vector2.new(0, 1)
-	label.Position = UDim2.new(0, L.pad + L.width + 10, 1, -L.bottom)
-	label.Size = UDim2.fromOffset(80, 24)
+	label.Position = UDim2.new(0, x, 1, -bottom)
+	label.Size = UDim2.fromOffset(80, DAMAGE_HEIGHT)
 	label.FontFace = Theme.Fonts.Number
 	label.TextSize = Theme.TextSize.Heading
-	label.TextColor3 = Theme.Color.Bad
-	label.TextStrokeTransparency = 0.4
+	label.TextColor3 = P.HealthLow
+	label.TextStrokeColor3 = P.Outline
+	label.TextStrokeTransparency = 0
 	label.TextXAlignment = Enum.TextXAlignment.Left
 	label.Text = string.format("-%d", damage)
 	label.Parent = screen
@@ -222,7 +274,7 @@ local function popDamageNumber(damage)
 		label,
 		TweenInfo.new(0.75, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 		{
-			Position = UDim2.new(0, L.pad + L.width + 10, 1, -L.bottom - 34),
+			Position = UDim2.new(0, x, 1, -bottom - DAMAGE_RISE),
 			TextTransparency = 1,
 			TextStrokeTransparency = 1,
 		}
@@ -240,21 +292,28 @@ end
 	Scaled against a full quarter of the player's health so that a slime's bump
 	and a slime's lunge do not look the same. A hit that takes a quarter of you
 	should be alarming; one that takes two points should be a flicker.
+
+	Both halves can be switched off in the settings window (Shared.UI.
+	PlayerSettings: hitFlash and damageNumbers). The bar itself always moves.
 ]]
 local function flashDamage(damage, maxHealth)
 	local severity = math.clamp(damage / math.max(1, (maxHealth or 100) * 0.25), 0.15, 1)
 	local peak = 1 - severity * 0.55
 
-	for _, strip in ipairs(edges) do
-		strip.BackgroundTransparency = peak
-		TweenService:Create(
-			strip,
-			TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-			{ BackgroundTransparency = 1 }
-		):Play()
+	if PlayerSettings.get("hitFlash") then
+		for _, strip in ipairs(edges) do
+			strip.BackgroundTransparency = peak
+			TweenService:Create(
+				strip,
+				TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+				{ BackgroundTransparency = 1 }
+			):Play()
+		end
 	end
 
-	popDamageNumber(damage)
+	if PlayerSettings.get("damageNumbers") then
+		popDamageNumber(damage)
+	end
 end
 
 -- ---------------------------------------------------------------------------
@@ -266,11 +325,13 @@ local ghostTween = nil
 
 local function setDefence(defense, reduction)
 	if not defense or defense <= 0 then
+		defence.Visible = false
 		defenceLabel.Text = ""
 		return
 	end
 
 	defenceLabel.Text = string.format("DEF %d  -%d%%", defense, math.floor((reduction or 0) * 100 + 0.5))
+	defence.Visible = true
 end
 
 local function render(health, maxHealth, hit)
@@ -283,7 +344,7 @@ local function render(health, maxHealth, hit)
 
 	amount.Text = string.format("%d / %d", math.floor(health + 0.5), math.floor(maxHealth + 0.5))
 
-	fill.BackgroundColor3 = if fraction <= LOW_FRACTION then Theme.Color.Bad else Theme.Color.Good
+	fill.ImageColor3 = if fraction <= LOW_FRACTION then P.HealthLow else P.HealthFill
 
 	TweenService:Create(fill, Theme.Tween.Hover, {
 		Size = UDim2.fromScale(fraction, 1),
@@ -309,11 +370,11 @@ local function render(health, maxHealth, hit)
 	end
 
 	if hit and hit > 0 then
-		-- A flash on the frame rather than on the bar, so it reads at the edge
-		-- of vision without hiding the number.
-		trackStroke.Color = Theme.Color.Bad
-		TweenService:Create(trackStroke, Theme.Tween.Fade, {
-			Color = Theme.Color.Stroke,
+		-- The wooden frame flushes red and fades back, so the hit reads at the
+		-- edge of vision without hiding the number.
+		track.ImageColor3 = P.HitFlash
+		TweenService:Create(track, Theme.Tween.Fade, {
+			ImageColor3 = Color3.new(1, 1, 1),
 		}):Play()
 	end
 end

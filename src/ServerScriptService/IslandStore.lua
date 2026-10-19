@@ -24,6 +24,11 @@
 	    stations = { { id = "Workbench", x = 3, y = 38, z = -2 }, ... },
 	  }
 
+	A storage station (a chest) also carries `items = { { slot, name, count },
+	... }` when it holds anything, and `facing` (quarter turns, 1 to 3) when
+	it was turned to face its placer. Both optional, so a record from before
+	chests loads exactly as it did.
+
 	Only what players CHANGED. The island itself is a template every island
 	shares (see IslandConfig), so a fresh island is an empty snapshot and a
 	busy one is a few thousand entries.
@@ -260,6 +265,44 @@ local function isInteger(value)
 end
 
 --[[
+	A storage station's contents, as stored: a list of { slot, name, count }.
+	Returns the entries that are shaped right, and how many were not - which
+	are dropped and counted, never allowed to stop the rest of the island
+	loading. Absent is simply empty.
+]]
+local MAX_STORED_SLOTS = 99
+local MAX_STORED_COUNT = 9999
+
+-- A station's quarter turns, 0 to 3: which way a chest was turned to face
+-- whoever placed it. Absent is 0.
+local function isFacing(value)
+	return isInteger(value) and value >= 0 and value <= 3
+end
+
+local function cleanItems(list)
+	local items = {}
+	local bad = 0
+	if type(list) ~= "table" then
+		return items, 0
+	end
+	for _, record in ipairs(list) do
+		local slot = type(record) == "table" and record[1]
+		local name = type(record) == "table" and record[2]
+		local count = type(record) == "table" and record[3]
+		if
+			isInteger(slot) and slot >= 1 and slot <= MAX_STORED_SLOTS
+			and type(name) == "string" and name ~= "" and #name <= 64
+			and isInteger(count) and count >= 1 and count <= MAX_STORED_COUNT
+		then
+			items[#items + 1] = { slot, name, count }
+		else
+			bad += 1
+		end
+	end
+	return items, bad
+end
+
+--[[
 	Snapshot -> the table that goes into the DataStore.
 
 	Returns the payload and how many entries had to be dropped because they
@@ -320,7 +363,16 @@ function IslandStore.encode(snapshot, floorY, templateVersion)
 			type(station.id) == "string"
 			and isInteger(station.x) and isInteger(station.y) and isInteger(station.z)
 		then
-			stations[#stations + 1] = { id = station.id, x = station.x, y = station.y, z = station.z }
+			local record = { id = station.id, x = station.x, y = station.y, z = station.z }
+			local items, bad = cleanItems(station.items)
+			skipped += bad
+			if #items > 0 then
+				record.items = items
+			end
+			if isFacing(station.facing) and station.facing ~= 0 then
+				record.facing = station.facing
+			end
+			stations[#stations + 1] = record
 		else
 			skipped += 1
 		end
@@ -411,11 +463,15 @@ function IslandStore.decode(record)
 				and type(station.id) == "string"
 				and isInteger(station.x) and isInteger(station.y) and isInteger(station.z)
 			then
+				local items, bad = cleanItems(station.items)
+				problems += bad
 				table.insert(snapshot.stations, {
 					id = station.id,
 					x = station.x,
 					y = station.y,
 					z = station.z,
+					items = if #items > 0 then items else nil,
+					facing = if isFacing(station.facing) then station.facing else nil,
 				})
 			else
 				problems += 1

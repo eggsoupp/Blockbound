@@ -3116,4 +3116,8 @@ end
 	EnemyDrops inventory items.
 ]]
 
+-- Where the fight changes, as health fractions, for the boss bar's markers
+-- (BossService sends it): three stages.
+SlimeEmperor.phases = Tuning.phaseAt
+
 return SlimeEmperor

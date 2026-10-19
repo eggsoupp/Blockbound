@@ -1,0 +1,26 @@
+GIMP Palette
+Name: Blockbound Iron Oak Leather
+Columns: 6
+#
+ 53  54  53 Iron deep
+ 76  78  76 Iron shadow
+ 98 101  97 Steel dark
+129 132 127 Steel body
+155 159 152 Steel light
+185 189 181 Honed edge
+213 216 205 Edge glint
+113 117 111 Steel wear
+ 80  48  25 Wood deep
+117  69  33 Wood shadow
+157  99  45 Wood warm
+181 132  69 Wood body
+201 154  88 Wood light
+213 174 107 End grain
+ 59  36  23 Leather deep
+ 98  58  32 Leather shadow
+136  80  38 Leather body
+172 112  54 Leather edge
+120  96  43 Brass dark
+162 135  64 Brass body
+195 166  87 Brass light
+ 40  42  39 Recess

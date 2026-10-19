@@ -87,6 +87,24 @@ EnemyDrops.Tables = {
 	ServantEye = {
 		{ item = "Herb", chance = 0.25, min = 1, max = 1 },
 	},
+
+	--[[
+		The Eater of Worlds drops the Corruption's ore and its own scales; this
+		drops what it has been eating its way through - deep ore and the
+		game's magic material, always, and now and then a shard of the void it
+		came up from. A step up from the All Seeing Eye.
+	]]
+	Blightborer = {
+		{ item = "MythrilOre", chance = 1, min = 6, max = 12 },
+		{ item = "EssenceShard", chance = 1, min = 5, max = 9 },
+		{ item = "VoidCrystal", chance = 0.35, min = 1, max = 2 },
+	},
+
+	-- Its brood, which it makes a lot of: now and then a scrap of leather.
+	Blightling = {
+		{ item = "Leather", chance = 0.2, min = 1, max = 1 },
+		{ item = "EssenceShard", chance = 0.04, min = 1, max = 1 },
+	},
 }
 
 --[[

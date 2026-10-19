@@ -22,6 +22,8 @@
 ]]
 
 return {
-	-- 3712344063 is a Developer Product; replace with a published Pass ID.
-	AbilityStoragePassId = 0,
+	-- The "+3 ability storage" Game Pass of this experience (a Pass, not a
+	-- Developer Product: UserOwnsGamePassAsync can only answer for a Pass).
+	-- It has to be switched on for sale on the Creator Dashboard to be bought.
+	AbilityStoragePassId = 2040735675,
 }

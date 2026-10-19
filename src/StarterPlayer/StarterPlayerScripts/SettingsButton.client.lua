@@ -1,24 +1,29 @@
 --[[
 	SettingsButton
 
-	The gear in the topbar, next to Roblox's own chat button, and the small menu
-	it opens: sound on or off, and view distance.
+	The gear in the topbar, next to Roblox's own chat button, and the settings
+	window it opens: audio, view distance and the combat feedback options.
 
 	WHY IT IS NOT IN THE TAB MENU
 
-	Because those two are the settings a player changes WHILE PLAYING - sound
+	Because these are the settings a player changes WHILE PLAYING - sound
 	because somebody walked into the room, view distance because the frame rate
-	dropped - and both of those are worse moments to be dropped into a modal
-	menu that stops you moving and swings the camera. The Tab menu is where you
-	go to look at your abilities; this is where you go to turn the music off.
+	dropped - and both of those are worse moments to be dropped into a menu that
+	stops you moving and swings the camera. The Tab menu is where you go to look
+	at your abilities; this is where you go to turn the music off. So the
+	window does not lock movement, and closes on Esc, on its cross, on the gear,
+	or on a click outside it.
 
-	IT IS BUILT TO LOOK LIKE ROBLOX'S OWN
+	THE BUTTON LOOKS LIKE ROBLOX'S OWN; THE WINDOW LOOKS LIKE THE GAME'S
 
-	Same size and spacing as the core topbar buttons, the same translucent black
-	rounded square, the same white glyph, and the panel under it is the dark
-	rounded card with light dividers that Roblox's own menus use. The gear is
-	drawn from Frames rather than being an image, like every other icon in this
-	game - see Shared.UI.MenuBackdrop for the same idea at a larger scale.
+	The gear is chrome in Roblox's topbar, so it matches the core buttons beside
+	it: same size and spacing, the same translucent black rounded square, the
+	same white glyph, drawn from Frames rather than being an image. The window
+	it opens is the game's, so it is drawn from the pixel-art kit like every
+	other window (Shared.UI.PixelUI): a wooden frame and its green title banner,
+	and on parchment inside it, a row per setting - a gold marker, its name, a
+	line on what it does, and its control on the right with its default under
+	it.
 
 	WHERE IT SITS IS ASKED FOR, NOT GUESSED
 
@@ -28,13 +33,20 @@
 	and it changes. The inset is also watched, because it moves when the chat
 	button appears and disappears.
 
+	THE VALUES LIVE IN Shared.UI.PlayerSettings
+
+	This file only draws them and changes them through PlayerSettings, which
+	applies each one and saves it with the player. The window follows
+	PlayerSettings.Changed rather than its own last click, so it is right when
+	the saved values arrive after it was drawn.
+
 	VIEW DISTANCE IS THE SERVER'S ANSWER, NOT THE CLICK
 
 	The number displayed is always the one the SERVER confirmed, never the one
 	the player just clicked - it decides how much terrain the server generates
-	and holds on this player's behalf. Pressing + shows nothing until the reply
-	lands, which is correct: it means the readout can never claim a distance
-	that is not actually loaded.
+	and holds on this player's behalf. Pressing an arrow shows nothing until the
+	reply lands, which is correct: it means the readout can never claim a
+	distance that is not actually loaded. The server saves it too.
 ]]
 
 local Players = game:GetService("Players")
@@ -45,15 +57,21 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
+local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
+local Motion = require(Shared.UI:WaitForChild("Motion"))
+local MenuState = require(Shared.UI:WaitForChild("MenuState"))
+local PlayerSettings = require(Shared.UI:WaitForChild("PlayerSettings"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
-local Music = require(Shared.Audio:WaitForChild("Music"))
 
 local RequestViewDistance = Remotes.wait("RequestViewDistance")
 local ViewDistanceChanged = Remotes.wait("ViewDistanceChanged")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
+
+local P = Theme.PixelColor
+local MENU_NAME = "Settings"
 
 -- ---------------------------------------------------------------------------
 -- Look
@@ -70,27 +88,47 @@ local BUTTON_CORNER = 8
 local BUTTON_TRANSPARENCY = 0.5
 local BUTTON_HOVER_TRANSPARENCY = 0.3
 
-local PANEL_WIDTH = 268
-local PANEL_TOP_GAP = 6
-local PANEL_PAD = 12
-local PANEL_ROW_HEIGHT = 44
-local PANEL_CORNER = 10
-local PANEL_TRANSPARENCY = 0.08
+-- The window, in pixels on a 1080p screen. A UIScale fits it to the real one.
+local L = {
+	width = 780,
+	height = 700,
+	-- Clear of the frame art's border, and the header row under the banner.
+	pad = 30,
+	headerHeight = 66,
 
--- The pill toggle: Roblox's own is about this shape.
-local TOGGLE_WIDTH = 44
-local TOGGLE_HEIGHT = 24
-local TOGGLE_KNOB = 18
+	sectionHeight = 40,
+	rowHeight = 80,
+	accentWidth = 6,
+	controlsWidth = 336,
 
-local STEP_SIZE = 26
+	button = 36,
+	sliderWidth = 168,
+	valueWidth = 64,
+	stepperBox = 96,
+}
 
-local VOLUME_WIDTH = 108
-local VOLUME_HEIGHT = 6
-local VOLUME_KNOB = 14
+local DESIGN_HEIGHT = 1080
+local MIN_SCALE = 0.5
 
--- Fractions of a view-distance step. The server owns the real bounds and sends
+-- One press of a volume button, and how finely a drag settles.
+local VOLUME_STEP = 0.05
+local VOLUME_DRAG_STEP = 0.01
+
+-- One press of a view distance arrow. The server owns the bounds and sends
 -- them, so this is only the size of one press.
 local DISTANCE_STEP = 1
+
+-- The volume fill is a sliced sprite, never drawn narrower than its two ends.
+local FILL_MIN = 6 * PixelUI.Scale
+
+-- The rule behind a section's name, and the parchment the name is printed
+-- on, which masks the rule where the name crosses it.
+local RULE_COLOR = Color3.fromRGB(168, 124, 76)
+local PARCHMENT = Color3.fromRGB(239, 220, 174)
+local ACCENT = Color3.fromRGB(214, 160, 52)
+
+-- An arrow with nowhere left to go.
+local ARROW_SPENT_TRANSPARENCY = 0.6
 
 local screen = Instance.new("ScreenGui")
 screen.Name = "SettingsButton"
@@ -119,6 +157,8 @@ button.Size = UDim2.fromOffset(BUTTON_SIZE, BUTTON_SIZE)
 button.BackgroundColor3 = Color3.new(0, 0, 0)
 button.BackgroundTransparency = BUTTON_TRANSPARENCY
 button.BorderSizePixel = 0
+-- Over the window's dimmed backdrop, so it can close what it opened.
+button.ZIndex = 3
 button.Parent = screen
 
 local buttonCorner = Instance.new("UICorner")
@@ -143,7 +183,6 @@ local function buildGear(parent: Instance)
 	field.BackgroundTransparency = 1
 	field.Parent = parent
 
-	local teeth = {}
 	for index = 1, 8 do
 		local angle = (index - 1) * (math.pi * 2 / 8)
 
@@ -158,8 +197,6 @@ local function buildGear(parent: Instance)
 		tooth.BackgroundColor3 = Color3.new(1, 1, 1)
 		tooth.BorderSizePixel = 0
 		tooth.Parent = field
-
-		table.insert(teeth, tooth)
 	end
 
 	local ring = Instance.new("Frame")
@@ -183,10 +220,6 @@ local function buildGear(parent: Instance)
 end
 
 buildGear(button)
-
--- ---------------------------------------------------------------------------
--- Where it sits
--- ---------------------------------------------------------------------------
 
 --[[
 	The bar's height, with a floor under it.
@@ -221,320 +254,335 @@ place()
 GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(place)
 
 -- ---------------------------------------------------------------------------
--- The panel
+-- The window
 -- ---------------------------------------------------------------------------
 
-local panel = Instance.new("Frame")
+-- A light dim behind the window. A click on it closes the window; a click on
+-- the window never reaches it.
+local backdrop = Instance.new("TextButton")
+backdrop.Name = "Backdrop"
+backdrop.Text = ""
+backdrop.AutoButtonColor = false
+backdrop.Size = UDim2.fromScale(1, 1)
+backdrop.BackgroundColor3 = Theme.Color.Backdrop
+backdrop.BackgroundTransparency = 1
+backdrop.BorderSizePixel = 0
+backdrop.Visible = false
+backdrop.ZIndex = 1
+backdrop.Parent = screen
+
+local BACKDROP_TRANSPARENCY = 0.65
+
+local root = Instance.new("Frame")
+root.Name = "Root"
+root.AnchorPoint = Vector2.new(0.5, 0.5)
+root.Position = UDim2.fromScale(0.5, 0.5)
+root.Size = UDim2.fromOffset(L.width, L.height)
+root.BackgroundTransparency = 1
+root.Visible = false
+root.ZIndex = 2
+root.Parent = screen
+
+local rootScale = Instance.new("UIScale")
+rootScale.Parent = root
+
+local window = PixelUI.image(root, "frame_wood")
+window.Name = "Window"
+window.AnchorPoint = Vector2.new(0.5, 0.5)
+window.Position = UDim2.fromScale(0.5, 0.5)
+window.Size = UDim2.fromScale(1, 1)
+
+local banner = PixelUI.header(window, "SETTINGS")
+banner.Position = UDim2.new(0.5, 0, 0, 0)
+banner.ZIndex = 3
+
+local closeButton = PixelUI.closeButton(window)
+closeButton.Position = UDim2.new(1, -14, 0, 14)
+closeButton.ZIndex = 3
+
+local hint = Instance.new("TextLabel")
+hint.Name = "KeyHint"
+hint.BackgroundTransparency = 1
+hint.AnchorPoint = Vector2.new(1, 0.5)
+hint.Position = UDim2.new(1, -L.pad, 0, 24 + (L.headerHeight - 24) / 2)
+hint.Size = UDim2.fromOffset(200, 18)
+hint.FontFace = Theme.Fonts.Body
+hint.TextSize = Theme.TextSize.Small
+hint.TextColor3 = P.OnWoodDim
+hint.TextXAlignment = Enum.TextXAlignment.Right
+hint.Text = "Esc to close"
+hint.Parent = window
+
+local panel = PixelUI.image(window, "inset_parchment")
 panel.Name = "Panel"
-panel.AnchorPoint = Vector2.new(0, 0)
-panel.Size = UDim2.fromOffset(PANEL_WIDTH, 0)
-panel.AutomaticSize = Enum.AutomaticSize.Y
-panel.BackgroundColor3 = Theme.Color.Panel
-panel.BackgroundTransparency = PANEL_TRANSPARENCY
-panel.BorderSizePixel = 0
-panel.Visible = false
-panel.Parent = screen
+panel.Position = UDim2.fromOffset(L.pad, L.headerHeight)
+panel.Size = UDim2.new(1, -L.pad * 2, 1, -(L.headerHeight + L.pad))
 
-local panelCorner = Instance.new("UICorner")
-panelCorner.CornerRadius = UDim.new(0, PANEL_CORNER)
-panelCorner.Parent = panel
+local insetLeft, insetTop, insetRight, insetBottom = PixelUI.border("inset_parchment")
 
-local panelStroke = Instance.new("UIStroke")
-panelStroke.Color = Theme.Color.Stroke
-panelStroke.Thickness = 1
-panelStroke.Transparency = 0.4
-panelStroke.Parent = panel
+local list = Instance.new("ScrollingFrame")
+list.Name = "List"
+list.BackgroundTransparency = 1
+list.BorderSizePixel = 0
+list.Position = UDim2.fromOffset(insetLeft, insetTop)
+list.Size = UDim2.new(1, -(insetLeft + insetRight), 1, -(insetTop + insetBottom))
+list.CanvasSize = UDim2.new()
+list.AutomaticCanvasSize = Enum.AutomaticSize.Y
+list.ScrollingDirection = Enum.ScrollingDirection.Y
+list.Parent = panel
+PixelUI.styleScrollBar(list)
 
-local panelPadding = Instance.new("UIPadding")
-panelPadding.PaddingTop = UDim.new(0, PANEL_PAD)
-panelPadding.PaddingBottom = UDim.new(0, PANEL_PAD)
-panelPadding.PaddingLeft = UDim.new(0, PANEL_PAD)
-panelPadding.PaddingRight = UDim.new(0, PANEL_PAD)
-panelPadding.Parent = panel
+local listLayout = Instance.new("UIListLayout")
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Parent = list
 
-local panelLayout = Instance.new("UIListLayout")
-panelLayout.FillDirection = Enum.FillDirection.Vertical
-panelLayout.SortOrder = Enum.SortOrder.LayoutOrder
-panelLayout.Parent = panel
+local listPadding = Instance.new("UIPadding")
+listPadding.PaddingLeft = UDim.new(0, 12)
+listPadding.PaddingRight = UDim.new(0, 18)
+listPadding.PaddingTop = UDim.new(0, 4)
+listPadding.PaddingBottom = UDim.new(0, 10)
+listPadding.Parent = list
 
-local rowCount = 0
+local layoutOrder = 0
+local function nextOrder(): number
+	layoutOrder += 1
+	return layoutOrder
+end
 
---[[
-	A labelled row, and the space on its right for whatever controls it.
-
-	Adding a setting is a call to this and then whatever control it needs built
-	into the row it hands back. The panel sizes itself to its contents.
-]]
-local function addRow(text: string): Frame
-	rowCount += 1
-
-	if rowCount > 1 then
-		local divider = Instance.new("Frame")
-		divider.LayoutOrder = rowCount * 10 - 1
-		divider.Size = UDim2.new(1, 0, 0, 1)
-		divider.BackgroundColor3 = Theme.Color.Divider
-		divider.BorderSizePixel = 0
-		divider.Parent = panel
-	end
-
-	local row = Instance.new("Frame")
-	row.Name = text
-	row.LayoutOrder = rowCount * 10
-	row.Size = UDim2.new(1, 0, 0, PANEL_ROW_HEIGHT)
-	row.BackgroundTransparency = 1
-	row.Parent = panel
-
+local function text(parent: Instance, name: string, font: Font, size: number, color: Color3): TextLabel
 	local label = Instance.new("TextLabel")
-	label.AnchorPoint = Vector2.new(0, 0.5)
-	label.Position = UDim2.fromScale(0, 0.5)
-	label.Size = UDim2.new(0.5, 0, 1, 0)
+	label.Name = name
 	label.BackgroundTransparency = 1
-	label.FontFace = Theme.Fonts.Body
-	label.TextSize = Theme.TextSize.Body
+	label.FontFace = font
+	label.TextSize = size
+	label.TextColor3 = color
 	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.TextColor3 = Theme.Color.Text
-	label.Text = text
-	label.Parent = row
-
-	return row
+	label.Text = ""
+	label.Parent = parent
+	return label
 end
 
--- ---------------------------------------------------------------------------
--- Sound
--- ---------------------------------------------------------------------------
-
---[[
-	One switch for everything audible.
-
-	Muting is done by remembering the music volume and setting it to zero rather
-	than by a flag every play site would have to check - so nothing else in the
-	game needs to know this switch exists, and unmuting puts the volume back
-	exactly where the player had left the slider.
-
-	Sounds.MasterVolume covers the effects, which are read per play, so it takes
-	effect on the next sound rather than cutting one already in the air. That is
-	the right behaviour for a mute: it stops the noise, it does not clip it.
-]]
-local soundOn = true
-local mutedMusicVolume = nil
-
-local soundRow = addRow("Sound")
-
-local toggle = Instance.new("TextButton")
-toggle.Name = "Toggle"
-toggle.Text = ""
-toggle.AutoButtonColor = false
-toggle.AnchorPoint = Vector2.new(1, 0.5)
-toggle.Position = UDim2.fromScale(1, 0.5)
-toggle.Size = UDim2.fromOffset(TOGGLE_WIDTH, TOGGLE_HEIGHT)
-toggle.BackgroundColor3 = Theme.Color.Good
-toggle.BorderSizePixel = 0
-toggle.Parent = soundRow
-
-local toggleCorner = Instance.new("UICorner")
-toggleCorner.CornerRadius = UDim.new(1, 0)
-toggleCorner.Parent = toggle
-
-local knob = Instance.new("Frame")
-knob.Name = "Knob"
-knob.AnchorPoint = Vector2.new(0.5, 0.5)
-knob.Size = UDim2.fromOffset(TOGGLE_KNOB, TOGGLE_KNOB)
-knob.BackgroundColor3 = Color3.new(1, 1, 1)
-knob.BorderSizePixel = 0
-knob.Parent = toggle
-
-local knobCorner = Instance.new("UICorner")
-knobCorner.CornerRadius = UDim.new(1, 0)
-knobCorner.Parent = knob
-
-local function drawToggle(animate: boolean)
-	local slide = if soundOn then 1 else 0
-	local goal = {
-		Position = UDim2.new(
-			slide, (if soundOn then -1 else 1) * (TOGGLE_KNOB * 0.5 + 3), 0.5, 0
-		),
-	}
-
-	if animate then
-		TweenService:Create(knob, Theme.Tween.Hover, goal):Play()
-		TweenService:Create(toggle, Theme.Tween.Hover, {
-			BackgroundColor3 = if soundOn then Theme.Color.Good else Theme.Color.Stroke,
-		}):Play()
-	else
-		knob.Position = goal.Position
-		toggle.BackgroundColor3 = if soundOn then Theme.Color.Good else Theme.Color.Stroke
-	end
+local function percent(value: number): string
+	return string.format("%d%%", math.floor(value * 100 + 0.5))
 end
 
-local function setSound(on: boolean)
-	if on == soundOn then
-		return
-	end
-	soundOn = on
+-- A section's name over a rule running the width of the list.
+local function section(title: string)
+	local holder = Instance.new("Frame")
+	holder.Name = title
+	holder.BackgroundTransparency = 1
+	holder.Size = UDim2.new(1, 0, 0, L.sectionHeight)
+	holder.LayoutOrder = nextOrder()
+	holder.Parent = list
 
-	if on then
-		Sounds.MasterVolume = 1
-		if mutedMusicVolume then
-			Music.setVolume(mutedMusicVolume)
-			mutedMusicVolume = nil
-		end
-	else
-		-- Read before it is zeroed, so unmuting restores what the slider says
-		-- rather than a number this file made up.
-		mutedMusicVolume = Music.getVolume()
-		Music.setVolume(0)
-		Sounds.MasterVolume = 0
-	end
+	local rule = Instance.new("Frame")
+	rule.Name = "Rule"
+	rule.AnchorPoint = Vector2.new(0, 0.5)
+	rule.Position = UDim2.new(0, 0, 0.5, 4)
+	rule.Size = UDim2.new(1, 0, 0, PixelUI.Scale)
+	rule.BackgroundColor3 = RULE_COLOR
+	rule.BackgroundTransparency = 0.45
+	rule.BorderSizePixel = 0
+	rule.Parent = holder
 
-	drawToggle(true)
+	local label = text(holder, "Title", Theme.Fonts.Heading, Theme.TextSize.Small, P.Heading)
+	label.AnchorPoint = Vector2.new(0, 0.5)
+	label.Position = UDim2.new(0, 0, 0.5, 4)
+	label.Size = UDim2.fromOffset(0, 20)
+	label.AutomaticSize = Enum.AutomaticSize.X
+	label.BackgroundColor3 = PARCHMENT
+	label.BackgroundTransparency = 0
+	label.Text = string.upper(title)
+	label.ZIndex = 2
 
-	-- After the volume is back up, so turning sound ON is audible and turning
-	-- it off is not. The click is the confirmation either way.
-	Sounds.play("ui.click")
+	local labelPadding = Instance.new("UIPadding")
+	labelPadding.PaddingRight = UDim.new(0, 10)
+	labelPadding.Parent = label
 end
 
-toggle.MouseButton1Click:Connect(function()
-	setSound(not soundOn)
-end)
-
-drawToggle(false)
-
--- ---------------------------------------------------------------------------
--- Volume
--- ---------------------------------------------------------------------------
-
---[[
-	The music volume, as a slider.
-
-	It exists because this panel REPLACED the one in the Tab menu, and that one
-	was granular. A toggle alone would have been a quieter way of deleting a
-	control: "sound is redundant now" is only true if everything it could do can
-	still be done.
-
-	Music owns Sound.Volume - writing it anywhere else fought the track fade,
-	and the next track change threw the choice away - so this goes through
-	setVolume and follows Music.Changed rather than its own last write. That is
-	also what keeps the knob honest while the mute toggle is moving the same
-	number underneath it.
-]]
-local volumeRow = addRow("Volume")
-
-local volumeTrack = Instance.new("Frame")
-volumeTrack.Name = "Track"
-volumeTrack.AnchorPoint = Vector2.new(1, 0.5)
-volumeTrack.Position = UDim2.fromScale(1, 0.5)
-volumeTrack.Size = UDim2.fromOffset(VOLUME_WIDTH, VOLUME_HEIGHT)
-volumeTrack.BackgroundColor3 = Theme.Color.Stroke
-volumeTrack.BorderSizePixel = 0
-volumeTrack.Parent = volumeRow
-
-local volumeTrackCorner = Instance.new("UICorner")
-volumeTrackCorner.CornerRadius = UDim.new(1, 0)
-volumeTrackCorner.Parent = volumeTrack
-
-local volumeFill = Instance.new("Frame")
-volumeFill.Name = "Fill"
-volumeFill.Size = UDim2.fromScale(1, 1)
-volumeFill.BackgroundColor3 = Theme.Color.Good
-volumeFill.BorderSizePixel = 0
-volumeFill.Parent = volumeTrack
-
-local volumeFillCorner = Instance.new("UICorner")
-volumeFillCorner.CornerRadius = UDim.new(1, 0)
-volumeFillCorner.Parent = volumeFill
-
-local volumeKnob = Instance.new("Frame")
-volumeKnob.Name = "Knob"
-volumeKnob.AnchorPoint = Vector2.new(0.5, 0.5)
-volumeKnob.Size = UDim2.fromOffset(VOLUME_KNOB, VOLUME_KNOB)
-volumeKnob.BackgroundColor3 = Color3.new(1, 1, 1)
-volumeKnob.BorderSizePixel = 0
-volumeKnob.ZIndex = 2
-volumeKnob.Parent = volumeTrack
-
-local volumeKnobCorner = Instance.new("UICorner")
-volumeKnobCorner.CornerRadius = UDim.new(1, 0)
-volumeKnobCorner.Parent = volumeKnob
-
---[[
-	The grab area, over the whole row rather than only the knob.
-
-	A 14px circle is a small thing to hit and an unforgiving one to miss, and
-	the row is otherwise doing nothing with the space.
-]]
-local volumeGrab = Instance.new("TextButton")
-volumeGrab.Name = "Grab"
-volumeGrab.Text = ""
-volumeGrab.AutoButtonColor = false
-volumeGrab.AnchorPoint = Vector2.new(1, 0.5)
-volumeGrab.Position = UDim2.fromScale(1, 0.5)
-volumeGrab.Size = UDim2.fromOffset(VOLUME_WIDTH + VOLUME_KNOB, PANEL_ROW_HEIGHT)
-volumeGrab.BackgroundTransparency = 1
-volumeGrab.ZIndex = 3
-volumeGrab.Parent = volumeRow
-
-local function drawVolume(value: number)
-	volumeFill.Size = UDim2.fromScale(value, 1)
-	volumeKnob.Position = UDim2.new(value, 0, 0.5, 0)
+-- An engraved line between two rows of the same section.
+local function divider()
+	local line = PixelUI.divider(list)
+	line.LayoutOrder = nextOrder()
 end
 
 --[[
-	Where along the track a pointer is, as 0..1.
-
-	`x` is an InputObject's Position, which is in the same space as
-	AbsolutePosition. UserInputService:GetMouseLocation() is NOT, even in a
-	ScreenGui that ignores the GUI inset: it counts from the window's corner,
-	inset included - the same trap that put the inventory's drop targets a top
-	bar too high. Here only the left inset matters, which is zero on a PC and
-	not on a phone with a notch. The panel's card drag gets away with pure
-	deltas - a slider cannot, because clicking the track has to jump to where
-	the click was.
+	A row: the gold marker, the name, a line on what it does, and a frame on
+	the right for its control. The control's builder puts "DEFAULT ..." under
+	itself with `caption`.
 ]]
-local function volumeAt(x: number): number
-	local left = volumeTrack.AbsolutePosition.X
-	local width = volumeTrack.AbsoluteSize.X
+local function row(title: string, description: string): Frame
+	local holder = Instance.new("Frame")
+	holder.Name = title
+	holder.BackgroundTransparency = 1
+	holder.Size = UDim2.new(1, 0, 0, L.rowHeight)
+	holder.LayoutOrder = nextOrder()
+	holder.Parent = list
+
+	local accent = Instance.new("Frame")
+	accent.Name = "Accent"
+	accent.Position = UDim2.fromOffset(0, 10)
+	accent.Size = UDim2.new(0, L.accentWidth, 1, -20)
+	accent.BackgroundColor3 = ACCENT
+	accent.BorderSizePixel = 0
+	accent.Parent = holder
+
+	local textWidth = -(20 + L.controlsWidth + 16)
+
+	local name = text(holder, "Name", Theme.Fonts.Heading, Theme.TextSize.Body, P.Ink)
+	name.Position = UDim2.fromOffset(20, 12)
+	name.Size = UDim2.new(1, textWidth, 0, 20)
+	name.Text = string.upper(title)
+
+	local about = text(holder, "Description", Theme.Fonts.Body, Theme.TextSize.Small, P.InkSoft)
+	about.Position = UDim2.fromOffset(20, 36)
+	about.Size = UDim2.new(1, textWidth, 0, 36)
+	about.TextWrapped = true
+	about.TextYAlignment = Enum.TextYAlignment.Top
+	about.Text = description
+
+	local controls = Instance.new("Frame")
+	controls.Name = "Controls"
+	controls.BackgroundTransparency = 1
+	controls.AnchorPoint = Vector2.new(1, 0)
+	controls.Position = UDim2.new(1, 0, 0, 12)
+	controls.Size = UDim2.new(0, L.controlsWidth, 1, -12)
+	controls.Parent = holder
+
+	return controls
+end
+
+-- The small print under a control: its default, or its range.
+local function caption(controls: Instance): TextLabel
+	local label = text(controls, "Default", Theme.Fonts.Number, 13, P.InkFaint)
+	label.AnchorPoint = Vector2.new(1, 0)
+	label.Position = UDim2.new(1, 0, 0, L.button + 6)
+	label.Size = UDim2.new(1, 0, 0, 16)
+	label.TextXAlignment = Enum.TextXAlignment.Right
+	return label
+end
+
+local function smallButton(parent: Instance, label: string, x: number, onClick: () -> ())
+	local handle = PixelUI.button(parent, {
+		text = label,
+		textSize = Theme.TextSize.Body,
+		size = UDim2.fromOffset(L.button, L.button),
+		onClick = onClick,
+	})
+	handle.button.Position = UDim2.fromOffset(x, 0)
+	return handle
+end
+
+-- ---------------------------------------------------------------------------
+-- Controls
+-- ---------------------------------------------------------------------------
+
+-- The slider being dragged, if any: { track, set }.
+local dragging = nil
+
+local function sliderValueAt(track: GuiObject, x: number): number
+	local width = track.AbsoluteSize.X
 	if width <= 0 then
 		return 0
 	end
-	return math.clamp((x - left) / width, 0, 1)
+	return math.clamp((x - track.AbsolutePosition.X) / width, 0, 1)
 end
 
-local draggingVolume = false
+--[[
+	[-] slider [+] and the value, for a 0..1 setting shown as a percentage.
 
-local function applyVolume(x: number)
-	local value = volumeAt(x)
-	drawVolume(value)
-
-	-- Straight to Music, which is what actually owns the number. Muting is a
-	-- separate switch and is left alone: dragging the slider while muted sets
-	-- what unmuting will restore, which is the least surprising reading of it.
-	if soundOn then
-		Music.setVolume(value)
-	else
-		mutedMusicVolume = value
+	`x` from an InputObject's Position, which is in the same space as
+	AbsolutePosition. UserInputService:GetMouseLocation() is NOT, even in a
+	ScreenGui that ignores the GUI inset: it counts from the window's corner,
+	inset included - the same trap that put the inventory's drop targets a top
+	bar too high.
+]]
+local function volumeControl(controls: Frame, key: string)
+	local function step(direction: number)
+		local value = PlayerSettings.get(key) + direction * VOLUME_STEP
+		PlayerSettings.set(key, math.round(value / VOLUME_STEP) * VOLUME_STEP)
 	end
+
+	smallButton(controls, "-", 0, function()
+		step(-1)
+	end)
+
+	local trackX = L.button + 8
+	local track = PixelUI.image(controls, "slider_track")
+	track.Name = "Track"
+	track.Position = UDim2.fromOffset(trackX, (L.button - 24) / 2)
+	track.Size = UDim2.fromOffset(L.sliderWidth, 24)
+
+	local fill = PixelUI.image(track, "slider_fill")
+	fill.Name = "Fill"
+
+	local knob = PixelUI.image(track, "slider_knob")
+	knob.Name = "Knob"
+	knob.AnchorPoint = Vector2.new(0.5, 0.5)
+	knob.ZIndex = 2
+
+	smallButton(controls, "+", trackX + L.sliderWidth + 8, function()
+		step(1)
+	end)
+
+	local value = text(controls, "Value", Theme.Fonts.Number, Theme.TextSize.Body, P.Ink)
+	value.AnchorPoint = Vector2.new(1, 0)
+	value.Position = UDim2.new(1, 0, 0, 0)
+	value.Size = UDim2.fromOffset(L.valueWidth, L.button)
+	value.TextXAlignment = Enum.TextXAlignment.Right
+
+	caption(controls).Text = "DEFAULT " .. percent(PlayerSettings.getDefault(key))
+
+	local function draw(level: number)
+		fill.Size = UDim2.new(level, (1 - level) * FILL_MIN, 1, 0)
+		knob.Position = UDim2.new(level, 0, 0.5, 0)
+		value.Text = percent(level)
+	end
+
+	local function setFrom(x: number)
+		local level = sliderValueAt(track, x)
+		PlayerSettings.set(key, math.round(level / VOLUME_DRAG_STEP) * VOLUME_DRAG_STEP)
+	end
+
+	-- The grab area is wider than the track, so the knob is easy to catch at
+	-- either end.
+	local grab = Instance.new("TextButton")
+	grab.Name = "Grab"
+	grab.Text = ""
+	grab.AutoButtonColor = false
+	grab.BackgroundTransparency = 1
+	grab.Position = UDim2.fromOffset(trackX - 8, 0)
+	grab.Size = UDim2.fromOffset(L.sliderWidth + 16, L.button)
+	grab.ZIndex = 3
+	grab.Parent = controls
+
+	grab.InputBegan:Connect(function(input)
+		if
+			input.UserInputType == Enum.UserInputType.MouseButton1
+			or input.UserInputType == Enum.UserInputType.Touch
+		then
+			dragging = { set = setFrom }
+			setFrom(input.Position.X)
+		end
+	end)
+
+	draw(PlayerSettings.get(key))
+	PlayerSettings.Changed.Event:Connect(function(changed, level)
+		if changed == key then
+			draw(level)
+		end
+	end)
 end
-
-volumeGrab.InputBegan:Connect(function(input)
-	if
-		input.UserInputType == Enum.UserInputType.MouseButton1
-		or input.UserInputType == Enum.UserInputType.Touch
-	then
-		draggingVolume = true
-		applyVolume(input.Position.X)
-	end
-end)
 
 UserInputService.InputChanged:Connect(function(input)
-	if not draggingVolume then
-		return
-	end
-
 	if
-		input.UserInputType == Enum.UserInputType.MouseMovement
-		or input.UserInputType == Enum.UserInputType.Touch
+		dragging
+		and (
+			input.UserInputType == Enum.UserInputType.MouseMovement
+			or input.UserInputType == Enum.UserInputType.Touch
+		)
 	then
-		applyVolume(input.Position.X)
+		dragging.set(input.Position.X)
 	end
 end)
 
@@ -543,80 +591,163 @@ UserInputService.InputEnded:Connect(function(input)
 		input.UserInputType == Enum.UserInputType.MouseButton1
 		or input.UserInputType == Enum.UserInputType.Touch
 	then
-		draggingVolume = false
+		dragging = nil
 	end
 end)
 
--- Followed rather than assumed, so the knob is right whoever moved the volume -
--- including the mute switch above, which sets it to zero and back.
-Music.Changed.Event:Connect(function(value)
-	if not draggingVolume and soundOn then
-		drawVolume(math.clamp(value, 0, 1))
-	end
-end)
+--[[
+	OFF | ON, for a true/false setting. The side that is chosen is lit: ON in
+	green, OFF in red. The other side is plain tan.
+]]
+local function toggleControl(controls: Frame, key: string)
+	local width = 72
 
-drawVolume(math.clamp(Music.getVolume(), 0, 1))
+	local off = PixelUI.button(controls, {
+		text = "OFF",
+		textSize = Theme.TextSize.Small,
+		size = UDim2.fromOffset(width, L.button),
+		onClick = function()
+			PlayerSettings.set(key, false)
+		end,
+	})
+	off.button.AnchorPoint = Vector2.new(1, 0)
+	off.button.Position = UDim2.new(1, -(width + 4), 0, 0)
+
+	local on = PixelUI.button(controls, {
+		text = "ON",
+		textSize = Theme.TextSize.Small,
+		size = UDim2.fromOffset(width, L.button),
+		onClick = function()
+			PlayerSettings.set(key, true)
+		end,
+	})
+	on.button.AnchorPoint = Vector2.new(1, 0)
+	on.button.Position = UDim2.new(1, 0, 0, 0)
+
+	caption(controls).Text = "DEFAULT " .. (if PlayerSettings.getDefault(key) then "ON" else "OFF")
+
+	local function draw(enabled: boolean)
+		on.setColor(if enabled then "green" else "tan")
+		off.setColor(if enabled then "tan" else "red")
+	end
+
+	draw(PlayerSettings.get(key))
+	PlayerSettings.Changed.Event:Connect(function(changed, enabled)
+		if changed == key then
+			draw(enabled)
+		end
+	end)
+end
+
+-- ---------------------------------------------------------------------------
+-- The rows
+-- ---------------------------------------------------------------------------
+
+section("Audio")
+volumeControl(
+	row("Music volume", "How loud the music is. Sound effects are separate."),
+	"musicVolume"
+)
+divider()
+volumeControl(
+	row("Sound effects", "Mining, combat, abilities, menus - everything that is not music."),
+	"sfxVolume"
+)
+
+section("World")
+local distanceRow = row(
+	"View distance",
+	"How far the world loads around you, in chunks. Lower it if the game runs slowly."
+)
+
+section("Combat")
+toggleControl(
+	row("Damage numbers", "Shows how much each hit took, beside your health bar."),
+	"damageNumbers"
+)
+divider()
+toggleControl(
+	row("Hit flash", "Flashes the edges of the screen red when you are hurt."),
+	"hitFlash"
+)
+
+-- Reset, in the header row: audio and combat back to their defaults. View
+-- distance is the server's, and is left where it is.
+local reset = PixelUI.button(window, {
+	name = "Reset",
+	text = "RESET TO DEFAULTS",
+	textSize = Theme.TextSize.Small,
+	size = UDim2.fromOffset(210, L.button),
+	onClick = function()
+		PlayerSettings.reset()
+	end,
+})
+reset.button.AnchorPoint = Vector2.new(0, 0.5)
+reset.button.Position = UDim2.new(0, L.pad, 0, 24 + (L.headerHeight - 24) / 2)
 
 -- ---------------------------------------------------------------------------
 -- View distance
 -- ---------------------------------------------------------------------------
 
-local distanceRow = addRow("View distance")
+local distance, distanceMin, distanceMax, distanceDefault = nil, nil, nil, nil
 
-local distance, distanceMin, distanceMax = nil, nil, nil
+local arrowWidth = PixelUI.get("icon_arrow_right").size.X * PixelUI.Scale
+local stepperWidth = arrowWidth * 2 + L.stepperBox + 16
 
-local distanceValue = Instance.new("TextLabel")
-distanceValue.AnchorPoint = Vector2.new(1, 0.5)
-distanceValue.Position = UDim2.new(1, -(STEP_SIZE + 6), 0.5, 0)
-distanceValue.Size = UDim2.fromOffset(52, PANEL_ROW_HEIGHT)
-distanceValue.BackgroundTransparency = 1
-distanceValue.FontFace = Theme.Fonts.Number
-distanceValue.TextSize = Theme.TextSize.Body
-distanceValue.TextColor3 = Theme.Color.TextDim
-distanceValue.Text = "..."
-distanceValue.Parent = distanceRow
-
-local function stepButton(text: string, offsetFromRight: number): TextButton
-	local step = Instance.new("TextButton")
-	step.Text = text
+local function arrow(sprite: string, x: number): ImageButton
+	local step = Instance.new("ImageButton")
+	step.Name = sprite
 	step.AutoButtonColor = false
-	step.AnchorPoint = Vector2.new(1, 0.5)
-	step.Position = UDim2.new(1, -offsetFromRight, 0.5, 0)
-	step.Size = UDim2.fromOffset(STEP_SIZE, STEP_SIZE)
-	step.BackgroundColor3 = Theme.Color.PanelRaised
+	step.BackgroundTransparency = 1
 	step.BorderSizePixel = 0
-	step.FontFace = Theme.Fonts.Number
-	step.TextSize = Theme.TextSize.Body
-	step.TextColor3 = Theme.Color.Text
+	step.Size = PixelUI.size(sprite)
+	step.Position = UDim2.new(1, x, 0, (L.button - step.Size.Y.Offset) / 2)
 	step.Parent = distanceRow
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 6)
-	corner.Parent = step
-
+	PixelUI.apply(step, sprite)
+	step.MouseEnter:Connect(function()
+		Sounds.play("ui.hover")
+	end)
 	return step
 end
 
-local minus = stepButton("-", STEP_SIZE + 6 + 52 + 6)
-local plus = stepButton("+", 0)
+local minus = arrow("icon_arrow_left", -stepperWidth)
+local plus = arrow("icon_arrow_right", -arrowWidth)
+
+local distanceBox = PixelUI.image(distanceRow, "input")
+distanceBox.Name = "Distance"
+distanceBox.Position = UDim2.new(1, -(arrowWidth + 8 + L.stepperBox), 0, 0)
+distanceBox.Size = UDim2.fromOffset(L.stepperBox, L.button)
+
+local distanceValue = text(distanceBox, "Value", Theme.Fonts.Number, Theme.TextSize.Body, P.InkSoft)
+distanceValue.Size = UDim2.fromScale(1, 1)
+distanceValue.TextXAlignment = Enum.TextXAlignment.Center
+distanceValue.Text = "..."
+
+local distanceCaption = caption(distanceRow)
 
 local function drawDistance()
 	if not distance then
 		distanceValue.Text = "..."
+		distanceCaption.Text = ""
 		return
 	end
 
 	distanceValue.Text = tostring(distance)
-	distanceValue.TextColor3 = Theme.Color.Text
+	distanceValue.TextColor3 = P.Ink
 
-	-- Greyed at the ends rather than hidden, so the range is visible without
+	local parts = {}
+	if distanceDefault then
+		table.insert(parts, "DEFAULT " .. tostring(distanceDefault))
+	end
+	if distanceMin and distanceMax then
+		table.insert(parts, string.format("%d TO %d", distanceMin, distanceMax))
+	end
+	distanceCaption.Text = table.concat(parts, "  ·  ")
+
+	-- Faded at the ends rather than hidden, so the range is visible without
 	-- the row changing shape.
-	minus.TextColor3 = if distanceMin and distance <= distanceMin
-		then Theme.Color.Disabled
-		else Theme.Color.Text
-	plus.TextColor3 = if distanceMax and distance >= distanceMax
-		then Theme.Color.Disabled
-		else Theme.Color.Text
+	minus.ImageTransparency = if distanceMin and distance <= distanceMin then ARROW_SPENT_TRANSPARENCY else 0
+	plus.ImageTransparency = if distanceMax and distance >= distanceMax then ARROW_SPENT_TRANSPARENCY else 0
 end
 
 local function requestDistance(delta: number)
@@ -649,7 +780,7 @@ plus.MouseButton1Click:Connect(function()
 	requestDistance(DISTANCE_STEP)
 end)
 
-ViewDistanceChanged.OnClientEvent:Connect(function(applied, low, high)
+ViewDistanceChanged.OnClientEvent:Connect(function(applied, low, high, default)
 	if type(applied) ~= "number" then
 		return
 	end
@@ -657,6 +788,7 @@ ViewDistanceChanged.OnClientEvent:Connect(function(applied, low, high)
 	distance = applied
 	distanceMin = if type(low) == "number" then low else distanceMin
 	distanceMax = if type(high) == "number" then high else distanceMax
+	distanceDefault = if type(default) == "number" then default else distanceDefault
 
 	drawDistance()
 end)
@@ -667,31 +799,58 @@ drawDistance()
 -- Opening and closing
 -- ---------------------------------------------------------------------------
 
-local open = false
+-- Never smaller than designed on an ordinary screen, bigger on a tall one, and
+-- shrunk only when the window would not otherwise fit.
+local function fit()
+	local size = screen.AbsoluteSize
+	if size.X <= 0 or size.Y <= 0 then
+		return
+	end
 
-local function placePanel()
-	local inset = GuiService.TopbarInset
-	panel.Position = UDim2.fromOffset(
-		inset.Min.X + BUTTON_GAP,
-		inset.Min.Y + barHeight(inset) + PANEL_TOP_GAP
+	local scale = math.min(
+		math.max(1, size.Y / DESIGN_HEIGHT),
+		size.Y * 0.9 / L.height,
+		size.X * 0.94 / L.width
 	)
+	rootScale.Scale = math.max(scale, MIN_SCALE)
 end
+
+screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
+
+local open = false
 
 local function setOpen(shouldOpen: boolean)
 	if shouldOpen == open then
 		return
 	end
 	open = shouldOpen
+	dragging = nil
 
 	if shouldOpen then
-		placePanel()
+		fit()
+		root.Visible = true
+		backdrop.Visible = true
+		Motion.openPanel(window, 1)
+		TweenService:Create(backdrop, Theme.Tween.Open, { BackgroundTransparency = BACKDROP_TRANSPARENCY }):Play()
+
+		-- What the server holds now: something else (/bbvd, the benchmark) may
+		-- have moved it since the last reply.
+		RequestViewDistance:FireServer()
+	else
+		TweenService:Create(backdrop, Theme.Tween.Close, { BackgroundTransparency = 1 }):Play()
+		Motion.closePanel(window, function()
+			if not open then
+				root.Visible = false
+				backdrop.Visible = false
+			end
+		end)
 	end
 
-	panel.Visible = shouldOpen
-	button.BackgroundTransparency = if shouldOpen
-		then BUTTON_HOVER_TRANSPARENCY
-		else BUTTON_TRANSPARENCY
+	-- These settings are changed while playing, so the window does not stop
+	-- the player moving.
+	MenuState.setOpen(MENU_NAME, shouldOpen, false)
 
+	button.BackgroundTransparency = if shouldOpen then BUTTON_HOVER_TRANSPARENCY else BUTTON_TRANSPARENCY
 	Sounds.play(if shouldOpen then "ui.open" else "ui.close")
 end
 
@@ -711,26 +870,24 @@ button.MouseLeave:Connect(function()
 	end
 end)
 
---[[
-	A click anywhere else closes it.
+closeButton.MouseButton1Click:Connect(function()
+	setOpen(false)
+end)
 
-	Watched globally rather than with a full-screen invisible button behind the
-	panel, because that button would also swallow the click - so dismissing the
-	menu and pressing the thing you actually wanted would take two clicks.
+backdrop.MouseButton1Click:Connect(function()
+	setOpen(false)
+end)
 
-	`processed` is true when the click landed on some GUI, which includes the
-	panel and the gear; both of those have their own handlers and neither wants
-	this one as well.
-]]
 UserInputService.InputBegan:Connect(function(input, processed)
-	if not open or processed then
-		return
+	if open and input.KeyCode == Enum.KeyCode.Escape and not processed then
+		setOpen(false)
 	end
+end)
 
-	if
-		input.UserInputType == Enum.UserInputType.MouseButton1
-		or input.UserInputType == Enum.UserInputType.Touch
-	then
+-- Two full-screen menus at once is never what anyone wants; the pause menu
+-- wins because it is the one with the escape hatch.
+MenuState.Changed:Connect(function(name, opened)
+	if name == "PauseMenu" and opened and open then
 		setOpen(false)
 	end
 end)

@@ -193,6 +193,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local chunks = {} -- chunkKey -> chunk data
+TerrainManager._wallReservations, TerrainManager._wallChunkPins = {}, {}
 local loadedChunkCount = 0 -- live size of `chunks`, kept incrementally
 local usageCounts = {} -- chunkKey -> how many players want it
 local pendingUnload = {} -- chunkKey -> { cx, cz, dueAt }
@@ -534,6 +535,11 @@ local function normaliseBlockFaces()
 
 	local function visit(part)
 		for _, child in ipairs(part:GetChildren()) do
+			-- Temper the vivid grass-top artwork without desaturating other blocks.
+			-- Apply before conversion so merged terrain inherits the same tint.
+			if child:IsA("Decal") and child.Texture == "rbxassetid://92680494635879" then
+				child.Color3 = Color3.fromRGB(205, 170, 145)
+			end
 			-- ClassName rather than IsA, because Texture derives from Decal.
 			if child.ClassName == "Texture" then
 				textures += 1
@@ -2817,6 +2823,7 @@ end
 
 function TerrainManager:_UnloadChunk(cx, cz)
 	local key = chunkKey(cx, cz)
+	if TerrainManager._wallChunkPins[key] then return end
 	if generatingChunks[key] then
 		return
 	end
@@ -3539,6 +3546,76 @@ function TerrainManager:OpenEditZone(position: Vector3)
 	openEditZone(math.floor(position.X / STUD_SIZE), math.floor(position.Z / STUD_SIZE))
 end
 
+-- Server-only meteor bowl. All edits use the normal persistence path; never
+-- deletes rendered slabs directly. Bound the volume and remesh each chunk once.
+function TerrainManager:MineMeteorCrater(centre, radius, depth)
+	local samples, rewards = {}, {}
+	if typeof(centre) ~= "Vector3" or centre.X ~= centre.X or centre.Y ~= centre.Y or centre.Z ~= centre.Z
+		or math.max(math.abs(centre.X), math.abs(centre.Y), math.abs(centre.Z)) > 1e6 then
+		return 0, samples, rewards
+	end
+	if type(radius) ~= "number" or radius ~= radius or type(depth) ~= "number" or depth ~= depth then
+		return 0, samples, rewards
+	end
+	radius, depth = math.clamp(radius, 4, 32), math.clamp(depth, 4, 24)
+	local top = math.min(MAX_BLOCK_Y, math.floor((centre.Y - 0.05) / STUD_SIZE))
+	local extent = math.ceil(radius / STUD_SIZE)
+	local blockX, blockZ = math.floor(centre.X / STUD_SIZE), math.floor(centre.Z / STUD_SIZE)
+	local dirty, removed = {}, 0
+	for dx = -extent, extent do
+		for dz = -extent, extent do
+			local x, z = blockX + dx, blockZ + dz
+			local distance2 = ((x + 0.5) * STUD_SIZE - centre.X)^2 + ((z + 0.5) * STUD_SIZE - centre.Z)^2
+			if distance2 > radius * radius then continue end
+			local cx, cz, bx, bz = normalizeCell(x // CHUNK_SIZE, z // CHUNK_SIZE, x % CHUNK_SIZE, z % CHUNK_SIZE)
+			local key = chunkKey(cx, cz)
+			local data = chunks[key]
+			if not isChunkInBounds(cx, cz) or not data or generatingChunks[key] then continue end
+			local cell = cellOf(bx, bz)
+			local layers = math.max(1, math.ceil(depth / STUD_SIZE * (1 - distance2 / (radius * radius))))
+			local bottom = math.max(FLOOR_Y, top - layers + 1)
+			for by = math.min(MAX_BLOCK_Y, top + 2), bottom, -1 do
+				if removed >= 1800 then break end
+				if not isPresentInData(data, cell, by) then continue end
+				local name = blockNameFor(data, cell, by)
+				-- Never dig underneath bedrock or a protected solid layer.
+				if BlockConfig.isUnbreakable(name) then break end
+				local ok, item = removeResolvedBlock(data, cell, by, false)
+				if ok then
+					removed += 1
+					if item then rewards[item] = (rewards[item] or 0) + 1 end
+					dirty[key .. ":" .. cell] = {cx, cz, bx, bz}
+					-- Reservoir sampling covers the whole bowl rather than its first edge.
+					local record = {position = Vector3.new((x + .5)*STUD_SIZE, (by + .5)*STUD_SIZE, (z + .5)*STUD_SIZE), block = name}
+					if #samples < 48 then table.insert(samples, record)
+					else local slot = math.random(1, removed); if slot <= 48 then samples[slot] = record end end
+				end
+			end
+		end
+	end
+	local columns, touched = {}, {}
+	local function addColumn(cx, cz, bx, bz)
+		local ncx, ncz, nbx, nbz = normalizeCell(cx, cz, bx, bz)
+		local key = chunkKey(ncx, ncz)
+		local data = chunks[key]
+		if not isChunkInBounds(ncx, ncz) or not data then return end
+		if generatingChunks[key] then data.bordersStale = true; return end
+		columns[key .. ":" .. cellOf(nbx, nbz)] = {ncx, ncz, nbx, nbz}
+		touched[data] = true
+	end
+	for _, c in pairs(dirty) do
+		local data = chunks[chunkKey(c[1], c[2])]
+		syncColumnWater(data, cellOf(c[3], c[4]))
+		addColumn(c[1], c[2], c[3], c[4])
+		for i = 1, 4 do addColumn(c[1], c[2], c[3] + DIR_X[i], c[4] + DIR_Z[i]) end
+	end
+	for _, c in pairs(columns) do updateColumnVisibility(c[1], c[2], c[3], c[4]) end
+	local list = {}
+	for data in pairs(touched) do table.insert(list, data) end
+	flushChunks(list, true)
+	return removed, samples, rewards
+end
+
 -- Server-only ability excavation. Exact loaded cells, no mining-reach override on
 -- BreakBlock and no client remote. Clear the beam shaft as well as the crater.
 function TerrainManager:MineAbilityCrater(centre, canCollect, collect, beamHeight, beamRadius)
@@ -3853,6 +3930,190 @@ end
 	Every check here is server-side. The caller supplies a grid cell and a block
 	name; nothing about the client's view of the world is trusted.
 ]]
+-- Server-only earth movement. A loan lasts less than a second, reserves both
+-- ends, and pins the touched chunks until it commits or rolls back on cancel.
+function TerrainManager._wallCell(x, y, z)
+	local cx,cz,bx,bz=normalizeCell(x//CHUNK_SIZE,z//CHUNK_SIZE,x%CHUNK_SIZE,z%CHUNK_SIZE)
+	local key=chunkKey(cx,cz)
+	local cell=cellOf(bx,bz)
+	return {cx=cx,cz=cz,bx=bx,bz=bz,cell=cell,by=y,key=key,
+		id=key..":"..cell..":"..y,position=Vector3.new(x+.5,y+.5,z+.5)*STUD_SIZE}
+end
+
+function TerrainManager:PlanBlockWall(origin, forward)
+	local axis=if math.abs(forward.X)>math.abs(forward.Z) then Vector3.new(if forward.X>0 then 1 else -1,0,0) else Vector3.new(0,0,if forward.Z>0 then 1 else -1)
+	local side=Vector3.new(-axis.Z,0,axis.X)
+	local centre=origin+axis*9
+	local x,z=math.floor(centre.X/STUD_SIZE),math.floor(centre.Z/STUD_SIZE)
+	local targets,excluded={},{}
+	local ray=RaycastParams.new()
+	ray.FilterType=Enum.RaycastFilterType.Include
+	ray.FilterDescendantsInstances={workspace:FindFirstChild("GeneratedTerrain")}
+	for column=-1,1 do
+		local tx,tz=x+side.X*column,z+side.Z*column
+		local hit=workspace:Raycast(Vector3.new((tx+.5)*STUD_SIZE,origin.Y+6,(tz+.5)*STUD_SIZE),Vector3.new(0,-24,0),ray)
+		if not hit or hit.Normal.Y<.8 then return nil,"Block Wall needs solid ground in front of you." end
+		local bottom=math.floor((hit.Position.Y+.05)/STUD_SIZE)
+		excluded[tx..":"..tz]=true
+		for row=0,2 do
+			local c=TerrainManager._wallCell(tx,bottom+row,tz)
+			local data=chunks[c.key]
+			if not data or generatingChunks[c.key] or c.by>MAX_BLOCK_Y or TerrainManager._wallReservations[c.id] or isPresentInData(data,c.cell,c.by) then
+				return nil,"There is no room for a wall here."
+			end
+			table.insert(targets,c)
+		end
+	end
+	local candidates={}
+	local bx,bz=math.floor(origin.X/STUD_SIZE),math.floor(origin.Z/STUD_SIZE)
+	for dx=-4,4 do for dz=-4,4 do
+		local wx,wz=(bx+dx+.5)*STUD_SIZE,(bz+dz+.5)*STUD_SIZE
+		local distance=(Vector3.new(wx,origin.Y,wz)-origin).Magnitude
+		if distance>=4.5 and distance<=16 and not excluded[(bx+dx)..":"..(bz+dz)] then
+			table.insert(candidates,{x=wx,z=wz,y=origin.Y-3,depth=1,distance=distance})
+		end
+	end end
+	table.sort(candidates,function(a,b) return a.distance<b.distance end)
+	local sources={}
+	for _,column in ipairs(candidates) do
+		local cells=self:PlanExcavation({column},{naturalOnly=true,skipWet=true,maxCells=1})
+		local cell=cells[1]
+		if cell then
+			local c=TerrainManager._wallCell(math.floor(cell.position.X/STUD_SIZE),cell.by,math.floor(cell.position.Z/STUD_SIZE))
+			if not TerrainManager._wallReservations[c.id] then c.block=cell.block;table.insert(sources,c) end
+		end
+		if #sources==9 then break end
+	end
+	if #sources<9 then return nil,"Not enough nearby natural blocks to raise a wall." end
+	local records={}
+	for i,c in ipairs(sources) do table.insert(records,{source=c,target=targets[i],block=c.block}) end
+	return records
+end
+
+function TerrainManager:TakeBlockWall(records)
+	if type(records)~="table" or #records~=9 then return nil end
+	for _,r in ipairs(records) do
+		local s,t=r.source,r.target
+		local from,to=chunks[s.key],chunks[t.key]
+		if not from or not to or generatingChunks[s.key] or generatingChunks[t.key]
+			or TerrainManager._wallReservations[s.id] or TerrainManager._wallReservations[t.id]
+			or not cellAllowed(from,s.cell,s.by,{naturalOnly=true,skipWet=true})
+			or blockNameFor(from,s.cell,s.by)~=r.block or isPresentInData(to,t.cell,t.by) then return nil end
+	end
+	local loan={records=records,done=false,keys={}}
+	for _,r in ipairs(records) do
+		for _,c in ipairs({r.source,r.target}) do
+			TerrainManager._wallReservations[c.id]=loan
+			if not loan.keys[c.key] then loan.keys[c.key]=true;TerrainManager._wallChunkPins[c.key]=(TerrainManager._wallChunkPins[c.key] or 0)+1 end
+		end
+		local c=r.source
+		removeResolvedBlock(chunks[c.key],c.cell,c.by,false)
+	end
+	for _,r in ipairs(records) do local c=r.source;refreshAdjacentColumns(c.cx,c.cz,c.bx,c.bz,true) end
+	return loan
+end
+
+function TerrainManager:FinishBlockWall(loan, commit)
+	if not loan or loan.done then return end
+	loan.done=true
+	for _,r in ipairs(loan.records) do
+		local c=if commit then r.target else r.source
+		local data=chunks[c.key]
+		-- Pinned above: no chunk can disappear while the blocks travel.
+		if data then applyPlacement(data,c.cell,c.by,r.block) end
+		ChunkEdits.recordPlacement(c.key,c.cell,c.by,r.block)
+		TerrainManager._wallReservations[r.source.id],TerrainManager._wallReservations[r.target.id]=nil,nil
+	end
+	for key in pairs(loan.keys) do
+		local count=(TerrainManager._wallChunkPins[key] or 1)-1
+		TerrainManager._wallChunkPins[key]=if count>0 then count else nil
+	end
+	for _,r in ipairs(loan.records) do
+		local c=if commit then r.target else r.source
+		refreshAdjacentColumns(c.cx,c.cz,c.bx,c.bz,true)
+	end
+end
+
+-- Signus moves actual terrain cells. Sources stay reserved and chunks stay
+-- resident until the travelling blocks have been deposited or rolled back.
+function TerrainManager:BeginBossDisplacement(plan, destinations)
+	local loan={records={},keys={},done=false}
+	local function pin(c)
+		if not loan.keys[c.key] then
+			loan.keys[c.key]=true
+			self._wallChunkPins[c.key]=(self._wallChunkPins[c.key] or 0)+1
+		end
+	end
+	local overlap=OverlapParams.new();overlap.FilterType=Enum.RaycastFilterType.Exclude
+	local exclusions={workspace:FindFirstChild("GeneratedTerrain")}
+	local moving=workspace:FindFirstChild("SignusMovingTerrain");if moving then table.insert(exclusions,moving) end
+	overlap.FilterDescendantsInstances=exclusions
+	for i,r in ipairs(plan) do
+		if #loan.records>=32 then break end
+		local s=self._wallCell(math.floor(r.position.X/STUD_SIZE),r.by,math.floor(r.position.Z/STUD_SIZE))
+		local data=chunks[s.key]
+		if not data or generatingChunks[s.key] or self._wallReservations[s.id]
+			or not cellAllowed(data,s.cell,s.by,{naturalOnly=true,skipWet=true}) then continue end
+		local desired=destinations[i];local target=nil
+		if typeof(desired)~="Vector3" then continue end
+		-- Find supported, empty ground beside the intended landing point.
+		for attempt=0,24 do
+			local angle=attempt*2.399963;local radius=math.ceil(attempt/8)
+			local x=math.floor(desired.X/STUD_SIZE)+math.round(math.cos(angle)*radius)
+			local z=math.floor(desired.Z/STUD_SIZE)+math.round(math.sin(angle)*radius)
+			local seed=self._wallCell(x,0,z);local td=chunks[seed.key]
+			if not td or generatingChunks[seed.key] or not isChunkInBounds(seed.cx,seed.cz) then continue end
+			local height=td.currentHeight[seed.cell]
+			if not height or td.waterTop[seed.cell]>height then continue end
+			local top=height-1 -- currentHeight is the first empty cell, not the top solid cell
+			for y=top+1,math.min(top+5,MAX_BLOCK_Y) do
+				local t=self._wallCell(x,y,z)
+				if self._wallReservations[t.id] or isPresentInData(td,t.cell,y)
+					or not isPresentInData(td,t.cell,y-1) then continue end
+				local occupied=false
+				for _,p in ipairs(workspace:GetPartBoundsInBox(CFrame.new(t.position),Vector3.one*(STUD_SIZE-.15),overlap)) do
+					if p.CanCollide or p:FindFirstAncestorOfClass("Model") and p:FindFirstAncestorOfClass("Model"):FindFirstChildOfClass("Humanoid") then occupied=true;break end
+				end
+				if not occupied then target=t;break end
+			end
+			if target then break end
+		end
+		if not target then continue end
+		local name=blockNameFor(data,s.cell,s.by)
+		if not removeResolvedBlock(data,s.cell,s.by,false) then continue end
+		self._wallReservations[s.id]=loan;self._wallReservations[target.id]=loan
+		pin(s);pin(target)
+		table.insert(loan.records,{source=s,target=target,block=name})
+	end
+	for _,r in ipairs(loan.records) do local c=r.source;refreshAdjacentColumns(c.cx,c.cz,c.bx,c.bz,true) end
+	return loan
+end
+
+function TerrainManager:FinishBossDisplacement(loan,commit)
+	if not loan or loan.done then return end
+	loan.done=true
+	local characters={}
+	for _,player in ipairs(Players:GetPlayers()) do if player.Character then table.insert(characters,player.Character) end end
+	local overlap=OverlapParams.new();overlap.FilterType=Enum.RaycastFilterType.Include;overlap.FilterDescendantsInstances=characters
+	for _,r in ipairs(loan.records) do
+		local c=if commit then r.target else r.source
+		local data=chunks[c.key]
+		-- Another operation may have removed the landing support while flying.
+		if commit and (not data or isPresentInData(data,c.cell,c.by) or not isPresentInData(data,c.cell,c.by-1)
+			or #workspace:GetPartBoundsInBox(CFrame.new(c.position),Vector3.one*(STUD_SIZE-.2),overlap)>0) then c=r.source;data=chunks[c.key] end
+		if data then
+			applyPlacement(data,c.cell,c.by,r.block)
+			ChunkEdits.recordPlacement(c.key,c.cell,c.by,r.block)
+			refreshAdjacentColumns(c.cx,c.cz,c.bx,c.bz,true)
+		end
+		self._wallReservations[r.source.id]=nil;self._wallReservations[r.target.id]=nil
+	end
+	for key in pairs(loan.keys) do
+		local count=(self._wallChunkPins[key] or 1)-1
+		self._wallChunkPins[key]=if count>0 then count else nil
+	end
+end
+
 function TerrainManager:PlaceBlock(player, blockX, by, blockZ, blockName)
 	Profiler.enter("Terrain.placeBlock")
 
@@ -3918,6 +4179,7 @@ function TerrainManager:PlaceBlock(player, blockX, by, blockZ, blockName)
 	end
 
 	local cell = cellOf(bx, bz)
+	if TerrainManager._wallReservations[key..":"..cell..":"..by] then return finish(false,"A block is moving here") end
 	if isPresentInData(data, cell, by) then
 		return finish(false, "Cell occupied")
 	end

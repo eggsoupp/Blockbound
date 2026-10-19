@@ -489,6 +489,81 @@ EnemyConfig.Definitions = {
 		modelRotation = DEMON_EYE_ROTATION,
 	},
 
+	--[[
+		SIGNUS - the Hallowed Eclipse. A hooded lunar spellcaster that fights
+		from range: crescents, a falling moon, ground that tears open, and in
+		its second phase an eclipse nova that only cover stops. Everything it
+		does, and every number that tunes it, is in
+		ServerScriptService.Bosses.Signus.
+
+		The model is ReplicatedStorage.EnemyAssets.Signus, the Motor6D rig
+		built by assets/signus-hallow/roblox/CreateSignusRig.server.lua: an
+		anchored RootPart and four jointed MeshParts, ArticulatedRig = true.
+		Its RootPart's front is already -Z, so modelRotation is zero.
+
+		No spawnBiomes: /spawn Signus, or nothing.
+
+		`hitFlash = "Highlight"` because tinting a textured MeshPart's Color
+		shows nothing; EnemyService flashes it with a Highlight instead.
+		`burstColor` is the death burst, which would otherwise be whatever
+		colour the importer left the largest mesh.
+	]]
+	Signus = {
+		asset = "Signus",
+		displayName = "Signus",
+		boss = true,
+		behaviour = "Signus",
+
+		-- A little under the Eye's: it is in melee reach more of the time,
+		-- but holds still less often. See the BALANCE note in the module.
+		health = 2000,
+
+		sizeVariance = 0,
+		modelRotation = Vector3.new(0, 0, 0),
+
+		hitFlash = "Highlight",
+		hitFlashColor = Color3.fromRGB(255, 236, 246),
+		burstColor = Color3.fromRGB(150, 70, 225),
+	},
+
+	--[[
+		THE BLIGHTBORER - the Corruption's worm, after Terraria's Eater of
+		Worlds. It swims through the ground, erupts under you, tears trenches,
+		spits ichor that eats blocks, opens sinkholes, and splits into more
+		worms as its segments break. Everything it does, and every number
+		that tunes it, is in ServerScriptService.Bosses.Blightborer.
+
+		THREE MODELS in ReplicatedStorage.EnemyAssets: `head` (the asset
+		below), `body_segment` and `tail`. The behaviour builds the body out
+		of the other two. If a piece faces the wrong way, it is corrected with
+		a WormRotation attribute on that model, not with modelRotation here -
+		see the module's notes.
+
+		No spawnBiomes: the ambient spawner never makes it. For now it is
+		/spawn Blightborer or nothing; how it comes up in the Corruption on
+		its own is still to be decided.
+
+		`hitFlash = "Highlight"` so a hit lights the whole body, textured or
+		not, with one instance.
+	]]
+	Blightborer = {
+		asset = "head",
+		displayName = "The Blightborer",
+		boss = true,
+		behaviour = "Blightborer",
+
+		-- A bit more than Signus: it is underground and out of reach for a
+		-- good part of the fight. See the BALANCE note in the module.
+		health = 2400,
+
+		sizeVariance = 0,
+		modelRotation = Vector3.new(0, 0, 0),
+
+		hitFlash = "Highlight",
+		hitFlashColor = Color3.fromRGB(214, 255, 150),
+		burstColor = Color3.fromRGB(96, 70, 110),
+	},
+
 	GreenSlime = {
 		asset = "GreenSlime",
 		displayName = "Green Slime",
@@ -530,6 +605,39 @@ EnemyConfig.Definitions = {
 		lungeDamage = 12,
 		lungeCooldown = 3.5,
 	},
+
+	--[[
+		What the Blightborer spills when a segment bursts, hatches from its
+		spit and retches up: small, quick flying things that come straight at
+		you through anything, like the Corruption's Ghost but frailer. Only
+		the boss makes these, and its own Tuning caps how many are out.
+
+		The model is EnemyAssets.Blightling, which does not exist yet. Until
+		it does the boss sends Ghosts in its place (and says so once in the
+		output), so the fight works now and gets its own minion the moment
+		the model is added - no change here needed.
+	]]
+	Blightling = {
+		asset = "Blightling",
+		displayName = "Blightling",
+		health = 16,
+		movement = "Fly",
+
+		speed = 15,
+		aggroRange = 150,
+		giveUpRange = 220,
+		despawnSeconds = 25,
+
+		contactRange = 3.5,
+		contactDamage = 6,
+		contactInterval = 0.8,
+
+		hoverHeight = 1.5,
+		bobAmplitude = 0.7,
+		bobPeriod = 1.3,
+
+		sizeVariance = 0.15,
+	},
 }
 
 --[[
@@ -565,7 +673,11 @@ EnemyConfig.Animations = {
 
 -- Stable order for anything that lists enemies to a human. The boss last,
 -- because /spawn prints this and it is the one you scroll to on purpose.
-EnemyConfig.Order = { "Ghost", "DemonEye", "BlueSlime", "GreenSlime", "SlimeEmperor", "AllSeeingEye", "ServantEye" }
+EnemyConfig.Order = {
+	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
+	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
+	"ServantEye", "Blightling",
+}
 
 --[[
 	The model in `folder` for an `asset` name: the exact name, or failing that

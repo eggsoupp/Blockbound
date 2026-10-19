@@ -20,8 +20,9 @@
 	recipe id. Crafting several is several requests, one after another, each
 	waiting for the last one's answer.
 
-	Drawn from Shared.UI.Theme, so it shares the inventory's slot art, fonts,
-	rarity colours and selection yellow.
+	Drawn from the pixel-art kit (Shared.UI.PixelUI) on Shared.UI.Theme's fonts
+	and rarity colours, so it shares the inventory's slots and frames: a wooden
+	window, parchment insets for the list and the recipe, and the kit's buttons.
 ]]
 
 local Players = game:GetService("Players")
@@ -37,6 +38,7 @@ local StationConfig = require(Shared.Crafting:WaitForChild("StationConfig"))
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local Motion = require(Shared.UI:WaitForChild("Motion"))
 local SlotArt = require(Shared.UI:WaitForChild("SlotArt"))
+local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local ItemPreview = require(Shared.UI:WaitForChild("ItemPreview"))
 local InventoryMirror =
 	require(Shared:WaitForChild("Inventory"):WaitForChild("InventoryMirror"))
@@ -83,31 +85,35 @@ local playerGui = player:WaitForChild("PlayerGui")
 -- ---------------------------------------------------------------------------
 
 local L = {
-	width = 920,
-	height = 620,
-	pad = 18,
+	width = 960,
+	height = 650,
+	-- Clear of the window frame's border (24) with a little to spare.
+	pad = 30,
 	gutter = 16,
-	radius = 12,
+	radius = 8,
 
-	headerHeight = 66,
+	-- The frame's top border and the header row under the title banner.
+	headerHeight = 84,
+	headerRowTop = 24,
 
 	sidebarWidth = 200,
-	tabHeight = 50,
+	tabHeight = 54,
 
-	searchHeight = 38,
-	filterWidth = 112,
+	searchHeight = 42,
+	filterWidth = 150,
 	rowHeight = 62,
 	rowGap = 6,
 
 	detailWidth = 300,
-	detailPad = 14,
+	-- Clear of an inset's border (12).
+	detailPad = 18,
 	heroHeight = 120,
-	ingredientHeight = 38,
-	stepperHeight = 32,
-	buttonHeight = 48,
+	ingredientHeight = 46,
+	stepperHeight = 36,
+	buttonHeight = 50,
 }
 
-L.bodyTop = L.headerHeight + 14
+L.bodyTop = L.headerHeight + 6
 L.bodyHeight = L.height - L.bodyTop - L.pad
 L.listX = L.pad + L.sidebarWidth + L.gutter
 L.detailX = L.width - L.pad - L.detailWidth
@@ -131,13 +137,15 @@ local PROXIMITY_INTERVAL = 0.5
 -- How long a result message stays up.
 local TOAST_SECONDS = 3
 
-local C = {
-	card = Theme.Color.PanelRaised,
-	cardHover = Theme.Color.PanelRaised:Lerp(Color3.new(1, 1, 1), 0.07),
-	sunken = Theme.Color.Panel:Lerp(Color3.new(0, 0, 0), 0.3),
-	-- Dark text that stays readable on the selection yellow.
-	onAccent = Color3.fromRGB(34, 31, 8),
-}
+-- Text colours: dark ink on parchment, cream on wood.
+local P = Theme.PixelColor
+
+-- The thin bars under each ingredient: a groove of dark wood.
+local GROOVE = Color3.fromRGB(90, 53, 32)
+
+-- The search box is drawn a touch dim, and lights up while it is typed in.
+local SEARCH_IDLE = Color3.fromRGB(238, 238, 238)
+local SEARCH_FOCUSED = Color3.new(1, 1, 1)
 
 -- ---------------------------------------------------------------------------
 -- State
@@ -371,76 +379,60 @@ for index, layer in ipairs(SHADOW_LAYERS) do
 	shadows[index] = { frame = shade, transparency = layer.transparency }
 end
 
-local window = frame(root, "Window", Theme.Color.Panel, Theme.Transparency.Panel)
+-- The wooden window. Its background stays transparent: the art is the panel.
+local window = PixelUI.image(root, "frame_wood")
+window.Name = "Window"
 window.AnchorPoint = Vector2.new(0.5, 0.5)
 window.Position = UDim2.fromScale(0.5, 0.5)
 window.Size = UDim2.fromScale(1, 1)
 -- Above the shadow layers, which are its earlier siblings.
 window.ZIndex = 2
-corner(window, L.radius)
-stroke(window, Theme.Color.Stroke, 1.5, 0.35)
-
--- Lit from above: the top of the panel a touch lighter than the bottom.
-local windowShade = Instance.new("UIGradient")
-windowShade.Rotation = 90
-windowShade.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(196, 196, 206))
-windowShade.Parent = window
 
 -- === Header =================================================================
 
 local header = frame(window, "Header")
 header.Size = UDim2.new(1, 0, 0, L.headerHeight)
 
-local stationBadge = frame(header, "StationBadge", Theme.Color.TextDim)
-stationBadge.Position = UDim2.fromOffset(L.pad, (L.headerHeight - 42) / 2)
-stationBadge.Size = UDim2.fromOffset(42, 42)
-corner(stationBadge, 10)
-stroke(stationBadge, Color3.new(1, 1, 1), 1, 0.75)
+-- The title is the green banner across the frame's top edge.
+local banner, title = PixelUI.header(window, "Crafting")
+banner.Position = UDim2.new(0.5, 0, 0, 0)
+banner.ZIndex = 3
 
-local badgeShade = Instance.new("UIGradient")
-badgeShade.Rotation = 90
-badgeShade.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(150, 150, 150))
-badgeShade.Parent = stationBadge
+local headerRowHeight = L.headerHeight - L.headerRowTop
+
+-- A small slot tinted with the station's colour, its initial on it.
+local stationBadge = Instance.new("ImageLabel")
+stationBadge.Name = "StationBadge"
+stationBadge.BackgroundTransparency = 1
+stationBadge.Position = UDim2.fromOffset(L.pad, L.headerRowTop + (headerRowHeight - 42) / 2)
+stationBadge.Size = UDim2.fromOffset(42, 42)
+stationBadge.Parent = header
+SlotArt.apply(stationBadge)
 
 local badgeLetter = text(stationBadge, "Letter", Theme.Fonts.Heading, 22, Color3.new(1, 1, 1))
 badgeLetter.Size = UDim2.fromScale(1, 1)
 badgeLetter.TextXAlignment = Enum.TextXAlignment.Center
-badgeLetter.TextStrokeTransparency = 0.6
+badgeLetter.TextStrokeColor3 = Color3.fromRGB(43, 24, 16)
+badgeLetter.TextStrokeTransparency = 0.2
 
-local title = text(header, "Title", Theme.Fonts.Heading, Theme.TextSize.Heading, Theme.Color.Text)
-title.Position = UDim2.fromOffset(L.pad + 56, 13)
-title.Size = UDim2.fromOffset(360, 24)
-title.Text = "Crafting"
+local subtitle = text(header, "Subtitle", Theme.Fonts.Body, Theme.TextSize.Body, P.OnWoodDim)
+subtitle.AnchorPoint = Vector2.new(0, 0.5)
+subtitle.Position = UDim2.fromOffset(L.pad + 56, L.headerRowTop + headerRowHeight / 2)
+subtitle.Size = UDim2.fromOffset(420, 22)
 
-local subtitle = text(header, "Subtitle", Theme.Fonts.Body, Theme.TextSize.Small, Theme.Color.TextDim)
-subtitle.Position = UDim2.fromOffset(L.pad + 56, 37)
-subtitle.Size = UDim2.fromOffset(360, 18)
-
--- Close: a round button with a cross, red under the cursor, and the keys that
+-- Close: the kit's cross over the frame's top-right corner, and the keys that
 -- do the same beside it - a modal with no visible way out feels like a trap.
-local closeButton = button(header, "Close")
-closeButton.AnchorPoint = Vector2.new(0, 0.5)
-closeButton.Position = UDim2.new(1, -(L.pad + 34), 0.5, 0)
-closeButton.Size = UDim2.fromOffset(34, 34)
-closeButton.BackgroundColor3 = C.card
-corner(closeButton, UDim.new(1, 0))
-local closeStroke = stroke(closeButton, Theme.Color.Stroke, 1, 0.4)
+-- Wired further down, once close() exists.
+local closeButton = PixelUI.closeButton(window)
+closeButton.Position = UDim2.new(1, -14, 0, 14)
+closeButton.ZIndex = 3
 
-local closeGlyph = text(closeButton, "Glyph", Theme.Fonts.Heading, Theme.TextSize.Subheading, Theme.Color.TextDim)
-closeGlyph.Size = UDim2.fromScale(1, 1)
-closeGlyph.TextXAlignment = Enum.TextXAlignment.Center
-closeGlyph.Text = "\u{00D7}"
-
-local closeHint = text(header, "KeyHint", Theme.Fonts.Body, Theme.TextSize.Small, Theme.Color.TextFaint)
+local closeHint = text(header, "KeyHint", Theme.Fonts.Body, Theme.TextSize.Small, P.OnWoodDim)
 closeHint.AnchorPoint = Vector2.new(1, 0.5)
-closeHint.Position = UDim2.new(1, -(L.pad + 34 + 10), 0.5, 0)
-closeHint.Size = UDim2.fromOffset(120, 18)
+closeHint.Position = UDim2.new(1, -L.pad, 0, L.headerRowTop + headerRowHeight / 2)
+closeHint.Size = UDim2.fromOffset(160, 18)
 closeHint.TextXAlignment = Enum.TextXAlignment.Right
 closeHint.Text = "B or Esc to close"
-
-local headerRule = frame(window, "HeaderRule", Theme.Color.Divider, 0.2)
-headerRule.Position = UDim2.fromOffset(L.pad, L.headerHeight)
-headerRule.Size = UDim2.new(1, -L.pad * 2, 0, 1)
 
 -- === Stations ===============================================================
 
@@ -448,7 +440,7 @@ local sidebar = frame(window, "Stations")
 sidebar.Position = UDim2.fromOffset(L.pad, L.bodyTop)
 sidebar.Size = UDim2.fromOffset(L.sidebarWidth, L.bodyHeight)
 
-local sidebarCaption = text(sidebar, "Caption", Theme.Fonts.BodyBold, Theme.TextSize.Small, Theme.Color.TextFaint)
+local sidebarCaption = text(sidebar, "Caption", Theme.Fonts.BodyBold, Theme.TextSize.Small, P.OnWoodDim)
 sidebarCaption.Size = UDim2.new(1, 0, 0, 18)
 sidebarCaption.Text = "STATIONS"
 
@@ -463,38 +455,35 @@ tabLayout.Parent = tabList
 
 -- === Search and filter ======================================================
 
-local listColumn = frame(window, "Recipes")
+-- The middle column is a parchment inset; its padding keeps everything in it
+-- clear of the inset's border.
+local listColumn = PixelUI.image(window, "inset_parchment")
+listColumn.Name = "Recipes"
 listColumn.Position = UDim2.fromOffset(L.listX, L.bodyTop)
 listColumn.Size = UDim2.fromOffset(L.listWidth, L.bodyHeight)
+PixelUI.padTo(listColumn, "inset_parchment", 4)
 
-local searchField = frame(listColumn, "Search", C.sunken, 0.1)
+local searchField = PixelUI.image(listColumn, "input")
+searchField.Name = "Search"
 searchField.Size = UDim2.new(1, -(L.filterWidth + 8), 0, L.searchHeight)
-corner(searchField, 8)
-local searchStroke = stroke(searchField, Theme.Color.Stroke, 1, 0.5)
+searchField.ImageColor3 = SEARCH_IDLE
 
--- A magnifier drawn from two frames, so it needs no image asset.
-local lensRing = frame(searchField, "Lens")
-lensRing.Position = UDim2.fromOffset(12, 11)
-lensRing.Size = UDim2.fromOffset(12, 12)
-corner(lensRing, UDim.new(1, 0))
-stroke(lensRing, Theme.Color.TextDim, 2, 0)
-
-local lensHandle = frame(searchField, "Handle", Theme.Color.TextDim)
-lensHandle.AnchorPoint = Vector2.new(0.5, 0.5)
-lensHandle.Position = UDim2.fromOffset(26, 26)
-lensHandle.Size = UDim2.fromOffset(6, 2)
-lensHandle.Rotation = 45
+-- The kit's magnifier, at two texels a pixel so it fits the box.
+local lens = PixelUI.image(searchField, "icon_search", 2)
+lens.Name = "Lens"
+lens.AnchorPoint = Vector2.new(0, 0.5)
+lens.Position = UDim2.new(0, 10, 0.5, 0)
 
 local searchBox = Instance.new("TextBox")
 searchBox.Name = "Box"
 searchBox.BackgroundTransparency = 1
-searchBox.Position = UDim2.fromOffset(36, 0)
-searchBox.Size = UDim2.new(1, -36 - 30, 1, 0)
+searchBox.Position = UDim2.fromOffset(38, 0)
+searchBox.Size = UDim2.new(1, -38 - 30, 1, 0)
 searchBox.FontFace = Theme.Fonts.Body
 searchBox.TextSize = Theme.TextSize.Body
-searchBox.TextColor3 = Theme.Color.Text
+searchBox.TextColor3 = P.Ink
 searchBox.PlaceholderText = "Search recipes"
-searchBox.PlaceholderColor3 = Theme.Color.TextFaint
+searchBox.PlaceholderColor3 = P.InkFaint
 searchBox.TextXAlignment = Enum.TextXAlignment.Left
 searchBox.ClearTextOnFocus = false
 searchBox.Text = ""
@@ -504,43 +493,29 @@ local clearSearch = button(searchField, "Clear")
 clearSearch.AnchorPoint = Vector2.new(1, 0.5)
 clearSearch.Position = UDim2.new(1, -8, 0.5, 0)
 clearSearch.Size = UDim2.fromOffset(22, 22)
-clearSearch.BackgroundColor3 = C.card
+clearSearch.BackgroundTransparency = 1
 clearSearch.Visible = false
-corner(clearSearch, UDim.new(1, 0))
 
-local clearGlyph = text(clearSearch, "Glyph", Theme.Fonts.Heading, Theme.TextSize.Small, Theme.Color.TextDim)
+local clearGlyph = text(clearSearch, "Glyph", Theme.Fonts.Heading, Theme.TextSize.Subheading, P.InkSoft)
 clearGlyph.Size = UDim2.fromScale(1, 1)
 clearGlyph.TextXAlignment = Enum.TextXAlignment.Center
 clearGlyph.Text = "\u{00D7}"
 
--- "Craftable": a toggle that hides everything you cannot make right now.
+-- "Craftable": a checkbox that hides everything you cannot make right now.
 local filterChip = button(listColumn, "CraftableOnly")
 filterChip.AnchorPoint = Vector2.new(1, 0)
 filterChip.Position = UDim2.new(1, 0, 0, 0)
 filterChip.Size = UDim2.fromOffset(L.filterWidth, L.searchHeight)
-filterChip.BackgroundColor3 = C.sunken
-filterChip.BackgroundTransparency = 0.1
-corner(filterChip, 8)
-local filterStroke = stroke(filterChip, Theme.Color.Stroke, 1, 0.5)
+filterChip.BackgroundTransparency = 1
 
-local filterBox = frame(filterChip, "Box")
-filterBox.Position = UDim2.fromOffset(12, (L.searchHeight - 16) / 2)
-filterBox.Size = UDim2.fromOffset(16, 16)
-filterBox.BackgroundColor3 = Theme.Color.Accent
-corner(filterBox, 4)
-local filterBoxStroke = stroke(filterBox, Theme.Color.TextDim, 1.5, 0)
+local filterBox = PixelUI.image(filterChip, "checkbox_off")
+filterBox.Name = "Box"
+filterBox.AnchorPoint = Vector2.new(0, 0.5)
+filterBox.Position = UDim2.new(0, 4, 0.5, 0)
 
--- A dark dot in the filled box, drawn rather than typed: a tick glyph is not
--- something every font has.
-local filterTick = frame(filterBox, "Tick", C.onAccent)
-filterTick.AnchorPoint = Vector2.new(0.5, 0.5)
-filterTick.Position = UDim2.fromScale(0.5, 0.5)
-filterTick.Size = UDim2.fromOffset(6, 6)
-corner(filterTick, 2)
-
-local filterLabel = text(filterChip, "Label", Theme.Fonts.BodyBold, Theme.TextSize.Small, Theme.Color.TextDim)
-filterLabel.Position = UDim2.fromOffset(36, 0)
-filterLabel.Size = UDim2.new(1, -40, 1, 0)
+local filterLabel = text(filterChip, "Label", Theme.Fonts.BodyBold, Theme.TextSize.Small, P.InkSoft)
+filterLabel.Position = UDim2.fromOffset(46, 0)
+filterLabel.Size = UDim2.new(1, -46, 1, 0)
 filterLabel.Text = "Craftable"
 
 -- === Recipe list ============================================================
@@ -553,10 +528,9 @@ list.Position = UDim2.fromOffset(0, L.searchHeight + 10)
 list.Size = UDim2.new(1, 0, 1, -(L.searchHeight + 10))
 list.CanvasSize = UDim2.new()
 list.AutomaticCanvasSize = Enum.AutomaticSize.Y
-list.ScrollBarThickness = 4
-list.ScrollBarImageColor3 = Theme.Color.Stroke
 list.ScrollingDirection = Enum.ScrollingDirection.Y
 list.Parent = listColumn
+PixelUI.styleScrollBar(list)
 
 local listLayout = Instance.new("UIListLayout")
 listLayout.Padding = UDim.new(0, L.rowGap)
@@ -567,7 +541,7 @@ listLayout.Parent = list
 local listPadding = Instance.new("UIPadding")
 listPadding.PaddingTop = UDim.new(0, 2)
 listPadding.PaddingLeft = UDim.new(0, 2)
-listPadding.PaddingRight = UDim.new(0, 10)
+listPadding.PaddingRight = UDim.new(0, 12)
 listPadding.PaddingBottom = UDim.new(0, 2)
 listPadding.Parent = list
 
@@ -579,11 +553,11 @@ emptyNote.Position = UDim2.new(0.5, 0, 0, L.searchHeight + 60)
 emptyNote.Size = UDim2.new(1, -40, 0, 70)
 emptyNote.Visible = false
 
-local emptyTitle = text(emptyNote, "Title", Theme.Fonts.BodyBold, Theme.TextSize.Subheading, Theme.Color.TextDim)
+local emptyTitle = text(emptyNote, "Title", Theme.Fonts.BodyBold, Theme.TextSize.Subheading, P.InkSoft)
 emptyTitle.Size = UDim2.new(1, 0, 0, 24)
 emptyTitle.TextXAlignment = Enum.TextXAlignment.Center
 
-local emptyHint = text(emptyNote, "Hint", Theme.Fonts.Body, Theme.TextSize.Small, Theme.Color.TextFaint)
+local emptyHint = text(emptyNote, "Hint", Theme.Fonts.Body, Theme.TextSize.Small, P.InkFaint)
 emptyHint.Position = UDim2.fromOffset(0, 28)
 emptyHint.Size = UDim2.new(1, 0, 0, 40)
 emptyHint.TextXAlignment = Enum.TextXAlignment.Center
@@ -592,24 +566,26 @@ emptyHint.TextWrapped = true
 
 -- === Detail =================================================================
 
-local detail = frame(window, "Detail", C.card, 0.25)
+local detail = PixelUI.image(window, "inset_parchment")
+detail.Name = "Detail"
 detail.Position = UDim2.fromOffset(L.detailX, L.bodyTop)
 detail.Size = UDim2.fromOffset(L.detailWidth, L.bodyHeight)
-corner(detail, 10)
-stroke(detail, Theme.Color.Stroke, 1, 0.6)
 
 local detailBody = frame(detail, "Body")
 detailBody.Position = UDim2.fromOffset(L.detailPad, L.detailPad)
 detailBody.Size = UDim2.new(1, -L.detailPad * 2, 1, -L.detailPad * 2)
 
--- The hero: what the recipe makes, large, on a glow in its rarity's colour.
-local hero = frame(detailBody, "Hero", C.sunken, 0)
+-- The hero: what the recipe makes, large, in a wooden well that glows in its
+-- rarity's colour.
+local hero = PixelUI.image(detailBody, "inset_wood")
+hero.Name = "Hero"
 hero.Size = UDim2.new(1, 0, 0, L.heroHeight)
-corner(hero, 8)
 
+-- Inside the well's border, so the glow never paints over the frame art.
+local heroInset = (PixelUI.border("inset_wood"))
 local heroGlow = frame(hero, "Glow", Theme.Color.TextDim, 0)
-heroGlow.Size = UDim2.fromScale(1, 1)
-corner(heroGlow, 8)
+heroGlow.Position = UDim2.fromOffset(heroInset, heroInset)
+heroGlow.Size = UDim2.new(1, -heroInset * 2, 1, -heroInset * 2)
 
 local heroGlowFade = Instance.new("UIGradient")
 heroGlowFade.Rotation = 90
@@ -637,15 +613,18 @@ heroCount.TextXAlignment = Enum.TextXAlignment.Right
 heroCount.TextStrokeTransparency = 0.4
 heroCount.ZIndex = 3
 
-local nameLabel = text(detailBody, "Name", Theme.Fonts.Heading, Theme.TextSize.Heading, Theme.Color.Text)
+local nameLabel = text(detailBody, "Name", Theme.Fonts.Heading, Theme.TextSize.Heading, P.Ink)
 nameLabel.Position = UDim2.fromOffset(0, L.heroHeight + 10)
 nameLabel.Size = UDim2.new(1, 0, 0, 26)
 nameLabel.TextTruncate = Enum.TextTruncate.AtEnd
 
--- Two small pills: rarity, and where it is made.
+-- Two small pills: rarity, and where it is made. The kit's dark badge, as
+-- tall as its art.
+local CHIP_HEIGHT = PixelUI.get("badge").size.Y * PixelUI.Scale
+
 local chips = frame(detailBody, "Chips")
 chips.Position = UDim2.fromOffset(0, L.heroHeight + 40)
-chips.Size = UDim2.new(1, 0, 0, 22)
+chips.Size = UDim2.new(1, 0, 0, CHIP_HEIGHT)
 
 local chipLayout = Instance.new("UIListLayout")
 chipLayout.FillDirection = Enum.FillDirection.Horizontal
@@ -654,18 +633,18 @@ chipLayout.SortOrder = Enum.SortOrder.LayoutOrder
 chipLayout.Parent = chips
 
 local function newChip(name, order)
-	local chip = frame(chips, name, Theme.Color.TextDim, 0.82)
-	chip.Size = UDim2.fromOffset(0, 22)
+	local chip = PixelUI.image(chips, "badge")
+	chip.Name = name
+	chip.Size = UDim2.fromOffset(0, CHIP_HEIGHT)
 	chip.AutomaticSize = Enum.AutomaticSize.X
 	chip.LayoutOrder = order
-	corner(chip, UDim.new(1, 0))
 
 	local chipPadding = Instance.new("UIPadding")
-	chipPadding.PaddingLeft = UDim.new(0, 10)
-	chipPadding.PaddingRight = UDim.new(0, 10)
+	chipPadding.PaddingLeft = UDim.new(0, 12)
+	chipPadding.PaddingRight = UDim.new(0, 12)
 	chipPadding.Parent = chip
 
-	local label = text(chip, "Label", Theme.Fonts.BodyBold, 13, Theme.Color.Text)
+	local label = text(chip, "Label", Theme.Fonts.BodyBold, 13, P.OnWood)
 	label.Size = UDim2.fromScale(0, 1)
 	label.AutomaticSize = Enum.AutomaticSize.X
 
@@ -675,20 +654,20 @@ end
 local rarityChip, rarityLabel = newChip("Rarity", 1)
 local stationChip, stationLabel = newChip("Station", 2)
 
-local description = text(detailBody, "Description", Theme.Fonts.Body, Theme.TextSize.Small, Theme.Color.TextDim)
-description.Position = UDim2.fromOffset(0, L.heroHeight + 70)
+local description = text(detailBody, "Description", Theme.Fonts.Body, Theme.TextSize.Small, P.InkSoft)
+description.Position = UDim2.fromOffset(0, L.heroHeight + 74)
 description.Size = UDim2.new(1, 0, 0, 36)
 description.TextWrapped = true
 description.TextYAlignment = Enum.TextYAlignment.Top
 description.TextTruncate = Enum.TextTruncate.AtEnd
 
-local requiresCaption = text(detailBody, "RequiresCaption", Theme.Fonts.BodyBold, Theme.TextSize.Small, Theme.Color.TextFaint)
-requiresCaption.Position = UDim2.fromOffset(0, L.heroHeight + 112)
+local requiresCaption = text(detailBody, "RequiresCaption", Theme.Fonts.BodyBold, Theme.TextSize.Small, P.Heading)
+requiresCaption.Position = UDim2.fromOffset(0, L.heroHeight + 116)
 requiresCaption.Size = UDim2.new(1, 0, 0, 16)
 requiresCaption.Text = "REQUIRES"
 
 local footerHeight = L.stepperHeight + 10 + L.buttonHeight
-local ingredientsTop = L.heroHeight + 132
+local ingredientsTop = L.heroHeight + 136
 
 local ingredients = Instance.new("ScrollingFrame")
 ingredients.Name = "Ingredients"
@@ -698,10 +677,9 @@ ingredients.Position = UDim2.fromOffset(0, ingredientsTop)
 ingredients.Size = UDim2.new(1, 0, 1, -(ingredientsTop + footerHeight + 10))
 ingredients.CanvasSize = UDim2.new()
 ingredients.AutomaticCanvasSize = Enum.AutomaticSize.Y
-ingredients.ScrollBarThickness = 3
-ingredients.ScrollBarImageColor3 = Theme.Color.Stroke
 ingredients.ScrollingDirection = Enum.ScrollingDirection.Y
 ingredients.Parent = detailBody
+PixelUI.styleScrollBar(ingredients)
 
 local ingredientLayout = Instance.new("UIListLayout")
 ingredientLayout.Padding = UDim.new(0, 4)
@@ -714,61 +692,57 @@ stepper.AnchorPoint = Vector2.new(0, 1)
 stepper.Position = UDim2.new(0, 0, 1, -(L.buttonHeight + 10))
 stepper.Size = UDim2.new(1, 0, 0, L.stepperHeight)
 
+-- Small tan buttons; their clicks are wired further down, with the rest.
 local function stepButton(name, label, x, width)
-	local b = button(stepper, name)
-	b.Position = UDim2.fromOffset(x, 0)
-	b.Size = UDim2.fromOffset(width, L.stepperHeight)
-	b.BackgroundColor3 = C.sunken
-	corner(b, 6)
-	stroke(b, Theme.Color.Stroke, 1, 0.5)
-
-	local glyph = text(b, "Glyph", Theme.Fonts.Heading, Theme.TextSize.Body, Theme.Color.Text)
-	glyph.Size = UDim2.fromScale(1, 1)
-	glyph.TextXAlignment = Enum.TextXAlignment.Center
-	glyph.Text = label
-	return b, glyph
+	local handle = PixelUI.button(stepper, {
+		name = name,
+		text = label,
+		textSize = Theme.TextSize.Body,
+		size = UDim2.fromOffset(width, L.stepperHeight),
+	})
+	handle.button.Position = UDim2.fromOffset(x, 0)
+	return handle.button, handle.label
 end
 
 local minusButton = stepButton("Less", "-", 0, L.stepperHeight)
-local quantityLabel = text(stepper, "Value", Theme.Fonts.Number, Theme.TextSize.Subheading, Theme.Color.Text)
+local quantityLabel = text(stepper, "Value", Theme.Fonts.Number, Theme.TextSize.Subheading, P.Ink)
 quantityLabel.Position = UDim2.fromOffset(L.stepperHeight, 0)
-quantityLabel.Size = UDim2.fromOffset(48, L.stepperHeight)
+quantityLabel.Size = UDim2.fromOffset(44, L.stepperHeight)
 quantityLabel.TextXAlignment = Enum.TextXAlignment.Center
-local plusButton = stepButton("More", "+", L.stepperHeight + 48, L.stepperHeight)
-local maxButton, maxGlyph = stepButton("Max", "MAX", L.stepperHeight * 2 + 56, 52)
+local plusButton = stepButton("More", "+", L.stepperHeight + 44, L.stepperHeight)
+local maxButton, maxGlyph = stepButton("Max", "MAX", L.stepperHeight * 2 + 52, 58)
 maxGlyph.TextSize = Theme.TextSize.Small
 
-local canMakeLabel = text(stepper, "CanMake", Theme.Fonts.Body, Theme.TextSize.Small, Theme.Color.TextFaint)
+local canMakeLabel = text(stepper, "CanMake", Theme.Fonts.Body, Theme.TextSize.Small, P.InkSoft)
 canMakeLabel.AnchorPoint = Vector2.new(1, 0)
 canMakeLabel.Position = UDim2.new(1, 0, 0, 0)
 canMakeLabel.Size = UDim2.fromOffset(90, L.stepperHeight)
 canMakeLabel.TextXAlignment = Enum.TextXAlignment.Right
 
--- The craft button. Yellow when it will work; when it will not, it says why.
-local craftButton = button(detailBody, "Craft")
+-- The craft button. Green when it will work; grey when it will not, saying why.
+local craft = PixelUI.button(detailBody, {
+	name = "Craft",
+	color = "green",
+	textSize = Theme.TextSize.Subheading,
+	size = UDim2.new(1, 0, 0, L.buttonHeight),
+})
+local craftButton = craft.button
+local craftLabel = craft.label
 craftButton.Position = UDim2.new(0, 0, 1, -L.buttonHeight)
-craftButton.Size = UDim2.new(1, 0, 0, L.buttonHeight)
-craftButton.BackgroundColor3 = Theme.Color.Accent
-corner(craftButton, 8)
-local craftStroke = stroke(craftButton, Color3.new(1, 1, 1), 1, 0.7)
-
-local craftShade = Instance.new("UIGradient")
-craftShade.Rotation = 90
-craftShade.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(215, 215, 215))
-craftShade.Parent = craftButton
-
--- Fills left to right while a batch is being made.
-local craftProgress = frame(craftButton, "Progress", Color3.new(1, 1, 1), 0.7)
-craftProgress.Size = UDim2.fromScale(0, 1)
-corner(craftProgress, 8)
-
-local craftLabel = text(craftButton, "Label", Theme.Fonts.Heading, Theme.TextSize.Subheading, C.onAccent)
-craftLabel.Size = UDim2.fromScale(1, 1)
-craftLabel.TextXAlignment = Enum.TextXAlignment.Center
 craftLabel.ZIndex = 2
 
+-- Fills left to right while a batch is being made: a pale wash over the face,
+-- under the label.
+-- Inside the outline, so the wash never paints over the button's edge.
+local craftTrack = frame(craft.content, "Track")
+craftTrack.Position = UDim2.fromOffset(PixelUI.Scale, PixelUI.Scale)
+craftTrack.Size = UDim2.new(1, -PixelUI.Scale * 2, 1, -PixelUI.Scale * 2)
+
+local craftProgress = frame(craftTrack, "Progress", Color3.new(1, 1, 1), 0.72)
+craftProgress.Size = UDim2.fromScale(0, 1)
+
 -- The detail panel's empty state.
-local noSelection = text(detail, "NoSelection", Theme.Fonts.Body, Theme.TextSize.Body, Theme.Color.TextFaint)
+local noSelection = text(detail, "NoSelection", Theme.Fonts.Body, Theme.TextSize.Body, P.InkFaint)
 noSelection.Size = UDim2.fromScale(1, 1)
 noSelection.TextXAlignment = Enum.TextXAlignment.Center
 noSelection.Text = "Pick a recipe"
@@ -778,20 +752,20 @@ noSelection.Visible = false
 
 -- Results appear as a pill just under the window, where they do not cover the
 -- thing being crafted.
-local toast = frame(root, "Toast", C.card, 1)
+local toast = PixelUI.image(root, "tooltip")
+toast.Name = "Toast"
 toast.AnchorPoint = Vector2.new(0.5, 0)
 toast.Position = UDim2.new(0.5, 0, 1, 14)
-toast.Size = UDim2.fromOffset(0, 34)
+toast.Size = UDim2.fromOffset(0, 40)
 toast.AutomaticSize = Enum.AutomaticSize.X
-corner(toast, UDim.new(1, 0))
-local toastStroke = stroke(toast, Theme.Color.Stroke, 1, 1)
+toast.ImageTransparency = 1
 
 local toastPadding = Instance.new("UIPadding")
-toastPadding.PaddingLeft = UDim.new(0, 16)
-toastPadding.PaddingRight = UDim.new(0, 16)
+toastPadding.PaddingLeft = UDim.new(0, 20)
+toastPadding.PaddingRight = UDim.new(0, 20)
 toastPadding.Parent = toast
 
-local toastLabel = text(toast, "Label", Theme.Fonts.BodyBold, Theme.TextSize.Body, Theme.Color.Text)
+local toastLabel = text(toast, "Label", Theme.Fonts.BodyBold, Theme.TextSize.Body, P.OnWood)
 toastLabel.Size = UDim2.fromScale(0, 1)
 toastLabel.AutomaticSize = Enum.AutomaticSize.X
 toastLabel.TextTransparency = 1
@@ -802,30 +776,25 @@ local function showToast(message, tone)
 	toastToken += 1
 	local token = toastToken
 
-	local color = if tone == "bad" then Theme.Color.Bad elseif tone == "good" then Theme.Color.Good else Theme.Color.Text
 	toastLabel.Text = message
-	toastLabel.TextColor3 = color
-	toastStroke.Color = color
+	toastLabel.TextColor3 = if tone == "bad" then P.BadLight elseif tone == "good" then P.GoodLight else P.OnWood
 
-	TweenService:Create(toast, Theme.Tween.Fade, { BackgroundTransparency = 0.05 }):Play()
+	TweenService:Create(toast, Theme.Tween.Fade, { ImageTransparency = 0 }):Play()
 	TweenService:Create(toastLabel, Theme.Tween.Fade, { TextTransparency = 0 }):Play()
-	TweenService:Create(toastStroke, Theme.Tween.Fade, { Transparency = 0.3 }):Play()
 
 	task.delay(TOAST_SECONDS, function()
 		if token ~= toastToken then
 			return
 		end
-		TweenService:Create(toast, Theme.Tween.Fade, { BackgroundTransparency = 1 }):Play()
+		TweenService:Create(toast, Theme.Tween.Fade, { ImageTransparency = 1 }):Play()
 		TweenService:Create(toastLabel, Theme.Tween.Fade, { TextTransparency = 1 }):Play()
-		TweenService:Create(toastStroke, Theme.Tween.Fade, { Transparency = 1 }):Play()
 	end)
 end
 
 local function hideToast()
 	toastToken += 1
-	toast.BackgroundTransparency = 1
+	toast.ImageTransparency = 1
 	toastLabel.TextTransparency = 1
-	toastStroke.Transparency = 1
 end
 
 -- ---------------------------------------------------------------------------
@@ -857,12 +826,8 @@ local selectRecipe
 local refreshTabs
 
 local function refreshFilterChip()
-	filterTick.Visible = craftableOnly
-	filterBox.BackgroundTransparency = if craftableOnly then 0 else 1
-	filterBoxStroke.Color = if craftableOnly then Theme.Color.Accent else Theme.Color.TextDim
-	filterStroke.Color = if craftableOnly then Theme.Color.Accent else Theme.Color.Stroke
-	filterStroke.Transparency = if craftableOnly then 0.2 else 0.5
-	filterLabel.TextColor3 = if craftableOnly then Theme.Color.Text else Theme.Color.TextDim
+	PixelUI.apply(filterBox, if craftableOnly then "checkbox_on" else "checkbox_off")
+	filterLabel.TextColor3 = if craftableOnly then P.Ink else P.InkSoft
 end
 
 -- What a row looks like for its state: chosen, under the cursor, affordable.
@@ -870,29 +835,23 @@ local function paintRow(entry)
 	local selected = selectedRecipe ~= nil and selectedRecipe.id == entry.recipe.id
 	local affordable = canAfford(entry.recipe)
 
-	entry.button.BackgroundColor3 = if entry.hovered or selected then C.cardHover else C.card
-	entry.button.BackgroundTransparency = if selected then 0.05 elseif entry.hovered then 0.2 else 0.5
-	entry.border.Color = if selected then Theme.Color.Accent else Theme.Color.Stroke
-	entry.border.Transparency = if selected then 0 else 0.8
-	entry.border.Thickness = if selected then 2 else 1
+	PixelUI.apply(entry.button, if selected then "row_selected" elseif entry.hovered then "row_hover" else "row")
 
-	entry.tile.ImageColor3 = if affordable then Color3.new(1, 1, 1) else Theme.Color.Disabled
+	entry.tile.ImageColor3 = if affordable then Color3.new(1, 1, 1) else P.Disabled
 	entry.icon.ImageTransparency = if affordable then 0 else 0.45
-	entry.name.TextColor3 = if affordable then Theme.Color.Text else Theme.Color.TextDim
+	entry.name.TextColor3 = if affordable then P.Ink else P.InkSoft
 
 	local possible = craftableCount(entry.recipe)
 	if possible > 0 then
 		entry.badge.Text = "\u{00D7}" .. tostring(math.min(possible, 999))
-		entry.badge.TextColor3 = Theme.Color.Good
-		entry.badgeFrame.BackgroundColor3 = Theme.Color.Good
+		entry.badge.TextColor3 = P.GoodLight
 	else
 		entry.badge.Text = "Need"
-		entry.badge.TextColor3 = Theme.Color.TextFaint
-		entry.badgeFrame.BackgroundColor3 = Theme.Color.TextFaint
+		entry.badge.TextColor3 = P.OnWoodDim
 	end
 
 	for _, chip in ipairs(entry.costs) do
-		chip.label.TextColor3 = if held(chip.item) >= chip.count then Theme.Color.TextDim else Theme.Color.Bad
+		chip.label.TextColor3 = if held(chip.item) >= chip.count then P.InkSoft else P.Bad
 	end
 end
 
@@ -905,12 +864,16 @@ end
 local function newRow(recipe, order)
 	local entry = { recipe = recipe, hovered = false, costs = {} }
 
-	local row = button(list, recipe.id)
+	local row = Instance.new("ImageButton")
+	row.Name = recipe.id
+	row.AutoButtonColor = false
+	row.BackgroundTransparency = 1
+	row.BorderSizePixel = 0
 	row.Size = UDim2.new(1, 0, 0, L.rowHeight)
 	row.LayoutOrder = order
-	corner(row, 8)
+	row.Parent = list
+	PixelUI.apply(row, "row")
 	entry.button = row
-	entry.border = stroke(row, Theme.Color.Stroke, 1, 0.8)
 
 	local tile, icon, count = newSlotTile(row, 48)
 	tile.Position = UDim2.fromOffset(7, (L.rowHeight - 48) / 2)
@@ -918,7 +881,7 @@ local function newRow(recipe, order)
 	count.Text = if recipe.output.count > 1 then tostring(recipe.output.count) else ""
 	entry.tile, entry.icon = tile, icon
 
-	local name = text(row, "Name", Theme.Fonts.BodyBold, Theme.TextSize.Body, Theme.Color.Text)
+	local name = text(row, "Name", Theme.Fonts.BodyBold, Theme.TextSize.Body, P.Ink)
 	name.Position = UDim2.fromOffset(66, 9)
 	name.Size = UDim2.new(1, -66 - 64, 0, 20)
 	name.TextTruncate = Enum.TextTruncate.AtEnd
@@ -939,7 +902,7 @@ local function newRow(recipe, order)
 
 	for index, ingredient in ipairs(recipe.ingredients) do
 		if index > 4 then
-			local more = text(costs, "More", Theme.Fonts.Body, 13, Theme.Color.TextFaint)
+			local more = text(costs, "More", Theme.Fonts.Body, 13, P.InkFaint)
 			more.Size = UDim2.fromOffset(28, 18)
 			more.LayoutOrder = index
 			more.Text = string.format("+%d", #recipe.ingredients - 4)
@@ -958,7 +921,7 @@ local function newRow(recipe, order)
 		mini.Parent = cost
 		ItemThumbnails.bind(mini, ingredient.item)
 
-		local amount = text(cost, "Count", Theme.Fonts.Number, 13, Theme.Color.TextDim)
+		local amount = text(cost, "Count", Theme.Fonts.Number, 13, P.InkSoft)
 		amount.Position = UDim2.fromOffset(20, 0)
 		amount.Size = UDim2.fromOffset(0, 18)
 		amount.AutomaticSize = Enum.AutomaticSize.X
@@ -967,15 +930,15 @@ local function newRow(recipe, order)
 		table.insert(entry.costs, { item = ingredient.item, count = ingredient.count, label = amount })
 	end
 
-	-- How many you could make, on the right.
-	local badgeFrame = frame(row, "Badge", Theme.Color.Good, 0.85)
+	-- How many you could make, on the right, on the kit's dark pill.
+	local badgeFrame = PixelUI.image(row, "badge")
+	badgeFrame.Name = "Badge"
 	badgeFrame.AnchorPoint = Vector2.new(1, 0.5)
-	badgeFrame.Position = UDim2.new(1, -12, 0.5, 0)
-	badgeFrame.Size = UDim2.fromOffset(48, 24)
-	corner(badgeFrame, UDim.new(1, 0))
+	badgeFrame.Position = UDim2.new(1, -14, 0.5, 0)
+	badgeFrame.Size = UDim2.fromOffset(54, CHIP_HEIGHT)
 	entry.badgeFrame = badgeFrame
 
-	local badge = text(badgeFrame, "Label", Theme.Fonts.Number, 13, Theme.Color.Good)
+	local badge = text(badgeFrame, "Label", Theme.Fonts.Number, 13, P.GoodLight)
 	badge.Size = UDim2.fromScale(1, 1)
 	badge.TextXAlignment = Enum.TextXAlignment.Center
 	entry.badge = badge
@@ -1080,13 +1043,15 @@ local function buildList()
 end
 
 local function newIngredientRow(ingredient, order)
-	local row = frame(ingredients, ingredient.item, C.sunken, 0.35)
+	local row = PixelUI.image(ingredients, "row")
+	row.Name = ingredient.item
 	row.Size = UDim2.new(1, -4, 0, L.ingredientHeight)
 	row.LayoutOrder = order
-	corner(row, 6)
 
-	local tile, icon = newSlotTile(row, 32)
-	tile.Position = UDim2.fromOffset(4, (L.ingredientHeight - 32) / 2)
+	-- The wooden slot, so the cost reads apart from the recipe's own tiles.
+	local tile, icon = newSlotTile(row, 34)
+	SlotArt.apply(tile, "dark")
+	tile.Position = UDim2.fromOffset(6, (L.ingredientHeight - 34) / 2)
 	ItemThumbnails.bind(icon, ingredient.item, function(image)
 		if image == "" then
 			ItemPreview.fillSlot(icon, ingredient.item)
@@ -1096,28 +1061,27 @@ local function newIngredientRow(ingredient, order)
 	local have = held(ingredient.item)
 	local enough = have >= ingredient.count
 
-	local name = text(row, "Name", Theme.Fonts.Body, Theme.TextSize.Small, if enough then Theme.Color.Text else Theme.Color.TextDim)
-	name.Position = UDim2.fromOffset(44, 5)
-	name.Size = UDim2.new(1, -44 - 70, 0, 18)
+	local name = text(row, "Name", Theme.Fonts.Body, Theme.TextSize.Small, if enough then P.Ink else P.InkSoft)
+	name.Position = UDim2.fromOffset(48, 8)
+	name.Size = UDim2.new(1, -48 - 76, 0, 18)
 	name.TextTruncate = Enum.TextTruncate.AtEnd
 	name.Text = displayName(ingredient.item)
 
-	local tally = text(row, "Tally", Theme.Fonts.Number, Theme.TextSize.Count, if enough then Theme.Color.Good else Theme.Color.Bad)
+	local tally = text(row, "Tally", Theme.Fonts.Number, Theme.TextSize.Count, if enough then P.Good else P.Bad)
 	tally.AnchorPoint = Vector2.new(1, 0)
-	tally.Position = UDim2.new(1, -10, 0, 4)
+	tally.Position = UDim2.new(1, -12, 0, 7)
 	tally.Size = UDim2.fromOffset(70, 18)
 	tally.TextXAlignment = Enum.TextXAlignment.Right
 	tally.Text = string.format("%d / %d", math.min(have, 9999), ingredient.count)
 
-	-- How far along you are, under the name.
-	local track = frame(row, "Track", Theme.Color.Divider, 0)
-	track.Position = UDim2.new(0, 44, 0, 27)
-	track.Size = UDim2.new(1, -54, 0, 4)
-	corner(track, UDim.new(1, 0))
+	-- How far along you are, under the name: a groove that fills. Square ends,
+	-- like everything else drawn in texels.
+	local track = frame(row, "Track", GROOVE, 0.35)
+	track.Position = UDim2.new(0, 48, 0, 30)
+	track.Size = UDim2.new(1, -60, 0, PixelUI.Scale * 2)
 
-	local fill = frame(track, "Fill", if enough then Theme.Color.Good else Theme.Color.Bad, 0)
+	local fill = frame(track, "Fill", if enough then P.Good else P.Bad, 0)
 	fill.Size = UDim2.fromScale(math.clamp(have / math.max(ingredient.count, 1), 0, 1), 1)
-	corner(fill, UDim.new(1, 0))
 end
 
 local function refreshIngredients(recipe)
@@ -1170,10 +1134,7 @@ local function refreshCraftButton()
 	end
 
 	local lit = ready and reachable
-	craftButton.BackgroundColor3 = if lit or batch then Theme.Color.Accent else C.sunken
-	craftLabel.TextColor3 = if lit or batch then C.onAccent else Theme.Color.TextFaint
-	craftStroke.Color = if lit or batch then Color3.new(1, 1, 1) else Theme.Color.Stroke
-	craftStroke.Transparency = if lit or batch then 0.7 else 0.5
+	craft.setStyle(if lit or batch then "green" else "disabled")
 	craftProgress.Size = UDim2.fromScale(if batch then batch.done / batch.total else 0, 1)
 
 	minusButton.Visible = affordable
@@ -1206,15 +1167,14 @@ function refreshDetail()
 	heroCount.Text = if recipe.output.count > 1 then "\u{00D7}" .. tostring(recipe.output.count) else ""
 
 	nameLabel.Text = displayName(item)
-	nameLabel.TextColor3 = if Theme.rarityRank(rarity) > 1 then rarityColor else Theme.Color.Text
+	nameLabel.TextColor3 = if Theme.rarityRank(rarity) > 1 then Theme.rarityInk(rarity) else P.Ink
 
-	rarityChip.BackgroundColor3 = rarityColor
+	-- On the dark pills, so the rarity's own colour, lifted a little.
 	rarityLabel.Text = string.upper(rarity)
 	rarityLabel.TextColor3 = rarityColor:Lerp(Color3.new(1, 1, 1), 0.35)
 
-	stationChip.BackgroundColor3 = stationColor(recipe.station)
 	stationLabel.Text = if recipe.station then StationConfig.getDisplayName(recipe.station) else "By hand"
-	stationLabel.TextColor3 = if inRange(recipe.station) then Theme.Color.Text else Theme.Color.TextDim
+	stationLabel.TextColor3 = if inRange(recipe.station) then P.OnWood else P.OnWoodDim
 
 	-- A weapon's class line ("Sword -> Longsword") heads its description.
 	description.Text = WeaponClasses.description(def)
@@ -1251,48 +1211,46 @@ local function buildTabs()
 		local stationId = if id == StationConfig.HandStation then nil else id
 		local tab = { stationId = stationId, active = false, hovered = false }
 
-		local b = button(tabList, id)
+		-- A kit button: tan, and green while it is the station shown. What is
+		-- drawn on its face sits in `content`, which drops with the face when
+		-- it is pressed.
+		local b = Instance.new("ImageButton")
+		b.Name = id
+		b.AutoButtonColor = false
+		b.BackgroundTransparency = 1
+		b.BorderSizePixel = 0
 		b.Size = UDim2.new(1, 0, 0, L.tabHeight)
 		b.LayoutOrder = order
-		b.BackgroundColor3 = C.card
-		b.BackgroundTransparency = 1
-		corner(b, 8)
+		b.Parent = tabList
 		tab.button = b
-		tab.border = stroke(b, Theme.Color.Stroke, 1, 1)
 
-		-- The active tab gets an accent bar as well as a fill: colour alone is
-		-- easy to miss beside a busy list.
-		local bar = frame(b, "Accent", Theme.Color.Accent)
-		bar.AnchorPoint = Vector2.new(0, 0.5)
-		bar.Position = UDim2.new(0, 0, 0.5, 0)
-		bar.Size = UDim2.fromOffset(4, L.tabHeight - 18)
-		bar.Visible = false
-		corner(bar, 2)
-		tab.bar = bar
+		local content = frame(b, "Content")
+		content.Size = UDim2.new(1, 0, 1, -PixelUI.Scale * 2)
+		tab.look = PixelUI.bindButton(b, "tan", content)
 
-		local dot = frame(b, "Swatch", stationColor(stationId))
+		-- Square, outlined in the frame art's dark brown: a texel swatch.
+		local dot = frame(content, "Swatch", stationColor(stationId))
 		dot.AnchorPoint = Vector2.new(0, 0.5)
 		dot.Position = UDim2.new(0, 14, 0.5, 0)
-		dot.Size = UDim2.fromOffset(14, 14)
-		corner(dot, 4)
-		stroke(dot, Color3.new(1, 1, 1), 1, 0.7)
+		dot.Size = UDim2.fromOffset(12, 12)
+		stroke(dot, Color3.fromRGB(43, 24, 16), 2, 0)
 
-		local name = text(b, "Name", Theme.Fonts.Body, Theme.TextSize.Body, Theme.Color.TextDim)
-		name.Position = UDim2.fromOffset(38, 7)
-		name.Size = UDim2.new(1, -38 - 44, 0, 20)
+		local name = text(content, "Name", Theme.Fonts.Body, Theme.TextSize.Body, P.Ink)
+		name.Position = UDim2.fromOffset(36, 6)
+		name.Size = UDim2.new(1, -36 - 50, 0, 20)
 		name.TextTruncate = Enum.TextTruncate.AtEnd
 		name.Text = if stationId then StationConfig.getDisplayName(stationId) else "By Hand"
 		tab.name = name
 
-		local state = text(b, "State", Theme.Fonts.Body, 13, Theme.Color.TextFaint)
-		state.Position = UDim2.fromOffset(38, 27)
-		state.Size = UDim2.new(1, -38 - 44, 0, 16)
+		local state = text(content, "State", Theme.Fonts.Body, 13, P.InkSoft)
+		state.Position = UDim2.fromOffset(36, 26)
+		state.Size = UDim2.new(1, -36 - 50, 0, 16)
 		tab.state = state
 
 		-- How many of its recipes you can make right now, of how many.
-		local count = text(b, "Count", Theme.Fonts.Number, 13, Theme.Color.TextFaint)
+		local count = text(content, "Count", Theme.Fonts.Number, 13, P.InkSoft)
 		count.AnchorPoint = Vector2.new(1, 0.5)
-		count.Position = UDim2.new(1, -10, 0.5, 0)
+		count.Position = UDim2.new(1, -14, 0.5, 0)
 		count.Size = UDim2.fromOffset(40, 18)
 		count.TextXAlignment = Enum.TextXAlignment.Right
 		tab.count = count
@@ -1321,21 +1279,21 @@ function refreshTabs()
 	for _, tab in pairs(tabs) do
 		local stationId = tab.stationId
 
-		tab.button.BackgroundTransparency = if tab.active then 0.1 elseif tab.hovered then 0.45 else 1
-		tab.border.Transparency = if tab.active then 0.5 else 1
-		tab.bar.Visible = tab.active
+		-- Green is the station shown; its text is the dark green that reads on
+		-- it, and every other tab is ink on tan.
+		tab.look.setStyle(if tab.active then "green" else "tan")
 		tab.name.FontFace = if tab.active then Theme.Fonts.BodyBold else Theme.Fonts.Body
-		tab.name.TextColor3 = if tab.active or tab.hovered then Theme.Color.Text else Theme.Color.TextDim
+		tab.name.TextColor3 = if tab.active then P.OnGreen else P.Ink
 
 		if stationId == nil then
 			tab.state.Text = "Anywhere"
-			tab.state.TextColor3 = Theme.Color.TextFaint
+			tab.state.TextColor3 = if tab.active then P.OnGreen else P.InkSoft
 		elseif nearby[stationId] then
 			tab.state.Text = "In range"
-			tab.state.TextColor3 = Theme.Color.Good
+			tab.state.TextColor3 = if tab.active then P.OnGreen else P.Good
 		else
 			tab.state.Text = "Not nearby"
-			tab.state.TextColor3 = Theme.Color.TextFaint
+			tab.state.TextColor3 = if tab.active then P.OnGreen else P.InkSoft
 		end
 
 		local recipes = RecipeBook.getForStation(stationId)
@@ -1346,13 +1304,14 @@ function refreshTabs()
 			end
 		end
 		tab.count.Text = string.format("%d/%d", ready, #recipes)
-		tab.count.TextColor3 = if ready > 0 then Theme.Color.Good else Theme.Color.TextFaint
+		tab.count.TextColor3 = if tab.active then P.OnGreen elseif ready > 0 then P.Good else P.InkSoft
 	end
 end
 
 local function refreshHeader()
-	local color = stationColor(activeStation)
-	stationBadge.BackgroundColor3 = color
+	-- Tinted toward the station's colour, but kept light: a full-strength
+	-- multiply would sink the parchment slot to near black.
+	stationBadge.ImageColor3 = stationColor(activeStation):Lerp(Color3.new(1, 1, 1), 0.3)
 
 	local name = if activeStation then StationConfig.getDisplayName(activeStation) else "By Hand"
 	badgeLetter.Text = if activeStation then string.upper(string.sub(name, 1, 1)) else "H"
@@ -1360,13 +1319,13 @@ local function refreshHeader()
 
 	if activeStation == nil then
 		subtitle.Text = "Hand recipes - craft these anywhere"
-		subtitle.TextColor3 = Theme.Color.TextDim
+		subtitle.TextColor3 = P.OnWoodDim
 	elseif nearby[activeStation] then
 		subtitle.Text = string.format("At a %s", name)
-		subtitle.TextColor3 = Theme.Color.Good
+		subtitle.TextColor3 = P.GoodLight
 	else
 		subtitle.Text = string.format("Stand near a %s to craft these", name)
-		subtitle.TextColor3 = Theme.Color.TextDim
+		subtitle.TextColor3 = P.OnWoodDim
 	end
 end
 
@@ -1548,7 +1507,8 @@ local function open(stationId)
 
 	if not wasOpen then
 		Sounds.play("ui.open")
-		Motion.openPanel(window, Theme.Transparency.Panel)
+		-- Transparent to the end: the frame art is the panel, not a background.
+		Motion.openPanel(window, 1)
 		fadeShadows(true, Theme.Tween.Open)
 		TweenService:Create(backdrop, Theme.Tween.Open, {
 			BackgroundTransparency = Theme.Transparency.Backdrop,
@@ -1601,38 +1561,25 @@ end
 -- Wiring
 -- ---------------------------------------------------------------------------
 
-Motion.attachButton(craftButton, {
-	hoverScale = 1.02,
-	pressScale = 0.97,
-	sound = "ui.click",
-	enabled = function()
-		return selectedRecipe ~= nil and canAfford(selectedRecipe) and batch == nil
-	end,
-	onDenied = function()
+-- The kit's buttons show hover and press themselves, and are never scaled -
+-- a stretched texel looks like a mistake - so these only decide what a click
+-- does.
+craftButton.MouseButton1Click:Connect(function()
+	if not (selectedRecipe ~= nil and canAfford(selectedRecipe) and batch == nil) then
+		Sounds.play("ui.denied")
 		if not batch then
 			Motion.shake(detail, 6)
 			showToast("Not enough materials", "bad")
 		end
-	end,
-	onClick = requestCraft,
-})
-
-Motion.attachButton(closeButton, {
-	hoverScale = 1.08,
-	pressScale = 0.92,
-	sound = "ui.click",
-	onClick = close,
-})
-
-closeButton.MouseEnter:Connect(function()
-	TweenService:Create(closeButton, Theme.Tween.Hover, { BackgroundColor3 = Theme.Color.Bad }):Play()
-	closeGlyph.TextColor3 = Color3.new(1, 1, 1)
-	closeStroke.Transparency = 1
+		return
+	end
+	Sounds.play("ui.click")
+	requestCraft()
 end)
-closeButton.MouseLeave:Connect(function()
-	TweenService:Create(closeButton, Theme.Tween.Hover, { BackgroundColor3 = C.card }):Play()
-	closeGlyph.TextColor3 = Theme.Color.TextDim
-	closeStroke.Transparency = 0.4
+
+closeButton.MouseButton1Click:Connect(function()
+	Sounds.play("ui.click")
+	close()
 end)
 
 local function stepQuantity(delta)
@@ -1646,15 +1593,19 @@ local function stepQuantity(delta)
 	refreshCraftButton()
 end
 
-Motion.attachButton(minusButton, { onClick = function() stepQuantity(-1) end, sound = "ui.click" })
-Motion.attachButton(plusButton, { onClick = function() stepQuantity(1) end, sound = "ui.click" })
-Motion.attachButton(maxButton, {
-	sound = "ui.click",
-	onClick = function()
-		quantity = quantityLimit()
-		refreshCraftButton()
-	end,
-})
+minusButton.MouseButton1Click:Connect(function()
+	Sounds.play("ui.click")
+	stepQuantity(-1)
+end)
+plusButton.MouseButton1Click:Connect(function()
+	Sounds.play("ui.click")
+	stepQuantity(1)
+end)
+maxButton.MouseButton1Click:Connect(function()
+	Sounds.play("ui.click")
+	quantity = quantityLimit()
+	refreshCraftButton()
+end)
 
 filterChip.MouseButton1Click:Connect(function()
 	craftableOnly = not craftableOnly
@@ -1669,15 +1620,13 @@ clearSearch.MouseButton1Click:Connect(function()
 end)
 
 searchBox.Focused:Connect(function()
-	searchStroke.Color = Theme.Color.Accent
-	searchStroke.Transparency = 0.2
+	searchField.ImageColor3 = SEARCH_FOCUSED
 end)
 
 -- Enter in the search box crafts the selection, so a player can type a name
 -- and make it without reaching for the mouse.
 searchBox.FocusLost:Connect(function(enterPressed)
-	searchStroke.Color = Theme.Color.Stroke
-	searchStroke.Transparency = 0.5
+	searchField.ImageColor3 = SEARCH_IDLE
 	if enterPressed and selectedRecipe then
 		requestCraft()
 	end

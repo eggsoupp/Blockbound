@@ -3,6 +3,14 @@
   "tree": {
     "$className": "DataModel",
     "$ignoreUnknownInstances": true,
+    "Lighting": {
+      "$className": "Lighting",
+      "$ignoreUnknownInstances": true,
+      "$properties": {
+        "LightingStyle": "Soft",
+        "PrioritizeLightingQuality": true
+      }
+    },
     "Workspace": {
       "$className": "Workspace",
       "$ignoreUnknownInstances": true,
@@ -456,87 +464,54 @@
           "AbilityScope": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/AbilityScope.lua"
           },
-          "SacredRainPlan": {
-            "$path": "src/ReplicatedStorage/Shared/Abilities/SacredRainPlan.lua"
-          },
           "VFX": {
             "$className": "Folder",
             "$ignoreUnknownInstances": true,
-            "FXBuilder": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/FXBuilder.lua"
-            },
-            "SacredRainData": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SacredRainData.lua"
-            },
-            "SacredRainVFX": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SacredRainVFX.lua"
-            },
-            "VFXPalette": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/VFXPalette.lua"
-            },
-            "EclipseVFX": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/EclipseVFX.lua"
-            },
-            "AnnihilationVFX": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationVFX.lua"
-            },
-            "AnnihilationMeshes": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationMeshes.lua"
-            },
-            "AnnihilationMeshData": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationMeshData.lua"
-            },
-            "AnnihilationBeamData": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationBeamData.lua"
-            },
-            "AnnihilationBeam": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationBeam.lua"
-            },
-            "AnnihilationImported": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationImported.lua"
-            },
-            "AnnihilationCamera": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationCamera.lua"
-            },
-            "AnnihilationDebris": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AnnihilationDebris.lua"
-            },
-            "ElementalVFX": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/ElementalVFX.lua"
-            },
-            "AstralCollapseVFX": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AstralCollapseVFX.lua"
-            },
-            "StormWellVFX": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/StormWellVFX.lua"
-            },
             "SignusVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusVFX.lua"
+            },
+            "CataclysmVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CataclysmVFX.lua"
+            },
+            "CataclysmCamera": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CataclysmCamera.lua"
+            },
+            "CataclysmParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CataclysmParticles.lua"
+            },
+            "StarterVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/StarterVFX.lua"
+            },
+            "StarterParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/StarterParticles.lua"
+            },
+            "SignusParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusParticles.lua"
+            },
+            "SignusFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusFX.lua"
+            },
+            "SignusVisuals": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusVisuals.lua"
             },
             "BlightborerVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/BlightborerVFX.lua"
             },
             "BlightborerParticles": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/BlightborerParticles.lua"
+            },
+            "SignusChoreography": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusChoreography.lua"
             }
-          },
-          "EclipsePlan": {
-            "$path": "src/ReplicatedStorage/Shared/Abilities/EclipsePlan.lua"
-          },
-          "AnnihilationPlan": {
-            "$path": "src/ReplicatedStorage/Shared/Abilities/AnnihilationPlan.lua"
-          },
-          "ElementalPlan": {
-            "$path": "src/ReplicatedStorage/Shared/Abilities/ElementalPlan.lua"
-          },
-          "AstralCollapsePlan": {
-            "$path": "src/ReplicatedStorage/Shared/Abilities/AstralCollapsePlan.lua"
-          },
-          "StormWellPlan": {
-            "$path": "src/ReplicatedStorage/Shared/Abilities/StormWellPlan.lua"
           },
           "StorageConfig": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/StorageConfig.lua"
+          },
+          "CataclysmPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/CataclysmPlan.lua"
+          },
+          "StarterPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/StarterPlan.lua"
           }
         },
         "Permissions": {
@@ -550,6 +525,9 @@
     "ServerScriptService": {
       "$className": "ServerScriptService",
       "$ignoreUnknownInstances": true,
+      "LightingPreset": {
+        "$path": "src/ServerScriptService/LightingPreset.server.lua"
+      },
       "Day/Night Cycle": {
         "$path": "src/ServerScriptService/Day-Night Cycle.server.lua",
         "$properties": {
@@ -667,23 +645,11 @@
       "Abilities": {
         "$className": "Folder",
         "$ignoreUnknownInstances": true,
-        "SacredRain": {
-          "$path": "src/ServerScriptService/Abilities/SacredRain.lua"
+        "Cataclysm": {
+          "$path": "src/ServerScriptService/Abilities/Cataclysm.lua"
         },
-        "Eclipse": {
-          "$path": "src/ServerScriptService/Abilities/Eclipse.lua"
-        },
-        "Annihilation": {
-          "$path": "src/ServerScriptService/Abilities/Annihilation.lua"
-        },
-        "ElementalAttack": {
-          "$path": "src/ServerScriptService/Abilities/ElementalAttack.lua"
-        },
-        "AstralCollapse": {
-          "$path": "src/ServerScriptService/Abilities/AstralCollapse.lua"
-        },
-        "StormWell": {
-          "$path": "src/ServerScriptService/Abilities/StormWell.lua"
+        "StarterAbilities": {
+          "$path": "src/ServerScriptService/Abilities/StarterAbilities.lua"
         }
       },
       "InitAbilities": {
@@ -745,6 +711,9 @@
         },
         "Blightborer": {
           "$path": "src/ServerScriptService/Bosses/Blightborer.lua"
+        },
+        "SignusMoves": {
+          "$path": "src/ServerScriptService/Bosses/SignusMoves.lua"
         }
       },
       "BossService": {

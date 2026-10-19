@@ -1,0 +1,95 @@
+{
+  "identical_palettes": true,
+  "models": [
+    {
+      "file": "steel_sword.vox",
+      "format": "MagicaVoxel VOX 150",
+      "dimensions_xyz": [
+        13,
+        3,
+        32
+      ],
+      "voxels": 314,
+      "connected_components": 1,
+      "roundtrip_identical": true,
+      "rgba_sha256": "047a4a170dd4fc7a03b64b446afc16121aa93b8651c18d1733070cb860223c49",
+      "used_palette_indices": [
+        18,
+        20,
+        22,
+        26,
+        27
+      ],
+      "design_origin_xyz": [
+        6,
+        1,
+        0
+      ],
+      "grip_anchor_xyz": [
+        6,
+        1,
+        4
+      ]
+    },
+    {
+      "file": "steel_pickaxe.vox",
+      "format": "MagicaVoxel VOX 150",
+      "dimensions_xyz": [
+        19,
+        3,
+        24
+      ],
+      "voxels": 172,
+      "connected_components": 1,
+      "roundtrip_identical": true,
+      "rgba_sha256": "047a4a170dd4fc7a03b64b446afc16121aa93b8651c18d1733070cb860223c49",
+      "used_palette_indices": [
+        4,
+        6,
+        18,
+        20,
+        22
+      ],
+      "design_origin_xyz": [
+        9,
+        1,
+        0
+      ],
+      "grip_anchor_xyz": [
+        9,
+        1,
+        8
+      ]
+    },
+    {
+      "file": "steel_axe.vox",
+      "format": "MagicaVoxel VOX 150",
+      "dimensions_xyz": [
+        12,
+        3,
+        24
+      ],
+      "voxels": 249,
+      "connected_components": 1,
+      "roundtrip_identical": true,
+      "rgba_sha256": "047a4a170dd4fc7a03b64b446afc16121aa93b8651c18d1733070cb860223c49",
+      "used_palette_indices": [
+        4,
+        6,
+        18,
+        20,
+        22
+      ],
+      "design_origin_xyz": [
+        2,
+        1,
+        0
+      ],
+      "grip_anchor_xyz": [
+        2,
+        1,
+        8
+      ]
+    }
+  ]
+}

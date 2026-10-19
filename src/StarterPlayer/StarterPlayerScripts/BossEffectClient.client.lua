@@ -2,10 +2,10 @@
 	BossEffectClient
 
 	Draws the one-shot effects a boss asks for: particle bursts, flashes and
-	camera kicks, which are presentation and belong on the client. The server
-	keeps the geometry that promises something (telegraph rings, cracks,
-	projectiles) because those replicate as ordinary instances; what it cannot
-	do is call ParticleEmitter:Emit on a client's behalf, so bursts come here.
+	camera kicks, which are presentation and belong on the client. Signus's
+	persistent telegraphs, projectiles, aura and eclipse are rendered by
+	SignusVisuals on invisible server carriers. Their positions and combat
+	decisions remain authoritative; particle bursts arrive through this remote.
 
 	Listens to the `BossEffect` remote, which BossService ensures at server
 	start. The payload names the boss, and the boss's VFX module in
@@ -38,7 +38,10 @@ local VFXFolder = Shared:WaitForChild("Abilities"):WaitForChild("VFX")
 
 local BossEffect = Remotes.wait("BossEffect")
 
-local MAX_CONCURRENT = 14
+-- Persistent effects must also exist for observers arriving mid-encounter.
+require(VFXFolder:WaitForChild("SignusVisuals")).start()
+
+local MAX_CONCURRENT = 28
 local DEFAULT_DURATION = 3
 
 local active = 0

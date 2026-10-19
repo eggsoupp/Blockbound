@@ -1,0 +1,147 @@
+{
+  "name": "Blockbound - Wood, Linen, Steel and Leather",
+  "indexing": "0 is empty. RGBA entry 0 maps to voxel color index 1.",
+  "compatibility": "Indices 1-16 preserve the existing wooden sword palette.",
+  "colors": [
+    {
+      "index": 1,
+      "name": "Wood deep shadow",
+      "hex": "#51351e"
+    },
+    {
+      "index": 2,
+      "name": "Wood shadow",
+      "hex": "#664322"
+    },
+    {
+      "index": 3,
+      "name": "Wood dark edge",
+      "hex": "#79522b"
+    },
+    {
+      "index": 4,
+      "name": "Wood edge",
+      "hex": "#896035"
+    },
+    {
+      "index": 5,
+      "name": "Wood brown",
+      "hex": "#997243"
+    },
+    {
+      "index": 6,
+      "name": "Wood ochre",
+      "hex": "#aa8250"
+    },
+    {
+      "index": 7,
+      "name": "Wood warm",
+      "hex": "#b7925d"
+    },
+    {
+      "index": 8,
+      "name": "Wood tan",
+      "hex": "#c3a36e"
+    },
+    {
+      "index": 9,
+      "name": "Wood face",
+      "hex": "#cdb480"
+    },
+    {
+      "index": 10,
+      "name": "Wood light",
+      "hex": "#d8bf8b"
+    },
+    {
+      "index": 11,
+      "name": "Wood highlight",
+      "hex": "#e1cc9b"
+    },
+    {
+      "index": 12,
+      "name": "Linen shadow",
+      "hex": "#8e8879"
+    },
+    {
+      "index": 13,
+      "name": "Linen shade",
+      "hex": "#a59e8d"
+    },
+    {
+      "index": 14,
+      "name": "Linen base",
+      "hex": "#bcb4a2"
+    },
+    {
+      "index": 15,
+      "name": "Linen light",
+      "hex": "#cec6b4"
+    },
+    {
+      "index": 16,
+      "name": "Linen highlight",
+      "hex": "#dfd6c2"
+    },
+    {
+      "index": 17,
+      "name": "Steel deepest",
+      "hex": "#363440"
+    },
+    {
+      "index": 18,
+      "name": "Steel shadow",
+      "hex": "#55535f"
+    },
+    {
+      "index": 19,
+      "name": "Steel dark",
+      "hex": "#72717b"
+    },
+    {
+      "index": 20,
+      "name": "Steel body",
+      "hex": "#94959a"
+    },
+    {
+      "index": 21,
+      "name": "Steel light",
+      "hex": "#b2b6b6"
+    },
+    {
+      "index": 22,
+      "name": "Steel edge",
+      "hex": "#cdd2ce"
+    },
+    {
+      "index": 23,
+      "name": "Steel glint",
+      "hex": "#e5e7d6"
+    },
+    {
+      "index": 24,
+      "name": "Steel warm reflection",
+      "hex": "#bcbda3"
+    },
+    {
+      "index": 25,
+      "name": "Leather deep",
+      "hex": "#4b2b22"
+    },
+    {
+      "index": 26,
+      "name": "Leather shade",
+      "hex": "#70412c"
+    },
+    {
+      "index": 27,
+      "name": "Leather body",
+      "hex": "#945333"
+    },
+    {
+      "index": 28,
+      "name": "Leather light",
+      "hex": "#b56c40"
+    }
+  ]
+}

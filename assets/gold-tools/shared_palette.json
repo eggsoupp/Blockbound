@@ -1,0 +1,126 @@
+{
+  "name": "Blockbound Gold Tools",
+  "indexing": "0 = empty; palette entry 1 maps to VOX index 1",
+  "colors": [
+    {
+      "index": 1,
+      "name": "Burgundy outline",
+      "hex": "#46051f"
+    },
+    {
+      "index": 2,
+      "name": "Umber deep",
+      "hex": "#46250d"
+    },
+    {
+      "index": 3,
+      "name": "Umber",
+      "hex": "#713b15"
+    },
+    {
+      "index": 4,
+      "name": "Burnished red",
+      "hex": "#9c4229"
+    },
+    {
+      "index": 5,
+      "name": "Copper",
+      "hex": "#af5510"
+    },
+    {
+      "index": 6,
+      "name": "Gold shadow",
+      "hex": "#956b09"
+    },
+    {
+      "index": 7,
+      "name": "Gold ochre",
+      "hex": "#cf7c0b"
+    },
+    {
+      "index": 8,
+      "name": "Gold amber",
+      "hex": "#e39c0d"
+    },
+    {
+      "index": 9,
+      "name": "Gold",
+      "hex": "#f5bf22"
+    },
+    {
+      "index": 10,
+      "name": "Gold bright",
+      "hex": "#ffe32b"
+    },
+    {
+      "index": 11,
+      "name": "Gold light",
+      "hex": "#fff35b"
+    },
+    {
+      "index": 12,
+      "name": "Gold glint",
+      "hex": "#fff2ab"
+    },
+    {
+      "index": 13,
+      "name": "Leather dark",
+      "hex": "#54251c"
+    },
+    {
+      "index": 14,
+      "name": "Leather",
+      "hex": "#80351e"
+    },
+    {
+      "index": 15,
+      "name": "Leather light",
+      "hex": "#aa522a"
+    },
+    {
+      "index": 16,
+      "name": "Amethyst shadow",
+      "hex": "#67116e"
+    },
+    {
+      "index": 17,
+      "name": "Amethyst",
+      "hex": "#af13c7"
+    },
+    {
+      "index": 18,
+      "name": "Amethyst light",
+      "hex": "#e46ef3"
+    },
+    {
+      "index": 19,
+      "name": "Steel shadow",
+      "hex": "#303744"
+    },
+    {
+      "index": 20,
+      "name": "Steel",
+      "hex": "#586474"
+    },
+    {
+      "index": 21,
+      "name": "Steel light",
+      "hex": "#8c9cac"
+    },
+    {
+      "index": 22,
+      "name": "Steel glint",
+      "hex": "#c3d0d5"
+    },
+    {
+      "index": 23,
+      "name": "Old gold shadow",
+      "hex": "#6d590e"
+    },
+    {
+      "index": 24,
+      "name": "Old gold",
+      "hex": "#a18b24"
+    }
+  ]
+}

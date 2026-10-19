@@ -91,24 +91,9 @@ ContentAudit.UseHandlers = {
 	module the audit cannot see inside at runtime, so it is written down here.
 ]]
 ContentAudit.VfxAssets = {
-	ElementalVFX = {
-		"ElementalPacks/LightningCharge", "ElementalPacks/LightningImpact",
-		"ElementalPacks/BurstA", "ElementalPacks/BurstB", "ElementalPacks/Windburst",
-	},
-	StormWellVFX = {
-		"ElementalPacks/Windburst", "ElementalPacks/LightningCharge", "ElementalPacks/LightningImpact",
-		"ElementalPacks/BurstA", "ElementalPacks/BurstB", "ElementalPacks/AstralImpact",
-		"AnnihilationPacks/Constellation", "AnnihilationPacks/ElectricCharge", "AnnihilationPacks/Halftone",
-		"AnnihilationPacks/LaserFire", "AnnihilationPacks/BeamImpact", "AnnihilationPacks/Explode",
-	},
-	AstralCollapseVFX = { "ElementalPacks/AstralImpact", "ElementalPacks/AstralShard" },
-	AnnihilationVFX = {
-		"AnnihilationImported",
-		"AnnihilationPacks/ElectricCharge", "AnnihilationPacks/Constellation", "AnnihilationPacks/Halftone",
-		"AnnihilationPacks/LaserFire", "AnnihilationPacks/BeamImpact", "AnnihilationPacks/Explode",
-	},
-	SacredRainVFX = { "SacredRainData", "FXBuilder", "VFXPalette" },
-	EclipseVFX = { "FXBuilder", "VFXPalette" },
+	CataclysmVFX = {"CataclysmParticles", "CataclysmCamera"},
+	StarterVFX = {"StarterParticles", "CataclysmParticles"},
+	SignusVFX = {"SignusFX", "SignusParticles", "SignusVisuals", "SignusChoreography", "CataclysmParticles", "StarterParticles"},
 }
 
 -- Swing animations ToolConfig leaves blank on purpose (see ToolConfig.Animations).
@@ -117,8 +102,12 @@ ContentAudit.BlankAnimationsByDesign = true
 -- Abilities whose AbilityConfig entry explains why they have no cast
 -- animation. Any other ability without one is reported as placeholder content.
 ContentAudit.NoCastAnimationByDesign = {
-	SacredRain = "the reference effect has no cast animation of its own; AbilityConfig says why",
-	Eclipse = "no cast animation exists to point at; AbilityConfig says why",
+	Cataclysm = "cast and impact are communicated by authored particles",
+	Fireball = "particle charge and release",
+	WindBurst = "particle gather and directional pressure fan",
+	WaterBlade = "particle charge and water crescent",
+	EchoStep = "departure, travel ribbon and arrival particles",
+	BlockWall = "physical terrain movement and dust particles",
 }
 
 -- Every field ItemDefinitions documents or a system reads. Anything else is

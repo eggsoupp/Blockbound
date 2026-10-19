@@ -1,0 +1,80 @@
+{
+  "format": "MagicaVoxel VOX 150",
+  "canvas": [
+    32,
+    8,
+    40
+  ],
+  "up_axis": "+Z",
+  "raw_base_pivot": [
+    16,
+    4,
+    0
+  ],
+  "files": {
+    "axe.vox": {
+      "voxels": 374,
+      "occupied_min": [
+        11,
+        2,
+        1
+      ],
+      "occupied_max_exclusive": [
+        26,
+        6,
+        30
+      ],
+      "occupied_size": [
+        15,
+        4,
+        29
+      ],
+      "face_connected_components": 1,
+      "binary_roundtrip": "passed",
+      "sha256": "3631248ca108dfecb29cc93d7dfb38c73e9f25cf8c3f5d8f2ce78d1b7e6f7480"
+    },
+    "pickaxe.vox": {
+      "voxels": 268,
+      "occupied_min": [
+        5,
+        2,
+        1
+      ],
+      "occupied_max_exclusive": [
+        27,
+        6,
+        30
+      ],
+      "occupied_size": [
+        22,
+        4,
+        29
+      ],
+      "face_connected_components": 1,
+      "binary_roundtrip": "passed",
+      "sha256": "aaa0fd46767173d8724438ca06d04e71a93fc4fcdd4477b4f7edb55968e8bd36"
+    },
+    "sword.vox": {
+      "voxels": 480,
+      "occupied_min": [
+        9,
+        2,
+        1
+      ],
+      "occupied_max_exclusive": [
+        23,
+        6,
+        37
+      ],
+      "occupied_size": [
+        14,
+        4,
+        36
+      ],
+      "face_connected_components": 1,
+      "binary_roundtrip": "passed",
+      "sha256": "5dee67ad45c68a2b00303fd52bd894aa082bab568dc52522dbbdd684386a05f1"
+    }
+  },
+  "identical_RGBA_chunks": true
+}

@@ -58,7 +58,7 @@ local mouse = player:GetMouse()
 	already more than anyone can read, and a full server of players casting into
 	the same place should not be able to stall a client.
 ]]
-local MAX_CONCURRENT_EFFECTS = 3
+local MAX_CONCURRENT_EFFECTS = 12
 
 -- Fallback teardown for a VFX module that does not say how long it runs.
 local DEFAULT_EFFECT_DURATION = 15

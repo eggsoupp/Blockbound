@@ -1779,6 +1779,23 @@ function EnemyService.describe(model)
 	return entry.name, entry.health, entry.def.health
 end
 
+-- Custom movers are anchored; physics impulses cannot push them. Feed the
+-- existing airborne movement state so terrain collision and landing still apply.
+function EnemyService.knockback(model, direction, speed, lift)
+	local entry = entries[model]
+	if not entry or entry.behaviour or held[model] or entry.health <= 0 then return false end
+	local flat = Vector3.new(direction.X,0,direction.Z)
+	if flat.Magnitude < .01 then return false end
+	flat = flat.Unit
+	speed, lift = math.clamp(speed,0,55), math.clamp(lift,0,35)
+	entry.velocity = flat*speed + Vector3.new(0,lift,0)
+	entry.state, entry.lunging = HOP_AIRBORNE, false
+	entry.facing = -flat
+	entry.landingAt = model:GetPivot().Position + flat*speed*(2*lift/entry.def.gravity)
+	bounceStretch(entry,.18)
+	return true
+end
+
 --[[
 	Removes one enemy, without it counting as a kill.
 

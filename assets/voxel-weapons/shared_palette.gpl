@@ -1,0 +1,20 @@
+GIMP Palette
+Name: Blockbound Weapons - Charcoal and Warm Wood
+Columns: 8
+#
+ 32  32  30	01 Charcoal outline
+ 41  39  32	02 Charcoal bevel
+ 99  55  35	03 Wood deepest
+121  62  41	04 Wood dark red
+136  73  46	05 Wood russet
+148  83  50	06 Wood shade
+159  93  52	07 Wood brown
+170 104  58	08 Wood orange
+179 116  64	09 Wood warm
+189 130  73	10 Wood highlight
+152 100  52	11 Wood ochre
+128  83  48	12 Wood muted
+112  69  43	13 Wood side
+174 117  66	14 Wood light edge
+161 107  54	15 Wood amber
+180 123  69	16 Wood light grain

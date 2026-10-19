@@ -1,0 +1,32 @@
+GIMP Palette
+Name: Blockbound shared tool palette
+Columns: 7
+#
+ 81  53  30	01 Wood deep shadow
+102  67  34	02 Wood shadow
+121  82  43	03 Wood dark edge
+137  96  53	04 Wood edge
+153 114  67	05 Wood brown
+170 130  80	06 Wood ochre
+183 146  93	07 Wood warm
+195 163 110	08 Wood tan
+205 180 128	09 Wood face
+216 191 139	10 Wood light
+225 204 155	11 Wood highlight
+142 136 121	12 Linen shadow
+165 158 141	13 Linen shade
+188 180 162	14 Linen base
+206 198 180	15 Linen light
+223 214 194	16 Linen highlight
+ 54  52  64	17 Steel deepest
+ 85  83  95	18 Steel shadow
+114 113 123	19 Steel dark
+148 149 154	20 Steel body
+178 182 182	21 Steel light
+205 210 206	22 Steel edge
+229 231 214	23 Steel glint
+188 189 163	24 Steel warm reflection
+ 75  43  34	25 Leather deep
+112  65  44	26 Leather shade
+148  83  51	27 Leather body
+181 108  64	28 Leather light

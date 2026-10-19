@@ -6,28 +6,20 @@
 
 	WHAT IT DOES
 
-	  CRESCENT VOLLEY  three crescents of light formed between its sleeves and
-	                   flung one after another. Any block stops one, placed or
-	                   natural. Five in phase two, and they curve.
-	  MOONFALL         a lunar sigil tracks you, locks, and a shard of the moon
-	                   falls on it: a crater, and the stone it tore out streams
-	                   up into Signus's clasp to orbit it.
-	  UMBRAL FISSURE   it drops to the ground and slams; a glowing crack races
-	                   at you and the ground along it erupts. Stand on anything
-	                   two blocks up and it passes beneath you.
-	  CRESCENT LUNGE   only when you keep away or hide for long enough: a dash
-	                   behind a crescent blade that ends low to the ground,
-	                   spent, for a second and a half. That is the melee window.
-	  VEIL STEP        when you hug it too long it folds into a crescent and
-	                   glides eighteen studs away. It never gets far.
-	  TOTALITY         at half health: the sky goes to eclipse, a ring of
-	                   ground rises to orbit it as a halo, and a black sun hangs
-	                   over the fight for the rest of it.
-	  ECLIPSE NOVA     phase two: it descends to the ground and channels for
-	                   two and a half seconds, then detonates. Only cover saves
-	                   you - a block of any kind between you and its core - and
-	                   the ground in a ring around it is scorched away. It is
-	                   on the floor the whole time; hit it and leave.
+	  UMBRAL MAELSTROM  a fixed warning tightens into coiling violet ribbons;
+	                    terrain rises into orbit, then is flung onto the rim.
+	  ECLIPSE JUDGMENT  charges and launches an orb; the target compresses,
+	                    then erupts into a towering beam with orbiting rings.
+	                    Real terrain rises and lands around a lasting crater.
+	  WORLDREND         a sustained violet flame beam, with a fixed aim and a
+	                    clear windup, tears a strip of ground into moving blocks.
+	  TOTALITY          the half-health transformation raises an orbit of
+	                    terrain, changes the sky and forms the overhead eclipse.
+	  CRESCENT LUNGE    a short charge followed by a vulnerable recovery.
+	  VEIL STEP         a short reposition with a crescent and departure burst.
+
+	SignusMoves owns the three reference attacks and Totality. The earlier
+	attack helpers remain private below and are not in the active ATTACKS map.
 
 	HOW IT MOVES
 
@@ -54,15 +46,15 @@
 	placed block, a structure, a cave wall or bedrock, under the caps in
 	Tuning, with no loot. Cells are chosen BEFORE the warning is drawn and
 	nothing re-aims after it. Clients are told what really went over
-	BossTerrain (TerrainDebris draws it); the halo fragments are cosmetic parts
-	made from those samples, never the blocks themselves.
+	BossEffect; particle shards stream out of the actual excavated cells into
+	the halo. No cosmetic terrain clones are made.
 
 	EFFECTS
 
-	Geometry that promises something - sigils, cracks, crescents, the halo,
-	the eclipse - is built here, in the spell's AbilityScope, and replicates.
-	Bursts, flashes and camera kicks are asked for over BossEffect and drawn
-	by Shared.Abilities.VFX.SignusVFX on each client near enough to see them.
+	Invisible carriers replicate the authoritative positions, sizes and opacity
+	of telegraphs, projectiles, aura and eclipse. SignusVisuals renders pack
+	particles and beams locally, including when an observer joins mid-fight.
+	Bursts, flashes and camera kicks use BossEffect and SignusVFX.
 
 	CLEANUP
 
@@ -78,6 +70,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Lighting = game:GetService("Lighting")
 local Debris = game:GetService("Debris")
 local TweenService = game:GetService("TweenService")
+local CollectionService = game:GetService("CollectionService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local EnemyConfig = require(Shared:WaitForChild("Enemies"):WaitForChild("EnemyConfig"))
@@ -93,7 +86,6 @@ local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 
 -- Both ensured by BossService at server start as well; see there.
-local BossTerrain = Remotes.ensure("BossTerrain", "RemoteEvent")
 local BossEffect = Remotes.ensure("BossEffect", "RemoteEvent")
 
 local Signus = {}
@@ -260,11 +252,14 @@ local Tuning = {
 -- What it does, in order, by phase. Lunge and Veil Step are not in the
 -- cycle: they answer what the player is doing, between its turns.
 local CYCLES = {
-	{ "volley", "moonfall", "volley", "fissure", "moonfall", "volley" },
-	{ "volley", "fissure", "moonfall", "volley", "nova" },
+	{ "spiral", "lance", "beam", "spiral", "lance" },
+	{ "lance", "spiral", "beam", "lance", "beam" },
 }
 
 local ATTACK_NAMES = {
+	spiral = "Umbral Maelstrom",
+	lance = "Eclipse Judgment",
+	beam = "Worldrend",
 	volley = "Crescent Volley",
 	moonfall = "Moonfall",
 	fissure = "Umbral Fissure",
@@ -407,24 +402,38 @@ end
 -- Effects: the server half
 -- ---------------------------------------------------------------------------
 
-local function newPart(size: Vector3, color: Color3, transparency: number): Part
-	local part = Instance.new("Part")
-	part.Size = size
-	part.Color = color
-	part.Material = Enum.Material.Neon
-	part.Transparency = transparency
-	part.Anchored = true
-	part.CanCollide = false
-	part.CanQuery = false
-	part.CanTouch = false
-	part.CastShadow = false
-	part.Massless = true
-	return part
+-- These are invisible replicated carriers, never rendered geometry. The client
+-- draws authored pack particles/beams on them, including for late observers.
+local function newPart(size: Vector3, color: Color3, transparency: number, kind: string?): Part
+ local part = Instance.new("Part")
+ part.Name = "SignusFX_" .. (kind or "Charge")
+ part.Size = size
+ part.Color = color
+ part.Transparency = 1
+ part.Anchored = true
+ part.CanCollide = false
+ part.CanQuery = false
+ part.CanTouch = false
+ part.CastShadow = false
+ part:SetAttribute("SignusKind",kind or "Charge")
+ local opacity=Instance.new("NumberValue")
+ opacity.Name="FXOpacity";opacity.Value=1-transparency;opacity.Parent=part
+ CollectionService:AddTag(part,"SignusVisual")
+ return part
+end
+
+local function tweenFX(scope,part,info,goals)
+ local values=table.clone(goals)
+ if values.Transparency~=nil then
+  scope:tween(part.FXOpacity,info,{Value=1-values.Transparency})
+  values.Transparency=nil
+ end
+ if next(values) then scope:tween(part,info,values) end
 end
 
 -- A Cylinder's length runs along X, so it is turned on its side to lie flat.
 local function newDisc(centre: Vector3, radius: number, color: Color3, transparency: number): Part
-	local disc = newPart(Vector3.new(0.2, radius * 2, radius * 2), color, transparency)
+	local disc = newPart(Vector3.new(0.2, radius * 2, radius * 2), color, transparency, "Disc")
 	disc.Shape = Enum.PartType.Cylinder
 	disc.CFrame = CFrame.new(centre) * CFrame.Angles(0, 0, math.rad(90))
 	disc.Parent = workspace
@@ -462,44 +471,19 @@ local function fx(kind: string, position: Vector3, extra: { [string]: any }?)
 	end
 end
 
---[[
-	ARCS AND RINGS, the shapes everything here is drawn with.
-
-	An arc is `count` Neon segments laid along part of a circle in a frame's
-	local XY plane. Lay it on the ground with a frame turned ninety degrees
-	about X; lay it upright for a crescent. The segments are made once and
-	re-laid as often as the effect moves, so a ring that closes or a crescent
-	that flies is the same parts moved, not new parts.
-]]
-local function makeArc(scope, count: number, color: Color3, transparency: number): { Part }
-	local parts = {}
-	for index = 1, count do
-		local part = newPart(Vector3.new(1, 0.3, 0.3), color, transparency)
-		part.Parent = workspace
-		scope:add(part)
-		parts[index] = part
-	end
-	return parts
+-- One invisible carrier per complete arc replaces the old neon segments.
+local function makeArc(scope, _count: number, color: Color3, transparency: number): { Part }
+ local part=newPart(Vector3.one*.1,color,transparency,"Ring")
+ part.Parent=workspace;scope:add(part)
+ return {part}
 end
 
--- Lays `parts` from angle `from` to `to` (radians, in the frame's XY plane)
--- at `radius`. `thick` is the segment thickness at the middle; a crescent
--- tapers toward its horns when `taper` is true.
-local function layArc(parts: { Part }, frame: CFrame, radius: number, from: number, to: number, thick: number, taper: boolean?)
-	local count = #parts
-	if count == 0 then
-		return
-	end
-	local step = (to - from) / count
-	local length = 2 * radius * math.sin(math.abs(step) * 0.5) * 1.12
-	for index, part in ipairs(parts) do
-		local angle = from + (index - 0.5) * step
-		local t = (index - 0.5) / count
-		local width = if taper then thick * (0.3 + 0.7 * math.sin(t * math.pi)) else thick
-		part.Size = Vector3.new(math.max(0.05, length), width, width)
-		part.CFrame = frame * CFrame.new(math.cos(angle) * radius, math.sin(angle) * radius, 0)
-			* CFrame.Angles(0, 0, angle + math.pi * 0.5)
-	end
+local function layArc(parts: {Part}, frame: CFrame, radius: number, _from: number, _to: number, _thick: number, taper: boolean?)
+ local part=parts[1]
+ if not part then return end
+ part.Size=Vector3.new(math.max(.1,radius*2),math.max(.1,radius*2),.1)
+ part.CFrame=frame
+ part:SetAttribute("SignusKind",if taper then "Crescent" else "Ring")
 end
 
 -- A frame lying flat on the ground at `centre`, turned by `spin`, whose local
@@ -514,25 +498,15 @@ local function layRing(parts: { Part }, centre: Vector3, radius: number, spin: n
 	layArc(parts, groundFrame(centre, spin), radius, 0, TAU, thick)
 end
 
--- A sphere of light that swells and fades, on the server: cheap and seen by
--- everyone, for the moments a client burst would be too late.
-local function flare(scope, centre: Vector3, radius: number, seconds: number, color: Color3)
-	local ball = newPart(Vector3.one * 1.5, color, 0.3)
-	ball.Shape = Enum.PartType.Ball
-	ball.Position = centre
-	ball.Parent = workspace
-	scope:add(ball)
-	scope:tween(ball, TweenInfo.new(seconds, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-		Size = Vector3.one * radius * 2,
-		Transparency = 1,
-	})
+local function flare(_scope, centre: Vector3, radius: number, seconds: number, color: Color3)
+ fx("flare",centre,{radius=radius,seconds=seconds,color=color})
 end
 
 -- A steady stream of motes on a part: the only emitters the server makes,
 -- and only ever Enabled ones, which replicate as a property.
 local function moteStream(parent: Instance, color: Color3, rate: number, size: number, speed: number): ParticleEmitter
 	local emitter = Instance.new("ParticleEmitter")
-	emitter.Texture = "rbxassetid://9544354287"
+	emitter.Texture = "rbxassetid://11187840108" -- supplied pack embers
 	emitter.Color = ColorSequence.new({
 		ColorSequenceKeypoint.new(0, Colors.pearl),
 		ColorSequenceKeypoint.new(1, color),
@@ -555,57 +529,10 @@ local function moteStream(parent: Instance, color: Color3, rate: number, size: n
 	return emitter
 end
 
---[[
-	What a block of `name` looks like, as a free part: a copy of the authored
-	block when there is one, so the halo is visibly the ground it tore up.
-]]
-local function blockLook(name: string?): BasePart
-	local assets = ReplicatedStorage:FindFirstChild("TerrainAssets")
-	local blocks = assets and assets:FindFirstChild("Blocks")
-	local template = blocks and name and blocks:FindFirstChild(name)
-	if template and template:IsA("Model") then
-		template = template.PrimaryPart or template:FindFirstChildWhichIsA("BasePart")
-	end
-
-	local part
-	if template and template:IsA("BasePart") then
-		part = template:Clone()
-		for _, child in ipairs(part:GetChildren()) do
-			if not child:IsA("Decal") then
-				child:Destroy()
-			end
-		end
-	else
-		part = Instance.new("Part")
-		part.Material = Enum.Material.Slate
-		part.Color = Color3.fromRGB(112, 106, 100)
-	end
-
-	part.Anchored = true
-	part.CanCollide = false
-	part.CanQuery = false
-	part.CanTouch = false
-	part.CastShadow = false
-	return part
-end
-
--- Ground it took, flown to a point on the clients near enough to see it.
+-- The server still removes the exact terrain cells. Their absorption is
+-- presented as particle rock shards and violet streams, not cloned blocks.
 local function broadcastDebris(centre: Vector3, blocks, seconds: number)
-	if #blocks == 0 then
-		return
-	end
-	local payload = {
-		blocks = blocks,
-		centre = centre,
-		startedAt = workspace:GetServerTimeNow(),
-		seconds = seconds,
-	}
-	for _, player in ipairs(Players:GetPlayers()) do
-		local root = rootOf(player)
-		if root and (root.Position - centre).Magnitude <= BROADCAST_RADIUS then
-			BossTerrain:FireClient(player, payload)
-		end
-	end
+ if #blocks>0 then fx("harvest",centre,{blocks=blocks,seconds=seconds}) end
 end
 
 -- ---------------------------------------------------------------------------
@@ -721,6 +648,7 @@ local function applyPose(entry, extra: CFrame?)
 		frame *= extra
 	end
 	entry.model:PivotTo(frame * (entry.orient or CFrame.identity))
+	if entry.aura then entry.aura.CFrame=entry.model:GetPivot() end
 end
 
 -- A point on the rig, in the world, from its RootPart-space offset.
@@ -931,7 +859,7 @@ local function addHalo(entry, samples, count: number)
 		if #halo.parts >= Tuning.totality.haloMax then
 			break
 		end
-		local fragment = blockLook(samples[index].block)
+		local fragment = newPart(Vector3.one,Colors.violet,.1,"Halo")
 		fragment.Size = Vector3.one * H.size
 		fragment.CFrame = CFrame.new(samples[index].position)
 		fragment.Parent = workspace
@@ -981,7 +909,7 @@ local function spendHalo(entry, scope)
 		local part = fragment.part
 		if part.Parent then
 			local away = flat(part.Position - entry.position)
-			scope:tween(part, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+			tweenFX(scope,part, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 				CFrame = CFrame.new(part.Position + away * 34 + Vector3.new(0, 6, 0)) * CFrame.Angles(2, 1, 0),
 				Transparency = 1,
 			})
@@ -994,35 +922,16 @@ end
 -- The black sun that hangs over phase two: a void disc inside a corona,
 -- facing the fight, turning slowly. Built once in Totality.
 local function buildEclipse(entry)
-	local scope = entry.encounterScope
-	local corona = newDisc(entry.position, 11, Colors.orchid, 0.15)
-	local void = newDisc(entry.position, 9, Colors.black, 0)
-	void.Material = Enum.Material.SmoothPlastic
-	local rim = newDisc(entry.position, 9.8, Colors.pearl, 0.3)
-	scope:add(corona)
-	scope:add(void)
-	scope:add(rim)
-	newLight(void, Colors.orchid, 60, 1.2)
-	entry.eclipse = { corona = corona, void = void, rim = rim, spin = 0 }
+ local visual=newPart(Vector3.new(22,22,.1),Colors.orchid,0,"Eclipse")
+ visual.CFrame=CFrame.new(entry.position+Vector3.new(0,38,0))
+ visual.Parent=workspace;entry.encounterScope:add(visual)
+ entry.eclipse={visual=visual}
 end
 
-local function stepEclipse(entry, dt: number)
-	local eclipse = entry.eclipse
-	if not eclipse or not eclipse.void.Parent then
-		return
-	end
-	eclipse.spin += dt * 0.35
-	local centre = entry.position + Vector3.new(0, 30, 0)
-	-- It faces whoever it is after, tilted down at them, so the disc reads
-	-- as a disc from where the fight is.
-	local focus = livingRoot(entry.focus) or rootOf((nearestPlayer(entry.position)))
-	local toward = if focus then (focus.Position - centre) else Vector3.new(0, -1, 0.3)
-	local frame = CFrame.lookAt(centre, centre + toward)
-	-- A cylinder's axis is X; turned so it faces along the frame's look.
-	local facing = frame * CFrame.Angles(0, math.rad(90), 0) * CFrame.Angles(eclipse.spin, 0, 0)
-	eclipse.void.CFrame = facing
-	eclipse.corona.CFrame = facing * CFrame.new(-0.3, 0, 0)
-	eclipse.rim.CFrame = facing * CFrame.new(-0.15, 0, 0)
+local function stepEclipse(entry,_dt: number)
+ if entry.eclipse and entry.eclipse.visual.Parent then
+  entry.eclipse.visual.CFrame=CFrame.new(entry.position+Vector3.new(0,38,0))
+ end
 end
 
 -- ---------------------------------------------------------------------------
@@ -1051,14 +960,14 @@ local function volley(entry, phase: number)
 
 	setPose(entry, "gather", 0.4)
 	local orb = handOrb(entry, scope, Colors.orchid, 0.6)
-	scope:tween(orb, TweenInfo.new(V.gather, Enum.EasingStyle.Quad), { Size = Vector3.one * 2.2 })
+	tweenFX(scope,orb, TweenInfo.new(V.gather, Enum.EasingStyle.Quad), { Size = Vector3.one * 2.2 })
 
 	-- The crescents, forming around the orb.
 	local count = V.count[phase]
 	local crescents = {}
 	for index = 1, count do
 		local parts = makeArc(scope, V.segments, Colors.orchid, 0.1)
-		local middle = parts[math.ceil(V.segments / 2)]
+		local middle = parts[1]
 		local a0 = Instance.new("Attachment")
 		a0.Position = Vector3.new(0, 1.4, 0)
 		a0.Parent = middle
@@ -1073,6 +982,7 @@ local function volley(entry, phase: number)
 			ColorSequenceKeypoint.new(1, Colors.violet),
 		})
 		trail.Transparency = NumberSequence.new(0.2, 1)
+		trail.Texture = "rbxassetid://12781812529" -- supplied aura ribbon
 		trail.Lifetime = 0.35
 		trail.WidthScale = NumberSequence.new(1, 0.2)
 		trail.LightEmission = 1
@@ -1117,7 +1027,7 @@ local function volley(entry, phase: number)
 
 	local function fly(crescent, index: number)
 		local root = livingRoot(target) or rootOf((nearestPlayer(entry.position)))
-		local middle = crescent.parts[math.ceil(V.segments / 2)]
+		local middle = crescent.parts[1]
 		local position = middle.Position
 		local aim = if root then root.Position + Vector3.new(0, 1.5, 0) else position + flat(entry.look) * 40
 		local direction = (aim - position).Unit
@@ -1184,7 +1094,7 @@ local function volley(entry, phase: number)
 		end
 	end
 
-	scope:tween(orb, TweenInfo.new(0.3), { Size = Vector3.one * 0.2, Transparency = 1 })
+	tweenFX(scope,orb, TweenInfo.new(0.3), { Size = Vector3.one * 0.2, Transparency = 1 })
 	setPose(entry, "rest", 0.5)
 	entry.leanGoal = 0
 
@@ -1203,41 +1113,16 @@ end
 	violet. Made once and re-laid as it tracks, swells and locks.
 ]]
 local function makeSigil(scope)
-	local sigil = {
-		outer = makeArc(scope, 20, Colors.pearl, 0.25),
-		inner = makeArc(scope, 12, Colors.orchid, 0.2),
-		crescent = makeArc(scope, 7, Colors.pearl, 0.1),
-		ticks = {},
-		fill = nil,
-		spin = 0,
-	}
-	for index = 1, 6 do
-		local tick = newPart(Vector3.new(1, 0.25, 0.25), Colors.orchid, 0.2)
-		tick.Parent = workspace
-		scope:add(tick)
-		sigil.ticks[index] = tick
-	end
-	sigil.fill = newDisc(Vector3.zero, 1, Colors.violet, 0.75)
-	scope:add(sigil.fill)
-	return sigil
+ local carrier=newPart(Vector3.one*.1,Colors.orchid,.2,"Sigil")
+ carrier.Parent=workspace;scope:add(carrier)
+ return {outer={carrier},spin=0}
 end
 
-local function laySigil(sigil, centre: Vector3, radius: number, spin: number, bright: number)
-	local lifted = centre + Vector3.new(0, 0.2, 0)
-	layRing(sigil.outer, lifted, radius, spin, 0.3 + bright * 0.2)
-	layRing(sigil.inner, lifted + Vector3.new(0, 0.05, 0), radius * 0.62, -spin * 1.6, 0.25)
-	layArc(sigil.crescent, groundFrame(lifted + Vector3.new(0, 0.1, 0), spin * 2.4), radius * 0.36, math.pi * 0.5, math.pi * 1.5, 0.45, true)
-	for index, tick in ipairs(sigil.ticks) do
-		local angle = spin + (index - 1) / 6 * TAU
-		local from = radius * 0.66
-		local to = radius * 0.96
-		local mid = lifted + Vector3.new(math.cos(angle) * (from + to) * 0.5, 0.05, math.sin(angle) * (from + to) * 0.5)
-		tick.Size = Vector3.new(to - from, 0.25, 0.25)
-		tick.CFrame = CFrame.new(mid) * CFrame.Angles(0, -angle, 0)
-	end
-	sigil.fill.Size = Vector3.new(0.2, radius * 2, radius * 2)
-	sigil.fill.CFrame = CFrame.new(centre + Vector3.new(0, 0.12, 0)) * CFrame.Angles(0, 0, math.rad(90))
-	sigil.fill.Transparency = 0.85 - bright * 0.35
+local function laySigil(sigil,centre: Vector3,radius: number,spin: number,bright: number)
+ local carrier=sigil.outer[1]
+ carrier.Size=Vector3.new(radius*2,radius*2,.1)
+ carrier.CFrame=groundFrame(centre+Vector3.new(0,.25,0),spin)
+ carrier.FXOpacity.Value=.65+bright*.35
 end
 
 -- Flat marks on the cells an excavation will take: the honest half of a
@@ -1245,7 +1130,7 @@ end
 local function markCells(scope, plan, color: Color3, transparency: number): { Part }
 	local marks = {}
 	for index, cell in ipairs(plan) do
-		local mark = newPart(Vector3.new(STUD_SIZE * 0.9, 0.18, STUD_SIZE * 0.9), color, transparency)
+		local mark = newPart(Vector3.new(STUD_SIZE * 0.9, 0.18, STUD_SIZE * 0.9), color, transparency, "Mark")
 		mark.Position = cell.position + Vector3.new(0, STUD_SIZE * 0.5 + 0.1, 0)
 		mark.Parent = workspace
 		scope:add(mark)
@@ -1307,22 +1192,22 @@ local function moonShard(entry, scope, target: Player?, ledger, key: string, pha
 
 	-- The pillar from the sky, and the shard at the top of it.
 	local top = centre + Vector3.new(0, 70, 0)
-	local pillar = newPart(Vector3.new(0.6, 70, 0.6), Colors.pearl, 0.6)
+	local pillar = newPart(Vector3.new(0.6, 70, 0.6), Colors.pearl, 0.6, "Pillar")
 	pillar.CFrame = CFrame.new(centre:Lerp(top, 0.5))
 	pillar.Parent = workspace
 	scope:add(pillar)
-	scope:tween(pillar, TweenInfo.new(M.fall, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+	tweenFX(scope,pillar, TweenInfo.new(M.fall, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
 		Size = Vector3.new(3.2, 70, 3.2),
 		Transparency = 0.25,
 	})
-	local shard = newPart(Vector3.new(2.4, 11, 2.4), Colors.pearl, 0.05)
+	local shard = newPart(Vector3.new(2.4, 11, 2.4), Colors.pearl, 0.05, "Shard")
 	shard.Shape = Enum.PartType.Ball
 	shard.CFrame = CFrame.new(top)
 	shard.Parent = workspace
 	scope:add(shard)
 	newLight(shard, Colors.orchid, 30, 3)
 	moteStream(shard, Colors.orchid, 50, 1.4, 8)
-	scope:tween(shard, TweenInfo.new(M.fall, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
+	tweenFX(scope,shard, TweenInfo.new(M.fall, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
 		CFrame = CFrame.new(centre + Vector3.new(0, 2, 0)),
 	})
 
@@ -1335,7 +1220,7 @@ local function moonShard(entry, scope, target: Player?, ledger, key: string, pha
 		sigil.spin += 0.09 + alpha * 0.1
 		laySigil(sigil, centre, M.radius * (1 + math.sin(alpha * TAU * 3) * 0.03), sigil.spin, 0.5 + alpha * 0.5)
 		for _, mark in ipairs(marks) do
-			mark.Transparency = 0.55 - alpha * 0.4
+			mark.FXOpacity.Value = 1-(0.55 - alpha * 0.4)
 		end
 		task.wait()
 	end
@@ -1347,7 +1232,7 @@ local function moonShard(entry, scope, target: Player?, ledger, key: string, pha
 	shard:Destroy()
 	pillar:Destroy()
 	for _, part in ipairs(sigil.outer) do
-		part.Transparency = 1
+		part.FXOpacity.Value = 1-(1)
 	end
 	fx("impact", centre, { radius = M.radius })
 	flare(scope, centre + Vector3.new(0, 1, 0), M.radius * 0.8, 0.4, Colors.pearl)
@@ -1399,7 +1284,7 @@ local function moonfall(entry, phase: number)
 		end
 	end
 
-	scope:tween(orb, TweenInfo.new(0.3), { Size = Vector3.one * 0.2, Transparency = 1 })
+	tweenFX(scope,orb, TweenInfo.new(0.3), { Size = Vector3.one * 0.2, Transparency = 1 })
 	setPose(entry, "rest", 0.5)
 	entry.hem = Tuning.hover.hem
 	entry.leanGoal = 0
@@ -1438,7 +1323,7 @@ local function planCrack(entry, scope, from: Vector3, direction: Vector3, length
 	-- Every point is marked: the line is the danger whatever is under it.
 	local marks = {}
 	for i, point in ipairs(points) do
-		local mark = newPart(Vector3.new(STUD_SIZE * 0.8, 0.16, STUD_SIZE * 0.8), Colors.violet, 0.6)
+		local mark = newPart(Vector3.new(STUD_SIZE * 0.8, 0.16, STUD_SIZE * 0.8), Colors.violet, 0.6, "Mark")
 		mark.CFrame = CFrame.new(point + Vector3.new(0, 0.12, 0)) * CFrame.Angles(0, (i % 2) * 0.3, 0)
 		mark.Parent = workspace
 		scope:add(mark)
@@ -1449,7 +1334,7 @@ local function planCrack(entry, scope, from: Vector3, direction: Vector3, length
 	local seams = {}
 	for i, cell in ipairs(plan) do
 		cell.along = (cell.position - from):Dot(direction)
-		local seam = newPart(Vector3.new(0.3, 0.22, STUD_SIZE * 1.05), Colors.pearl, 0.6)
+		local seam = newPart(Vector3.new(0.3, 0.22, STUD_SIZE * 1.05), Colors.pearl, 0.6, "Seam")
 		seam.CFrame = CFrame.lookAt(cell.position + Vector3.new(0, STUD_SIZE * 0.5 + 0.16, 0), cell.position + direction + Vector3.new(0, STUD_SIZE * 0.5 + 0.16, 0))
 		seam.Parent = workspace
 		scope:add(seam)
@@ -1488,7 +1373,7 @@ local function fissure(entry, phase: number)
 	local from = groundUnder(entry.position)
 	flare(scope, from + Vector3.new(0, 0.5, 0), 9, 0.5, Colors.violet)
 	fx("cast", from + Vector3.new(0, 0.5, 0), { color = Colors.violet })
-	scope:tween(orb, TweenInfo.new(0.2), { Size = Vector3.one * 0.2, Transparency = 1 })
+	tweenFX(scope,orb, TweenInfo.new(0.2), { Size = Vector3.one * 0.2, Transparency = 1 })
 
 	local toward = flat(root.Position - from)
 	local length = math.min((root.Position - from).Magnitude + 8, F.length)
@@ -1529,11 +1414,11 @@ local function fissure(entry, phase: number)
 			local reach = alpha * 1.25
 			for i, mark in ipairs(crack.marks) do
 				local t = i / #crack.marks
-				mark.Transparency = if t <= reach then 0.35 - pulse * 0.15 else 0.65
+				mark.FXOpacity.Value = 1-(if t <= reach then 0.35 - pulse * 0.15 else 0.65)
 			end
 			for i, seam in ipairs(crack.seams) do
 				local t = i / #crack.seams
-				seam.Transparency = if t <= reach then 0.05 + (1 - alpha) * 0.3 else 0.6
+				seam.FXOpacity.Value = 1-(if t <= reach then 0.05 + (1 - alpha) * 0.3 else 0.6)
 			end
 		end
 		task.wait()
@@ -1580,8 +1465,8 @@ local function fissure(entry, phase: number)
 				local mark = crack.marks[i]
 				if mark then
 					mark.Color = Colors.pearl
-					mark.Transparency = 0.1
-					scope:tween(mark, TweenInfo.new(0.5), { Transparency = 1 })
+					mark.FXOpacity.Value = 1-(0.1)
+					tweenFX(scope,mark, TweenInfo.new(0.5), { Transparency = 1 })
 				end
 				task.wait(F.stagger)
 			end
@@ -1621,12 +1506,12 @@ local function lunge(entry, _phase: number)
 	setPose(entry, "lunge", 0.3)
 
 	-- The eyes, and the blade.
-	local eyes = newPart(Vector3.new(2.2, 0.6, 0.6), Colors.pearl, 0.2)
+	local eyes = newPart(Vector3.new(2.2, 0.6, 0.6), Colors.pearl, 0.2, "Eyes")
 	eyes.Parent = workspace
 	scope:add(eyes)
 	newLight(eyes, Colors.pearl, 20, 3)
 	local blade = makeArc(scope, 9, Colors.orchid, 0.1)
-	local bladeMid = blade[5]
+	local bladeMid = blade[1]
 	newLight(bladeMid, Colors.orchid, 16, 2)
 	moteStream(bladeMid, Colors.orchid, 40, 1, 6)
 
@@ -1737,7 +1622,7 @@ local function veilStep(entry, _phase: number)
 
 	-- The crescent that wraps it: upright, around the robe.
 	local wrap = makeArc(scope, 11, Colors.pearl, 0.1)
-	local wrapMid = wrap[6]
+	local wrapMid = wrap[1]
 	newLight(wrapMid, Colors.orchid, 22, 2.5)
 	local function layWrap(scale: number, spin: number)
 		local pivot = entry.model:GetPivot()
@@ -1829,7 +1714,7 @@ local function totality(entry, _phase: number)
 	setSky(2, 2.5)
 
 	local orb = handOrb(entry, scope, Colors.pearl, 1.6)
-	scope:tween(orb, TweenInfo.new(T.warn, Enum.EasingStyle.Quad), { Size = Vector3.one * 4 })
+	tweenFX(scope,orb, TweenInfo.new(T.warn, Enum.EasingStyle.Quad), { Size = Vector3.one * 4 })
 
 	local shadow = groundUnder(entry.position)
 	local plan = TerrainManager:PlanExcavation(ringColumns(shadow, T.ring[1], T.ring[2], T.columns), { maxCells = T.cap })
@@ -1844,7 +1729,7 @@ local function totality(entry, _phase: number)
 		local alpha = (os.clock() - began) / T.warn
 		layRing(ring, shadow + Vector3.new(0, 0.3, 0), T.ring[2] + 1.5, alpha * 2, 0.3 + alpha * 0.4)
 		for _, mark in ipairs(marks) do
-			mark.Transparency = 0.5 - alpha * 0.4
+			mark.FXOpacity.Value = 1-(0.5 - alpha * 0.4)
 		end
 		task.wait()
 	end
@@ -1864,9 +1749,10 @@ local function totality(entry, _phase: number)
 	fx("totality", entry.position, { drop = entry.position.Y - shadow.Y })
 	flare(scope, entry.position, 14, 0.9, Colors.pearl)
 	buildEclipse(entry)
-	scope:tween(orb, TweenInfo.new(0.4), { Size = Vector3.one * 0.2, Transparency = 1 })
+	tweenFX(scope,orb, TweenInfo.new(0.4), { Size = Vector3.one * 0.2, Transparency = 1 })
 
 	entry.transformed = true
+	if entry.aura then entry.aura:SetAttribute("Phase",2) end
 	pause(entry, T.settle)
 	setPose(entry, "rest", 0.6)
 	entry.hem = Tuning.hover.hem
@@ -1898,7 +1784,7 @@ local function nova(entry, _phase: number)
 
 	setPose(entry, "channel", 0.7)
 	local orb = handOrb(entry, scope, Colors.orchid, 1.2)
-	scope:tween(orb, TweenInfo.new(N.channel, Enum.EasingStyle.Quad), { Size = Vector3.one * 5 })
+	tweenFX(scope,orb, TweenInfo.new(N.channel, Enum.EasingStyle.Quad), { Size = Vector3.one * 5 })
 
 	-- The sigil and the scorch ring, chosen and marked before anything moves.
 	local centre = groundUnder(entry.position)
@@ -1910,14 +1796,14 @@ local function nova(entry, _phase: number)
 	local closing2 = makeArc(scope, 16, Colors.violet, 0.15)
 	local spokes = {}
 	for index = 1, 12 do
-		local spoke = newPart(Vector3.new(1, 0.22, 0.22), Colors.pearl, 0.4)
+		local spoke = newPart(Vector3.new(1, 0.22, 0.22), Colors.pearl, 0.4, "Spoke")
 		spoke.Parent = workspace
 		scope:add(spoke)
 		spokes[index] = spoke
 	end
 	local fill = newDisc(centre + Vector3.new(0, 0.1, 0), N.radius, Colors.plum, 0.8)
 	scope:add(fill)
-	local core = newPart(Vector3.one * 0.5, Colors.black, 0)
+	local core = newPart(Vector3.one * 0.5, Colors.black, 0, "Void")
 	core.Shape = Enum.PartType.Ball
 	core.Material = Enum.Material.SmoothPlastic
 	core.Parent = workspace
@@ -1940,11 +1826,11 @@ local function nova(entry, _phase: number)
 			local mid = lifted + Vector3.new(math.cos(angle) * reach * 0.5, 0.08, math.sin(angle) * reach * 0.5)
 			spoke.Size = Vector3.new(reach, 0.22, 0.22)
 			spoke.CFrame = CFrame.new(mid) * CFrame.Angles(0, -angle, 0)
-			spoke.Transparency = 0.5 - alpha * 0.4
+			spoke.FXOpacity.Value = 1-(0.5 - alpha * 0.4)
 		end
-		fill.Transparency = 0.8 - alpha * 0.3
+		fill.FXOpacity.Value = 1-(0.8 - alpha * 0.3)
 		for _, mark in ipairs(marks) do
-			mark.Transparency = 0.5 - alpha * 0.4
+			mark.FXOpacity.Value = 1-(0.5 - alpha * 0.4)
 		end
 		core.Position = rigPoint(entry, CLASP)
 		core.Size = Vector3.one * (0.5 + alpha * 3)
@@ -1952,9 +1838,9 @@ local function nova(entry, _phase: number)
 	end
 
 	-- THE HELD BREATH: the orb is gone, the core is black, nothing moves.
-	orb.Transparency = 1
+	orb.FXOpacity.Value = 1-(1)
 	for _, spoke in ipairs(spokes) do
-		spoke.Transparency = 1
+		spoke.FXOpacity.Value = 1-(1)
 	end
 	if not pause(entry, N.hold) then
 		return
@@ -2005,14 +1891,20 @@ end
 -- The fight
 -- ---------------------------------------------------------------------------
 
+local referenceMoves=require(script.Parent.SignusMoves).create({
+	carrier=newPart,pickTarget=pickTarget,root=livingRoot,ground=groundUnder,
+	pose=setPose,pause=pause,playersInCircle=playersInCircle,players=livingPlayers,
+	cover=sightBlock,hit=hitOnce,fx=fx,flat=flat,applyPose=applyPose,
+	hand=function(entry) return rigPoint(entry,HANDS) end,
+	sky=setSky,eclipse=buildEclipse,
+})
 local ATTACKS = {
-	volley = volley,
-	moonfall = moonfall,
-	fissure = fissure,
+	spiral = referenceMoves.spiral,
+	lance = referenceMoves.lance,
+	beam = referenceMoves.beam,
 	lunge = lunge,
 	step = veilStep,
-	totality = totality,
-	nova = nova,
+	totality = referenceMoves.totality,
 }
 
 local function nextInCycle(entry, phase: number): string
@@ -2278,6 +2170,10 @@ function Signus.start(entry)
 	end
 
 	findRig(entry)
+	entry.aura=newPart(Vector3.new(14,18,14),Colors.violet,0,"Aura")
+	entry.aura:SetAttribute("Phase",1)
+	entry.aura.Parent=workspace
+	entry.encounterScope:add(entry.aura)
 
 	local animator, reason = EnemyAnimator.new(entry.model, EnemyConfig.Animations.Signus)
 	if animator then
@@ -2436,6 +2332,7 @@ function Signus.finish(entry, reason: string?)
 	end
 	entry.halo = nil
 	entry.eclipse = nil
+	entry.aura = nil
 
 	if entry.animator then
 		entry.animator:destroy()

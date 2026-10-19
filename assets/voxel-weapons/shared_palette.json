@@ -1,0 +1,86 @@
+{
+  "name": "Blockbound Weapons - Charcoal and Warm Wood",
+  "indexing": "VOX index 0 is empty; first RGBA entry maps to index 1. Keep indices stable for future models.",
+  "colors": [
+    {
+      "index": 1,
+      "name": "Charcoal outline",
+      "hex": "#20201e"
+    },
+    {
+      "index": 2,
+      "name": "Charcoal bevel",
+      "hex": "#292720"
+    },
+    {
+      "index": 3,
+      "name": "Wood deepest",
+      "hex": "#633723"
+    },
+    {
+      "index": 4,
+      "name": "Wood dark red",
+      "hex": "#793e29"
+    },
+    {
+      "index": 5,
+      "name": "Wood russet",
+      "hex": "#88492e"
+    },
+    {
+      "index": 6,
+      "name": "Wood shade",
+      "hex": "#945332"
+    },
+    {
+      "index": 7,
+      "name": "Wood brown",
+      "hex": "#9f5d34"
+    },
+    {
+      "index": 8,
+      "name": "Wood orange",
+      "hex": "#aa683a"
+    },
+    {
+      "index": 9,
+      "name": "Wood warm",
+      "hex": "#b37440"
+    },
+    {
+      "index": 10,
+      "name": "Wood highlight",
+      "hex": "#bd8249"
+    },
+    {
+      "index": 11,
+      "name": "Wood ochre",
+      "hex": "#986434"
+    },
+    {
+      "index": 12,
+      "name": "Wood muted",
+      "hex": "#805330"
+    },
+    {
+      "index": 13,
+      "name": "Wood side",
+      "hex": "#70452b"
+    },
+    {
+      "index": 14,
+      "name": "Wood light edge",
+      "hex": "#ae7542"
+    },
+    {
+      "index": 15,
+      "name": "Wood amber",
+      "hex": "#a16b36"
+    },
+    {
+      "index": 16,
+      "name": "Wood light grain",
+      "hex": "#b47b45"
+    }
+  ]
+}

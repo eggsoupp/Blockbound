@@ -188,6 +188,12 @@
           "$properties": {
             "Disabled": false
           }
+        },
+        "TutorialClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/TutorialClient.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
         }
       },
       "StarterCharacterScripts": {
@@ -413,6 +419,12 @@
           },
           "AbilityStorage": {
             "$path": "src/ReplicatedStorage/Shared/UI/AbilityStorage.lua"
+          },
+          "TutorialSteps": {
+            "$path": "src/ReplicatedStorage/Shared/UI/TutorialSteps.lua"
+          },
+          "TutorialPanel": {
+            "$path": "src/ReplicatedStorage/Shared/UI/TutorialPanel.lua"
           }
         },
         "Tools": {

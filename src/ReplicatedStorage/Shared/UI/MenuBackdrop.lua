@@ -68,6 +68,23 @@
 	has finished, so a closed menu is not animating. One eased alpha drives
 	every transparency, which is why there are no tweens to cancel and no
 	half-faded state to recover from if the menu is toggled fast.
+
+	THE SAME SOLID IS ALSO THE TUTORIAL GUIDE
+
+		local guide = MenuBackdrop.new(smallSquareFrame, { look = "guide" })
+		guide:burst(nil, 0.5)  -- a gentle attention pulse
+
+	Shared.UI.TutorialPanel puts a small copy of this on the gameplay HUD, so
+	the shape the player meets behind the Tab menu is the one that talks to
+	them. It is the same geometry, projection, drift and burst; what differs is
+	a LOOK - how much of its host the solid fills, no wash and no starfield,
+	fewer streaks, a smaller glint and a shorter throw - and those are the only
+	things LOOKS parameterises. Everything else stays a module constant, so the
+	menu's art is untouched by the guide existing.
+
+	A guide instance never becomes `live` (below): MenuBackdrop.flourish is for
+	the one behind the Tab menu, and an equipped ability must not set off the
+	HUD copy as well.
 ]]
 
 local RunService = game:GetService("RunService")
@@ -301,6 +318,60 @@ local FLOURISH_LIFE = math.max(BURST_ATTACK + BURST_RELEASE, TINT_HOLD + TINT_RE
 -- The shape also grows a little as the menu opens, from this up to full size.
 local OPEN_SCALE = 0.94
 
+--[[
+	What differs between the art behind the Tab menu and the small guide on the
+	HUD. `menu` is exactly the numbers above, so MenuBackdrop.new(parent) draws
+	what it always has; `guide` is the same solid sized to fill a small square
+	host instead of the screen.
+
+	  shapeSpan / streakSpan / glintSpan  fractions of the host's HEIGHT
+	  wash          the green wash's transparency; 1 is none at all
+	  stars         how many in the starfield; 0 builds none
+	  streaks       how many light streaks
+	  burstExpand   how far a burst throws the solid, as a fraction of its span
+	  openScale     the size it grows in from, as a fraction of full size
+	  clips         whether the host clips the art. The menu's does, because its
+	                streaks run past the solid and the screen edge is the frame;
+	                the guide's must not, because its host IS the solid's size
+	                and a burst or a streak is meant to reach past it.
+	  haloSize / coreSize / vertexSize   pixels, see the menu values above
+
+	The guide's shape span is below 1 because the projection lands a unit vertex
+	about half the field out on the far side and nearer six tenths on the near
+	side: the solid's silhouette is wider than its field, so 0.82 of the host
+	fills most of it and a burst still has somewhere to go.
+]]
+local LOOKS = {
+	menu = {
+		shapeSpan = SHAPE_SPAN,
+		streakSpan = STREAK_SPAN,
+		glintSpan = GLINT_SPAN,
+		wash = WASH_TRANSPARENCY,
+		stars = STAR_COUNT,
+		streaks = STREAK_COUNT,
+		burstExpand = BURST_EXPAND,
+		openScale = OPEN_SCALE,
+		clips = true,
+		haloSize = GLINT_HALO_SIZE,
+		coreSize = GLINT_CORE_SIZE,
+		vertexSize = VERTEX_SIZE,
+	},
+	guide = {
+		shapeSpan = 0.82,
+		streakSpan = 1.15,
+		glintSpan = 0.36,
+		wash = 1,
+		stars = 0,
+		streaks = 4,
+		burstExpand = 0.14,
+		openScale = 0.7,
+		clips = false,
+		haloSize = 18,
+		coreSize = 6,
+		vertexSize = 4,
+	},
+}
+
 -- ---------------------------------------------------------------------------
 -- Envelopes
 -- ---------------------------------------------------------------------------
@@ -479,7 +550,7 @@ end
 -- Building
 -- ---------------------------------------------------------------------------
 
-local function buildStars(parent: Instance): { Frame }
+local function buildStars(parent: Instance, look): { Frame }
 	local field = Instance.new("Frame")
 	field.Name = "Stars"
 	field.Size = UDim2.fromScale(1, 1)
@@ -490,7 +561,7 @@ local function buildStars(parent: Instance): { Frame }
 	local random = Random.new(STAR_SEED)
 	local stars = {}
 
-	for _ = 1, STAR_COUNT do
+	for _ = 1, look.stars do
 		local star = newSquare(field, (if random:NextNumber() < 0.2 then 3 else 2), Theme.Color.MenuWire)
 		star.Position = UDim2.fromScale(random:NextNumber(), random:NextNumber())
 		star.ZIndex = 1
@@ -511,18 +582,18 @@ end
 	unrelated angles. Each one gets its own angle, length and sideways offset
 	from a fixed seed, so it is a scatter that stays put.
 ]]
-local function buildStreaks(parent: Instance): (Frame, { Frame })
-	local field = squareFrame(parent, STREAK_SPAN, 2)
+local function buildStreaks(parent: Instance, look): (Frame, { Frame })
+	local field = squareFrame(parent, look.streakSpan, 2)
 	field.Name = "Streaks"
 
 	local random = Random.new(STAR_SEED + 1)
 	local streaks = {}
 
-	for index = 1, STREAK_COUNT do
+	for index = 1, look.streaks do
 		local streak = newLine(field, Theme.Color.MenuStreak, STREAK_THICKNESS)
 
 		-- Spread over half a turn: a line and its opposite are the same line.
-		local angle = (index - 1) * (180 / STREAK_COUNT) + random:NextNumber(-9, 9)
+		local angle = (index - 1) * (180 / look.streaks) + random:NextNumber(-9, 9)
 		local length = random:NextNumber(0.62, 1)
 		local offset = random:NextNumber(-0.16, 0.16)
 
@@ -545,8 +616,8 @@ local function buildStreaks(parent: Instance): (Frame, { Frame })
 	return field, streaks
 end
 
-local function buildWire(parent: Instance): (Frame, { Frame }, { Frame })
-	local field = squareFrame(parent, SHAPE_SPAN, 3)
+local function buildWire(parent: Instance, look): (Frame, { Frame }, { Frame })
+	local field = squareFrame(parent, look.shapeSpan, 3)
 	field.Name = "Wireframe"
 
 	local lines = {}
@@ -556,7 +627,7 @@ local function buildWire(parent: Instance): (Frame, { Frame }, { Frame })
 
 	local dots = {}
 	for _ = 1, #VERTICES do
-		table.insert(dots, newSquare(field, VERTEX_SIZE, Theme.Color.MenuWire))
+		table.insert(dots, newSquare(field, look.vertexSize, Theme.Color.MenuWire))
 	end
 
 	return field, lines, dots
@@ -568,8 +639,8 @@ end
 	Two crossed streaks and a core, which is all a lens glint is. Its own square
 	frame so the arms are sized off screen height like everything else.
 ]]
-local function buildGlint(parent: Instance)
-	local field = squareFrame(parent, GLINT_SPAN, 4)
+local function buildGlint(parent: Instance, look)
+	local field = squareFrame(parent, look.glintSpan, 4)
 	field.Name = "Glint"
 
 	-- The arms are scaled with the field and grow with the solid; the halo and
@@ -587,11 +658,11 @@ local function buildGlint(parent: Instance)
 		table.insert(arms, arm)
 	end
 
-	local halo = newSquare(field, GLINT_HALO_SIZE, Theme.Color.MenuGlint)
+	local halo = newSquare(field, look.haloSize, Theme.Color.MenuGlint)
 	halo.Position = UDim2.fromScale(0.5, 0.5)
 	halo.ZIndex = 4
 
-	local core = newSquare(field, GLINT_CORE_SIZE, Theme.Color.MenuGlint)
+	local core = newSquare(field, look.coreSize, Theme.Color.MenuGlint)
 	core.Position = UDim2.fromScale(0.5, 0.5)
 	core.ZIndex = 4
 
@@ -616,25 +687,34 @@ local function fade(base: number, alpha: number): number
 	return math.clamp(1 - (1 - base) * alpha, 0, 1)
 end
 
-function MenuBackdrop.new(parent: Instance)
+--[[
+	`options.look` is a key of LOOKS: "menu" (the default, and the art behind
+	the Tab menu) or "guide" (the small copy the tutorial puts on the HUD).
+]]
+function MenuBackdrop.new(parent: Instance, options: { look: string? }?)
 	local self = setmetatable({}, MenuBackdrop)
 
+	local lookName = (options and options.look) or "menu"
+	local look = LOOKS[lookName]
+	assert(look, string.format("[MenuBackdrop] there is no look called %q", tostring(lookName)))
+	self.look = look
+
 	local root = Instance.new("Frame")
-	root.Name = "MenuBackdrop"
+	root.Name = if lookName == "menu" then "MenuBackdrop" else "GuideBackdrop"
 	root.Size = UDim2.fromScale(1, 1)
 	root.BackgroundColor3 = Theme.Color.MenuWash
 	root.BackgroundTransparency = 1
 	root.BorderSizePixel = 0
-	root.ClipsDescendants = true
+	root.ClipsDescendants = look.clips
 	root.Visible = false
 	root.ZIndex = 1
 	root.Parent = parent
 
 	self.root = root
-	self.stars = buildStars(root)
-	self.streakField, self.streaks = buildStreaks(root)
-	self.wireField, self.edgeLines, self.vertexDots = buildWire(root)
-	self.glint = buildGlint(root)
+	self.stars = buildStars(root, look)
+	self.streakField, self.streaks = buildStreaks(root, look)
+	self.wireField, self.edgeLines, self.vertexDots = buildWire(root, look)
+	self.glint = buildGlint(root, look)
 
 	-- Scratch, reused every frame: the projected position of each vertex, and
 	-- how far back it sits. Kept here so a frame allocates nothing.
@@ -682,6 +762,10 @@ function MenuBackdrop.new(parent: Instance)
 	self.flourishClock = nil
 	self.tintColor = nil
 
+	-- How hard the current burst hits, 1 being an equipped ability's. The
+	-- guide's attention pulse asks for less. See burst().
+	self.burstStrength = 1
+
 	--[[
 		The solid's yaw, accumulated rather than taken from the clock.
 
@@ -692,7 +776,10 @@ function MenuBackdrop.new(parent: Instance)
 	]]
 	self.spin = 0
 
-	live = self
+	-- Only the menu's own art answers MenuBackdrop.flourish; see the header.
+	if lookName == "menu" then
+		live = self
+	end
 
 	return self
 end
@@ -725,7 +812,7 @@ function MenuBackdrop:_applyAlpha(flare: number)
 	self.appliedAlpha = alpha
 	self.appliedLit = lit
 
-	self.root.BackgroundTransparency = fade(WASH_TRANSPARENCY, alpha)
+	self.root.BackgroundTransparency = fade(self.look.wash, alpha)
 
 	for _, star in ipairs(self.stars) do
 		star.frame.BackgroundTransparency = fade(STAR_TRANSPARENCY, lit * star.dim)
@@ -856,7 +943,7 @@ function MenuBackdrop:_step(deltaTime: number)
 		if self.flourishClock >= FLOURISH_LIFE then
 			self.flourishClock = nil
 		else
-			burst = burstEnvelope(self.flourishClock)
+			burst = burstEnvelope(self.flourishClock) * self.burstStrength
 			tint = if self.tintColor then tintEnvelope(self.flourishClock) else 0
 		end
 	end
@@ -893,8 +980,9 @@ function MenuBackdrop:_step(deltaTime: number)
 	self.spin += deltaTime * (YAW_SPEED + BURST_SPIN * punch)
 
 	-- Grows in as the menu opens, then is thrown outward on each flourish.
-	local throw = 1 + BURST_EXPAND * burst
-	local span = SHAPE_SPAN * (OPEN_SCALE + (1 - OPEN_SCALE) * alpha) * throw
+	local look = self.look
+	local throw = 1 + look.burstExpand * burst
+	local span = look.shapeSpan * (look.openScale + (1 - look.openScale) * alpha) * throw
 	self.wireField.Size = UDim2.fromScale(span, span)
 
 	self:_drawWire(self.spin, time, alpha * flare)
@@ -907,7 +995,7 @@ function MenuBackdrop:_step(deltaTime: number)
 
 	-- Thrown by the same factor as the solid, so the flash at the centre grows
 	-- with the shape it is the centre of.
-	local glintSpan = GLINT_SPAN * throw
+	local glintSpan = look.glintSpan * throw
 	glint.field.Size = UDim2.fromScale(glintSpan, glintSpan)
 
 	for _, arm in ipairs(glint.arms) do
@@ -973,7 +1061,7 @@ end
 	only mean they missed it; the CommandFeedback line is what tells them, and
 	the panel will be showing the new loadout the next time they open the menu.
 ]]
-function MenuBackdrop:_flourish(rarity: string?)
+function MenuBackdrop:_flourish(rarity: string?, strength: number?)
 	if not self.root.Visible then
 		return
 	end
@@ -985,6 +1073,7 @@ function MenuBackdrop:_flourish(rarity: string?)
 		colour.
 	]]
 	self.flourishClock = 0
+	self.burstStrength = strength or 1
 	self.tintColor = if rarity then Theme.rarityColor(rarity) else nil
 	self.appliedTint = -1
 end
@@ -997,6 +1086,16 @@ function MenuBackdrop.flourish(rarity: string?)
 	if live then
 		live:_flourish(rarity)
 	end
+end
+
+--[[
+	The same on an instance you DO hold - the tutorial's guide, which is not
+	`live` and has no rarity to show. `strength` scales the throw, the whip and
+	the flare together: 1 is a full flourish, 0.5 a nod. Nothing happens while
+	the art is hidden, as with the menu's.
+]]
+function MenuBackdrop:burst(rarity: string?, strength: number?)
+	self:_flourish(rarity, strength)
 end
 
 function MenuBackdrop:_disconnect()

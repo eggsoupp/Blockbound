@@ -659,6 +659,14 @@ local function setUp(model)
 		state.wings = wings
 	end
 
+	-- A neck and head on joints (the Cobra): see snakePose below.
+	local neck = part:FindFirstChild("Neck")
+	local neckPart = model:FindFirstChild("Neck")
+	local head = neckPart and neckPart:FindFirstChild("Head")
+	if neck and neck:IsA("Motor6D") and head and head:IsA("Motor6D") then
+		state.snake = { neck = neck, head = head, pitch = 0, headPitch = 0 }
+	end
+
 	if model:GetAttribute("Rainbow") then
 		local sheen = Instance.new("Highlight")
 		sheen.Adornee = model
@@ -709,7 +717,7 @@ local function setUp(model)
 		state.last = part.Position
 	end
 
-	if not (state.wings or state.sheen or state.snow) then
+	if not (state.wings or state.snake or state.sheen or state.snow) then
 		return false
 	end
 	return state
@@ -763,6 +771,38 @@ local function beatWing(wing, mode, bird, now, rate, amplitude, glide, dt)
 	wing.joint.Transform = CFrame.Angles(0, wing.back * wing.side, -wing.down * wing.side)
 end
 
+--[[
+	The Cobra's neck and head, by the CobraPose the server sets:
+	  idle     a slow, searching sway, the head held level against it
+	  slither  a faster, wider weave as it moves
+	  rear     drawn back, head tipped down at its mark, trembling
+	  strike   thrown forward, head driving in
+	The sway is drawn exactly; the lean of each pose is eased, so a strike
+	snaps forward and a rear draws back. Pitch about X: positive tips the
+	neck back (the model faces -Z).
+]]
+local SNAKE_POSES = {
+	idle = { pitch = 0.05, head = 0, rate = 1.6, sway = 0.22 },
+	slither = { pitch = 0.18, head = -0.1, rate = 3.4, sway = 0.34 },
+	rear = { pitch = 0.5, head = -0.45, rate = 9, sway = 0.04 },
+	strike = { pitch = -0.75, head = 0.25, rate = 0, sway = 0 },
+}
+
+local function snakePose(snake, pose, t, dt)
+	local p = SNAKE_POSES[pose] or SNAKE_POSES.idle
+	local ease = math.min(1, dt * (if pose == "strike" then 30 else 8))
+	snake.pitch += (p.pitch - snake.pitch) * ease
+	snake.headPitch += (p.head - snake.headPitch) * ease
+
+	local swing = math.sin(t * p.rate) * p.sway
+	local roll = math.sin(t * p.rate + 1.2) * p.sway * 0.4
+	-- A rise and fall in the neck, like breathing, under everything else.
+	local breathe = math.sin(t * 1.1) * 0.04
+	snake.neck.Transform = CFrame.Angles(snake.pitch + breathe, swing, roll)
+	-- The head counters most of the sway, so it keeps looking at its prey.
+	snake.head.Transform = CFrame.Angles(snake.headPitch - breathe, -swing * 0.7, -roll * 0.8)
+end
+
 RunService.RenderStepped:Connect(function(dt)
 	local now = os.clock()
 	local camera = workspace.CurrentCamera
@@ -785,6 +825,10 @@ RunService.RenderStepped:Connect(function(dt)
 				for _, wing in ipairs(state.wings) do
 					beatWing(wing, mode, glide > 0, t, rate, amplitude, glide, dt)
 				end
+			end
+
+			if state.snake then
+				snakePose(state.snake, model:GetAttribute("CobraPose") or "idle", t, dt)
 			end
 
 			if state.sheen then

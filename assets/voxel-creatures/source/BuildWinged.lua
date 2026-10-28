@@ -25,6 +25,13 @@ Build.Split = {
 		if x >= 50 then return "RightWing" end
 		return "Body"
 	end,
+	-- For buildJointed: the coil on the ground, the raised neck, the hooded
+	-- head. Boxes go by their bottom row.
+	Cobra = function(_x, y)
+		if y < 8 then return "Coil" end
+		if y < 36 then return "Neck" end
+		return "Head"
+	end,
 	-- Factor-2 boxes. The wings are the raised V above the shoulders and the
 	-- feathers hanging down the outside of the body.
 	Shrike = function(x, y, _z, w, _h, _d, _c)
@@ -158,6 +165,75 @@ function Build.build(data, voxel, assetName, split, flap)
 	model:SetAttribute("WingAngle", flap.angle)
 	model:SetAttribute("WingGlide", flap.glide or 0)
 	model.WorldPivot = CFrame.new(model:GetBoundingBox().Position)
+	model:PivotTo(CFrame.new())
+	return model
+end
+
+--[[
+	A chain of unions on Motor6Ds, for a body that bends rather than flaps:
+	`joints` is a list of { parent, child } group names, the first group in
+	`order` is the anchored root, and each child hinges at the bottom centre
+	of its own box. The pivot is the root's feet, centred.
+]]
+function Build.buildJointed(data, voxel, assetName, split, order, joints)
+	local colors = {}
+	for r, g, b in string.gmatch(data.colors, "(%d+),(%d+),(%d+)") do
+		table.insert(colors, Color3.fromRGB(tonumber(r), tonumber(g), tonumber(b)))
+	end
+	local dims = data.dims
+	local origin = Vector3.new(0, 500, 0)
+	local folder = Instance.new("Folder")
+	folder.Name = "_WingedBuild"
+
+	local groups = {}
+	for _, name in ipairs(order) do groups[name] = {} end
+	for x, y, z, w, h, d, c in string.gmatch(data.boxes, "(%d+),(%d+),(%d+),(%d+),(%d+),(%d+),(%d+)") do
+		x, y, z, w, h, d, c = tonumber(x), tonumber(y), tonumber(z), tonumber(w), tonumber(h), tonumber(d), tonumber(c)
+		local p = Instance.new("Part")
+		p.Anchored, p.CanCollide = true, false
+		p.Material = Enum.Material.SmoothPlastic
+		p.TopSurface, p.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+		p.Color = colors[c]
+		p.Size = Vector3.new(w, h, d) * voxel
+		p.Position = origin + Vector3.new(x + w / 2 - dims[1] / 2, y + h / 2, z + d / 2 - dims[3] / 2) * voxel
+		p.Parent = folder
+		table.insert(groups[split(x, y, z, w, h, d, c)], p)
+	end
+	folder.Parent = workspace
+	task.wait()
+
+	local model = Instance.new("Model")
+	model.Name = assetName
+	local parts = {}
+	for i, name in ipairs(order) do
+		local part, extras = union(groups[name], name)
+		part.Parent = model
+		if i == 1 then
+			model.PrimaryPart = part
+		else
+			part.Anchored = false
+			part.Massless = true
+		end
+		attach(model, part, extras)
+		parts[name] = part
+	end
+
+	for _, pair in ipairs(joints) do
+		local parent, child = parts[pair[1]], parts[pair[2]]
+		local hinge = CFrame.new(child.Position - Vector3.new(0, child.Size.Y / 2, 0))
+		local joint = Instance.new("Motor6D")
+		joint.Name = pair[2]
+		joint.Part0, joint.Part1 = parent, child
+		joint.C0 = parent.CFrame:ToObjectSpace(hinge)
+		joint.C1 = child.CFrame:ToObjectSpace(hinge)
+		joint.Parent = parent
+	end
+	folder:Destroy()
+
+	model:SetAttribute("ArticulatedRig", true)
+	local bounds = model:GetBoundingBox()
+	local root = model.PrimaryPart
+	model.WorldPivot = CFrame.new(bounds.Position.X, root.Position.Y - root.Size.Y / 2, bounds.Position.Z)
 	model:PivotTo(CFrame.new())
 	return model
 end

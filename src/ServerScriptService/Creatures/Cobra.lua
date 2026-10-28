@@ -28,8 +28,9 @@ local Tuning = {
 	cooldown = 2.2,
 	strikeDamage = 13,
 
-	-- The sway, in radians of yaw, and how fast.
-	sway = 0.32,
+	-- The whole body's slow yaw, in radians, and how fast. Small: the neck and
+	-- head do the real swaying, on their joints, drawn by each client.
+	sway = 0.1,
 	swayRate = 2.4,
 	-- How far it leans: back on the rear, forward on the lunge.
 	rearBack = 0.3,
@@ -47,6 +48,13 @@ function Trait.pose(entry, now)
 	CreatureKit.tilt(entry, sway(now))
 end
 
+-- What the neck and head are doing, for StarterPlayerScripts.CreatureFX.
+local function setPose(entry, pose: string)
+	if entry.model:GetAttribute("CobraPose") ~= pose then
+		entry.model:SetAttribute("CobraPose", pose)
+	end
+end
+
 local function strike(entry, now: number): boolean
 	local s = entry.strike
 	local elapsed = now - s.startedAt
@@ -54,10 +62,12 @@ local function strike(entry, now: number): boolean
 
 	local reach, lean = 0, 0
 	if elapsed < w then
+		setPose(entry, "rear")
 		local k = elapsed / w
 		reach, lean = -0.6 * k, -Tuning.rearBack * k
 	elseif elapsed < w + l then
 		local k = (elapsed - w) / l
+		setPose(entry, "strike")
 		reach, lean = Tuning.reach * k, Tuning.lungeLean * k
 		if not s.announced then
 			s.announced = true
@@ -66,6 +76,7 @@ local function strike(entry, now: number): boolean
 	elseif elapsed < w + l + h then
 		reach, lean = Tuning.reach, Tuning.lungeLean
 	elseif elapsed < w + l + h + r then
+		setPose(entry, "idle")
 		local k = 1 - (elapsed - w - l - h) / r
 		reach, lean = Tuning.reach * k, Tuning.lungeLean * k
 	else
@@ -89,6 +100,7 @@ end
 function Trait.step(entry, target, targetPosition, position, dt, now)
 	if entry.state ~= "Grounded" then
 		entry.strike = nil
+		setPose(entry, "idle")
 		return false
 	end
 
@@ -97,6 +109,7 @@ function Trait.step(entry, target, targetPosition, position, dt, now)
 	end
 
 	if not (target and targetPosition) then
+		setPose(entry, "idle")
 		return false
 	end
 
@@ -112,11 +125,13 @@ function Trait.step(entry, target, targetPosition, position, dt, now)
 
 	-- Close enough already: hold ground and sway, facing the target.
 	if distance <= Tuning.strikeRange then
+		setPose(entry, "idle")
 		CreatureKit.place(entry, feet, toward, sway(now))
 		return true
 	end
 
 	-- A step or a drop: the hop movement climbs it.
+	setPose(entry, "slither")
 	if not CreatureKit.slide(entry, toward * Tuning.slitherSpeed * dt, toward, sway(now), Tuning.slideStep) then
 		return false
 	end

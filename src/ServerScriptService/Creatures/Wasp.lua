@@ -49,6 +49,12 @@ local function buzz(now: number, scale: number?): CFrame
 	)
 end
 
+-- The wings are separate parts on hinges; StarterPlayerScripts.CreatureFX
+-- beats them every frame. Folded only for the dart.
+function Trait.start(entry)
+	CreatureKit.wings(entry, "flap")
+end
+
 function Trait.pose(entry, now)
 	CreatureKit.tilt(entry, buzz(now))
 end
@@ -70,6 +76,7 @@ function Trait.step(entry, target, targetPosition, position, dt, now)
 				-- Aimed at the chest, then committed.
 				local line = dive.aim - pivot
 				dive.phase = "dart"
+				CreatureKit.wings(entry, "fold")
 				dive.direction = if line.Magnitude > 1e-3 then line.Unit else entry.facing
 				dive.remaining = line.Magnitude + Tuning.overshoot
 				dive.endsAt = now + Tuning.maxDiveSeconds
@@ -87,6 +94,7 @@ function Trait.step(entry, target, targetPosition, position, dt, now)
 
 			if dive.remaining <= 0 or now >= dive.endsAt then
 				dive.phase = "recover"
+				CreatureKit.wings(entry, "flap")
 				dive.endsAt = now + Tuning.recoverSeconds
 			end
 			return true

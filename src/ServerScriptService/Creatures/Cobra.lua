@@ -116,17 +116,11 @@ function Trait.step(entry, target, targetPosition, position, dt, now)
 		return true
 	end
 
-	local ahead = feet + toward * Tuning.slitherSpeed * dt
-	local ground = CreatureKit.service().groundAt(ahead.X, ahead.Z, feet.Y)
-	if math.abs(ground - feet.Y) > Tuning.slideStep then
-		-- A step or a drop: the hop movement climbs it.
+	-- A step or a drop: the hop movement climbs it.
+	if not CreatureKit.slide(entry, toward * Tuning.slitherSpeed * dt, toward, sway(now), Tuning.slideStep) then
 		return false
 	end
-
-	local moved = Vector3.new(ahead.X, ground, ahead.Z)
-	CreatureKit.place(entry, moved, toward, sway(now))
-	CreatureKit.service().touch(entry, moved + Vector3.new(0, entry.height * 0.5, 0))
-	entry.groundY = ground
+	CreatureKit.service().touch(entry, CreatureKit.feet(entry) + Vector3.new(0, entry.height * 0.5, 0))
 	return true
 end
 

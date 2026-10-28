@@ -6,14 +6,18 @@
 	already decided everything - where the laser went, how the snowball
 	flies - and this only shows it.
 
-	  charge   (model, eye, seconds, lockAfter, character)
+	  charge   (model, eye, seconds, lockAfter, aim)
 	                                              the Lasereye gathering, with a thin aim line
-	                                              that follows the character until it locks
+	                                              that follows a character until it locks, or
+	                                              points at a fixed spot
 	  lock     (model, aim)                       the aim line stops following
-	  laser    (model, eye, finish, seconds)      the beam itself
+	  sweep    (model, eye, base, pitch, from, to, seconds, length)
+	                                              the raking beam, swung through its arc
+	  laser    (model, eye, finish, seconds)      the lance
 	  cancel   (model)                            a charge that will not fire
 	  throw    (id, origin, velocity, gravity)    a snowball on the server's own arc
 	  splash   (id, point)                        where it burst
+	  spin     (model, seconds, radius)           the Snowman's broom spin
 	  dive     (model, seconds)                   a streak behind a darting wasp or swooping bird
 	  strike   (model, seconds)                   the Cobra's bite
 	  flare    (model, color)                     the one-beat tell before a move
@@ -198,7 +202,50 @@ local handlers = {}
 -- Lasereye
 -- ---------------------------------------------------------------------------
 
+local LASER_WHITE = Color3.fromRGB(255, 236, 228)
+local SCORCH = Color3.fromRGB(60, 40, 36)
+
 local charges = {}
+
+local function light(parent, color, range, brightness)
+	local l = Instance.new("PointLight")
+	l.Color, l.Range, l.Brightness, l.Shadows = color, range, brightness, false
+	l.Parent = parent
+	return l
+end
+
+--[[
+	The beam both attacks share, three layers deep: a wide red glow, the
+	pack's flowing fire core, and a thin white-hot line down the middle that
+	keeps the centre reading as a beam rather than smoke. `scale` widens all
+	three; setLaser fades and pulses them together.
+]]
+local function laserBeam(host, a0, a1, scale)
+	local function layer(texture, color, width, emission, brightness, speed)
+		return {
+			width = width * scale,
+			beam = Kit.beam(host, a0, a1, {
+				Texture = texture, TextureMode = Enum.TextureMode.Stretch, TextureLength = 1,
+				TextureSpeed = speed or 0, Segments = 1, FaceCamera = true,
+				Color = ColorSequence.new(color), LightEmission = emission, Brightness = brightness,
+				Width0 = width * scale, Width1 = width * scale, Transparency = NumberSequence.new(0),
+			}),
+		}
+	end
+	return {
+		layer(Library.LaserGlow.Texture, LASER_RED, 3.8, 1, 2, Library.LaserGlow.TextureSpeed),
+		layer(Library.LaserCore.Texture, LASER_HOT, 1.6, 0.8, 3, Library.LaserCore.TextureSpeed),
+		layer("", LASER_WHITE, 0.32, 1, 1),
+	}
+end
+
+local function setLaser(layers, opacity: number, pulse: number)
+	for i, layer in ipairs(layers) do
+		Kit.opacity(layer.beam, opacity)
+		local width = layer.width * (if i == 3 then 1 else pulse)
+		layer.beam.Width0, layer.beam.Width1 = width, width
+	end
+end
 
 local function endCharge(model)
 	local charge = charges[model]
@@ -209,19 +256,25 @@ local function endCharge(model)
 	end
 end
 
-function handlers.charge(model, eye: Vector3, seconds: number, lockAfter: number, character)
+--[[
+	The eye gathering: rings drawn inward, a growing red core and light, and
+	a thin aim line. `aim` is either a character (the lance: the line follows
+	it until it locks) or a point (the sweep: where the rake will start).
+]]
+function handlers.charge(model, eye: Vector3, seconds: number, lockAfter: number, aim)
 	endCharge(model)
 
 	local host = Kit.host(folder, "LaserCharge", CFrame.new(eye))
 	local target = Kit.host(folder, "LaserAim", CFrame.new(eye))
 	local energy = emitter("ChargeEnergy", host, {
-		Enabled = true, Rate = 9, Color = ColorSequence.new(LASER_RED), Size = scaled(Library.ChargeEnergy.Size, 0.6),
+		Enabled = true, Rate = 9, Color = ColorSequence.new(LASER_RED), Size = scaled(Library.ChargeEnergy.Size, 0.7),
 	})
 	-- Dimmer than the pack's core, which blooms to white and loses the red.
 	local core = emitter("ChargeCore", host, {
 		Enabled = true, Rate = 30, Color = ColorSequence.new(LASER_RED), Size = NumberSequence.new(0.6),
 		Brightness = 1.5, LightEmission = 0.6,
 	})
+	local glow = light(host, LASER_RED, 6, 0)
 
 	local a0, a1 = Kit.attachment(host), Kit.attachment(target)
 	local line = Kit.beam(host, a0, a1, {
@@ -232,6 +285,10 @@ function handlers.charge(model, eye: Vector3, seconds: number, lockAfter: number
 
 	local charge = { host = host, target = target, locked = false }
 	charges[model] = charge
+	if typeof(aim) == "Vector3" then
+		target.Position = aim
+		charge.locked = true
+	end
 
 	during(seconds + 0.6, function(elapsed)
 		if charges[model] ~= charge then
@@ -239,33 +296,37 @@ function handlers.charge(model, eye: Vector3, seconds: number, lockAfter: number
 		end
 		local k = math.clamp(elapsed / seconds, 0, 1)
 		if not charge.locked then
-			local root = character and character.Parent and character:FindFirstChild("HumanoidRootPart")
+			local root = typeof(aim) == "Instance" and aim.Parent and aim:FindFirstChild("HumanoidRootPart")
 			if root then
 				target.Position = root.Position
 			end
 		end
 
 		-- Thickens and brightens as it gathers; flickers once it has locked.
-		local width = 0.08 + 0.22 * k
+		local width = 0.08 + 0.26 * k
 		line.Width0, line.Width1 = width, width
 		local opacity = 0.2 + 0.5 * k
 		if charge.locked then
 			opacity = if math.sin(elapsed * 60) > 0 then 0.95 else 0.55
 		end
 		Kit.opacity(line, opacity)
-		core.Size = NumberSequence.new(0.5 + 1.1 * k)
-		energy.Rate = 9 + 12 * k
+		core.Size = NumberSequence.new(0.5 + 1.4 * k)
+		energy.Rate = 9 + 14 * k
+		glow.Brightness = 0.5 + 2.5 * k
+		glow.Range = 6 + 8 * k
 	end, function()
 		if charges[model] == charge then
 			endCharge(model)
 		end
 	end)
 
-	-- The server's "lock" carries the exact aim; this only stops the line
-	-- chasing the character if that message is late.
-	task.delay(lockAfter, function()
-		charge.locked = true
-	end)
+	if typeof(aim) ~= "Vector3" then
+		-- The server's "lock" carries the exact aim; this only stops the line
+		-- chasing the character if that message is late.
+		task.delay(lockAfter, function()
+			charge.locked = true
+		end)
+	end
 end
 
 function handlers.lock(model, aim: Vector3)
@@ -280,44 +341,123 @@ function handlers.cancel(model)
 	endCharge(model)
 end
 
+-- Where a beam from `eye` along `direction` stops: the first thing it meets
+-- that is not a creature, a player or an effect.
+local beamParams = RaycastParams.new()
+beamParams.FilterType = Enum.RaycastFilterType.Exclude
+
+local function beamEnd(eye: Vector3, direction: Vector3, length: number): Vector3
+	local exclude = { folder }
+	local enemies = workspace:FindFirstChild("Enemies")
+	if enemies then table.insert(exclude, enemies) end
+	for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+		if player.Character then table.insert(exclude, player.Character) end
+	end
+	beamParams.FilterDescendantsInstances = exclude
+	local hit = workspace:Raycast(eye, direction * length, beamParams)
+	return if hit then hit.Position else eye + direction * length
+end
+
+-- The muzzle and the impact: a flare that stays lit on the eye, and sparks,
+-- a glow and a trail of scorch smoke wherever the beam lands.
+local function laserEnds(host, far)
+	local muzzle = emitter("Flare", host, {
+		Enabled = true, Rate = 14, Color = ColorSequence.new(LASER_RED), Size = NumberSequence.new(3.2),
+		Lifetime = NumberRange.new(0.25),
+	})
+	local sparks = emitter("BoomSparks", far, {
+		Enabled = true, Rate = 80, Color = ColorSequence.new(Color3.fromRGB(255, 120, 60)),
+		Speed = NumberRange.new(18, 30), Lifetime = NumberRange.new(0.35, 0.6), Size = NumberSequence.new(0.7, 0),
+	})
+	-- The pack glow runs at Brightness 50, which as a continuous stream on
+	-- snow whites out the whole screen; a tenth of it still reads as heat.
+	local heat = emitter("BoomGlow", far, {
+		Enabled = true, Rate = 10, Color = ColorSequence.new(LASER_RED), Size = scaled(Library.BoomGlow.Size, 0.28),
+		Brightness = 4, LightEmission = 0.7,
+	})
+	-- Not locked to the moving end, so the smoke stays where the beam passed.
+	local scorch = emitter("Puff", far, {
+		Enabled = true, Rate = 22, Color = ColorSequence.new(SCORCH), Size = NumberSequence.new(1.8),
+		Lifetime = NumberRange.new(0.9), LockedToPart = false, Speed = NumberRange.new(1, 2),
+		SpreadAngle = Vector2.new(30, 30), Acceleration = Vector3.new(0, 3, 0),
+	})
+	return { muzzle, sparks, heat, scorch }, light(host, LASER_RED, 12, 2), light(far, LASER_HOT, 9, 1.5)
+end
+
+local function stopEmitters(list)
+	for _, e in ipairs(list) do
+		e.Enabled = false
+	end
+end
+
+--[[
+	The sweep: the beam rakes along the ground through an arc, recomputed every
+	frame from the server's own numbers (base direction, pitch, start and end
+	angle, duration) and stopped by whatever it meets.
+]]
+function handlers.sweep(model, eye: Vector3, base: Vector3, pitch: number, from: number, to: number, seconds: number, length: number)
+	endCharge(model)
+
+	local host = Kit.host(folder, "Sweep", CFrame.new(eye))
+	local far = Kit.host(folder, "SweepEnd", CFrame.new(eye))
+	local a0, a1 = Kit.attachment(host), Kit.attachment(far)
+	local layers = laserBeam(host, a0, a1, 1)
+	local emitters, eyeLight, endLight = laserEnds(host, far)
+	Kit.sound(host, SOUND_HIT, 0.5, 0.55)
+
+	during(seconds + 0.25, function(elapsed)
+		local t = math.clamp(elapsed / seconds, 0, 1)
+		local eased = t * t * (3 - 2 * t)
+		local angle = math.rad(from + (to - from) * eased)
+		local flat = (CFrame.Angles(0, angle, 0) * CFrame.new(base)).Position
+		local direction = (flat * math.cos(pitch) + Vector3.new(0, math.sin(pitch), 0)).Unit
+		far.Position = beamEnd(eye, direction, length)
+
+		local fade = if elapsed <= seconds then 1 else 1 - (elapsed - seconds) / 0.25
+		if elapsed > seconds then
+			stopEmitters(emitters)
+		end
+		setLaser(layers, fade, 1 + 0.12 * math.sin(elapsed * 45))
+		eyeLight.Brightness, endLight.Brightness = 2 * fade, 1.5 * fade
+	end, function()
+		stopEmitters(emitters)
+		Debris:AddItem(host, 1)
+		Debris:AddItem(far, 1.2)
+	end)
+end
+
+-- The lance: one heavy, straight, locked shot.
 function handlers.laser(model, eye: Vector3, finish: Vector3, seconds: number)
 	endCharge(model)
 
 	local host = Kit.host(folder, "Laser", CFrame.new(eye))
 	local far = Kit.host(folder, "LaserEnd", CFrame.new(finish))
 	local a0, a1 = Kit.attachment(host), Kit.attachment(far)
-
-	local function beam(kind, width, color)
-		local data = Library[kind]
-		return Kit.beam(host, a0, a1, {
-			Texture = data.Texture, TextureMode = data.TextureMode, TextureLength = data.TextureLength,
-			TextureSpeed = data.TextureSpeed, Brightness = data.Brightness, Segments = data.Segments,
-			Color = ColorSequence.new(color), LightEmission = 0.7, FaceCamera = true,
-			Width0 = width, Width1 = width, Transparency = NumberSequence.new(0),
-		})
-	end
-	local glow = beam("LaserGlow", 3.2, LASER_RED)
-	local core = beam("LaserCore", 1.3, LASER_HOT)
+	local layers = laserBeam(host, a0, a1, 1.35)
+	local emitters, eyeLight, endLight = laserEnds(host, far)
 
 	burst(eye, {
-		{ "BoomGlow", 1, { Color = ColorSequence.new(LASER_RED), Size = scaled(Library.BoomGlow.Size, 0.35) } },
+		{ "BoomGlow", 1, { Color = ColorSequence.new(LASER_RED), Size = scaled(Library.BoomGlow.Size, 0.45), Brightness = 8 } },
+		{ "ChargeEnergy", 1, { Color = ColorSequence.new(LASER_HOT), Size = scaled(Library.ChargeEnergy.Size, 1.2) } },
 	}, 1)
 	burst(finish, {
-		{ "BoomGlow", 1, { Color = ColorSequence.new(LASER_RED), Size = scaled(Library.BoomGlow.Size, 0.45) } },
-		{ "BoomSparks", 10, { Color = ColorSequence.new(LASER_RED), Speed = NumberRange.new(30) } },
-		{ "Puff", 2, { Color = ColorSequence.new(Color3.fromRGB(90, 70, 60)), Size = NumberSequence.new(2.5) } },
+		{ "BoomGlow", 1, { Color = ColorSequence.new(LASER_RED), Size = scaled(Library.BoomGlow.Size, 0.6), Brightness = 8 } },
+		{ "BoomSparks", 22, { Color = ColorSequence.new(Color3.fromRGB(255, 120, 60)), Speed = NumberRange.new(30, 45) } },
+		{ "Puff", 4, { Color = ColorSequence.new(SCORCH), Size = NumberSequence.new(3) } },
 	}, 2)
-	Kit.sound(far, SOUND_HIT, 0.5, 0.7)
+	Kit.sound(far, SOUND_HIT, 0.6, 0.6)
 
-	during(seconds + 0.15, function(elapsed)
-		local fade = math.clamp(1 - (elapsed - seconds * 0.5) / (seconds * 0.5 + 0.15), 0, 1)
-		Kit.opacity(glow, fade * 0.8)
-		Kit.opacity(core, fade)
-		local pulse = 1 + 0.15 * math.sin(elapsed * 50)
-		glow.Width0, glow.Width1 = 3.2 * pulse * fade, 3.2 * pulse * fade
+	during(seconds + 0.2, function(elapsed)
+		local fade = math.clamp(1 - (elapsed - seconds * 0.6) / (seconds * 0.4 + 0.2), 0, 1)
+		if elapsed > seconds then
+			stopEmitters(emitters)
+		end
+		setLaser(layers, fade, (1 + 0.15 * math.sin(elapsed * 50)) * (0.4 + 0.6 * fade))
+		eyeLight.Brightness, endLight.Brightness = 2.5 * fade, 2 * fade
 	end, function()
-		host:Destroy()
-		Debris:AddItem(far, 1)
+		stopEmitters(emitters)
+		Debris:AddItem(host, 1)
+		Debris:AddItem(far, 1.2)
 	end)
 end
 
@@ -369,6 +509,47 @@ function handlers.splash(id: string, point: Vector3)
 		{ "Glints", 5, { Color = ColorSequence.new(Color3.fromRGB(200, 235, 255)), Size = NumberSequence.new(0.8) } },
 	}, 2)
 	Kit.sound(host, SOUND_HIT, 0.45, 1.3)
+end
+
+-- The broom spin: a ring of snow thrown out to its reach, and the broom's
+-- sweep drawn as slashes around it while it turns.
+function handlers.spin(model, seconds: number, radius: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local cframe, size = model:GetBoundingBox()
+	local feet = cframe.Position - Vector3.new(0, size.Y * 0.5 - 0.6, 0)
+
+	for i = 0, 11 do
+		local angle = i / 12 * math.pi * 2
+		local at = feet + Vector3.new(math.cos(angle), 0, math.sin(angle)) * radius * 0.75
+		burst(at, {
+			{ "Puff", 2, { Color = ColorSequence.new(SNOW), Size = NumberSequence.new(2.4), Speed = NumberRange.new(2, 5), SpreadAngle = Vector2.new(60, 60) } },
+		}, 1.5)
+	end
+	burst(feet, {
+		{ "Glints", 8, { Color = ColorSequence.new(Color3.fromRGB(200, 235, 255)), Size = NumberSequence.new(1) } },
+	}, 1.5)
+
+	local at = Kit.attachment(part)
+	local slash = emitter("Slash", at, {
+		Color = ColorSequence.new(Color3.fromRGB(235, 245, 255)), Size = NumberSequence.new(radius * 0.9),
+		LockedToPart = false,
+	})
+	local last = -1
+	during(seconds, function(elapsed)
+		local beat = math.floor(elapsed / 0.08)
+		if beat ~= last and model.Parent then
+			last = beat
+			local look = model:GetPivot().LookVector
+			at.WorldCFrame = CFrame.lookAt(feet + Vector3.new(0, 1.5, 0), feet + Vector3.new(0, 1.5, 0) + look)
+			slash:Emit(1)
+		end
+	end, function()
+		Debris:AddItem(at, 0.4)
+	end)
+	Kit.sound(part, SOUND_HIT, 0.5, 0.8)
 end
 
 -- ---------------------------------------------------------------------------
@@ -427,6 +608,201 @@ function handlers.flare(model, color: Color3?)
 	flare:Emit(1)
 	Debris:AddItem(at, 0.8)
 end
+
+-- ---------------------------------------------------------------------------
+-- Always on: wings, the rainbow, the snow trail
+-- ---------------------------------------------------------------------------
+
+--[[
+	Things a creature does all the time rather than on a message, driven here
+	every frame from attributes on its model, so none of it costs a remote.
+
+	WINGS. A model with LeftWing/RightWing Motor6Ds on its body (built by
+	assets/voxel-creatures/source/BuildWinged.lua) has its wings beaten
+	locally: WingRate (Hz) and WingAngle (degrees) are set on the asset,
+	WingMode ("flap", "glide", "fold", "spread") by the server as it moves.
+	WingGlide above 0 marks a bird - wings raised at rest, beating downward
+	from there - and 0 an insect, buzzing either side of level.
+
+	RAINBOW. A model with Rainbow = true gets a hue-cycling sheen over its
+	texture, a rainbow light and a trail of rainbow glints.
+
+	SNOW TRAIL. A model with SnowTrail = true kicks up snow at its base in
+	proportion to how fast it is going.
+]]
+local tracked = {}
+
+local RAINBOW = ColorSequence.new({
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 80)),
+	ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 200, 60)),
+	ColorSequenceKeypoint.new(0.4, Color3.fromRGB(110, 255, 110)),
+	ColorSequenceKeypoint.new(0.6, Color3.fromRGB(80, 200, 255)),
+	ColorSequenceKeypoint.new(0.8, Color3.fromRGB(150, 110, 255)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 110, 220)),
+})
+
+local function setUp(model)
+	local part = model.PrimaryPart
+	if not part then
+		return nil
+	end
+	local state = { model = model, part = part, phase = math.random() * 10 }
+
+	local wings = {}
+	for _, name in ipairs({ "LeftWing", "RightWing" }) do
+		local joint = part:FindFirstChild(name)
+		if joint and joint:IsA("Motor6D") then
+			table.insert(wings, { joint = joint, side = if joint.C0.Position.X >= 0 then 1 else -1, down = 0, back = 0 })
+		end
+	end
+	if #wings > 0 then
+		state.wings = wings
+	end
+
+	if model:GetAttribute("Rainbow") then
+		local sheen = Instance.new("Highlight")
+		sheen.Adornee = model
+		sheen.FillTransparency = 0.4
+		sheen.OutlineTransparency = 0.2
+		sheen.DepthMode = Enum.HighlightDepthMode.Occluded
+		sheen.Parent = folder
+		state.sheen = sheen
+		state.glow = light(part, Color3.new(1, 1, 1), 20, 1.6)
+		state.glints = emitter("Glints", part, {
+			Enabled = true, Rate = 18, Color = RAINBOW, Size = NumberSequence.new(2.2),
+			LockedToPart = false, Speed = NumberRange.new(2, 5), SpreadAngle = Vector2.new(180, 180),
+		})
+
+		--[[
+			A rainbow arching over it: five curved beams, outermost red. A beam
+			bows toward each attachment's X axis by its CurveSize, so the ends
+			point their X axis up and the far end's curve is negative.
+		]]
+		local half = part.Size.X * 0.55
+		local rise = part.Size.Y * 0.9
+		for i, hue in ipairs({ 0, 0.1, 0.3, 0.55, 0.75 }) do
+			local inset = (i - 1) * 0.45
+			local a0, a1 = Kit.attachment(part), Kit.attachment(part)
+			a0.Position = Vector3.new(-half + inset, part.Size.Y * 0.1, 0)
+			a1.Position = Vector3.new(half - inset, part.Size.Y * 0.1, 0)
+			a0.Axis, a1.Axis = Vector3.yAxis, Vector3.yAxis
+			Kit.beam(part, a0, a1, {
+				Color = ColorSequence.new(Color3.fromHSV(hue, 0.95, 1)), LightEmission = 0.5,
+				Transparency = NumberSequence.new({
+					NumberSequenceKeypoint.new(0, 1), NumberSequenceKeypoint.new(0.15, 0.1),
+					NumberSequenceKeypoint.new(0.85, 0.1), NumberSequenceKeypoint.new(1, 1),
+				}),
+				Width0 = 0.6, Width1 = 0.6, FaceCamera = true, Segments = 24,
+				CurveSize0 = rise - inset, CurveSize1 = -(rise - inset),
+			})
+		end
+	end
+
+	if model:GetAttribute("SnowTrail") then
+		local foot = Kit.attachment(part)
+		foot.Position = Vector3.new(0, -part.Size.Y * 0.5 + 0.3, 0)
+		state.snow = emitter("Puff", foot, {
+			Enabled = true, Rate = 0, Color = ColorSequence.new(SNOW), Size = NumberSequence.new(1.3, 2.2),
+			Lifetime = NumberRange.new(0.6), LockedToPart = false, Speed = NumberRange.new(1, 3),
+			SpreadAngle = Vector2.new(70, 70), Acceleration = Vector3.new(0, 2, 0),
+		})
+		state.last = part.Position
+	end
+
+	if not (state.wings or state.sheen or state.snow) then
+		return false
+	end
+	return state
+end
+
+local function tearDown(state)
+	if state.sheen then
+		state.sheen:Destroy()
+	end
+end
+
+-- Picks up new creatures twice a second; attributes set at spawn may land a
+-- moment after the model does, so an undecided one is looked at again.
+local firstSeen = setmetatable({}, { __mode = "k" })
+
+task.spawn(function()
+	local enemies = workspace:WaitForChild("Enemies")
+	while true do
+		local now = os.clock()
+		for _, model in ipairs(enemies:GetChildren()) do
+			if tracked[model] == nil and model:IsA("Model") then
+				firstSeen[model] = firstSeen[model] or now
+				local ok, state = pcall(setUp, model)
+				-- Nothing to draw is only final once it has had time to say so.
+				if ok and (state or (state == false and now - firstSeen[model] > 2)) then
+					tracked[model] = state
+				end
+			end
+		end
+		task.wait(0.5)
+	end
+end)
+
+local function beatWing(wing, mode, bird, now, rate, amplitude, glide, dt)
+	local down, back = 0, 0
+	if mode == "flap" then
+		local swing = math.sin(now * rate * math.pi * 2)
+		down = if bird then amplitude * (0.5 - 0.5 * math.cos(now * rate * math.pi * 2)) else amplitude * swing
+	elseif mode == "glide" then
+		down = if bird then amplitude * (0.75 + 0.1 * glide) + 0.04 * math.sin(now * 3) else 0
+	elseif mode == "fold" then
+		down, back = if bird then -0.3 else 0.1, 0.9
+	elseif mode == "spread" then
+		down = if bird then -0.2 else 0
+	end
+
+	-- Beating is drawn exactly; settling into a pose is eased.
+	local ease = if mode == "flap" then 1 else math.min(1, dt * 10)
+	wing.down += (down - wing.down) * ease
+	wing.back += (back - wing.back) * math.min(1, dt * 10)
+	wing.joint.Transform = CFrame.Angles(0, wing.back * wing.side, -wing.down * wing.side)
+end
+
+RunService.RenderStepped:Connect(function(dt)
+	local now = os.clock()
+	local camera = workspace.CurrentCamera
+	local eye = camera and camera.CFrame.Position or Vector3.zero
+
+	for model, state in pairs(tracked) do
+		if not model.Parent then
+			if state then
+				tearDown(state)
+			end
+			tracked[model] = nil
+		elseif state and (state.part.Position - eye).Magnitude < 300 then
+			local t = now + state.phase
+
+			if state.wings then
+				local rate = model:GetAttribute("WingRate") or 10
+				local amplitude = math.rad(model:GetAttribute("WingAngle") or 30)
+				local glide = model:GetAttribute("WingGlide") or 0
+				local mode = model:GetAttribute("WingMode") or "flap"
+				for _, wing in ipairs(state.wings) do
+					beatWing(wing, mode, glide > 0, t, rate, amplitude, glide, dt)
+				end
+			end
+
+			if state.sheen then
+				local hue = (t * 0.22) % 1
+				local color = Color3.fromHSV(hue, 0.75, 1)
+				state.sheen.FillColor = color
+				state.sheen.OutlineColor = Color3.fromHSV((hue + 0.5) % 1, 0.6, 1)
+				state.glow.Color = color
+			end
+
+			if state.snow then
+				local speed = (state.part.Position - state.last).Magnitude / math.max(dt, 1e-3)
+				state.last = state.part.Position
+				state.snow.Rate = math.clamp((speed - 1) * 3, 0, 30)
+			end
+		end
+	end
+end)
 
 CreatureFX.OnClientEvent:Connect(function(kind, ...)
 	local handler = handlers[kind]

@@ -119,8 +119,12 @@ function CreatureKit.hurtSphere(entry, center: Vector3, radius: number, damage: 
 	return hit
 end
 
--- Living players whose root is within `radius` of the segment a -> b.
-function CreatureKit.playersAlong(a: Vector3, b: Vector3, radius: number)
+--[[
+	Living players within `radius` of the segment a -> b, measured from their
+	root or, with `drop`, from that many studs below it: 2.5 is about the
+	ankle, which is what a beam raking the ground has to be jumped over at.
+]]
+function CreatureKit.playersAlong(a: Vector3, b: Vector3, radius: number, drop: number?)
 	local found = {}
 	local axis = b - a
 	local lengthSquared = axis:Dot(axis)
@@ -129,13 +133,43 @@ function CreatureKit.playersAlong(a: Vector3, b: Vector3, radius: number)
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 		if root and humanoid and humanoid.Health > 0 then
-			local t = if lengthSquared > 0 then math.clamp((root.Position - a):Dot(axis) / lengthSquared, 0, 1) else 0
-			if (a + axis * t - root.Position).Magnitude <= radius then
+			local at = root.Position - Vector3.new(0, drop or 0, 0)
+			local t = if lengthSquared > 0 then math.clamp((at - a):Dot(axis) / lengthSquared, 0, 1) else 0
+			if (a + axis * t - at).Magnitude <= radius then
 				table.insert(found, player)
 			end
 		end
 	end
 	return found
+end
+
+--[[
+	Slides a grounded creature over the surface by `step` (a flat offset),
+	looking along `look`, leaning by `tilt`. Returns false without moving when
+	the ground ahead rises or falls more than `maxStep` studs - a step or a
+	drop - so the caller can hand the tick to the ordinary hop, which climbs it.
+]]
+function CreatureKit.slide(entry, step: Vector3, look: Vector3?, tilt: CFrame?, maxStep: number?): boolean
+	local feet = CreatureKit.feet(entry)
+	local ahead = feet + Vector3.new(step.X, 0, step.Z)
+	local ground = CreatureKit.service().groundAt(ahead.X, ahead.Z, feet.Y)
+	if math.abs(ground - feet.Y) > (maxStep or 2) then
+		return false
+	end
+	CreatureKit.place(entry, Vector3.new(ahead.X, ground, ahead.Z), look, tilt)
+	entry.groundY = ground
+	return true
+end
+
+--[[
+	How a winged model's wings should move: "flap", "glide", "fold" or
+	"spread". An attribute, read by StarterPlayerScripts.CreatureFX, which
+	does the flapping itself every frame; the server only says which.
+]]
+function CreatureKit.wings(entry, mode: string)
+	if entry.model:GetAttribute("WingMode") ~= mode then
+		entry.model:SetAttribute("WingMode", mode)
+	end
 end
 
 function CreatureKit.solidAt(point: Vector3): boolean

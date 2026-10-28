@@ -107,6 +107,26 @@ end
 local random = Random.new()
 
 --[[
+	One of a biome's creatures, by each one's `spawnWeight` (1 when unset), so
+	a rare creature can share a biome without being as common as the rest.
+]]
+local function pickWeighted(candidates: { string }): string
+	local total = 0
+	for _, name in ipairs(candidates) do
+		total += EnemyConfig.Definitions[name].spawnWeight or 1
+	end
+
+	local roll = random:NextNumber(0, total)
+	for _, name in ipairs(candidates) do
+		roll -= EnemyConfig.Definitions[name].spawnWeight or 1
+		if roll <= 0 then
+			return name
+		end
+	end
+	return candidates[#candidates]
+end
+
+--[[
 	Whether a patch of world holds anything at all.
 
 	A hash of the cell's coordinates, so it is FIXED: the same clearing is
@@ -259,8 +279,11 @@ local function attempt(player: Player)
 			local candidates = biome and byBiome[biome]
 
 			if candidates and #candidates > 0 then
-				local name = candidates[random:NextInteger(1, #candidates)]
-				local count = random:NextInteger(S.groupMin, S.groupMax)
+				local name = pickWeighted(candidates)
+				local packSize = EnemyConfig.Definitions[name].packSize
+				local count = if packSize
+					then random:NextInteger(packSize.Min, packSize.Max)
+					else random:NextInteger(S.groupMin, S.groupMax)
 
 				local spawned, reason =
 					EnemyService.spawnPack(name, point, count, S.packSpread, true)

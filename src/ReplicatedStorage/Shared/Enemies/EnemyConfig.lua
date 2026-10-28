@@ -664,11 +664,18 @@ EnemyConfig.Definitions = {
 		creatures.
 	]]
 
-	-- A heavy blob that shuffles in short, slow hops and shoots from range.
+	--[[
+		A heavy blob that lumbers in slow, high hops and fights with its eye:
+		a raking sweep up close, a locked lance from range.
+
+		The hop is HIGH rather than long - a jumpPower of 36 under 115 gravity
+		peaks at about 5.6 studs, clear of one block (4) where the old 22
+		peaked at 2.1 and walked it into every step.
+	]]
 	Lasereye = {
 		asset = "Lasereye",
 		displayName = "Lasereye",
-		health = 60,
+		health = 70,
 		movement = "Hop",
 		trait = "Lasereye",
 
@@ -684,10 +691,10 @@ EnemyConfig.Definitions = {
 		contactInterval = 1.0,
 
 		gravity = 115,
-		jumpPower = 22,
-		maxHopDistance = 5,
-		maxHopSpeed = 7,
-		groundedSeconds = 1.3,
+		jumpPower = 36,
+		maxHopDistance = 8,
+		maxHopSpeed = 9,
+		groundedSeconds = 1.1,
 		windupSeconds = 0.4,
 
 		bounce = true,
@@ -698,15 +705,22 @@ EnemyConfig.Definitions = {
 		scanDownBlocks = 8,
 
 		lungeRange = 0,
-		lungeJumpPower = 22,
-		lungeMaxDistance = 5,
-		lungeMaxSpeed = 7,
+		lungeJumpPower = 36,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 9,
 		lungeWindup = 0.6,
 		lungeDamage = 8,
 		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(48, 112, 80),
 	},
 
-	-- Stiff, short hops through the snow; lobs snowballs from range.
+	--[[
+		Skates rather than hops - see its trait. The Hop numbers below are only
+		for climbing a step it cannot glide up; there is no bounce and no
+		lunge, which is what made the old one read as a slime.
+	]]
 	Snowman = {
 		asset = "Snowman",
 		displayName = "Snowman",
@@ -726,27 +740,28 @@ EnemyConfig.Definitions = {
 		contactInterval = 1.0,
 
 		gravity = 130,
-		jumpPower = 30,
-		maxHopDistance = 8,
-		maxHopSpeed = 11,
-		groundedSeconds = 1.0,
-		windupSeconds = 0.3,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 9,
+		groundedSeconds = 0.2,
+		windupSeconds = 0.15,
 
-		bounce = true,
 		sizeVariance = 0.1,
 
 		stepUpBlocks = 1,
 		scanUpBlocks = 2,
 		scanDownBlocks = 8,
 
-		-- Up close it belly-flops onto you.
-		lungeRange = 9,
-		lungeJumpPower = 38,
-		lungeMaxDistance = 12,
-		lungeMaxSpeed = 22,
-		lungeWindup = 0.55,
-		lungeDamage = 11,
-		lungeCooldown = 3.5,
+		lungeRange = 0,
+		lungeJumpPower = 36,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 9,
+		lungeWindup = 0.5,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(240, 245, 255),
 	},
 
 	-- Buzzes after you and darts in to sting.
@@ -771,6 +786,9 @@ EnemyConfig.Definitions = {
 		hoverHeight = 3,
 		bobAmplitude = 0.8,
 		bobPeriod = 1.1,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(84, 180, 20),
 	},
 
 	-- Circles overhead and swoops.
@@ -792,11 +810,14 @@ EnemyConfig.Definitions = {
 		contactDamage = 14,
 		contactInterval = 1.2,
 
-		hoverHeight = 10,
+		hoverHeight = 8,
 		bobAmplitude = 1.2,
 		bobPeriod = 2.6,
 
 		sizeVariance = 0.1,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(128, 104, 88),
 	},
 
 	-- Slithers after you and strikes.
@@ -838,8 +859,73 @@ EnemyConfig.Definitions = {
 		lungeDamage = 5,
 		lungeCooldown = 99,
 
-		-- The model is built facing +Z; at 0 it slithered along backwards.
-		modelRotation = Vector3.new(0, 180, 0),
+		-- Built facing -Z already. The markings on the BACK of its hood read
+		-- like a face, which is how 180 got in here once.
+		modelRotation = Vector3.new(0, 0, 0),
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(252, 176, 28),
+	},
+
+	--[[
+		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
+		moves, only far tougher and harder-hitting, and drawn in shifting
+		rainbow colours by every client (its trait marks it; see
+		ServerScriptService.Creatures.RainbowSlime).
+
+		RARE: `spawnWeight` is its share of the Hallow's rolls against the
+		Shrike's 1, so about one Hallow pack in forty is this, and `packSize`
+		makes it always come alone. A biome with nothing else in it would roll
+		it every time, which is why the weight is relative.
+
+		The model is EnemyAssets.RainbowSlime, the blue slime's mesh scaled up.
+		It is already the size it should be, so no size jitter.
+	]]
+	RainbowSlime = {
+		asset = "RainbowSlime",
+		displayName = "Rainbow Slime",
+		health = 450,
+		movement = "Hop",
+		trait = "RainbowSlime",
+
+		spawnBiomes = { "Hallow" },
+		spawnWeight = 0.025,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 10,
+		aggroRange = 80,
+		giveUpRange = 140,
+		despawnSeconds = 45,
+
+		contactRange = 7.5,
+		contactDamage = 18,
+		contactInterval = 1.0,
+
+		gravity = 110,
+		jumpPower = 48,
+		maxHopDistance = 18,
+		maxHopSpeed = 18,
+		groundedSeconds = 0.9,
+		windupSeconds = 0.4,
+
+		bounce = true,
+		sizeVariance = 0,
+
+		stepUpBlocks = 2,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 26,
+		lungeJumpPower = 62,
+		lungeMaxDistance = 30,
+		lungeMaxSpeed = 34,
+		lungeWindup = 0.7,
+		lungeDamage = 34,
+		lungeCooldown = 3.5,
+
+		hitFlash = "Highlight",
+		hitFlashColor = Color3.fromRGB(255, 255, 255),
+		burstColor = Color3.fromRGB(255, 150, 230),
 	},
 }
 
@@ -880,7 +966,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime",
 }
 
 --[[

@@ -931,6 +931,9 @@
         },
         "Cobra": {
           "$path": "src/ServerScriptService/Creatures/Cobra.lua"
+        },
+        "RainbowSlime": {
+          "$path": "src/ServerScriptService/Creatures/RainbowSlime.lua"
         }
       },
       "BossService": {

@@ -17,13 +17,17 @@
 local CreatureKit = require(script.Parent.CreatureKit)
 
 local Tuning = {
-	orbitRadius = 15,
-	orbitHeight = 11,
+	orbitRadius = 14,
+	-- Low enough to stay in a third-person camera's view.
+	orbitHeight = 8,
 	-- Radians a second round the circle, and how fast it flies to keep up.
 	orbitSpeed = 0.6,
 	flySpeed = 22,
 	-- How hard it leans into the turn, in radians.
 	bank = 0.55,
+	-- Seconds per beat-and-glide cycle, and the share of it spent beating.
+	wingCycle = 3.2,
+	beatShare = 0.55,
 
 	swoopEvery = NumberRange.new(3.5, 5.5),
 	swoopRange = 40,
@@ -63,11 +67,19 @@ local function circle(entry, targetPosition: Vector3, position: Vector3, dt: num
 	local tangent = Vector3.new(-math.sin(entry.orbitAngle), 0, math.cos(entry.orbitAngle)) * entry.orbitTurn
 	local lean = CFrame.Angles(0, 0, -Tuning.bank * entry.orbitTurn)
 	CreatureKit.place(entry, moved - Vector3.new(0, entry.feetOffset, 0), tangent, lean)
+
+	-- A few beats, then a glide, like a real bird working a thermal; always
+	-- beating while it climbs back up to its circle.
+	local climbing = delta.Y > 2
+	local beating = climbing or (now + entry.wingPhase) % Tuning.wingCycle < Tuning.wingCycle * Tuning.beatShare
+	CreatureKit.wings(entry, if beating then "flap" else "glide")
 end
 
 function Trait.start(entry)
 	entry.orbitTurn = if math.random() < 0.5 then 1 else -1
 	entry.nextSwoopAt = nextSwoop(os.clock())
+	entry.wingPhase = math.random() * Tuning.wingCycle
+	CreatureKit.wings(entry, "flap")
 end
 
 function Trait.step(entry, target, targetPosition, position, dt, now)
@@ -79,6 +91,7 @@ function Trait.step(entry, target, targetPosition, position, dt, now)
 			CreatureKit.place(entry, position - Vector3.new(0, entry.feetOffset, 0), swoop.through - position)
 			if now >= swoop.endsAt then
 				swoop.phase = "dive"
+				CreatureKit.wings(entry, "fold")
 				swoop.startedAt = now
 				swoop.from = position
 				local across = CreatureKit.flat(swoop.through - position)
@@ -111,6 +124,7 @@ function Trait.step(entry, target, targetPosition, position, dt, now)
 
 	if now >= (entry.nextSwoopAt or 0) and (targetPosition - position).Magnitude <= Tuning.swoopRange then
 		entry.swoop = { phase = "cry", endsAt = now + Tuning.crySeconds, through = targetPosition }
+		CreatureKit.wings(entry, "spread")
 		CreatureKit.fx("flare", entry.model, Color3.fromRGB(255, 220, 120))
 		return true
 	end

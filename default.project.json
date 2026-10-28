@@ -87,6 +87,12 @@
             "Disabled": false
           }
         },
+        "WeaponClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/WeaponClient.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
         "BenchClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/BenchClient.client.lua",
           "$properties": {
@@ -119,6 +125,12 @@
         },
         "DropFlight": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/DropFlight.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
+        "CreatureFX": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/CreatureFX.client.lua",
           "$properties": {
             "Disabled": false
           }
@@ -425,6 +437,12 @@
           },
           "TutorialPanel": {
             "$path": "src/ReplicatedStorage/Shared/UI/TutorialPanel.lua"
+          },
+          "TutorialChoice": {
+            "$path": "src/ReplicatedStorage/Shared/UI/TutorialChoice.lua"
+          },
+          "TutorialMarker": {
+            "$path": "src/ReplicatedStorage/Shared/UI/TutorialMarker.lua"
           }
         },
         "Tools": {
@@ -435,6 +453,12 @@
           },
           "ToolAnimation": {
             "$path": "src/ReplicatedStorage/Shared/Tools/ToolAnimation.lua"
+          },
+          "LocomotionAnimations": {
+            "$path": "src/ReplicatedStorage/Shared/Tools/LocomotionAnimations.lua"
+          },
+          "SwingAnimations": {
+            "$path": "src/ReplicatedStorage/Shared/Tools/SwingAnimations.lua"
           }
         },
         "Inventory": {
@@ -452,6 +476,9 @@
           "$ignoreUnknownInstances": true,
           "EnemyConfig": {
             "$path": "src/ReplicatedStorage/Shared/Enemies/EnemyConfig.lua"
+          },
+          "CreatureParticles": {
+            "$path": "src/ReplicatedStorage/Shared/Enemies/CreatureParticles.lua"
           }
         },
         "Combat": {
@@ -465,6 +492,9 @@
           },
           "WeaponClasses": {
             "$path": "src/ReplicatedStorage/Shared/Combat/WeaponClasses.lua"
+          },
+          "SwordCombo": {
+            "$path": "src/ReplicatedStorage/Shared/Combat/SwordCombo.lua"
           }
         },
         "Abilities": {
@@ -484,6 +514,12 @@
             },
             "CataclysmVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CataclysmVFX.lua"
+            },
+            "VoidRendVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/VoidRendVFX.lua"
+            },
+            "VoidRendParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/VoidRendParticles.lua"
             },
             "CataclysmCamera": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CataclysmCamera.lua"
@@ -514,6 +550,78 @@
             },
             "SignusChoreography": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusChoreography.lua"
+            },
+            "ImpactFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/ImpactFX.lua"
+            },
+            "AbilityKit": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AbilityKit.lua"
+            },
+            "DawnbreakerVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/DawnbreakerVFX.lua"
+            },
+            "DawnbreakerParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/DawnbreakerParticles.lua"
+            },
+            "DelugeVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/DelugeVFX.lua"
+            },
+            "DelugeParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/DelugeParticles.lua"
+            },
+            "SkyfallVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SkyfallVFX.lua"
+            },
+            "SkyfallParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SkyfallParticles.lua"
+            },
+            "SumiVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SumiVFX.lua"
+            },
+            "SumiParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SumiParticles.lua"
+            },
+            "BlossomVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/BlossomVFX.lua"
+            },
+            "BlossomParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/BlossomParticles.lua"
+            },
+            "HeliosVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/HeliosVFX.lua"
+            },
+            "HeliosParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/HeliosParticles.lua"
+            },
+            "AbyssVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AbyssVFX.lua"
+            },
+            "AbyssParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AbyssParticles.lua"
+            },
+            "CometVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CometVFX.lua"
+            },
+            "CometParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CometParticles.lua"
+            },
+            "TideVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/TideVFX.lua"
+            },
+            "TideParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/TideParticles.lua"
+            },
+            "SerpentVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SerpentVFX.lua"
+            },
+            "SerpentParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SerpentParticles.lua"
+            },
+            "AstralVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AstralVFX.lua"
+            },
+            "AstralParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AstralParticles.lua"
             }
           },
           "StorageConfig": {
@@ -521,6 +629,42 @@
           },
           "CataclysmPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/CataclysmPlan.lua"
+          },
+          "VoidRendPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/VoidRendPlan.lua"
+          },
+          "DawnbreakerPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/DawnbreakerPlan.lua"
+          },
+          "DelugePlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/DelugePlan.lua"
+          },
+          "SkyfallPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/SkyfallPlan.lua"
+          },
+          "SumiPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/SumiPlan.lua"
+          },
+          "BlossomPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/BlossomPlan.lua"
+          },
+          "HeliosPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/HeliosPlan.lua"
+          },
+          "AbyssPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/AbyssPlan.lua"
+          },
+          "CometPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/CometPlan.lua"
+          },
+          "TidePlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/TidePlan.lua"
+          },
+          "SerpentPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/SerpentPlan.lua"
+          },
+          "AstralPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/AstralPlan.lua"
           },
           "StarterPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/StarterPlan.lua"
@@ -633,6 +777,9 @@
       "InventoryStore": {
         "$path": "src/ServerScriptService/InventoryStore.lua"
       },
+      "TutorialService": {
+        "$path": "src/ServerScriptService/TutorialService.lua"
+      },
       "TerrainBench": {
         "$path": "src/ServerScriptService/TerrainBench.lua"
       },
@@ -659,6 +806,42 @@
         "$ignoreUnknownInstances": true,
         "Cataclysm": {
           "$path": "src/ServerScriptService/Abilities/Cataclysm.lua"
+        },
+        "VoidRend": {
+          "$path": "src/ServerScriptService/Abilities/VoidRend.lua"
+        },
+        "Dawnbreaker": {
+          "$path": "src/ServerScriptService/Abilities/Dawnbreaker.lua"
+        },
+        "Deluge": {
+          "$path": "src/ServerScriptService/Abilities/Deluge.lua"
+        },
+        "SkyfallVolley": {
+          "$path": "src/ServerScriptService/Abilities/SkyfallVolley.lua"
+        },
+        "SumiWhirl": {
+          "$path": "src/ServerScriptService/Abilities/SumiWhirl.lua"
+        },
+        "BlossomRoad": {
+          "$path": "src/ServerScriptService/Abilities/BlossomRoad.lua"
+        },
+        "HeliosLance": {
+          "$path": "src/ServerScriptService/Abilities/HeliosLance.lua"
+        },
+        "AbyssGate": {
+          "$path": "src/ServerScriptService/Abilities/AbyssGate.lua"
+        },
+        "AzureComet": {
+          "$path": "src/ServerScriptService/Abilities/AzureComet.lua"
+        },
+        "Tidecaller": {
+          "$path": "src/ServerScriptService/Abilities/Tidecaller.lua"
+        },
+        "SerpentFlare": {
+          "$path": "src/ServerScriptService/Abilities/SerpentFlare.lua"
+        },
+        "AstralVerdict": {
+          "$path": "src/ServerScriptService/Abilities/AstralVerdict.lua"
         },
         "StarterAbilities": {
           "$path": "src/ServerScriptService/Abilities/StarterAbilities.lua"
@@ -726,6 +909,28 @@
         },
         "SignusMoves": {
           "$path": "src/ServerScriptService/Bosses/SignusMoves.lua"
+        }
+      },
+      "Creatures": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true,
+        "CreatureKit": {
+          "$path": "src/ServerScriptService/Creatures/CreatureKit.lua"
+        },
+        "Lasereye": {
+          "$path": "src/ServerScriptService/Creatures/Lasereye.lua"
+        },
+        "Snowman": {
+          "$path": "src/ServerScriptService/Creatures/Snowman.lua"
+        },
+        "Wasp": {
+          "$path": "src/ServerScriptService/Creatures/Wasp.lua"
+        },
+        "Shrike": {
+          "$path": "src/ServerScriptService/Creatures/Shrike.lua"
+        },
+        "Cobra": {
+          "$path": "src/ServerScriptService/Creatures/Cobra.lua"
         }
       },
       "BossService": {

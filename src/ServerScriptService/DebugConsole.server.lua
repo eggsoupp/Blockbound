@@ -21,6 +21,10 @@
 	  /despawn            remove every spawned enemy
 	  /god                invulnerable, unlimited mana and no ability cooldowns
 	                      or leave. For testing a boss without dying to it
+	  /bosshp <percent>   bring every live boss down to that much health, through
+	                      the real damage path, so its phase changes fire
+	  /signus <spell>     make every Signus cast that spell next: spiral, lance,
+	                      beam, lunge, step or totality
 	  /bbface <enemy> <n> turn an enemy's model n degrees about Y, live, on
 	                      everything of that kind already in the world. For
 	                      finding the right EnemyConfig `modelRotation` without
@@ -41,6 +45,8 @@
 	  /tp cave [large|small]  teleport to the nearest cave mouth (or nearest
 	                      plan origin when it has no mouth), for a look inside
 	  /coords             your position in blocks, relative to spawn
+	  /tutorial           replay the tutorial from its first step. Takes back
+	                      the ability the tutorial gave, so the choice is real
 	  /bbcaves edit       standing in a cave: place, mine and refill through
 	                      the real terrain API and confirm it is all recorded
 
@@ -83,6 +89,7 @@ local CombatService = require(ServerScriptService:WaitForChild("CombatService"))
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
+local TutorialService = require(ServerScriptService:WaitForChild("TutorialService"))
 
 --[[
 	Says the same thing twice: once to the output window and once on the
@@ -569,6 +576,38 @@ local function onChatted(player, message)
 		reply(player, "god", if on
 			then "God mode: invulnerable, unlimited mana and no ability cooldowns. Type /god again to switch it off."
 			else "Mortal again.", if on then "good" else nil)
+	elseif command == "/bosshp" then
+		local percent = tonumber(words[2])
+		if not percent then
+			reply(player, "bosshp", "Usage: /bosshp <percent>, e.g. /bosshp 45.", "bad")
+			return
+		end
+		local touched = 0
+		for _, name in ipairs(EnemyConfig.Order) do
+			local definition = EnemyConfig.Definitions[name]
+			if definition and definition.boss then
+				for _, model in ipairs(EnemyService.allOf(name)) do
+					local _, health, maxHealth = EnemyService.describe(model)
+					local goal = maxHealth * math.clamp(percent, 1, 100) / 100
+					if health and health > goal then
+						EnemyService.damage(model, health - goal)
+						touched += 1
+					end
+				end
+			end
+		end
+		reply(player, "bosshp", string.format("%d boss(es) brought down to %d%%.", touched, percent), "good")
+	elseif command == "/signus" then
+		local spell = words[2]
+		local models = EnemyService.allOf("Signus")
+		for _, model in ipairs(models) do
+			model:SetAttribute("SignusCast", spell)
+		end
+		reply(player, "signus", string.format("%d Signus will cast '%s' next.", #models, tostring(spell)),
+			if #models > 0 then "good" else "bad")
+	elseif command == "/tutorial" then
+		TutorialService.Reset(player)
+		reply(player, "tutorial", "Tutorial restarted from the first step.", "good")
 	elseif command == "/despawn" then
 		local removed = EnemyService.despawnAll()
 		reply(player, "despawn", string.format(

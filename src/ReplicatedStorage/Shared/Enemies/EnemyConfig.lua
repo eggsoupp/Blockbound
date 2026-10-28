@@ -188,6 +188,16 @@ EnemyConfig.Spawning = {
 	emptyCells = 0.45,
 	hiddenAngle = 55,
 	hiddenWithin = 120,
+
+	--[[
+		Blocks around the world spawn (the origin) that stay free of wild
+		enemies, so the tutorial - and anybody's first minute - is not a slime
+		landing on them mid-craft. Nothing is spawned inside it, and a wild
+		enemy will not chase anybody standing in it. Enemies put there on
+		purpose - the tutorial's training slime, /spawn, a boss - are not wild
+		and ignore it.
+	]]
+	safeBlocks = 50,
 }
 
 --[[
@@ -639,6 +649,198 @@ EnemyConfig.Definitions = {
 
 		sizeVariance = 0.15,
 	},
+
+	--[[
+		THE VOXEL CREATURES - five rig-free creatures from the voxel creature
+		pack (assets/voxel-creatures), each a single coloured union, so none
+		of them needs a joint: they hop, float, slither and swoop as rigid
+		bodies, and squash, sway and bank in code.
+
+		Each moves with an ordinary Fly or Hop and carries a `trait`, a module
+		in ServerScriptService.Creatures that adds its one signature move on
+		top - see EnemyService.traitFor. The move's own numbers are in that
+		module's Tuning table; the numbers here are the plain creature.
+		Between them they give Swamp, Desert, Snow and Hallow their first
+		creatures.
+	]]
+
+	-- A heavy blob that shuffles in short, slow hops and shoots from range.
+	Lasereye = {
+		asset = "Lasereye",
+		displayName = "Lasereye",
+		health = 60,
+		movement = "Hop",
+		trait = "Lasereye",
+
+		spawnBiomes = { "Swamp" },
+
+		speed = 6,
+		aggroRange = 55,
+		giveUpRange = 90,
+		despawnSeconds = 30,
+
+		contactRange = 4.5,
+		contactDamage = 8,
+		contactInterval = 1.0,
+
+		gravity = 115,
+		jumpPower = 22,
+		maxHopDistance = 5,
+		maxHopSpeed = 7,
+		groundedSeconds = 1.3,
+		windupSeconds = 0.4,
+
+		bounce = true,
+		sizeVariance = 0.08,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 22,
+		lungeMaxDistance = 5,
+		lungeMaxSpeed = 7,
+		lungeWindup = 0.6,
+		lungeDamage = 8,
+		lungeCooldown = 99,
+	},
+
+	-- Stiff, short hops through the snow; lobs snowballs from range.
+	Snowman = {
+		asset = "Snowman",
+		displayName = "Snowman",
+		health = 45,
+		movement = "Hop",
+		trait = "Snowman",
+
+		spawnBiomes = { "Snow" },
+
+		speed = 7,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 30,
+
+		contactRange = 4.5,
+		contactDamage = 6,
+		contactInterval = 1.0,
+
+		gravity = 130,
+		jumpPower = 30,
+		maxHopDistance = 8,
+		maxHopSpeed = 11,
+		groundedSeconds = 1.0,
+		windupSeconds = 0.3,
+
+		bounce = true,
+		sizeVariance = 0.1,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		-- Up close it belly-flops onto you.
+		lungeRange = 9,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 12,
+		lungeMaxSpeed = 22,
+		lungeWindup = 0.55,
+		lungeDamage = 11,
+		lungeCooldown = 3.5,
+	},
+
+	-- Buzzes after you and darts in to sting.
+	GreenWasp = {
+		asset = "GreenWasp",
+		displayName = "Green Wasp",
+		health = 22,
+		movement = "Fly",
+		trait = "Wasp",
+
+		spawnBiomes = { "Desert", "Plains" },
+
+		speed = 14,
+		aggroRange = 80,
+		giveUpRange = 130,
+		despawnSeconds = 30,
+
+		contactRange = 3.5,
+		contactDamage = 6,
+		contactInterval = 0.9,
+
+		hoverHeight = 3,
+		bobAmplitude = 0.8,
+		bobPeriod = 1.1,
+	},
+
+	-- Circles overhead and swoops.
+	Shrike = {
+		asset = "Shrike",
+		displayName = "Yellow-billed Shrike",
+		health = 35,
+		movement = "Fly",
+		trait = "Shrike",
+
+		spawnBiomes = { "Hallow", "Snow" },
+
+		speed = 16,
+		aggroRange = 85,
+		giveUpRange = 140,
+		despawnSeconds = 30,
+
+		contactRange = 4.5,
+		contactDamage = 14,
+		contactInterval = 1.2,
+
+		hoverHeight = 10,
+		bobAmplitude = 1.2,
+		bobPeriod = 2.6,
+
+		sizeVariance = 0.1,
+	},
+
+	-- Slithers after you and strikes.
+	Cobra = {
+		asset = "Cobra",
+		displayName = "Cobra",
+		health = 32,
+		movement = "Hop",
+		trait = "Cobra",
+
+		spawnBiomes = { "Desert" },
+
+		speed = 6.5,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 30,
+
+		contactRange = 3.5,
+		contactDamage = 5,
+		contactInterval = 1.0,
+
+		-- Only used to climb a step, drop off a ledge or take a knockback.
+		gravity = 120,
+		jumpPower = 30,
+		maxHopDistance = 5,
+		maxHopSpeed = 8,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 30,
+		lungeMaxDistance = 5,
+		lungeMaxSpeed = 8,
+		lungeWindup = 0.5,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		-- The model is built facing +Z; at 0 it slithered along backwards.
+		modelRotation = Vector3.new(0, 180, 0),
+	},
 }
 
 --[[
@@ -678,6 +880,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra",
 }
 
 --[[
@@ -789,6 +992,10 @@ function EnemyConfig.validate()
 		assert(
 			def.bodyPart == nil or type(def.bodyPart) == "string",
 			label .. " bodyPart must be the name of a part in the model"
+		)
+		assert(
+			def.trait == nil or (type(def.trait) == "string" and def.trait ~= ""),
+			label .. " trait must name a module in ServerScriptService.Creatures"
 		)
 
 		if def.movement == "Hop" then

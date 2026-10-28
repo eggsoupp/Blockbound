@@ -1,13 +1,18 @@
 --[[
 	CraftingClient
 
-	The crafting window. Stations down the left, that station's recipes in the
-	middle, and the chosen recipe on the right: a live look at what it makes,
-	what it costs against what you are carrying, and a button that makes it
-	once or as many times as you ask.
+	The crafting window. One place's recipes on the left, and the chosen recipe
+	on the right: a live look at what it makes, what it costs against what you
+	are carrying, and a button that makes it once or as many times as you ask.
 
-	Opened with B for hand recipes, or by using a placed station's prompt, which
-	opens on that station. Every tab, row and count is built at run time from
+	Two ways in, and they never mix:
+
+		B          hand recipes, the ones that need no station. Anywhere.
+		E          beside a placed station, through its prompt: that station's
+		           recipes, and only while you stay beside it.
+
+	Standing near a station does nothing by itself - there is no list of
+	stations to browse from B. Every row and count is built at run time from
 	CraftingRecipes and StationConfig, so adding a recipe or a station changes
 	nothing here.
 
@@ -85,7 +90,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 -- ---------------------------------------------------------------------------
 
 local L = {
-	width = 960,
+	width = 744,
 	height = 650,
 	-- Clear of the window frame's border (24) with a little to spare.
 	pad = 30,
@@ -95,9 +100,6 @@ local L = {
 	-- The frame's top border and the header row under the title banner.
 	headerHeight = 84,
 	headerRowTop = 24,
-
-	sidebarWidth = 200,
-	tabHeight = 54,
 
 	searchHeight = 42,
 	filterWidth = 150,
@@ -115,7 +117,7 @@ local L = {
 
 L.bodyTop = L.headerHeight + 6
 L.bodyHeight = L.height - L.bodyTop - L.pad
-L.listX = L.pad + L.sidebarWidth + L.gutter
+L.listX = L.pad
 L.detailX = L.width - L.pad - L.detailWidth
 L.listWidth = L.detailX - L.gutter - L.listX
 
@@ -131,8 +133,16 @@ local CRAFT_GAP = 0.15
 local CRAFT_TIMEOUT = 3
 local MAX_BATCH = 99
 
--- How often, while the window is open, to look for stations in range.
-local PROXIMITY_INTERVAL = 0.5
+-- How often, while the window is open, to check the player is still beside
+-- the station and that a batch is still hearing back.
+local WATCH_INTERVAL = 0.5
+
+-- Studs past a station's useRange before its window closes on you: enough
+-- that a step back while reading does not shut it.
+local STATION_SLACK = 4
+
+-- Margin kept between the window and the tutorial guide, when that is up.
+local GUIDE_MARGIN = 16
 
 -- How long a result message stays up.
 local TOAST_SECONDS = 3
@@ -158,11 +168,11 @@ local heldCounts = {} -- itemName -> count, from the last inventory snapshot
 local searchQuery = "" -- lowercased search text; "" means no filter
 local craftableOnly = false
 local quantity = 1
-local nearby = {} -- stationId -> true while one is in range
+local stationPart = nil -- the placed station's part the window was opened at
+local closedAt = -math.huge -- when E last shut the window; see the prompt below
 
 local rows = {} -- recipeId -> row parts
 local visibleRecipes = {} -- the list as drawn, top to bottom
-local tabs = {} -- tab id -> tab parts
 
 -- The batch being crafted, if any: { recipe, total, done, sentAt }.
 local batch = nil
@@ -321,11 +331,6 @@ local function canAfford(recipe)
 	return craftableCount(recipe) > 0
 end
 
--- Hand recipes are always in range; a station's only near a placed one.
-local function inRange(stationId)
-	return stationId == nil or nearby[stationId] == true
-end
-
 local function matchesSearch(recipe)
 	if searchQuery == "" then
 		return true
@@ -433,25 +438,6 @@ closeHint.Position = UDim2.new(1, -L.pad, 0, L.headerRowTop + headerRowHeight / 
 closeHint.Size = UDim2.fromOffset(160, 18)
 closeHint.TextXAlignment = Enum.TextXAlignment.Right
 closeHint.Text = "B or Esc to close"
-
--- === Stations ===============================================================
-
-local sidebar = frame(window, "Stations")
-sidebar.Position = UDim2.fromOffset(L.pad, L.bodyTop)
-sidebar.Size = UDim2.fromOffset(L.sidebarWidth, L.bodyHeight)
-
-local sidebarCaption = text(sidebar, "Caption", Theme.Fonts.BodyBold, Theme.TextSize.Small, P.OnWoodDim)
-sidebarCaption.Size = UDim2.new(1, 0, 0, 18)
-sidebarCaption.Text = "STATIONS"
-
-local tabList = frame(sidebar, "List")
-tabList.Position = UDim2.fromOffset(0, 26)
-tabList.Size = UDim2.new(1, 0, 1, -26)
-
-local tabLayout = Instance.new("UIListLayout")
-tabLayout.Padding = UDim.new(0, 6)
-tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-tabLayout.Parent = tabList
 
 -- === Search and filter ======================================================
 
@@ -807,12 +793,31 @@ local function fit()
 		return
 	end
 
+	--[[
+		The tutorial guide sits in the top right over everything, and it is
+		up while the first table is being made. The window takes the room left
+		of it rather than sliding under it.
+	]]
+	local right = size.X
+	local guide = playerGui:FindFirstChild("TutorialGuide")
+	local guideRoot = guide and guide.Enabled and guide:FindFirstChild("Root")
+	if guideRoot and guideRoot:IsA("GuiObject") then
+		right = math.max(size.X * 0.5, guideRoot.AbsolutePosition.X - GUIDE_MARGIN)
+	end
+	local room = right - GUIDE_MARGIN
+
 	local scale = math.min(
 		math.max(1, size.Y / DESIGN_HEIGHT),
 		size.Y * 0.88 / L.height,
-		size.X * 0.94 / L.width
+		math.min(size.X * 0.94, room) / L.width
 	)
-	rootScale.Scale = math.max(scale, MIN_SCALE)
+	scale = math.max(scale, MIN_SCALE)
+	rootScale.Scale = scale
+
+	-- Centred on the screen when it fits there, nudged left when the guide is
+	-- in the way.
+	local centre = math.min(size.X / 2, right - L.width * scale / 2)
+	root.Position = UDim2.new(0, centre, 0.5, 0)
 end
 
 screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
@@ -823,7 +828,6 @@ screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
 
 local refreshDetail
 local selectRecipe
-local refreshTabs
 
 local function refreshFilterChip()
 	PixelUI.apply(filterBox, if craftableOnly then "checkbox_on" else "checkbox_off")
@@ -1110,7 +1114,6 @@ local function refreshCraftButton()
 	end
 
 	local affordable = canAfford(recipe)
-	local reachable = inRange(recipe.station)
 	quantity = math.clamp(quantity, 1, quantityLimit())
 
 	quantityLabel.Text = tostring(quantity)
@@ -1123,18 +1126,13 @@ local function refreshCraftButton()
 		craftLabel.Text = string.format("CRAFTING %d / %d", batch.done, batch.total)
 	elseif not affordable then
 		craftLabel.Text = "NEED MATERIALS"
-	elseif not reachable then
-		-- Still clickable: this is the client's guess at range, and the server
-		-- has the final word. It just warns before the attempt.
-		craftLabel.Text = string.format("GO TO A %s", string.upper(StationConfig.getDisplayName(recipe.station)))
 	elseif quantity > 1 then
 		craftLabel.Text = string.format("CRAFT \u{00D7}%d", quantity)
 	else
 		craftLabel.Text = "CRAFT"
 	end
 
-	local lit = ready and reachable
-	craft.setStyle(if lit or batch then "green" else "disabled")
+	craft.setStyle(if ready or batch then "green" else "disabled")
 	craftProgress.Size = UDim2.fromScale(if batch then batch.done / batch.total else 0, 1)
 
 	minusButton.Visible = affordable
@@ -1174,7 +1172,7 @@ function refreshDetail()
 	rarityLabel.TextColor3 = rarityColor:Lerp(Color3.new(1, 1, 1), 0.35)
 
 	stationLabel.Text = if recipe.station then StationConfig.getDisplayName(recipe.station) else "By hand"
-	stationLabel.TextColor3 = if inRange(recipe.station) then P.OnWood else P.OnWoodDim
+	stationLabel.TextColor3 = P.OnWood
 
 	-- A weapon's class line ("Sword -> Longsword") heads its description.
 	description.Text = WeaponClasses.description(def)
@@ -1196,118 +1194,6 @@ end
 -- Stations
 -- ---------------------------------------------------------------------------
 
-local setStation
-
-local function stationIds()
-	local ids = { StationConfig.HandStation }
-	for _, id in ipairs(StationConfig.Order) do
-		table.insert(ids, id)
-	end
-	return ids
-end
-
-local function buildTabs()
-	for order, id in ipairs(stationIds()) do
-		local stationId = if id == StationConfig.HandStation then nil else id
-		local tab = { stationId = stationId, active = false, hovered = false }
-
-		-- A kit button: tan, and green while it is the station shown. What is
-		-- drawn on its face sits in `content`, which drops with the face when
-		-- it is pressed.
-		local b = Instance.new("ImageButton")
-		b.Name = id
-		b.AutoButtonColor = false
-		b.BackgroundTransparency = 1
-		b.BorderSizePixel = 0
-		b.Size = UDim2.new(1, 0, 0, L.tabHeight)
-		b.LayoutOrder = order
-		b.Parent = tabList
-		tab.button = b
-
-		local content = frame(b, "Content")
-		content.Size = UDim2.new(1, 0, 1, -PixelUI.Scale * 2)
-		tab.look = PixelUI.bindButton(b, "tan", content)
-
-		-- Square, outlined in the frame art's dark brown: a texel swatch.
-		local dot = frame(content, "Swatch", stationColor(stationId))
-		dot.AnchorPoint = Vector2.new(0, 0.5)
-		dot.Position = UDim2.new(0, 14, 0.5, 0)
-		dot.Size = UDim2.fromOffset(12, 12)
-		stroke(dot, Color3.fromRGB(43, 24, 16), 2, 0)
-
-		local name = text(content, "Name", Theme.Fonts.Body, Theme.TextSize.Body, P.Ink)
-		name.Position = UDim2.fromOffset(36, 6)
-		name.Size = UDim2.new(1, -36 - 50, 0, 20)
-		name.TextTruncate = Enum.TextTruncate.AtEnd
-		name.Text = if stationId then StationConfig.getDisplayName(stationId) else "By Hand"
-		tab.name = name
-
-		local state = text(content, "State", Theme.Fonts.Body, 13, P.InkSoft)
-		state.Position = UDim2.fromOffset(36, 26)
-		state.Size = UDim2.new(1, -36 - 50, 0, 16)
-		tab.state = state
-
-		-- How many of its recipes you can make right now, of how many.
-		local count = text(content, "Count", Theme.Fonts.Number, 13, P.InkSoft)
-		count.AnchorPoint = Vector2.new(1, 0.5)
-		count.Position = UDim2.new(1, -14, 0.5, 0)
-		count.Size = UDim2.fromOffset(40, 18)
-		count.TextXAlignment = Enum.TextXAlignment.Right
-		tab.count = count
-
-		b.MouseEnter:Connect(function()
-			tab.hovered = true
-			refreshTabs()
-			Sounds.play("ui.hover")
-		end)
-		b.MouseLeave:Connect(function()
-			tab.hovered = false
-			refreshTabs()
-		end)
-		b.MouseButton1Click:Connect(function()
-			if not tab.active then
-				Sounds.play("ui.tab")
-				setStation(stationId)
-			end
-		end)
-
-		tabs[id] = tab
-	end
-end
-
-function refreshTabs()
-	for _, tab in pairs(tabs) do
-		local stationId = tab.stationId
-
-		-- Green is the station shown; its text is the dark green that reads on
-		-- it, and every other tab is ink on tan.
-		tab.look.setStyle(if tab.active then "green" else "tan")
-		tab.name.FontFace = if tab.active then Theme.Fonts.BodyBold else Theme.Fonts.Body
-		tab.name.TextColor3 = if tab.active then P.OnGreen else P.Ink
-
-		if stationId == nil then
-			tab.state.Text = "Anywhere"
-			tab.state.TextColor3 = if tab.active then P.OnGreen else P.InkSoft
-		elseif nearby[stationId] then
-			tab.state.Text = "In range"
-			tab.state.TextColor3 = if tab.active then P.OnGreen else P.Good
-		else
-			tab.state.Text = "Not nearby"
-			tab.state.TextColor3 = if tab.active then P.OnGreen else P.InkSoft
-		end
-
-		local recipes = RecipeBook.getForStation(stationId)
-		local ready = 0
-		for _, recipe in ipairs(recipes) do
-			if canAfford(recipe) then
-				ready += 1
-			end
-		end
-		tab.count.Text = string.format("%d/%d", ready, #recipes)
-		tab.count.TextColor3 = if tab.active then P.OnGreen elseif ready > 0 then P.Good else P.InkSoft
-	end
-end
-
 local function refreshHeader()
 	-- Tinted toward the station's colour, but kept light: a full-strength
 	-- multiply would sink the parchment slot to near black.
@@ -1316,80 +1202,42 @@ local function refreshHeader()
 	local name = if activeStation then StationConfig.getDisplayName(activeStation) else "By Hand"
 	badgeLetter.Text = if activeStation then string.upper(string.sub(name, 1, 1)) else "H"
 	title.Text = if activeStation then name else "Crafting"
+	subtitle.TextColor3 = P.OnWoodDim
 
 	if activeStation == nil then
-		subtitle.Text = "Hand recipes - craft these anywhere"
-		subtitle.TextColor3 = P.OnWoodDim
-	elseif nearby[activeStation] then
-		subtitle.Text = string.format("At a %s", name)
-		subtitle.TextColor3 = P.GoodLight
+		subtitle.Text = "By hand - press E beside a station for more"
+		closeHint.Text = "B or Esc to close"
 	else
-		subtitle.Text = string.format("Stand near a %s to craft these", name)
-		subtitle.TextColor3 = P.OnWoodDim
+		subtitle.Text = string.format("At your %s", name)
+		closeHint.Text = "E or Esc to close"
 	end
 end
 
-function setStation(stationId)
+local function setStation(stationId)
 	activeStation = stationId
-
-	for _, tab in pairs(tabs) do
-		tab.active = tab.stationId == stationId
-	end
-
-	refreshTabs()
 	refreshHeader()
 	buildList()
 end
 
--- ---------------------------------------------------------------------------
--- Stations in range
--- ---------------------------------------------------------------------------
-
 --[[
-	Which placed stations are within their use range of the player. The same
-	test the server makes - distance from the station's centre to the root
-	part, against StationConfig.useRange - from the stations StationService
-	puts in the world with a StationId attribute. A guess the server confirms;
-	the window only uses it to say where you are.
+	Is the player still beside the station the window was opened at? The same
+	test the server makes - the station's centre to the root part, against
+	StationConfig.useRange - with a little slack. Hand crafting is beside
+	nothing and always passes. A guess the server confirms on every craft.
 ]]
-local function scanNearby(): boolean
-	local found = {}
+local function stillAtStation(): boolean
+	if activeStation == nil then
+		return true
+	end
 
+	local def = StationConfig.get(activeStation)
 	local character = player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	local folder = workspace:FindFirstChild(StationConfig.WorldFolderName or "CraftingStations")
-
-	if root and folder then
-		local position = root.Position
-		for _, station in ipairs(folder:GetChildren()) do
-			local id = station:GetAttribute("StationId")
-			local def = type(id) == "string" and StationConfig.get(id)
-			if def and not found[id] then
-				local centre = if station:IsA("Model")
-					then station:GetPivot().Position
-					elseif station:IsA("BasePart") then station.Position
-					else nil
-				if centre and (centre - position).Magnitude <= def.useRange then
-					found[id] = true
-				end
-			end
-		end
+	local hrp = character and character:FindFirstChild("HumanoidRootPart")
+	if not (def and stationPart and stationPart.Parent and hrp) then
+		return false
 	end
 
-	local changed = false
-	for id in pairs(found) do
-		if not nearby[id] then
-			changed = true
-		end
-	end
-	for id in pairs(nearby) do
-		if not found[id] then
-			changed = true
-		end
-	end
-
-	nearby = found
-	return changed
+	return (stationPart.Position - hrp.Position).Magnitude <= def.useRange + STATION_SLACK
 end
 
 -- ---------------------------------------------------------------------------
@@ -1493,15 +1341,16 @@ local function fadeShadows(visible, info)
 	end
 end
 
-local function open(stationId)
+-- `part` is the placed station's part, for a station; nil for hand crafting.
+local function open(stationId, part)
 	log("open", stationId or "Hand")
 
 	local wasOpen = isOpen
 	isOpen = true
+	stationPart = part
 	screen.Enabled = true
 	fit()
 
-	scanNearby()
 	hideToast()
 	setStation(stationId)
 
@@ -1524,6 +1373,7 @@ local function close()
 
 	log("close")
 	isOpen = false
+	stationPart = nil
 
 	-- Reopening on a filter set a session ago, with no memory of having set
 	-- it, reads as half the recipes having disappeared.
@@ -1549,11 +1399,11 @@ local function close()
 	MenuState.setOpen(MENU_NAME, false)
 end
 
-local function toggle(stationId)
+local function toggle(stationId, part)
 	if isOpen and stationId == activeStation then
 		close()
 	else
-		open(stationId)
+		open(stationId, part)
 	end
 end
 
@@ -1664,7 +1514,6 @@ InventoryMirror.onChanged(function(snapshot)
 	end
 
 	if isOpen then
-		refreshTabs()
 		refreshDetail()
 	end
 end)
@@ -1676,10 +1525,16 @@ UserInputService.InputBegan:Connect(function(input, processed)
 
 	local key = input.KeyCode
 	if key == Enum.KeyCode.B then
+		-- Hand recipes only. From a station's window it switches to them.
 		toggle(nil)
 	elseif not isOpen then
 		return
 	elseif key == Enum.KeyCode.Escape then
+		close()
+	elseif key == Enum.KeyCode.E and activeStation then
+		-- E opened it, so E shuts it. The station's prompt hears this same
+		-- press, in no fixed order; `closedAt` keeps it from reopening.
+		closedAt = os.clock()
 		close()
 	elseif key == Enum.KeyCode.Return or key == Enum.KeyCode.KeypadEnter then
 		-- Only reached when the search box does not have focus; typing sets
@@ -1689,9 +1544,10 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 
 --[[
-	Using a placed station's prompt opens the window on that station. The
-	prompt carries the station id as an attribute, which keeps this generic: a
-	new station type needs no case here.
+	E beside a placed station - its prompt - opens the window on that station,
+	and E again shuts it. The prompt carries the station id as an attribute,
+	which keeps this generic: a new station type needs no case here. Storage
+	stations are ChestClient's.
 ]]
 ProximityPromptService.PromptTriggered:Connect(function(prompt, triggeringPlayer)
 	if triggeringPlayer ~= player then
@@ -1701,9 +1557,18 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, triggeringPlayer
 	local stationId = prompt:GetAttribute("StationId")
 	log("prompt triggered, station =", tostring(stationId))
 
-	if type(stationId) == "string" then
-		open(stationId)
+	local def = type(stationId) == "string" and StationConfig.get(stationId)
+	if not def or def.storage then
+		return
 	end
+
+	-- The same E press already shut this window through InputBegan.
+	if os.clock() - closedAt < 0.3 then
+		return
+	end
+
+	local part = prompt.Parent
+	toggle(stationId, if part and part:IsA("BasePart") then part else nil)
 end)
 
 -- Two full-screen menus at once is never what anyone wants; the pause menu
@@ -1714,20 +1579,35 @@ MenuState.Changed:Connect(function(name, opened)
 	end
 end)
 
--- While open: which stations are in range, and a batch that stopped hearing
+-- The tutorial guide coming or going changes the room the window has.
+playerGui.ChildAdded:Connect(function(child)
+	if child.Name == "TutorialGuide" and child:IsA("ScreenGui") then
+		child:GetPropertyChangedSignal("Enabled"):Connect(function()
+			if isOpen then
+				fit()
+			end
+		end)
+	end
+end)
+local existingGuide = playerGui:FindFirstChild("TutorialGuide")
+if existingGuide then
+	existingGuide:GetPropertyChangedSignal("Enabled"):Connect(function()
+		if isOpen then
+			fit()
+		end
+	end)
+end
+
+-- While open: walked away from the station, or a batch that stopped hearing
 -- back from the server.
 task.spawn(function()
 	while true do
-		task.wait(PROXIMITY_INTERVAL)
+		task.wait(WATCH_INTERVAL)
 
 		if isOpen then
-			if scanNearby() then
-				refreshTabs()
-				refreshHeader()
-				refreshDetail()
-			end
-
-			if batch and os.clock() - batch.sentAt > CRAFT_TIMEOUT then
+			if not stillAtStation() then
+				close()
+			elseif batch and os.clock() - batch.sentAt > CRAFT_TIMEOUT then
 				finishBatch("Crafting stopped - no answer from the server", "bad")
 			end
 		end
@@ -1737,6 +1617,5 @@ end)
 -- The list itself is built when the window opens, not here: rows take live
 -- item views from ItemPreview's shared cap, and a closed window holding them
 -- would starve the inventory.
-buildTabs()
 refreshFilterChip()
 RequestFullInventory:FireServer()

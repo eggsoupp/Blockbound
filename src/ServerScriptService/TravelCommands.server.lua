@@ -137,6 +137,18 @@ local function describeIsland()
 	)
 end
 
+-- The tutorial's "Go to my island" button: open to every player once the
+-- tutorial has reached its island step, not only to admins.
+local tutorialTravel = require(Shared.Net.Remotes).ensure("TutorialTravel", "RemoteEvent")
+tutorialTravel.OnServerEvent:Connect(function(player)
+	local step = player:GetAttribute("TutorialStep")
+	if step ~= "island" and step ~= "done" then return end
+	local now = os.clock()
+	if now - (lastTravelAt[player] or -math.huge) < MIN_INTERVAL then return end
+	lastTravelAt[player] = now
+	travel(player, "island")
+end)
+
 local function onChatted(player, message)
 	local command = string.match(message, "^%s*(/%a+)%s*$")
 	local destination = command and COMMANDS[string.lower(command)]

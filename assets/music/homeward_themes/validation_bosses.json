@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "slimeemperor",
+    "name": "Royal Jelly",
+    "description": "A courtly marimba intro, then a bouncing brass march: the theme on brass, tuba leaping octaves, marimba, pizzicato strings, timpani and kit.",
+    "duration_seconds": 62.626,
+    "drop_seconds": 9.6,
+    "loop_end_seconds": 60.1263,
+    "loop_bars": 32,
+    "bpm": [
+      100,
+      152
+    ],
+    "peak_dbfs": -1.0,
+    "post_drop_rms_dbfs": -14.49,
+    "intro_rms_dbfs": -24.54,
+    "lead_to_backing_rms_db": -0.89,
+    "verified_theme_statements": 3,
+    "midi_notes": 1393,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 60.126,
+    "drop_jump_db": 10.05
+  },
+  {
+    "slug": "signus",
+    "name": "Hallowed Eclipse",
+    "description": "Voices sing the hook over organ, then choir and a synth lead carry the theme at half speed over harpsichord runs, organ, string ostinato and orchestral drums.",
+    "duration_seconds": 60.846,
+    "drop_seconds": 12.6316,
+    "loop_end_seconds": 58.3459,
+    "loop_bars": 32,
+    "bpm": [
+      76,
+      168
+    ],
+    "peak_dbfs": -1.24,
+    "post_drop_rms_dbfs": -14.5,
+    "intro_rms_dbfs": -24.43,
+    "lead_to_backing_rms_db": 2.12,
+    "verified_theme_statements": 2,
+    "midi_notes": 1390,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 58.346,
+    "drop_jump_db": 9.93
+  },
+  {
+    "slug": "blightborer",
+    "name": "Devourer Below",
+    "description": "A low rumble and deep piano, then chugging synthesized grit chords in E Phrygian, double kick, a gritty theme lead and a half-time breakdown under a low choir.",
+    "duration_seconds": 72.698,
+    "drop_seconds": 14.5455,
+    "loop_end_seconds": 70.1976,
+    "loop_bars": 32,
+    "bpm": [
+      66,
+      138
+    ],
+    "peak_dbfs": -1.14,
+    "post_drop_rms_dbfs": -14.5,
+    "intro_rms_dbfs": -25.31,
+    "lead_to_backing_rms_db": -0.19,
+    "verified_theme_statements": 3,
+    "midi_notes": 1426,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 70.198,
+    "drop_jump_db": 10.81
+  }
+]

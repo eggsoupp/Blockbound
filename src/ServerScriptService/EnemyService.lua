@@ -603,6 +603,70 @@ local function behaviourFor(def)
 end
 
 --[[
+	The trait module an ordinary creature carries, or nil.
+
+	`trait` on a definition names a ModuleScript in ServerScriptService.Creatures.
+	Unlike a behaviour it does not take the creature over: the Fly/Hop movement,
+	crowding, knockback and give-up timer all stay, and the trait is offered
+	each tick first. It returns true for a tick it handled itself - a laser
+	charging, a snowball wound up, a dive - and false to let the ordinary movement
+	run. Lazy for the same reason as behaviourFor: traits require this module.
+
+	  step(entry, target, targetPosition, position, dt, now) -> handled
+	  pose(entry, now)       optional, after a placement: cosmetic tilt only
+	  start(entry), finish(entry, reason)   optional
+]]
+local traits = {}
+
+local function traitFor(def)
+	local name = def.trait
+	if type(name) ~= "string" then
+		return nil
+	end
+
+	local cached = traits[name]
+	if cached ~= nil then
+		return cached or nil
+	end
+
+	local folder = ServerScriptService:FindFirstChild("Creatures")
+	local moduleScript = folder and folder:FindFirstChild(name)
+	local ok, result = false, nil
+	if moduleScript and moduleScript:IsA("ModuleScript") then
+		ok, result = pcall(require, moduleScript)
+	end
+
+	if not ok or type(result) ~= "table" or type(result.step) ~= "function" then
+		warn(string.format(
+			"[EnemyService] trait '%s' did not load from ServerScriptService.Creatures (%s); "
+				.. "'%s' will only use its plain movement.",
+			name, tostring(result), tostring(def.displayName or name)
+		))
+		traits[name] = false
+		return nil
+	end
+
+	traits[name] = result
+	return result
+end
+
+-- Calls an optional trait hook, so a mistake in one creature costs that hook.
+local function traitCall(entry, hook, ...)
+	local trait = entry.trait
+	local fn = trait and trait[hook]
+	if not fn then
+		return nil
+	end
+
+	local ok, result = pcall(fn, entry, ...)
+	if not ok then
+		warn(string.format("[EnemyService] %s trait %s errored: %s", tostring(entry.name), hook, tostring(result)))
+		return nil
+	end
+	return result
+end
+
+--[[
 	Drops whatever the thing was carrying where it died, for the killer only.
 
 	PRIVATE LOOT. The drops are GroundDrops' private kind: only the killer's
@@ -687,6 +751,18 @@ end
 	The player an enemy should be going after: the closest one that is alive and
 	inside its aggro range.
 ]]
+local SAFE_RADIUS = EnemyConfig.Spawning.safeBlocks * TerrainConfig.StudSize
+
+--[[
+	Whether a point is in the clearing around the world spawn that wild enemies
+	stay out of. Flat distance from the origin, where the spawn sits.
+]]
+local function inSafeZone(position: Vector3): boolean
+	return position.X * position.X + position.Z * position.Z < SAFE_RADIUS * SAFE_RADIUS
+end
+
+EnemyService.inSafeZone = inSafeZone
+
 local function findTarget(entry, position)
 	local best, bestDistance = nil, entry.def.aggroRange
 
@@ -694,6 +770,11 @@ local function findTarget(entry, position)
 		local character = player.Character
 		local hrp = character and character:FindFirstChild("HumanoidRootPart")
 		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+		-- A wild enemy leaves anybody inside the spawn clearing alone.
+		if hrp and entry.wild and inSafeZone(hrp.Position) then
+			hrp = nil
+		end
 
 		if hrp and humanoid and humanoid.Health > 0 then
 			local distance = (hrp.Position - position).Magnitude
@@ -1139,7 +1220,7 @@ end
 local function applyContactDamage(entry, position, now, damage)
 	local def = entry.def
 	local rangeSquared = def.contactRange * def.contactRange
-	damage = damage or def.contactDamage
+	damage = (damage or def.contactDamage) * (entry.damageScale or 1)
 
 	for _, player in ipairs(Players:GetPlayers()) do
 		local character = player.Character
@@ -1177,6 +1258,8 @@ local function removeEntry(model, reason)
 	entries[model] = nil
 	held[model] = nil
 	aliveCount -= 1
+
+	traitCall(entry, "finish", reason)
 
 	-- Before the model goes, so a behaviour still has something to tidy up
 	-- against - a telegraph on the ground, a projectile in the air.
@@ -1329,6 +1412,7 @@ function EnemyService.spawn(name, position)
 	rollCrowdTraits(entry, boundsSize)
 
 	entry.behaviour = behaviourFor(def)
+	entry.trait = if def.behaviour then nil else traitFor(def)
 
 	--[[
 		The asset's own idea of which way is up, corrected once, here.
@@ -1410,6 +1494,7 @@ function EnemyService.spawn(name, position)
 			))
 		end
 	end
+	traitCall(entry, "start")
 
 	Profiler.count("Enemy.spawned")
 
@@ -1510,6 +1595,28 @@ function EnemyService.remeasure(entry, bottomY: number?)
 end
 
 --[[
+	Scales how hard one live enemy hits, contact and lunge alike: 0.5 is half.
+	For an enemy that is a lesson rather than a threat - the tutorial's slime.
+]]
+function EnemyService.setDamageScale(model, scale: number)
+	local entry = entries[model]
+	if entry then
+		entry.damageScale = scale
+	end
+end
+
+--[[
+	Contact damage from a trait that moved the creature itself this tick: the
+	same per-player cooldown and damage scale as an ordinary bump, at `damage`
+	(or the definition's contactDamage) and the definition's contactRange.
+]]
+function EnemyService.touch(entry, position: Vector3, damage: number?)
+	if entries[entry.model] == entry then
+		applyContactDamage(entry, position, os.clock(), damage)
+	end
+end
+
+--[[
 	Spawns a group AT A PLACE, scattered around it.
 
 	This is what the ambient spawner uses. It takes a point rather than a player
@@ -1521,7 +1628,11 @@ end
 	of four slimes reads as an arrangement, and the point of a pack is that
 	nobody arranged it.
 ]]
-function EnemyService.spawnPack(name, center, count, spread)
+--[[
+	`wild` marks the pack as the world's own - EnemySpawner's - which is what
+	keeps it out of the spawn clearing (EnemyConfig.Spawning.safeBlocks).
+]]
+function EnemyService.spawnPack(name, center, count, spread, wild: boolean?)
 	if typeof(center) ~= "Vector3" then
 		return 0, "no position to spawn at"
 	end
@@ -1539,6 +1650,9 @@ function EnemyService.spawnPack(name, center, count, spread)
 		local model, reason = EnemyService.spawn(name, Vector3.new(x, y, z))
 		if model then
 			spawned += 1
+			if wild and entries[model] then
+				entries[model].wild = true
+			end
 		else
 			lastReason = reason
 		end
@@ -1688,6 +1802,9 @@ function EnemyService.damage(model, amount, dealer)
 
 		-- Before removeEntry, which is what forgets whose kill it was.
 		awardDrops(entry, where)
+		if entry.dealer then
+			require(game:GetService("ServerScriptService").TutorialService).EnemyDefeated(entry.dealer)
+		end
 
 		removeEntry(model, "died")
 		return false
@@ -1784,6 +1901,8 @@ end
 function EnemyService.knockback(model, direction, speed, lift)
 	local entry = entries[model]
 	if not entry or entry.behaviour or held[model] or entry.health <= 0 then return false end
+	-- The arc below is a hop; a flyer has no gravity to finish it with.
+	if entry.def.movement ~= "Hop" then return false end
 	local flat = Vector3.new(direction.X,0,direction.Z)
 	if flat.Magnitude < .01 then return false end
 	flat = flat.Unit
@@ -2085,6 +2204,13 @@ local function stepAll(dt)
 		-- which drifts a little further every tick.
 		local position = model:GetPivot().Position
 
+		-- A wild enemy that ends up in the spawn clearing anyway - knocked in,
+		-- or there before the rule - leaves it.
+		if entry.wild and inSafeZone(position) then
+			removeEntry(model, "safe zone")
+			continue
+		end
+
 		--[[
 			A creature with a behaviour module owns its whole tick.
 
@@ -2116,11 +2242,27 @@ local function stepAll(dt)
 			-- not shed a pursuer by stepping one stud too far.
 			local character = entry.chasing.Character
 			local hrp = character and character:FindFirstChild("HumanoidRootPart")
+			if hrp and entry.wild and inSafeZone(hrp.Position) then
+				hrp = nil
+			end
 			if hrp and (hrp.Position - position).Magnitude <= entry.def.giveUpRange then
 				target = entry.chasing
 				entry.lastSeenPlayerAt = now
 			else
 				entry.chasing = nil
+			end
+		end
+
+		-- A trait gets first refusal on the tick, target or not: a move it
+		-- has committed to finishes after the player it was aimed at runs off.
+		if entry.trait then
+			local character = target and target.Character
+			local targetRoot = character and character:FindFirstChild("HumanoidRootPart")
+			local handled = traitCall(
+				entry, "step", target, targetRoot and targetRoot.Position, position, dt, now
+			)
+			if handled then
+				continue
 			end
 		end
 
@@ -2157,6 +2299,7 @@ local function stepAll(dt)
 				EnemyService.placeModel(
 					entry, moved - Vector3.new(0, entry.feetOffset, 0), facing
 				)
+				traitCall(entry, "pose", now)
 
 				-- A lunge hits harder than a bump. The enemy still only reports
 				-- raw damage; which number it reports is the whole difference
@@ -2184,6 +2327,7 @@ local function stepAll(dt)
 			EnemyService.placeModel(
 				entry, moved - Vector3.new(0, entry.feetOffset, 0), nil
 			)
+			traitCall(entry, "pose", now)
 		elseif now - entry.lastSeenPlayerAt >= entry.def.despawnSeconds then
 			removeEntry(model, "abandoned")
 			continue
@@ -2219,6 +2363,17 @@ function EnemyService.init()
 
 	EnemyConfig.validate()
 	ensureWorldFolder()
+
+	-- The creature traits' kit owns the CreatureFX remote; loaded now so the
+	-- remote exists before any client waits on it, not at the first spawn.
+	local creatures = ServerScriptService:FindFirstChild("Creatures")
+	local creatureKit = creatures and creatures:FindFirstChild("CreatureKit")
+	if creatureKit then
+		local ok, err = pcall(require, creatureKit)
+		if not ok then
+			warn("[EnemyService] CreatureKit did not load: " .. tostring(err))
+		end
+	end
 
 	if not findAssets() then
 		warn(string.format(

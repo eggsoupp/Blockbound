@@ -1,0 +1,10171 @@
+{
+  "title": "Devourer Below",
+  "tempos": [
+    [
+      0,
+      66,
+      "Something moves below"
+    ],
+    [
+      16,
+      138,
+      "It breaches"
+    ]
+  ],
+  "end": 144,
+  "parts": {
+    "Low drone": {
+      "channel": 0,
+      "program": 89,
+      "target_rms_db": -34,
+      "pan": 64,
+      "wet": 0.3,
+      "drums": false,
+      "render_gain": 0.5006038841710378,
+      "raw_rms_db": null,
+      "instrument": "Custom pad synthesizer; GM MIDI proxy",
+      "expression": 46
+    },
+    "Low piano intro": {
+      "channel": 1,
+      "program": 0,
+      "target_rms_db": -29,
+      "pan": 60,
+      "wet": 0.25,
+      "drums": false,
+      "render_gain": 8.004338554592463,
+      "instrument": "Grand Piano",
+      "raw_rms_db": -47.31,
+      "expression": 116
+    },
+    "Tremolo strings intro": {
+      "channel": 2,
+      "program": 44,
+      "target_rms_db": -37,
+      "pan": 70,
+      "wet": 0.25,
+      "drums": false,
+      "render_gain": 8.024459032692958,
+      "instrument": "Tremolo Strings",
+      "raw_rms_db": -55.05,
+      "expression": 116
+    },
+    "Grit rhythm": {
+      "channel": 3,
+      "program": 30,
+      "target_rms_db": -21,
+      "pan": 64,
+      "wet": 0.03,
+      "drums": false,
+      "render_gain": 0.7633579288350039,
+      "raw_rms_db": null,
+      "instrument": "Custom grit synthesizer; GM MIDI proxy",
+      "expression": 53
+    },
+    "Grit lead melody": {
+      "channel": 4,
+      "program": 29,
+      "target_rms_db": -14.5,
+      "pan": 64,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 2.9183235998656114,
+      "raw_rms_db": null,
+      "instrument": "Custom gritlead synthesizer; GM MIDI proxy",
+      "expression": 83
+    },
+    "Low brass melody": {
+      "channel": 5,
+      "program": 57,
+      "target_rms_db": -24,
+      "pan": 54,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 10.610663663412753,
+      "instrument": "Trombone",
+      "raw_rms_db": -44.71,
+      "expression": 127
+    },
+    "Sub bass": {
+      "channel": 6,
+      "program": 38,
+      "target_rms_db": -23,
+      "pan": 64,
+      "wet": 0.01,
+      "drums": false,
+      "render_gain": 0.8380397533584774,
+      "raw_rms_db": null,
+      "instrument": "Custom bass synthesizer; GM MIDI proxy",
+      "expression": 54
+    },
+    "Dark choir": {
+      "channel": 7,
+      "program": 53,
+      "target_rms_db": -27,
+      "pan": 76,
+      "wet": 0.3,
+      "drums": false,
+      "render_gain": 9.534965718235226,
+      "instrument": "Voice Oohs",
+      "raw_rms_db": -46.58,
+      "expression": 123
+    },
+    "Power drums": {
+      "channel": 9,
+      "program": 16,
+      "target_rms_db": -20,
+      "pan": 64,
+      "wet": 0.04,
+      "drums": true,
+      "render_gain": 3.3880521935666197,
+      "instrument": "Power",
+      "raw_rms_db": -31.81,
+      "expression": 87
+    }
+  },
+  "events": [
+    {
+      "part": "Low drone",
+      "beat": 0,
+      "pitch": 28,
+      "length": 15.9,
+      "velocity": 70
+    },
+    {
+      "part": "Low drone",
+      "beat": 0,
+      "pitch": 35,
+      "length": 15.9,
+      "velocity": 60
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 0,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 77
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 1,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 1.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 2.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 73
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 3.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 3.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 4,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 75
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 5.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 6.0,
+      "pitch": 52,
+      "length": 0.935,
+      "velocity": 70
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 8,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 78
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 9,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 69
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 9.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 10.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 74
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 11.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 11.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 71
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 12,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 76
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 13.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Low piano intro",
+      "beat": 14.0,
+      "pitch": 50,
+      "length": 0.935,
+      "velocity": 69
+    },
+    {
+      "part": "Tremolo strings intro",
+      "beat": 8,
+      "pitch": 40,
+      "length": 7.9,
+      "velocity": 44
+    },
+    {
+      "part": "Tremolo strings intro",
+      "beat": 8,
+      "pitch": 43,
+      "length": 7.9,
+      "velocity": 44
+    },
+    {
+      "part": "Tremolo strings intro",
+      "beat": 8,
+      "pitch": 47,
+      "length": 7.9,
+      "velocity": 44
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Sub bass",
+      "beat": 16,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 16.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 16.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 16.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 17.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 17.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 17.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 17.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 18,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18.25,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18.25,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 18.25,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 18.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Sub bass",
+      "beat": 18.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 19,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 19,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 19,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Sub bass",
+      "beat": 19,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 19.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 19.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 19.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Sub bass",
+      "beat": 19.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Sub bass",
+      "beat": 20,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 20.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 20.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 20.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 21.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 21.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 21.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 21.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 22,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22.25,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22.25,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 22.25,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 22.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Sub bass",
+      "beat": 22.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 23,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 23,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 23,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Sub bass",
+      "beat": 23,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 23.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 23.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 23.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Sub bass",
+      "beat": 23.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24,
+      "pitch": 41,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24,
+      "pitch": 53,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Sub bass",
+      "beat": 24,
+      "pitch": 29,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24.5,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24.5,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24.5,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 24.5,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24.75,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24.75,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 24.75,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 24.75,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 25.5,
+      "pitch": 41,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 25.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 25.5,
+      "pitch": 53,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 25.5,
+      "pitch": 29,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 26,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26.25,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26.25,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26.25,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 26.25,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26.75,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26.75,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 26.75,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Sub bass",
+      "beat": 26.75,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 27,
+      "pitch": 41,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 27,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 27,
+      "pitch": 53,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Sub bass",
+      "beat": 27,
+      "pitch": 29,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 27.5,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 27.5,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 27.5,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Sub bass",
+      "beat": 27.5,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Sub bass",
+      "beat": 28,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 28.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 28.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 28.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 29.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 29.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 29.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 29.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 30,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30.25,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30.25,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 30.25,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 30.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Sub bass",
+      "beat": 30.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 31,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 31,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 31,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Sub bass",
+      "beat": 31,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 31.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 31.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 31.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Sub bass",
+      "beat": 31.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Sub bass",
+      "beat": 32,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 32.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 32.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 32.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 33.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 33.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 33.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 33.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 34,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34.25,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34.25,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 34.25,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 34.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Sub bass",
+      "beat": 34.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 35,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 35,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 35,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Sub bass",
+      "beat": 35,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 35.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 35.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 35.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Sub bass",
+      "beat": 35.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Sub bass",
+      "beat": 36,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 36.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 36.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 36.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 37.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 37.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 37.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 37.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 38,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38.25,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38.25,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 38.25,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 38.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Sub bass",
+      "beat": 38.75,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 39,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 39,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 39,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Sub bass",
+      "beat": 39,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 39.5,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 39.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 39.5,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Sub bass",
+      "beat": 39.5,
+      "pitch": 28,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Sub bass",
+      "beat": 40,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40.5,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40.5,
+      "pitch": 55,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 40.5,
+      "pitch": 31,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40.75,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 40.75,
+      "pitch": 55,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 40.75,
+      "pitch": 31,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 41.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 41.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 41.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 41.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42,
+      "pitch": 55,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 42,
+      "pitch": 31,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42.25,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42.25,
+      "pitch": 55,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 42.25,
+      "pitch": 31,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42.75,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 42.75,
+      "pitch": 55,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Sub bass",
+      "beat": 42.75,
+      "pitch": 31,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 43,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 43,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 43,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Sub bass",
+      "beat": 43,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 43.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 43.5,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 43.5,
+      "pitch": 55,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Sub bass",
+      "beat": 43.5,
+      "pitch": 31,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44,
+      "pitch": 41,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44,
+      "pitch": 53,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Sub bass",
+      "beat": 44,
+      "pitch": 29,
+      "length": 0.4,
+      "velocity": 112
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44.5,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44.5,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44.5,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 44.5,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44.75,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44.75,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 44.75,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 44.75,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 45.5,
+      "pitch": 41,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 45.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 45.5,
+      "pitch": 53,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 45.5,
+      "pitch": 29,
+      "length": 0.4,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Sub bass",
+      "beat": 46,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46.25,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46.25,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46.25,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Sub bass",
+      "beat": 46.25,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 96
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46.75,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46.75,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 46.75,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Sub bass",
+      "beat": 46.75,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 100
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 47,
+      "pitch": 41,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 47,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 47,
+      "pitch": 53,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Sub bass",
+      "beat": 47,
+      "pitch": 29,
+      "length": 0.4,
+      "velocity": 110
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 47.5,
+      "pitch": 41,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 47.5,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 47.5,
+      "pitch": 53,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Sub bass",
+      "beat": 47.5,
+      "pitch": 29,
+      "length": 0.2,
+      "velocity": 94
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 48.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 48.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 48.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 48.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 48.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 48.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 48.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 48.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 49.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 49.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 49.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 49.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 49.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 49.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 49.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 49.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 50.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 50.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 50.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 50.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 50.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 50.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 50.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 50.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 51.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 51.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 51.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 51.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 51.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 51.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 51.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 51.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 48,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 48,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 48,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 52.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 52.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 52.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 52.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 52.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 52.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 52.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 52.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 53.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 53.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 53.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 53.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 53.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 53.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 53.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 53.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 54.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 54.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 54.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 54.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 54.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 54.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 54.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 54.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 55.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 55.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 55.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 55.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 55.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 55.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 55.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 55.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 52,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 52,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 52,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 56.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 56.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 56.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 56.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 56.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 56.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 56.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 56.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 57.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 57.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 57.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 57.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 57.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 57.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 57.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 57.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 58.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 58.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 58.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 58.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 58.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 58.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 58.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 58.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 59.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 59.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 59.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 59.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 59.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 59.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 59.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 59.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 56,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 56,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 56,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 60.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 60.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 60.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 60.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 60.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 60.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 60.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 60.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 61.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 61.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 61.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 61.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 61.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 61.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 61.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 61.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 62.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 62.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 62.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 62.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 62.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 62.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 62.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 62.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 63.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 63.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 63.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 63.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 63.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 63.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 63.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 63.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 60,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 60,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 60,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 64.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 64.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 64.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 64.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 64.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 64.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 64.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 64.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 65.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 65.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 65.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 65.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 65.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 65.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 65.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 65.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 66.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 66.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 66.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 66.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 66.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 66.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 66.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 66.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 67.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 67.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 67.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 67.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 67.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 67.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 67.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 67.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 64,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 64,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 64,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 68.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 68.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 68.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 68.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 68.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 68.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 68.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 68.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 69.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 69.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 69.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 69.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 69.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 69.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 69.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 69.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 70.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 70.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 70.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 70.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 70.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 70.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 70.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 70.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 71.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 71.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 71.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 71.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 71.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 71.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 71.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 71.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 68,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 68,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 68,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 72.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 72.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 72.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 72.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 72.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 72.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 72.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 72.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 73.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 73.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 73.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 73.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 73.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 73.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 73.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 73.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 74.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 74.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 74.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 74.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 74.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 74.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 74.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 74.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 75.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 75.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 75.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 75.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 75.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 75.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 75.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 75.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 72,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 72,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 72,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 76.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 76.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 76.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 76.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 76.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 76.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 76.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 76.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 77.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 77.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 77.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 77.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 77.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 77.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 77.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 77.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 78.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 78.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 78.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 78.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 78.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 78.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 78.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 78.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 79.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 79.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 79.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 79.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 79.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 79.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 79.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 79.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 76,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 76,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 76,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 80,
+      "pitch": 40,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 80,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 80,
+      "pitch": 52,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Sub bass",
+      "beat": 80,
+      "pitch": 28,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 82.5,
+      "pitch": 40,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 82.5,
+      "pitch": 47,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 82.5,
+      "pitch": 52,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 82.5,
+      "pitch": 28,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Dark choir",
+      "beat": 80,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 80,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 80,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 84,
+      "pitch": 41,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 84,
+      "pitch": 48,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 84,
+      "pitch": 53,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Sub bass",
+      "beat": 84,
+      "pitch": 29,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 86.5,
+      "pitch": 41,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 86.5,
+      "pitch": 48,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 86.5,
+      "pitch": 53,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 86.5,
+      "pitch": 29,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Dark choir",
+      "beat": 84,
+      "pitch": 53,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 84,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 84,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 88,
+      "pitch": 40,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 88,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 88,
+      "pitch": 52,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Sub bass",
+      "beat": 88,
+      "pitch": 28,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 90.5,
+      "pitch": 40,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 90.5,
+      "pitch": 47,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 90.5,
+      "pitch": 52,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 90.5,
+      "pitch": 28,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Dark choir",
+      "beat": 88,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 88,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 88,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 92,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 92,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 92,
+      "pitch": 50,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Sub bass",
+      "beat": 92,
+      "pitch": 26,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 94.5,
+      "pitch": 38,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 94.5,
+      "pitch": 45,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 94.5,
+      "pitch": 50,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 94.5,
+      "pitch": 26,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Dark choir",
+      "beat": 92,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 92,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 92,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 96,
+      "pitch": 36,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 96,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 96,
+      "pitch": 48,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Sub bass",
+      "beat": 96,
+      "pitch": 24,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 98.5,
+      "pitch": 36,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 98.5,
+      "pitch": 43,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 98.5,
+      "pitch": 48,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 98.5,
+      "pitch": 24,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Dark choir",
+      "beat": 96,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 96,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 96,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 100,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 100,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 100,
+      "pitch": 50,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Sub bass",
+      "beat": 100,
+      "pitch": 26,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 102.5,
+      "pitch": 38,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 102.5,
+      "pitch": 45,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 102.5,
+      "pitch": 50,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 102.5,
+      "pitch": 26,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Dark choir",
+      "beat": 100,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 100,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 100,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 104,
+      "pitch": 40,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 104,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 104,
+      "pitch": 52,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Sub bass",
+      "beat": 104,
+      "pitch": 28,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 106.5,
+      "pitch": 40,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 106.5,
+      "pitch": 47,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 106.5,
+      "pitch": 52,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 106.5,
+      "pitch": 28,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Dark choir",
+      "beat": 104,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 104,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 104,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 108,
+      "pitch": 41,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 108,
+      "pitch": 48,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 108,
+      "pitch": 53,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Sub bass",
+      "beat": 108,
+      "pitch": 29,
+      "length": 1.8,
+      "velocity": 116
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 110.5,
+      "pitch": 41,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 110.5,
+      "pitch": 48,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 110.5,
+      "pitch": 53,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Sub bass",
+      "beat": 110.5,
+      "pitch": 29,
+      "length": 1.2,
+      "velocity": 108
+    },
+    {
+      "part": "Dark choir",
+      "beat": 108,
+      "pitch": 53,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 108,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Dark choir",
+      "beat": 108,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 60
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 112.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 112.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 112.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 112.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 112.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 112.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 112.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 112.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 113.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 113.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 113.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 113.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 113.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 113.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 113.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 113.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 114.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 114.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 114.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 114.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 114.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 114.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 114.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 114.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 115.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 115.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 115.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 115.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 115.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 115.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 115.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 115.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 112,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 112,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 112,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 116.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 116.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 116.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 116.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 116.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 116.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 116.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 116.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 117.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 117.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 117.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 117.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 117.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 117.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 117.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 117.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 118.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 118.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 118.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 118.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 118.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 118.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 118.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 118.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 119.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 119.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 119.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 119.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 119.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 119.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 119.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 119.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 116,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 116,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 116,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 120.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 120.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 120.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 120.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 120.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 120.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 120.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 120.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 121.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 121.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 121.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 121.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 121.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 121.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 121.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 121.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 122.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 122.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 122.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 122.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 122.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 122.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 122.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 122.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 123.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 123.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 123.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 123.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 123.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 123.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 123.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 123.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 120,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 120,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 120,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 124.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 124.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 124.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 124.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 124.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 124.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 124.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 124.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 125.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 125.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 125.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 125.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 125.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 125.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 125.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 125.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 126.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 126.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 126.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 126.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 126.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 126.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 126.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 126.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 127.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 127.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 127.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 127.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 127.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 127.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 127.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 127.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 124,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 124,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 124,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 128.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 128.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 128.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 128.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 128.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 128.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 128.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 128.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 129.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 129.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 129.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 129.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 129.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 129.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 129.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 129.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 130.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 130.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 130.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 130.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 130.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 130.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 130.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 130.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 131.0,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 131.0,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 131.0,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 131.0,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 131.5,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 131.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 131.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 131.5,
+      "pitch": 28,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 128,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 128,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 128,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 132.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 132.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 132.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 132.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 132.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 132.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 132.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 132.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 133.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 133.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 133.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 133.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 133.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 133.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 133.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 133.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 134.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 134.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 134.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 134.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 134.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 134.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 134.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 134.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 135.0,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 135.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 135.0,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 135.0,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 135.5,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 135.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 135.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 135.5,
+      "pitch": 24,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 132,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 132,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 132,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 136.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 136.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 136.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 136.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 136.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 136.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 136.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 136.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 137.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 137.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 137.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 137.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 137.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 137.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 137.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 137.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 138.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 138.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 138.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 138.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 138.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 138.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 138.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 138.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 139.0,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 139.0,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 139.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 139.0,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 139.5,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 139.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 139.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 139.5,
+      "pitch": 26,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 136,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 136,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 136,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 140.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 140.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 140.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 140.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 140.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 140.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 140.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 140.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 141.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 141.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 141.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 141.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 141.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 141.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 141.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 141.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 142.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 142.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 142.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 142.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 142.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 142.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 142.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 142.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 143.0,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 143.0,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 143.0,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Sub bass",
+      "beat": 143.0,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 104
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 143.5,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 143.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Grit rhythm",
+      "beat": 143.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Sub bass",
+      "beat": 143.5,
+      "pitch": 31,
+      "length": 0.4,
+      "velocity": 88
+    },
+    {
+      "part": "Dark choir",
+      "beat": 140,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 140,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Dark choir",
+      "beat": 140,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Power drums",
+      "beat": 16,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 16,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 16,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 16.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 16.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 16.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 17,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 17,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 18,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 18,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 18.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 18.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 18.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 19,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 19,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 20,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 20,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 20.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 20.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 20.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 21,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 21,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 22,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 22,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 22.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 22.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 22.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 23,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 23,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 24,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 24,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 108
+    },
+    {
+      "part": "Power drums",
+      "beat": 24,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 24.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 24.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 24.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 25,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 25,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 26,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 26,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 26.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 26.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 26.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 27,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 27,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 28,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 28,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 28.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 28.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 28.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 29,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 29,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 30,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 30,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 30.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 30.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 30.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 31,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 31,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 32,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 32,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 108
+    },
+    {
+      "part": "Power drums",
+      "beat": 32,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 32.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 32.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 32.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 33,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 33,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 34,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 34,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 34.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 34.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 34.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 35,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 35,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 36,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 36,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 36.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 36.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 36.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 37,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 37,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 38,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 38,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 38.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 38.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 38.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 39,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 39,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 40,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 40,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 108
+    },
+    {
+      "part": "Power drums",
+      "beat": 40,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 40.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 40.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 40.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 41,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 41,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 42,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 42,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 42.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 42.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 42.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 43,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 43,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 44,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 44,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 44.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 44.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 44.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 45,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 45,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 46,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 46,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 46.25,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 46.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 46.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 46.75,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 96
+    },
+    {
+      "part": "Power drums",
+      "beat": 46.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Power drums",
+      "beat": 47,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 47.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 47,
+      "pitch": 51,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Power drums",
+      "beat": 47.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 47.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 120
+    },
+    {
+      "part": "Power drums",
+      "beat": 47.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 124
+    },
+    {
+      "part": "Power drums",
+      "beat": 48.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 48,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 48.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 49.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 49,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 49.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 50.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 50.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 51.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 51,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 51.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 52.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 52,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 52.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 53.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 53,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 53.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 54.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 54.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 55.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 55,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 55.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 56.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 56,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 56.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 57.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 57,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 57.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 58.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 58.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 59.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 59,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 59.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 60.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 60,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 60.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 61.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 61,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 61.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 62.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 62.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 63.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 63,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 63.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 64.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 64,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 64.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 65.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 65,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 65.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 66.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 66.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 67.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 67,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 67.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 68.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 68,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 68.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 69.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 69,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 69.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 70.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 70.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 71.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 71,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 71.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 72.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 72,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 72.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 73.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 73,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 73.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 74.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 74.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 75.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 75,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 75.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 76.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 76,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 76.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 77.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 77,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 77.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 78.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 78.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 78.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 78.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Power drums",
+      "beat": 79.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 79,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 79.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 79.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 79.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 79.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 120
+    },
+    {
+      "part": "Power drums",
+      "beat": 79.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 124
+    },
+    {
+      "part": "Power drums",
+      "beat": 80,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 80,
+      "pitch": 49,
+      "length": 1.2,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 82,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 82.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 84,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 84,
+      "pitch": 52,
+      "length": 1.2,
+      "velocity": 100
+    },
+    {
+      "part": "Power drums",
+      "beat": 86,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 86.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 88,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 88,
+      "pitch": 49,
+      "length": 1.2,
+      "velocity": 100
+    },
+    {
+      "part": "Power drums",
+      "beat": 90,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 90.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 92,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 92,
+      "pitch": 52,
+      "length": 1.2,
+      "velocity": 100
+    },
+    {
+      "part": "Power drums",
+      "beat": 94,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 94.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 96,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 96,
+      "pitch": 49,
+      "length": 1.2,
+      "velocity": 100
+    },
+    {
+      "part": "Power drums",
+      "beat": 98,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 98.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 100,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 100,
+      "pitch": 52,
+      "length": 1.2,
+      "velocity": 100
+    },
+    {
+      "part": "Power drums",
+      "beat": 102,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 102.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 104,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 104,
+      "pitch": 49,
+      "length": 1.2,
+      "velocity": 100
+    },
+    {
+      "part": "Power drums",
+      "beat": 106,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 106.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 108,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 108,
+      "pitch": 52,
+      "length": 1.2,
+      "velocity": 100
+    },
+    {
+      "part": "Power drums",
+      "beat": 110,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 118
+    },
+    {
+      "part": "Power drums",
+      "beat": 110.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 110.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 110.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Power drums",
+      "beat": 111.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 111.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 111.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 120
+    },
+    {
+      "part": "Power drums",
+      "beat": 111.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 124
+    },
+    {
+      "part": "Power drums",
+      "beat": 112.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 112,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 112.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 113.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 113,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 113.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 114.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 114.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 115.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 115,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 115.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 116.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 116,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 116.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 117.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 117,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 117.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 118.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 118.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 119.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 119,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 119.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 120.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 120,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 120.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 121.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 121,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 121.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 122.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 122.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 123.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 123,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 123.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 124.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 124,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 124.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 125.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 125,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 125.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 126.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 126.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 127.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 127,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 127.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 128.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 128,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 128.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 129.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 129,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 129.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 130.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 130.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 131.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 131,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 131.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 132.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 132,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 132.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 133.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 133,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 133.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 134.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 134.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 135.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 135,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 135.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 136.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 136,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 136.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 137.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 137,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 137.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 138.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 138.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 139.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 139,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 139.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 140.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 140,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 140.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 141.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 141,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 141.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 142.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 142.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 142.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Power drums",
+      "beat": 142.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Power drums",
+      "beat": 143.0,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 106
+    },
+    {
+      "part": "Power drums",
+      "beat": 143,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 114
+    },
+    {
+      "part": "Power drums",
+      "beat": 143.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Power drums",
+      "beat": 143.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Power drums",
+      "beat": 143.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 92
+    },
+    {
+      "part": "Power drums",
+      "beat": 143.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 120
+    },
+    {
+      "part": "Power drums",
+      "beat": 143.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 124
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 48,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 87
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 49,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 49.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 50.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 83
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 51.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 75
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 51.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 52,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 85
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 53.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 54.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 80
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 56,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 88
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 57,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 57.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 58.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 59.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 59.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 60,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 86
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 61.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 62.0,
+      "pitch": 62,
+      "length": 0.935,
+      "velocity": 79
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 64,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 88
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 65,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 65.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 66.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 67.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 83
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 67.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 68,
+      "pitch": 76,
+      "length": 1.435,
+      "velocity": 92
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 69.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 83
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 70.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 70.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 71.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 81
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 72,
+      "pitch": 69,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 73,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 82
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 73.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 74.0,
+      "pitch": 66,
+      "length": 0.935,
+      "velocity": 80
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 75.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 75.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 76,
+      "pitch": 67,
+      "length": 2.935,
+      "velocity": 84
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 112,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 91
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 113,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 82
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 113.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 114.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 87
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 115.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 115.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 84
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 116,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 89
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 117.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 118.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 120,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 92
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 121,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 83
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 121.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 122.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 88
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 123.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 123.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 85
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 124,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 90
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 125.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 126.0,
+      "pitch": 62,
+      "length": 0.935,
+      "velocity": 83
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 128,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 92
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 129,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 83
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 129.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 130.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 88
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 131.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 87
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 131.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 92
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 132,
+      "pitch": 76,
+      "length": 1.435,
+      "velocity": 96
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 133.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 87
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 134.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 84
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 134.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 135.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 85
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 136,
+      "pitch": 69,
+      "length": 0.935,
+      "velocity": 88
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 137,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 86
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 137.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 138.0,
+      "pitch": 66,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 139.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 139.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 140,
+      "pitch": 67,
+      "length": 2.935,
+      "velocity": 88
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 112,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 83
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 113,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 74
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 113.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 72
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 114.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 79
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 115.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 71
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 115.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 116,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 81
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 117.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 118.0,
+      "pitch": 52,
+      "length": 0.935,
+      "velocity": 76
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 120,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 121,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 75
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 121.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 122.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 80
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 123.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 72
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 123.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 124,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 82
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 125.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 126.0,
+      "pitch": 50,
+      "length": 0.935,
+      "velocity": 75
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 128,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 129,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 75
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 129.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 130.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 80
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 131.0,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 131.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 84
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 132,
+      "pitch": 64,
+      "length": 1.435,
+      "velocity": 88
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 133.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 134.0,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 134.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 72
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 135.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 77
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 136,
+      "pitch": 57,
+      "length": 0.935,
+      "velocity": 80
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 137,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 137.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 138.0,
+      "pitch": 54,
+      "length": 0.935,
+      "velocity": 76
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 139.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 69
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 139.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "Low brass melody",
+      "beat": 140,
+      "pitch": 55,
+      "length": 2.935,
+      "velocity": 80
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 88,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 79
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 89,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 89.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 90.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 75
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 91.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 91.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 72
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 92,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 77
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 93.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 69
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 94.0,
+      "pitch": 52,
+      "length": 0.935,
+      "velocity": 72
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 104,
+      "pitch": 65,
+      "length": 3.4,
+      "velocity": 90
+    },
+    {
+      "part": "Grit lead melody",
+      "beat": 108,
+      "pitch": 64,
+      "length": 3.6,
+      "velocity": 94
+    }
+  ],
+  "markers": [
+    [
+      0,
+      "Something moves below"
+    ],
+    [
+      16,
+      "DROP - it breaches"
+    ],
+    [
+      48,
+      "Homeward, devoured"
+    ],
+    [
+      80,
+      "Breakdown - the pit opens"
+    ],
+    [
+      112,
+      "Last breach"
+    ],
+    [
+      140,
+      "Turnaround"
+    ]
+  ],
+  "statements": [
+    {
+      "part": "Grit lead melody",
+      "start": 48,
+      "bars": 8,
+      "transpose": 0,
+      "scale": 1
+    },
+    {
+      "part": "Grit lead melody",
+      "start": 112,
+      "bars": 8,
+      "transpose": 0,
+      "scale": 1
+    },
+    {
+      "part": "Low brass melody",
+      "start": 112,
+      "bars": 8,
+      "transpose": -12,
+      "scale": 1
+    }
+  ],
+  "loop": [
+    14.545454545454545,
+    70.19762845849802
+  ],
+  "synths": {
+    "Low drone": "pad",
+    "Grit rhythm": "grit",
+    "Grit lead melody": "gritlead",
+    "Sub bass": "bass"
+  },
+  "space": "cavern",
+  "master_gain": 0.7564976454665885
+}

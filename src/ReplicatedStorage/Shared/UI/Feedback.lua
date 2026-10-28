@@ -203,7 +203,8 @@ end
 local function itemLook(itemName: string): (string, Color3)
 	local definition = ItemDefinitions[itemName]
 
-	local label = (definition and definition.displayName) or itemName
+	-- Most items have no displayName; "CraftingTable" still reads "Crafting Table".
+	local label = (definition and definition.displayName) or (string.gsub(itemName, "(%l)(%u)", "%1 %2"))
 	local color = Theme.rarityColor(definition and definition.rarity)
 
 	return label, color

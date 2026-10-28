@@ -31,6 +31,7 @@ local StructureConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("Str
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
 local GroundDrops = require(ServerScriptService:WaitForChild("GroundDrops"))
+local TutorialService = require(ServerScriptService:WaitForChild("TutorialService"))
 
 local RequestHarvest = Remotes.ensure("RequestHarvest", "RemoteEvent")
 
@@ -122,7 +123,7 @@ for _, def in ipairs(StructureConfig.Definitions) do
 	if def.tag and def.harvest and ItemDefinitions[def.harvest.item] then
 		-- The health lives beside the harvest rules rather than in them: it is
 		-- a property of the structure, and StructureConfig declares it there.
-		rulesByTag[def.tag] = { harvest = def.harvest, health = def.health }
+		rulesByTag[def.tag] = { tag = def.tag, harvest = def.harvest, health = def.health }
 	elseif def.harvest then
 		warn(string.format(
 			"[HarvestServer] '%s' declares harvest but is missing a tag or a known item; ignored.",
@@ -357,6 +358,9 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 		tags come off so nothing else can find it either.
 	]]
 	model:SetAttribute("Felled", true)
+	if spec.tag == "TreePart" then
+		TutorialService.TreeFelled(player)
+	end
 	for _, descendant in ipairs(model:GetDescendants()) do
 		if descendant:IsA("BasePart") then
 			for tag in pairs(rulesByTag) do
@@ -369,12 +373,15 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 
 	fell(model, hrp.Position)
 
-	-- On the chopper's side of the trunk, a step out from it: straight down
-	-- from the trunk would leave the wood floating inside the falling tree.
+	-- On the chopper's side of the trunk, a few studs short of the chopper:
+	-- straight down from the trunk would leave the wood floating inside the
+	-- falling tree, and a tree's part is its whole canopy, so "a step out from
+	-- the trunk" could still be well outside the pickup radius of somebody
+	-- chopping from arm's length.
 	local where = target.Position
 	local toward = (hrp.Position - where) * Vector3.new(1, 0, 1)
 	if toward.Magnitude > 0.1 then
-		where += toward.Unit * 3
+		where += toward.Unit * math.max(3, toward.Magnitude - 3)
 	end
 
 	GroundDrops.spawn(rules.item, amount, where, player)

@@ -11,9 +11,9 @@
 	belongs to StarterPlayerScripts rather than to a module somebody might
 	require for an unrelated reason.
 
-	Music.DefaultVolume is 0, so this makes no sound. It creates the Sound and
-	connects the track-advance handler, so a track is ready the moment the
-	player raises the slider.
+	The first track arrives a few seconds after joining, then the soundtrack
+	runs itself: tracks with silence between them, and boss themes when a fight
+	starts. See Shared.Audio.Music.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")

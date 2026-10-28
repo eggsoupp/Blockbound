@@ -82,6 +82,19 @@ function MenuState.requestOpen(name)
 	MenuState.OpenRequested:Fire(name)
 end
 
+--[[
+	The other half: "please close this menu", for the same kind of caller.
+
+	Used by StarterPlayerScripts.TutorialClient, whose ability choice sits in
+	the Tab menu and has a button to carry on - the only way out of it for a
+	player with no Tab key to press.
+]]
+MenuState.CloseRequested = Signal.new()
+
+function MenuState.requestClose(name)
+	MenuState.CloseRequested:Fire(name)
+end
+
 local openMenus = {}
 local openCount = 0
 

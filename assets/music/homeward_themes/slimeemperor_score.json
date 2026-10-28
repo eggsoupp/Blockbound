@@ -1,0 +1,9947 @@
+{
+  "title": "Royal Jelly",
+  "tempos": [
+    [
+      0,
+      100,
+      "Courtly marimba"
+    ],
+    [
+      16,
+      152,
+      "The Emperor bounces in"
+    ]
+  ],
+  "end": 144,
+  "parts": {
+    "Marimba intro melody": {
+      "channel": 0,
+      "program": 12,
+      "target_rms_db": -26,
+      "pan": 64,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 11.875331843610084,
+      "instrument": "Marimba",
+      "raw_rms_db": -47.69,
+      "expression": 101
+    },
+    "Tuba intro": {
+      "channel": 1,
+      "program": 58,
+      "target_rms_db": -30,
+      "pan": 64,
+      "wet": 0.06,
+      "drums": false,
+      "render_gain": 6.455317374644416,
+      "instrument": "Tuba",
+      "raw_rms_db": -46.15,
+      "expression": 82
+    },
+    "Brass theme melody": {
+      "channel": 2,
+      "program": 61,
+      "target_rms_db": -16,
+      "pan": 64,
+      "wet": 0.08,
+      "drums": false,
+      "render_gain": 23.957996782032623,
+      "instrument": "Brass Section",
+      "raw_rms_db": -45.8,
+      "expression": 127
+    },
+    "High strings melody": {
+      "channel": 3,
+      "program": 48,
+      "target_rms_db": -24,
+      "pan": 76,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 23.365084859445926,
+      "instrument": "Fast Strings",
+      "raw_rms_db": -51.55,
+      "expression": 126
+    },
+    "Trombone counter": {
+      "channel": 4,
+      "program": 57,
+      "target_rms_db": -21,
+      "pan": 52,
+      "wet": 0.08,
+      "drums": false,
+      "render_gain": 15.150668956480944,
+      "instrument": "Trombone",
+      "raw_rms_db": -44.69,
+      "expression": 109
+    },
+    "Bouncing tuba": {
+      "channel": 5,
+      "program": 58,
+      "target_rms_db": -20,
+      "pan": 64,
+      "wet": 0.04,
+      "drums": false,
+      "render_gain": 16.921141969985726,
+      "instrument": "Tuba",
+      "raw_rms_db": -45.54,
+      "expression": 113
+    },
+    "Marimba bounce": {
+      "channel": 6,
+      "program": 12,
+      "target_rms_db": -26,
+      "pan": 40,
+      "wet": 0.07,
+      "drums": false,
+      "render_gain": 10.237620522961365,
+      "instrument": "Marimba",
+      "raw_rms_db": -46.2,
+      "expression": 96
+    },
+    "Pizzicato offbeats": {
+      "channel": 7,
+      "program": 45,
+      "target_rms_db": -28,
+      "pan": 92,
+      "wet": 0.07,
+      "drums": false,
+      "render_gain": 6.066207407091844,
+      "instrument": "Pizzicato Strings",
+      "raw_rms_db": -46.58,
+      "expression": 80
+    },
+    "Timpani": {
+      "channel": 8,
+      "program": 47,
+      "target_rms_db": -25,
+      "pan": 64,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 4.094963109537708,
+      "instrument": "Timpani",
+      "raw_rms_db": -40.3,
+      "expression": 70
+    },
+    "Drum kit": {
+      "channel": 9,
+      "program": 0,
+      "target_rms_db": -22,
+      "pan": 64,
+      "wet": 0.03,
+      "drums": true,
+      "render_gain": 4.506092286498534,
+      "instrument": "Standard 1",
+      "raw_rms_db": -35.96,
+      "expression": 73
+    }
+  },
+  "events": [
+    {
+      "part": "Marimba intro melody",
+      "beat": 0,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 77
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 1,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 1.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 2.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 73
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 3.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 3.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 4,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 75
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 5.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 6.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 8,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 78
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 9,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 69
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 9.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 10.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 74
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 11.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 11.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 71
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 12,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 76
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 13.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Marimba intro melody",
+      "beat": 14.0,
+      "pitch": 62,
+      "length": 0.935,
+      "velocity": 69
+    },
+    {
+      "part": "Tuba intro",
+      "beat": 0,
+      "pitch": 40,
+      "length": 1.8,
+      "velocity": 58
+    },
+    {
+      "part": "Tuba intro",
+      "beat": 2,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 52
+    },
+    {
+      "part": "Tuba intro",
+      "beat": 4,
+      "pitch": 36,
+      "length": 1.8,
+      "velocity": 58
+    },
+    {
+      "part": "Tuba intro",
+      "beat": 6,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 52
+    },
+    {
+      "part": "Tuba intro",
+      "beat": 8,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 58
+    },
+    {
+      "part": "Tuba intro",
+      "beat": 10,
+      "pitch": 50,
+      "length": 1.8,
+      "velocity": 52
+    },
+    {
+      "part": "Tuba intro",
+      "beat": 12,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 58
+    },
+    {
+      "part": "Tuba intro",
+      "beat": 14,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 52
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 16,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 17.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 18,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 19,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 19.5,
+      "pitch": 52,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 16.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 16.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 17.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 17.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 18.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 18.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 19.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 19.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 16.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 16.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 17.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 17.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 18.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 18.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 19.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 19.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 16,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 20,
+      "pitch": 36,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 21.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 22,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 23,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 23.5,
+      "pitch": 48,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 20.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 20.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 21.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 21.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 22.0,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 22.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 23.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 23.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 20.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 20.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 21.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 21.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 22.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 22.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 23.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 23.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 20,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 24,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 25.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 26,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 27,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 27.5,
+      "pitch": 55,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 24.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 24.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 25.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 25.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 26.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 26.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 27.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 27.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 24.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 24.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 25.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 25.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 26.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 26.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 27.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 27.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 24,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 28,
+      "pitch": 38,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 29.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 30,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 31,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 31.5,
+      "pitch": 50,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 28.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 28.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 29.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 29.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 30.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 30.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 31.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 31.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 28.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 28.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 29.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 29.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 30.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 30.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 31.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 31.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 28,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 32,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 33.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 34,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 35,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 35.5,
+      "pitch": 52,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 32.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 32.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 33.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 33.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 34.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 34.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 35.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 35.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 32.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 32.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 33.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 33.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 34.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 34.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 35.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 35.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 32,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 36,
+      "pitch": 36,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 37.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 38,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 39,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 39.5,
+      "pitch": 48,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 36.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 36.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 37.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 37.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 38.0,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 38.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 39.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 39.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 36.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 36.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 37.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 37.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 38.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 38.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 39.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 39.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 36,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 40,
+      "pitch": 38,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 41.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 42,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 43,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 43.5,
+      "pitch": 50,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 40.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 40.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 41.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 41.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 42.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 42.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 43.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 43.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 40.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 40.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 41.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 41.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 42.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 42.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 43.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 43.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 40,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 44,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 45.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 46,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 47,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 47.5,
+      "pitch": 55,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 44.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 44.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 45.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 45.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 46.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 46.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 47.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 47.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 44.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 44.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 45.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 45.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 46.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 46.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 47.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 47.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 44,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 46.0,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 60
+    },
+    {
+      "part": "Timpani",
+      "beat": 46.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 65
+    },
+    {
+      "part": "Timpani",
+      "beat": 46.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Timpani",
+      "beat": 46.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 75
+    },
+    {
+      "part": "Timpani",
+      "beat": 47.0,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 80
+    },
+    {
+      "part": "Timpani",
+      "beat": 47.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 85
+    },
+    {
+      "part": "Timpani",
+      "beat": 47.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 90
+    },
+    {
+      "part": "Timpani",
+      "beat": 47.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 95
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 48,
+      "pitch": 36,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 49.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 50,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 51,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 51.5,
+      "pitch": 48,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 48.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 48.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 49.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 49.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 50.0,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 50.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 51.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 51.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 48.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 48.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 49.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 49.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 50.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 50.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 51.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 51.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 48,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 52,
+      "pitch": 38,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 53.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 54,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 55,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 55.5,
+      "pitch": 50,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 52.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 52.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 53.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 53.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 54.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 54.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 55.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 55.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 52.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 52.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 53.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 53.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 54.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 54.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 55.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 55.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 52,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 56,
+      "pitch": 35,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 57.5,
+      "pitch": 47,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 58,
+      "pitch": 42,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 59,
+      "pitch": 35,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 59.5,
+      "pitch": 47,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 56.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 56.5,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 57.0,
+      "pitch": 86,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 57.5,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 58.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 58.5,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 59.0,
+      "pitch": 86,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 59.5,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 56.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 56.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 57.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 57.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 58.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 58.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 59.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 59.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 56,
+      "pitch": 47,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 60,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 61.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 62,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 63,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 63.5,
+      "pitch": 52,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 60.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 60.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 61.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 61.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 62.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 62.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 63.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 63.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 60.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 60.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 61.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 61.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 62.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 62.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 63.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 63.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 60,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 64,
+      "pitch": 36,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 65.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 66,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 67,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 67.5,
+      "pitch": 48,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 64.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 64.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 65.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 65.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 66.0,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 66.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 67.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 67.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 64.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 64.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 65.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 65.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 66.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 66.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 67.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 67.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 64,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 68,
+      "pitch": 38,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 69.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 70,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 71,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 71.5,
+      "pitch": 50,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 68.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 68.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 69.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 69.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 70.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 70.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 71.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 71.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 68.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 68.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 69.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 69.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 70.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 70.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 71.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 71.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 68,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 72,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 73.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 74,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 75,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 75.5,
+      "pitch": 55,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 72.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 72.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 73.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 73.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 74.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 74.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 75.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 75.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 72.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 72.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 73.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 73.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 74.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 74.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 75.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 75.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 72,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 76,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 77.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 78,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 79,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 79.5,
+      "pitch": 55,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 76.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 76.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 77.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 77.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 78.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 78.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 79.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 79.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 76.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 76.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 77.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 77.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 78.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 78.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 79.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 79.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 76,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 78.0,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 60
+    },
+    {
+      "part": "Timpani",
+      "beat": 78.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 65
+    },
+    {
+      "part": "Timpani",
+      "beat": 78.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Timpani",
+      "beat": 78.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 75
+    },
+    {
+      "part": "Timpani",
+      "beat": 79.0,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 80
+    },
+    {
+      "part": "Timpani",
+      "beat": 79.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 85
+    },
+    {
+      "part": "Timpani",
+      "beat": 79.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 90
+    },
+    {
+      "part": "Timpani",
+      "beat": 79.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 95
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 80,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 81.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 82,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 83,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 83.5,
+      "pitch": 52,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 80.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 80.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 81.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 81.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 82.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 82.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 83.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 83.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 80.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 80.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 81.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 81.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 82.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 82.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 83.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 83.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 80,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 84,
+      "pitch": 36,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 85.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 86,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 87,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 87.5,
+      "pitch": 48,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 84.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 84.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 85.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 85.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 86.0,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 86.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 87.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 87.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 84.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 84.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 85.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 85.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 86.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 86.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 87.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 87.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 84,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 88,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 89.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 90,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 91,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 91.5,
+      "pitch": 55,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 88.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 88.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 89.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 89.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 90.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 90.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 91.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 91.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 88.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 88.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 89.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 89.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 90.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 90.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 91.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 91.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 88,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 92,
+      "pitch": 38,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 93.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 94,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 95,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 95.5,
+      "pitch": 50,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 92.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 92.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 93.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 93.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 94.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 94.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 95.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 95.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 92.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 92.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 93.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 93.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 94.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 94.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 95.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 95.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 92,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 96,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 97.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 98,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 99,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 99.5,
+      "pitch": 52,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 96.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 96.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 97.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 97.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 98.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 98.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 99.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 99.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 96.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 96.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 97.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 97.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 98.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 98.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 99.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 99.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 96,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 100,
+      "pitch": 36,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 101.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 102,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 103,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 103.5,
+      "pitch": 48,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 100.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 100.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 101.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 101.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 102.0,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 102.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 103.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 103.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 100.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 100.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 101.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 101.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 102.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 102.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 103.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 103.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 100,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 104,
+      "pitch": 38,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 105.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 106,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 107,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 107.5,
+      "pitch": 50,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 104.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 104.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 105.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 105.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 106.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 106.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 107.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 107.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 104.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 104.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 105.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 105.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 106.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 106.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 107.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 107.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 104,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 108,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 109.5,
+      "pitch": 55,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 110,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 111,
+      "pitch": 43,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 111.5,
+      "pitch": 55,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 108.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 108.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 109.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 109.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 110.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 110.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 111.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 111.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 108.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 108.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 109.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 109.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 110.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 110.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 111.5,
+      "pitch": 59,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 111.5,
+      "pitch": 62,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 108,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 110.0,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 60
+    },
+    {
+      "part": "Timpani",
+      "beat": 110.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 65
+    },
+    {
+      "part": "Timpani",
+      "beat": 110.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Timpani",
+      "beat": 110.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 75
+    },
+    {
+      "part": "Timpani",
+      "beat": 111.0,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 80
+    },
+    {
+      "part": "Timpani",
+      "beat": 111.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 85
+    },
+    {
+      "part": "Timpani",
+      "beat": 111.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 90
+    },
+    {
+      "part": "Timpani",
+      "beat": 111.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 95
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 112,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 113.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 114,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 115,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 115.5,
+      "pitch": 52,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 112.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 114.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 112.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 112.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 113.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 113.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 114.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 114.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 115.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 115.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 112.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 112.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 113.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 113.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 114.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 114.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 115.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 115.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 112,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 112,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 114.5,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 112,
+      "pitch": 67,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 114.5,
+      "pitch": 67,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 112,
+      "pitch": 71,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 114.5,
+      "pitch": 71,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 116,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 117.5,
+      "pitch": 52,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 118,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 119,
+      "pitch": 40,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 119.5,
+      "pitch": 52,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 116.75,
+      "pitch": 52,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 118.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 116.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 116.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 117.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 117.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 118.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 118.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 119.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 119.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 116.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 116.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 117.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 117.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 118.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 118.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 119.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 119.5,
+      "pitch": 71,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 116,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 116,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 118.5,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 116,
+      "pitch": 67,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 118.5,
+      "pitch": 67,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 116,
+      "pitch": 71,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 118.5,
+      "pitch": 71,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 120,
+      "pitch": 36,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 121.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 122,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 123,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 123.5,
+      "pitch": 48,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 120.75,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 122.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 120.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 120.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 121.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 121.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 122.0,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 122.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 123.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 123.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 120.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 120.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 121.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 121.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 122.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 122.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 123.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 123.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 120,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 120,
+      "pitch": 60,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 122.5,
+      "pitch": 60,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 120,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 122.5,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 120,
+      "pitch": 67,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 122.5,
+      "pitch": 67,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 124,
+      "pitch": 36,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 125.5,
+      "pitch": 48,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 126,
+      "pitch": 43,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 127,
+      "pitch": 36,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 127.5,
+      "pitch": 48,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 124.75,
+      "pitch": 48,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 126.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 124.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 124.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 125.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 125.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 126.0,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 126.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 127.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 127.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 124.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 124.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 125.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 125.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 126.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 126.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 127.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 127.5,
+      "pitch": 67,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 124,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 124,
+      "pitch": 60,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 126.5,
+      "pitch": 60,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 124,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 126.5,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 124,
+      "pitch": 67,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 126.5,
+      "pitch": 67,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 128,
+      "pitch": 33,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 129.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 130,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 131,
+      "pitch": 33,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 131.5,
+      "pitch": 45,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 128.75,
+      "pitch": 45,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 130.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 128.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 128.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 129.0,
+      "pitch": 84,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 129.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 130.0,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 130.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 131.0,
+      "pitch": 84,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 131.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 128.5,
+      "pitch": 60,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 128.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 129.5,
+      "pitch": 60,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 129.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 130.5,
+      "pitch": 60,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 130.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 131.5,
+      "pitch": 60,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 131.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 128,
+      "pitch": 45,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 128,
+      "pitch": 57,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 130.5,
+      "pitch": 57,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 128,
+      "pitch": 60,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 130.5,
+      "pitch": 60,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 128,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 130.5,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 132,
+      "pitch": 33,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 133.5,
+      "pitch": 45,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 134,
+      "pitch": 40,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 135,
+      "pitch": 33,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 135.5,
+      "pitch": 45,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 132.75,
+      "pitch": 45,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 134.75,
+      "pitch": 40,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 132.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 132.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 133.0,
+      "pitch": 84,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 133.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 134.0,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 134.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 135.0,
+      "pitch": 84,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 135.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 132.5,
+      "pitch": 60,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 132.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 133.5,
+      "pitch": 60,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 133.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 134.5,
+      "pitch": 60,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 134.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 135.5,
+      "pitch": 60,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 135.5,
+      "pitch": 64,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 132,
+      "pitch": 45,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 132,
+      "pitch": 57,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 134.5,
+      "pitch": 57,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 132,
+      "pitch": 60,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 134.5,
+      "pitch": 60,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 132,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 134.5,
+      "pitch": 64,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 136,
+      "pitch": 38,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 137.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 138,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 139,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 139.5,
+      "pitch": 50,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 136.75,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 138.75,
+      "pitch": 45,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 136.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 136.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 137.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 137.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 138.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 138.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 139.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 139.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 136.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 136.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 137.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 137.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 138.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 138.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 139.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 139.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 136,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 92
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 136,
+      "pitch": 62,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 138.5,
+      "pitch": 62,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 136,
+      "pitch": 66,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 138.5,
+      "pitch": 66,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 136,
+      "pitch": 69,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 138.5,
+      "pitch": 69,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 140,
+      "pitch": 38,
+      "length": 0.45,
+      "velocity": 98
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 141.5,
+      "pitch": 50,
+      "length": 0.4,
+      "velocity": 84
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 142,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 143,
+      "pitch": 38,
+      "length": 0.4,
+      "velocity": 90
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 143.5,
+      "pitch": 50,
+      "length": 0.35,
+      "velocity": 80
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 140.75,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Bouncing tuba",
+      "beat": 142.75,
+      "pitch": 45,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 140.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 140.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 141.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 141.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 142.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 142.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 143.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Marimba bounce",
+      "beat": 143.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 140.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 140.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 141.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 141.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 142.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 142.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 143.5,
+      "pitch": 66,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Pizzicato offbeats",
+      "beat": 143.5,
+      "pitch": 69,
+      "length": 0.2,
+      "velocity": 56
+    },
+    {
+      "part": "Timpani",
+      "beat": 140,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 142.0,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 60
+    },
+    {
+      "part": "Timpani",
+      "beat": 142.25,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 65
+    },
+    {
+      "part": "Timpani",
+      "beat": 142.5,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 70
+    },
+    {
+      "part": "Timpani",
+      "beat": 142.75,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 75
+    },
+    {
+      "part": "Timpani",
+      "beat": 143.0,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 80
+    },
+    {
+      "part": "Timpani",
+      "beat": 143.25,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 85
+    },
+    {
+      "part": "Timpani",
+      "beat": 143.5,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 90
+    },
+    {
+      "part": "Timpani",
+      "beat": 143.75,
+      "pitch": 50,
+      "length": 0.2,
+      "velocity": 95
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 140,
+      "pitch": 62,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 142.5,
+      "pitch": 62,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 140,
+      "pitch": 66,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 142.5,
+      "pitch": 66,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 140,
+      "pitch": 69,
+      "length": 0.3,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 142.5,
+      "pitch": 69,
+      "length": 0.3,
+      "velocity": 78
+    },
+    {
+      "part": "Drum kit",
+      "beat": 16,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 16.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 16,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 110
+    },
+    {
+      "part": "Drum kit",
+      "beat": 16.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 17,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 17.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 17.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 18,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 18.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 18.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 19,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 19.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 19.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 20,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 20.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 20.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 21,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 21.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 21.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 22,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 22.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 22.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 23,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 23.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 23.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 24,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 24.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 24.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 25,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 25.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 25.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 26,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 26.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 26.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 27,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 27.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 27.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 28,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 28.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 28.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 29,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 29.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 29.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 30,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 30.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 30.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 31,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 31.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 31.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 32,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 32.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 32.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 33,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 33.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 33.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 34,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 34.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 34.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 35,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 35.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 35.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 36,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 36.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 36.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 37,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 37.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 37.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 38,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 38.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 38.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 39,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 39.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 39.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 40,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 40.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 40.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 41,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 41.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 41.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 42,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 42.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 42.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 43,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 43.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 43.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 44,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 44.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 44.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 45,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 45.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 45.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 46,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 46.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 46.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 46.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 96
+    },
+    {
+      "part": "Drum kit",
+      "beat": 46.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 100
+    },
+    {
+      "part": "Drum kit",
+      "beat": 47,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 47.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 47.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Drum kit",
+      "beat": 47.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 47.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 47.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 47.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Drum kit",
+      "beat": 48,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 48.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 48,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 110
+    },
+    {
+      "part": "Drum kit",
+      "beat": 48.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 49,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 49.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 49.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 50,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 50.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 50.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 51,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 51.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 51.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 52,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 52.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 52.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 53,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 53.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 53.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 54,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 54.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 54.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 55,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 55.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 55.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 56,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 56.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 56.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 57,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 57.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 57.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 58,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 58.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 58.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 59,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 59.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 59.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 60,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 60.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 60.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 61,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 61.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 61.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 62,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 62.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 62.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 63,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 63.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 63.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 64,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 64.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 64.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 65,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 65.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 65.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 66,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 66.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 66.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 67,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 67.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 67.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 68,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 68.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 68.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 69,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 69.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 69.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 70,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 70.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 70.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 71,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 71.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 71.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 72,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 72.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 72.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 73,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 73.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 73.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 74,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 74.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 74.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 75,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 75.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 75.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 76,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 76.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 76.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 77,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 77.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 77.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 78,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 78.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 78.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 78.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 96
+    },
+    {
+      "part": "Drum kit",
+      "beat": 78.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 100
+    },
+    {
+      "part": "Drum kit",
+      "beat": 79,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 79.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 79.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Drum kit",
+      "beat": 79.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 79.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 79.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 79.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Drum kit",
+      "beat": 80,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 80.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 80,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 110
+    },
+    {
+      "part": "Drum kit",
+      "beat": 80.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 81,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 81.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 81.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 82,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 82.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 82.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 83,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 83.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 83.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 84,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 84.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 84.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 85,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 85.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 85.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 86,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 86.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 86.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 87,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 87.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 87.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 88,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 88.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 88.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 89,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 89.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 89.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 90,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 90.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 90.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 91,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 91.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 91.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 92,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 92.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 92.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 93,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 93.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 93.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 94,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 94.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 94.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 95,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 95.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 95.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 96,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 96.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 96.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 97,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 97.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 97.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 98,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 98.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 98.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 99,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 99.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 99.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 100,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 100.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 100.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 101,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 101.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 101.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 102,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 102.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 102.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 103,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 103.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 103.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 104,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 104.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 104.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 105,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 105.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 105.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 106,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 106.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 106.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 107,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 107.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 107.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 108,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 108.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 108.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 109,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 109.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 109.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 110,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 110.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 110.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 110.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 96
+    },
+    {
+      "part": "Drum kit",
+      "beat": 110.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 100
+    },
+    {
+      "part": "Drum kit",
+      "beat": 111,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 111.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 111.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Drum kit",
+      "beat": 111.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 111.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 111.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 111.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Drum kit",
+      "beat": 112,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 112.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 112,
+      "pitch": 49,
+      "length": 0.9,
+      "velocity": 110
+    },
+    {
+      "part": "Drum kit",
+      "beat": 112.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 113,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 113.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 113.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 114,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 114.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 114.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 114.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 115,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 115.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 115.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 115.5,
+      "pitch": 46,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Drum kit",
+      "beat": 116,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 116.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 116.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 117,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 117.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 117.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 118,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 118.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 118.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 118.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 119,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 119.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 119.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 119.5,
+      "pitch": 46,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Drum kit",
+      "beat": 120,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 120.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 120.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 121,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 121.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 121.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 122,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 122.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 122.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 122.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 123,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 123.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 123.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 123.5,
+      "pitch": 46,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Drum kit",
+      "beat": 124,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 124.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 124.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 125,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 125.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 125.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 126,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 126.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 126.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 126.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 127,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 127.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 127.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 127.5,
+      "pitch": 46,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Drum kit",
+      "beat": 128,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 128.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 128.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 129,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 129.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 129.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 130,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 130.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 130.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 130.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 131,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 131.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 131.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 131.5,
+      "pitch": 46,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Drum kit",
+      "beat": 132,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 132.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 132.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 133,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 133.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 133.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 134,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 134.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 134.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 134.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 135,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 135.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 135.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 135.5,
+      "pitch": 46,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Drum kit",
+      "beat": 136,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 136.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 136.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 137,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 137.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 137.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 138,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 138.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 138.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 138.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 139,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 139.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 139.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 139.5,
+      "pitch": 46,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Drum kit",
+      "beat": 140,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 140.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 140.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 141,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 141.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 141.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 142,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 142.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 142.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 142.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 142.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 96
+    },
+    {
+      "part": "Drum kit",
+      "beat": 142.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 100
+    },
+    {
+      "part": "Drum kit",
+      "beat": 143,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 143.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 70
+    },
+    {
+      "part": "Drum kit",
+      "beat": 143.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Drum kit",
+      "beat": 143.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Drum kit",
+      "beat": 143.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 54
+    },
+    {
+      "part": "Drum kit",
+      "beat": 143.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Drum kit",
+      "beat": 143.5,
+      "pitch": 46,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Drum kit",
+      "beat": 143.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 16,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 87
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 17,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 17.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 18.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 83
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 19.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 75
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 19.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 20,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 85
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 21.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 22.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 80
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 24,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 88
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 25,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 25.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 26.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 27.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 27.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 28,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 86
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 29.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 30.0,
+      "pitch": 62,
+      "length": 0.935,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 32,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 88
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 33,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 33.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 34.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 35.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 83
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 35.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 88
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 36,
+      "pitch": 76,
+      "length": 1.435,
+      "velocity": 92
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 37.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 83
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 38.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 38.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 39.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 81
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 40,
+      "pitch": 69,
+      "length": 0.935,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 41,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 82
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 41.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 42.0,
+      "pitch": 66,
+      "length": 0.935,
+      "velocity": 80
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 43.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 43.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 44,
+      "pitch": 67,
+      "length": 2.935,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 80,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 89
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 81,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 81.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 82.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 85
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 83.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 83.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 82
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 84,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 87
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 85.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 86.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 82
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 88,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 90
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 89,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 89.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 90.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 86
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 91.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 91.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 83
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 92,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 88
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 93.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 94.0,
+      "pitch": 62,
+      "length": 0.935,
+      "velocity": 81
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 96,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 90
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 97,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 81
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 97.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 98.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 86
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 99.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 85
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 99.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 90
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 100,
+      "pitch": 76,
+      "length": 1.435,
+      "velocity": 94
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 101.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 85
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 102.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 82
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 102.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 103.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 83
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 104,
+      "pitch": 69,
+      "length": 0.935,
+      "velocity": 86
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 105,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 84
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 105.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 106.0,
+      "pitch": 66,
+      "length": 0.935,
+      "velocity": 82
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 107.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 75
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 107.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 108,
+      "pitch": 67,
+      "length": 2.935,
+      "velocity": 86
+    },
+    {
+      "part": "High strings melody",
+      "beat": 80,
+      "pitch": 83,
+      "length": 0.935,
+      "velocity": 77
+    },
+    {
+      "part": "High strings melody",
+      "beat": 81,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "High strings melody",
+      "beat": 81.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "High strings melody",
+      "beat": 82.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 73
+    },
+    {
+      "part": "High strings melody",
+      "beat": 83.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "High strings melody",
+      "beat": 83.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "High strings melody",
+      "beat": 84,
+      "pitch": 81,
+      "length": 1.435,
+      "velocity": 75
+    },
+    {
+      "part": "High strings melody",
+      "beat": 85.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "High strings melody",
+      "beat": 86.0,
+      "pitch": 76,
+      "length": 0.935,
+      "velocity": 70
+    },
+    {
+      "part": "High strings melody",
+      "beat": 88,
+      "pitch": 83,
+      "length": 0.935,
+      "velocity": 78
+    },
+    {
+      "part": "High strings melody",
+      "beat": 89,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 69
+    },
+    {
+      "part": "High strings melody",
+      "beat": 89.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "High strings melody",
+      "beat": 90.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 74
+    },
+    {
+      "part": "High strings melody",
+      "beat": 91.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "High strings melody",
+      "beat": 91.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 71
+    },
+    {
+      "part": "High strings melody",
+      "beat": 92,
+      "pitch": 81,
+      "length": 1.435,
+      "velocity": 76
+    },
+    {
+      "part": "High strings melody",
+      "beat": 93.5,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "High strings melody",
+      "beat": 94.0,
+      "pitch": 74,
+      "length": 0.935,
+      "velocity": 69
+    },
+    {
+      "part": "High strings melody",
+      "beat": 96,
+      "pitch": 83,
+      "length": 0.935,
+      "velocity": 78
+    },
+    {
+      "part": "High strings melody",
+      "beat": 97,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 69
+    },
+    {
+      "part": "High strings melody",
+      "beat": 97.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "High strings melody",
+      "beat": 98.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 74
+    },
+    {
+      "part": "High strings melody",
+      "beat": 99.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "High strings melody",
+      "beat": 99.5,
+      "pitch": 86,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "High strings melody",
+      "beat": 100,
+      "pitch": 88,
+      "length": 1.435,
+      "velocity": 82
+    },
+    {
+      "part": "High strings melody",
+      "beat": 101.5,
+      "pitch": 86,
+      "length": 0.45,
+      "velocity": 73
+    },
+    {
+      "part": "High strings melody",
+      "beat": 102.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "High strings melody",
+      "beat": 102.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "High strings melody",
+      "beat": 103.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 71
+    },
+    {
+      "part": "High strings melody",
+      "beat": 104,
+      "pitch": 81,
+      "length": 0.935,
+      "velocity": 74
+    },
+    {
+      "part": "High strings melody",
+      "beat": 105,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 72
+    },
+    {
+      "part": "High strings melody",
+      "beat": 105.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "High strings melody",
+      "beat": 106.0,
+      "pitch": 78,
+      "length": 0.935,
+      "velocity": 70
+    },
+    {
+      "part": "High strings melody",
+      "beat": 107.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "High strings melody",
+      "beat": 107.5,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "High strings melody",
+      "beat": 108,
+      "pitch": 79,
+      "length": 2.935,
+      "velocity": 74
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 64,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 73
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 65,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 65.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 66.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 69
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 67.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 67.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 68,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 71
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 69.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Brass theme melody",
+      "beat": 70.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 66
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 48,
+      "pitch": 60,
+      "length": 1.45,
+      "velocity": 76
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 49.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 50,
+      "pitch": 64,
+      "length": 0.95,
+      "velocity": 74
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 51,
+      "pitch": 67,
+      "length": 0.95,
+      "velocity": 74
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 52,
+      "pitch": 66,
+      "length": 1.45,
+      "velocity": 76
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 53.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 54,
+      "pitch": 62,
+      "length": 1.9,
+      "velocity": 72
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 56,
+      "pitch": 59,
+      "length": 1.45,
+      "velocity": 74
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 57.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 58,
+      "pitch": 66,
+      "length": 0.95,
+      "velocity": 72
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 59,
+      "pitch": 64,
+      "length": 0.95,
+      "velocity": 70
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 60,
+      "pitch": 64,
+      "length": 2.9,
+      "velocity": 72
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 64,
+      "pitch": 60,
+      "length": 1.45,
+      "velocity": 76
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 65.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 66,
+      "pitch": 64,
+      "length": 0.95,
+      "velocity": 74
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 67,
+      "pitch": 67,
+      "length": 0.95,
+      "velocity": 74
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 68,
+      "pitch": 66,
+      "length": 1.45,
+      "velocity": 76
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 69.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 70,
+      "pitch": 71,
+      "length": 1.9,
+      "velocity": 76
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 72,
+      "pitch": 67,
+      "length": 1.45,
+      "velocity": 74
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 73.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Trombone counter",
+      "beat": 74,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 74
+    }
+  ],
+  "markers": [
+    [
+      0,
+      "Courtly intro"
+    ],
+    [
+      16,
+      "DROP - the Emperor bounces in"
+    ],
+    [
+      48,
+      "Court dance"
+    ],
+    [
+      80,
+      "Theme returns, strings above"
+    ],
+    [
+      112,
+      "Wobble groove"
+    ],
+    [
+      140,
+      "Turnaround"
+    ]
+  ],
+  "statements": [
+    {
+      "part": "Brass theme melody",
+      "start": 16,
+      "bars": 8,
+      "transpose": 0,
+      "scale": 1
+    },
+    {
+      "part": "Brass theme melody",
+      "start": 80,
+      "bars": 8,
+      "transpose": 0,
+      "scale": 1
+    },
+    {
+      "part": "High strings melody",
+      "start": 80,
+      "bars": 8,
+      "transpose": 12,
+      "scale": 1
+    }
+  ],
+  "loop": [
+    9.6,
+    60.126315789473686
+  ],
+  "synths": {},
+  "space": "room",
+  "master_gain": 0.9825594569696111
+}

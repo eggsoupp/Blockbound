@@ -182,8 +182,11 @@ local function updateItemLabelFromEquipped()
 	if name == lastDisplayedName then return end
 	lastDisplayedName = name
 	if name then
-		itemLabel.Text = name
 		local def = ItemDefinitions[name]
+		-- The item's own name, "Wood Axe", never its id "WoodAxe".
+		itemLabel.Text = if def and type(def.displayName) == "string" and def.displayName ~= ""
+			then def.displayName
+			else (string.gsub(name, "(%l)(%u)", "%1 %2"))
 		local rarity = (def and def.rarity) or "Common"
 		itemLabel.TextColor3 = Theme.rarityColor(rarity)
 		-- A swap reads as a new name arriving rather than a hard text swap.
@@ -657,12 +660,29 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	player:SetAttribute(EQUIPPED_SLOT_ATTRIBUTE, equippedSlot)
 end)
 
+--[[
+	E is also the key of every station's prompt - a crafting table, a chest.
+	While one of those prompts is showing, E is the station's: the prompt and
+	this handler hear the same press in no fixed order, so asking MenuState
+	alone would sometimes open the bag behind the station's window.
+]]
+local stationPromptsShown = {}
+game:GetService("ProximityPromptService").PromptShown:Connect(function(prompt)
+	if prompt:GetAttribute("StationId") and prompt.KeyboardKeyCode == Enum.KeyCode.E then
+		stationPromptsShown[prompt] = true
+		prompt.PromptHidden:Once(function()
+			stationPromptsShown[prompt] = nil
+		end)
+	end
+end)
+
 -- inventory toggle
 UserInputService.InputBegan:Connect(function(input, processed)
 	if processed then return end
-	-- E also triggers crafting-station prompts. Both firing at once is fine, but
-	-- the inventory should not open behind a full-screen menu.
-	if input.KeyCode == Enum.KeyCode.E and not MenuState.isAnyOpen() then
+	-- Not behind a full-screen menu, and not opened while E belongs to a
+	-- station - though an open bag still shuts on it.
+	local stationHasE = next(stationPromptsShown) ~= nil and not inventoryVisible
+	if input.KeyCode == Enum.KeyCode.E and not MenuState.isAnyOpen() and not stationHasE then
 		local now = tick()
 		if now - lastToggleTime >= 0.35 then
 			lastToggleTime = now

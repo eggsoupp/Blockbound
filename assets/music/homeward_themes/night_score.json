@@ -1,0 +1,2396 @@
+{
+  "title": "Under the Stars",
+  "tempos": [
+    [
+      0,
+      72,
+      "Slow night air"
+    ]
+  ],
+  "end": 128,
+  "parts": {
+    "Music box theme fragments": {
+      "channel": 0,
+      "program": 10,
+      "target_rms_db": -23,
+      "pan": 64,
+      "wet": 0.16,
+      "drums": false,
+      "render_gain": 12.969191094934125,
+      "instrument": "Music Box",
+      "raw_rms_db": -48.11,
+      "expression": 98
+    },
+    "Celesta theme fragments": {
+      "channel": 1,
+      "program": 8,
+      "target_rms_db": -26,
+      "pan": 74,
+      "wet": 0.18,
+      "drums": false,
+      "render_gain": 28.245865293180756,
+      "instrument": "Celeste",
+      "raw_rms_db": -56.56,
+      "expression": 127
+    },
+    "Warm pad": {
+      "channel": 2,
+      "program": 89,
+      "target_rms_db": -34,
+      "pan": 64,
+      "wet": 0.25,
+      "drums": false,
+      "render_gain": 2.172213184515537,
+      "instrument": "Warm Pad",
+      "raw_rms_db": -40.73,
+      "expression": 54
+    },
+    "Slow harp": {
+      "channel": 3,
+      "program": 46,
+      "target_rms_db": -34,
+      "pan": 42,
+      "wet": 0.24,
+      "drums": false,
+      "render_gain": 5.58390078470784,
+      "instrument": "Orchestral Harp",
+      "raw_rms_db": -48.93,
+      "expression": 74
+    },
+    "Low strings": {
+      "channel": 4,
+      "program": 49,
+      "target_rms_db": -37,
+      "pan": 86,
+      "wet": 0.22,
+      "drums": false,
+      "render_gain": 4.575137889794211,
+      "instrument": "Slow Strings",
+      "raw_rms_db": -50.2,
+      "expression": 69
+    },
+    "Cello": {
+      "channel": 5,
+      "program": 42,
+      "target_rms_db": -36,
+      "pan": 54,
+      "wet": 0.15,
+      "drums": false,
+      "render_gain": 2.7737868793637763,
+      "instrument": "Cello",
+      "raw_rms_db": -44.86,
+      "expression": 59
+    },
+    "Starlight celesta": {
+      "channel": 6,
+      "program": 8,
+      "target_rms_db": -36,
+      "pan": 50,
+      "wet": 0.3,
+      "drums": false,
+      "render_gain": 12.667366509318322,
+      "instrument": "Celeste",
+      "raw_rms_db": -67.96,
+      "expression": 97
+    }
+  },
+  "events": [
+    {
+      "part": "Warm pad",
+      "beat": 0,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 0,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 0,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 4,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 4,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 4,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Starlight celesta",
+      "beat": 6.5,
+      "pitch": 79,
+      "length": 1.4,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 8,
+      "pitch": 45,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 8,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 8,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 8,
+      "pitch": 45,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 9,
+      "pitch": 57,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 10,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 11,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 12,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 12,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 12,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 12,
+      "pitch": 52,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 13,
+      "pitch": 59,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 14,
+      "pitch": 66,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 15,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Starlight celesta",
+      "beat": 14.5,
+      "pitch": 88,
+      "length": 1.4,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 16,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 16,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 16,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 16,
+      "pitch": 52,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 17,
+      "pitch": 59,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 18,
+      "pitch": 67,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 19,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 16,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 20,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 20,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 20,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 20,
+      "pitch": 48,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 21,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 22,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 23,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 20,
+      "pitch": 36,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 24,
+      "pitch": 45,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 24,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 24,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 24,
+      "pitch": 45,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 25,
+      "pitch": 57,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 26,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 27,
+      "pitch": 72,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 24,
+      "pitch": 33,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 28,
+      "pitch": 42,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 28,
+      "pitch": 51,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 28,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 28,
+      "pitch": 47,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 29,
+      "pitch": 54,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 30,
+      "pitch": 63,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 31,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 28,
+      "pitch": 35,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 32,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 32,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 32,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 32,
+      "pitch": 52,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 33,
+      "pitch": 59,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 34,
+      "pitch": 67,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 35,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 32,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 32,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 32,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 32,
+      "pitch": 71,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 36,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 36,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 36,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 36,
+      "pitch": 48,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 37,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 38,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 39,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 36,
+      "pitch": 36,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 40,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 40,
+      "pitch": 50,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 40,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 40,
+      "pitch": 43,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 41,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 42,
+      "pitch": 62,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 43,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 40,
+      "pitch": 31,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 40,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 40,
+      "pitch": 62,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 40,
+      "pitch": 71,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 44,
+      "pitch": 45,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 44,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 44,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 44,
+      "pitch": 50,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 45,
+      "pitch": 57,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 46,
+      "pitch": 66,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 47,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 44,
+      "pitch": 38,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 48,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 48,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 48,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 48,
+      "pitch": 52,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 49,
+      "pitch": 59,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 50,
+      "pitch": 67,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 51,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 48,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 48,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 48,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 48,
+      "pitch": 71,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 52,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 52,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 52,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 52,
+      "pitch": 48,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 53,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 54,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 55,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 52,
+      "pitch": 36,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 56,
+      "pitch": 45,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 56,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 56,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 56,
+      "pitch": 50,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 57,
+      "pitch": 57,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 58,
+      "pitch": 66,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 59,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 56,
+      "pitch": 38,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 56,
+      "pitch": 57,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 56,
+      "pitch": 66,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 56,
+      "pitch": 69,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 60,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 60,
+      "pitch": 50,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 60,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 60,
+      "pitch": 43,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 61,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 62,
+      "pitch": 62,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 63,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 60,
+      "pitch": 31,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 64,
+      "pitch": 45,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 64,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 64,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 64,
+      "pitch": 45,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 65,
+      "pitch": 57,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 66,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 67,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 64,
+      "pitch": 33,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 64,
+      "pitch": 57,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 64,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 64,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 68,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 68,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 68,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 68,
+      "pitch": 52,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 69,
+      "pitch": 59,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 70,
+      "pitch": 67,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 71,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 68,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Starlight celesta",
+      "beat": 70.5,
+      "pitch": 83,
+      "length": 1.4,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 72,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 72,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 72,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 72,
+      "pitch": 48,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 73,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 74,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 75,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 72,
+      "pitch": 36,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 72,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 72,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 72,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 76,
+      "pitch": 42,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 76,
+      "pitch": 51,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 76,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 76,
+      "pitch": 47,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 77,
+      "pitch": 54,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 78,
+      "pitch": 63,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 79,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 76,
+      "pitch": 35,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Starlight celesta",
+      "beat": 78.5,
+      "pitch": 88,
+      "length": 1.4,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 80,
+      "pitch": 45,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 80,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 80,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 80,
+      "pitch": 45,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 81,
+      "pitch": 57,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 82,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 83,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 80,
+      "pitch": 33,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 80,
+      "pitch": 57,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 80,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 80,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 84,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 84,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 84,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 84,
+      "pitch": 52,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 85,
+      "pitch": 59,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 86,
+      "pitch": 67,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 87,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 84,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Starlight celesta",
+      "beat": 86.5,
+      "pitch": 91,
+      "length": 1.4,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 88,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 88,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 88,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 88,
+      "pitch": 48,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 89,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 90,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 91,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 88,
+      "pitch": 36,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 88,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 88,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 88,
+      "pitch": 71,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 92,
+      "pitch": 42,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 92,
+      "pitch": 51,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 92,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 92,
+      "pitch": 47,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 93,
+      "pitch": 54,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 94,
+      "pitch": 63,
+      "length": 2.6,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 95,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 92,
+      "pitch": 35,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Starlight celesta",
+      "beat": 94.5,
+      "pitch": 83,
+      "length": 1.4,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 96,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 96,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 96,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 96,
+      "pitch": 52,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 97,
+      "pitch": 59,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 98,
+      "pitch": 67,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 99,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 96,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 96,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 96,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 96,
+      "pitch": 71,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 100,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 100,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 100,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 100,
+      "pitch": 48,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 101,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 102,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 103,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 100,
+      "pitch": 36,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 104,
+      "pitch": 45,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 104,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 104,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 104,
+      "pitch": 45,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 105,
+      "pitch": 57,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 106,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 107,
+      "pitch": 72,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 104,
+      "pitch": 33,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Low strings",
+      "beat": 104,
+      "pitch": 57,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 104,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Low strings",
+      "beat": 104,
+      "pitch": 72,
+      "length": 7.9,
+      "velocity": 40
+    },
+    {
+      "part": "Warm pad",
+      "beat": 108,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 108,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Warm pad",
+      "beat": 108,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 43
+    },
+    {
+      "part": "Slow harp",
+      "beat": 108,
+      "pitch": 52,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 109,
+      "pitch": 59,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 110,
+      "pitch": 67,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 111,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 108,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 112,
+      "pitch": 43,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 112,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 112,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 112,
+      "pitch": 48,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 113,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 114,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 115,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 112,
+      "pitch": 36,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 116,
+      "pitch": 45,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 116,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 116,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Slow harp",
+      "beat": 116,
+      "pitch": 45,
+      "length": 2.6,
+      "velocity": 46
+    },
+    {
+      "part": "Slow harp",
+      "beat": 117,
+      "pitch": 57,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 118,
+      "pitch": 64,
+      "length": 2.6,
+      "velocity": 42
+    },
+    {
+      "part": "Slow harp",
+      "beat": 119,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 42
+    },
+    {
+      "part": "Cello",
+      "beat": 116,
+      "pitch": 33,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Starlight celesta",
+      "beat": 118.5,
+      "pitch": 83,
+      "length": 1.4,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 120,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 120,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 120,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 120,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Warm pad",
+      "beat": 124,
+      "pitch": 47,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 124,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Warm pad",
+      "beat": 124,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 38
+    },
+    {
+      "part": "Cello",
+      "beat": 124,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 42
+    },
+    {
+      "part": "Starlight celesta",
+      "beat": 126.5,
+      "pitch": 86,
+      "length": 1.4,
+      "velocity": 38
+    },
+    {
+      "part": "Celesta theme fragments",
+      "beat": 16,
+      "pitch": 83,
+      "length": 1.6,
+      "velocity": 58
+    },
+    {
+      "part": "Celesta theme fragments",
+      "beat": 18,
+      "pitch": 81,
+      "length": 0.7,
+      "velocity": 52
+    },
+    {
+      "part": "Celesta theme fragments",
+      "beat": 19,
+      "pitch": 79,
+      "length": 2.4,
+      "velocity": 55
+    },
+    {
+      "part": "Celesta theme fragments",
+      "beat": 24,
+      "pitch": 81,
+      "length": 1.8,
+      "velocity": 56
+    },
+    {
+      "part": "Celesta theme fragments",
+      "beat": 27,
+      "pitch": 78,
+      "length": 0.9,
+      "velocity": 50
+    },
+    {
+      "part": "Celesta theme fragments",
+      "beat": 29,
+      "pitch": 76,
+      "length": 2.6,
+      "velocity": 54
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 32,
+      "pitch": 83,
+      "length": 0.935,
+      "velocity": 67
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 33,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 58
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 33.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 34.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 63
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 35.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 55
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 35.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 36,
+      "pitch": 81,
+      "length": 1.435,
+      "velocity": 65
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 37.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 57
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 38.0,
+      "pitch": 76,
+      "length": 0.935,
+      "velocity": 60
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 40,
+      "pitch": 83,
+      "length": 0.935,
+      "velocity": 68
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 41,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 59
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 41.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 57
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 42.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 64
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 43.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 43.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 44,
+      "pitch": 81,
+      "length": 1.435,
+      "velocity": 66
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 45.5,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 57
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 46.0,
+      "pitch": 74,
+      "length": 0.935,
+      "velocity": 59
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 48,
+      "pitch": 83,
+      "length": 0.935,
+      "velocity": 68
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 49,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 59
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 49.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 57
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 50.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 64
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 51.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 51.5,
+      "pitch": 86,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 52,
+      "pitch": 88,
+      "length": 1.435,
+      "velocity": 72
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 53.5,
+      "pitch": 86,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 54.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 54.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 55.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 61
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 56,
+      "pitch": 81,
+      "length": 0.935,
+      "velocity": 64
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 57,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 57.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 57
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 58.0,
+      "pitch": 78,
+      "length": 0.935,
+      "velocity": 60
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 59.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 53
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 59.5,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 57
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 60,
+      "pitch": 79,
+      "length": 2.935,
+      "velocity": 64
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 96,
+      "pitch": 83,
+      "length": 2.4,
+      "velocity": 52
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 100,
+      "pitch": 81,
+      "length": 1.4,
+      "velocity": 46
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 102,
+      "pitch": 79,
+      "length": 3,
+      "velocity": 50
+    },
+    {
+      "part": "Music box theme fragments",
+      "beat": 106,
+      "pitch": 76,
+      "length": 3.6,
+      "velocity": 46
+    }
+  ],
+  "markers": [
+    [
+      0,
+      "Dusk - no theme"
+    ],
+    [
+      16,
+      "First stars"
+    ],
+    [
+      32,
+      "Homeward, half-remembered"
+    ],
+    [
+      64,
+      "Night walk - no theme"
+    ],
+    [
+      96,
+      "Fading memory"
+    ],
+    [
+      112,
+      "Before dawn - no theme"
+    ]
+  ],
+  "statements": [
+    {
+      "part": "Music box theme fragments",
+      "start": 32,
+      "bars": 8,
+      "transpose": 12,
+      "scale": 1
+    }
+  ],
+  "theme_absent_sections": [
+    [
+      0,
+      16
+    ],
+    [
+      64,
+      96
+    ],
+    [
+      112,
+      128
+    ]
+  ],
+  "space": {
+    "seconds": 2.4,
+    "decay": 0.55,
+    "predelay": 0.02,
+    "brightness": 24,
+    "seed": 72
+  },
+  "master_gain": 0.8794359282542905
+}

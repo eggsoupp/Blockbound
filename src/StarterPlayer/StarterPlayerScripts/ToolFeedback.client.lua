@@ -9,16 +9,16 @@
 
 	ADDING A SWING IS ADDING AN ID
 
-	  Shared.Tools.ToolConfig.Animations.Weapon = "rbxassetid://123"
+	  Shared.Tools.ToolConfig.Animations.<classification> = "rbxassetid://123"
 
-	and every weapon swings. A single item can overrule its class with
-	`animation` in its own ItemDefinitions entry. No rigging, no per-tool
+	and everything of that class swings. A single item can overrule its class
+	with `animation` in its own ItemDefinitions entry. No rigging, no per-tool
 	script, no server involvement.
 
-	Weapons and axes have none yet. A tool with none still makes its sound and
-	still hits; it simply does not move. Pickaxes do have one, but it is the
-	mining swing and MiningClient plays it - looped while held, timed to the
-	pickaxe's miningSpeed - so this script leaves pickaxes alone.
+	Pickaxes, axes and weapons all have theirs played elsewhere: MiningClient
+	loops the pickaxe's while held, timed to its miningSpeed; HarvestClient
+	swings the axe once per chop; WeaponClient plays a weapon's combo. So in
+	practice this is the swing for anything else held.
 
 	NO PROCEDURAL FALLBACK, DELIBERATELY. Tweening the Tool's Grip needs no
 	asset, which was its appeal - but Grip changes made on a CLIENT do not
@@ -80,10 +80,15 @@ end
 	ChopSeconds, playing the animation and the sound itself, so they match the
 	chops rather than the clicks. A sound here on every click would put the
 	click speed straight back into what the player hears.
+
+	A weapon: WeaponClient plays its combo, one swing and one swoosh per swing
+	of the combo, which is not one per click either.
 ]]
+local OWNED_ELSEWHERE = { Tool = true, Weapon = true }
+
 local function swingOwnedElsewhere(tool)
 	local definition = ItemDefinitions[itemNameFor(tool)]
-	return definition ~= nil and definition.classification == "Tool"
+	return definition ~= nil and OWNED_ELSEWHERE[definition.classification] == true
 end
 
 --[[

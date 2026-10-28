@@ -11,6 +11,10 @@
 	Materials row. Units are studs; the handle is centred on the grip.
 ]]
 
+local RunService = game:GetService("RunService")
+
+local SwingAnimations = require(script.Parent:WaitForChild("SwingAnimations"))
+
 local ToolConfig = {}
 
 --[[
@@ -96,29 +100,68 @@ ToolConfig.ShapeByClassification = {
 ToolConfig.DefaultShape = "Pickaxe"
 
 --[[
-	Swing animation per classification: one rbxassetid, played on the wielder
-	when they click. An item can overrule its class with `animation` in its own
+	Swing animation per classification, played on the wielder: the name of one
+	of Shared.Tools.SwingAnimations' swings (resolved by swingId below), or an
+	rbxassetid. An item can overrule its class with `animation` in its own
 	ItemDefinitions entry.
 
 	The pickaxe's is the mining swing, and it is played differently: not per
 	click by ToolFeedback but by MiningClient, LOOPED for as long as the button
 	is held, at ToolConfig.miningAnimationRate of the pickaxe's miningSpeed.
 
-	The axe ("Tool") uses the same swing, once per chop, played by ToolFeedback
-	like any other click.
+	The axe ("Tool") chops once per StructureConfig.ChopSeconds, played by
+	HarvestClient.
 
-	Weapon is blank - there is no attack swing yet, and an invented id would
-	either fail to load or play something nobody chose. A weapon still makes
-	its sound and still hits; it just does not move. See ToolFeedback for why a
-	procedural swing is not the fallback.
+	Weapon is blank here because a weapon does not have A swing: it has the
+	four-swing combo in Shared.Combat.SwordCombo, played by WeaponClient.
 ]]
 local MINING_SWING = "rbxassetid://95795656805717"
 
 ToolConfig.Animations = {
-	Pickaxe = MINING_SWING,
+	Pickaxe = "PickaxeSwing",
 	Weapon = "",
-	Tool = MINING_SWING,
+	Tool = "AxeChop",
 }
+
+--[[
+	The published Animation for each SwingAnimations swing; "" until it is
+	published (see SwingAnimations, PUBLISHING). Unpublished, Studio plays a
+	preview of it and a live server plays its fallback below, if any.
+]]
+ToolConfig.SwingIds = {
+	SwordSlash1 = "",
+	SwordSlash2 = "",
+	SwordSlash3 = "",
+	SwordSlash4 = "",
+	PickaxeSwing = "",
+	AxeChop = "",
+}
+
+-- What a live server plays for a swing not yet published: the old mining
+-- swing, so a pickaxe and an axe never stop moving. The sword has none.
+ToolConfig.SwingFallbacks = {
+	PickaxeSwing = MINING_SWING,
+	AxeChop = MINING_SWING,
+}
+
+-- The id to play for a SwingAnimations swing: published, else a Studio
+-- preview (client only, which is where animations are played), else the
+-- fallback. nil plays nothing.
+function ToolConfig.swingId(name)
+	local published = ToolConfig.SwingIds[name]
+	if type(published) == "string" and published ~= "" then
+		return published
+	end
+
+	if RunService:IsStudio() and RunService:IsClient() then
+		local preview = SwingAnimations.preview(name)
+		if preview then
+			return preview
+		end
+	end
+
+	return ToolConfig.SwingFallbacks[name]
+end
 
 --[[
 	How a pickaxe's miningSpeed becomes the mining swing's playback rate.
@@ -149,16 +192,23 @@ end
 
 --[[
 	How a held tool is carried while WALKING, played by StarterPlayerScripts.
-	ToolWalk in place of the ordinary walk for as long as the player walks with
-	it out. Weapons go by their ItemDefinitions `weaponClass` (see Shared.Combat.
-	WeaponClasses); a pickaxe, an axe, or anything else held uses Default.
-	Nothing held: the ordinary Roblox walk, untouched.
+	ToolWalk in place of the ordinary walk for as long as the player walks.
+	Weapons go by their ItemDefinitions `weaponClass` (see Shared.Combat.
+	WeaponClasses); a pickaxe, an axe, empty hands or anything else use
+	Default, which is the sword walk.
+
+	The six walks and runs are Shared.Tools.LocomotionAnimations. Each id here
+	is the published Animation for one of them; "" means not published yet, and
+	ToolWalk then previews that gait in Studio and plays nothing in a live
+	server. To publish: Save to Roblox each KeyframeSequence in
+	ServerStorage.LocomotionAnimations, under the group that owns the game.
 ]]
+local SWORD_WALK = "" -- SwordWalk
 ToolConfig.WalkAnimations = {
-	Default = "rbxassetid://107768818175051",
-	Sword = "rbxassetid://89137147173428",
-	HeavySword = "rbxassetid://134341579640714",
-	Lance = "rbxassetid://114635571790712",
+	Default = SWORD_WALK,
+	Sword = SWORD_WALK,
+	HeavySword = "", -- HeavySwordWalk
+	Lance = "", -- LanceWalk
 }
 
 -- The walking speed the walks were made for. Played at (speed / this), so a
@@ -174,16 +224,16 @@ end
 	The same, for SPRINTING with a tool out: ToolWalk plays these in place of the
 	walks once the player is sprinting (spring-crouch-walk raises WalkSpeed past
 	WalkReferenceSpeed) and actually moving at a run. Swords, pickaxes, axes and
-	anything else held share one run; heavy swords and lances have their own.
-	Sprinting empty-handed keeps spring-crouch-walk's own run.
+	anything else (empty hands included) share the sword run; heavy swords and
+	lances have their own. Ids as for WalkAnimations.
 ]]
-local RUN = "rbxassetid://132843119533694"
+local SWORD_RUN = "" -- SwordRun
 
 ToolConfig.RunAnimations = {
-	Default = RUN,
-	Sword = RUN,
-	HeavySword = "rbxassetid://136519978443390",
-	Lance = "rbxassetid://100319399166871",
+	Default = SWORD_RUN,
+	Sword = SWORD_RUN,
+	HeavySword = "", -- HeavySwordRun
+	Lance = "", -- LanceRun
 }
 
 -- The sprinting speed the runs were made for: spring-crouch-walk's RUN_SPEED.
@@ -212,16 +262,20 @@ end
 
 function ToolConfig.animationFor(classification, definition)
 	local own = definition and definition.animation
-	if type(own) == "string" and own ~= "" then
-		return own
+	if type(own) ~= "string" or own == "" then
+		own = ToolConfig.Animations[classification]
 	end
 
-	local shared = ToolConfig.Animations[classification]
-	if type(shared) == "string" and shared ~= "" then
-		return shared
+	if type(own) ~= "string" or own == "" then
+		return nil
 	end
 
-	return nil
+	-- A swing's name rather than an id.
+	if ToolConfig.SwingIds[own] ~= nil then
+		return ToolConfig.swingId(own)
+	end
+
+	return own
 end
 
 -- ---------------------------------------------------------------------------

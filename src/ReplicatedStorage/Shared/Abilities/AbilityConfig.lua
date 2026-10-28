@@ -14,6 +14,10 @@ AbilityConfig.Definitions = {
   displayName="Cataclysm", rarity="Legendary", server="Cataclysm", vfx="CataclysmVFX",
   cooldown=45, manaCost=80, requiresTarget=true, castRange=220, maxConcurrent=1,
  },
+ VoidRend = {
+  displayName="Void Rend", rarity="Epic", server="VoidRend", vfx="VoidRendVFX",
+  cooldown=12, manaCost=30, requiresTarget=false, maxConcurrent=1,
+ },
  Fireball = {
   displayName="Fireball", rarity="Common", server="StarterAbilities", vfx="StarterVFX",
   cooldown=5, manaCost=10, requiresTarget=true, castRange=90, maxConcurrent=1, tuning=Plan.Fireball,
@@ -33,6 +37,50 @@ AbilityConfig.Definitions = {
  BlockWall = {
   displayName="Block Wall", rarity="Common", server="StarterAbilities", vfx="StarterVFX",
   cooldown=10, manaCost=16, requiresTarget=false, maxConcurrent=1, tuning=Plan.BlockWall,
+ },
+ Dawnbreaker = {
+  displayName="Dawnbreaker", rarity="Rare", server="Dawnbreaker", vfx="DawnbreakerVFX",
+  cooldown=10, manaCost=28, requiresTarget=true, castRange=90, maxConcurrent=1,
+ },
+ Deluge = {
+  displayName="Deluge", rarity="Uncommon", server="Deluge", vfx="DelugeVFX",
+  cooldown=9, manaCost=22, requiresTarget=true, castRange=70, maxConcurrent=1,
+ },
+ SkyfallVolley = {
+  displayName="Skyfall Volley", rarity="Epic", server="SkyfallVolley", vfx="SkyfallVFX",
+  cooldown=14, manaCost=35, requiresTarget=true, castRange=80, maxConcurrent=1,
+ },
+ SumiWhirl = {
+  displayName="Sumi Whirl", rarity="Rare", server="SumiWhirl", vfx="SumiVFX",
+  cooldown=8, manaCost=24, requiresTarget=false, maxConcurrent=1,
+ },
+ BlossomRoad = {
+  displayName="Blossom Road", rarity="Rare", server="BlossomRoad", vfx="BlossomVFX",
+  cooldown=12, manaCost=30, requiresTarget=true, castRange=60, maxConcurrent=1,
+ },
+ HeliosLance = {
+  displayName="Helios Lance", rarity="Epic", server="HeliosLance", vfx="HeliosVFX",
+  cooldown=16, manaCost=40, requiresTarget=true, castRange=70, maxConcurrent=1,
+ },
+ AbyssGate = {
+  displayName="Abyss Gate", rarity="Legendary", server="AbyssGate", vfx="AbyssVFX",
+  cooldown=20, manaCost=50, requiresTarget=true, castRange=75, maxConcurrent=1,
+ },
+ AzureComet = {
+  displayName="Azure Comet", rarity="Rare", server="AzureComet", vfx="CometVFX",
+  cooldown=11, manaCost=30, requiresTarget=true, castRange=85, maxConcurrent=1,
+ },
+ Tidecaller = {
+  displayName="Tidecaller", rarity="Uncommon", server="Tidecaller", vfx="TideVFX",
+  cooldown=10, manaCost=22, requiresTarget=false, maxConcurrent=1,
+ },
+ SerpentFlare = {
+  displayName="Serpent Flare", rarity="Epic", server="SerpentFlare", vfx="SerpentVFX",
+  cooldown=14, manaCost=38, requiresTarget=true, castRange=80, maxConcurrent=1,
+ },
+ AstralVerdict = {
+  displayName="Astral Verdict", rarity="Legendary", server="AstralVerdict", vfx="AstralVFX",
+  cooldown=22, manaCost=55, requiresTarget=true, castRange=80, maxConcurrent=1,
  },
 }
 

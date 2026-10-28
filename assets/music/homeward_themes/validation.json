@@ -1,0 +1,113 @@
+[
+  {
+    "slug": "adventure1",
+    "name": "Wide Skies - drifting paths",
+    "description": "Piano fragments emerge from harp and strings; the theme visits once, surrounded by long passages of open harmony.",
+    "version": 2,
+    "duration_seconds": 87.833,
+    "peak_dbfs": -4.57,
+    "rms_dbfs": -21.12,
+    "verified_theme_statements": 1,
+    "midi_notes": 403,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 85.333,
+    "theme_absent_sections_seconds": [
+      [
+        0.0,
+        10.67
+      ],
+      [
+        42.67,
+        64.0
+      ],
+      [
+        74.67,
+        85.33
+      ]
+    ],
+    "theme_absent_duration_seconds": 42.67
+  },
+  {
+    "slug": "adventure2",
+    "name": "The Open Road - wandering onward",
+    "description": "Flute answers and guitar carry a travelling derivative, with extended rhythmic interludes and only one complete theme statement.",
+    "version": 2,
+    "duration_seconds": 76.346,
+    "peak_dbfs": -4.17,
+    "rms_dbfs": -21.14,
+    "verified_theme_statements": 1,
+    "midi_notes": 650,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 73.846,
+    "theme_absent_sections_seconds": [
+      [
+        0.0,
+        4.62
+      ],
+      [
+        13.85,
+        23.08
+      ],
+      [
+        41.54,
+        60.0
+      ],
+      [
+        69.23,
+        73.85
+      ]
+    ],
+    "theme_absent_duration_seconds": 36.92
+  },
+  {
+    "slug": "adventure3",
+    "name": "Islands Above the Clouds - distant lights",
+    "description": "Warm orchestral space, slow horn recollections and a single understated return of the theme.",
+    "version": 2,
+    "duration_seconds": 84.451,
+    "peak_dbfs": -5.35,
+    "rms_dbfs": -21.13,
+    "verified_theme_statements": 1,
+    "midi_notes": 310,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 81.951,
+    "theme_absent_sections_seconds": [
+      [
+        0.0,
+        11.71
+      ],
+      [
+        23.41,
+        46.83
+      ],
+      [
+        76.1,
+        81.95
+      ]
+    ],
+    "theme_absent_duration_seconds": 40.98
+  },
+  {
+    "slug": "allseeingeye",
+    "name": "Allseeingeye",
+    "version": 5,
+    "description": "A wide electronic lead, flowing synth figure, piano countermelody and dark harmony over powerful chopped breaks; quieter piano opening and louder drop.",
+    "duration_seconds": 69.709,
+    "drop_seconds": 10.435,
+    "post_drop_bpm": 186,
+    "peak_dbfs": -1.36,
+    "rms_dbfs": -14.76,
+    "intro_change_db": -4.5,
+    "post_drop_change_db": 2.0,
+    "intro_notes_and_timing_unchanged": true,
+    "verified_theme_statements": 4,
+    "guitar_parts_removed": true,
+    "metallic_parts_absent": true,
+    "music_to_drums_rms_db": 4.8,
+    "backing_to_drums_rms_db": 1.33,
+    "lead_to_drums_rms_db": 1.84,
+    "midi_notes": 2895,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 67.209
+  }
+]

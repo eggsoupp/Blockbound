@@ -108,6 +108,34 @@ EnemyDrops.Tables = {
 		{ item = "Leather", chance = 0.2, min = 1, max = 1 },
 		{ item = "EssenceShard", chance = 0.04, min = 1, max = 1 },
 	},
+
+	-- The voxel creatures. Each drops what it is made of, plus a small chance
+	-- of the shared magic material.
+	Lasereye = {
+		{ item = "Gel", chance = 1, min = 2, max = 3 },
+		{ item = "EssenceShard", chance = 0.12, min = 1, max = 1 },
+	},
+
+	Snowman = {
+		{ item = "Snow", chance = 1, min = 2, max = 4 },
+		{ item = "Coal", chance = 0.6, min = 1, max = 2 },
+		{ item = "Stick", chance = 0.4, min = 1, max = 2 },
+	},
+
+	GreenWasp = {
+		{ item = "Herb", chance = 0.35, min = 1, max = 1 },
+		{ item = "EssenceShard", chance = 0.05, min = 1, max = 1 },
+	},
+
+	Shrike = {
+		{ item = "Leather", chance = 0.6, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.08, min = 1, max = 1 },
+	},
+
+	Cobra = {
+		{ item = "Leather", chance = 0.7, min = 1, max = 2 },
+		{ item = "Herb", chance = 0.2, min = 1, max = 1 },
+	},
 }
 
 --[[

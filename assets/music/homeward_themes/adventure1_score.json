@@ -1,0 +1,2948 @@
+{
+  "title": "Wide Skies - drifting paths",
+  "version": 2,
+  "tempos": [
+    [
+      0,
+      90,
+      "Unhurried"
+    ]
+  ],
+  "end": 128,
+  "parts": {
+    "Piano theme fragments": {
+      "channel": 0,
+      "program": 0,
+      "target_rms_db": -28,
+      "pan": 64,
+      "wet": 0.12,
+      "drums": false,
+      "render_gain": 9.53588132537898,
+      "instrument": "Grand Piano",
+      "raw_rms_db": -50.04,
+      "expression": 127
+    },
+    "Harp": {
+      "channel": 1,
+      "program": 46,
+      "target_rms_db": -29,
+      "pan": 39,
+      "wet": 0.14,
+      "drums": false,
+      "render_gain": 7.010815301255825,
+      "instrument": "Orchestral Harp",
+      "raw_rms_db": -45.91,
+      "expression": 115
+    },
+    "Warm strings": {
+      "channel": 2,
+      "program": 49,
+      "target_rms_db": -31,
+      "pan": 88,
+      "wet": 0.18,
+      "drums": false,
+      "render_gain": 8.022157090140473,
+      "instrument": "Slow Strings",
+      "raw_rms_db": -49.09,
+      "expression": 120
+    },
+    "Acoustic bass": {
+      "channel": 3,
+      "program": 32,
+      "target_rms_db": -32,
+      "pan": 64,
+      "wet": 0.035,
+      "drums": false,
+      "render_gain": 5.645193749713444,
+      "instrument": "Acoustic Bass",
+      "raw_rms_db": -47.03,
+      "expression": 107
+    },
+    "Piano low harmony": {
+      "channel": 4,
+      "program": 0,
+      "target_rms_db": -30,
+      "pan": 52,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 7.511729124757411,
+      "instrument": "Grand Piano",
+      "raw_rms_db": -49.39,
+      "expression": 117
+    }
+  },
+  "events": [
+    {
+      "part": "Harp",
+      "beat": 0,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 0.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 1.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 2.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 3.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 0,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 0,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 0,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 0,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Harp",
+      "beat": 4,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 4.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 5.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 6.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 7.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 4,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 43
+    },
+    {
+      "part": "Harp",
+      "beat": 8,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 8.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 9.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 10.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 11.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 8,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 8,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 8,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 8,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 8,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 8,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 8,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 12,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 12.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 13.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 14.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 15.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 12,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 12,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 12,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 12,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 16,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 16.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 17.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 18.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 19.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 16,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 16,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 16,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 16,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 16,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 16,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 16,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 20,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 20.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 21.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 22.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 23.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 20,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 20,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 20,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 20,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 24,
+      "pitch": 45,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 24.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 25.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 26.5,
+      "pitch": 60,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 27.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 24,
+      "pitch": 33,
+      "length": 3.82,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 24,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 24,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 24,
+      "pitch": 60,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 24,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 24,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 24,
+      "pitch": 60,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 28,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 28.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 29.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 30.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 31.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 28,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 28,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 28,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 28,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 32,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 32.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 33.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 34.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 35.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 32,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 32,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 32,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 32,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 32,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 32,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 32,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 36,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 36.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 37.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 38.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 39.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 36,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 36,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 36,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 36,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 36,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 36,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 36,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 40,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 40.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 41.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 42.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 43.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 40,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 40,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 40,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 40,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 40,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 40,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 40,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 44,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 44.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 45.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 46.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 47.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 44,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 44,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 44,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 44,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 44,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 44,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 44,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 48,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 48.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 49.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 50.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 51.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 48,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 48,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 48,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 48,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 48,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 48,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 48,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 52,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 52.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 53.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 54.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 55.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 52,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 52,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 52,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 52,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 52,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 52,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 52,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 56,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 56.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 57.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 58.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 59.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 56,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 56,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 56,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 56,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 56,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 56,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 56,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 60,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 60.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 61.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 62.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 63.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 60,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 60,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 60,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 60,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 60,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 60,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Warm strings",
+      "beat": 60,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 44
+    },
+    {
+      "part": "Harp",
+      "beat": 64,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 64.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 65.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 66.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 67.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 64,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 64,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 64,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 64,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 64,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 64,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 64,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 68,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 68.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 69.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 70.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 71.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 68,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 68,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 68,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 68,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 72.0,
+      "pitch": 45,
+      "length": 0.44,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 72.5,
+      "pitch": 57,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 73.0,
+      "pitch": 64,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 73.5,
+      "pitch": 60,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 74.0,
+      "pitch": 64,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 74.5,
+      "pitch": 57,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 75.0,
+      "pitch": 60,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 75.5,
+      "pitch": 64,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 72,
+      "pitch": 33,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 72,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 72,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 72,
+      "pitch": 60,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 72,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 72,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 72,
+      "pitch": 60,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 76.0,
+      "pitch": 52,
+      "length": 0.44,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 76.5,
+      "pitch": 59,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 77.0,
+      "pitch": 67,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 77.5,
+      "pitch": 59,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 78.0,
+      "pitch": 67,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 78.5,
+      "pitch": 59,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 79.0,
+      "pitch": 59,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 79.5,
+      "pitch": 67,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 76,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 76,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 76,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 76,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 80.0,
+      "pitch": 48,
+      "length": 0.44,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 80.5,
+      "pitch": 55,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 81.0,
+      "pitch": 64,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 81.5,
+      "pitch": 55,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 82.0,
+      "pitch": 64,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 82.5,
+      "pitch": 55,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 83.0,
+      "pitch": 55,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 83.5,
+      "pitch": 64,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 80,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 80,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 80,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 80,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 80,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 80,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 80,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 84.0,
+      "pitch": 47,
+      "length": 0.44,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 84.5,
+      "pitch": 54,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 85.0,
+      "pitch": 62,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 85.5,
+      "pitch": 54,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 86.0,
+      "pitch": 62,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 86.5,
+      "pitch": 54,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 87.0,
+      "pitch": 54,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 87.5,
+      "pitch": 62,
+      "length": 0.44,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 84,
+      "pitch": 35,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 84,
+      "pitch": 42,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 84,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 84,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 88,
+      "pitch": 45,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 88.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 89.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 90.5,
+      "pitch": 60,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 91.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 88,
+      "pitch": 33,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 88,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 88,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 88,
+      "pitch": 60,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 88,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 88,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 88,
+      "pitch": 60,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 92,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 92.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 93.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 94.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 95.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 92,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 92,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 92,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 92,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 96,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 96.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 97.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 98.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 99.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 96,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 96,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 96,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 96,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 96,
+      "pitch": 47,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 96,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 96,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 100,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 100.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 101.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 102.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 103.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 100,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 100,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 100,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 100,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 104,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 104.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 105.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 106.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 107.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 104,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 104,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 104,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 104,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 104,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 104,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 104,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 108,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 108.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 109.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 110.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 111.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 108,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 108,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 108,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 108,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 112,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 112.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 113.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 114.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 115.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 112,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 112,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 112,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 112,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 112,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 112,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 112,
+      "pitch": 55,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 116,
+      "pitch": 45,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 116.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 117.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 118.5,
+      "pitch": 60,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 119.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 116,
+      "pitch": 33,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 116,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 116,
+      "pitch": 52,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 116,
+      "pitch": 60,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 120,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 120.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 121.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 122.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 123.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 120,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 120,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 120,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Piano low harmony",
+      "beat": 120,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 43
+    },
+    {
+      "part": "Warm strings",
+      "beat": 120,
+      "pitch": 45,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 120,
+      "pitch": 54,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 120,
+      "pitch": 57,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Harp",
+      "beat": 124,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 124.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 125.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 126.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 127.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 124,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 124,
+      "pitch": 43,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 124,
+      "pitch": 50,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Warm strings",
+      "beat": 124,
+      "pitch": 59,
+      "length": 3.86,
+      "velocity": 49
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 16,
+      "pitch": 71,
+      "length": 1.8,
+      "velocity": 70
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 18,
+      "pitch": 69,
+      "length": 0.8,
+      "velocity": 64
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 19,
+      "pitch": 67,
+      "length": 2.5,
+      "velocity": 67
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 22,
+      "pitch": 64,
+      "length": 1.5,
+      "velocity": 62
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 24,
+      "pitch": 69,
+      "length": 2,
+      "velocity": 69
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 27,
+      "pitch": 67,
+      "length": 1,
+      "velocity": 62
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 29,
+      "pitch": 64,
+      "length": 2,
+      "velocity": 64
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 32,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 75
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 33,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 33.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 34.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 71
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 35.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 35.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 36,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 73
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 37.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 38.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 68
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 40,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 76
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 41,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 41.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 42.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 72
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 43.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 43.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 69
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 44,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 74
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 45.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 46.0,
+      "pitch": 62,
+      "length": 0.935,
+      "velocity": 67
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 48,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 76
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 49,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 49.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 50.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 72
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 51.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 71
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 51.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 52,
+      "pitch": 76,
+      "length": 1.435,
+      "velocity": 80
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 53.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 71
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 54.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 54.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 55.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 69
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 56,
+      "pitch": 69,
+      "length": 0.935,
+      "velocity": 72
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 57,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 57.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 58.0,
+      "pitch": 66,
+      "length": 0.935,
+      "velocity": 68
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 59.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 59.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 60,
+      "pitch": 67,
+      "length": 2.935,
+      "velocity": 72
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 96,
+      "pitch": 71,
+      "length": 2,
+      "velocity": 65
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 99,
+      "pitch": 69,
+      "length": 0.8,
+      "velocity": 59
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 100,
+      "pitch": 67,
+      "length": 2,
+      "velocity": 64
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 104,
+      "pitch": 69,
+      "length": 1.5,
+      "velocity": 63
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 106,
+      "pitch": 66,
+      "length": 1.5,
+      "velocity": 58
+    },
+    {
+      "part": "Piano theme fragments",
+      "beat": 108,
+      "pitch": 67,
+      "length": 2.8,
+      "velocity": 65
+    }
+  ],
+  "markers": [
+    [
+      0,
+      "Clouds - no theme"
+    ],
+    [
+      16,
+      "A memory of Homeward"
+    ],
+    [
+      32,
+      "Theme passes through"
+    ],
+    [
+      64,
+      "Drifting paths - no theme"
+    ],
+    [
+      96,
+      "Distant echo"
+    ],
+    [
+      112,
+      "Open sky - no theme"
+    ]
+  ],
+  "statements": [
+    {
+      "part": "Piano theme fragments",
+      "start": 32,
+      "bars": 8,
+      "transpose": 0,
+      "scale": 1
+    }
+  ],
+  "theme_absent_sections": [
+    [
+      0,
+      16
+    ],
+    [
+      64,
+      96
+    ],
+    [
+      112,
+      128
+    ]
+  ],
+  "drum_audio_edits": [],
+  "master_gain": 1.2670768949210534
+}

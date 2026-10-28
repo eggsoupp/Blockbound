@@ -1,0 +1,246 @@
+-- Curated from ReplicatedStorage["assets(VFX for use)"] for Sumi Whirl. Each entry
+-- copies one authored emitter, beam or trail (its pack path is above it) and
+-- the VFX module recolours, resizes and times it. Code-backed so a Rojo
+-- install does not depend on the demo packs. `count` is the pack's EmitCount.
+local function seq(...)
+	local points = {}
+	for _, p in ipairs({...}) do table.insert(points, NumberSequenceKeypoint.new(p[1], p[2], p[3] or 0)) end
+	return NumberSequence.new(points)
+end
+local function cseq(...)
+	local points = {}
+	for _, p in ipairs({...}) do table.insert(points, ColorSequenceKeypoint.new(p[1], p[2])) end
+	return ColorSequence.new(points)
+end
+local rgb = Color3.fromRGB
+
+return {
+	-- Model#1/Model#8/Model/C - BLOOD SPLATTER/MIDDLE/BLOOD01
+	Splatter = {
+		Texture = "rbxassetid://12996605668",
+		Color = ColorSequence.new(rgb(75, 0, 0)),
+		Size = seq({0, 0.25}, {1, 0.5, 0.125}),
+		Transparency = seq({0, 1}, {0.25, 0}, {1, 1}),
+		Lifetime = NumberRange.new(0.5, 1),
+		Speed = NumberRange.new(0.001),
+		Rotation = NumberRange.new(-360, 360),
+		LightInfluence = 1,
+		Orientation = Enum.ParticleOrientation.VelocityPerpendicular,
+		FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4,
+		FlipbookMode = Enum.ParticleFlipbookMode.OneShot,
+	},
+	-- Model#1/Model#8/Model/Blood/H - Wild Splatter/Splash
+	SplatterWild = {
+		Texture = "rbxassetid://241576804",
+		Color = ColorSequence.new(rgb(100, 0, 0)),
+		Size = seq({0, 0.5}, {1, 3, 0.25}),
+		Transparency = seq({0, 1}, {0.125, 0.5}, {1, 1}),
+		Lifetime = NumberRange.new(0.25, 0.5),
+		Speed = NumberRange.new(10, 15),
+		Rotation = NumberRange.new(-360, 360),
+		RotSpeed = NumberRange.new(-90, 90),
+		SpreadAngle = Vector2.new(90, 90),
+		Acceleration = Vector3.new(0, -50, 0),
+		LightInfluence = 1,
+	},
+	-- Model#1/Model#8/Model/Blood/H - Wild Splatter/Middle/Blood
+	Blob = {
+		Texture = "rbxassetid://4509687978",
+		Color = ColorSequence.new(rgb(100, 0, 0)),
+		Size = seq({0, 0.25}, {1, 0.5, 0.25}),
+		Transparency = seq({0, 1}, {0.25, 0}, {1, 1}),
+		Lifetime = NumberRange.new(0.125, 0.25),
+		Speed = NumberRange.new(1, 2),
+		SpreadAngle = Vector2.new(90, 90),
+		LightInfluence = 1,
+		Orientation = Enum.ParticleOrientation.VelocityParallel,
+		Squash = seq({0, 0}, {1, -3}),
+	},
+	-- Slash VFX/Workspace/Slash/Lines1
+	SlashLines = {
+		Texture = "http://www.roblox.com/asset/?id=14480500149",
+		Color = ColorSequence.new(rgb(193, 94, 255)),
+		Size = seq({0, 0}, {0.3203, 0.07494}, {0.4273, 0.6781}, {0.5263, 1.642}, {0.6153, 0.8208}, {0.7983, 0.1499}, {0.9, 0.01561}, {1, 0}),
+		Lifetime = NumberRange.new(0.1, 0.4),
+		Speed = NumberRange.new(42.82, 85.65),
+		Rotation = NumberRange.new(-90),
+		Drag = 5,
+		LightEmission = 1,
+		Brightness = 4.59,
+		Orientation = Enum.ParticleOrientation.VelocityParallel,
+		EmissionDirection = Enum.NormalId.Back,
+		Squash = seq({0, 4.7}, {0.1, 4.699}, {0.2, 4.694}, {0.3, 4.675}, {0.4, 4.627}, {0.5, 4.518}, {0.6, 4.285}, {0.7, 3.833}, {0.8, 3.086}, {0.9, 2.1}, {1, 1}),
+		ZOffset = 1,
+		count = 15,
+	},
+	-- Slash VFX/Workspace/Slash/combo1/Specs1
+	Specs = {
+		Texture = "http://www.roblox.com/asset/?id=11898862963",
+		Color = ColorSequence.new(rgb(193, 94, 255)),
+		Size = seq({0, 0.5798, 0.2377}, {1, 0}),
+		Lifetime = NumberRange.new(0.4, 0.5),
+		Speed = NumberRange.new(50.21, 83.85),
+		Rotation = NumberRange.new(-360, 360),
+		RotSpeed = NumberRange.new(-360, 360),
+		SpreadAngle = Vector2.new(0, 120),
+		Acceleration = Vector3.new(0, -3.138, 0),
+		Drag = 12.7,
+		LightEmission = -2,
+		Brightness = 10,
+		EmissionDirection = Enum.NormalId.Front,
+		Shape = Enum.ParticleEmitterShape.Disc,
+		Squash = seq({0, 0.2, 0.4125}, {0.1979, 0.3913, 0.3308}, {0.4165, 0.163, 0.2407}, {0.6846, 0.3587, 0.1301}, {1, 0.2}),
+		LockedToPart = true,
+		count = 10,
+	},
+	-- Slash VFX/Workspace/Slash/25R
+	Glints = {
+		Texture = "rbxassetid://11197917329",
+		Color = ColorSequence.new(rgb(193, 94, 255)),
+		Size = seq({0, 0}, {0.05514, 0.4385, 0.4385}, {0.119, 0.2154, 0.2154}, {1, 0}),
+		Lifetime = NumberRange.new(0.5, 0.8),
+		Speed = NumberRange.new(20.96, 78.59),
+		Rotation = NumberRange.new(-360, 360),
+		SpreadAngle = Vector2.new(25, 25),
+		Drag = 12,
+		LightEmission = 1,
+		Brightness = 20,
+		EmissionDirection = Enum.NormalId.Back,
+		ZOffset = 12.2,
+		count = 25,
+	},
+	-- Slash VFX/Workspace/Slash/Attachment1/Trail2
+	Trail = {
+		Texture = "rbxassetid://16892374733",
+		Color = cseq({0, rgb(193, 94, 255)}, {1, rgb(0, 0, 0)}),
+		Transparency = NumberSequence.new(0),
+		WidthScale = seq({0, 1}, {1, 0}),
+		Lifetime = 0.7,
+		MinLength = 0,
+		TextureMode = Enum.TextureMode.Static,
+		TextureLength = 5.139,
+		Brightness = 20,
+	},
+	-- Yona VFX Pack/Explosion-VFX/Blast-Explosion-01/Smoke3
+	Smoke = {
+		Texture = "rbxassetid://10180479311",
+		Color = ColorSequence.new(rgb(0, 0, 0)),
+		Size = seq({0, 0}, {0.15, 3, 0.189}, {1, 3.5, 0.5}),
+		Transparency = seq({0, 0.4}, {0.45, 0.95}, {1, 1}),
+		Lifetime = NumberRange.new(1.25),
+		Speed = NumberRange.new(10, 75),
+		Rotation = NumberRange.new(-360, 360),
+		RotSpeed = NumberRange.new(-100, 100),
+		SpreadAngle = Vector2.new(-360, 360),
+		Drag = 12.5,
+		Brightness = 0,
+		ZOffset = 1,
+		LockedToPart = true,
+		count = 65,
+	},
+	-- Big/Explosion-01/SmokeDark1
+	DarkSmoke = {
+		Texture = "rbxassetid://10180479311",
+		Color = ColorSequence.new(rgb(0, 0, 0)),
+		Size = seq({0, 13.5}, {0.25, 27, 0.5}, {1, 27}),
+		Transparency = seq({0, 0.1688, 0.09375}, {1, 1}),
+		Lifetime = NumberRange.new(2, 4),
+		Rotation = NumberRange.new(-360, 360),
+		RotSpeed = NumberRange.new(-18, 18),
+		SpreadAngle = Vector2.new(-360, 360),
+		Drag = 1,
+		LightEmission = 0.5,
+		Brightness = 4,
+	},
+	-- Anime/Shoot-01/Shockwave1
+	Shockwave = {
+		Texture = "rbxassetid://16477162837",
+		Size = seq({0, 0.4375}, {0.4975, 3.75}, {1, 5.125}),
+		Lifetime = NumberRange.new(0.5),
+		Speed = NumberRange.new(0.01),
+		Rotation = NumberRange.new(-360, 360),
+		LightEmission = 1,
+		Brightness = 5,
+		Orientation = Enum.ParticleOrientation.VelocityPerpendicular,
+		EmissionDirection = Enum.NormalId.Front,
+		FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4,
+		FlipbookMode = Enum.ParticleFlipbookMode.OneShot,
+		ZOffset = 1,
+		LockedToPart = true,
+		count = 1,
+	},
+	-- Anime/Wind-01/Wind1
+	WindRing = {
+		Texture = "rbxassetid://16950679789",
+		Size = seq({0, 0}, {0.1, 2.286}, {0.2, 3.942}, {0.3, 5.226}, {0.4, 6.25}, {0.5, 7.076}, {0.6, 7.739}, {0.7, 8.26}, {0.8, 8.649}, {0.9, 8.903}, {1, 9}),
+		Transparency = seq({0, 1}, {0.08717, 0.8062}, {1, 1}),
+		Lifetime = NumberRange.new(0.4, 0.8),
+		Speed = NumberRange.new(0.001),
+		Rotation = NumberRange.new(-360, 360),
+		RotSpeed = NumberRange.new(-30, 30),
+		SpreadAngle = Vector2.new(10, 10),
+		Drag = 3,
+		LightEmission = 1,
+		Orientation = Enum.ParticleOrientation.VelocityPerpendicular,
+		count = 5,
+	},
+	-- Yona VFX Pack/Combat-VFX/Hit-04/Lines
+	HitLines = {
+		Texture = "rbxassetid://7845168136",
+		Size = seq({0, 2.852, 0.9904}, {1, 0}),
+		Transparency = seq({0, 0}, {0.8695, 0}, {1, 1}),
+		Lifetime = NumberRange.new(0.2, 0.4),
+		Speed = NumberRange.new(36.25, 90.62),
+		SpreadAngle = Vector2.new(360, 360),
+		Drag = 12,
+		LightEmission = 0.5,
+		Brightness = 3,
+		Orientation = Enum.ParticleOrientation.VelocityParallel,
+		ZOffset = 1.45,
+		LockedToPart = true,
+		count = 5,
+	},
+	-- Yona VFX Pack/Combat-VFX/Hit-04/HitEffect
+	HitFlash = {
+		Texture = "http://www.roblox.com/asset/?id=7919757890",
+		Size = seq({0, 5.269}, {1, 0}),
+		Lifetime = NumberRange.new(0.15),
+		Speed = NumberRange.new(0.0014),
+		Rotation = NumberRange.new(-360, 360),
+		SpreadAngle = Vector2.new(-360, 360),
+		LightEmission = 0.3,
+		Brightness = 2,
+		count = 5,
+	},
+	-- Yona VFX Pack/Explosion-VFX/Explosion-02/ShardsDark
+	ShardsDark = {
+		Texture = "rbxassetid://10439119562",
+		Color = ColorSequence.new(rgb(0, 0, 0)),
+		Size = seq({0, 0}, {0.25, 2.468, 2.468}, {1, 0}),
+		Transparency = NumberSequence.new(0.2),
+		Lifetime = NumberRange.new(0.45, 0.7),
+		Speed = NumberRange.new(138.8, 277.7),
+		Rotation = NumberRange.new(90),
+		SpreadAngle = Vector2.new(-360, 360),
+		Drag = 8,
+		Brightness = 0,
+		Orientation = Enum.ParticleOrientation.VelocityParallel,
+		Squash = seq({0, 0}, {1, -0.6375}),
+		ZOffset = 6.171,
+	},
+	-- Yona VFX Pack/Explosion-VFX/Explosion-02/SpecsDark
+	SpecsDark = {
+		Texture = "rbxassetid://10632727506",
+		Color = ColorSequence.new(rgb(0, 0, 0)),
+		Size = seq({0, 0}, {0.25, 2.777, 2.777}, {1, 0}),
+		Transparency = NumberSequence.new(0.15),
+		Lifetime = NumberRange.new(0.45, 0.8),
+		Speed = NumberRange.new(138.8, 277.7),
+		Rotation = NumberRange.new(-360, 360),
+		SpreadAngle = Vector2.new(-360, 360),
+		Drag = 8,
+		Brightness = 0,
+		ZOffset = 6.171,
+		count = 35,
+	},
+}

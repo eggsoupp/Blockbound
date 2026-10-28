@@ -44,17 +44,12 @@ local function restoreCamera()
  if previousCamera and previousCamera==workspace.CurrentCamera and previousCamera.CFrame==previousApplied then previousCamera.CFrame=previousBase end
  previousCamera,previousBase,previousApplied=nil,nil,nil
 end
-local function kick(scope,point,power,frames)
- local e={point=point,power=power,at=workspace:GetServerTimeNow(),frames=frames}
- local tint=scope:add(Instance.new("ColorCorrectionEffect"));tint.Name="SignusImpactFrames";tint.Parent=workspace.CurrentCamera;e.tint=tint
- kicks[e]=true
- local function remove()
-  kicks[e]=nil;if tint.Parent then tint:Destroy() end
-  if not next(kicks) and bound then
-   Run:UnbindFromRenderStep("SignusCameraBefore");Run:UnbindFromRenderStep("SignusCameraAfter");restoreCamera();bound=false
-  end
+local function release()
+ if not next(kicks) and bound then
+  Run:UnbindFromRenderStep("SignusCameraBefore");Run:UnbindFromRenderStep("SignusCameraAfter");restoreCamera();bound=false
  end
- scope:add(remove);scope:delay(1.2,remove)
+end
+local function bind()
  if bound then return end;bound=true
  Run:BindToRenderStep("SignusCameraBefore",Enum.RenderPriority.Camera.Value-3,restoreCamera)
  Run:BindToRenderStep("SignusCameraAfter",Enum.RenderPriority.Last.Value+10,function()
@@ -63,19 +58,40 @@ local function kick(scope,point,power,frames)
   local reduced=Players.LocalPlayer:GetAttribute("ReducedMotion")==true
   for effect in pairs(kicks) do
    local age=now-effect.at;local near=math.clamp(1-(camera.CFrame.Position-effect.point).Magnitude/130,0,1)
-   strength+=effect.power*near*math.exp(-age*6)
-   local bright,contrast,sat=0,0,0
-   if effect.frames and not reduced then
-    if age<.04 then bright,contrast,sat=.35,.35,-.5
-    elseif age>.065 and age<.11 then bright,contrast,sat=-.15,.65,-.8 end
+   -- A rumble holds its strength for its short life; a kick decays.
+   strength+=effect.power*near*(if effect.steady then 1 else math.exp(-age*6))
+   if effect.tint then
+    local bright,contrast,sat=0,0,0
+    if effect.frames and not reduced then
+     if age<.04 then bright,contrast,sat=.35,.35,-.5
+     elseif age>.065 and age<.11 then bright,contrast,sat=-.15,.65,-.8 end
+    end
+    effect.tint.Brightness=bright*near;effect.tint.Contrast=contrast*near;effect.tint.Saturation=sat*near
    end
-   effect.tint.Brightness=bright*near;effect.tint.Contrast=contrast*near;effect.tint.Saturation=sat*near
   end
   strength=if reduced then 0 else math.min(1.5,strength)
   local t=now%128;local x=math.noise(t*23,1.2)*strength;local y=math.noise(4.1,t*29)*strength
   previousCamera,previousBase=camera,camera.CFrame
   previousApplied=camera.CFrame*CFrame.new(x,y,0)*CFrame.Angles(y*.018,x*.012,0);camera.CFrame=previousApplied
  end)
+end
+local function kick(scope,point,power,frames)
+ local e={point=point,power=power,at=workspace:GetServerTimeNow(),frames=frames}
+ local tint=scope:add(Instance.new("ColorCorrectionEffect"));tint.Name="SignusImpactFrames";tint.Parent=workspace.CurrentCamera;e.tint=tint
+ kicks[e]=true
+ local function remove()
+  kicks[e]=nil;if tint.Parent then tint:Destroy() end
+  release()
+ end
+ scope:add(remove);scope:delay(1.2,remove)
+ bind()
+end
+-- A steady shake for something sustained, such as a beam that is firing.
+-- Callers renew it every few frames; it lapses on its own when they stop.
+function VFX.rumble(point,power,seconds)
+ local e={point=point,power=power,at=workspace:GetServerTimeNow(),steady=true}
+ kicks[e]=true;bind()
+ task.delay(seconds or .25,function() kicks[e]=nil;release() end)
 end
 local kinds={}
 function kinds.referenceImpact(payload,scope)
@@ -85,7 +101,97 @@ function kinds.referenceImpact(payload,scope)
  FX.burst("GroundPulse",a,1,{Size=ns(r,r*3.5),Lifetime=NumberRange.new(.4),Speed=NumberRange.new(.01),EmissionDirection=Enum.NormalId.Front,SpreadAngle=Vector2.zero,Orientation=Enum.ParticleOrientation.VelocityPerpendicular,Color=color(C.orchid),LightEmission=1,Transparency=ns(.05,1)})
  FX.burst("Electric",p,3,{Size=ns(r*1.7,r*2.3),Lifetime=NumberRange.new(.25,.4),Speed=NumberRange.new(0),Color=color(C.violet),LightEmission=1,Transparency=ns(.05,1)})
  flash(p,r*2);sparks(p,55,38,.5,1);smoke(p,7,r,1.2)
- kick(scope,payload.position,1.2,true);FX.sound(p,.7,.7);return 1.8
+ if payload.phase==2 then
+  -- The eclipse in it: a black core swallowed by a pearl rim, and a second wave.
+  FX.burst("Core",p,1,{Size=ns(r*.4,r*1.6),Lifetime=NumberRange.new(.45),Color=color(C.black),LightEmission=0,LightInfluence=0,Transparency=ns(0,1),Speed=NumberRange.new(0),ZOffset=1,Orientation=Enum.ParticleOrientation.FacingCamera})
+  FX.burst("PressureRing",p,1,{Size=ns(r,r*4.5),Lifetime=NumberRange.new(.5),Speed=NumberRange.new(0),Orientation=Enum.ParticleOrientation.FacingCamera,Color=color(C.pearl),LightEmission=1,Transparency=ns(0,1),Rotation=NumberRange.new(0),RotSpeed=NumberRange.new(0)})
+  ring(scope,payload.position,r*5,.7,C.violet,.12)
+  FX.burst("Streaks",p,36,{Size=ns(1.4,0),Lifetime=NumberRange.new(.25,.5),Speed=NumberRange.new(50,95),EmissionDirection=Enum.NormalId.Top,SpreadAngle=Vector2.new(70,70),Color=color(C.pearl,C.orchid),LightEmission=1,Transparency=ns(0,1)})
+  light(scope,p,36,2.5,.6)
+ end
+ kick(scope,payload.position,if payload.phase==2 then 1.7 else 1.2,true)
+ FX.sound(p,.7,.7);FX.sound(p,if payload.phase==2 then 1.2 else .6,.8,FX.Sounds.thunder);return 1.8
+end
+-- A part at `point` whose Front looks along `direction`, so an emitter on it
+-- set to EmissionDirection Front fires that way.
+local function facing(scope,point,direction)
+ local p=anchor(scope,point)
+ if direction.Magnitude>.01 then p.CFrame=CFrame.lookAt(point,point+direction.Unit) end
+ return p
+end
+local function flat(scope,point)
+ local p=anchor(scope,point+Vector3.new(0,.3,0))
+ return p,FX.attachment(p,CFrame.Angles(math.pi/2,0,0)) -- Front faces up
+end
+local function plate(kind,parent,from,to,seconds,col,props)
+ local base={Size=ns(from,to),Lifetime=NumberRange.new(seconds),Speed=NumberRange.new(.01),EmissionDirection=Enum.NormalId.Front,SpreadAngle=Vector2.zero,Orientation=Enum.ParticleOrientation.VelocityPerpendicular,Color=color(col),LightEmission=1,Transparency=ns(.05,1),Rotation=NumberRange.new(-180,180),RotSpeed=NumberRange.new(0)}
+ for k,v in pairs(props or {}) do base[k]=v end
+ FX.burst(kind,parent,1,base)
+end
+-- Worldrend leaving the hands: a blast ring square to the beam, a spray of
+-- streaks down its line, and a kick with impact frames.
+function kinds.beamFire(payload,scope)
+ local dir=if typeof(payload.direction)=="Vector3" then payload.direction else Vector3.zAxis
+ local big=if payload.phase==2 then 1.4 else 1
+ local p=facing(scope,payload.position,dir)
+ flash(p,20*big)
+ plate("PressureRing",p,3,30*big,.4,C.pearl)
+ scope:delay(.07,function() plate("PressureRing",p,4,44*big,.55,C.orchid) end)
+ plate("GroundPulse",p,6,34*big,.32,C.orchid)
+ FX.burst("Streaks",p,40,{Size=ns(1.3*big,0),Lifetime=NumberRange.new(.2,.4),Speed=NumberRange.new(70,130),EmissionDirection=Enum.NormalId.Front,SpreadAngle=Vector2.new(22,22),Color=color(C.pearl,C.orchid),LightEmission=1,Transparency=ns(0,1)})
+ FX.burst("Electric",p,3,{Size=ns(10*big,16*big),Lifetime=NumberRange.new(.2,.3),Speed=NumberRange.new(0),Color=color(C.violet),LightEmission=1,Transparency=ns(.05,1)})
+ fire(p,8,10*big,.5);sparks(p,45,40,.6,.7)
+ light(scope,p,36,3,.5);kick(scope,payload.position,1.3*big,true)
+ FX.sound(p,1.6,.6,FX.Sounds.blast);FX.sound(p,1.1,.62)
+ return 1.2
+end
+-- Each bite the beam takes out of the ground it meets.
+function kinds.beamImpact(payload,scope)
+ local normal=if typeof(payload.normal)=="Vector3" then payload.normal else Vector3.yAxis
+ local big=if payload.phase==2 then 1.3 else 1
+ local p=facing(scope,payload.position+normal*.3,normal)
+ plate("GroundBurst",p,4,15*big,.35,C.orchid,{LightEmission=.8})
+ FX.burst("Rock",p,14,{Size=ns(.9,0),Lifetime=NumberRange.new(.6,1.1),Speed=NumberRange.new(20,42),SpreadAngle=Vector2.new(50,50),EmissionDirection=Enum.NormalId.Front,Acceleration=Vector3.new(0,-70,0),Color=color(C.plum,C.violet),Transparency=ns(.1,1),LightEmission=.15,Rotation=NumberRange.new(-180,180),RotSpeed=NumberRange.new(-200,200)})
+ FX.burst("SmokeShock",p,2,{Size=ns(5*big,11*big),Lifetime=NumberRange.new(.5,.8),Speed=NumberRange.new(3,8),EmissionDirection=Enum.NormalId.Front,SpreadAngle=Vector2.new(30,30),Color=color(C.violet,C.plum),LightEmission=.3,Transparency=ns(.3,1)})
+ flash(p,9*big);kick(scope,payload.position,.55*big,false)
+ FX.sound(p,.8,.9+math.random()*.2)
+ return 1.2
+end
+-- Phase two's flight: coming down to recover, and going back up.
+function kinds.land(payload,scope)
+ local p,a=flat(scope,payload.position)
+ plate("DustRing",a,6,30,.55,C.pearl,{LightEmission=.4,Transparency=ns(.2,1)})
+ ring(scope,payload.position,26,.5,C.orchid)
+ smoke(p,8,9,1.1)
+ FX.burst("Rock",p,10,{Size=ns(.7,0),Lifetime=NumberRange.new(.5,.9),Speed=NumberRange.new(14,26),SpreadAngle=Vector2.new(60,60),EmissionDirection=Enum.NormalId.Top,Acceleration=Vector3.new(0,-50,0),Color=color(C.violet,C.plum),Transparency=ns(.15,1)})
+ kick(scope,payload.position,.7,false);FX.sound(p,.55,1.05)
+ return 1.4
+end
+function kinds.takeoff(payload,scope)
+ local p,a=flat(scope,payload.position)
+ plate("DustRing",a,4,26,.5,C.pearl,{LightEmission=.4,Transparency=ns(.2,1)})
+ plate("GroundPulse",a,4,22,.35,C.orchid)
+ FX.burst("Streaks",p,26,{Size=ns(1.1,0),Lifetime=NumberRange.new(.25,.45),Speed=NumberRange.new(40,75),EmissionDirection=Enum.NormalId.Top,SpreadAngle=Vector2.new(25,25),Color=color(C.pearl,C.violet),LightEmission=1,Transparency=ns(.05,1)})
+ fire(p,6,8,.5);smoke(p,6,8,1)
+ kick(scope,payload.position,.5,false);FX.sound(p,.8,1.6,FX.Sounds.blast)
+ return 1.2
+end
+-- The eclipse crown igniting behind the hood at the climax of Totality.
+function kinds.crown(payload,scope)
+ local p=anchor(scope,payload.position)
+ flash(p,44)
+ FX.burst("Core",p,1,{Size=ns(2,26),Lifetime=NumberRange.new(.8),Color=color(C.black),LightEmission=0,LightInfluence=0,Transparency=ns(0,1),Speed=NumberRange.new(0),ZOffset=1,Orientation=Enum.ParticleOrientation.FacingCamera})
+ FX.burst("Aura",p,3,{Size=ns(6,50),Lifetime=NumberRange.new(1),Color=color(C.orchid),LightEmission=1,Transparency=ns(.05,1),Speed=NumberRange.new(0),Orientation=Enum.ParticleOrientation.FacingCamera})
+ for i,size in ipairs({60,90,120}) do
+  scope:delay((i-1)*.12,function()
+   FX.burst("PressureRing",p,1,{Size=ns(4,size),Lifetime=NumberRange.new(.6+i*.15),Speed=NumberRange.new(0),Orientation=Enum.ParticleOrientation.FacingCamera,Color=color(if i==2 then C.orchid else C.pearl),LightEmission=1,Transparency=ns(0,1),Rotation=NumberRange.new(0),RotSpeed=NumberRange.new(0)})
+  end)
+ end
+ FX.burst("Star",p,40,{Size=ns(2.4,0),Lifetime=NumberRange.new(.8,1.6),Speed=NumberRange.new(25,60),SpreadAngle=Vector2.new(180,180),Color=color(C.pearl,C.orchid),LightEmission=1,Transparency=ns(.05,1),Drag=1.5})
+ FX.burst("Streaks",p,60,{Size=ns(1.8,0),Lifetime=NumberRange.new(.3,.6),Speed=NumberRange.new(70,140),SpreadAngle=Vector2.new(180,180),Color=color(C.pearl,C.violet),LightEmission=1,Transparency=ns(0,1)})
+ light(scope,p,50,4,1.2);kick(scope,payload.position,2,true)
+ FX.sound(p,2,.7,FX.Sounds.thunder);FX.sound(p,1,.45)
+ return 2.5
 end
 function kinds.flare(payload,scope)
  local p=anchor(scope,payload.position);flash(p,(payload.radius or 3)*2)
@@ -150,10 +256,14 @@ function kinds.nova(payload,scope) return eclipseBurst(payload,scope,false) end
 function kinds.death(payload,scope) return eclipseBurst(payload,scope,true) end
 function kinds.totality(payload,scope)
  local p=anchor(scope,payload.position)
- ring(scope,payload.position-Vector3.yAxis*(payload.drop or 12),80,1.2,C.orchid)
- flash(p,35);fire(p,14,22,1.2);sparks(p,80,42,.7,1.7);pillar(scope,payload.position,60,8,1.2)
- FX.burst("Star",p,24,{Size=ns(1.5,0),Lifetime=NumberRange.new(1,2),Speed=NumberRange.new(8,24),SpreadAngle=Vector2.new(180,180),Color=color(C.pearl,C.teal),LightEmission=1,Transparency=ns(.1,1)})
- kick(scope,payload.position,1.1,true);FX.sound(p,.7,.6);return 2.8
+ local ground=payload.position-Vector3.yAxis*(payload.drop or 12)
+ ring(scope,ground,80,1.2,C.orchid);ring(scope,ground,130,1.6,C.pearl,.15);ring(scope,ground,170,2,C.violet,.3)
+ local _,a=flat(scope,ground)
+ plate("DustRing",a,10,90,1.1,C.pearl,{LightEmission=.4,Transparency=ns(.15,1)})
+ flash(p,50);fire(p,18,26,1.3);sparks(p,110,55,.8,1.8);pillar(scope,ground,180,16,1.4);pillar(scope,ground,180,6,2)
+ FX.burst("Star",p,36,{Size=ns(2,0),Lifetime=NumberRange.new(1,2),Speed=NumberRange.new(10,30),SpreadAngle=Vector2.new(180,180),Color=color(C.pearl,C.teal),LightEmission=1,Transparency=ns(.1,1)})
+ FX.burst("Streaks",p,60,{Size=ns(1.6,0),Lifetime=NumberRange.new(.4,.7),Speed=NumberRange.new(60,120),SpreadAngle=Vector2.new(180,180),Color=color(C.pearl,C.orchid),LightEmission=1,Transparency=ns(0,1)})
+ kick(scope,payload.position,1.8,true);FX.sound(p,.8,.5);FX.sound(p,2,.85,FX.Sounds.thunder);return 2.8
 end
 function kinds.harvest(payload,scope)
  local seconds=math.clamp(payload.seconds or 1,.2,2);local moving={}

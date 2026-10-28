@@ -1,0 +1,4685 @@
+{
+  "title": "The Open Road - wandering onward",
+  "version": 2,
+  "tempos": [
+    [
+      0,
+      104,
+      "Light walking pulse"
+    ]
+  ],
+  "end": 128,
+  "parts": {
+    "Flute theme fragments": {
+      "channel": 0,
+      "program": 73,
+      "target_rms_db": -28,
+      "pan": 65,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 4.93118618833776,
+      "instrument": "Flute",
+      "raw_rms_db": -45.44,
+      "expression": 95
+    },
+    "Nylon guitar": {
+      "channel": 1,
+      "program": 24,
+      "target_rms_db": -27,
+      "pan": 42,
+      "wet": 0.085,
+      "drums": false,
+      "render_gain": 11.671648888167123,
+      "instrument": "Nylon Guitar",
+      "raw_rms_db": -48.42,
+      "expression": 127
+    },
+    "Pizzicato strings": {
+      "channel": 2,
+      "program": 45,
+      "target_rms_db": -31,
+      "pan": 89,
+      "wet": 0.08,
+      "drums": false,
+      "render_gain": 6.398230942396199,
+      "instrument": "Pizzicato Strings",
+      "raw_rms_db": -53.43,
+      "expression": 104
+    },
+    "Acoustic bass": {
+      "channel": 3,
+      "program": 32,
+      "target_rms_db": -31,
+      "pan": 64,
+      "wet": 0.035,
+      "drums": false,
+      "render_gain": 4.65655243168728,
+      "instrument": "Acoustic Bass",
+      "raw_rms_db": -44.35,
+      "expression": 93
+    },
+    "Gentle percussion": {
+      "channel": 9,
+      "program": 0,
+      "target_rms_db": -32,
+      "pan": 64,
+      "wet": 0.025,
+      "drums": true,
+      "render_gain": 7.006831833712,
+      "instrument": "Standard 1",
+      "raw_rms_db": -52.61,
+      "expression": 107
+    }
+  },
+  "events": [
+    {
+      "part": "Nylon guitar",
+      "beat": 0.0,
+      "pitch": 52,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 0.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 1.0,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 1.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 2.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 2.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 3.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 3.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 0,
+      "pitch": 40,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 2,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 4.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 4.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 5.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 5.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 6.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 6.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 7.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 7.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 4,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 6,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 8.0,
+      "pitch": 43,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 8.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 9.0,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 9.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 10.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 10.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 11.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 11.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 8,
+      "pitch": 31,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 10,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 9,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 9,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 11,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 11,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 8,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 9,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 10,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 11,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 12.0,
+      "pitch": 50,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 12.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 13.0,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 13.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 14.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 14.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 15.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 15.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 12,
+      "pitch": 38,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 14,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 13,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 13,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 15,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 15,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 12,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 13,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 14,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 15,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 16.0,
+      "pitch": 52,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 16.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 17.0,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 17.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 18.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 18.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 19.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 19.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 16,
+      "pitch": 40,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 18,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 17,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 17,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 19,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 19,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 16,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 17,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 18,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 19,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 20.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 20.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 21.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 21.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 22.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 22.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 23.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 23.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 20,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 22,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 21,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 21,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 23,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 23,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 20,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 21,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 22,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 23,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 24.0,
+      "pitch": 45,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 24.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 25.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 25.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 26.0,
+      "pitch": 60,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 26.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 27.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 27.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 24,
+      "pitch": 33,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 26,
+      "pitch": 40,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 25,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 25,
+      "pitch": 60,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 27,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 27,
+      "pitch": 60,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 24,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 25,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 26,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 27,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 28.0,
+      "pitch": 43,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 28.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 29.0,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 29.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 30.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 30.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 31.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 31.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 28,
+      "pitch": 31,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 30,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 29,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 29,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 31,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 31,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 28,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 29,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 30,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 31,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 32.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 32.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 33.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 33.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 34.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 34.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 35.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 35.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 32,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 34,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 33,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 33,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 35,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 35,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 32,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 33,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 34,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 35,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 36.0,
+      "pitch": 50,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 36.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 37.0,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 37.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 38.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 38.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 39.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 39.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 36,
+      "pitch": 38,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 38,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 37,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 37,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 39,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 39,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 36,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 37,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 38,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 39,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 40.0,
+      "pitch": 52,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 40.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 41.0,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 41.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 42.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 42.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 43.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 43.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 40,
+      "pitch": 40,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 42,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 41,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 41,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 43,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 43,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 40,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 41,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 42,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 43,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 44.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 44.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 45.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 45.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 46.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 46.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 47.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 47.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 44,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 46,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 45,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 45,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 47,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 47,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 44,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 45,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 46,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 47,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 48.0,
+      "pitch": 43,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 48.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 49.0,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 49.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 50.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 50.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 51.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 51.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 48,
+      "pitch": 31,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 50,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 49,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 49,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 51,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 51,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 48,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 49,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 50,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 51,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 52.0,
+      "pitch": 50,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 52.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 53.0,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 53.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 54.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 54.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 55.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 55.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 52,
+      "pitch": 38,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 54,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 53,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 53,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 55,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 55,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 52,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 53,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 54,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 55,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 56.0,
+      "pitch": 52,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 56.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 57.0,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 57.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 58.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 58.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 59.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 59.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 56,
+      "pitch": 40,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 58,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 57,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 57,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 59,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 59,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 56,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 57,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 58,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 59,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 60.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 60.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 61.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 61.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 62.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 62.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 63.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 63.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 60,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 62,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 61,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 61,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 63,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 63,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 60,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 61,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 62,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 63,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 64.0,
+      "pitch": 50,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 64.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 65.0,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 65.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 66.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 66.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 67.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 67.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 64,
+      "pitch": 38,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 66,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 65,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 65,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 67,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 67,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 64,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 65,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 66,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 67,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 68.0,
+      "pitch": 43,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 68.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 69.0,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 69.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 70.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 70.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 71.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 71.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 68,
+      "pitch": 31,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 70,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 69,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 69,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 71,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 71,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 68,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 69,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 70,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 71,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 72.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 72.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 73.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 73.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 74.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 74.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 75.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 75.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 72,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 74,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 73,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 73,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 75,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 75,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 72,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 73,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 74,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 75,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 72.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 72.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 73.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 73.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 74.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 74.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 75.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 75.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 76.0,
+      "pitch": 43,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 76.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 77.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 77.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 78.0,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 78.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 79.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 79.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 76,
+      "pitch": 31,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 78,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 77,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 77,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 79,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 79,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 76,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 77,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 78,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 79,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 76.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 76.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 77.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 77.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 78.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 78.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 79.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 79.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 80.0,
+      "pitch": 45,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 80.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 81.0,
+      "pitch": 60,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 81.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 82.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 82.5,
+      "pitch": 60,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 83.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 83.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 80,
+      "pitch": 33,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 82,
+      "pitch": 40,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 81,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 81,
+      "pitch": 60,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 83,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 83,
+      "pitch": 60,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 80,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 81,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 82,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 83,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 80.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 80.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 81.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 81.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 82.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 82.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 83.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 83.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 84.0,
+      "pitch": 52,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 84.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 85.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 85.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 86.0,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 86.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 87.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 87.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 84,
+      "pitch": 40,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 86,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 85,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 85,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 87,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 87,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 84,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 85,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 86,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 87,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 84.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 84.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 85.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 85.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 86.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 86.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 87.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 87.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 88.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 88.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 89.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 89.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 90.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 90.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 91.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 91.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 88,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 90,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 89,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 89,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 91,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 91,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 88,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 89,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 90,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 91,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 88.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 88.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 89.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 89.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 90.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 90.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 91.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 91.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 92.0,
+      "pitch": 47,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 92.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 93.0,
+      "pitch": 54,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 93.5,
+      "pitch": 54,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 94.0,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 94.5,
+      "pitch": 54,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 95.0,
+      "pitch": 54,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 95.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 92,
+      "pitch": 35,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 94,
+      "pitch": 42,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 93,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 93,
+      "pitch": 54,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 95,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 95,
+      "pitch": 54,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 92,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 93,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 94,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 95,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 92.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 92.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 93.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 93.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 94.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 94.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 95.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 95.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 96.0,
+      "pitch": 45,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 96.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 97.0,
+      "pitch": 60,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 97.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 98.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 98.5,
+      "pitch": 60,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 99.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 99.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 96,
+      "pitch": 33,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 98,
+      "pitch": 40,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 97,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 97,
+      "pitch": 60,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 99,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 99,
+      "pitch": 60,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 96,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 97,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 98,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 99,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 96.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 96.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 97.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 97.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 98.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 98.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 99.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 99.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 100.0,
+      "pitch": 50,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 100.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 101.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 101.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 102.0,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 102.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 103.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 103.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 100,
+      "pitch": 38,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 102,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 101,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 101,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 103,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 103,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 100,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 101,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 102,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 103,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 100.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 100.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 101.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 101.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 102.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 102.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 103.0,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 37
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 103.5,
+      "pitch": 42,
+      "length": 0.09,
+      "velocity": 29
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 104.0,
+      "pitch": 52,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 104.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 105.0,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 105.5,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 106.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 106.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 107.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 107.5,
+      "pitch": 67,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 104,
+      "pitch": 40,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 106,
+      "pitch": 47,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 105,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 105,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 107,
+      "pitch": 67,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 107,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 104,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 105,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 106,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 107,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 108.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 108.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 109.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 109.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 110.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 110.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 111.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 111.5,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 108,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 110,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 109,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 109,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 111,
+      "pitch": 64,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 111,
+      "pitch": 55,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 108,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 109,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 110,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 111,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 112.0,
+      "pitch": 50,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 112.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 113.0,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 113.5,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 114.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 114.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 115.0,
+      "pitch": 57,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 115.5,
+      "pitch": 66,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 112,
+      "pitch": 38,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 114,
+      "pitch": 45,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 113,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 113,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 115,
+      "pitch": 66,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 115,
+      "pitch": 57,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 112,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 113,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 114,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 115,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 116.0,
+      "pitch": 43,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 116.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 117.0,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 117.5,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 118.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 118.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 119.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 119.5,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 116,
+      "pitch": 31,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 118,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 117,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 117,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 119,
+      "pitch": 62,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Pizzicato strings",
+      "beat": 119,
+      "pitch": 59,
+      "length": 0.25,
+      "velocity": 44
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 116,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 54
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 117,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 43
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 118,
+      "pitch": 64,
+      "length": 0.13,
+      "velocity": 48
+    },
+    {
+      "part": "Gentle percussion",
+      "beat": 119,
+      "pitch": 62,
+      "length": 0.13,
+      "velocity": 46
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 120.0,
+      "pitch": 48,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 121.0,
+      "pitch": 64,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 122.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 123.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 120,
+      "pitch": 36,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 122,
+      "pitch": 43,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 124.0,
+      "pitch": 43,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 125.0,
+      "pitch": 62,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 126.0,
+      "pitch": 59,
+      "length": 0.46,
+      "velocity": 53
+    },
+    {
+      "part": "Nylon guitar",
+      "beat": 127.0,
+      "pitch": 55,
+      "length": 0.46,
+      "velocity": 44
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 124,
+      "pitch": 31,
+      "length": 1.82,
+      "velocity": 50
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 126,
+      "pitch": 38,
+      "length": 1.8,
+      "velocity": 44
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 8,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 69
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 9.5,
+      "pitch": 69,
+      "length": 0.4,
+      "velocity": 62
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 10,
+      "pitch": 67,
+      "length": 1.7,
+      "velocity": 66
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 14,
+      "pitch": 64,
+      "length": 0.7,
+      "velocity": 61
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 15,
+      "pitch": 67,
+      "length": 0.7,
+      "velocity": 65
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 16,
+      "pitch": 69,
+      "length": 1.7,
+      "velocity": 69
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 19,
+      "pitch": 67,
+      "length": 0.7,
+      "velocity": 62
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 21,
+      "pitch": 64,
+      "length": 1.6,
+      "velocity": 65
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 40,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 74
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 41,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 41.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 42.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 70
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 43.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 43.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 44,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 72
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 45.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 46.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 67
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 48,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 75
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 49,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 49.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 50.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 71
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 51.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 51.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 68
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 52,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 73
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 53.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 54.0,
+      "pitch": 62,
+      "length": 0.935,
+      "velocity": 66
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 56,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 75
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 57,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 57.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 58.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 71
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 59.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 59.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 75
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 60,
+      "pitch": 76,
+      "length": 1.435,
+      "velocity": 79
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 61.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 70
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 62.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 62.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 63.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 68
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 64,
+      "pitch": 69,
+      "length": 0.935,
+      "velocity": 71
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 65,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 69
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 65.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 66.0,
+      "pitch": 66,
+      "length": 0.935,
+      "velocity": 67
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 67.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 67.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 68,
+      "pitch": 67,
+      "length": 2.935,
+      "velocity": 71
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 104,
+      "pitch": 71,
+      "length": 1.4,
+      "velocity": 68
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 106,
+      "pitch": 69,
+      "length": 0.7,
+      "velocity": 62
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 107,
+      "pitch": 67,
+      "length": 1.6,
+      "velocity": 65
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 112,
+      "pitch": 69,
+      "length": 1.7,
+      "velocity": 67
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 115,
+      "pitch": 66,
+      "length": 0.8,
+      "velocity": 60
+    },
+    {
+      "part": "Flute theme fragments",
+      "beat": 117,
+      "pitch": 67,
+      "length": 1.8,
+      "velocity": 65
+    }
+  ],
+  "markers": [
+    [
+      0,
+      "Guitar path"
+    ],
+    [
+      8,
+      "Flute answers"
+    ],
+    [
+      24,
+      "Walking interlude - no theme"
+    ],
+    [
+      40,
+      "Homeward glimpse"
+    ],
+    [
+      72,
+      "Taking the long road - no theme"
+    ],
+    [
+      104,
+      "Distant call"
+    ],
+    [
+      120,
+      "Guitar farewell"
+    ]
+  ],
+  "statements": [
+    {
+      "part": "Flute theme fragments",
+      "start": 40,
+      "bars": 8,
+      "transpose": 0,
+      "scale": 1
+    }
+  ],
+  "theme_absent_sections": [
+    [
+      0,
+      8
+    ],
+    [
+      24,
+      40
+    ],
+    [
+      72,
+      104
+    ],
+    [
+      120,
+      128
+    ]
+  ],
+  "drum_audio_edits": [],
+  "master_gain": 1.3936048622192385
+}

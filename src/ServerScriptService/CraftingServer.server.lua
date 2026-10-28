@@ -27,6 +27,7 @@ local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
 local ServerScriptService = game:GetService("ServerScriptService")
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
+local TutorialService = require(ServerScriptService:WaitForChild("TutorialService"))
 local StationService = require(ServerScriptService:WaitForChild("StationService"))
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
 
@@ -63,7 +64,7 @@ local function tryCraft(player, recipeId)
 	-- require the player to be genuinely standing at one right now.
 	if recipe.station and not StationService.isNear(player, recipe.station) then
 		return false, string.format(
-			"Needs a %s nearby", StationConfig.getDisplayName(recipe.station)
+			"Stand at a %s and press E", StationConfig.getDisplayName(recipe.station)
 		)
 	end
 
@@ -101,6 +102,7 @@ local function tryCraft(player, recipeId)
 	end
 
 	inventory:Add(recipe.output.item, recipe.output.count)
+	TutorialService.Crafted(player, recipe.output.item, recipe.output.count)
 	InventoryService.SaveAndSync(player)
 
 	return true, string.format("Crafted %s", recipe.output.item)

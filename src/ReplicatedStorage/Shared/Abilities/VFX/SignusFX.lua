@@ -19,11 +19,14 @@ function FX.preload()
   for _,library in ipairs({Pack,Base,Starter}) do
    for _,data in pairs(library) do table.insert(assets,data.Texture) end
   end
-  local sound=Instance.new("Sound");sound.SoundId="rbxassetid://5540424854";table.insert(assets,sound)
+  local sounds={}
+  for _,id in pairs(FX.Sounds) do
+   local sound=Instance.new("Sound");sound.SoundId=id;table.insert(assets,sound);table.insert(sounds,sound)
+  end
   pcall(function() Content:PreloadAsync(assets,function(id,status)
    if status~=Enum.AssetFetchStatus.Success then warn("[SignusVFX] Asset unavailable: "..id) end
   end) end)
-  sound:Destroy()
+  for _,sound in ipairs(sounds) do sound:Destroy() end
  end)
 end
 function FX.host(scope,position,name)
@@ -62,10 +65,19 @@ function FX.beam(parent,from,to,width,color,texture)
  beam.Transparency=NumberSequence.new(.15);beam.Parent=parent
  return beam,a,b
 end
-function FX.sound(parent,volume,pitch)
- local sound=Instance.new("Sound");sound.SoundId="rbxassetid://5540424854"
- sound.Volume=volume;sound.PlaybackSpeed=pitch or 1;sound.RollOffMinDistance=15;sound.RollOffMaxDistance=180
- sound.Parent=parent;sound:Play()
+-- The boom, and sounds bundled with the engine, which always load. (The two
+-- ability ids in SoundConfig are not authorised for this place.)
+FX.Sounds={
+ boom="rbxassetid://5540424854",
+ roar="rbxasset://sounds/Rocket whoosh 01.wav", -- charging, and a firing beam, looped
+ blast="rbxasset://sounds/Launching rocket.wav",
+ thunder="rbxasset://sounds/HalloweenThunder.wav",
+ wind="rbxasset://sounds/action_falling.ogg",
+}
+function FX.sound(parent,volume,pitch,id,looped)
+ local sound=Instance.new("Sound");sound.SoundId=id or FX.Sounds.boom
+ sound.Volume=volume;sound.PlaybackSpeed=pitch or 1;sound.RollOffMinDistance=15;sound.RollOffMaxDistance=220
+ sound.Looped=looped==true;sound.Parent=parent;sound:Play()
  return sound
 end
 return FX

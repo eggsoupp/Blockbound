@@ -9,7 +9,9 @@
 	reasons unrelated to the UI: ReplicatedStorage.Tools[item] and
 	ReplicatedStorage.TerrainAssets.Blocks[item]. So nothing extra has to be
 	authored for an item to be previewable. Failing both, an item with a `look`
-	in ItemDefinitions gets a simple model built from it (see buildFromLook).
+	in ItemDefinitions gets a simple model built from it (see buildFromLook),
+	and a station with only StationConfig's `appearance` a block in its colours
+	(buildFromStation).
 
 	Nothing here is ever parented anywhere. `find` returns the live template and
 	callers clone it - reparenting one would empty the folder the terrain builds
@@ -18,6 +20,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
+local StationConfig = require(script.Parent.Parent:WaitForChild("Crafting"):WaitForChild("StationConfig"))
 
 local ItemModels = {}
 
@@ -121,6 +124,38 @@ local function buildFromLook(itemName: string): Instance?
 	return model
 end
 
+--[[
+	A station with no authored model yet - the crafting table, the furnace -
+	drawn as the stand-in StationService puts in the world: a block in its
+	`appearance` colours, its top a shade of its own. So the first thing a new
+	player crafts is not an empty slot.
+]]
+local function buildFromStation(itemName: string): Instance?
+	local definition = StationConfig.get(itemName)
+	local look = definition and definition.appearance
+	if type(look) ~= "table" or typeof(look.color) ~= "Color3" then
+		return nil
+	end
+
+	local material = if typeof(look.material) == "EnumItem" then look.material else Enum.Material.SmoothPlastic
+
+	local model = Instance.new("Model")
+	model.Name = itemName
+
+	local body = lookPart(Vector3.new(2, 1.6, 2), look.color, material)
+	body.Name = "Body"
+	body.CFrame = CFrame.new(0, -0.2, 0)
+	body.Parent = model
+
+	local top = lookPart(Vector3.new(2.1, 0.4, 2.1), look.topColor or look.color, material)
+	top.Name = "Top"
+	top.CFrame = CFrame.new(0, 0.8, 0)
+	top.Parent = model
+
+	model.PrimaryPart = body
+	return model
+end
+
 -- Tools first: an item that is both holdable and placeable should preview as
 -- the thing you hold, that being the version with a shape worth looking at.
 function ItemModels.find(itemName: string?): Instance?
@@ -150,7 +185,7 @@ function ItemModels.find(itemName: string?): Instance?
 	end
 
 	if not found then
-		found = buildFromLook(itemName)
+		found = buildFromLook(itemName) or buildFromStation(itemName)
 	end
 
 	-- A miss is deliberately NOT cached. ToolFactory builds missing tools at

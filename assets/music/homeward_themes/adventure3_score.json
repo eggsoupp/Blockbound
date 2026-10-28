@@ -1,0 +1,2297 @@
+{
+  "title": "Islands Above the Clouds - distant lights",
+  "version": 2,
+  "tempos": [
+    [
+      0,
+      82,
+      "Broad and gentle"
+    ]
+  ],
+  "end": 112,
+  "parts": {
+    "Horn theme fragments": {
+      "channel": 0,
+      "program": 60,
+      "target_rms_db": -29,
+      "pan": 65,
+      "wet": 0.16,
+      "drums": false,
+      "render_gain": 17.760387693049463,
+      "instrument": "French Horns",
+      "raw_rms_db": -56.56,
+      "expression": 127
+    },
+    "Harp": {
+      "channel": 1,
+      "program": 46,
+      "target_rms_db": -30,
+      "pan": 36,
+      "wet": 0.16,
+      "drums": false,
+      "render_gain": 6.412339922668899,
+      "instrument": "Orchestral Harp",
+      "raw_rms_db": -46.14,
+      "expression": 90
+    },
+    "String harmony": {
+      "channel": 2,
+      "program": 49,
+      "target_rms_db": -29,
+      "pan": 88,
+      "wet": 0.19,
+      "drums": false,
+      "render_gain": 9.866338401986289,
+      "instrument": "Slow Strings",
+      "raw_rms_db": -48.89,
+      "expression": 104
+    },
+    "Cello bass": {
+      "channel": 3,
+      "program": 42,
+      "target_rms_db": -32,
+      "pan": 48,
+      "wet": 0.13,
+      "drums": false,
+      "render_gain": 3.872548455895026,
+      "instrument": "Cello",
+      "raw_rms_db": -43.77,
+      "expression": 76
+    },
+    "Quiet piano colours": {
+      "channel": 4,
+      "program": 0,
+      "target_rms_db": -33,
+      "pan": 70,
+      "wet": 0.12,
+      "drums": false,
+      "render_gain": 8.661811555321155,
+      "instrument": "Grand Piano",
+      "raw_rms_db": -57.88,
+      "expression": 100
+    }
+  },
+  "events": [
+    {
+      "part": "Harp",
+      "beat": 0,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 0.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 1.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 2.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 3.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 0,
+      "pitch": 59,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 0,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 0,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 0,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 4,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 4.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 5.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 6.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 7.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 4,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 4,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 4,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 4,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 8,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 8.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 9.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 10.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 11.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 8,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 8,
+      "pitch": 62,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 8,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 8,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 8.5,
+      "pitch": 74,
+      "length": 2.3,
+      "velocity": 43
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 10.5,
+      "pitch": 67,
+      "length": 1.3,
+      "velocity": 39
+    },
+    {
+      "part": "Harp",
+      "beat": 12,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 12.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 13.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 14.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 15.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 12,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 12,
+      "pitch": 66,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 12,
+      "pitch": 69,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 12,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 16,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 16.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 17.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 18.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 19.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 16,
+      "pitch": 59,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 16,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 16,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 16,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 20,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 20.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 21.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 22.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 23.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 20,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 20,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 20,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 20,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 24,
+      "pitch": 45,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 24.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 25.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 26.5,
+      "pitch": 60,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 27.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 24,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 24,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 24,
+      "pitch": 72,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 24,
+      "pitch": 33,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 24.5,
+      "pitch": 76,
+      "length": 2.3,
+      "velocity": 43
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 26.5,
+      "pitch": 69,
+      "length": 1.3,
+      "velocity": 39
+    },
+    {
+      "part": "Harp",
+      "beat": 28,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 28.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 29.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 30.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 31.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 28,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 28,
+      "pitch": 66,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 28,
+      "pitch": 69,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 28,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 32,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 32.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 33.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 34.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 35.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 32,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 32,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 32,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 32,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 36,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 36.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 37.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 38.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 39.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 36,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 36,
+      "pitch": 62,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 36,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 36,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 40,
+      "pitch": 45,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 40.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 41.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 42.5,
+      "pitch": 60,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 43.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 40,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 40,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 40,
+      "pitch": 72,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 40,
+      "pitch": 33,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 40.5,
+      "pitch": 76,
+      "length": 2.3,
+      "velocity": 43
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 42.5,
+      "pitch": 69,
+      "length": 1.3,
+      "velocity": 39
+    },
+    {
+      "part": "Harp",
+      "beat": 44,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 44.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 45.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 46.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 47.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 44,
+      "pitch": 59,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 44,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 44,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 44,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 48,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 48.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 49.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 50.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 51.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 48,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 48,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 48,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 48,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 52,
+      "pitch": 47,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 52.75,
+      "pitch": 54,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 53.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 54.5,
+      "pitch": 54,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 55.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 52,
+      "pitch": 54,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 52,
+      "pitch": 62,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 52,
+      "pitch": 66,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 52,
+      "pitch": 35,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 56,
+      "pitch": 45,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 56.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 57.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 58.5,
+      "pitch": 60,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 59.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 56,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 56,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 56,
+      "pitch": 72,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 56,
+      "pitch": 33,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 56.5,
+      "pitch": 76,
+      "length": 2.3,
+      "velocity": 43
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 58.5,
+      "pitch": 69,
+      "length": 1.3,
+      "velocity": 39
+    },
+    {
+      "part": "Harp",
+      "beat": 60,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 60.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 61.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 62.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 63.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 60,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 60,
+      "pitch": 66,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "String harmony",
+      "beat": 60,
+      "pitch": 69,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Cello bass",
+      "beat": 60,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 64,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 64.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 65.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 66.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 67.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 64,
+      "pitch": 59,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 64,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 64,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 64,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 68,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 68.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 69.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 70.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 71.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 68,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 68,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 68,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 68,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 72,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 72.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 73.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 74.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 75.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 72,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 72,
+      "pitch": 62,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 72,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 72,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 72.5,
+      "pitch": 74,
+      "length": 2.3,
+      "velocity": 43
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 74.5,
+      "pitch": 67,
+      "length": 1.3,
+      "velocity": 39
+    },
+    {
+      "part": "Harp",
+      "beat": 76,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 76.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 77.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 78.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 79.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 76,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 76,
+      "pitch": 66,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 76,
+      "pitch": 69,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 76,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 80,
+      "pitch": 52,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 80.75,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 81.5,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 82.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 83.25,
+      "pitch": 67,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 80,
+      "pitch": 59,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 80,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 80,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 80,
+      "pitch": 40,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 84,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 84.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 85.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 86.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 87.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 84,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 84,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 84,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 84,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 88,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 88.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 89.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 90.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 91.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 88,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 88,
+      "pitch": 66,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 88,
+      "pitch": 69,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 88,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 88.5,
+      "pitch": 78,
+      "length": 2.3,
+      "velocity": 43
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 90.5,
+      "pitch": 69,
+      "length": 1.3,
+      "velocity": 39
+    },
+    {
+      "part": "Harp",
+      "beat": 92,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 92.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 93.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 94.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 95.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 92,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 92,
+      "pitch": 62,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 92,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 92,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 96,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 96.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 97.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 98.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 99.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 96,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 96,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 96,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 96,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 100,
+      "pitch": 50,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 100.75,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 101.5,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 102.5,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 103.25,
+      "pitch": 66,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 100,
+      "pitch": 57,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 100,
+      "pitch": 66,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 100,
+      "pitch": 69,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 100,
+      "pitch": 38,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Harp",
+      "beat": 104,
+      "pitch": 48,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 104.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 105.5,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 106.5,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 107.25,
+      "pitch": 64,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 104,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 104,
+      "pitch": 64,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 104,
+      "pitch": 67,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 104,
+      "pitch": 36,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 104.5,
+      "pitch": 76,
+      "length": 2.3,
+      "velocity": 43
+    },
+    {
+      "part": "Quiet piano colours",
+      "beat": 106.5,
+      "pitch": 67,
+      "length": 1.3,
+      "velocity": 39
+    },
+    {
+      "part": "Harp",
+      "beat": 108,
+      "pitch": 43,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Harp",
+      "beat": 108.75,
+      "pitch": 55,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 109.5,
+      "pitch": 62,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 110.5,
+      "pitch": 59,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Harp",
+      "beat": 111.25,
+      "pitch": 62,
+      "length": 0.71,
+      "velocity": 48
+    },
+    {
+      "part": "String harmony",
+      "beat": 108,
+      "pitch": 55,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 108,
+      "pitch": 62,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "String harmony",
+      "beat": 108,
+      "pitch": 71,
+      "length": 3.82,
+      "velocity": 50
+    },
+    {
+      "part": "Cello bass",
+      "beat": 108,
+      "pitch": 31,
+      "length": 3.82,
+      "velocity": 46
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 16,
+      "pitch": 59,
+      "length": 2.8,
+      "velocity": 65
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 20,
+      "pitch": 57,
+      "length": 1.8,
+      "velocity": 60
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 22,
+      "pitch": 55,
+      "length": 2.7,
+      "velocity": 63
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 26,
+      "pitch": 52,
+      "length": 1.8,
+      "velocity": 60
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 29,
+      "pitch": 55,
+      "length": 2.5,
+      "velocity": 62
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 64,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 70
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 65,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 65.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 59
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 66.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 66
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 67.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 58
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 67.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 68,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 68
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 69.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 70.0,
+      "pitch": 52,
+      "length": 0.935,
+      "velocity": 63
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 72,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 71
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 73,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 73.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 74.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 67
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 75.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 59
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 75.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 76,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 69
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 77.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 78.0,
+      "pitch": 50,
+      "length": 0.935,
+      "velocity": 62
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 80,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 71
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 81,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 81.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 82.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 67
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 83.0,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 83.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 71
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 84,
+      "pitch": 64,
+      "length": 1.435,
+      "velocity": 75
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 85.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 86.0,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 86.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 59
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 87.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 64
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 88,
+      "pitch": 57,
+      "length": 0.935,
+      "velocity": 67
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 89,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 89.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 90.0,
+      "pitch": 54,
+      "length": 0.935,
+      "velocity": 63
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 91.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 56
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 91.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 92,
+      "pitch": 55,
+      "length": 2.935,
+      "velocity": 67
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 96,
+      "pitch": 57,
+      "length": 2,
+      "velocity": 63
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 99,
+      "pitch": 54,
+      "length": 1.6,
+      "velocity": 58
+    },
+    {
+      "part": "Horn theme fragments",
+      "beat": 101,
+      "pitch": 55,
+      "length": 2.7,
+      "velocity": 62
+    }
+  ],
+  "markers": [
+    [
+      0,
+      "Floating islands - no theme"
+    ],
+    [
+      16,
+      "Horn recollection"
+    ],
+    [
+      32,
+      "Distant lights - no theme"
+    ],
+    [
+      64,
+      "Homeward return"
+    ],
+    [
+      96,
+      "Last answer"
+    ],
+    [
+      104,
+      "Home - no theme"
+    ]
+  ],
+  "statements": [
+    {
+      "part": "Horn theme fragments",
+      "start": 64,
+      "bars": 8,
+      "transpose": -12,
+      "scale": 1
+    }
+  ],
+  "theme_absent_sections": [
+    [
+      0,
+      16
+    ],
+    [
+      32,
+      64
+    ],
+    [
+      104,
+      112
+    ]
+  ],
+  "drum_audio_edits": [],
+  "master_gain": 1.2349817247997095
+}

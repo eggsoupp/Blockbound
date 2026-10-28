@@ -89,6 +89,9 @@ end
 local function payloadFor(entry)
 	return {
 		name = (entry.def and entry.def.displayName) or entry.name,
+		-- Which boss, by its EnemyConfig name: what the soundtrack keys its
+		-- boss themes on (Shared.Audio.Music.BossThemes).
+		key = entry.name,
 		health = math.max(0, entry.health),
 		maxHealth = (entry.def and entry.def.health) or entry.health,
 

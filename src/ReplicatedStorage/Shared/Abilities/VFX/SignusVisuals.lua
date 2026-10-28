@@ -122,14 +122,16 @@ function Visuals.start()
  for _,part in ipairs(Collection:GetTagged("SignusVisual")) do observe(part) end
  local accumulator=0
  Run.Heartbeat:Connect(function(dt)
-  accumulator+=dt;if accumulator<1/30 then return end;accumulator=0
+  -- Choreographed effects (beams, crown, wings) move every frame; the plain
+  -- particle layers only need resizing at 30 Hz.
+  accumulator+=dt;local slow=accumulator>=1/30;if slow then accumulator=0 end
   local camera=workspace.CurrentCamera
   for part,entry in pairs(entries) do
    if not part:IsDescendantOf(workspace) then
     if entry.scope then remove(part) end
     continue
    end
-   if not entry.scope then continue end
+   if not entry.scope or not (slow or entry.custom) then continue end
    if entry.kind~=part:GetAttribute("SignusKind") or entry.phase~=(part:GetAttribute("Phase") or 1) then build(part,entry) end
    local near=camera and (camera.CFrame.Position-part.Position).Magnitude<420
    if entry.custom then

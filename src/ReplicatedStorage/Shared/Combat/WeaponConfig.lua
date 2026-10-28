@@ -27,16 +27,21 @@ local WeaponConfig = {}
 
 -- Well short of mining reach (34), and deliberately past the enemies' own
 -- contactRange (5): a player who can only hit what is already touching them
--- cannot fight anything that hurts on contact.
+-- cannot fight anything that hurts on contact. Measured to the NEAR side of
+-- an enemy, not its middle (see SwordCombo), so a big one is easier to reach.
 WeaponConfig.DefaultRange = 11
 
--- Total forward arc in degrees, so 120 is 60 either side of where you look.
--- Wide enough not to demand precision the mouse cannot express, narrow enough
--- to read as a swing rather than an aura.
-WeaponConfig.DefaultArcDegrees = 120
+-- Total forward arc in degrees, so 220 is 110 either side of where you look:
+-- a little past side-on. Generous on purpose - the server judges facing from
+-- the character, not the mouse, and a swing that visibly sweeps through an
+-- enemy beside you should not miss it. SwordCombo's finisher spins and hits
+-- all round regardless.
+WeaponConfig.DefaultArcDegrees = 220
 
--- The cap on damage per second, and why clicking faster does not win.
--- buffs.attackSpeed shortens it: 0.2 is 20% quicker.
+-- The cap on damage per second, and why clicking faster does not win. The
+-- sword combo (SwordCombo) is timed for this; a weapon with a shorter one
+-- plays the whole combo proportionally faster. buffs.attackSpeed shortens
+-- it: 0.2 is 20% quicker.
 WeaponConfig.DefaultCooldown = 0.55
 
 -- Raising this turns every weapon into a cleave, which is a balance decision

@@ -11,10 +11,17 @@
 	  ECLIPSE JUDGMENT  charges and launches an orb; the target compresses,
 	                    then erupts into a towering beam with orbiting rings.
 	                    Real terrain rises and lands around a lasting crater.
-	  WORLDREND         a sustained violet flame beam, with a fixed aim and a
-	                    clear windup, tears a strip of ground into moving blocks.
+	  WORLDREND         a sustained violet beam with no end of its own: it runs
+	                    until it meets a block, bores on through natural ground
+	                    and fades out at its range. The aim locks before it fires.
 	  TOTALITY          the half-health transformation raises an orbit of
-	                    terrain, changes the sky and forms the overhead eclipse.
+	                    terrain, darkens the sky, lifts it into the air on wings
+	                    of violet fire and ignites the eclipse crown behind its
+	                    hood.
+
+	In phase two every spell is cast from the air and is bigger: a second
+	Maelstrom beside the first, two more Judgment columns either side, and a
+	wider, black-cored Worldrend that keeps turning after you.
 	  CRESCENT LUNGE    a short charge followed by a vulnerable recovery.
 	  VEIL STEP         a short reposition with a crescent and departure burst.
 
@@ -28,6 +35,10 @@
 	while it casts. That puts its pivot inside a sword's reach when you stand
 	beside it. It rises only for Moonfall and Totality, and sinks to the
 	ground for the Fissure, the Nova and the end of a Lunge.
+
+	After Totality it flies (Tuning.flight): it circles high and wide,
+	banking into its turns, casts from the air, and comes down after every
+	spell to recover for a few seconds before taking off again.
 
 	THE RIG
 
@@ -242,6 +253,21 @@ local Tuning = {
 		size = 3.2,
 	},
 
+	-- Phase two: it takes to the air. It circles high and casts from there,
+	-- then comes down after each spell to recover - the window a sword has -
+	-- and takes off again before the next.
+	flight = {
+		hem = 13, -- studs of air under the robe while it circles
+		castHem = 15, -- and while it casts
+		ring = 30,
+		speed = 26,
+		drift = 1.8, -- the ring slides round this much faster
+		bobAmplitude = 1.8,
+		bank = 0.4, -- most it rolls into a turn, radians
+		perch = { 2.2, 3 }, -- seconds on the ground after a spell
+		airTime = 1.3, -- seconds aloft before the next spell
+	},
+
 	-- Leaving: nobody near it for this long.
 	giveUpSeconds = 14,
 	giveUpRange = 360,
@@ -274,6 +300,8 @@ local ATTACK_NAMES = {
 local HANDS = CFrame.new(0, -0.6, -3.6)
 local CLASP = CFrame.new(0, 1.6, -3.1)
 local EYES = CFrame.new(0, 5.6, -2.7)
+-- Behind and above the hood, where phase two's eclipse crown sits.
+local CROWN = CFrame.new(0, 11.4, 2.2)
 
 -- ---------------------------------------------------------------------------
 -- Players
@@ -547,7 +575,9 @@ end
 ]]
 local SKY = {
 	[1] = { TintColor = Color3.fromRGB(230, 220, 255), Saturation = -0.08, Contrast = 0.02, Brightness = 0 },
-	[2] = { TintColor = Color3.fromRGB(196, 168, 236), Saturation = -0.24, Contrast = 0.1, Brightness = -0.06 },
+	-- Eclipse: drained colour and a hard violet cast, but only a touch darker,
+	-- so night terrain is not crushed to black.
+	[2] = { TintColor = Color3.fromRGB(198, 168, 244), Saturation = -0.3, Contrast = 0.1, Brightness = -0.03 },
 	clear = { TintColor = Color3.new(1, 1, 1), Saturation = 0, Contrast = 0, Brightness = 0 },
 }
 
@@ -919,19 +949,12 @@ local function spendHalo(entry, scope)
 	halo.parts = {}
 end
 
--- The black sun that hangs over phase two: a void disc inside a corona,
--- facing the fight, turning slowly. Built once in Totality.
+-- The black sun of phase two is worn as a crown behind the hood: the aura
+-- carrier draws it once its Phase is 2 (SignusChoreography). This is the
+-- moment it ignites.
 local function buildEclipse(entry)
- local visual=newPart(Vector3.new(22,22,.1),Colors.orchid,0,"Eclipse")
- visual.CFrame=CFrame.new(entry.position+Vector3.new(0,38,0))
- visual.Parent=workspace;entry.encounterScope:add(visual)
- entry.eclipse={visual=visual}
-end
-
-local function stepEclipse(entry,_dt: number)
- if entry.eclipse and entry.eclipse.visual.Parent then
-  entry.eclipse.visual.CFrame=CFrame.new(entry.position+Vector3.new(0,38,0))
- end
+ fx("crown",rigPoint(entry,CROWN))
+ entry.eclipse={}
 end
 
 -- ---------------------------------------------------------------------------
@@ -1896,7 +1919,8 @@ local referenceMoves=require(script.Parent.SignusMoves).create({
 	pose=setPose,pause=pause,playersInCircle=playersInCircle,players=livingPlayers,
 	cover=sightBlock,hit=hitOnce,fx=fx,flat=flat,applyPose=applyPose,
 	hand=function(entry) return rigPoint(entry,HANDS) end,
-	sky=setSky,eclipse=buildEclipse,
+	sky=setSky,eclipse=buildEclipse,other=otherPlayer,announce=announce,
+	airHem=Tuning.flight.castHem,
 })
 local ATTACKS = {
 	spiral = referenceMoves.spiral,
@@ -1955,6 +1979,14 @@ local function performAttack(entry, pick: string, phase: number)
 		local rest = if pick == "step" or pick == "lunge"
 			then 0.3
 			else math.random() * (Tuning.restMax[now] - Tuning.restMin[now]) + Tuning.restMin[now]
+		-- Aloft, every spell but a step ends on the ground, spent; it takes off
+		-- again a moment before the next. Totality ends in the air.
+		if entry.transformed and pick ~= "step" and pick ~= "totality" then
+			local F = Tuning.flight
+			local perch = F.perch[1] + math.random() * (F.perch[2] - F.perch[1])
+			entry.perchUntil = os.clock() + perch
+			rest = perch + F.airTime
+		end
 		entry.nextAttackAt = os.clock() + rest
 		entry.busy = false
 		setBossPhase(entry, nil)
@@ -2140,6 +2172,8 @@ function Signus.start(entry)
 	entry.busy = false
 	entry.leaving = false
 	entry.transformed = false
+	entry.perchUntil = nil
+	entry.perched = false
 	entry.scope = nil
 	entry.poseScope = nil
 	entry.encounterScope = AbilityScope.new()
@@ -2215,12 +2249,15 @@ function Signus.step(entry, dt: number, now: number)
 	end
 
 	local H = Tuning.hover
+	local F = Tuning.flight
 	local phase = phaseOf(entry)
+	-- Aloft: transformed, and not down recovering from a spell.
+	local flying = entry.transformed and now >= (entry.perchUntil or 0)
 
 	entry.bobPhase += dt
 	entry.bob = if entry.motion == "scripted"
 		then 0
-		else math.sin(entry.bobPhase * TAU / H.bobPeriod) * H.bobAmplitude
+		else math.sin(entry.bobPhase * TAU / H.bobPeriod) * (if entry.transformed then F.bobAmplitude else H.bobAmplitude)
 	-- A scripted move writes the lean itself; easing it here as well would
 	-- fight it within the same frame.
 	if entry.motion ~= "scripted" then
@@ -2241,13 +2278,17 @@ function Signus.step(entry, dt: number, now: number)
 		local focus = livingRoot(entry.focus) or rootOf(target)
 
 		if entry.motion == "hover" and focus then
-			entry.ringAngle += entry.ringSpin * dt
-			local ring = focus.Position + Vector3.new(math.cos(entry.ringAngle), 0, math.sin(entry.ringAngle)) * H.ring[phase]
+			-- Down recovering it drifts at half pace; aloft it circles wide and fast.
+			local perched = entry.transformed and not flying
+			entry.ringAngle += entry.ringSpin * dt * (if flying then F.drift elseif perched then 0.5 else 1)
+			local radius = if flying then F.ring else H.ring[phase]
+			local ring = focus.Position + Vector3.new(math.cos(entry.ringAngle), 0, math.sin(entry.ringAngle)) * radius
 			local ground = groundUnder(Vector3.new(ring.X, focus.Position.Y, ring.Z))
-			local goal = Vector3.new(ring.X, pivotHeight(entry, ground, entry.hem), ring.Z)
-			moveToward(entry, goal, dt, H.speed[phase])
-		elseif entry.motion == "hold" or entry.motion == "ground" then
-			-- Still, but settling to the height the spell wants.
+			local goal = Vector3.new(ring.X, pivotHeight(entry, ground, if flying then F.hem else entry.hem), ring.Z)
+			moveToward(entry, goal, dt, if flying then F.speed elseif perched then H.speed[phase] * 0.5 else H.speed[phase])
+		elseif entry.motion == "hold" or entry.motion == "ground" or entry.motion == "aim" then
+			-- Still, but settling to the height the spell wants. A spell that
+			-- aims ("aim") turns it itself.
 			local hem = if entry.motion == "ground" then 0.2 else entry.hem
 			local ground = groundUnder(entry.position)
 			local goalY = pivotHeight(entry, ground, hem)
@@ -2259,15 +2300,35 @@ function Signus.step(entry, dt: number, now: number)
 			)
 		end
 
-		if focus then
+		if focus and entry.motion ~= "aim" then
 			entry.look = turnFlat(entry.look, focus.Position - entry.position, math.rad(H.turnRate) * dt)
+		end
+
+		-- Flying, it banks into its turns and leans into its speed.
+		if entry.transformed and entry.motion == "hover" then
+			local right = flat(entry.look):Cross(Vector3.yAxis)
+			local bank = if flying then -math.clamp(entry.velocity:Dot(right) / F.speed, -1, 1) * F.bank else 0
+			entry.roll += (bank - entry.roll) * math.clamp(dt * 3, 0, 1)
+			entry.leanGoal = if flying then 0.18 * math.clamp(entry.velocity:Dot(flat(entry.look)) / F.speed, -1, 1) else 0
 		end
 
 		applyPose(entry)
 	end
 
+	-- Touching down after a spell, and taking off again.
+	if entry.transformed and entry.motion == "hover" then
+		local ground = groundUnder(entry.position)
+		if flying and entry.perched then
+			entry.perched = false
+			fx("takeoff", ground)
+		elseif not flying and not entry.perched
+			and entry.position.Y - pivotHeight(entry, ground, Tuning.hover.hem) < 1.5 then
+			entry.perched = true
+			fx("land", ground)
+		end
+	end
+
 	stepHalo(entry, dt)
-	stepEclipse(entry, dt)
 
 	if not entry.leaving then
 		contactDamage(entry, now)
@@ -2277,10 +2338,21 @@ function Signus.step(entry, dt: number, now: number)
 		return
 	end
 
-	if now >= (entry.nextAttackAt or 0) then
+	-- A spell asked for by name (/signus <spell> in the debug console) goes
+	-- next, once it is free; Totality still comes first at half health.
+	local asked = entry.model:GetAttribute("SignusCast")
+	if asked ~= nil and not ATTACKS[asked] then
+		entry.model:SetAttribute("SignusCast", nil)
+		asked = nil
+	end
+
+	if now >= (entry.nextAttackAt or 0) or asked then
 		local pick
 		if phase == 2 and not entry.transformed then
 			pick = "totality"
+		elseif asked then
+			pick = asked
+			entry.model:SetAttribute("SignusCast", nil)
 		else
 			pick = situational(entry, now, phase) or nextInCycle(entry, phase)
 		end

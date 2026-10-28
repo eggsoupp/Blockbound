@@ -71,6 +71,9 @@ end
 local S = EnemyConfig.Spawning
 local STUD_SIZE = TerrainConfig.StudSize
 
+-- The clearing round the world spawn; see EnemyConfig.Spawning.safeBlocks.
+local SAFE_RADIUS = S.safeBlocks * STUD_SIZE
+
 --[[
 	biome name -> the enemies that live there, built once from the definitions.
 
@@ -247,7 +250,11 @@ local function attempt(player: Player)
 			math.sin(angle) * distance
 		)
 
-		if not inPlainSight(position, look, point) then
+		-- Nothing in the spawn clearing, and nothing whose scatter would
+		-- reach into it.
+		local clear = (Vector3.new(point.X, 0, point.Z)).Magnitude >= SAFE_RADIUS + S.packSpread
+
+		if clear and not inPlainSight(position, look, point) then
 			local biome = biomeAt(point.X, point.Z)
 			local candidates = biome and byBiome[biome]
 
@@ -256,7 +263,7 @@ local function attempt(player: Player)
 				local count = random:NextInteger(S.groupMin, S.groupMax)
 
 				local spawned, reason =
-					EnemyService.spawnPack(name, point, count, S.packSpread)
+					EnemyService.spawnPack(name, point, count, S.packSpread, true)
 
 				if spawned > 0 then
 					log(string.format(

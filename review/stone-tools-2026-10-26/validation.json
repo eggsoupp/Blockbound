@@ -1,0 +1,63 @@
+{
+  "sword": {
+    "canvas_xyz": [
+      24,
+      3,
+      24
+    ],
+    "voxels": 166,
+    "center_layer_voxels": 134,
+    "raised_cells_per_side": 16,
+    "face_connected_components": 1,
+    "mirrored_thickness": true,
+    "front_projection_matches_design": true,
+    "solid_depth_columns": true,
+    "source_head_pixels_preserved": false,
+    "occupied_xyz": [
+      22,
+      3,
+      22
+    ]
+  },
+  "pickaxe": {
+    "canvas_xyz": [
+      24,
+      3,
+      24
+    ],
+    "voxels": 103,
+    "center_layer_voxels": 85,
+    "raised_cells_per_side": 9,
+    "face_connected_components": 1,
+    "mirrored_thickness": true,
+    "front_projection_matches_design": true,
+    "solid_depth_columns": true,
+    "source_head_pixels_preserved": true,
+    "occupied_xyz": [
+      19,
+      3,
+      19
+    ]
+  },
+  "axe": {
+    "canvas_xyz": [
+      24,
+      3,
+      24
+    ],
+    "voxels": 89,
+    "center_layer_voxels": 75,
+    "raised_cells_per_side": 7,
+    "face_connected_components": 1,
+    "mirrored_thickness": true,
+    "front_projection_matches_design": true,
+    "solid_depth_columns": true,
+    "source_head_pixels_preserved": true,
+    "occupied_xyz": [
+      17,
+      3,
+      19
+    ]
+  },
+  "shared_palette_byte_identical": true
+}

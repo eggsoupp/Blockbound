@@ -91,6 +91,9 @@ local slots: { any } = {}
 ]]
 local handlers: { [string]: ((...any) -> ())? } = {}
 
+-- Whether something has asked the list to step aside; see setHeldBack.
+local heldBack = false
+
 -- ---------------------------------------------------------------------------
 -- Look
 -- ---------------------------------------------------------------------------
@@ -418,6 +421,7 @@ function AbilityPanel.new(parent: Instance)
 	self.cards = {}
 	self.filled = 0
 	self.visible = false
+	self.wanted = false
 	self.fade = nil
 	self.drag = nil
 
@@ -1100,7 +1104,13 @@ end
 -- Visibility
 -- ---------------------------------------------------------------------------
 
+-- What the menu asked for. Shown only if nothing is holding the list back too.
 function AbilityPanel:setVisible(visible: boolean)
+	self.wanted = visible == true
+	self:_show(self.wanted and not heldBack)
+end
+
+function AbilityPanel:_show(visible: boolean)
 	visible = visible == true
 	if visible == self.visible then
 		return
@@ -1185,6 +1195,20 @@ end
 ]]
 function AbilityPanel.setHandlers(next: { [string]: ((...any) -> ())? }?)
 	handlers = next or {}
+end
+
+--[[
+	Steps the list out of the way while something else needs the middle of
+	the Tab menu - today, the tutorial's ability choice (Shared.UI.
+	TutorialChoice) - and back when it is done. The menu still opens and
+	closes it as usual; held back, it just stays faded out until released.
+]]
+function AbilityPanel.setHeldBack(held: boolean)
+	heldBack = held == true
+
+	if live then
+		live:_show(live.wanted and not heldBack)
+	end
 end
 
 return AbilityPanel

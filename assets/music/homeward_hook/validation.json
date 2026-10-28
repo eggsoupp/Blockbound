@@ -1,0 +1,26 @@
+[
+  {
+    "duration_seconds": 21.67,
+    "note_counts": {
+      "0": 36,
+      "1": 24
+    },
+    "melody_is_monophonic": true,
+    "all_notes_released": true,
+    "file": "Blockbound_Homeward",
+    "peak_dbfs": -7.47,
+    "rms_dbfs": -22.0
+  },
+  {
+    "duration_seconds": 21.67,
+    "note_counts": {
+      "0": 36,
+      "1": 0
+    },
+    "melody_is_monophonic": true,
+    "all_notes_released": true,
+    "file": "Blockbound_Homeward_Melody_Only",
+    "peak_dbfs": -8.64,
+    "rms_dbfs": -22.29
+  }
+]

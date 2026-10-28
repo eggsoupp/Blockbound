@@ -1,0 +1,1257 @@
+{
+  "title": "Echoes Below",
+  "tempos": [
+    [
+      0,
+      64,
+      "Deep and still"
+    ]
+  ],
+  "end": 112,
+  "parts": {
+    "Low piano theme fragments": {
+      "channel": 0,
+      "program": 0,
+      "target_rms_db": -23,
+      "pan": 60,
+      "wet": 0.26,
+      "drums": false,
+      "render_gain": 18.956533241327637,
+      "instrument": "Grand Piano",
+      "raw_rms_db": -50.88,
+      "expression": 127
+    },
+    "Contrabass drone": {
+      "channel": 1,
+      "program": 43,
+      "target_rms_db": -34,
+      "pan": 64,
+      "wet": 0.2,
+      "drums": false,
+      "render_gain": 5.145010441310199,
+      "instrument": "Double Bass",
+      "raw_rms_db": -48.26,
+      "expression": 82
+    },
+    "Cello drone": {
+      "channel": 2,
+      "program": 42,
+      "target_rms_db": -36,
+      "pan": 46,
+      "wet": 0.24,
+      "drums": false,
+      "render_gain": 2.783720722459604,
+      "instrument": "Cello",
+      "raw_rms_db": -44.91,
+      "expression": 67
+    },
+    "Distant choir": {
+      "channel": 3,
+      "program": 52,
+      "target_rms_db": -37,
+      "pan": 82,
+      "wet": 0.4,
+      "drums": false,
+      "render_gain": 6.4754957253050245,
+      "instrument": "Concert Choir",
+      "raw_rms_db": -53.22,
+      "expression": 89
+    },
+    "Kalimba drips": {
+      "channel": 4,
+      "program": 108,
+      "target_rms_db": -33,
+      "pan": 64,
+      "wet": 0.45,
+      "drums": false,
+      "render_gain": 6.829733370732595,
+      "instrument": "Kalimba",
+      "raw_rms_db": -56.41,
+      "expression": 90
+    },
+    "Dark atmosphere": {
+      "channel": 5,
+      "program": 95,
+      "target_rms_db": -36,
+      "pan": 64,
+      "wet": 0.35,
+      "drums": false,
+      "render_gain": 7.553840935603945,
+      "instrument": "Sweep Pad",
+      "raw_rms_db": -53.6,
+      "expression": 93
+    }
+  },
+  "events": [
+    {
+      "part": "Contrabass drone",
+      "beat": 0,
+      "pitch": 40,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 0,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Dark atmosphere",
+      "beat": 0,
+      "pitch": 64,
+      "length": 15.6,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 2.0,
+      "pitch": 91,
+      "length": 0.5,
+      "velocity": 45
+    },
+    {
+      "part": "Cello drone",
+      "beat": 4,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 5.25,
+      "pitch": 81,
+      "length": 0.5,
+      "velocity": 41
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 8,
+      "pitch": 36,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 8,
+      "pitch": 43,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 8.5,
+      "pitch": 88,
+      "length": 0.5,
+      "velocity": 39
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 10.0,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 37
+    },
+    {
+      "part": "Cello drone",
+      "beat": 12,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 12.5,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 42
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 14.75,
+      "pitch": 88,
+      "length": 0.5,
+      "velocity": 45
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 16,
+      "pitch": 33,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 16,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Dark atmosphere",
+      "beat": 16,
+      "pitch": 57,
+      "length": 15.6,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 17.25,
+      "pitch": 79,
+      "length": 0.5,
+      "velocity": 41
+    },
+    {
+      "part": "Cello drone",
+      "beat": 20,
+      "pitch": 42,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 22.0,
+      "pitch": 91,
+      "length": 0.5,
+      "velocity": 41
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 23.25,
+      "pitch": 91,
+      "length": 0.5,
+      "velocity": 41
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 24,
+      "pitch": 40,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 24,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 26.0,
+      "pitch": 79,
+      "length": 0.5,
+      "velocity": 38
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 27.25,
+      "pitch": 91,
+      "length": 0.5,
+      "velocity": 36
+    },
+    {
+      "part": "Cello drone",
+      "beat": 28,
+      "pitch": 43,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 24,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 24,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 24,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 28.5,
+      "pitch": 76,
+      "length": 0.5,
+      "velocity": 38
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 30.75,
+      "pitch": 88,
+      "length": 0.5,
+      "velocity": 43
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 32,
+      "pitch": 40,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 32,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Dark atmosphere",
+      "beat": 32,
+      "pitch": 64,
+      "length": 15.6,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 33.25,
+      "pitch": 88,
+      "length": 0.5,
+      "velocity": 42
+    },
+    {
+      "part": "Cello drone",
+      "beat": 36,
+      "pitch": 43,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 32,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 32,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 32,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 39.25,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 41
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 40,
+      "pitch": 31,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 40,
+      "pitch": 38,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 42.0,
+      "pitch": 91,
+      "length": 0.5,
+      "velocity": 38
+    },
+    {
+      "part": "Cello drone",
+      "beat": 44,
+      "pitch": 45,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 40,
+      "pitch": 57,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 40,
+      "pitch": 66,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 40,
+      "pitch": 69,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 47.25,
+      "pitch": 79,
+      "length": 0.5,
+      "velocity": 45
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 48,
+      "pitch": 40,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 48,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Dark atmosphere",
+      "beat": 48,
+      "pitch": 64,
+      "length": 15.6,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 48.5,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 41
+    },
+    {
+      "part": "Cello drone",
+      "beat": 52,
+      "pitch": 43,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 48,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 48,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 48,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 52.5,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 44
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 56,
+      "pitch": 38,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 56,
+      "pitch": 45,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 58.75,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 39
+    },
+    {
+      "part": "Cello drone",
+      "beat": 60,
+      "pitch": 38,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 56,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 56,
+      "pitch": 62,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 56,
+      "pitch": 71,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 62.0,
+      "pitch": 88,
+      "length": 0.5,
+      "velocity": 36
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 64,
+      "pitch": 33,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 64,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Dark atmosphere",
+      "beat": 64,
+      "pitch": 57,
+      "length": 15.6,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 64.5,
+      "pitch": 79,
+      "length": 0.5,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 66.0,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 34
+    },
+    {
+      "part": "Cello drone",
+      "beat": 68,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 64,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 64,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 64,
+      "pitch": 71,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 71.25,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 44
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 72,
+      "pitch": 36,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 72,
+      "pitch": 43,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 73.25,
+      "pitch": 79,
+      "length": 0.5,
+      "velocity": 45
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 74.0,
+      "pitch": 76,
+      "length": 0.5,
+      "velocity": 44
+    },
+    {
+      "part": "Cello drone",
+      "beat": 76,
+      "pitch": 42,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 72,
+      "pitch": 54,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 72,
+      "pitch": 63,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 72,
+      "pitch": 66,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 78.0,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 42
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 80,
+      "pitch": 33,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 80,
+      "pitch": 40,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Dark atmosphere",
+      "beat": 80,
+      "pitch": 57,
+      "length": 15.6,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 81.25,
+      "pitch": 81,
+      "length": 0.5,
+      "velocity": 43
+    },
+    {
+      "part": "Cello drone",
+      "beat": 84,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 80,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 80,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 80,
+      "pitch": 71,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 86.0,
+      "pitch": 88,
+      "length": 0.5,
+      "velocity": 39
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 88,
+      "pitch": 36,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 88,
+      "pitch": 43,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 88.5,
+      "pitch": 86,
+      "length": 0.5,
+      "velocity": 35
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 91.25,
+      "pitch": 79,
+      "length": 0.5,
+      "velocity": 44
+    },
+    {
+      "part": "Cello drone",
+      "beat": 92,
+      "pitch": 42,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 88,
+      "pitch": 54,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 88,
+      "pitch": 63,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 88,
+      "pitch": 66,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 95.25,
+      "pitch": 76,
+      "length": 0.5,
+      "velocity": 35
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 96,
+      "pitch": 40,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 96,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Dark atmosphere",
+      "beat": 96,
+      "pitch": 64,
+      "length": 15.6,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 99.25,
+      "pitch": 83,
+      "length": 0.5,
+      "velocity": 34
+    },
+    {
+      "part": "Cello drone",
+      "beat": 100,
+      "pitch": 43,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Distant choir",
+      "beat": 96,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 96,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Distant choir",
+      "beat": 96,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 36
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 101.25,
+      "pitch": 76,
+      "length": 0.5,
+      "velocity": 37
+    },
+    {
+      "part": "Contrabass drone",
+      "beat": 104,
+      "pitch": 40,
+      "length": 7.8,
+      "velocity": 50
+    },
+    {
+      "part": "Cello drone",
+      "beat": 104,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 105.25,
+      "pitch": 88,
+      "length": 0.5,
+      "velocity": 43
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 106.75,
+      "pitch": 88,
+      "length": 0.5,
+      "velocity": 40
+    },
+    {
+      "part": "Cello drone",
+      "beat": 108,
+      "pitch": 47,
+      "length": 3.85,
+      "velocity": 40
+    },
+    {
+      "part": "Kalimba drips",
+      "beat": 110.75,
+      "pitch": 86,
+      "length": 0.5,
+      "velocity": 44
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 24,
+      "pitch": 59,
+      "length": 1.8,
+      "velocity": 58
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 26,
+      "pitch": 57,
+      "length": 0.8,
+      "velocity": 52
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 27,
+      "pitch": 55,
+      "length": 2.6,
+      "velocity": 55
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 32,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 71
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 33,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 33.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 34.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 67
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 35.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 59
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 35.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 36,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 69
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 37.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 38.0,
+      "pitch": 52,
+      "length": 0.935,
+      "velocity": 64
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 40,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 72
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 41,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 41.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 42.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 68
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 43.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 43.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 44,
+      "pitch": 57,
+      "length": 1.435,
+      "velocity": 70
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 45.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 46.0,
+      "pitch": 50,
+      "length": 0.935,
+      "velocity": 63
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 48,
+      "pitch": 59,
+      "length": 0.935,
+      "velocity": 72
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 49,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 49.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 50.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 68
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 51.0,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 51.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 72
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 52,
+      "pitch": 64,
+      "length": 1.435,
+      "velocity": 76
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 53.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 54.0,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 54.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 60
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 55.0,
+      "pitch": 55,
+      "length": 0.935,
+      "velocity": 65
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 56,
+      "pitch": 57,
+      "length": 0.935,
+      "velocity": 68
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 57,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 57.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 58.0,
+      "pitch": 54,
+      "length": 0.935,
+      "velocity": 64
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 59.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 57
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 59.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 60,
+      "pitch": 55,
+      "length": 2.935,
+      "velocity": 68
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 88,
+      "pitch": 59,
+      "length": 2.2,
+      "velocity": 54
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 91,
+      "pitch": 57,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 92,
+      "pitch": 55,
+      "length": 2.4,
+      "velocity": 52
+    },
+    {
+      "part": "Low piano theme fragments",
+      "beat": 96,
+      "pitch": 52,
+      "length": 3.4,
+      "velocity": 48
+    }
+  ],
+  "markers": [
+    [
+      0,
+      "Darkness - no theme"
+    ],
+    [
+      24,
+      "Something familiar"
+    ],
+    [
+      32,
+      "Homeward, far below"
+    ],
+    [
+      64,
+      "Deeper - no theme"
+    ],
+    [
+      88,
+      "An echo of home"
+    ],
+    [
+      104,
+      "Silence - no theme"
+    ]
+  ],
+  "statements": [
+    {
+      "part": "Low piano theme fragments",
+      "start": 32,
+      "bars": 8,
+      "transpose": -12,
+      "scale": 1
+    }
+  ],
+  "theme_absent_sections": [
+    [
+      0,
+      24
+    ],
+    [
+      64,
+      88
+    ],
+    [
+      104,
+      112
+    ]
+  ],
+  "space": {
+    "seconds": 4.5,
+    "decay": 1.15,
+    "predelay": 0.045,
+    "brightness": 40,
+    "seed": 64
+  },
+  "master_gain": 0.49630934884584077
+}

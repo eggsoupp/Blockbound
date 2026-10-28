@@ -1,0 +1,72 @@
+{
+  "pickaxe": {
+    "size_xyz": [
+      15,
+      2,
+      16
+    ],
+    "voxel_count": 170,
+    "connected_components": 1,
+    "front_back_symmetry": true,
+    "front_projection_matches_trace": true,
+    "solid_depth": 2
+  },
+  "sword": {
+    "size_xyz": [
+      26,
+      2,
+      26
+    ],
+    "voxel_count": 372,
+    "connected_components": 1,
+    "front_back_symmetry": true,
+    "front_projection_matches_trace": true,
+    "solid_depth": 2
+  },
+  "axe": {
+    "size_xyz": [
+      16,
+      2,
+      16
+    ],
+    "voxel_count": 120,
+    "connected_components": 1,
+    "front_back_symmetry": true,
+    "front_projection_matches_trace": true,
+    "solid_depth": 2
+  },
+  "shared_palette_identical": true,
+  "sword_uses_only_existing_axe_wood_colors": true,
+  "sword_used_colors_rgb": [
+    [
+      40,
+      30,
+      11
+    ],
+    [
+      55,
+      41,
+      16
+    ],
+    [
+      73,
+      54,
+      21
+    ],
+    [
+      89,
+      67,
+      25
+    ],
+    [
+      107,
+      81,
+      31
+    ],
+    [
+      134,
+      101,
+      38
+    ]
+  ]
+}

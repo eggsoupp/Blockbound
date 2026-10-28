@@ -1,0 +1,58 @@
+[
+  {
+    "slug": "night",
+    "name": "Under the Stars",
+    "description": "Music box and celesta drift over warm pads and slow harp; the theme visits once, an octave up, between long stretches of quiet harmony.",
+    "duration_seconds": 111.167,
+    "peak_dbfs": -3.98,
+    "rms_dbfs": -23.0,
+    "theme_to_backing_rms_db_during_theme": 6.89,
+    "verified_theme_statements": 1,
+    "theme_absent_sections_seconds": [
+      [
+        0.0,
+        13.33
+      ],
+      [
+        53.33,
+        80.0
+      ],
+      [
+        93.33,
+        106.67
+      ]
+    ],
+    "theme_absent_duration_seconds": 53.33,
+    "midi_notes": 320,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 106.667
+  },
+  {
+    "slug": "cave",
+    "name": "Echoes Below",
+    "description": "Low piano carries the theme far underground over cello and contrabass drones and a faint choir; sparse kalimba notes fall like drips and echo away.",
+    "duration_seconds": 109.5,
+    "peak_dbfs": -4.66,
+    "rms_dbfs": -24.01,
+    "theme_to_backing_rms_db_during_theme": 6.61,
+    "verified_theme_statements": 1,
+    "theme_absent_sections_seconds": [
+      [
+        0.0,
+        22.5
+      ],
+      [
+        60.0,
+        82.5
+      ],
+      [
+        97.5,
+        105.0
+      ]
+    ],
+    "theme_absent_duration_seconds": 52.5,
+    "midi_notes": 159,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 105.0
+  }
+]

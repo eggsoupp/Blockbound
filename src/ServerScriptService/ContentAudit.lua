@@ -93,6 +93,7 @@ ContentAudit.UseHandlers = {
 ]]
 ContentAudit.VfxAssets = {
 	CataclysmVFX = {"CataclysmParticles", "CataclysmCamera"},
+	VoidRendVFX = {"VoidRendParticles"},
 	StarterVFX = {"StarterParticles", "CataclysmParticles"},
 	SignusVFX = {"SignusFX", "SignusParticles", "SignusVisuals", "SignusChoreography", "CataclysmParticles", "StarterParticles"},
 }
@@ -104,6 +105,7 @@ ContentAudit.BlankAnimationsByDesign = true
 -- animation. Any other ability without one is reported as placeholder content.
 ContentAudit.NoCastAnimationByDesign = {
 	Cataclysm = "cast and impact are communicated by authored particles",
+	VoidRend = "the caster's flight path is the motion; leap, crescent and claw rake are particles and beams",
 	Fireball = "particle charge and release",
 	WindBurst = "particle gather and directional pressure fan",
 	WaterBlade = "particle charge and water crescent",

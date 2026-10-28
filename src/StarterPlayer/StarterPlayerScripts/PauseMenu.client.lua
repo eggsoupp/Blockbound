@@ -262,6 +262,12 @@ MenuState.OpenRequested:Connect(function(name)
 	end
 end)
 
+MenuState.CloseRequested:Connect(function(name)
+	if name == MENU_NAME and isOpen then
+		closeMenu()
+	end
+end)
+
 player.CharacterAdded:Connect(function()
 	if isOpen then
 		closeMenu()

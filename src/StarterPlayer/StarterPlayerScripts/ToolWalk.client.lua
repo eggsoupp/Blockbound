@@ -3,10 +3,11 @@
 
 	Walks and runs the character with the held tool the way that tool is
 	carried: a sword walk for a sword, a heavier one for a heavy sword, a lance
-	walk for a lance, and the normal walk for a pickaxe, an axe or anything else
-	held - and, sprinting, the matching run. Which is which is ToolConfig.
-	WalkAnimations and RunAnimations, keyed by the weapon's `weaponClass` in
-	ItemDefinitions.
+	walk for a lance, and the sword walk for a pickaxe, an axe, empty hands or
+	anything else - and, sprinting, the matching run. Which is which is
+	ToolConfig.WalkAnimations and RunAnimations, keyed by the weapon's
+	`weaponClass` in ItemDefinitions; the animations themselves are
+	Shared.Tools.LocomotionAnimations, previewed in Studio until published.
 
 	ONLY WHILE MOVING, ONLY WHILE HOLDING
 
@@ -37,6 +38,7 @@ local RunService = game:GetService("RunService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local ToolConfig = require(Shared:WaitForChild("Tools"):WaitForChild("ToolConfig"))
 local ToolAnimation = require(Shared.Tools:WaitForChild("ToolAnimation"))
+local LocomotionAnimations = require(Shared.Tools:WaitForChild("LocomotionAnimations"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
 local player = Players.LocalPlayer
@@ -72,9 +74,25 @@ local function itemNameFor(tool)
 	return tool.Name
 end
 
+--[[
+	The id to play for a gait: the published one from ToolConfig, or - while
+	that is still "" - a temporary preview of the LocomotionAnimations gait,
+	which only Studio can make. nil plays nothing.
+]]
+local function gaitId(id, kind, definition)
+	if type(id) == "string" and id ~= "" then
+		return id
+	end
+	if RunService:IsStudio() then
+		return LocomotionAnimations.preview(LocomotionAnimations.nameFor(kind, definition and definition.weaponClass))
+	end
+	return nil
+end
+
 -- The held tool, its walk and its run, worked out once per equip rather than
 -- per frame.
 local heldTool, heldWalk, heldRun, heldIdle = nil, nil, nil, nil
+local resolved = false
 
 -- What is playing now.
 local playing = { character = nil, id = nil, track = nil }
@@ -117,11 +135,11 @@ RunService.Heartbeat:Connect(function()
 	-- Empty hands (or a block, or any item that is not a held Tool) use the
 	-- Default walk and run, so `definition` nil is a real case, not a skip.
 	local tool = character:FindFirstChildOfClass("Tool")
-	if tool ~= heldTool or heldWalk == nil then
-		heldTool = tool
+	if tool ~= heldTool or not resolved then
+		heldTool, resolved = tool, true
 		local definition = tool and ItemDefinitions[itemNameFor(tool)]
-		heldWalk = ToolConfig.walkAnimationFor(definition)
-		heldRun = ToolConfig.runAnimationFor(definition)
+		heldWalk = gaitId(ToolConfig.walkAnimationFor(definition), "Walk", definition)
+		heldRun = gaitId(ToolConfig.runAnimationFor(definition), "Run", definition)
 		heldIdle = ToolConfig.idleAnimationFor(definition)
 	end
 

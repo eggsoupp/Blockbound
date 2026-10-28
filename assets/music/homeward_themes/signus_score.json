@@ -1,0 +1,9918 @@
+{
+  "title": "Hallowed Eclipse",
+  "tempos": [
+    [
+      0,
+      76,
+      "Voices in the dark"
+    ],
+    [
+      16,
+      168,
+      "Eclipse"
+    ]
+  ],
+  "end": 144,
+  "parts": {
+    "Voice hook intro": {
+      "channel": 0,
+      "program": 53,
+      "target_rms_db": -29,
+      "pan": 64,
+      "wet": 0.3,
+      "drums": false,
+      "render_gain": 7.864252309456173,
+      "instrument": "Voice Oohs",
+      "raw_rms_db": -47.15,
+      "expression": 71
+    },
+    "Organ intro": {
+      "channel": 1,
+      "program": 19,
+      "target_rms_db": -36,
+      "pan": 64,
+      "wet": 0.25,
+      "drums": false,
+      "render_gain": 3.5484471975882457,
+      "instrument": "Pipe Organ",
+      "raw_rms_db": -46.97,
+      "expression": 54
+    },
+    "Choir theme melody": {
+      "channel": 2,
+      "program": 52,
+      "target_rms_db": -19,
+      "pan": 70,
+      "wet": 0.22,
+      "drums": false,
+      "render_gain": 43.927355329475624,
+      "instrument": "Concert Choir",
+      "raw_rms_db": -52.03,
+      "expression": 125
+    },
+    "Lead synth melody": {
+      "channel": 3,
+      "program": 81,
+      "target_rms_db": -18,
+      "pan": 58,
+      "wet": 0.12,
+      "drums": false,
+      "render_gain": 3.523773642629637,
+      "raw_rms_db": null,
+      "instrument": "Custom lead synthesizer; GM MIDI proxy",
+      "expression": 54
+    },
+    "Harpsichord arpeggio": {
+      "channel": 4,
+      "program": 6,
+      "target_rms_db": -27,
+      "pan": 36,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 45.69921064971744,
+      "instrument": "Harpsichord",
+      "raw_rms_db": -60.19,
+      "expression": 127
+    },
+    "Organ chords": {
+      "channel": 5,
+      "program": 19,
+      "target_rms_db": -28,
+      "pan": 64,
+      "wet": 0.18,
+      "drums": false,
+      "render_gain": 7.19697610778461,
+      "instrument": "Pipe Organ",
+      "raw_rms_db": -45.13,
+      "expression": 69
+    },
+    "String ostinato": {
+      "channel": 6,
+      "program": 48,
+      "target_rms_db": -28,
+      "pan": 92,
+      "wet": 0.12,
+      "drums": false,
+      "render_gain": 22.838479351932342,
+      "instrument": "Fast Strings",
+      "raw_rms_db": -55.17,
+      "expression": 101
+    },
+    "Synth bass": {
+      "channel": 7,
+      "program": 38,
+      "target_rms_db": -23,
+      "pan": 64,
+      "wet": 0.02,
+      "drums": false,
+      "render_gain": 1.0426423464758106,
+      "raw_rms_db": null,
+      "instrument": "Custom bass synthesizer; GM MIDI proxy",
+      "expression": 36
+    },
+    "Timpani": {
+      "channel": 8,
+      "program": 47,
+      "target_rms_db": -26,
+      "pan": 64,
+      "wet": 0.14,
+      "drums": false,
+      "render_gain": 4.469793445596204,
+      "instrument": "Timpani",
+      "raw_rms_db": -43.23,
+      "expression": 59
+    },
+    "Orchestral drums": {
+      "channel": 9,
+      "program": 48,
+      "target_rms_db": -22,
+      "pan": 64,
+      "wet": 0.06,
+      "drums": true,
+      "render_gain": 3.49967773347614,
+      "instrument": "Orchestral",
+      "raw_rms_db": -34.38,
+      "expression": 54
+    }
+  },
+  "events": [
+    {
+      "part": "Voice hook intro",
+      "beat": 0,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 73
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 1,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 64
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 1.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 2.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 69
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 3.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 61
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 3.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 66
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 4,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 71
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 5.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 6.0,
+      "pitch": 64,
+      "length": 0.935,
+      "velocity": 66
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 8,
+      "pitch": 71,
+      "length": 0.935,
+      "velocity": 74
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 9,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 65
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 9.5,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 10.0,
+      "pitch": 67,
+      "length": 0.935,
+      "velocity": 70
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 11.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 11.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 67
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 12,
+      "pitch": 69,
+      "length": 1.435,
+      "velocity": 72
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 13.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 63
+    },
+    {
+      "part": "Voice hook intro",
+      "beat": 14.0,
+      "pitch": 62,
+      "length": 0.935,
+      "velocity": 65
+    },
+    {
+      "part": "Organ intro",
+      "beat": 0,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 0,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 0,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 4,
+      "pitch": 48,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 4,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 4,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 8,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 8,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 8,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 12,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 12,
+      "pitch": 63,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ intro",
+      "beat": 12,
+      "pitch": 66,
+      "length": 3.9,
+      "velocity": 50
+    },
+    {
+      "part": "Organ chords",
+      "beat": 16,
+      "pitch": 52,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 16,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 16,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 16,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 16.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 16.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 17.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 17.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 18.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 18.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 19.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 19.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 16.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 16.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 17.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 17.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 18.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 18.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 19.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 19.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 16.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 16.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 17.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 17.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 18.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 18.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 19.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 19.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 16,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 20.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 20.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 21.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 21.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 22.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 22.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 23.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 23.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 20.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 20.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 21.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 21.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 22.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 22.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 23.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 23.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 20.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 20.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 21.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 21.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 22.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 22.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 23.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 23.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Organ chords",
+      "beat": 24,
+      "pitch": 48,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 24,
+      "pitch": 52,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 24,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 24,
+      "pitch": 60,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 24.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 24.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 25.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 25.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 26.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 26.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 27.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 27.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 24.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 24.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 25.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 25.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 26.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 26.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 27.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 27.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 24.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 24.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 25.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 25.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 26.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 26.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 27.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 27.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 24,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 28.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 28.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 29.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 29.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 30.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 30.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 31.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 31.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 28.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 28.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 29.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 29.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 30.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 30.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 31.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 31.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 28.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 28.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 29.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 29.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 30.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 30.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 31.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 31.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Organ chords",
+      "beat": 32,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 32,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 32,
+      "pitch": 62,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 32,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 32.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 32.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 33.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 33.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 34.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 34.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 35.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 35.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 32.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 32.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 33.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 33.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 34.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 34.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 35.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 35.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 32.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 32.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 33.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 33.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 34.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 34.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 35.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 35.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 32,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 36.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 36.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 37.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 37.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 38.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 38.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 39.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 39.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 36.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 36.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 37.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 37.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 38.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 38.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 39.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 39.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 36.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 36.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 37.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 37.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 38.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 38.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 39.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 39.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Organ chords",
+      "beat": 40,
+      "pitch": 50,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 40,
+      "pitch": 54,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 40,
+      "pitch": 57,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 40,
+      "pitch": 62,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 40.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 40.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 41.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 41.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 42.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 42.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 43.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 43.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 40.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 40.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 41.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 41.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 42.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 42.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 43.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 43.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 40.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 40.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 41.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 41.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 42.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 42.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 43.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 43.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 40,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 44.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 44.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 45.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 45.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 46.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 46.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 47.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 47.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 44.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 44.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 45.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 45.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 46.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 46.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 47.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 47.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 44.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 44.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 45.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 45.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 46.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 46.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 47.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 47.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Organ chords",
+      "beat": 48,
+      "pitch": 52,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 48,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 48,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 48,
+      "pitch": 64,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 48.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 48.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 49.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 49.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 50.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 50.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 51.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 51.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 48.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 48.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 49.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 49.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 50.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 50.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 51.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 51.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 48.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 48.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 49.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 49.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 50.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 50.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 51.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 51.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 48,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 52.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 52.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 53.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 53.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 54.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 54.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 55.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 55.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 52.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 52.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 53.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 53.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 54.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 54.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 55.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 55.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 52.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 52.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 53.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 53.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 54.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 54.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 55.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 55.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Organ chords",
+      "beat": 56,
+      "pitch": 48,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 56,
+      "pitch": 52,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 56,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 56,
+      "pitch": 60,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 56.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 56.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 57.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 57.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 58.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 58.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 59.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 59.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 56.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 56.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 57.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 57.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 58.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 58.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 59.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 59.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 56.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 56.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 57.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 57.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 58.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 58.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 59.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 59.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 56,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 60.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 60.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 61.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 61.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 62.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 62.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 63.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 63.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 60.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 60.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 61.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 61.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 62.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 62.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 63.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 63.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 60.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 60.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 61.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 61.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 62.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 62.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 63.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 63.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Organ chords",
+      "beat": 64,
+      "pitch": 50,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 64,
+      "pitch": 54,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 64,
+      "pitch": 57,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 64,
+      "pitch": 62,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 64.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 64.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 65.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 65.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 66.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 66.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 67.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 67.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 64.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 64.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 65.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 65.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 66.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 66.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 67.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 67.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 64.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 64.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 65.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 65.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 66.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 66.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 67.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 67.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 64,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 68.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 68.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 69.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 69.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 70.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 70.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 71.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 71.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 68.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 68.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 69.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 69.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 70.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 70.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 71.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 71.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 68.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 68.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 69.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 69.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 70.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 70.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 71.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 71.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Organ chords",
+      "beat": 72,
+      "pitch": 55,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 72,
+      "pitch": 59,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 72,
+      "pitch": 62,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 72,
+      "pitch": 67,
+      "length": 7.9,
+      "velocity": 54
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 72.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 72.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 73.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 73.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 74.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 74.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 75.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 75.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 72.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 72.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 73.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 73.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 74.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 74.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 75.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 75.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 72.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 72.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 73.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 73.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 74.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 74.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 75.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 75.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 72,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 76.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 76.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 77.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 77.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 78.0,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 78.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 79.0,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 79.5,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 76.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 76.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 77.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 77.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 78.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 78.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 79.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 79.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 76.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 76.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 77.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 77.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 78.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 78.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 79.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 79.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 78.0,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 62
+    },
+    {
+      "part": "Timpani",
+      "beat": 78.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 67
+    },
+    {
+      "part": "Timpani",
+      "beat": 78.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Timpani",
+      "beat": 78.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 77
+    },
+    {
+      "part": "Timpani",
+      "beat": 79.0,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 82
+    },
+    {
+      "part": "Timpani",
+      "beat": 79.25,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 87
+    },
+    {
+      "part": "Timpani",
+      "beat": 79.5,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Timpani",
+      "beat": 79.75,
+      "pitch": 43,
+      "length": 0.2,
+      "velocity": 97
+    },
+    {
+      "part": "Organ chords",
+      "beat": 80,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 80,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 80,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 80,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 80,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 80,
+      "pitch": 72,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 80,
+      "pitch": 76,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 80.0,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 80.25,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 80.5,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 80.75,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 81.0,
+      "pitch": 84,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 81.25,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 81.5,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 81.75,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 82.0,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 82.25,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 82.5,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 82.75,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 83.0,
+      "pitch": 84,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 83.25,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 83.5,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 83.75,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 80.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 80.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 81.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 81.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 82.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 82.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 83.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 83.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 80.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 80.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 81.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 81.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 82.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 82.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 83.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 83.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 80,
+      "pitch": 45,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 84,
+      "pitch": 53,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 84,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 84,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 84,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 84,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 84,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 84,
+      "pitch": 72,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 84.0,
+      "pitch": 65,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 84.25,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 84.5,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 84.75,
+      "pitch": 77,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 85.0,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 85.25,
+      "pitch": 77,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 85.5,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 85.75,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 86.0,
+      "pitch": 65,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 86.25,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 86.5,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 86.75,
+      "pitch": 77,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 87.0,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 87.25,
+      "pitch": 77,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 87.5,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 87.75,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 84.0,
+      "pitch": 53,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 84.5,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 85.0,
+      "pitch": 53,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 85.5,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 86.0,
+      "pitch": 53,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 86.5,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 87.0,
+      "pitch": 53,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 87.5,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 84.0,
+      "pitch": 29,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 84.5,
+      "pitch": 41,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 85.0,
+      "pitch": 29,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 85.5,
+      "pitch": 41,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 86.0,
+      "pitch": 29,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 86.5,
+      "pitch": 41,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 87.0,
+      "pitch": 29,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 87.5,
+      "pitch": 41,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 84,
+      "pitch": 41,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 88,
+      "pitch": 48,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 88,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 88,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 88,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 88,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 88,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 88,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 88.0,
+      "pitch": 60,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 88.25,
+      "pitch": 64,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 88.5,
+      "pitch": 67,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 88.75,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 89.0,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 89.25,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 89.5,
+      "pitch": 67,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 89.75,
+      "pitch": 64,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 90.0,
+      "pitch": 60,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 90.25,
+      "pitch": 64,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 90.5,
+      "pitch": 67,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 90.75,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 91.0,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 91.25,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 91.5,
+      "pitch": 67,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 91.75,
+      "pitch": 64,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 88.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 88.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 89.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 89.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 90.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 90.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 91.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 91.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 88.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 88.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 89.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 89.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 90.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 90.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 91.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 91.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 88,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 92,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 92,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 92,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 92,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 92,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 92,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 92,
+      "pitch": 74,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 92.0,
+      "pitch": 67,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 92.25,
+      "pitch": 71,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 92.5,
+      "pitch": 74,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 92.75,
+      "pitch": 79,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 93.0,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 93.25,
+      "pitch": 79,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 93.5,
+      "pitch": 74,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 93.75,
+      "pitch": 71,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 94.0,
+      "pitch": 67,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 94.25,
+      "pitch": 71,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 94.5,
+      "pitch": 74,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 94.75,
+      "pitch": 79,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 95.0,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 95.25,
+      "pitch": 79,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 95.5,
+      "pitch": 74,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 95.75,
+      "pitch": 71,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 92.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 92.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 93.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 93.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 94.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 94.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 95.0,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 95.5,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 92.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 92.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 93.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 93.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 94.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 94.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 95.0,
+      "pitch": 31,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 95.5,
+      "pitch": 43,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 92,
+      "pitch": 43,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 96,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 96,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 96,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 96,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 96,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 96,
+      "pitch": 72,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 96,
+      "pitch": 76,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 96.0,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 96.25,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 96.5,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 96.75,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 97.0,
+      "pitch": 84,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 97.25,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 97.5,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 97.75,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 98.0,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 98.25,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 98.5,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 98.75,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 99.0,
+      "pitch": 84,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 99.25,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 99.5,
+      "pitch": 76,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 99.75,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 96.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 96.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 97.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 97.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 98.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 98.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 99.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 99.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 96.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 96.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 97.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 97.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 98.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 98.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 99.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 99.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 96,
+      "pitch": 45,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 100,
+      "pitch": 53,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 100,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 100,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 100,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 100,
+      "pitch": 65,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 100,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 100,
+      "pitch": 72,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 100.0,
+      "pitch": 65,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 100.25,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 100.5,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 100.75,
+      "pitch": 77,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 101.0,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 101.25,
+      "pitch": 77,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 101.5,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 101.75,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 102.0,
+      "pitch": 65,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 102.25,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 102.5,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 102.75,
+      "pitch": 77,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 103.0,
+      "pitch": 81,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 103.25,
+      "pitch": 77,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 103.5,
+      "pitch": 72,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 103.75,
+      "pitch": 69,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 100.0,
+      "pitch": 53,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 100.5,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 101.0,
+      "pitch": 53,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 101.5,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 102.0,
+      "pitch": 53,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 102.5,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 103.0,
+      "pitch": 53,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 103.5,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 100.0,
+      "pitch": 29,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 100.5,
+      "pitch": 41,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 101.0,
+      "pitch": 29,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 101.5,
+      "pitch": 41,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 102.0,
+      "pitch": 29,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 102.5,
+      "pitch": 41,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 103.0,
+      "pitch": 29,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 103.5,
+      "pitch": 41,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 100,
+      "pitch": 41,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 104,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 104,
+      "pitch": 63,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 104,
+      "pitch": 66,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 104,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 104,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 104,
+      "pitch": 75,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 104,
+      "pitch": 78,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 104.0,
+      "pitch": 71,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 104.25,
+      "pitch": 75,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 104.5,
+      "pitch": 78,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 104.75,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 105.0,
+      "pitch": 87,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 105.25,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 105.5,
+      "pitch": 78,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 105.75,
+      "pitch": 75,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 106.0,
+      "pitch": 71,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 106.25,
+      "pitch": 75,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 106.5,
+      "pitch": 78,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 106.75,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 107.0,
+      "pitch": 87,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 107.25,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 107.5,
+      "pitch": 78,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 107.75,
+      "pitch": 75,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 104.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 104.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 105.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 105.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 106.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 106.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 107.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 107.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 104.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 104.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 105.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 105.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 106.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 106.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 107.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 107.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 104,
+      "pitch": 47,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 108,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 108,
+      "pitch": 63,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 108,
+      "pitch": 66,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 108,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 108,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 108,
+      "pitch": 75,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 108,
+      "pitch": 78,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 108.0,
+      "pitch": 71,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 108.25,
+      "pitch": 75,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 108.5,
+      "pitch": 78,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 108.75,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 109.0,
+      "pitch": 87,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 109.25,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 109.5,
+      "pitch": 78,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 109.75,
+      "pitch": 75,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 110.0,
+      "pitch": 71,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 110.25,
+      "pitch": 75,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 110.5,
+      "pitch": 78,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 110.75,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 111.0,
+      "pitch": 87,
+      "length": 0.22,
+      "velocity": 64
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 111.25,
+      "pitch": 83,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 111.5,
+      "pitch": 78,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 111.75,
+      "pitch": 75,
+      "length": 0.22,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 108.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 108.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 109.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 109.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 110.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 110.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 111.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 111.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 108.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 108.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 109.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 109.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 110.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 110.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 111.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 111.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 108,
+      "pitch": 47,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Timpani",
+      "beat": 110.0,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 62
+    },
+    {
+      "part": "Timpani",
+      "beat": 110.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 67
+    },
+    {
+      "part": "Timpani",
+      "beat": 110.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Timpani",
+      "beat": 110.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 77
+    },
+    {
+      "part": "Timpani",
+      "beat": 111.0,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 82
+    },
+    {
+      "part": "Timpani",
+      "beat": 111.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 87
+    },
+    {
+      "part": "Timpani",
+      "beat": 111.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Timpani",
+      "beat": 111.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 97
+    },
+    {
+      "part": "Organ chords",
+      "beat": 112,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 112,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 112,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 112,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 112,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 112,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 112,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 112.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 112.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 113.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 113.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 114.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 114.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 115.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 115.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 112.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 112.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 113.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 113.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 114.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 114.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 115.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 115.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 112.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 112.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 113.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 113.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 114.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 114.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 115.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 115.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 112,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 116,
+      "pitch": 48,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 116,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 116,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 116,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 116,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 116,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 116,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 116.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 116.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 117.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 117.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 118.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 118.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 119.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 119.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 116.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 116.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 117.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 117.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 118.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 118.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 119.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 119.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 116.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 116.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 117.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 117.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 118.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 118.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 119.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 119.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 116,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 120,
+      "pitch": 50,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 120,
+      "pitch": 54,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 120,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 120,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 120,
+      "pitch": 62,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 120,
+      "pitch": 66,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 120,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 120.0,
+      "pitch": 62,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 120.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 121.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 121.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 122.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 122.5,
+      "pitch": 74,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 123.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 123.5,
+      "pitch": 66,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 120.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 120.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 121.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 121.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 122.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 122.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 123.0,
+      "pitch": 50,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 123.5,
+      "pitch": 57,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 120.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 120.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 121.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 121.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 122.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 122.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 123.0,
+      "pitch": 38,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 123.5,
+      "pitch": 50,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 120,
+      "pitch": 50,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 124,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 124,
+      "pitch": 63,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 124,
+      "pitch": 66,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 124,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 124,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 124,
+      "pitch": 75,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 124,
+      "pitch": 78,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 124.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 124.5,
+      "pitch": 75,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 125.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 125.5,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 126.0,
+      "pitch": 87,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 126.5,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 127.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 127.5,
+      "pitch": 75,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 124.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 124.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 125.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 125.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 126.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 126.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 127.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 127.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 124.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 124.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 125.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 125.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 126.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 126.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 127.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 127.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 124,
+      "pitch": 47,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 128,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 128,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 128,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 128,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 128,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 128,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 128,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 128.0,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 128.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 129.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 129.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 130.0,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 130.5,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 131.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 131.5,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 128.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 128.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 129.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 129.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 130.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 130.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 131.0,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 131.5,
+      "pitch": 59,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 128.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 128.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 129.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 129.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 130.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 130.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 131.0,
+      "pitch": 28,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 131.5,
+      "pitch": 40,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 128,
+      "pitch": 40,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 132,
+      "pitch": 48,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 132,
+      "pitch": 52,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 132,
+      "pitch": 55,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 132,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 132,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 132,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 132,
+      "pitch": 67,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 132.0,
+      "pitch": 60,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 132.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 133.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 133.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 134.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 134.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 135.0,
+      "pitch": 67,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 135.5,
+      "pitch": 64,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 132.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 132.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 133.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 133.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 134.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 134.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 135.0,
+      "pitch": 48,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 135.5,
+      "pitch": 55,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 132.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 132.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 133.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 133.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 134.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 134.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 135.0,
+      "pitch": 36,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 135.5,
+      "pitch": 48,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 132,
+      "pitch": 48,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 136,
+      "pitch": 57,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 136,
+      "pitch": 60,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 136,
+      "pitch": 64,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 136,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 136,
+      "pitch": 69,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 136,
+      "pitch": 72,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 136,
+      "pitch": 76,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 136.0,
+      "pitch": 69,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 136.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 137.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 137.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 138.0,
+      "pitch": 84,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 138.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 139.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 139.5,
+      "pitch": 72,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 136.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 136.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 137.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 137.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 138.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 138.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 139.0,
+      "pitch": 45,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 139.5,
+      "pitch": 52,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 136.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 136.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 137.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 137.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 138.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 138.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 139.0,
+      "pitch": 33,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 139.5,
+      "pitch": 45,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 136,
+      "pitch": 45,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Organ chords",
+      "beat": 140,
+      "pitch": 59,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 140,
+      "pitch": 63,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 140,
+      "pitch": 66,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Organ chords",
+      "beat": 140,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 54
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 140,
+      "pitch": 71,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 140,
+      "pitch": 75,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 140,
+      "pitch": 78,
+      "length": 3.9,
+      "velocity": 58
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 140.0,
+      "pitch": 71,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 140.5,
+      "pitch": 75,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 141.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 141.5,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 142.0,
+      "pitch": 87,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 142.5,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 143.0,
+      "pitch": 78,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "Harpsichord arpeggio",
+      "beat": 143.5,
+      "pitch": 75,
+      "length": 0.45,
+      "velocity": 50
+    },
+    {
+      "part": "String ostinato",
+      "beat": 140.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 140.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 141.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 141.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 142.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 62
+    },
+    {
+      "part": "String ostinato",
+      "beat": 142.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 143.0,
+      "pitch": 47,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "String ostinato",
+      "beat": 143.5,
+      "pitch": 54,
+      "length": 0.45,
+      "velocity": 52
+    },
+    {
+      "part": "Synth bass",
+      "beat": 140.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 92
+    },
+    {
+      "part": "Synth bass",
+      "beat": 140.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 141.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 141.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 142.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 142.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 143.0,
+      "pitch": 35,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Synth bass",
+      "beat": 143.5,
+      "pitch": 47,
+      "length": 0.42,
+      "velocity": 78
+    },
+    {
+      "part": "Timpani",
+      "beat": 140,
+      "pitch": 47,
+      "length": 1.4,
+      "velocity": 94
+    },
+    {
+      "part": "Timpani",
+      "beat": 142.0,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 62
+    },
+    {
+      "part": "Timpani",
+      "beat": 142.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 67
+    },
+    {
+      "part": "Timpani",
+      "beat": 142.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 72
+    },
+    {
+      "part": "Timpani",
+      "beat": 142.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 77
+    },
+    {
+      "part": "Timpani",
+      "beat": 143.0,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 82
+    },
+    {
+      "part": "Timpani",
+      "beat": 143.25,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 87
+    },
+    {
+      "part": "Timpani",
+      "beat": 143.5,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 92
+    },
+    {
+      "part": "Timpani",
+      "beat": 143.75,
+      "pitch": 47,
+      "length": 0.2,
+      "velocity": 97
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 16,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 16,
+      "pitch": 49,
+      "length": 1.2,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 17,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 17.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 18,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 19,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 20,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 21,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 21.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 22,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 23,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 24,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 25,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 25.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 26,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 27,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 28,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 29,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 29.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 30,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 31,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 32,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 33,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 33.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 34,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 35,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 36,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 37,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 37.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 38,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 39,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 40,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 41,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 41.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 42,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 43,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 44,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 45,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 45.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 46,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 47,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 48,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 49,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 49.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 50,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 51,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 52,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 53,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 53.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 54,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 55,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 56,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 57,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 57.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 58,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 59,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 60,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 61,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 61.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 62,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 63,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 64,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 65,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 65.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 66,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 67,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 68,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 69,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 69.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 70,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 71,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 72,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 73,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 73.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 74,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 75,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 76,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 77,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 77.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 78,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 78.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 100
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 78.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 79,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 79.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 79.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 79.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 79.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 120
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 80,
+      "pitch": 36,
+      "length": 0.2,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 80,
+      "pitch": 49,
+      "length": 1.2,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 82,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 84,
+      "pitch": 36,
+      "length": 0.2,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 86,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 88,
+      "pitch": 36,
+      "length": 0.2,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 90,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 92,
+      "pitch": 36,
+      "length": 0.2,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 94,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 96,
+      "pitch": 36,
+      "length": 0.2,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 98,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 100,
+      "pitch": 36,
+      "length": 0.2,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 102,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 104,
+      "pitch": 36,
+      "length": 0.2,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 106,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 108,
+      "pitch": 36,
+      "length": 0.2,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 110,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 110.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 100
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 110.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 111,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 100
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 111.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 111.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 111.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 111.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 120
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 112,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 112.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 112,
+      "pitch": 49,
+      "length": 1.2,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 112.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 113,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 113.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 113.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 113.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 114,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 114.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 114.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 115,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 115.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 115.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 115.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 116,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 116.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 116.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 117,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 117.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 117.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 117.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 118,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 118.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 118.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 119,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 119.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 119.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 119.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 120,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 120.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 120.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 121,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 121.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 121.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 121.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 122,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 122.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 122.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 123,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 123.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 123.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 123.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 124,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 124.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 124.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 125,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 125.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 125.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 125.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 126,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 126.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 126.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 127,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 127.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 127.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 127.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 128,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 128.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 128.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 129,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 129.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 129.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 129.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 130,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 130.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 130.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 131,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 131.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 131.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 131.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 132,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 132.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 132.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 133,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 133.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 133.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 133.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 134,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 134.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 134.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 135,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 135.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 135.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 135.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 136,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 136.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 136.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 137,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 137.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 137.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 137.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 138,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 138.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 138.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 139,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 139.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 139.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 139.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 140,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 140.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 140.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 141,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 141.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 141.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 141.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 142,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 142.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 142.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 142.5,
+      "pitch": 50,
+      "length": 0.12,
+      "velocity": 100
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 142.75,
+      "pitch": 48,
+      "length": 0.12,
+      "velocity": 104
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 143,
+      "pitch": 38,
+      "length": 0.1,
+      "velocity": 110
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 143.0,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 64
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 143.0,
+      "pitch": 47,
+      "length": 0.12,
+      "velocity": 108
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 143.25,
+      "pitch": 45,
+      "length": 0.12,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 143.5,
+      "pitch": 36,
+      "length": 0.1,
+      "velocity": 112
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 143.5,
+      "pitch": 42,
+      "length": 0.08,
+      "velocity": 50
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 143.5,
+      "pitch": 43,
+      "length": 0.12,
+      "velocity": 116
+    },
+    {
+      "part": "Orchestral drums",
+      "beat": 143.75,
+      "pitch": 41,
+      "length": 0.12,
+      "velocity": 120
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 16,
+      "pitch": 71,
+      "length": 1.87,
+      "velocity": 79
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 18,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 70
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 19.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 68
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 20.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 75
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 22.0,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 67
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 23.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 72
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 24,
+      "pitch": 69,
+      "length": 2.87,
+      "velocity": 77
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 27.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 69
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 28.0,
+      "pitch": 64,
+      "length": 1.87,
+      "velocity": 72
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 32,
+      "pitch": 71,
+      "length": 1.87,
+      "velocity": 80
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 34,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 71
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 35.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 69
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 36.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 76
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 38.0,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 68
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 39.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 73
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 40,
+      "pitch": 69,
+      "length": 2.87,
+      "velocity": 78
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 43.0,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 69
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 44.0,
+      "pitch": 62,
+      "length": 1.87,
+      "velocity": 71
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 48,
+      "pitch": 71,
+      "length": 1.87,
+      "velocity": 80
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 50,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 71
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 51.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 69
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 52.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 76
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 54.0,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 75
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 55.0,
+      "pitch": 74,
+      "length": 0.9,
+      "velocity": 80
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 56,
+      "pitch": 76,
+      "length": 2.87,
+      "velocity": 84
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 59.0,
+      "pitch": 74,
+      "length": 0.9,
+      "velocity": 75
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 60.0,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 72
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 61.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 68
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 62.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 73
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 64,
+      "pitch": 69,
+      "length": 1.87,
+      "velocity": 76
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 66,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 74
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 67.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 69
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 68.0,
+      "pitch": 66,
+      "length": 1.87,
+      "velocity": 72
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 70.0,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 65
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 71.0,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 69
+    },
+    {
+      "part": "Choir theme melody",
+      "beat": 72,
+      "pitch": 67,
+      "length": 5.87,
+      "velocity": 76
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 16,
+      "pitch": 71,
+      "length": 1.87,
+      "velocity": 85
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 18,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 76
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 19.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 74
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 20.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 81
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 22.0,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 73
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 23.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 78
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 24,
+      "pitch": 69,
+      "length": 2.87,
+      "velocity": 83
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 27.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 75
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 28.0,
+      "pitch": 64,
+      "length": 1.87,
+      "velocity": 78
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 32,
+      "pitch": 71,
+      "length": 1.87,
+      "velocity": 86
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 34,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 77
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 35.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 75
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 36.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 38.0,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 74
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 39.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 79
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 40,
+      "pitch": 69,
+      "length": 2.87,
+      "velocity": 84
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 43.0,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 75
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 44.0,
+      "pitch": 62,
+      "length": 1.87,
+      "velocity": 77
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 48,
+      "pitch": 71,
+      "length": 1.87,
+      "velocity": 86
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 50,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 77
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 51.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 75
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 52.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 54.0,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 81
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 55.0,
+      "pitch": 74,
+      "length": 0.9,
+      "velocity": 86
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 56,
+      "pitch": 76,
+      "length": 2.87,
+      "velocity": 90
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 59.0,
+      "pitch": 74,
+      "length": 0.9,
+      "velocity": 81
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 60.0,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 78
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 61.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 74
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 62.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 79
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 64,
+      "pitch": 69,
+      "length": 1.87,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 66,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 80
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 67.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 75
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 68.0,
+      "pitch": 66,
+      "length": 1.87,
+      "velocity": 78
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 70.0,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 71
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 71.0,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 75
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 72,
+      "pitch": 67,
+      "length": 5.87,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 80,
+      "pitch": 69,
+      "length": 2.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 83,
+      "pitch": 72,
+      "length": 0.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 84,
+      "pitch": 77,
+      "length": 2.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 87,
+      "pitch": 76,
+      "length": 0.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 88,
+      "pitch": 72,
+      "length": 3.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 92,
+      "pitch": 74,
+      "length": 2.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 95,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 96,
+      "pitch": 69,
+      "length": 2.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 99,
+      "pitch": 72,
+      "length": 0.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 100,
+      "pitch": 77,
+      "length": 3.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 104,
+      "pitch": 75,
+      "length": 3.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 108,
+      "pitch": 78,
+      "length": 3.9,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 112,
+      "pitch": 83,
+      "length": 0.935,
+      "velocity": 87
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 113,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 113.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 76
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 114.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 83
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 115.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 75
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 115.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 116,
+      "pitch": 81,
+      "length": 1.435,
+      "velocity": 85
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 117.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 118.0,
+      "pitch": 76,
+      "length": 0.935,
+      "velocity": 80
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 128,
+      "pitch": 83,
+      "length": 0.935,
+      "velocity": 89
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 129,
+      "pitch": 83,
+      "length": 0.45,
+      "velocity": 80
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 129.5,
+      "pitch": 81,
+      "length": 0.45,
+      "velocity": 78
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 130.0,
+      "pitch": 79,
+      "length": 0.935,
+      "velocity": 85
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 131.0,
+      "pitch": 76,
+      "length": 0.45,
+      "velocity": 77
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 131.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 132,
+      "pitch": 81,
+      "length": 1.435,
+      "velocity": 87
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 133.5,
+      "pitch": 79,
+      "length": 0.45,
+      "velocity": 79
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 134.0,
+      "pitch": 76,
+      "length": 0.935,
+      "velocity": 82
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 120,
+      "pitch": 78,
+      "length": 3.4,
+      "velocity": 80
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 124,
+      "pitch": 75,
+      "length": 3.4,
+      "velocity": 78
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 136,
+      "pitch": 76,
+      "length": 3.4,
+      "velocity": 80
+    },
+    {
+      "part": "Lead synth melody",
+      "beat": 140,
+      "pitch": 75,
+      "length": 3.8,
+      "velocity": 84
+    }
+  ],
+  "markers": [
+    [
+      0,
+      "Voices in the dark"
+    ],
+    [
+      16,
+      "DROP - Eclipse, theme in half time"
+    ],
+    [
+      80,
+      "Totality"
+    ],
+    [
+      112,
+      "Corona"
+    ],
+    [
+      140,
+      "Turnaround"
+    ]
+  ],
+  "statements": [
+    {
+      "part": "Choir theme melody",
+      "start": 16,
+      "bars": 8,
+      "transpose": 0,
+      "scale": 2
+    },
+    {
+      "part": "Lead synth melody",
+      "start": 16,
+      "bars": 8,
+      "transpose": 0,
+      "scale": 2
+    }
+  ],
+  "loop": [
+    12.631578947368421,
+    58.34586466165413
+  ],
+  "synths": {
+    "Lead synth melody": "lead",
+    "Synth bass": "bass"
+  },
+  "space": "hall",
+  "master_gain": 0.7013449914054944
+}

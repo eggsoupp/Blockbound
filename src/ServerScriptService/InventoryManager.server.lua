@@ -33,6 +33,7 @@ local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Inventory = require(ServerScriptService:WaitForChild("InventoryClass"))
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
+local TutorialService = require(ServerScriptService:WaitForChild("TutorialService"))
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 local PromptItemMappings = require(ReplicatedStorage:WaitForChild("PromptItemMappings"))
@@ -135,6 +136,7 @@ local function onPlayerAdded(player)
 	end
 
 	local queuedApplied = InventoryService.Register(player, inv)
+	TutorialService.Start(player)
 	-- Full, not a delta: this is the client's first sight of the bag, so there
 	-- is nothing for a delta to be relative to.
 	InventoryService.SyncFull(player)

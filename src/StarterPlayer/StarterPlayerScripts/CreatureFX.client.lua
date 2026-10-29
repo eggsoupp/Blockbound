@@ -1194,6 +1194,70 @@ function handlers.blizzardend(id: string)
 	Debris:AddItem(storm.ground, 2.5)
 end
 
+-- ---------------------------------------------------------------------------
+-- Tiger Blademaster
+-- ---------------------------------------------------------------------------
+
+local function bladeFront(model): CFrame
+	local cframe, size = model:GetBoundingBox()
+	local look = model:GetPivot().LookVector
+	local at = cframe.Position + look * size.Z * 0.6 + Vector3.new(0, size.Y * 0.1, 0)
+	return CFrame.lookAt(at, at + look)
+end
+
+-- A blow parried in the stance: a ring of steel - sparks off the crossed
+-- blades and a bright clang.
+function handlers.parry(model)
+	if not body(model) then
+		return
+	end
+	local host = burst(bladeFront(model).Position, {
+		{ "Flare", 1, { Color = ColorSequence.new(Color3.fromRGB(255, 250, 230)), Size = NumberSequence.new(4) } },
+		{ "BoomSparks", 16, { Color = ColorSequence.new(Color3.fromRGB(255, 230, 160)) } },
+	}, 1.5)
+	Kit.sound(host, SOUND_HIT, 0.7, 2.2)
+end
+
+-- One cut of the blades: a slash across in front of it.
+function handlers.cut(model)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local at = Kit.attachment(part)
+	at.WorldCFrame = bladeFront(model)
+	emitter("Slash", at, {
+		Color = ColorSequence.new(Color3.fromRGB(240, 245, 255)), Size = NumberSequence.new(4.5), LockedToPart = false,
+	}):Emit(1)
+	Debris:AddItem(at, 1)
+	Kit.sound(part, SOUND_HIT, 0.45, 1.5)
+end
+
+-- The dash: dust kicked off its heels for as long as it runs, and a glint
+-- trail off the blades.
+function handlers.dashtrail(model, seconds: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local heels = Kit.attachment(part)
+	local _, size = model:GetBoundingBox()
+	heels.Position = Vector3.new(0, -size.Y * 0.45, 0)
+	local dust = emitter("Puff", heels, {
+		Enabled = true, Rate = 40, Color = ColorSequence.new(DUST), Size = NumberSequence.new(1.8),
+		Speed = NumberRange.new(1, 3), LockedToPart = false,
+	})
+	local glints = emitter("Glints", part, {
+		Enabled = true, Rate = 50, Color = ColorSequence.new(Color3.fromRGB(235, 245, 255)), Size = NumberSequence.new(0.6),
+		LockedToPart = false,
+	})
+	task.delay(seconds + 0.1, function()
+		stopEmitters({ dust, glints })
+		Debris:AddItem(heels, 1)
+		Debris:AddItem(glints, 1)
+	end)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

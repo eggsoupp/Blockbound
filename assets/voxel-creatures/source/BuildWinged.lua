@@ -146,6 +146,16 @@ Build.Split = {
 		if cx > 62 then return "RightArm" end
 		return "Body"
 	end,
+	-- A caped tiger with its arms crossed holding two crossed swords: the arms
+	-- and blades in front of z 12 between rows 18 and 72 are one part; head
+	-- above row 72; legs below row 15.
+	TigerBlademaster = function(x, y, z, w, h, d)
+		local cx = x + w / 2
+		if y >= 72 then return "Head" end
+		if y + h <= 15 then return if cx < 50 then "LeftLeg" else "RightLeg" end
+		if z + d <= 12 and y >= 18 then return "Blades" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

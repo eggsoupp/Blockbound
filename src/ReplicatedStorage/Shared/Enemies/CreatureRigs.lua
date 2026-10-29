@@ -862,4 +862,63 @@ Rigs.GoatShaman = {
 	end,
 }
 
+--[[
+	TIGER BLADEMASTER. A caped tiger whose crossed arms and crossed swords
+	are one piece, hinged at the chest. It stalks upright. Its moves:
+	  stance  the crossed blades raised high before its face, utterly still
+	          but for a slow breath - the counter stance
+	  crouch  low, blades drawn back, before a dash
+	  dash    leaning in, blades back
+	  slash   the crossed blades swept across, side to side
+	+pitch on the blades lifts them toward its face; yaw sweeps them across.
+]]
+Rigs.TigerBlademaster = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 3 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.45 * moving
+		local legL, legR = CFrame.Angles(step, 0, 0), CFrame.Angles(-step, 0, 0)
+		local blades = CFrame.Angles(math.sin(ctx.t * 1.5) * 0.04, math.sin(s) * 0.08 * moving, 0)
+		local head = CFrame.Angles(0, math.sin(ctx.t * 0.7) * 0.15, 0)
+
+		if ctx.pose == "stance" then
+			local k = math.min(1, b * 3)
+			blades = CFrame.Angles(0.75 * k + math.sin(ctx.t * 2) * 0.03, 0, 0)
+			head = CFrame.Angles(0.1 * k, 0, 0)
+			legL = CFrame.Angles(0.35 * k, 0, 0)
+			legR = CFrame.Angles(-0.35 * k, 0, 0)
+		elseif ctx.pose == "crouch" then
+			local k = math.min(1, b * 3)
+			blades = CFrame.Angles(-0.6 * k, 0, 0)
+			head = CFrame.Angles(0.25 * k, 0, 0)
+			legL = CFrame.Angles(0.6 * k, 0, 0)
+			legR = CFrame.Angles(-0.5 * k, 0, 0)
+		elseif ctx.pose == "dash" then
+			local stride = math.sin(ctx.t * 26) * 0.7
+			blades = CFrame.Angles(-0.8, 0, 0)
+			head = CFrame.Angles(0.2, 0, 0)
+			legL = CFrame.Angles(stride, 0, 0)
+			legR = CFrame.Angles(-stride, 0, 0)
+		elseif ctx.pose == "slash" then
+			-- Two sweeps across in the pose's first second.
+			local sweep = math.sin(math.min(1, b) * math.pi * 2)
+			blades = CFrame.Angles(0.35, 1.1 * sweep, 0.3 * sweep)
+			head = CFrame.Angles(0, -0.3 * sweep, 0)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.Blades.Transform = blades
+		j.Head.Transform = head
+	end,
+}
+
 return Rigs

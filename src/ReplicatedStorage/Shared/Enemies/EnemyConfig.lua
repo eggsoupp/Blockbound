@@ -1582,6 +1582,58 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		TIGER BLADEMASTER - the Plains' swordsman: a counter stance that
+		parries any blow and answers with a dash through you, a dash slash
+		from range, and a double cut up close
+		(ServerScriptService.Creatures.TigerBlademaster; its rig is
+		Shared.Enemies.CreatureRigs.TigerBlademaster).
+	]]
+	TigerBlademaster = {
+		asset = "TigerBlademaster",
+		displayName = "Tiger Blademaster",
+		health = 95,
+		movement = "Hop",
+		trait = "TigerBlademaster",
+
+		spawnBiomes = { "Plains" },
+		spawnWeight = 0.4,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 8,
+		aggroRange = 55,
+		giveUpRange = 95,
+		despawnSeconds = 40,
+
+		contactRange = 3.2,
+		contactDamage = 5,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 38,
+		maxHopDistance = 6,
+		maxHopSpeed = 11,
+		groundedSeconds = 0.1,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 11,
+		lungeWindup = 0.5,
+		lungeDamage = 11,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(220, 124, 12),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -1728,7 +1780,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster",
 }
 
 --[[

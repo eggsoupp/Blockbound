@@ -234,6 +234,14 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
 	},
 
+	-- A warrior's hide and purse: leather, gold now and then, and the magic
+	-- material.
+	TigerBlademaster = {
+		{ item = "Leather", chance = 1, min = 1, max = 3 },
+		{ item = "GoldOre", chance = 0.25, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.3, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

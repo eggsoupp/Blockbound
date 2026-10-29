@@ -988,6 +988,9 @@
         },
         "LavaGolem": {
           "$path": "src/ServerScriptService/Creatures/LavaGolem.lua"
+        },
+        "BatMutant": {
+          "$path": "src/ServerScriptService/Creatures/BatMutant.lua"
         }
       },
       "BossService": {

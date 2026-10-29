@@ -1024,4 +1024,62 @@ Rigs.LavaGolem = {
 	end,
 }
 
+--[[
+	BAT MUTANT. A wingless bat on two short legs, all ears and teeth, with
+	stub arms. It scurries, ears twitching. Its moves:
+	  crouch   squatting before a bound
+	  bound    legs tucked, arms flung out, in the air
+	  screech  head thrown back, then thrust forward with the arms spread
+	  bite     head snapped forward and down
+]]
+Rigs.BatMutant = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 1.4 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.6 * moving
+		local legL, legR = CFrame.Angles(step, 0, 0), CFrame.Angles(-step, 0, 0)
+		local left = CFrame.Angles(-step * 0.4, 0, -0.1)
+		local right = CFrame.Angles(step * 0.4, 0, 0.1)
+		-- Ears twitch: the head flicks now and then.
+		local flick = if math.sin(ctx.t * 5.3) > 0.95 then 0.15 else 0
+		local head = CFrame.Angles(flick, math.sin(ctx.t * 1.2) * 0.2, math.sin(ctx.t * 0.9) * 0.08)
+
+		if ctx.pose == "crouch" then
+			local k = math.min(1, b * 3)
+			legL = CFrame.Angles(0.7 * k, 0, 0)
+			legR = CFrame.Angles(0.7 * k, 0, 0)
+			head = CFrame.Angles(0.2 * k, 0, 0)
+		elseif ctx.pose == "bound" then
+			legL = CFrame.Angles(-0.6, 0, 0)
+			legR = CFrame.Angles(-0.6, 0, 0)
+			left = CFrame.Angles(0.3, 0, -1.2)
+			right = CFrame.Angles(0.3, 0, 1.2)
+		elseif ctx.pose == "screech" then
+			local back = math.min(1, b * 2.2)
+			local thrust = math.clamp(b * 2.2 - 1, 0, 1)
+			local shake = math.sin(ctx.t * 45) * 0.05 * thrust
+			head = CFrame.Angles(-0.6 * back + 0.9 * thrust + shake, 0, shake)
+			left = CFrame.Angles(0.5 * thrust, 0, -1.3 * thrust)
+			right = CFrame.Angles(0.5 * thrust, 0, 1.3 * thrust)
+		elseif ctx.pose == "bite" then
+			local k = math.sin(math.min(1, b * 1.6) * math.pi)
+			head = CFrame.Angles(0.5 * k, 0, 0)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Head.Transform = head
+	end,
+}
+
 return Rigs

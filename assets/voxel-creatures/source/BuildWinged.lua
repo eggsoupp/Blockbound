@@ -177,6 +177,16 @@ Build.Split = {
 		if y + h <= 54 and cx > 40 then return "RightArm" end
 		return "Body"
 	end,
+	-- A wingless bat standing upright: head and ears above row 45; stub arms
+	-- outside x 36-69; legs below row 14.
+	BatMutant = function(x, y, _z, w, h)
+		local cx = x + w / 2
+		if y >= 45 then return "Head" end
+		if y + h <= 14 then return if cx < 52 then "LeftLeg" else "RightLeg" end
+		if cx < 36 then return "LeftArm" end
+		if cx > 69 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

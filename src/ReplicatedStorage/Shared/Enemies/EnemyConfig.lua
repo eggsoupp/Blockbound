@@ -1738,6 +1738,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		BAT MUTANT - the Desert's skirmisher: erratic bounds off to one side or
+		the other, a screech in a cone that hurts and slows, and a bite
+		(ServerScriptService.Creatures.BatMutant; its rig is
+		Shared.Enemies.CreatureRigs.BatMutant).
+	]]
+	BatMutant = {
+		asset = "BatMutant",
+		displayName = "Bat Mutant",
+		health = 45,
+		movement = "Hop",
+		trait = "BatMutant",
+
+		spawnBiomes = { "Desert" },
+		spawnWeight = 0.7,
+		packSize = NumberRange.new(1, 2),
+
+		speed = 7,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 2.8,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 38,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.1,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.08,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 10,
+		lungeWindup = 0.5,
+		lungeDamage = 4,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(150, 90, 60),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -1884,7 +1935,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant",
 }
 
 --[[

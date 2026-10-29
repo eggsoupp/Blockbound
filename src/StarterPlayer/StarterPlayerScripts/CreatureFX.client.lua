@@ -1340,6 +1340,30 @@ function handlers.erupt(position: Vector3, radius: number)
 	Kit.sound(host, SOUND_BOOM, 0.4, 1.4)
 end
 
+-- ---------------------------------------------------------------------------
+-- Bat Mutant
+-- ---------------------------------------------------------------------------
+
+local SCREECH = Color3.fromRGB(230, 200, 255)
+
+-- The screech: pulses of disturbed air rolling out along its cone, widening
+-- as they go, and a piercing note.
+function handlers.screech(origin: Vector3, facing: Vector3, range: number)
+	for i = 1, 4 do
+		local k = i / 4
+		task.delay(k * 0.18, function()
+			burst(origin + facing * range * k, {
+				{ "Puff", 2 + i, { Color = ColorSequence.new(SCREECH), Size = NumberSequence.new(1.2 + 1.4 * k), Transparency = NumberSequence.new(0.6, 1), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(60, 60), Lifetime = NumberRange.new(0.4) } },
+				{ "Glints", 3, { Color = ColorSequence.new(SCREECH), Size = NumberSequence.new(0.6) } },
+			}, 1.2)
+		end)
+	end
+	local host = burst(origin, {
+		{ "Flare", 1, { Color = ColorSequence.new(SCREECH), Size = NumberSequence.new(2.5) } },
+	}, 1.5)
+	Kit.sound(host, SOUND_HIT, 0.6, 3)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

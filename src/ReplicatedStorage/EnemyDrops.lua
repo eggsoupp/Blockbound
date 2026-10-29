@@ -256,6 +256,12 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.4, min = 1, max = 3 },
 	},
 
+	-- A thin hide, and now and then the magic material.
+	BatMutant = {
+		{ item = "Leather", chance = 0.6, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.15, min = 1, max = 1 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

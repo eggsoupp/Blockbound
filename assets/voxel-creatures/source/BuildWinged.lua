@@ -311,6 +311,17 @@ Build.Split = {
 	Cannon = function(_x, _y, _z, _w, _h, _d, c)
 		return if c == 3 or c == 4 then "Barrel" else "Body"
 	end,
+	-- A hunched pink demon: the long arms hang outside x 46-98 between rows
+	-- 12 and 50;
+	-- the head is the top of it, above row 66; legs below row 16.
+	PinkyDemon = function(x, y, _z, w, h)
+		local cx = x + w / 2
+		if y >= 12 and y + h <= 50 and cx < 46 then return "LeftArm" end
+		if y >= 12 and y + h <= 50 and cx > 98 then return "RightArm" end
+		if y + h <= 16 then return if cx < 78 then "LeftLeg" else "RightLeg" end
+		if y >= 66 then return "Head" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

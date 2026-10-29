@@ -1629,6 +1629,53 @@ Rigs.Cannon = {
 	end,
 }
 
+--[[
+	PINKY DEMON. A hunched pink brute with long arms and short legs. It
+	lumbers, arms swinging. Its moves:
+	  pound  both fists hauled up overhead through the wind-up, then driven
+	         into the ground
+	  punch  the right fist drawn back, then thrown
+	Arms hang from the shoulder: +pitch swings a fist forward and up.
+]]
+Rigs.PinkyDemon = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 4, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 3 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.35 * moving
+		local left = CFrame.Angles(-step + math.sin(ctx.t * 1.4) * 0.05, 0, -0.05)
+		local right = CFrame.Angles(step, 0, 0.05)
+		local head = CFrame.Angles(math.sin(ctx.t * 1.1) * 0.05, math.sin(ctx.t * 0.6) * 0.15, 0)
+
+		if ctx.pose == "pound" then
+			local wind, hit = phases(ctx, 0.9, 0.12)
+			local raise = 2.7 * wind - 2.3 * hit
+			left = CFrame.Angles(raise, 0, 0.2 * wind)
+			right = CFrame.Angles(raise, 0, -0.2 * wind)
+			-- The "head" is the whole top of the hump: it only nods.
+			head = CFrame.Angles(-0.08 * wind + 0.1 * hit, 0, 0)
+		elseif ctx.pose == "punch" then
+			local wind, hit = phases(ctx, 0.5, 0.1)
+			right = CFrame.Angles(-0.7 * wind + 2.0 * hit, 0, 0)
+			left = CFrame.Angles(0.3 * wind, 0, 0)
+			head = CFrame.Angles(0.1 * hit, 0, 0)
+		end
+
+		local legStep = math.sin(s) * 0.3 * moving
+		j.LeftLeg.Transform = CFrame.Angles(legStep, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-legStep, 0, 0)
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Head.Transform = head
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

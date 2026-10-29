@@ -335,6 +335,13 @@ EnemyDrops.Tables = {
 		{ item = "GoldOre", chance = 0.2, min = 1, max = 2 },
 	},
 
+	-- A brute's haul: the Crimson's dirt, the magic material more often than not, some gold.
+	PinkyDemon = {
+		{ item = "CrimsonDirt", chance = 1, min = 2, max = 4 },
+		{ item = "EssenceShard", chance = 0.6, min = 1, max = 3 },
+		{ item = "GoldOre", chance = 0.3, min = 1, max = 3 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

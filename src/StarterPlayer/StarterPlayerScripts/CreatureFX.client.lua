@@ -1434,6 +1434,39 @@ function handlers.drain(model, character)
 end
 
 -- ---------------------------------------------------------------------------
+-- Pinky Demon
+-- ---------------------------------------------------------------------------
+
+--[[
+	The ground pound's shockwaves: each a ring of dust and grit bursts thrown
+	up along its edge as it grows - drawn here from the same numbers the
+	server hurts with, `count` rings `gap` seconds apart.
+]]
+function handlers.shockwave(center: Vector3, speed: number, radius: number, count: number, gap: number)
+	for k = 0, count - 1 do
+		task.delay(k * gap, function()
+			local lastStep = -1
+			during(radius / speed + 0.1, function(elapsed)
+				local step = math.floor(elapsed / 0.07)
+				if step == lastStep then
+					return
+				end
+				lastStep = step
+				local r = math.max(1, elapsed * speed)
+				local around = math.clamp(math.floor(r * 1.2), 8, 28)
+				for i = 0, around - 1 do
+					local angle = i / around * math.pi * 2 + step * 0.3
+					burst(center + Vector3.new(math.cos(angle) * r, 0.5, math.sin(angle) * r), {
+						{ "Puff", 1, { Color = ColorSequence.new(DUST), Size = NumberSequence.new(1.6), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(20, 20), Lifetime = NumberRange.new(0.35) } },
+					}, 0.8)
+				end
+			end)
+			Kit.sound(burst(center, {}, 1), SOUND_BOOM, 0.4, 0.7)
+		end)
+	end
+end
+
+-- ---------------------------------------------------------------------------
 -- Cannon
 -- ---------------------------------------------------------------------------
 

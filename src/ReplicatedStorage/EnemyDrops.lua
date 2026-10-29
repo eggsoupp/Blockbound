@@ -356,6 +356,12 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
 	},
 
+	-- Kindling, and now and then the magic material that moved it.
+	AxeGolem = {
+		{ item = "Stick", chance = 1, min = 3, max = 6 },
+		{ item = "EssenceShard", chance = 0.3, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

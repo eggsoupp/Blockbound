@@ -345,6 +345,20 @@ Build.Split = {
 		if cx > 21 then return "RightArm" end
 		return "Body"
 	end,
+	-- A wooden golem holding its arms straight out, each fist round an upright
+	-- pole with an axe head at both ends: the poles are outside x 27-78, the
+	-- arms between them and the body (x 39-66); head above row 57 in the
+	-- middle; legs below row 24.
+	AxeGolem = function(x, y, _z, w, h)
+		local cx = x + w / 2
+		if cx < 27 then return "LeftAxe" end
+		if cx > 78 then return "RightAxe" end
+		if cx < 39 then return "LeftArm" end
+		if cx > 66 then return "RightArm" end
+		if y >= 57 and cx >= 45 and cx <= 60 then return "Head" end
+		if y + h <= 24 then return if cx < 53 then "LeftLeg" else "RightLeg" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

@@ -1770,6 +1770,55 @@ Rigs.LemurianWarrior = {
 	end,
 }
 
+--[[
+	AXE GOLEM. A wooden golem with its arms held straight out, each fist round
+	an upright pole with an axe head at both ends. It stomps stiffly. The
+	arms point along X, so a pitch on one turns its pole about the fist: -pitch
+	tips the top axe forward and down, +pitch back. Its moves:
+	  chop     both poles tipped back through the wind-up, then over and
+	           down in front, the top axes striking the ground
+	  cyclone  poles held out level, wobbling, while the server spins the body
+	  dizzy    arms drooping, head lolling
+]]
+Rigs.AxeGolem = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.8 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.35 * moving
+		local sway = math.sin(s) * 0.08 * moving
+		local left, right = CFrame.Angles(sway, 0, 0), CFrame.Angles(-sway, 0, 0)
+		local head = CFrame.Angles(0, math.sin(ctx.t * 0.7) * 0.2, 0)
+
+		if ctx.pose == "chop" then
+			local wind, hit = phases(ctx, 0.55, 0.12)
+			local tip = 0.6 * wind - 2.4 * hit
+			left, right = CFrame.Angles(tip, 0, 0), CFrame.Angles(tip, 0, 0)
+			head = CFrame.Angles(-0.1 * wind + 0.2 * hit, 0, 0)
+		elseif ctx.pose == "cyclone" then
+			local wobble = math.sin(ctx.t * 22) * 0.06
+			left = CFrame.Angles(-1.5 + wobble, 0, 0)
+			right = CFrame.Angles(1.5 - wobble, 0, 0)
+		elseif ctx.pose == "dizzy" then
+			left = CFrame.Angles(0, 0, -0.5)
+			right = CFrame.Angles(0, 0, 0.5)
+			head = CFrame.Angles(0.2, math.sin(ctx.t * 3) * 0.3, math.cos(ctx.t * 3) * 0.2)
+		end
+
+		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-step, 0, 0)
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Head.Transform = head
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

@@ -284,6 +284,15 @@ Build.Split = {
 		if y + h <= 15 then return (if cz < 51 then "F" else "B") .. (if cx < 28 then "L" else "R") end
 		return "Body"
 	end,
+	-- A raptor, built facing +Z (turned round after the build): head beyond
+	-- z 72 above row 30, tail before z 30, legs below row 15.
+	GreenRaptor = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz >= 72 and y >= 30 then return "Head" end
+		if cz < 30 then return "Tail" end
+		if y + h <= 15 then return if cx < 43 then "LeftLeg" else "RightLeg" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

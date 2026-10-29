@@ -1496,6 +1496,50 @@ Rigs.Beagle = quadruped({ walk = 8, cycle = 1.4, bite = 0.2 })
 Rigs.BeisaOryx = quadruped({ walk = 8, cycle = 2.2, gore = 0.3, kick = 0.25 })
 Rigs.Bronto = quadruped({ walk = 4, cycle = 4, bite = 0.35, stomp = 0.9, sweep = 0.45 })
 
+--[[
+	GREEN RAPTOR. A small two-legged hunter, built facing +Z and turned round
+	whole, so its joints are mirrored: on it a NEGATIVE pitch swings a leg
+	forward, a POSITIVE pitch lowers its head (forward of the hinge) and raises
+	its tail (behind). It runs on quick strides, head low, tail out for
+	balance. Its moves:
+	  dart  sprinting in: head down and out, tail up
+	  bite  head drawn up, then snapped down
+	  hiss  head up and back, tail lashing - circling, waiting its turn
+]]
+Rigs.GreenRaptor = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 8, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 3 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.7 * moving
+		local head = 0.1 * moving + math.sin(s * 2) * 0.06 * moving
+		local headYaw = math.sin(ctx.t * 1.5) * 0.25 * (1 - moving)
+		local tail, tailYaw = 0.05, math.sin(ctx.t * 2.4 + s) * 0.3
+
+		if ctx.pose == "dart" then
+			head, headYaw, tail = 0.3, 0, 0.2
+		elseif ctx.pose == "bite" then
+			local wind, hit = phases(ctx, 0.15, 0.07)
+			head = -0.35 * wind + 0.7 * hit
+			headYaw = 0
+		elseif ctx.pose == "hiss" then
+			head = -0.4 + math.sin(ctx.t * 20) * 0.05
+			tailYaw = math.sin(ctx.t * 9) * 0.6
+		end
+
+		j.LeftLeg.Transform = CFrame.Angles(-step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.Head.Transform = CFrame.Angles(head, headYaw, 0)
+		j.Tail.Transform = CFrame.Angles(tail, tailYaw, 0)
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

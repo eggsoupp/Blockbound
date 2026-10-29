@@ -322,6 +322,13 @@ EnemyDrops.Tables = {
 		{ item = "Leather", chance = 0.7, min = 1, max = 1 },
 	},
 
+	-- A monk's few things: the Hallow's dirt, a little mana, sometimes the magic material.
+	CatMonk = {
+		{ item = "HallowedDirt", chance = 0.5, min = 1, max = 2 },
+		{ item = "ManaPotion", chance = 0.2, min = 1, max = 1 },
+		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

@@ -2311,6 +2311,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		CAT MONK - the Hallow's staff fighter: dodges a good share of the blows
+		struck at it while it is not attacking, jabs in flurries of three, and
+		trips you with a low spinning sweep (ServerScriptService.Creatures.CatMonk;
+		its rig is Shared.Enemies.CreatureRigs.CatMonk).
+	]]
+	CatMonk = {
+		asset = "CatMonk",
+		displayName = "Cat Monk",
+		health = 70,
+		movement = "Hop",
+		trait = "CatMonk",
+
+		spawnBiomes = { "Hallow" },
+		spawnWeight = 0.5,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 8,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 10,
+		lungeMaxSpeed = 15,
+		lungeWindup = 0.35,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(120,80,44),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -2457,7 +2508,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon", "WerewolfLord", "Beagle", "BeisaOryx", "Bronto", "GreenRaptor",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon", "WerewolfLord", "Beagle", "BeisaOryx", "Bronto", "GreenRaptor", "CatMonk",
 }
 
 --[[

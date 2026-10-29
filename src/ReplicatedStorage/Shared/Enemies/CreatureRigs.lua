@@ -1540,6 +1540,72 @@ Rigs.GreenRaptor = {
 	end,
 }
 
+--[[
+	CAT MONK. A robed cat with a long staff held level at its left side, the
+	grip near the middle, so the staff turns about its own centre. It walks
+	calmly, staff steady. Its moves:
+	  flurry  three quick jabs, the staff driven straight out and back
+	  sweep   a crouch and the staff spun once flat round, low
+	  dodge   a quick lean away, staff drawn in
+]]
+Rigs.CatMonk = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.4 * math.pi * 2
+		local s = rig.stride
+		local e = ctx.elapsed or 0
+
+		local step = math.sin(s) * 0.45 * moving
+		local legL, legR = CFrame.Angles(step, 0, 0), CFrame.Angles(-step, 0, 0)
+		local left = CFrame.Angles(0.15, 0, 0)
+		local right = CFrame.Angles(-step * 0.4, 0, 0)
+		local staff = CFrame.Angles(0, math.sin(ctx.t * 0.8) * 0.05, 0)
+		local head = CFrame.Angles(0, math.sin(ctx.t * 0.6) * 0.2, 0)
+
+		if ctx.pose == "flurry" then
+			-- Out at 0.2, 0.4 and 0.6s (Creatures.CatMonk jabTimes).
+			local jab = 0
+			for _, at in ipairs({ 0.2, 0.4, 0.6 }) do
+				local k = (e - at + 0.08) / 0.16
+				if k > 0 and k < 1 then
+					jab = math.sin(k * math.pi)
+				end
+			end
+			staff = CFrame.new(0, 0, -1.2 * jab)
+			-- The arm stays nearly still: tipping it tips the staff (and the
+			-- robe edge on the arm) up off the line of the jab.
+			left = CFrame.Angles(0.08 + 0.04 * jab, 0, 0)
+			right = CFrame.Angles(0.5, 0, -0.3)
+			legL = CFrame.Angles(0.35, 0, 0)
+			legR = CFrame.Angles(-0.25, 0, 0)
+		elseif ctx.pose == "sweep" then
+			local wind, hit = phases(ctx, 0.3, 0.35)
+			staff = CFrame.Angles(0, -0.6 * wind + (math.pi * 2 + 0.6) * hit, 0)
+			legL = CFrame.Angles(0.6 * wind, 0, 0)
+			legR = CFrame.Angles(-0.5 * wind, 0, 0)
+			left = CFrame.Angles(0.2, 0, 0)
+			head = CFrame.Angles(0.2 * wind, 0, 0)
+		elseif ctx.pose == "dodge" then
+			local k = math.sin(math.min(1, e / 0.3) * math.pi)
+			legL = CFrame.Angles(0, 0, -0.4 * k)
+			legR = CFrame.Angles(0, 0, -0.4 * k)
+			head = CFrame.Angles(0, 0, 0.25 * k)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Staff.Transform = staff
+		j.Head.Transform = head
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

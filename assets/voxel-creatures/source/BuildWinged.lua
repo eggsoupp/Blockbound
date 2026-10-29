@@ -293,6 +293,19 @@ Build.Split = {
 		if y + h <= 15 then return if cx < 43 then "LeftLeg" else "RightLeg" end
 		return "Body"
 	end,
+	-- A robed cat monk with a long staff held level along its left side: the
+	-- staff is rows 23-29 outside the body (in front of z 31, behind z 45) or
+	-- along its left flank (x < 23); head above row 57; arms outside x 23-44;
+	-- legs below row 9.
+	CatMonk = function(x, y, z, w, h, d)
+		local cx = x + w / 2
+		if y >= 23 and y + h <= 29 and (z + d <= 31 or z >= 45 or cx < 23) then return "Staff" end
+		if y >= 57 then return "Head" end
+		if y + h <= 9 then return if cx < 33 then "LeftLeg" else "RightLeg" end
+		if cx < 23 then return "LeftArm" end
+		if cx > 44 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

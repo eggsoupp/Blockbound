@@ -134,6 +134,59 @@ Rigs.EvilRat = {
 }
 
 --[[
+	FOOTED PIRANHA. An upright fish on eight stubby legs that patter in two
+	alternating sets (L1, R2, L3, R4 against the rest), its tail fin
+	waggling side to side the whole time. Its moves:
+	  chomp  the jaw snapping, close to you
+	  leap   jaw wide open, legs trailing, tail flicked up
+	  flop   a landing on its side - the body is placed by the server; here
+	         the legs kick and the jaw gapes
+	Legs hang from their joints (positive pitch swings them forward); the
+	jaw hinges at the back of the mouth (positive pitch opens it).
+]]
+Rigs.FootedPiranha = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 1.2 * math.pi * 2
+
+		for i = 1, 4 do
+			local set = if i % 2 == 1 then 0 else math.pi
+			local left = math.sin(rig.stride + set) * 0.7 * moving
+			local right = math.sin(rig.stride + set + math.pi) * 0.7 * moving
+			if ctx.pose == "leap" then
+				left += (-0.6 - left) * b
+				right += (-0.6 - right) * b
+			elseif ctx.pose == "flop" then
+				left = math.sin(ctx.t * 30 + i) * 0.6
+				right = math.sin(ctx.t * 30 + i + 1) * 0.6
+			end
+			j["L" .. i].Transform = CFrame.Angles(left, 0, 0)
+			j["R" .. i].Transform = CFrame.Angles(right, 0, 0)
+		end
+
+		local waggle = math.sin(ctx.t * (6 + 8 * moving)) * (0.25 + 0.2 * moving)
+		local flick = if ctx.pose == "leap" then 0.4 * b else 0
+		j.Tail.Transform = CFrame.Angles(flick, waggle, 0)
+
+		local jaw = 0.05 + math.max(0, math.sin(ctx.t * 4)) * 0.08
+		if ctx.pose == "chomp" then
+			jaw = math.max(0, math.sin(ctx.t * 22)) * 0.55
+		elseif ctx.pose == "leap" then
+			jaw += (0.7 - jaw) * b
+		elseif ctx.pose == "flop" then
+			jaw = 0.35 + math.sin(ctx.t * 12) * 0.2
+		end
+		j.Jaw.Transform = CFrame.Angles(jaw, 0, 0)
+	end,
+}
+
+--[[
 	RABBIC CLERIC. A robed rabbit that bounds rather than walks: its legs
 	tuck while it is in the air and its great ears stream back as it rises
 	and flop up as it falls (worked out here from how fast the model is

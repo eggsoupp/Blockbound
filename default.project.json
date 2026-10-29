@@ -955,6 +955,9 @@
         },
         "RabbicCleric": {
           "$path": "src/ServerScriptService/Creatures/RabbicCleric.lua"
+        },
+        "FootedPiranha": {
+          "$path": "src/ServerScriptService/Creatures/FootedPiranha.lua"
         }
       },
       "BossService": {

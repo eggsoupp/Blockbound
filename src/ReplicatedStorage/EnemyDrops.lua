@@ -175,6 +175,12 @@ EnemyDrops.Tables = {
 		{ item = "HallowedDirt", chance = 0.3, min = 1, max = 2 },
 	},
 
+	-- Gel-slick scales and swamp herbs caught in its teeth.
+	FootedPiranha = {
+		{ item = "Gel", chance = 0.4, min = 1, max = 1 },
+		{ item = "Herb", chance = 0.3, min = 1, max = 1 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

@@ -69,6 +69,18 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- An upright fish: tail fin behind z 29, a lower jaw (front, below row
+	-- 13), and four short legs a side below row 8, in z bands.
+	FootedPiranha = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz >= 29 then return "Tail" end
+		if y + h <= 8 then
+			local band = if cz < 10 then 1 elseif cz < 17 then 2 elseif cz < 24 then 3 else 4
+			return (if cx < 34 then "L" else "R") .. band
+		end
+		if cz < 12 and y >= 11 and y + h <= 13 and cx >= 29 and cx <= 39 then return "Jaw" end
+		return "Body"
+	end,
 	-- A robed rabbit: two great ears spread above row 58, the head above row
 	-- 43, an arm either side of the robe (the right one holding the staff),
 	-- and short legs under the hem (row 15).

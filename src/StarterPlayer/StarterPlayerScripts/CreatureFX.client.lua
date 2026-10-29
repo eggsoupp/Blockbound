@@ -495,6 +495,16 @@ local STYLES = {
 		},
 		pitch = 1.6,
 	},
+	-- Only ever a splash: a piranha's flop.
+	water = {
+		name = "Splash", size = 0.6, material = Enum.Material.Glass, color = Color3.fromRGB(120, 170, 220),
+		trail = { rate = 0, size = 0.5, life = 0.2 },
+		burst = {
+			{ "Puff", 4, { Color = ColorSequence.new(Color3.fromRGB(150, 190, 230)), Size = NumberSequence.new(1.4), Speed = NumberRange.new(3, 6), SpreadAngle = Vector2.new(60, 60), Lifetime = NumberRange.new(0.5) } },
+			{ "Glints", 5, { Color = ColorSequence.new(Color3.fromRGB(200, 230, 255)), Size = NumberSequence.new(0.6) } },
+		},
+		pitch = 1.8,
+	},
 	ichor = {
 		name = "Ichor", size = 0.9, material = Enum.Material.Neon, color = ICHOR,
 		trail = { rate = 30, size = 0.9, life = 0.4 },

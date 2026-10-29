@@ -1170,6 +1170,56 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		A small swamp fish on eight legs, in little schools: scurries in,
+		snapping, and leaps the last few blocks jaws-first; a missed leap
+		leaves it flopping (see its trait). The lunge numbers ARE the leap -
+		the trait winds it up itself - and the hop is for climbing a step.
+	]]
+	FootedPiranha = {
+		asset = "FootedPiranha",
+		displayName = "Footed Piranha",
+		health = 16,
+		movement = "Hop",
+		trait = "FootedPiranha",
+
+		spawnBiomes = { "Swamp" },
+		packSize = NumberRange.new(2, 4),
+
+		speed = 13,
+		aggroRange = 55,
+		giveUpRange = 95,
+		despawnSeconds = 30,
+
+		contactRange = 2.6,
+		contactDamage = 4,
+		contactInterval = 0.8,
+
+		gravity = 120,
+		jumpPower = 32,
+		maxHopDistance = 6,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.1,
+		windupSeconds = 0.08,
+
+		sizeVariance = 0.15,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 30,
+		lungeMaxDistance = 11,
+		lungeMaxSpeed = 22,
+		lungeWindup = 0.3,
+		lungeDamage = 8,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(40, 104, 208),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1268,7 +1318,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha",
 }
 
 --[[

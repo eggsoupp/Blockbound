@@ -286,6 +286,14 @@ EnemyDrops.Tables = {
 		{ item = "CrimsonDirt", chance = 0.4, min = 1, max = 2 },
 	},
 
+	-- A spotted hide, the Corruption's dirt, and a fair chance of the magic
+	-- material.
+	SpottedDemon = {
+		{ item = "Leather", chance = 1, min = 1, max = 2 },
+		{ item = "CorruptedDirt", chance = 0.5, min = 1, max = 3 },
+		{ item = "EssenceShard", chance = 0.3, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

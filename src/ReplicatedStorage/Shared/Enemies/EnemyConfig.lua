@@ -2000,6 +2000,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		SPOTTED DEMON - the Corruption's ambusher: all but invisible while it
+		stalks, it shows itself to pounce from range in a high leap that lands
+		on you, and rakes up close (ServerScriptService.Creatures.SpottedDemon;
+		its rig is Shared.Enemies.CreatureRigs.SpottedDemon).
+	]]
+	SpottedDemon = {
+		asset = "SpottedDemon",
+		displayName = "Spotted Demon",
+		health = 90,
+		movement = "Hop",
+		trait = "SpottedDemon",
+
+		spawnBiomes = { "Corruption" },
+		spawnWeight = 0.45,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 7,
+		aggroRange = 55,
+		giveUpRange = 95,
+		despawnSeconds = 40,
+
+		contactRange = 3.2,
+		contactDamage = 5,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 38,
+		maxHopDistance = 7,
+		maxHopSpeed = 11,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 7,
+		lungeMaxSpeed = 11,
+		lungeWindup = 0.5,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(110, 60, 70),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -2146,7 +2197,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon",
 }
 
 --[[

@@ -1284,6 +1284,59 @@ Rigs.VampireDuck = {
 	end,
 }
 
+--[[
+	SPOTTED DEMON. A hunched demon that walks on its knuckles: long arms in
+	front swing with the opposite short leg behind. Its moves:
+	  crouch  gathered low, arms bent, head down - the pounce tell
+	  pounce  in the air, arms flung forward, legs trailing
+	  claw    the right arm drawn up and back, then raked down in front
+	Arms and legs hang from their joints: +pitch swings a hand or foot
+	forward. The head juts forward of its hinge, so -pitch lowers it.
+]]
+Rigs.SpottedDemon = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 3 * math.pi * 2
+		local s = rig.stride
+
+		local swing = math.sin(s) * 0.45 * moving
+		local left, right = CFrame.Angles(swing, 0, 0), CFrame.Angles(-swing, 0, 0)
+		local legL, legR = CFrame.Angles(-swing, 0, 0), CFrame.Angles(swing, 0, 0)
+		local head = CFrame.Angles(math.sin(ctx.t * 1.2) * 0.06, math.sin(ctx.t * 0.7) * 0.25, 0)
+
+		if ctx.pose == "crouch" then
+			local k = math.min(1, ctx.blend * 2)
+			left = CFrame.Angles(-0.5 * k, 0, 0)
+			right = CFrame.Angles(-0.5 * k, 0, 0)
+			legL = CFrame.Angles(0.5 * k, 0, 0)
+			legR = CFrame.Angles(0.5 * k, 0, 0)
+			head = CFrame.Angles(-0.3 * k, 0, 0)
+		elseif ctx.pose == "pounce" then
+			left = CFrame.Angles(1.4, 0, -0.2)
+			right = CFrame.Angles(1.4, 0, 0.2)
+			legL = CFrame.Angles(-0.7, 0, 0)
+			legR = CFrame.Angles(-0.7, 0, 0)
+			head = CFrame.Angles(0.2, 0, 0)
+		elseif ctx.pose == "claw" then
+			local wind, hit = phases(ctx, 0.35, 0.1)
+			right = CFrame.Angles(2.2 * wind - 2.0 * hit, 0, 0.3 * wind)
+			left = CFrame.Angles(0.3 * wind, 0, 0)
+			head = CFrame.Angles(0.15 * wind - 0.25 * hit, 0, 0)
+		end
+
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.Head.Transform = head
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

@@ -234,6 +234,17 @@ Build.Split = {
 		if y + h <= 7 then return if cx < 46 then "LeftLeg" else "RightLeg" end
 		return "Body"
 	end,
+	-- A hunched spotted demon walking on its knuckles: head above row 54; the
+	-- long arms are the outer limbs in front of z 42 (outside x 16-44); the
+	-- legs are behind z 45 below row 21.
+	SpottedDemon = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if y >= 54 then return "Head" end
+		if cz < 42 and cx < 16 then return "LeftArm" end
+		if cz < 42 and cx > 44 then return "RightArm" end
+		if cz >= 45 and y + h <= 21 then return if cx < 31 then "LeftLeg" else "RightLeg" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

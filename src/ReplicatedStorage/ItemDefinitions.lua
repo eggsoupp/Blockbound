@@ -190,7 +190,6 @@ local ItemDefinitions = {
 		value = 999,
 	},
 	TestPickaxe = {
-		sprite = "pickaxe_test",
 		icon = "rbxassetid://78053200894485",
 		description = "test",
 		rarity = "Unobtainable",
@@ -205,7 +204,6 @@ local ItemDefinitions = {
 		miningPower = 99,
 	},
 	TestAxe = {
-		sprite = "axe_test",
 		icon = "rbxassetid://15599043650",
 		description = "test",
 		rarity = "Unobtainable",
@@ -215,7 +213,6 @@ local ItemDefinitions = {
 	},
 
 	CopperPickaxe = {
-		sprite = "pickaxe_copper",
 		icon = "rbxassetid://3000000000",
 		description = "A basic pickaxe used for mining copper ore.",
 		rarity = "Common",
@@ -241,7 +238,6 @@ local ItemDefinitions = {
 	-- The wood tier. Weakest of everything, and the first tools a player can
 	-- make from what the world hands them without smelting anything.
 	WoodAxe = {
-		sprite = "axe_wood",
 		icon = "rbxassetid://3000000002",
 		description = "A crude axe for chopping down trees.",
 		rarity = "Common",
@@ -251,7 +247,6 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(25, 270, 35),
 	},
 	WoodPickaxe = {
-		sprite = "pickaxe_wood",
 		-- PLACEHOLDER ICON, in the same made-up series as its neighbours.
 		icon = "rbxassetid://3000000013",
 		description = "A crude pickaxe. It will break stone, slowly.",
@@ -280,7 +275,6 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(0, 0, 0),
 	},
 	StonePickaxe = {
-		sprite = "pickaxe_stone",
 		icon = "rbxassetid://3000000009",
 		description = "A sturdy pickaxe made of stone. More durable than copper.",
 		rarity = "Common",
@@ -482,7 +476,6 @@ local ItemDefinitions = {
 
 	-- === Mid-Game Tools & Weapons ===
 	IronPickaxe = {
-		sprite = "pickaxe_iron",
 		icon = "rbxassetid://3000000401",
 		description = "Stronger than copper, used to mine tougher ores.",
 		rarity = "Uncommon",
@@ -668,7 +661,6 @@ local ItemDefinitions = {
 	-- for the ore. Every one of these is a working tool - Tools.ToolConfig builds
 	-- a template for anything holdable, so they equip and mine like the rest.
 	GoldPickaxe = {
-		sprite = "pickaxe_gold",
 		icon = "rbxassetid://3000000420",
 		description = "Soft metal, sharp edge. Cuts stone quickly but not gently.",
 		rarity = "Rare",
@@ -690,7 +682,6 @@ local ItemDefinitions = {
 		value = 60,
 	},
 	MythrilPickaxe = {
-		sprite = "pickaxe_mythril",
 		icon = "rbxassetid://3000000422",
 		description = "Hums as it cuts. Shrugs off the deep rock.",
 		rarity = "Rare",
@@ -701,7 +692,6 @@ local ItemDefinitions = {
 		miningPower = 5,
 	},
 	VoidPickaxe = {
-		sprite = "pickaxe_void",
 		icon = "rbxassetid://3000000423",
 		description = "Built around a fragment of nothing. Stone barely registers.",
 		rarity = "Legendary",
@@ -867,7 +857,6 @@ local ItemDefinitions = {
 		dropOnly = true,
 	},
 	SkybreakerPick = {
-		sprite = "pickaxe_skybreaker",
 		icon = "rbxassetid://3000000604",
 		description = "A celestial pickaxe that breaks multiple blocks at once.",
 		rarity = "Legendary",
@@ -880,7 +869,6 @@ local ItemDefinitions = {
 		dropOnly = true,
 	},
 	BuilderWand = {
-		sprite = "wand_builder",
 		icon = "rbxassetid://3000000605",
 		description = "Places multiple blocks at once when building.",
 		rarity = "Epic",
@@ -890,7 +878,6 @@ local ItemDefinitions = {
 		dropOnly = true,
 	},
 	FlameHammer = {
-		sprite = "hammer_flame",
 		icon = "rbxassetid://3000000606",
 		description = "Smelts ores instantly on impact. Can be used as a weapon.",
 		rarity = "Rare",

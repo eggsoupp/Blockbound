@@ -1789,6 +1789,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		ROOSTER - the Plains' rabble-rouser: its crow makes every creature
+		nearby hit half again as hard for a while; on its own it pecks and
+		flutters at you (ServerScriptService.Creatures.Rooster; its rig is
+		Shared.Enemies.CreatureRigs.Rooster). Fragile - kill it first.
+	]]
+	Rooster = {
+		asset = "Rooster",
+		displayName = "Rooster",
+		health = 30,
+		movement = "Hop",
+		trait = "Rooster",
+
+		spawnBiomes = { "Plains" },
+		spawnWeight = 0.6,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 9,
+		aggroRange = 45,
+		giveUpRange = 85,
+		despawnSeconds = 40,
+
+		contactRange = 2.4,
+		contactDamage = 3,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 40,
+		maxHopDistance = 8,
+		maxHopSpeed = 13,
+		groundedSeconds = 0.1,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.08,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 40,
+		lungeMaxDistance = 10,
+		lungeMaxSpeed = 15,
+		lungeWindup = 0.3,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(140, 72, 28),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -1935,7 +1986,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster",
 }
 
 --[[

@@ -1364,6 +1364,43 @@ function handlers.screech(origin: Vector3, facing: Vector3, range: number)
 	Kit.sound(host, SOUND_HIT, 0.6, 3)
 end
 
+-- ---------------------------------------------------------------------------
+-- Rooster
+-- ---------------------------------------------------------------------------
+
+local RALLY = Color3.fromRGB(255, 80, 50)
+
+-- The crow: a flash off its head, feathers of light, and the call itself.
+function handlers.crow(model)
+	if not body(model) then
+		return
+	end
+	local host = burst(topOf(model) + Vector3.new(0, 0.4, 0), {
+		{ "Flare", 1, { Color = ColorSequence.new(Color3.fromRGB(255, 210, 120)), Size = NumberSequence.new(4) } },
+		{ "Glints", 12, { Color = ColorSequence.new(RALLY), Size = NumberSequence.new(0.9) } },
+	}, 2)
+	Kit.sound(host, SOUND_BOOM, 0.5, 2.6)
+	Kit.sound(host, SOUND_HIT, 0.5, 1.8)
+end
+
+-- Rallied: a red glow of sparks round a creature for as long as it lasts.
+function handlers.rallied(model, seconds: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local aura = emitter("Glints", part, {
+		Enabled = true, Rate = 14, Color = ColorSequence.new(RALLY), Size = NumberSequence.new(0.8),
+		LockedToPart = false,
+	})
+	local glow = light(part, RALLY, 8, 1.2)
+	task.delay(seconds, function()
+		aura.Enabled = false
+		glow:Destroy()
+		Debris:AddItem(aura, 1.5)
+	end)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

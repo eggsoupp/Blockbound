@@ -187,6 +187,17 @@ Build.Split = {
 		if cx > 69 then return "RightArm" end
 		return "Body"
 	end,
+	-- A rooster: head and neck above row 32; tail behind z 32; legs below row
+	-- 12; the wings are the flanks outside x 29-41.
+	Rooster = function(x, y, z, w, h)
+		local cx = x + w / 2
+		if y >= 32 then return "Head" end
+		if z >= 32 and y >= 18 then return "Tail" end
+		if y + h <= 12 then return if cx < 35 then "LeftLeg" else "RightLeg" end
+		if cx < 29 then return "LeftWing" end
+		if cx > 41 then return "RightWing" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

@@ -991,6 +991,9 @@
         },
         "BatMutant": {
           "$path": "src/ServerScriptService/Creatures/BatMutant.lua"
+        },
+        "Rooster": {
+          "$path": "src/ServerScriptService/Creatures/Rooster.lua"
         }
       },
       "BossService": {

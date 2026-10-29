@@ -1082,4 +1082,62 @@ Rigs.BatMutant = {
 	end,
 }
 
+--[[
+	ROOSTER. A big, belligerent cockerel. It struts - the head jerking
+	forward and back with each step, the way a bird's does - and its moves:
+	  crow     chest out, head thrown up, wings spread and beating
+	  peck     the head stabbing down and forward, fast, over and over
+	  flutter  wings flapping hard, legs tucked - a flapping leap
+	Wings hinge along the flank: a roll about Z lifts them away from the body
+	(negative for the left, positive for the right).
+]]
+Rigs.Rooster = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 1.6 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.6 * moving
+		local legL, legR = CFrame.Angles(step, 0, 0), CFrame.Angles(-step, 0, 0)
+		-- The bob: head thrust forward on one half of the stride, back on the
+		-- other, sharply rather than smoothly.
+		local bob = (if math.sin(s * 2) > 0 then 1 else -1) * 0.12 * moving
+		local head = CFrame.new(0, 0, -bob) * CFrame.Angles(0, math.sin(ctx.t * 1.7) * 0.3 * (1 - moving), 0)
+		local wingL, wingR = CFrame.identity, CFrame.identity
+		local tail = CFrame.Angles(math.sin(ctx.t * 1.3) * 0.05, 0, 0)
+
+		if ctx.pose == "crow" then
+			local k = math.min(1, b * 3)
+			local beat = math.sin(ctx.t * 22) * 0.4 * k
+			head = CFrame.Angles(0.7 * k, 0, 0)
+			wingL = CFrame.Angles(0, 0, -(0.9 * k + beat))
+			wingR = CFrame.Angles(0, 0, 0.9 * k + beat)
+			tail = CFrame.Angles(0.3 * k, 0, 0)
+		elseif ctx.pose == "peck" then
+			local stab = math.max(0, math.sin(ctx.t * 24))
+			head = CFrame.new(0, -0.2 * stab, -0.35 * stab) * CFrame.Angles(-0.8 * stab, 0, 0)
+		elseif ctx.pose == "flutter" then
+			local beat = math.sin(ctx.t * 30) * 0.6
+			wingL = CFrame.Angles(0, 0, -(0.8 + beat))
+			wingR = CFrame.Angles(0, 0, 0.8 + beat)
+			legL = CFrame.Angles(-0.5, 0, 0)
+			legR = CFrame.Angles(-0.5, 0, 0)
+			head = CFrame.Angles(0.2, 0, 0)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.LeftWing.Transform = wingL
+		j.RightWing.Transform = wingR
+		j.Head.Transform = head
+		j.Tail.Transform = tail
+	end,
+}
+
 return Rigs

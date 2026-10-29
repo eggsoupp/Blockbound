@@ -1607,6 +1607,13 @@ function EnemyService.setDamageScale(model, scale: number)
 	end
 end
 
+-- The scale a live enemy's damage is under now (1 when nothing has set one),
+-- so a temporary change can be made on top of it and taken back off.
+function EnemyService.damageScaleOf(model): number?
+	local entry = entries[model]
+	return entry and (entry.damageScale or 1)
+end
+
 --[[
 	Contact damage from a trait that moved the creature itself this tick: the
 	same per-player cooldown and damage scale as an ordinary bump, at `damage`

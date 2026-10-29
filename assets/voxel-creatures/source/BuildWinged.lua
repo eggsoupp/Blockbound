@@ -69,6 +69,20 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- Knuckle-walker: the arms are the outer columns (x < 30, x > 41) from
+	-- the shoulders to the ground, the head the middle above row 36, the
+	-- legs the short columns under the back half.
+	Gorilla = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		-- Front columns only: further back the same x is the torso's flank.
+		if cx < 30 and cz < 18 then return "LeftArm" end
+		if cx > 41 and cz < 18 then return "RightArm" end
+		if y >= 36 then return "Head" end
+		if y + h <= 19 and cz >= 28 then
+			return if cx < 36 then "LeftLeg" else "RightLeg"
+		end
+		return "Body"
+	end,
 	-- Factor-2 boxes. The wings are the raised V above the shoulders and the
 	-- feathers hanging down the outside of the body.
 	Shrike = function(x, y, _z, w, _h, _d, _c)

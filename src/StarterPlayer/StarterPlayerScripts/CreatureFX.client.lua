@@ -144,7 +144,7 @@ local folder = Instance.new("Folder")
 folder.Name = "CreatureFX"
 folder.Parent = workspace
 
-Kit.preload(Library, { SOUND_HIT })
+Kit.preload(Library, { SOUND_HIT, "rbxassetid://5540424854" })
 
 local function emitter(kind, parent, props)
 	return Kit.emitter(Library, kind, parent, props)
@@ -608,6 +608,57 @@ function handlers.strike(model, _seconds: number)
 	local slash = emitter("Slash", at, { Color = ColorSequence.new(Color3.fromRGB(255, 230, 140)), Size = NumberSequence.new(4) })
 	slash:Emit(1)
 	Debris:AddItem(at, 0.6)
+end
+
+-- ---------------------------------------------------------------------------
+-- Gorilla
+-- ---------------------------------------------------------------------------
+
+local DUST = Color3.fromRGB(150, 120, 85)
+local SOUND_BOOM = "rbxassetid://5540424854"
+
+-- The chest pound: a ring of pressure off its chest with every beat.
+function handlers.roar(model, seconds: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local cframe, size = model:GetBoundingBox()
+	local at = Kit.attachment(part)
+	at.WorldCFrame = CFrame.lookAt(cframe.Position + Vector3.new(0, size.Y * 0.2, 0), cframe.Position + Vector3.new(0, size.Y * 0.2, 0) + model:GetPivot().LookVector)
+	local rings = emitter("ChargeEnergy", at, {
+		-- Growing outward rather than drawn in, unlike the pack's charge.
+		Color = ColorSequence.new(Color3.fromRGB(255, 235, 200)), Size = NumberSequence.new(1, 5),
+		Transparency = NumberSequence.new(0.4), Brightness = 2, LightEmission = 0.4,
+	})
+	local beats = 0
+	during(seconds, function(elapsed)
+		local due = math.floor(elapsed / 0.18)
+		if due > beats and model.Parent then
+			beats = due
+			rings:Emit(1)
+		end
+	end, function()
+		Debris:AddItem(at, 0.5)
+	end)
+	Kit.sound(part, SOUND_HIT, 0.6, 0.45)
+end
+
+-- The slam: a ring of dust thrown out to its reach and a shockwave.
+function handlers.slam(position: Vector3, radius: number)
+	for i = 0, 15 do
+		local angle = i / 16 * math.pi * 2
+		local at = position + Vector3.new(math.cos(angle), 0.4, math.sin(angle)) * radius * 0.55
+		burst(at, {
+			{ "Puff", 2, { Color = ColorSequence.new(DUST), Size = NumberSequence.new(3.2), Speed = NumberRange.new(3, 7), SpreadAngle = Vector2.new(50, 50), Lifetime = NumberRange.new(1) } },
+		}, 2)
+	end
+	local host = burst(position + Vector3.new(0, 0.5, 0), {
+		{ "BoomRing", 1, { Color = ColorSequence.new(Color3.fromRGB(240, 220, 180)), Size = scaled(Library.BoomRing.Size, radius / 5), Brightness = 4, LightEmission = 0.5 } },
+		{ "BoomSparks", 18, { Color = ColorSequence.new(DUST), Speed = NumberRange.new(25, 40), LightEmission = 0 } },
+		{ "Puff", 5, { Color = ColorSequence.new(DUST), Size = NumberSequence.new(4.5), Speed = NumberRange.new(1, 3) } },
+	}, 3)
+	Kit.sound(host, SOUND_BOOM, 0.8, 0.8)
 end
 
 function handlers.flare(model, color: Color3?)

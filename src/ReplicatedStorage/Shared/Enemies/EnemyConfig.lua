@@ -966,6 +966,58 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		A plains brute: knuckle-walks, swipes up close, and from range pounds
+		its chest and leaps into a ground slam (see its trait). Uncommon and
+		alone. The lunge numbers ARE the leap - the trait winds it up itself,
+		lungeRange 0 keeps the plain hop from choosing one - and the rest of
+		the Hop numbers are for climbing.
+	]]
+	Gorilla = {
+		asset = "Gorilla",
+		displayName = "Gorilla",
+		health = 140,
+		movement = "Hop",
+		trait = "Gorilla",
+
+		spawnBiomes = { "Plains" },
+		spawnWeight = 0.25,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 8,
+		aggroRange = 55,
+		giveUpRange = 95,
+		despawnSeconds = 40,
+
+		contactRange = 4.5,
+		contactDamage = 10,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 9,
+		groundedSeconds = 0.2,
+		windupSeconds = 0.15,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 50,
+		lungeMaxDistance = 22,
+		lungeMaxSpeed = 30,
+		lungeWindup = 1.1,
+		lungeDamage = 10,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(56, 56, 56),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1064,7 +1116,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla",
 }
 
 --[[

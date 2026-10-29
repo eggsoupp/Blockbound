@@ -943,6 +943,9 @@
         },
         "EvilRat": {
           "$path": "src/ServerScriptService/Creatures/EvilRat.lua"
+        },
+        "Gorilla": {
+          "$path": "src/ServerScriptService/Creatures/Gorilla.lua"
         }
       },
       "BossService": {

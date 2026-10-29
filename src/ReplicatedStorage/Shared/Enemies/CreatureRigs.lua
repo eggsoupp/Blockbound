@@ -133,4 +133,63 @@ Rigs.EvilRat = {
 	end,
 }
 
+--[[
+	GORILLA. A knuckle-walk: each arm swings with the opposite leg, big and
+	slow, the head rolling a little with the gait. Standing it breathes - the
+	arms sway out and in. Its moves:
+	  pound   arms up in front, beating the chest in turn - the warning
+	  leap    both arms flung up overhead, in the air
+	  slam    both fists driven down in front, on landing
+	  swipe   one arm swung across, up close
+	Arms and legs hang from their joints, so a positive pitch about X swings
+	the hand or foot forward; roll about Z swings an arm out or in.
+]]
+Rigs.Gorilla = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 4 * math.pi * 2
+		local s = rig.stride
+		local b = ctx.blend
+
+		local armSwing = math.sin(s) * 0.55 * moving
+		local legSwing = math.sin(s) * 0.45 * moving
+		local breathe = math.sin(ctx.t * 1.6) * 0.06 * (1 - moving)
+
+		local left = CFrame.Angles(armSwing, 0, -breathe)
+		local right = CFrame.Angles(-armSwing, 0, breathe)
+		local head = CFrame.Angles(math.sin(s * 2) * 0.05 * moving, math.sin(s) * 0.12 * moving, 0)
+
+		if ctx.pose == "pound" then
+			-- Raised in front and beating the chest in turn.
+			local beat = math.sin(ctx.t * 14)
+			left = left:Lerp(CFrame.Angles(1.5 + beat * 0.35, 0.3, 0.55), b)
+			right = right:Lerp(CFrame.Angles(1.5 - beat * 0.35, -0.3, -0.55), b)
+			head = head:Lerp(CFrame.Angles(-0.35, 0, 0), b)
+		elseif ctx.pose == "leap" then
+			left = left:Lerp(CFrame.Angles(2.8, 0, -0.25), b)
+			right = right:Lerp(CFrame.Angles(2.8, 0, 0.25), b)
+			head = head:Lerp(CFrame.Angles(-0.2, 0, 0), b)
+		elseif ctx.pose == "slam" then
+			left = left:Lerp(CFrame.Angles(0.9, 0, 0.2), b)
+			right = right:Lerp(CFrame.Angles(0.9, 0, -0.2), b)
+			head = head:Lerp(CFrame.Angles(0.25, 0, 0), b)
+		elseif ctx.pose == "swipe" then
+			-- The right arm swung out and across.
+			local k = math.sin(math.min(1, b * 1.2) * math.pi)
+			right = right:Lerp(CFrame.Angles(1.2, -0.9, -1.1 + 1.6 * b), k)
+		end
+
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.LeftLeg.Transform = CFrame.Angles(-legSwing, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(legSwing, 0, 0)
+		j.Head.Transform = head
+	end,
+}
+
 return Rigs

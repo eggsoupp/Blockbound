@@ -43,6 +43,20 @@ return {
 		count = 1,
 	},
 	-- Explosions/Boom 1/shockwave
+	BoomRing = {
+		Texture = "rbxassetid://8952335649",
+		Color = ColorSequence.new(rgb(255, 100, 0)),
+		Size = seq({0, 0}, {1, 10}),
+		Transparency = seq({0, 0}, {1, 1}),
+		Lifetime = NumberRange.new(0.375),
+		Speed = NumberRange.new(0),
+		Rotation = NumberRange.new(-180, 180),
+		RotSpeed = NumberRange.new(-90, 90),
+		LightEmission = 1,
+		Brightness = 37.5,
+		ZOffset = 3,
+		count = 1,
+	},
 	-- Anime/Charge-01/Main/Energy1 (inward rings)
 	ChargeEnergy = {
 		Texture = "rbxassetid://15041986621",

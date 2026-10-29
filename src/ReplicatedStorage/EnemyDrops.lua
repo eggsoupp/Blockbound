@@ -150,6 +150,12 @@ EnemyDrops.Tables = {
 		{ item = "CrimsonDirt", chance = 0.25, min = 1, max = 2 },
 	},
 
+	-- A big animal: a good haul of leather, sometimes the magic material.
+	Gorilla = {
+		{ item = "Leather", chance = 1, min = 2, max = 4 },
+		{ item = "EssenceShard", chance = 0.15, min = 1, max = 1 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

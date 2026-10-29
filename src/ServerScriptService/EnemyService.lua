@@ -615,6 +615,8 @@ end
 	  step(entry, target, targetPosition, position, dt, now) -> handled
 	  pose(entry, now)       optional, after a placement: cosmetic tilt only
 	  start(entry), finish(entry, reason)   optional
+	  guard(entry, amount, dealer) -> share   optional, the share (0-1) of a
+	                         blow it actually takes
 ]]
 local traits = {}
 
@@ -1728,6 +1730,11 @@ function EnemyService.damage(model, amount, dealer)
 	end
 
 	local dealt = math.max(0, tonumber(amount) or 0)
+	-- A trait may take some of the blow: a raised guard, a shell.
+	local share = if dealt > 0 then traitCall(entry, "guard", dealt, dealer) else nil
+	if type(share) == "number" then
+		dealt *= math.clamp(share, 0, 1)
+	end
 	entry.health -= dealt
 	refreshNamePlate(entry)
 

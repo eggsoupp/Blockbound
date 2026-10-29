@@ -535,4 +535,83 @@ Rigs.Gorilla = {
 	end,
 }
 
+--[[
+	CRAB MONSTER. A crab-man on two legs with a pincer on each forearm. Its
+	moves:
+	  scuttle  sideways, the legs rocking out to the sides instead of striding
+	  guard    both claws raised crossed in front of its face - the shell it
+	           hides behind (ServerScriptService.Creatures.CrabMonster)
+	  pinch    claws thrown wide, then snapped together in front
+	  hold     claws clamped together forward, shaking whoever is in them
+	Idle, the claws clack now and then.
+]]
+Rigs.CrabMonster = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.5 * math.pi * 2
+		local s = rig.stride
+
+		local legL, legR
+		if ctx.pose == "scuttle" then
+			local rock = math.sin(s) * 0.35 * moving
+			legL = CFrame.Angles(0, 0, -math.max(0, rock))
+			legR = CFrame.Angles(0, 0, math.max(0, -rock))
+		else
+			local step = math.sin(s) * 0.4 * moving
+			legL = CFrame.Angles(step, 0, 0)
+			legR = CFrame.Angles(-step, 0, 0)
+		end
+
+		-- A clack every couple of seconds: both claws twitch up together.
+		local clack = math.max(0, math.sin(ctx.t * 3)) ^ 12 * 0.35
+		local armL = CFrame.Angles(0.15 + math.sin(s) * 0.15 * moving, 0, 0)
+		local armR = CFrame.Angles(0.15 - math.sin(s) * 0.15 * moving, 0, 0)
+		local clawL = CFrame.Angles(clack, 0, 0)
+		local clawR = CFrame.Angles(clack, 0, 0)
+		local head = CFrame.Angles(0, math.sin(ctx.t * 0.9) * 0.15, 0)
+		local tail = CFrame.Angles(0, math.sin(ctx.t * 2 + s) * 0.3, 0)
+
+		if ctx.pose == "guard" or ctx.pose == "scuttle" then
+			-- Raised and turned in so the pincers cross in front of the face.
+			local k = if ctx.pose == "guard" then b else 1
+			armL = armL:Lerp(CFrame.Angles(0.9, 0, 0), k)
+			armR = armR:Lerp(CFrame.Angles(0.9, 0, 0), k)
+			clawL = clawL:Lerp(CFrame.Angles(0.5, -0.55, 0), k)
+			clawR = clawR:Lerp(CFrame.Angles(0.5, 0.55, 0), k)
+			head = head:Lerp(CFrame.Angles(0.2, 0, 0), k)
+		elseif ctx.pose == "pinch" then
+			-- Thrown wide for the first half, then snapped shut in front.
+			local open = math.min(1, b * 2)
+			local snap = math.clamp(b * 4 - 2.4, 0, 1)
+			armL = CFrame.Angles(0.4 + 0.4 * snap, 0, 0)
+			armR = CFrame.Angles(0.4 + 0.4 * snap, 0, 0)
+			clawL = CFrame.Angles(0.2, 0.8 * open - 1.1 * snap, 0)
+			clawR = CFrame.Angles(0.2, -0.8 * open + 1.1 * snap, 0)
+			head = CFrame.Angles(-0.25 * open + 0.3 * snap, 0, 0)
+		elseif ctx.pose == "hold" then
+			local shake = math.sin(ctx.t * 30) * 0.08
+			armL = CFrame.Angles(0.8 + shake, 0, 0)
+			armR = CFrame.Angles(0.8 - shake, 0, 0)
+			clawL = CFrame.Angles(0.2, -0.3, 0)
+			clawR = CFrame.Angles(0.2, 0.3, 0)
+			head = CFrame.Angles(0.3, 0, 0)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.LeftArm.Transform = armL
+		j.RightArm.Transform = armR
+		j.LeftClaw.Transform = clawL
+		j.RightClaw.Transform = clawR
+		j.Head.Transform = head
+		j.Tail.Transform = tail
+	end,
+}
+
 return Rigs

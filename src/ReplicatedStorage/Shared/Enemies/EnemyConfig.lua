@@ -1323,6 +1323,58 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		CRAB MONSTER - the Swamp's wall: claws up in a guard that takes most of
+		a blow from in front, scuttling sideways as it closes, and a pinch that
+		holds you (ServerScriptService.Creatures.CrabMonster; its rig is
+		Shared.Enemies.CreatureRigs.CrabMonster). Tough, slow, few: hit it from
+		the side, or when it opens its claws.
+	]]
+	CrabMonster = {
+		asset = "CrabMonster",
+		displayName = "Crab Monster",
+		health = 110,
+		movement = "Hop",
+		trait = "CrabMonster",
+
+		spawnBiomes = { "Swamp" },
+		spawnWeight = 0.5,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 5,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3.5,
+		contactDamage = 5,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 34,
+		maxHopDistance = 5,
+		maxHopSpeed = 8,
+		groundedSeconds = 0.2,
+		windupSeconds = 0.15,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 34,
+		lungeMaxDistance = 5,
+		lungeMaxSpeed = 8,
+		lungeWindup = 0.5,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(150, 60, 110),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1421,7 +1473,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster",
 }
 
 --[[

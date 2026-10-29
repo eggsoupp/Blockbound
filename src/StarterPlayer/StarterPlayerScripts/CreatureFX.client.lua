@@ -963,6 +963,45 @@ function handlers.cleave(model)
 	Kit.sound(part, SOUND_HIT, 0.5, 0.7)
 end
 
+-- ---------------------------------------------------------------------------
+-- Crab Monster
+-- ---------------------------------------------------------------------------
+
+-- In front of its raised claws, where a guarded blow lands.
+local function clawFront(model): Vector3
+	local cframe, size = model:GetBoundingBox()
+	return cframe.Position + model:GetPivot().LookVector * size.Z * 0.55 + Vector3.new(0, size.Y * 0.1, 0)
+end
+
+-- A blow turned by the guard: sparks off the shell and a dull clank.
+function handlers.clank(model)
+	if not body(model) then
+		return
+	end
+	local host = burst(clawFront(model), {
+		{ "BoomSparks", 10, { Color = ColorSequence.new(Color3.fromRGB(255, 230, 170)) } },
+		{ "Glints", 4, { Color = ColorSequence.new(Color3.fromRGB(220, 170, 255)), Size = NumberSequence.new(0.8) } },
+	}, 1.5)
+	Kit.sound(host, SOUND_HIT, 0.6, 1.9)
+end
+
+-- The pincers snapping shut: a short slash where they meet, and a crunch
+-- when they caught someone.
+function handlers.snap(model, caught: boolean?)
+	if not body(model) then
+		return
+	end
+	local layers = {
+		{ "Slash", 1, { Color = ColorSequence.new(Color3.fromRGB(230, 170, 255)), Size = NumberSequence.new(3.5), LockedToPart = false } },
+	}
+	if caught then
+		table.insert(layers, { "BoomSparks", 10, { Color = ColorSequence.new(Color3.fromRGB(255, 120, 120)) } })
+		table.insert(layers, { "Puff", 3, { Color = ColorSequence.new(Color3.fromRGB(120, 160, 110)), Size = NumberSequence.new(1.6), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(180, 180) } })
+	end
+	local host = burst(clawFront(model), layers, 1.5)
+	Kit.sound(host, SOUND_HIT, if caught then 0.7 else 0.4, if caught then 0.6 else 1.4)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

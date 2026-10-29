@@ -84,6 +84,20 @@ Build.Split = {
 		if cx > 82 then return "RightArm" end
 		return "Body"
 	end,
+	-- A crab-man: the purple pincers and everything beside the torso below row
+	-- 54 are the claws, the shoulders above them the arms; head above row 69,
+	-- the tail behind z 57 below row 36, legs below row 24.
+	CrabMonster = function(x, y, z, w, h, _d, c)
+		local cx = x + w / 2
+		local side = if cx < 60 then "Left" else "Right"
+		local flank = cx < 45 or cx > 76
+		if c == 1 or c == 2 or (flank and y + h <= 54 and y >= 36) then return side .. "Claw" end
+		if flank and y >= 54 then return side .. "Arm" end
+		if z >= 57 and y + h <= 36 then return "Tail" end
+		if y + h <= 24 then return side .. "Leg" end
+		if y >= 69 then return "Head" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

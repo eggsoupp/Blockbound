@@ -469,23 +469,56 @@ end
 local snowballs = {}
 
 local WEB = Color3.fromRGB(236, 240, 228)
+local ICHOR = Color3.fromRGB(150, 70, 200)
 
--- `style` "web" is the spider's glob; anything else is a snowball.
-function handlers.throw(id: string, origin: Vector3, velocity: Vector3, gravity: number, style: string?)
-	-- The projectile itself: a packed block of snow, or a wad of web.
-	local web = style == "web"
+--[[
+	What each projectile style looks like in flight and when it bursts:
+	the snowman's snowball (the default), the spider's web and the Wormy
+	Horror's ichor. The projectile is a real part - it is the thing thrown.
+]]
+local STYLES = {
+	snow = {
+		name = "Snowball", size = 1.1, material = Enum.Material.Snow, color = SNOW,
+		trail = { rate = 14, size = 1.1, life = 0.35 },
+		burst = {
+			{ "Puff", 6, { Color = ColorSequence.new(SNOW), Size = NumberSequence.new(2.6), Speed = NumberRange.new(4, 8), SpreadAngle = Vector2.new(180, 180) } },
+			{ "Glints", 5, { Color = ColorSequence.new(Color3.fromRGB(200, 235, 255)), Size = NumberSequence.new(0.8) } },
+		},
+		pitch = 1.3,
+	},
+	web = {
+		name = "WebGlob", size = 0.8, material = Enum.Material.Fabric, color = WEB,
+		trail = { rate = 24, size = 0.6, life = 0.25 },
+		burst = {
+			{ "Puff", 5, { Color = ColorSequence.new(WEB), Size = NumberSequence.new(1.8), Speed = NumberRange.new(2, 5), SpreadAngle = Vector2.new(180, 180) } },
+			{ "Slash", 1, { Color = ColorSequence.new(WEB), Size = NumberSequence.new(3.5), LockedToPart = false } },
+		},
+		pitch = 1.6,
+	},
+	ichor = {
+		name = "Ichor", size = 0.9, material = Enum.Material.Neon, color = ICHOR,
+		trail = { rate = 30, size = 0.9, life = 0.4 },
+		burst = {
+			{ "Puff", 6, { Color = ColorSequence.new(ICHOR), Size = NumberSequence.new(2.2), Speed = NumberRange.new(3, 6), SpreadAngle = Vector2.new(180, 180) } },
+			{ "Glints", 6, { Color = ColorSequence.new(Color3.fromRGB(210, 150, 255)), Size = NumberSequence.new(0.9) } },
+		},
+		pitch = 0.7,
+	},
+}
+
+function handlers.throw(id: string, origin: Vector3, velocity: Vector3, gravity: number, styleName: string?)
+	local style = STYLES[styleName or "snow"] or STYLES.snow
 	local ball = Instance.new("Part")
-	ball.Name = if web then "WebGlob" else "Snowball"
-	ball.Size = Vector3.one * (if web then 0.8 else 1.1)
-	ball.Material = if web then Enum.Material.Fabric else Enum.Material.Snow
-	ball.Color = if web then WEB else SNOW
+	ball.Name = style.name
+	ball.Size = Vector3.one * style.size
+	ball.Material = style.material
+	ball.Color = style.color
 	ball.Anchored, ball.CanCollide, ball.CanTouch, ball.CanQuery = true, false, false, false
 	ball.CFrame = CFrame.new(origin)
 	ball.Parent = folder
 	emitter("Puff", ball, {
-		Enabled = true, Rate = if web then 24 else 14, Color = ColorSequence.new(if web then WEB else SNOW),
-		Size = NumberSequence.new(if web then 0.6 else 1.1),
-		Lifetime = NumberRange.new(if web then 0.25 else 0.35), LockedToPart = false,
+		Enabled = true, Rate = style.trail.rate, Color = ColorSequence.new(style.color),
+		Size = NumberSequence.new(style.trail.size), Lifetime = NumberRange.new(style.trail.life), LockedToPart = false,
 	})
 	snowballs[id] = ball
 
@@ -504,26 +537,15 @@ function handlers.throw(id: string, origin: Vector3, velocity: Vector3, gravity:
 	end)
 end
 
-function handlers.splash(id: string, point: Vector3, style: string?)
+function handlers.splash(id: string, point: Vector3, styleName: string?)
 	local ball = snowballs[id]
 	snowballs[id] = nil
 	if ball then
 		ball:Destroy()
 	end
-	if style == "web" then
-		-- A splat of web: a white burst and a star of strands.
-		local host = burst(point, {
-			{ "Puff", 5, { Color = ColorSequence.new(WEB), Size = NumberSequence.new(1.8), Speed = NumberRange.new(2, 5), SpreadAngle = Vector2.new(180, 180) } },
-			{ "Slash", 1, { Color = ColorSequence.new(WEB), Size = NumberSequence.new(3.5), LockedToPart = false } },
-		}, 2)
-		Kit.sound(host, SOUND_HIT, 0.35, 1.6)
-		return
-	end
-	local host = burst(point, {
-		{ "Puff", 6, { Color = ColorSequence.new(SNOW), Size = NumberSequence.new(2.6), Speed = NumberRange.new(4, 8), SpreadAngle = Vector2.new(180, 180) } },
-		{ "Glints", 5, { Color = ColorSequence.new(Color3.fromRGB(200, 235, 255)), Size = NumberSequence.new(0.8) } },
-	}, 2)
-	Kit.sound(host, SOUND_HIT, 0.45, 1.3)
+	local style = STYLES[styleName or "snow"] or STYLES.snow
+	local host = burst(point, style.burst, 2)
+	Kit.sound(host, SOUND_HIT, 0.4, style.pitch)
 end
 
 -- The broom spin: a ring of snow thrown out to its reach, and the broom's
@@ -659,6 +681,42 @@ function handlers.slam(position: Vector3, radius: number)
 		{ "Puff", 5, { Color = ColorSequence.new(DUST), Size = NumberSequence.new(4.5), Speed = NumberRange.new(1, 3) } },
 	}, 3)
 	Kit.sound(host, SOUND_BOOM, 0.8, 0.8)
+end
+
+-- ---------------------------------------------------------------------------
+-- Wormy Horror
+-- ---------------------------------------------------------------------------
+
+-- Burning with ichor: purple smoke and sparks off the victim while it lasts.
+function handlers.burn(character, seconds: number)
+	local root = typeof(character) == "Instance" and character:FindFirstChild("HumanoidRootPart")
+	if not root then
+		return
+	end
+	local at = Kit.attachment(root)
+	local smoke = emitter("Puff", at, {
+		Enabled = true, Rate = 10, Color = ColorSequence.new(ICHOR), Size = NumberSequence.new(1, 2),
+		Lifetime = NumberRange.new(0.6), LockedToPart = false, Speed = NumberRange.new(1, 2),
+		Acceleration = Vector3.new(0, 4, 0), Transparency = NumberSequence.new(0.35, 1),
+	})
+	local sparks = emitter("Glints", at, {
+		Enabled = true, Rate = 8, Color = ColorSequence.new(Color3.fromRGB(210, 150, 255)), Size = NumberSequence.new(0.7),
+		Lifetime = NumberRange.new(0.5), LockedToPart = false,
+	})
+	task.delay(seconds, function()
+		smoke.Enabled, sparks.Enabled = false, false
+		Debris:AddItem(at, 1)
+	end)
+end
+
+-- The impale: both front legs driving into the ground at one point.
+function handlers.impale(point: Vector3, radius: number)
+	local host = burst(point + Vector3.new(0, 0.5, 0), {
+		{ "Slash", 1, { Color = ColorSequence.new(Color3.fromRGB(200, 150, 255)), Size = NumberSequence.new(radius * 1.6), LockedToPart = false } },
+		{ "Puff", 6, { Color = ColorSequence.new(Color3.fromRGB(70, 50, 80)), Size = NumberSequence.new(2.2), Speed = NumberRange.new(3, 6), SpreadAngle = Vector2.new(70, 70) } },
+		{ "BoomSparks", 10, { Color = ColorSequence.new(ICHOR), Speed = NumberRange.new(18, 28), LightEmission = 0.6 } },
+	}, 2)
+	Kit.sound(host, SOUND_HIT, 0.6, 0.5)
 end
 
 -- ---------------------------------------------------------------------------

@@ -69,6 +69,33 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- A body down the middle (x 57-83), its mouth the front of it, and four
+	-- long arched legs: every box outside the body joins the leg whose
+	-- root-to-tip line it is nearest (traced from a top-down map).
+	WormyHorror = (function()
+		local legs = {
+			FL = { 58, 16, 34, 2 }, FR = { 82, 16, 106, 2 },
+			BL = { 56, 34, 24, 46 }, BR = { 84, 34, 116, 46 },
+		}
+		local function distance(px, pz, l)
+			local ax, az, bx, bz = l[1], l[2], l[3], l[4]
+			local dx, dz = bx - ax, bz - az
+			local t = math.clamp(((px - ax) * dx + (pz - az) * dz) / (dx * dx + dz * dz), 0, 1)
+			return math.sqrt((ax + dx * t - px) ^ 2 + (az + dz * t - pz) ^ 2)
+		end
+		return function(x, _y, z, w, _h, d)
+			local cx, cz = x + w / 2, z + d / 2
+			if cx >= 57 and cx <= 83 then
+				return if cz < 14 then "Head" else "Body"
+			end
+			local best, bestDistance = "Body", math.huge
+			for name, line in pairs(legs) do
+				local dist = distance(cx, cz, line)
+				if dist < bestDistance then best, bestDistance = name, dist end
+			end
+			return best
+		end
+	end)(),
 	-- Horned head and frill in front, a drooping tail behind, four stubby
 	-- legs (top at row 11 or lower) under the front and back of the body.
 	Pentasaurus = function(x, y, z, w, h, d)

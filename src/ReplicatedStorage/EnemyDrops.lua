@@ -162,6 +162,12 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.08, min = 1, max = 1 },
 	},
 
+	-- The Corruption made flesh: its ground, and a fair chance of the magic material.
+	WormyHorror = {
+		{ item = "CorruptedDirt", chance = 0.6, min = 1, max = 3 },
+		{ item = "EssenceShard", chance = 0.2, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

@@ -1068,6 +1068,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		The Corruption's stalker on four long legs: walks slowly, spits a
+		burning ichor, and rears to impale whatever is in front of it (see its
+		trait). The Hop numbers are only for climbing a step.
+	]]
+	WormyHorror = {
+		asset = "WormyHorror",
+		displayName = "Wormy Horror",
+		health = 110,
+		movement = "Hop",
+		trait = "WormyHorror",
+
+		spawnBiomes = { "Corruption" },
+		spawnWeight = 0.7,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 6.5,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 40,
+
+		contactRange = 4,
+		contactDamage = 8,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 38,
+		maxHopDistance = 7,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.2,
+		windupSeconds = 0.15,
+
+		sizeVariance = 0.08,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 7,
+		lungeMaxSpeed = 10,
+		lungeWindup = 0.5,
+		lungeDamage = 8,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		hitFlashColor = Color3.fromRGB(210, 160, 255),
+		burstColor = Color3.fromRGB(32, 40, 56),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1166,7 +1217,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror",
 }
 
 --[[

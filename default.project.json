@@ -949,6 +949,9 @@
         },
         "Pentasaurus": {
           "$path": "src/ServerScriptService/Creatures/Pentasaurus.lua"
+        },
+        "WormyHorror": {
+          "$path": "src/ServerScriptService/Creatures/WormyHorror.lua"
         }
       },
       "BossService": {

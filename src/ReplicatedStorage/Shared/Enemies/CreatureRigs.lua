@@ -134,6 +134,65 @@ Rigs.EvilRat = {
 }
 
 --[[
+	WORMY HORROR. Four long arched legs off a hanging body: a slow stilt-walk
+	on diagonal pairs (front-left with back-right), each leg lifted as it
+	swings forward, and a mouth that never quite stops working. Its moves:
+	  rear   the two front legs raised high and reaching - the impale tell
+	  stab   the front legs driven down and forward
+	  spit   the mouth thrown up, then forward
+]]
+Rigs.WormyHorror = {
+	setup = function(rig)
+		rig.legs = {}
+		for name, set in pairs({ FL = 0, BR = 0, FR = math.pi, BL = math.pi }) do
+			local joint = rig.joints[name]
+			if joint then
+				table.insert(rig.legs, {
+					joint = joint, set = set, front = string.sub(name, 1, 1) == "F",
+					left = string.sub(name, 2, 2) == "L", direction = reach(rig, joint),
+				})
+			end
+		end
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 4.5 * math.pi * 2
+		local b = ctx.blend
+
+		for _, leg in ipairs(rig.legs) do
+			local phase = rig.stride + leg.set
+			local swing = math.sin(phase) * 0.3 * moving
+			local lift = math.max(0, math.cos(phase)) * 0.35 * moving
+			lift += math.sin(ctx.t * 1.3 + leg.set + (if leg.front then 0 else 2)) * 0.03 * (1 - moving)
+
+			if leg.front and ctx.pose == "rear" then
+				lift += (0.85 + math.sin(ctx.t * 18) * 0.05 - lift) * b
+				swing += (0.35 - swing) * b
+			elseif leg.front and ctx.pose == "stab" then
+				lift += (-0.3 - lift) * b
+				swing += (0.45 - swing) * b
+			end
+
+			leg.joint.Transform = legTransform(leg.direction, lift, if leg.left then -swing else swing)
+		end
+
+		local head = rig.joints.Head
+		if head then
+			local gnash = math.sin(ctx.t * 5) * 0.08
+			local pitch = gnash
+			if ctx.pose == "spit" then
+				pitch += (-0.45 - pitch) * b
+			elseif ctx.pose == "stab" then
+				pitch += (0.2 - pitch) * b
+			end
+			head.Transform = CFrame.Angles(pitch, math.sin(ctx.t * 0.8) * 0.15, 0)
+		end
+	end,
+}
+
+--[[
 	PENTASAURUS. A heavy four-legged walk on diagonal pairs, the frilled head
 	swinging a little and the tail swaying behind. Its moves:
 	  paw      head down, one front foot scraping at the ground - the charge tell

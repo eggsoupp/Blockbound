@@ -225,6 +225,15 @@ Build.Split = {
 		if y >= 30 and cx > 63 then return "RightArm" end
 		return "Body"
 	end,
+	-- A vampire duck: head and long bill in front of z 24 above row 18, and
+	-- the fangs hanging at its very front; legs
+	-- below row 7.
+	VampireDuck = function(x, y, z, w, h, d)
+		local cx = x + w / 2
+		if z + d <= 24 and (y >= 18 or z + d <= 6) then return "Head" end
+		if y + h <= 7 then return if cx < 46 then "LeftLeg" else "RightLeg" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

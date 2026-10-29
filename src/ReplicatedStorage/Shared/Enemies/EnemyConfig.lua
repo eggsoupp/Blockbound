@@ -1947,6 +1947,59 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		VAMPIRE DUCK - the Crimson's leech: it latches on with its bill and
+		drinks, healing itself and dragging at you, until a blow knocks it
+		off; then it scuttles away and comes back
+		(ServerScriptService.Creatures.VampireDuck; its rig is
+		Shared.Enemies.CreatureRigs.VampireDuck). Not an animal you can leave
+		alone: it hunts.
+	]]
+	VampireDuck = {
+		asset = "VampireDuck",
+		displayName = "Vampire Duck",
+		health = 40,
+		movement = "Hop",
+		trait = "VampireDuck",
+
+		spawnBiomes = { "Crimson" },
+		spawnWeight = 0.6,
+		packSize = NumberRange.new(1, 3),
+
+		speed = 6.5,
+		aggroRange = 45,
+		giveUpRange = 85,
+		despawnSeconds = 40,
+
+		contactRange = 2.4,
+		contactDamage = 3,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 34,
+		maxHopDistance = 5,
+		maxHopSpeed = 8,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.08,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 34,
+		lungeMaxDistance = 5,
+		lungeMaxSpeed = 8,
+		lungeWindup = 0.5,
+		lungeDamage = 3,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(150, 20, 30),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -2093,7 +2146,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck",
 }
 
 --[[

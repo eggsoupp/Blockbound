@@ -280,6 +280,12 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
 	},
 
+	-- Little: a scrap of hide, the Crimson's dirt.
+	VampireDuck = {
+		{ item = "Leather", chance = 0.4, min = 1, max = 1 },
+		{ item = "CrimsonDirt", chance = 0.4, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

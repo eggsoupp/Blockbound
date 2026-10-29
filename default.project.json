@@ -1000,6 +1000,9 @@
         },
         "LizardWarrior": {
           "$path": "src/ServerScriptService/Creatures/LizardWarrior.lua"
+        },
+        "VampireDuck": {
+          "$path": "src/ServerScriptService/Creatures/VampireDuck.lua"
         }
       },
       "BossService": {

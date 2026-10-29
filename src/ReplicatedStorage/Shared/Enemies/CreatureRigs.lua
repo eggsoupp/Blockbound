@@ -1243,6 +1243,47 @@ Rigs.LizardWarrior = {
 	end,
 }
 
+--[[
+	VAMPIRE DUCK. A black duck with a long red bill and a vampire's taste. It
+	waddles - short quick steps, head bobbing - and its moves are:
+	  peck   the bill drawn back, then stabbed forward (the latch)
+	  latch  hanging on: bill buried, head working, feet kicking
+	  flee   scuttling off, head low
+	The head hangs forward of its hinge, so a negative pitch lowers it.
+]]
+Rigs.VampireDuck = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 1.2 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.7 * moving
+		local legL, legR = CFrame.Angles(step, 0, 0), CFrame.Angles(-step, 0, 0)
+		local head = CFrame.Angles(math.sin(s * 2) * 0.12 * moving, math.sin(ctx.t * 1.3) * 0.3 * (1 - moving), 0)
+
+		if ctx.pose == "peck" then
+			local wind, hit = phases(ctx, 0.25, 0.08)
+			head = CFrame.new(0, 0, 0.25 * wind - 0.5 * hit) * CFrame.Angles(0.3 * wind - 0.4 * hit, 0, 0)
+		elseif ctx.pose == "latch" then
+			local work = math.sin(ctx.t * 14) * 0.12
+			head = CFrame.new(0, 0, -0.4) * CFrame.Angles(-0.3 + work, 0, 0)
+			legL = CFrame.Angles(math.sin(ctx.t * 18) * 0.6, 0, 0)
+			legR = CFrame.Angles(-math.sin(ctx.t * 18) * 0.6, 0, 0)
+		elseif ctx.pose == "flee" then
+			head = CFrame.Angles(-0.3, 0, 0)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.Head.Transform = head
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

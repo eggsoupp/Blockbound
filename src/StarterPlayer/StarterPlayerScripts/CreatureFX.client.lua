@@ -1401,6 +1401,27 @@ function handlers.rallied(model, seconds: number)
 	end)
 end
 
+-- ---------------------------------------------------------------------------
+-- Vampire Duck
+-- ---------------------------------------------------------------------------
+
+local BLOOD = Color3.fromRGB(200, 30, 40)
+
+-- One draught: red motes off the victim, and a little glow on the duck.
+function handlers.drain(model, character)
+	local root = typeof(character) == "Instance" and character:FindFirstChild("HumanoidRootPart")
+	local part = body(model)
+	if not (root and part) then
+		return
+	end
+	burst(root.Position, {
+		{ "Glints", 4, { Color = ColorSequence.new(BLOOD), Size = NumberSequence.new(0.6), Speed = NumberRange.new(2, 4) } },
+	}, 1)
+	burst(part.Position + Vector3.new(0, 0.5, 0), {
+		{ "Flare", 1, { Color = ColorSequence.new(BLOOD), Size = NumberSequence.new(1.6) } },
+	}, 1)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

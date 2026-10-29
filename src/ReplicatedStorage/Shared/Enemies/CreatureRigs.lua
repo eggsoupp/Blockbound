@@ -134,6 +134,63 @@ Rigs.EvilRat = {
 }
 
 --[[
+	PIT DEVIL. A horned imp carrying a halberd crossways at its waist. It
+	prowls on quick short steps, head cocked, the halberd bobbing. Its moves:
+	  swing  the halberd turned about the vertical so the blade sweeps from
+	         its side round to the front - a cleave
+	  throw  the right arm hauled back and flung forward (the spear it throws
+	         is fire, drawn separately)
+	The halberd hangs off the right hand on its own joint: yaw about Y turns
+	its blade end (+X) toward the front (-Z).
+]]
+Rigs.PitDevil = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.2 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.5 * moving
+		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-step, 0, 0)
+
+		local left = CFrame.Angles(-step * 0.5, 0, 0)
+		local right = CFrame.Angles(step * 0.3, 0, 0)
+		local weapon = CFrame.Angles(0, 0, math.sin(s * 2) * 0.04 * moving)
+		-- A twitchy head: short jerks rather than a smooth sway.
+		local head = CFrame.Angles(0, math.sin(math.floor(ctx.t * 2.5) * 1.7) * 0.25, math.sin(ctx.t * 1.1) * 0.12)
+
+		if ctx.pose == "swing" then
+			-- Wound back for the first third, then the sweep round to the front.
+			local wind = math.min(1, b * 3)
+			local sweep = math.clamp(b * 1.5 - 0.5, 0, 1)
+			weapon = CFrame.Angles(0, -0.5 * wind * (1 - sweep) + 1.9 * sweep, 0.3 * (1 - sweep))
+			right = CFrame.Angles(0.5 * wind - 0.2 * sweep, 0, 0)
+			head = CFrame.Angles(0.1, 0.3 * sweep, 0)
+		elseif ctx.pose == "throw" then
+			local back = math.min(1, b * 2)
+			local fling = math.max(0, b * 2 - 1)
+			right = CFrame.Angles(2.6 * back - 2.2 * fling, 0, 0)
+			left = CFrame.Angles(0.9 * back, 0, 0.3)
+			weapon = CFrame.Angles(0, 1.5 * back, 0)
+		elseif ctx.pose == "blink" then
+			right = CFrame.Angles(0.4, 0, 0.4)
+			left = CFrame.Angles(0.4, 0, -0.4)
+		end
+
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Weapon.Transform = weapon
+		j.Head.Transform = head
+	end,
+}
+
+--[[
 	BEARID WIZARD. A heavy, robed bear: a short-stepping waddle with the
 	head rolling side to side, arms swinging a little. Its moves:
 	  channel  staff (right arm) raised overhead, left paw lifted - the

@@ -961,6 +961,9 @@
         },
         "BearidWizard": {
           "$path": "src/ServerScriptService/Creatures/BearidWizard.lua"
+        },
+        "PitDevil": {
+          "$path": "src/ServerScriptService/Creatures/PitDevil.lua"
         }
       },
       "BossService": {

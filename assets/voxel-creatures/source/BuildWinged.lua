@@ -69,6 +69,21 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- A horned imp holding a halberd across its waist: the halberd is its
+	-- wood (colours 1 and 2) plus the blade end (x > 96), and rides the right
+	-- arm; the head is above row 50; arms either side of x 58-82; legs below
+	-- row 12.
+	PitDevil = function(x, y, _z, w, h, _d, c)
+		local cx = x + w / 2
+		if c == 1 or c == 2 or cx > 96 then return "Weapon" end
+		if y >= 50 then return "Head" end
+		if y + h <= 12 and cx >= 54 and cx <= 84 then
+			return if cx < 68 then "LeftLeg" else "RightLeg"
+		end
+		if cx < 58 then return "LeftArm" end
+		if cx > 82 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

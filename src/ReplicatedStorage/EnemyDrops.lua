@@ -188,6 +188,13 @@ EnemyDrops.Tables = {
 		{ item = "ManaPotion", chance = 0.1, min = 1, max = 1 },
 	},
 
+	-- Leather, the Crimson's dirt, and sometimes the magic material.
+	PitDevil = {
+		{ item = "Leather", chance = 1, min = 1, max = 2 },
+		{ item = "CrimsonDirt", chance = 0.5, min = 1, max = 3 },
+		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

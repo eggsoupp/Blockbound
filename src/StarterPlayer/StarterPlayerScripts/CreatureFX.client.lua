@@ -470,6 +470,7 @@ local snowballs = {}
 
 local WEB = Color3.fromRGB(236, 240, 228)
 local ICHOR = Color3.fromRGB(150, 70, 200)
+local HELLFIRE = Color3.fromRGB(255, 120, 40)
 
 --[[
 	What each projectile style looks like in flight and when it bursts:
@@ -513,6 +514,17 @@ local STYLES = {
 			{ "Glints", 6, { Color = ColorSequence.new(Color3.fromRGB(210, 150, 255)), Size = NumberSequence.new(0.9) } },
 		},
 		pitch = 0.7,
+	},
+	-- The Pit Devil's spear of fire.
+	fire = {
+		name = "FireSpear", size = 0.8, material = Enum.Material.Neon, color = HELLFIRE,
+		trail = { rate = 40, size = 1.2, life = 0.3 },
+		burst = {
+			{ "Flare", 1, { Color = ColorSequence.new(HELLFIRE), Size = NumberSequence.new(4) } },
+			{ "BoomSparks", 14, { Color = ColorSequence.new(Color3.fromRGB(255, 190, 80)) } },
+			{ "Puff", 5, { Color = ColorSequence.new(Color3.fromRGB(70, 30, 26)), Size = NumberSequence.new(2.4), Speed = NumberRange.new(2, 5), SpreadAngle = Vector2.new(180, 180) } },
+		},
+		pitch = 0.9,
 	},
 }
 
@@ -911,6 +923,44 @@ function handlers.stunned(model, seconds: number)
 	end, function()
 		Debris:AddItem(at, 0.6)
 	end)
+end
+
+-- ---------------------------------------------------------------------------
+-- Pit Devil
+-- ---------------------------------------------------------------------------
+
+-- Where it vanished or came back: a burst of hellfire and smoke.
+function handlers.blink(position: Vector3)
+	local host = burst(position, {
+		{ "BoomGlow", 1, { Color = ColorSequence.new(HELLFIRE), Size = NumberSequence.new(7) } },
+		{ "BoomSparks", 22, { Color = ColorSequence.new(Color3.fromRGB(255, 170, 60)) } },
+		{ "Puff", 9, { Color = ColorSequence.new(Color3.fromRGB(60, 24, 22)), Size = NumberSequence.new(3), Speed = NumberRange.new(3, 7), SpreadAngle = Vector2.new(180, 180) } },
+		{ "Glints", 8, { Color = ColorSequence.new(Color3.fromRGB(255, 120, 60)), Size = NumberSequence.new(0.9) } },
+	}, 2)
+	local glow = light(host, HELLFIRE, 14, 3)
+	during(0.4, function(elapsed)
+		glow.Brightness = 3 * (1 - elapsed / 0.4)
+	end)
+	Kit.sound(host, SOUND_BOOM, 0.5, 1.6)
+end
+
+-- The halberd's sweep: a fiery slash in front of it.
+function handlers.cleave(model)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local cframe, size = model:GetBoundingBox()
+	local look = model:GetPivot().LookVector
+	local front = cframe.Position + look * size.Z * 0.5
+	local at = Kit.attachment(part)
+	at.WorldCFrame = CFrame.lookAt(front, front + look)
+	emitter("Slash", at, {
+		Color = ColorSequence.new(Color3.fromRGB(255, 150, 70)), Size = NumberSequence.new(6), LockedToPart = false,
+	}):Emit(1)
+	emitter("BoomSparks", at, { Color = ColorSequence.new(Color3.fromRGB(255, 190, 90)) }):Emit(8)
+	Debris:AddItem(at, 1)
+	Kit.sound(part, SOUND_HIT, 0.5, 0.7)
 end
 
 function handlers.flare(model, color: Color3?)

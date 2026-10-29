@@ -1271,6 +1271,58 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		PIT DEVIL - the Crimson's duelist: blinks to your side in a burst of
+		fire and cleaves with its halberd, hurls spears of fire from range
+		(ServerScriptService.Creatures.PitDevil; its rig is
+		Shared.Enemies.CreatureRigs.PitDevil). Hop movement is only for steps
+		its walk cannot take.
+	]]
+	PitDevil = {
+		asset = "PitDevil",
+		displayName = "Pit Devil",
+		health = 85,
+		movement = "Hop",
+		trait = "PitDevil",
+
+		spawnBiomes = { "Crimson" },
+		spawnWeight = 0.6,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 8,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 40,
+
+		contactRange = 3.5,
+		contactDamage = 5,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 36,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 10,
+		lungeWindup = 0.5,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(200, 50, 40),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1369,7 +1421,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil",
 }
 
 --[[

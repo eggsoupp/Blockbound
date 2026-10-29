@@ -1686,6 +1686,58 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		LAVA GOLEM - the Crimson's walking hazard: slow and enormously tough,
+		it leaves burning magma pools in its tracks and sends a line of
+		eruptions across the ground at you
+		(ServerScriptService.Creatures.LavaGolem; its rig is
+		Shared.Enemies.CreatureRigs.LavaGolem).
+	]]
+	LavaGolem = {
+		asset = "LavaGolem",
+		displayName = "Lava Golem",
+		health = 200,
+		movement = "Hop",
+		trait = "LavaGolem",
+
+		spawnBiomes = { "Crimson" },
+		spawnWeight = 0.35,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 4.5,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3.8,
+		contactDamage = 7,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 32,
+		maxHopDistance = 4,
+		maxHopSpeed = 7,
+		groundedSeconds = 0.3,
+		windupSeconds = 0.2,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 32,
+		lungeMaxDistance = 4,
+		lungeMaxSpeed = 7,
+		lungeWindup = 0.5,
+		lungeDamage = 7,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(255, 110, 30),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -1832,7 +1884,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem",
 }
 
 --[[

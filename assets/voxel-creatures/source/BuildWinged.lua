@@ -167,6 +167,16 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- A hulking lava golem: the head juts forward of z 9 above row 54; long
+	-- arms outside x 7-40 below it; legs below row 22.
+	LavaGolem = function(x, y, z, w, h, d)
+		local cx = x + w / 2
+		if y + h <= 22 then return if cx < 24 then "LeftLeg" else "RightLeg" end
+		if y >= 54 and z + d <= 9 then return "Head" end
+		if y + h <= 54 and cx < 7 then return "LeftArm" end
+		if y + h <= 54 and cx > 40 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

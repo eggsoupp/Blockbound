@@ -985,6 +985,9 @@
         },
         "ZombieRat": {
           "$path": "src/ServerScriptService/Creatures/ZombieRat.lua"
+        },
+        "LavaGolem": {
+          "$path": "src/ServerScriptService/Creatures/LavaGolem.lua"
         }
       },
       "BossService": {

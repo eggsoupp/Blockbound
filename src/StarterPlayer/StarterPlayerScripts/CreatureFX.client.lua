@@ -1297,6 +1297,49 @@ function handlers.rot(character, seconds: number)
 	end)
 end
 
+-- ---------------------------------------------------------------------------
+-- Lava Golem
+-- ---------------------------------------------------------------------------
+
+local MAGMA = Color3.fromRGB(255, 110, 30)
+
+--[[
+	A magma pool: embers and heat glow welling up over the circle from an
+	invisible host laid flat on the ground, a dull red light, for `seconds`.
+]]
+function handlers.magma(center: Vector3, radius: number, seconds: number)
+	local floor = Kit.host(folder, "MagmaPool", CFrame.new(center + Vector3.new(0, 0.15, 0)))
+	floor.Size = Vector3.new(radius * 1.8, 0.2, radius * 1.8)
+	local glow = emitter("BoomGlow", floor, {
+		Enabled = true, Rate = 6, Color = ColorSequence.new(MAGMA), Size = NumberSequence.new(radius * 0.9),
+		Brightness = 2, Speed = NumberRange.new(0), Lifetime = NumberRange.new(0.6, 0.9), LockedToPart = false,
+	})
+	local embers = emitter("Glints", floor, {
+		Enabled = true, Rate = 16, Color = ColorSequence.new(Color3.fromRGB(255, 170, 60)), Size = NumberSequence.new(0.5),
+		LockedToPart = false,
+	})
+	local smoke = emitter("Puff", floor, {
+		Enabled = true, Rate = 4, Color = ColorSequence.new(Color3.fromRGB(60, 40, 36)), Size = NumberSequence.new(1.6),
+		Speed = NumberRange.new(1, 2), EmissionDirection = Enum.NormalId.Top, LockedToPart = false,
+	})
+	local l = light(floor, MAGMA, radius * 3, 1.5)
+	task.delay(seconds, function()
+		stopEmitters({ glow, embers, smoke })
+		l.Enabled = false
+		Debris:AddItem(floor, 1.5)
+	end)
+end
+
+-- One eruption of the line: a spout of fire and sparks out of the ground.
+function handlers.erupt(position: Vector3, radius: number)
+	local host = burst(position + Vector3.new(0, 0.5, 0), {
+		{ "Flare", 1, { Color = ColorSequence.new(MAGMA), Size = NumberSequence.new(radius * 2.2) } },
+		{ "BoomSparks", 16, { Color = ColorSequence.new(Color3.fromRGB(255, 180, 70)), SpreadAngle = Vector2.new(25, 25) } },
+		{ "Puff", 4, { Color = ColorSequence.new(Color3.fromRGB(70, 36, 30)), Size = NumberSequence.new(2.6), Speed = NumberRange.new(5, 9), SpreadAngle = Vector2.new(20, 20) } },
+	}, 2)
+	Kit.sound(host, SOUND_BOOM, 0.4, 1.4)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

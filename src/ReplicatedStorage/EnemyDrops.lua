@@ -248,6 +248,14 @@ EnemyDrops.Tables = {
 		{ item = "CorruptedDirt", chance = 0.3, min = 1, max = 2 },
 	},
 
+	-- Rock and fire: coal for certain, the Crimson's dirt, and a good chance of
+	-- the magic material.
+	LavaGolem = {
+		{ item = "Coal", chance = 1, min = 3, max = 6 },
+		{ item = "CrimsonDirt", chance = 0.5, min = 2, max = 4 },
+		{ item = "EssenceShard", chance = 0.4, min = 1, max = 3 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

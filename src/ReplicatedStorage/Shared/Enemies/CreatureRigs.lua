@@ -979,4 +979,49 @@ Rigs.ZombieRat = {
 	end,
 }
 
+--[[
+	LAVA GOLEM. A hulking block of cooled rock with lava in the cracks. It
+	plods - short heavy steps, arms swinging stiffly - and its moves are:
+	  slam   both fists raised high, then driven down into the ground
+	  punch  the right fist drawn back and thrown
+]]
+Rigs.LavaGolem = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 4, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 3 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.3 * moving
+		local left = CFrame.Angles(-step, 0, -0.05)
+		local right = CFrame.Angles(step, 0, 0.05)
+		local head = CFrame.Angles(math.sin(ctx.t * 0.8) * 0.05, math.sin(ctx.t * 0.5) * 0.12, 0)
+
+		if ctx.pose == "slam" then
+			local up = math.min(1, b * 1.6)
+			local down = math.clamp(b * 4 - 3, 0, 1)
+			left = CFrame.Angles(2.9 * up - 2.6 * down, 0, 0.25 * up)
+			right = CFrame.Angles(2.9 * up - 2.6 * down, 0, -0.25 * up)
+			head = CFrame.Angles(-0.2 * up + 0.35 * down, 0, 0)
+		elseif ctx.pose == "punch" then
+			local back = math.min(1, b * 2)
+			local throw = math.clamp(b * 3 - 1.6, 0, 1)
+			right = CFrame.Angles(-0.6 * back + 2.1 * throw, 0, 0)
+			left = CFrame.Angles(0.3 * back, 0, -0.1)
+			head = CFrame.Angles(0.1 * throw, 0, 0)
+		end
+
+		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-step, 0, 0)
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Head.Transform = head
+	end,
+}
+
 return Rigs

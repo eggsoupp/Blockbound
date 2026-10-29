@@ -1676,6 +1676,43 @@ Rigs.PinkyDemon = {
 	end,
 }
 
+--[[
+	HANDLESS NORG. A tusked purple blob on two thin legs, the mouth and tusks
+	one piece in front. It scuttles on its little legs, mouth working. Its
+	moves:
+	  inhale  mouth thrown up and open, juddering, as it sucks you in
+	  chomp   the mouth slammed down and shut
+	The head is forward of its hinge, so +pitch raises it.
+]]
+Rigs.HandlessNorg = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 1.2 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.7 * moving
+		local head = math.sin(ctx.t * 3) * 0.06
+		local tail = CFrame.Angles(0, math.sin(ctx.t * 1.8 + s) * 0.2, 0)
+
+		if ctx.pose == "inhale" then
+			head = 0.35 * math.min(1, ctx.blend * 2) + math.sin(ctx.t * 35) * 0.05
+		elseif ctx.pose == "chomp" then
+			local wind, hit = phases(ctx, 0.2, 0.08)
+			head = 0.4 * wind - 0.75 * hit
+		end
+
+		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-step, 0, 0)
+		j.Head.Transform = CFrame.Angles(head, 0, 0)
+		j.Tail.Transform = tail
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

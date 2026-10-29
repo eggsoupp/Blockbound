@@ -322,6 +322,15 @@ Build.Split = {
 		if y >= 66 then return "Head" end
 		return "Body"
 	end,
+	-- A tusked blob on thin legs: mouth and tusks in front of z 27, a stub of
+	-- tail behind z 60, legs below row 12 between z 30 and 50.
+	HandlessNorg = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz < 27 then return "Head" end
+		if y + h <= 12 and cz >= 30 and cz <= 50 then return if cx < 39 then "LeftLeg" else "RightLeg" end
+		if cz >= 60 then return "Tail" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

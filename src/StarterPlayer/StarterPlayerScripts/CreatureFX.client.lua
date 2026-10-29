@@ -1467,6 +1467,77 @@ function handlers.shockwave(center: Vector3, speed: number, radius: number, coun
 end
 
 -- ---------------------------------------------------------------------------
+-- Handless Norg
+-- ---------------------------------------------------------------------------
+
+local inhaling = {}
+
+--[[
+	The inhale: motes and dust streaming in toward the mouth from the cone in
+	front of it - and, for the local player only, the pull itself. Your own
+	client owns your character, so it is moved here, a little each frame
+	toward the mouth, while you stand in the cone; walking away outpaces it.
+]]
+function handlers.inhale(model, seconds: number, range: number, arc: number, pullSpeed: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local state = {}
+	inhaling[model] = state
+	local cosine = math.cos(math.rad(arc))
+	local lastPuff = -1
+	local lastElapsed = 0
+	during(seconds, function(elapsed)
+		local dt = elapsed - lastElapsed
+		lastElapsed = elapsed
+		if inhaling[model] ~= state or not model.Parent then
+			return false
+		end
+		local pivot = model:GetPivot()
+		local look = Vector3.new(pivot.LookVector.X, 0, pivot.LookVector.Z).Unit
+		local cframe, size = model:GetBoundingBox()
+		local mouthAt = cframe.Position + look * size.Z * 0.45
+
+		-- Air drawn in: puffs set out along the cone, flying back to the mouth.
+		local beat = math.floor(elapsed / 0.06)
+		if beat ~= lastPuff then
+			lastPuff = beat
+			local side = look:Cross(Vector3.yAxis) * (math.random() - 0.5) * range * 0.8
+			local from = mouthAt + look * range * (0.4 + math.random() * 0.5) + side + Vector3.new(0, math.random() * 2, 0)
+			local host = burst(from, {
+				{ "Glints", 2, { Color = ColorSequence.new(Color3.fromRGB(200, 170, 230)), Size = NumberSequence.new(0.6), Speed = NumberRange.new(0) } },
+			}, 0.6)
+			local travel = mouthAt - from
+			during(0.5, function(t)
+				host.CFrame = CFrame.new(from + travel * (t / 0.5))
+			end)
+		end
+
+		-- The pull, on our own character only.
+		local character = game:GetService("Players").LocalPlayer.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if root then
+			local offset = Vector3.new(root.Position.X - mouthAt.X, 0, root.Position.Z - mouthAt.Z)
+			local distance = offset.Magnitude
+			if distance > 1.8 and distance <= range and offset.Unit:Dot(look) >= cosine then
+				local step = math.min(distance - 1.8, pullSpeed * dt)
+				root.CFrame = root.CFrame - offset.Unit * step
+			end
+		end
+	end, function()
+		if inhaling[model] == state then
+			inhaling[model] = nil
+		end
+	end)
+	Kit.sound(part, SOUND_BOOM, 0.4, 0.4)
+end
+
+function handlers.inhaleend(model)
+	inhaling[model] = nil
+end
+
+-- ---------------------------------------------------------------------------
 -- Cannon
 -- ---------------------------------------------------------------------------
 

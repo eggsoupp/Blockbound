@@ -9,6 +9,12 @@
 //   tint <icon> <sheet> <column> <row> <ramp>   that cell recoloured to a ramp
 //   template <name> [flat] [<ramp> <ramp> <ramp>]   then 16 rows, then `end`
 //   icon <icon> <template> [<ramp> [<ramp> [<ramp>]]]
+//   weapon <icon> <shape> <head> <fitting> <grip>   a diagonal weapon/tool,
+//          shape: sword katana broadsword greatsword spear pickaxe axe hammer
+//          wand staff bow (see Part)
+//   texture <name> <hex,hex,..> <256 indices>   a 16x16 block texture
+//   retex <name> <base> <hex>=<hex> ...          a texture with colours swapped
+//   block <icon> <top texture> [<side texture>]  an isometric block
 //
 // A template row is either 8 characters - the LEFT half, mirrored to make the
 // right, so the icon is symmetric by construction - or 16 for a full row.
@@ -46,6 +52,7 @@ namespace ItemIcons
 			var slots = new List<KeyValuePair<string, Bitmap>>();
 			var sheets = new Dictionary<string, Bitmap>();
 			var names = new HashSet<string>();
+			var textures = new Dictionary<string, Color[]>();
 
 			string[] lines = File.ReadAllLines(Path.Combine(root, "source", "icons.txt"));
 			for (int i = 0; i < lines.Length; i++)
@@ -120,6 +127,57 @@ namespace ItemIcons
 							bmp.SetPixel(x, y, r[level]);
 						}
 						slots.Add(new KeyValuePair<string, Bitmap>(w[1], bmp));
+						break;
+					}
+					case "texture":
+					{
+						// texture <name> <hex,hex,...> <256 palette indices, 0-9 then a-z>
+						string[] pal = w[2].Split(',');
+						if (w[3].Length != Cell * Cell) throw new Exception(where + ": texture " + w[1] + " needs 256 pixels");
+						var tex = new Color[Cell * Cell];
+						for (int k = 0; k < tex.Length; k++)
+						{
+							char ch = w[3][k];
+							int idx = ch <= '9' ? ch - '0' : ch - 'a' + 10;
+							if (idx >= pal.Length) throw new Exception(where + ": texture " + w[1] + " uses colour " + idx);
+							tex[k] = Hex(pal[idx]);
+						}
+						textures[w[1]] = tex;
+						break;
+					}
+					case "retex":
+					{
+						// retex <name> <base> <from hex>=<to hex> ...   a texture with colours swapped
+						Color[] src;
+						if (!textures.TryGetValue(w[2], out src)) throw new Exception(where + ": no texture " + w[2]);
+						var tex = (Color[])src.Clone();
+						for (int k = 3; k < w.Length; k++)
+						{
+							string[] pair = w[k].Split('=');
+							Color from = Hex(pair[0]), to = Hex(pair[1]);
+							for (int p = 0; p < tex.Length; p++) if (tex[p].ToArgb() == from.ToArgb()) tex[p] = to;
+						}
+						textures[w[1]] = tex;
+						break;
+					}
+					case "block":
+					{
+						// block <icon> <top texture> [<side texture>]
+						if (!names.Add(w[1])) throw new Exception(where + ": duplicate icon " + w[1]);
+						Color[] top, side;
+						if (!textures.TryGetValue(w[2], out top)) throw new Exception(where + ": no texture " + w[2]);
+						if (!textures.TryGetValue(w.Length > 3 ? w[3] : w[2], out side)) throw new Exception(where + ": no texture " + w[3]);
+						slots.Add(new KeyValuePair<string, Bitmap>(w[1], Block(top, side)));
+						break;
+					}
+					case "weapon":
+					{
+						// weapon <icon> <shape> <head ramp> <fitting ramp> <grip ramp>
+						if (!names.Add(w[1])) throw new Exception(where + ": duplicate icon " + w[1]);
+						var use = new Color[3][];
+						for (int k = 0; k < 3 && 3 + k < w.Length; k++)
+							if (!ramps.TryGetValue(w[3 + k], out use[k])) throw new Exception(where + ": no ramp " + w[3 + k]);
+						slots.Add(new KeyValuePair<string, Bitmap>(w[1], Weapon(w[2], use, where)));
 						break;
 					}
 					case "icon":
@@ -207,7 +265,13 @@ namespace ItemIcons
 					ramp[x, y] = r; level[x, y] = l;
 				}
 			}
+			return Render(ramp, level, use);
+		}
 
+		// Paints ramp/level maps and outlines them: every empty pixel touching a
+		// drawn one (4-neighbour) takes that pixel's ramp outline colour.
+		static Bitmap Render(int[,] ramp, int[,] level, Color[][] use)
+		{
 			var bmp = new Bitmap(Cell, Cell, PixelFormat.Format32bppArgb);
 			int[] dx = { 1, -1, 0, 0 }, dy = { 0, 0, 1, -1 };
 			for (int y = 0; y < Cell; y++)
@@ -231,6 +295,174 @@ namespace ItemIcons
 				}
 			return bmp;
 		}
+
+		// ------------------------------------------------------------------ weapons
+		// Weapons and tools lie on the icon's diagonal, handle bottom-left, head
+		// top-right, as in Terraria. Each pixel is measured along that axis (t,
+		// 0 at the butt, 1 per diagonal pixel) and across it (a, an integer: 0 on
+		// the axis, negative toward the lit top-left). Shapes are tests on (t, a),
+		// so every weapon is mirror-symmetric about its own axis. Ramps: 0 head or
+		// blade, 1 guard and fittings, 2 grip or haft.
+		static Bitmap Weapon(string shape, Color[][] use, string where)
+		{
+			var ramp = new int[Cell, Cell];
+			var level = new int[Cell, Cell];
+			for (int y = 0; y < Cell; y++)
+				for (int x = 0; x < Cell; x++)
+				{
+					int a = x + y - 15;
+					double t = (x - y + 13) / 2.0;
+					int r = -1, l = 0;
+					Part(shape, t, a, ref r, ref l, where);
+					if (r >= 0 && use[r] == null) throw new Exception(where + ": weapon needs ramp " + (r + 1));
+					ramp[x, y] = r; level[x, y] = l;
+				}
+			return Render(ramp, level, use);
+		}
+
+		// Shade across a band of half-width w: lit side 4, middle 3, far side 2.
+		static int Across(int a, int w) { return w <= 0 ? 3 : a < 0 ? (a <= -w ? 3 : 4) : a == 0 ? 3 : (a >= w ? 1 : 2); }
+
+		static void Part(string shape, double t, int a, ref int r, ref int l, string where)
+		{
+			int aa = Math.Abs(a);
+			switch (shape)
+			{
+				case "sword":
+				case "broadsword":
+				case "greatsword":
+				case "katana":
+				{
+					int bladeW = shape == "broadsword" || shape == "greatsword" ? 2 : 1;
+					int guardW = shape == "greatsword" ? 5 : shape == "broadsword" ? 4 : shape == "katana" ? 2 : 3;
+					double gripEnd = shape == "katana" ? 4.5 : 3.5;
+					double guardEnd = gripEnd + (shape == "katana" ? 0.5 : 1.0);
+					double tipStart = shape == "katana" ? 12.0 : 11.5;
+					if (t <= 1.0 && aa <= 1) { r = 1; l = a < 0 ? 4 : a == 0 ? 3 : 2; }                  // pommel
+					else if (t > 1.0 && t <= gripEnd && aa <= 1)                                          // grip
+					{ r = 2; l = shape == "katana" && ((int)(t * 2) % 2 == 0) ? 1 : Across(a, 1); }
+					else if (t > gripEnd && t <= guardEnd && aa <= guardW)                                // guard
+					{ r = 1; l = aa == guardW ? 2 : a < 0 ? 4 : 3; if (shape == "greatsword" && aa >= guardW - 1 && t > gripEnd + 0.4) l = 4; }
+					else if (t > guardEnd)                                                                 // blade
+					{
+						double taper = Math.Max(0, t - tipStart);
+						int w = (int)Math.Floor(bladeW - taper + 0.25);
+						if (shape == "katana") { if (a >= -1 && a <= 0 && t <= tipStart + 1.0) { r = 0; l = a < 0 ? 4 : 2; } }
+						else if (w >= 0 && aa <= w && t <= tipStart + bladeW + 1.0)
+						{
+							r = 0; l = Across(a, bladeW);
+							if (shape == "greatsword" && a == 0 && t > guardEnd + 0.4 && t < guardEnd + 2.6) { r = 1; l = 4; } // fuller gem
+						}
+					}
+					break;
+				}
+				case "spear":
+				{
+					if (t <= 9.0 && aa <= 1 && (a != 1)) { r = 2; l = a < 0 ? 3 : 2; }                    // shaft
+					else if (t > 9.0 && t <= 9.6 && aa <= 2) { r = 1; l = a < 0 ? 4 : 3; }                // collar
+					else if (t > 9.6)
+					{
+						double half = t < 11.6 ? 2.2 : 2.2 - (t - 11.6) * 1.1;
+						if (aa <= half + 0.01 && t <= 13.8) { r = 0; l = Across(a, 2); }
+					}
+					break;
+				}
+				case "pickaxe":
+				case "axe":
+				case "hammer":
+				{
+					// Haft first, then the head drawn over it.
+					if (t <= 10.5 && aa <= 1 && a != 1) { r = 2; l = a < 0 ? 3 : 2; }
+					if (shape == "pickaxe")
+					{
+						double centre = 11.0 - 0.1 * a * a;
+						if (aa <= 6 && Math.Abs(t - centre) <= 0.75) { r = 0; l = t >= centre ? (a < 0 ? 4 : 3) : 2; if (aa == 6) l = 2; }
+						if (aa <= 1 && t > 10.0 && t <= 11.5) { r = 1; l = 3; }
+					}
+					else if (shape == "axe")
+					{
+						double du = (t - 10.4) / 2.6, dv = (a + 4.2) / 4.6;
+						if (a <= 0 && du * du + dv * dv <= 1.0) { r = 0; l = a <= -5 ? 4 : a <= -2 ? 3 : 2; }
+						if (aa <= 1 && t > 9.5 && t <= 11.0) { r = 1; l = 3; }
+					}
+					else
+					{
+						if (t >= 9.5 && t <= 12.5 && aa <= 6) { r = 0; l = aa == 6 ? 2 : t >= 12.5 ? 4 : t <= 9.5 ? 2 : a < 0 ? 3 : 2; }
+					}
+					break;
+				}
+				case "wand":
+				case "staff":
+				{
+					double len = shape == "staff" ? 10.5 : 9.0;
+					if (t <= len && (a == 0 || (shape == "staff" && a == -1))) { r = 2; l = a < 0 ? 3 : 2; }
+					double gem = len + 1.6;
+					double d = Math.Abs(t - gem) + aa * 0.55;
+					if (d <= 1.6) { r = 0; l = d <= 0.5 ? 4 : a < 0 ? 3 : 2; }
+					if (shape == "staff" && t > len - 0.6 && t <= len + 0.2 && aa <= 2) { r = 1; l = a < 0 ? 4 : 3; }
+					break;
+				}
+				case "bow":
+				{
+					// String straight across the icon, limbs bowed toward the top right.
+					double limb = 7.0 + 3.6 * (1.0 - (a / 6.5) * (a / 6.5));
+					if (aa <= 6 && Math.Abs(t - limb) <= 0.6) { r = 0; l = aa <= 1 ? 2 : a < 0 ? 4 : 3; }
+					else if (aa <= 6 && Math.Abs(t - 7.0) <= 0.5) { r = 1; l = 4; }
+					if (aa <= 1 && Math.Abs(t - 10.6) <= 0.6) { r = 2; l = 3; }
+					break;
+				}
+				default:
+					throw new Exception(where + ": unknown weapon shape " + shape);
+			}
+		}
+
+		// ------------------------------------------------------------------- blocks
+		// An isometric cube from 16x16 textures: top face lit, left face mid, right
+		// face shaded, inside a 14 px box so it gets the same dark outline.
+		static Bitmap Block(Color[] top, Color[] side)
+		{
+			var bmp = new Bitmap(Cell, Cell, PixelFormat.Format32bppArgb);
+			var drawn = new bool[Cell, Cell];
+			for (int y = 0; y < Cell; y++)
+				for (int x = 0; x < Cell; x++)
+				{
+					double lx = x + 0.5 - 1, ly = y + 0.5 - 1;
+					Color c = Color.Empty; double shade = 1;
+					double a = (lx / 7 - (ly - 3.5) / 3.5) / 2, b = (lx / 7 + (ly - 3.5) / 3.5) / 2;
+					if (a >= 0 && a < 1 && b >= 0 && b < 1)
+						c = top[Clamp((int)(b * 16)) * 16 + Clamp((int)((1 - a) * 16))];
+					else if (lx >= 0 && lx < 7)
+					{
+						double tt = (ly - (3.5 + lx / 2)) / 7;
+						if (tt >= 0 && tt < 1) { c = side[Clamp((int)(tt * 16)) * 16 + Clamp((int)(lx / 7 * 16))]; shade = 0.8; }
+					}
+					else if (lx >= 7 && lx < 14)
+					{
+						double tt = (ly - (7 - (lx - 7) / 2)) / 7;
+						if (tt >= 0 && tt < 1) { c = side[Clamp((int)(tt * 16)) * 16 + Clamp((int)((lx - 7) / 7 * 16))]; shade = 0.62; }
+					}
+					if (c == Color.Empty) continue;
+					drawn[x, y] = true;
+					bmp.SetPixel(x, y, Color.FromArgb(255, (int)(c.R * shade), (int)(c.G * shade), (int)(c.B * shade)));
+				}
+			int[] dx = { 1, -1, 0, 0 }, dy = { 0, 0, 1, -1 };
+			for (int y = 0; y < Cell; y++)
+				for (int x = 0; x < Cell; x++)
+				{
+					if (drawn[x, y]) continue;
+					for (int k = 0; k < 4; k++)
+					{
+						int nx = x + dx[k], ny = y + dy[k];
+						if (nx < 0 || ny < 0 || nx >= Cell || ny >= Cell || !drawn[nx, ny]) continue;
+						Color n = bmp.GetPixel(nx, ny);
+						bmp.SetPixel(x, y, Color.FromArgb(255, n.R / 4, n.G / 4, n.B / 4));
+						break;
+					}
+				}
+			return bmp;
+		}
+
+		static int Clamp(int v) { return v < 0 ? 0 : v > 15 ? 15 : v; }
 
 		// 4x preview on a dark ground, with names, for checking the art by eye.
 		static void Preview(List<KeyValuePair<string, Bitmap>> slots, string path)

@@ -94,6 +94,7 @@ local ItemDefinitions = {
 
 	-- === Basic Materials & Components ===
 	Stone = {
+		sprite = "block_stone",
 		icon = "rbxassetid://135294244542357",
 		description = "A simple stone. Used for crafting basic tools.",
 		rarity = "Common",
@@ -105,6 +106,7 @@ local ItemDefinitions = {
 	
 
 	WoodPlank = {
+		sprite = "block_oak_plank",
 		icon = "rbxassetid://82387679070340",
 		description = "Processed wood, used in many recipes.",
 		rarity = "Common",
@@ -177,6 +179,7 @@ local ItemDefinitions = {
 	-- === Basic Tools, Pickaxes & Weapons ===
 	-- NOTE: items that should allow mining must have classification == "Pickaxe".
 	TestSword = {
+		sprite = "sword_test",
 		icon = "rbxassetid://79477131719769",
 		description = "test",
 		rarity = "Unobtainable",
@@ -222,6 +225,7 @@ local ItemDefinitions = {
 		miningPower = 2,
 	},
 	CopperSword = {
+		sprite = "sword_copper",
 		icon = "rbxassetid://3000000001",
 		description = "A simple copper sword. Better than fists.",
 		rarity = "Common",
@@ -258,6 +262,7 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(170, 0, 0),
 	},
 	WoodSword = {
+		sprite = "sword_wood",
 		-- PLACEHOLDER ICON.
 		icon = "rbxassetid://3000000014",
 		description = "A blunt wooden sword. Barely better than fists.",
@@ -280,6 +285,7 @@ local ItemDefinitions = {
 		miningPower = 2,
 	},
 	StoneSword = {
+		sprite = "sword_stone",
 		icon = "rbxassetid://3000000010",
 		description = "A basic sword carved from stone.",
 		rarity = "Common",
@@ -458,6 +464,7 @@ local ItemDefinitions = {
 		miningTime = 2000,            -- 2000 ms (2.0s) because it's tougher
 	},
 	Cobblestone = {
+		sprite = "block_cobblestone",
 		icon = "rbxassetid://3000000403",
 		description = "Rough stone. Useful for crafting and building.",
 		rarity = "Common",
@@ -479,6 +486,7 @@ local ItemDefinitions = {
 		miningPower = 3,
 	},
 	IronSword = {
+		sprite = "sword_iron",
 		icon = "rbxassetid://3000000402",
 		description = "A sharp iron sword. Deals good melee damage.",
 		rarity = "Uncommon",
@@ -568,6 +576,7 @@ local ItemDefinitions = {
 
 	-- === Workbenches ===
 	CraftingTable = {
+		sprite = "station_workbench",
 		icon = "rbxassetid://3000000500",
 		description = "Used to craft basic tools and items.",
 		rarity = "Common",
@@ -578,6 +587,7 @@ local ItemDefinitions = {
 	-- Storage stations (Shared.Crafting.StationConfig): placed like a bench,
 	-- opened rather than crafted at. Islands only - see their station entries.
 	BasicChest = {
+		sprite = "chest_basic",
 		description = "Holds 27 stacks. Place it on your island and open it to store things.",
 		rarity = "Common",
 		maxStack = 16,
@@ -585,6 +595,7 @@ local ItemDefinitions = {
 		value = 20,
 	},
 	RareChest = {
+		sprite = "chest_rare",
 		description = "Holds 36 stacks. Iron-bound, and a row bigger than a basic chest.",
 		rarity = "Rare",
 		maxStack = 16,
@@ -592,6 +603,7 @@ local ItemDefinitions = {
 		value = 90,
 	},
 	LegendaryChest = {
+		sprite = "chest_legendary",
 		description = "Holds 54 stacks. Twice a basic chest, and a good deal finer.",
 		rarity = "Legendary",
 		maxStack = 16,
@@ -599,6 +611,7 @@ local ItemDefinitions = {
 		value = 400,
 	},
 	Furnace = {
+		sprite = "station_furnace",
 		icon = "rbxassetid://3000000501",
 		description = "Smelts ores into ingots.",
 		rarity = "Common",
@@ -607,6 +620,7 @@ local ItemDefinitions = {
 		value = 25,
 	},
 	Anvil = {
+		sprite = "station_anvil",
 		icon = "rbxassetid://3000000502",
 		description = "Used to forge weapons and armor.",
 		rarity = "Uncommon",
@@ -615,6 +629,7 @@ local ItemDefinitions = {
 		value = 50,
 	},
 	ArcaneForge = {
+		sprite = "station_arcane_forge",
 		icon = "rbxassetid://3000000503",
 		description = "Fuses magic into equipment. Required for enchanted gear.",
 		rarity = "Rare",
@@ -623,6 +638,7 @@ local ItemDefinitions = {
 		value = 100,
 	},
 	AlchemyBench = {
+		sprite = "station_alchemy",
 		icon = "rbxassetid://3000000607",
 		description = "Used to craft potions and magical consumables.",
 		rarity = "Uncommon",
@@ -631,6 +647,7 @@ local ItemDefinitions = {
 		value = 80,
 	},
 	EnchantingTable = {
+		sprite = "station_enchanting",
 		icon = "rbxassetid://3000000608",
 		description = "Used to enchant weapons, tools, and armor.",
 		rarity = "Rare",
@@ -654,6 +671,7 @@ local ItemDefinitions = {
 		miningPower = 4,
 	},
 	GoldSword = {
+		sprite = "sword_gold",
 		icon = "rbxassetid://3000000421",
 		description = "More ceremony than weapon, but it swings fast.",
 		rarity = "Rare",
@@ -688,6 +706,7 @@ local ItemDefinitions = {
 	-- Placeable and mineable like any terrain block. TerrainManager builds their
 	-- parts from Blocks.BlockConfig.Generated, so they need no authored asset.
 	StoneBricks = {
+		sprite = "block_stone_bricks",
 		icon = "rbxassetid://3000000430",
 		description = "Cut and squared. For building something that lasts.",
 		rarity = "Common",
@@ -697,6 +716,7 @@ local ItemDefinitions = {
 		miningTime = 1700,
 	},
 	MagmaBrick = {
+		sprite = "block_magma_brick",
 		icon = "rbxassetid://3000000431",
 		description = "Fired with magma ore. Glows faintly, warm to the touch.",
 		rarity = "Uncommon",
@@ -719,6 +739,7 @@ local ItemDefinitions = {
 		while, so one is never knocked apart by accident mid-fight.
 	]]
 	AltarStone = {
+		sprite = "block_altar_stone",
 		displayName = "Altar Stone",
 		-- PLACEHOLDER ICON.
 		icon = "rbxassetid://3000000432",
@@ -730,6 +751,7 @@ local ItemDefinitions = {
 		miningTime = 4000,
 	},
 	AltarCore = {
+		sprite = "block_altar_core",
 		displayName = "Altar Core",
 		-- PLACEHOLDER ICON.
 		icon = "rbxassetid://3000000433",
@@ -772,6 +794,7 @@ local ItemDefinitions = {
 
 	-- === High-End Gear (Craftable) ===
 	MythrilSword = {
+		sprite = "sword_mythril",
 		icon = "rbxassetid://3000000602",
 		description = "An elegant blade of Mythril. Fast and deadly.",
 		rarity = "Rare",
@@ -785,6 +808,7 @@ local ItemDefinitions = {
 
 
 	LightLance = {
+		sprite = "light_lance",
 		description = "A lance of hardened light. Calls a rain of blades down on a marked place, "
 			.. "or collapses a black star at its bearer's feet.",
 		rarity = "Legendary",
@@ -796,6 +820,7 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(0, 0, -100),
 	},
 	Thunderveil = {
+		sprite = "thunderveil",
 		description = "A sword of crackling thunder. Deals high damage and has a chance to stun enemies.",
 		rarity = "Legendary",
 		maxStack = 1,
@@ -806,6 +831,7 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(0, 0, 0),
 	},
 	Bloodfang = { 
+		sprite = "bloodfang",
 		description = "A sword that bleeds. Deals high damage and life steal.",
 		rarity = "Epic",
 		maxStack = 1,
@@ -818,6 +844,7 @@ local ItemDefinitions = {
 
 	-- === High-End Gear (Drop-Only) ===
 	VoidReaver = {
+		sprite = "void_reaver",
 		icon = "rbxassetid://3000000603",
 		description = "A cursed blade that deals high damage and life steal.",
 		rarity = "Legendary",
@@ -863,6 +890,7 @@ local ItemDefinitions = {
 
 	-- === Basic terrain block items (if you want them placeable / droppable as items) ===
 	Dirt = {
+		sprite = "block_dirt",
 		icon = "rbxassetid://3000000700",
 		description = "Loose earth.",
 		rarity = "Common",
@@ -872,6 +900,7 @@ local ItemDefinitions = {
 		miningTime = 550,
 	},
 	Grass = {
+		sprite = "block_grass",
 		icon = "rbxassetid://3000000701",
 		description = "Surface grass block.",
 		rarity = "Common",
@@ -881,6 +910,7 @@ local ItemDefinitions = {
 		miningTime = 600,
 	},
 	Sand = {
+		sprite = "block_sand",
 		icon = "rbxassetid://3000000702",
 		description = "Loose sand. Flows into gaps.",
 		rarity = "Common",
@@ -890,6 +920,7 @@ local ItemDefinitions = {
 		miningTime = 500,
 	},
 	Sandstone = {
+		sprite = "block_sandstone",
 		icon = "rbxassetid://3000000703",
 		description = "Compact sand turned to stone.",
 		rarity = "Common",
@@ -899,6 +930,7 @@ local ItemDefinitions = {
 		miningTime = 1200,
 	},
 	Snow = {
+		sprite = "block_snow",
 		icon = "rbxassetid://3000000704",
 		description = "Packed snow block.",
 		rarity = "Common",
@@ -910,6 +942,7 @@ local ItemDefinitions = {
 
 	-- === New biome/placeable blocks ===
 	CorruptedStone = {
+		sprite = "block_corrupted_stone",
 		icon = "rbxassetid://3000000800",
 		description = "Dark, twisted stone infused with corruption.",
 		rarity = "Uncommon",
@@ -919,6 +952,7 @@ local ItemDefinitions = {
 		miningTime = 1800,
 	},
 	CorruptedDirt = {
+		sprite = "block_corrupted_dirt",
 		icon = "rbxassetid://3000000801",
 		description = "Soil tainted by corruption.",
 		rarity = "Uncommon",
@@ -928,6 +962,7 @@ local ItemDefinitions = {
 		miningTime = 700,
 	},
 	CrimsonStone = {
+		sprite = "block_crimson_stone",
 		icon = "rbxassetid://3000000802",
 		description = "A blood-red stone from the crimson lands.",
 		rarity = "Uncommon",
@@ -937,6 +972,7 @@ local ItemDefinitions = {
 		miningTime = 1800,
 	},
 	CrimsonDirt = {
+		sprite = "block_crimson_dirt",
 		icon = "rbxassetid://3000000803",
 		description = "Soil from the crimson biome.",
 		rarity = "Uncommon",
@@ -946,6 +982,7 @@ local ItemDefinitions = {
 		miningTime = 700,
 	},
 	HallowedStone = {
+		sprite = "block_hallowed_stone",
 		icon = "rbxassetid://3000000804",
 		description = "Holy stone radiating light.",
 		rarity = "Rare",
@@ -955,6 +992,7 @@ local ItemDefinitions = {
 		miningTime = 2000,
 	},
 	HallowedDirt = {
+		sprite = "block_hallowed_dirt",
 		icon = "rbxassetid://3000000805",
 		description = "Blessed soil glowing faintly.",
 		rarity = "Rare",

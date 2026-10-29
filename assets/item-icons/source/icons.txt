@@ -1171,6 +1171,122 @@ template horseshoe flat
 ........
 end
 
+
+# Crafting stations ------------------------------------------------------------
+template workbench - darkstone iron
+........
+........
+........
+........
+........
+.3333333
+.4444444
+.2222222
+.1111111
+.22.....
+.22.....
+.2333333
+.2222222
+.22.....
+.11.....
+........
+end
+
+template furnace - orange
+........
+........
+..333333
+.3444444
+.3433434
+.3333333
+.343xxxx
+.33xxcdd
+.34xcddd
+.33xbccc
+.343bbbb
+.3333333
+.2222222
+.1111111
+........
+........
+end
+
+template anvil
+........
+........
+........
+........
+.3333333
+.4444444
+..222222
+....2222
+.....222
+.....222
+....2222
+..333333
+.3444444
+.1111111
+........
+........
+end
+
+template forge - purple
+.......c
+......cd
+......cd
+.....bcd
+......bc
+..333333
+.3444444
+.34xxxxx
+.33xbccd
+.34xbccc
+.33xbbbb
+.3333333
+.2222222
+.1111111
+........
+........
+end
+
+template alchemy wood green glass
+.......f
+.......f
+......bb
+.....bcc
+.....bbb
+.3333333
+.4444444
+.2222222
+.1111111
+.22.....
+.22.....
+.2333333
+.2222222
+.22.....
+.11.....
+........
+end
+
+template enchanting - paper gold
+........
+........
+..bbbbbb
+..cccccd
+..cccccc
+.eeeeeee
+.3333333
+.4444444
+.2222222
+.1222222
+.f222222
+.1222222
+.2222222
+.1111111
+........
+........
+end
+
 # Keys, scrolls, books and bags ------------------------------------------------
 template key flat
 ........
@@ -1742,3 +1858,170 @@ icon arrows_holy         arrows hallow
 icon bullet              bullet gold
 icon bullet_silver       bullet silver
 icon lantern             lantern
+
+# ---------------------------------------------------------------- block textures
+# The game's own 16x16 block textures, read out of Studio (EditableImage), as a
+# palette and one palette index per pixel. Not slots - `block` lines use them.
+texture stone 8c8b8b,a6a5a5 0000000000000000000100011110000001000000000001000011111000000000000000000111000000000100000000101111000000000000000000111110001100000000000111000000000000000000000111110010000001100000000000000000000001111110001000001000000000001111000000100000000000000000
+texture dirt 784b25,5f3e22,a66936 0000000111000000021000200000001002200000002220110001000022000001111000010000100100022221011100000010001000002200000110022200002002000001002000210000000001000010010022220011100001111000100222000022001100000000100002000222220010011100211100010100000000000010
+texture grass_top 297d21,3aae2e,309926 0111110011111222121000111011211111111111110111111012211222211101011112211111121111201112111222111001111000121101102222212211101222111100110001011011122111111211122221110000212201111110121111110110122221112211111111111011010122211000011101121122211111101221
+texture grass_side 3aae2e,309926,297d21,784b25,a66936,5f3e22 0111101111201112201103122112201014221323111041153335133314033335555333353333533533344445355533333353335333334433333553344433334334333335334333453333333335333353353344443355533335555333533444333344335533333333533334333444443353355533455533353533333333333353
+texture sand e2cc70,feea96,b5a358 0000000000000000001000000000000000000001000002000000000000001000000002000000000000000000000000000000000002000000000010000000000000000000000000000020000000000000000000000000000000000000200100000000020000000000000000000100000010000000000000200000000000000000
+texture sandstone ddc473,dbba4e 0000000000000000000000000000000011111111111111110011000000100110001110000100001000001000010000101000100010000010111110011000110000001010010100100001110000110001000100000110100111100000100001000100000100000011001000011000010000011010011111000000111000010000
+texture snow d5e7ed,deedf3 0011111110011111011100000001111111000000010000111100000010000011100000011000001110001111000000010001111000000001100111100000000110011111100000011000011101000001100000100011101110000010001111110000000000111000000001001110000000111111110000001111111110000000
+texture oak_plank bb8e41,9b793f,694f23 0000010000000000000000000000000001000000000000002222222222222222000000010001000000000000000100000000000000010000222222222222222200001000000000000000100000001000000000000001010022222222222222221000000000000000100000000000000010000000000000102222222222222222
+texture birch_plank aa9b68,7a6e47,5f5533 0000010000000000000000000000000001000000000000002222222222222222000000010001000000000000000100000000000000010000222222222222222200001000000000000000100000001000000000000001010022222222222222221000000000000000100000000000000010000000000000102222222222222222
+texture cobblestone 635f5a,83807d 0111110111011111011100111000111001101101011101010001111011111011110111110111101111011100111100111110101101101101111001110101111011011111010110010011111010011011100011011110011110110011111101111011101111110111011110111110100111110101110111100000011000111111
+texture coal_ore 8c8b8b,231f23,a6a5a5 0000000000000000001200011220000001000111100002000122111100001000000011100222110000001110000001202222000000000000000000222111002200000000011111000000010001111100000211220011110002111100001110000011110002222220001110002000011000002222000011100000000000000000
+texture corrupted_stone 80718e,9c8bac 0000000000000000000100011110000001000000000001000011111000000000000000000111000000000100000000101111000000000000000000111110001100000000000111000000000000000000000111110010000001100000000000000000000001111110001000001000000000001111000000100000000000000000
+texture corrupted_dirt_top a54efb,af5eff,9c37ff 0111112211111000101222111211011111111111112111111210011000011121211110011111101111021110111000111221111222101121120000010011121000111122112221211211100111111011100001112222010021111112101111112112100001110011111111111211212100011222211121101100011111121001
+texture corrupted_dirt_side af5eff,9c37ff,a54efb,784b25,a66936,5f3e22 0111101111201112201103122112201004221323111041153335133314033335555333353333533533344445355533333353335333334433333553344433334334333335334333453333333335333353353344443355533335555333533444333344335533333333533334333444443353355533455533353533333333333353
+texture crimson_stone 8c3a3a,a56e6e 0000000000000000000100011110000001000000000001000011111000000000000000000111000000000100000000101111000000000000000000111110001100000000000111000000000000000000000111110010000001100000000000000000000001111110001000001000000000001111000000100000000000000000
+texture crimson_dirt_top ce2020,d55d5d,d33b3b 0111110011111222121000111011211111111111110111111012211222211101011112211111121111201112111222111001111000121101102222212211101222111100110001011011122111111211122221110000212201111110121111110110122221112211111111111011010122211000011101121122211111101221
+texture crimson_dirt_side d55d5d,d33b3b,ce2020,784b25,a66936,5f3e22 0111101111201112201103122112201014221323111041153335133314033335555333353333533533344445355533333353335333334433333553344433334334333335334333453333333335333353353344443355533335555333533444333344335533333333533334333444443353355533455533353533333333333353
+texture hallowed_stone 9c689d,b99ab9 0000000000000000000100011110000001000000000001000011111000000000000000000111000000000100000000101111000000000000000000111110001100000000000111000000000000000000000111110010000001100000000000000000000001111110001000001000000000001111000000100000000000000000
+texture hallowed_dirt_top f8d0ff,fef9ff,f9e2fc,faddff 0111110011111222121000111011211111111111110111111012211222211101011112211111121111201112111222111001111000121101102222212211101222111100110001011011122111111211122221110000212201111110121111110110122221112211111111111011010122211000011101121122211111101331
+texture hallowed_dirt_side fef9ff,f9e2fc,f8d0ff,784b25,a66936,5f3e22 0111101111101112201103122112201004221323111041153335133314033335555333353333533533344445355533333353335333334433333553344433334334333335334333453333333335333353353344443355533335555333533444333344335533333333533334333444443353355533455533353533333333333353
+
+# ---------------------------------------------------------------- weapons
+# The game's own weapons, coloured after their models.
+weapon sword_wood        sword      wood     brown     brown
+weapon sword_stone       sword      stone    darkstone wood
+weapon sword_copper      sword      copper   brown     leather
+weapon sword_iron        sword      iron     darkstone leather
+weapon sword_gold        sword      gold     red       leather
+weapon sword_mythril     sword      mythril  silver    darkfur
+weapon sword_test        sword      silver   gold      leather
+weapon bloodfang         katana     crimson  black     black
+weapon thunderveil       broadsword cobalt   black     darkstone
+weapon void_reaver       greatsword void     purple    darkstone
+weapon light_lance       spear      white    gold      silver
+
+# More of each kind, in every material.
+weapon sword_tin         sword      tin      darkstone leather
+weapon sword_lead        sword      lead     darkstone leather
+weapon sword_silver      sword      silver   darkstone leather
+weapon sword_platinum    sword      platinum gold      leather
+weapon sword_cobalt      sword      cobalt   silver    darkfur
+weapon sword_magma       sword      magma    darkstone black
+weapon sword_crimson     sword      crimson  bone      flesh
+weapon sword_corrupt     sword      corrupt  rot       black
+weapon sword_hallow      sword      hallow   gold      white
+weapon sword_frost       sword      frost    silver    cobalt
+weapon katana_iron       katana     iron     gold      black
+weapon katana_void       katana     void     black     purple
+weapon katana_frost      katana     frost    silver    blue
+weapon katana_jade       katana     green    gold      black
+weapon broadsword_iron   broadsword iron     darkstone leather
+weapon broadsword_gold   broadsword gold     red       leather
+weapon broadsword_magma  broadsword magma    black     darkstone
+weapon broadsword_hallow broadsword hallow   gold      white
+weapon greatsword_gold   greatsword gold     cobalt    leather
+weapon greatsword_crimson greatsword crimson bone      black
+weapon greatsword_hallow greatsword hallow   gold      white
+weapon greatsword_frost  greatsword frost    cobalt    silver
+weapon spear_iron        spear      iron     darkstone wood
+weapon spear_gold        spear      gold     red       wood
+weapon spear_magma       spear      magma    darkstone black
+weapon spear_frost       spear      frost    silver    wood
+weapon spear_crimson     spear      crimson  bone      flesh
+weapon bow_wood          bow        wood     silk      leather
+weapon bow_gold          bow        gold     silk      leather
+weapon bow_frost         bow        frost    silk      cobalt
+weapon bow_magma         bow        magma    yellow    black
+weapon bow_hallow        bow        hallow   silk      gold
+weapon bow_void          bow        void     purple    black
+weapon staff_ruby        staff      red      gold      wood
+weapon staff_sapphire    staff      blue     gold      wood
+weapon staff_emerald     staff      green    gold      wood
+weapon staff_topaz       staff      amber    gold      wood
+weapon staff_amethyst    staff      purple   silver    wood
+weapon staff_diamond     staff      diamond  silver    wood
+weapon wand_fire         wand       magma    gold      wood
+weapon wand_frost        wand       frost    silver    wood
+
+# ---------------------------------------------------------------- tools
+weapon pickaxe_wood      pickaxe    wood     brown     wood
+weapon pickaxe_stone     pickaxe    stone    darkstone wood
+weapon pickaxe_copper    pickaxe    copper   brown     wood
+weapon pickaxe_iron      pickaxe    iron     darkstone wood
+weapon pickaxe_gold      pickaxe    gold     brown     wood
+weapon pickaxe_mythril   pickaxe    mythril  silver    wood
+weapon pickaxe_void      pickaxe    void     purple    darkstone
+weapon pickaxe_skybreaker pickaxe   cyan     gold      white
+weapon pickaxe_test      pickaxe    diamond  silver    wood
+weapon pickaxe_tin       pickaxe    tin      darkstone wood
+weapon pickaxe_lead      pickaxe    lead     darkstone wood
+weapon pickaxe_silver    pickaxe    silver   darkstone wood
+weapon pickaxe_platinum  pickaxe    platinum gold      wood
+weapon pickaxe_cobalt    pickaxe    cobalt   silver    wood
+weapon pickaxe_magma     pickaxe    magma    darkstone black
+weapon pickaxe_crimson   pickaxe    crimson  bone      flesh
+weapon pickaxe_corrupt   pickaxe    corrupt  rot       black
+weapon pickaxe_hallow    pickaxe    hallow   gold      white
+weapon pickaxe_frost     pickaxe    frost    silver    cobalt
+weapon axe_wood          axe        wood     brown     wood
+weapon axe_test          axe        iron     darkstone wood
+weapon axe_stone         axe        stone    darkstone wood
+weapon axe_copper        axe        copper   brown     wood
+weapon axe_gold          axe        gold     brown     wood
+weapon axe_mythril       axe        mythril  silver    wood
+weapon axe_magma         axe        magma    darkstone black
+weapon axe_void          axe        void     purple    darkstone
+weapon axe_hallow        axe        hallow   gold      white
+weapon hammer_flame      hammer     magma    iron      wood
+weapon hammer_wood       hammer     wood     brown     wood
+weapon hammer_iron       hammer     iron     darkstone wood
+weapon hammer_gold       hammer     gold     brown     wood
+weapon hammer_void       hammer     void     purple    darkstone
+weapon wand_builder      wand       amber    gold      wood
+
+# ---------------------------------------------------------------- blocks
+retex sandstone_top      sandstone
+retex stone_bricks       sandstone ddc473=9a9999 dbba4e=55545a
+retex magma_brick        sandstone ddc473=8c2a14 dbba4e=ff8a2a
+retex altar_stone        sandstone ddc473=4c4d56 dbba4e=c8a040
+retex altar_core         coal_ore 8c8b8b=4c4d56 a6a5a5=6a6c76 231f23=f7d454
+retex copper_ore         coal_ore 231f23=c8703a
+retex iron_ore           coal_ore 231f23=d8b898
+retex gold_ore           coal_ore 231f23=f7d454
+retex mythril_ore        coal_ore 231f23=35c08e
+retex magma_ore          coal_ore 8c8b8b=5a2a20 a6a5a5=7a3a2a 231f23=ff8a2a
+retex void_ore           coal_ore 8c8b8b=3a304a a6a5a5=4e4462 231f23=b886f0
+block block_stone        stone
+block block_dirt         dirt
+block block_grass        grass_top grass_side
+block block_sand         sand
+block block_sandstone    sandstone_top sandstone
+block block_snow         snow
+block block_oak_plank    oak_plank
+block block_birch_plank  birch_plank
+block block_cobblestone  cobblestone
+block block_coal_ore     coal_ore
+block block_copper_ore   copper_ore
+block block_iron_ore     iron_ore
+block block_gold_ore     gold_ore
+block block_mythril_ore  mythril_ore
+block block_magma_ore    magma_ore
+block block_void_ore     void_ore
+block block_stone_bricks stone_bricks
+block block_magma_brick  magma_brick
+block block_altar_stone  altar_stone
+block block_altar_core   altar_core
+block block_corrupted_stone corrupted_stone
+block block_corrupted_dirt  corrupted_dirt_top corrupted_dirt_side
+block block_crimson_stone   crimson_stone
+block block_crimson_dirt    crimson_dirt_top crimson_dirt_side
+block block_hallowed_stone  hallowed_stone
+block block_hallowed_dirt   hallowed_dirt_top hallowed_dirt_side
+
+# ---------------------------------------------------------------- crafting stations
+icon station_workbench   workbench wood
+icon station_furnace     furnace stone
+icon station_anvil       anvil iron
+icon station_arcane_forge forge darkstone void
+icon station_alchemy     alchemy
+icon station_enchanting  enchanting black paper gold
+pack chest_basic         chests 0 0
+pack chest_rare          chests 3 2
+pack chest_legendary     chests 7 5

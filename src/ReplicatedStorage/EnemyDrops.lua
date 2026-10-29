@@ -329,6 +329,12 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
 	},
 
+	-- Powder and shot: coal, and now and then some metal worth having.
+	Cannon = {
+		{ item = "Coal", chance = 1, min = 2, max = 4 },
+		{ item = "GoldOre", chance = 0.2, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

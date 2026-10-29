@@ -1013,6 +1013,9 @@
         "Beast": {
           "$path": "src/ServerScriptService/Creatures/Beast.lua"
         },
+        "Cannon": {
+          "$path": "src/ServerScriptService/Creatures/Cannon.lua"
+        },
         "CatMonk": {
           "$path": "src/ServerScriptService/Creatures/CatMonk.lua"
         },

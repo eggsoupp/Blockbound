@@ -306,6 +306,11 @@ Build.Split = {
 		if cx > 44 then return "RightArm" end
 		return "Body"
 	end,
+	-- A cannon on a wheeled carriage: the iron (colours 3 and 4) is the
+	-- barrel, on its own trunnion joint; the rest is the carriage.
+	Cannon = function(_x, _y, _z, _w, _h, _d, c)
+		return if c == 3 or c == 4 then "Barrel" else "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

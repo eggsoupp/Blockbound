@@ -1606,6 +1606,29 @@ Rigs.CatMonk = {
 	end,
 }
 
+--[[
+	CANNON. A barrel on a wheeled carriage; only the barrel moves, on its
+	trunnions. The muzzle is forward of the hinge, so +pitch raises it.
+	  aim   the barrel raised to its firing elevation
+	  fire  the same, kicked back along its length by the recoil and run
+	        forward again
+]]
+Rigs.Cannon = {
+	setup = function() end,
+
+	animate = function(rig, ctx)
+		local barrel = CFrame.identity
+		if ctx.pose == "aim" then
+			barrel = CFrame.Angles(0.3 * math.min(1, ctx.blend * 1.5), 0, 0)
+		elseif ctx.pose == "fire" then
+			local e = ctx.elapsed or 0
+			local kick = if e < 0.06 then e / 0.06 else math.max(0, 1 - (e - 0.06) / 0.5)
+			barrel = CFrame.Angles(0.3 + 0.08 * kick, 0, 0) * CFrame.new(0, 0, 0.8 * kick)
+		end
+		rig.joints.Barrel.Transform = barrel
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

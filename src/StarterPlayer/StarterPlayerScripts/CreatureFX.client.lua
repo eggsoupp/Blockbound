@@ -525,6 +525,17 @@ local STYLES = {
 		},
 		pitch = 2,
 	},
+	-- The Cannon's ball: iron, trailing smoke, bursting in fire and smoke.
+	iron = {
+		name = "Cannonball", size = 1.1, material = Enum.Material.Metal, color = Color3.fromRGB(45, 45, 50),
+		trail = { rate = 30, size = 1.4, life = 0.5 },
+		burst = {
+			{ "Flare", 1, { Color = ColorSequence.new(Color3.fromRGB(255, 160, 70)), Size = NumberSequence.new(5) } },
+			{ "BoomSparks", 16, { Color = ColorSequence.new(Color3.fromRGB(255, 190, 90)) } },
+			{ "Puff", 7, { Color = ColorSequence.new(Color3.fromRGB(80, 75, 70)), Size = NumberSequence.new(3.5), Speed = NumberRange.new(3, 7), SpreadAngle = Vector2.new(180, 180) } },
+		},
+		pitch = 0.5,
+	},
 	-- The Pit Devil's spear of fire.
 	fire = {
 		name = "FireSpear", size = 0.8, material = Enum.Material.Neon, color = HELLFIRE,
@@ -1420,6 +1431,20 @@ function handlers.drain(model, character)
 	burst(part.Position + Vector3.new(0, 0.5, 0), {
 		{ "Flare", 1, { Color = ColorSequence.new(BLOOD), Size = NumberSequence.new(1.6) } },
 	}, 1)
+end
+
+-- ---------------------------------------------------------------------------
+-- Cannon
+-- ---------------------------------------------------------------------------
+
+-- A shot: a flash at the muzzle, smoke rolling out of it, and the boom.
+function handlers.muzzle(position: Vector3, facing: Vector3)
+	local host = burst(position, {
+		{ "Flare", 1, { Color = ColorSequence.new(Color3.fromRGB(255, 200, 120)), Size = NumberSequence.new(3.5) } },
+		{ "Puff", 8, { Color = ColorSequence.new(Color3.fromRGB(150, 145, 140)), Size = NumberSequence.new(2.6), Speed = NumberRange.new(4, 9), SpreadAngle = Vector2.new(25, 25) } },
+	}, 2.5)
+	host.CFrame = CFrame.lookAt(position, position + facing) * CFrame.Angles(-math.pi / 2, 0, 0)
+	Kit.sound(host, SOUND_BOOM, 0.7, 1)
 end
 
 function handlers.flare(model, color: Color3?)

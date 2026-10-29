@@ -116,6 +116,7 @@ local ItemDefinitions = {
 
 
 	Wood = {
+		sprite = "wood",
 		icon = "rbxassetid://82387679070340",
 		description = "Wood, used in many recipes.",
 		rarity = "Common",
@@ -124,6 +125,7 @@ local ItemDefinitions = {
 		value = 2,
 	},
 	Stick = {
+		sprite = "stick",
 		icon = "rbxassetid://3000000005",
 		description = "A wooden stick. Essential crafting component.",
 		rarity = "Common",
@@ -132,6 +134,7 @@ local ItemDefinitions = {
 		value = 1,
 	},
 	Leather = {
+		sprite = "leather",
 		icon = "rbxassetid://3000000006",
 		description = "Treated hide. Used for basic armor.",
 		rarity = "Uncommon",
@@ -140,6 +143,7 @@ local ItemDefinitions = {
 		value = 5,
 	},
 	Herb = {
+		sprite = "herb",
 		icon = "rbxassetid://3000000007",
 		description = "A medicinal herb. Used in potions.",
 		rarity = "Common",
@@ -160,6 +164,7 @@ local ItemDefinitions = {
 	-- What a slime is made of. Every slime sheds one or two (EnemyDrops), and a
 	-- hundred of them is the body of the Gelatinous Crown.
 	Gel = {
+		sprite = "gel",
 		-- PLACEHOLDER ICON, in the same made-up series as its neighbours.
 		icon = "rbxassetid://3000000015",
 		description = "A wobbling lump of slime. Sticky, faintly sweet, and oddly warm.",
@@ -322,6 +327,7 @@ local ItemDefinitions = {
 		crown and says so.
 	]]
 	GelatinousCrown = {
+		sprite = "slime_crown",
 		displayName = "Gelatinous Crown",
 		-- PLACEHOLDER ICON.
 		icon = "rbxassetid://3000000016",
@@ -359,6 +365,7 @@ local ItemDefinitions = {
 	-- rest of this file already uses. Swap them for real asset ids when the art
 	-- exists; nothing else has to change.
 	Coal = {
+		sprite = "coal",
 		icon = "rbxassetid://3000000410",
 		description = "Sooty black rock. Fuel for every furnace.",
 		rarity = "Common",
@@ -367,6 +374,7 @@ local ItemDefinitions = {
 		value = 2,
 	},
 	CopperOre = {
+		sprite = "ore_copper",
 		icon = "rbxassetid://3000000411",
 		description = "Raw copper. Smelt it into an ingot.",
 		rarity = "Common",
@@ -375,6 +383,7 @@ local ItemDefinitions = {
 		value = 3,
 	},
 	IronOre = {
+		sprite = "ore_iron",
 		icon = "rbxassetid://3000000412",
 		description = "Raw iron. Smelt it into an ingot.",
 		rarity = "Uncommon",
@@ -383,6 +392,7 @@ local ItemDefinitions = {
 		value = 6,
 	},
 	GoldOre = {
+		sprite = "ore_gold",
 		icon = "rbxassetid://3000000413",
 		description = "Raw gold, found only well below the surface.",
 		rarity = "Rare",
@@ -391,6 +401,7 @@ local ItemDefinitions = {
 		value = 18,
 	},
 	MythrilOre = {
+		sprite = "ore_mythril",
 		icon = "rbxassetid://3000000414",
 		description = "Faintly humming ore from the deep rock.",
 		rarity = "Rare",
@@ -437,6 +448,7 @@ local ItemDefinitions = {
 		value = 35,
 	},
 	MagmaOre = {
+		sprite = "ore_magma",
 		icon = "rbxassetid://117405535919969",
 		description = "Burning-hot ore. Requires a strong pickaxe to mine.",
 		rarity = "Epic",
@@ -506,6 +518,7 @@ local ItemDefinitions = {
 	-- No art exists yet, so `look` has Shared.UI.ItemModels build a simple
 	-- model in code for the slot and the tooltip to show.
 	VitalityAmulet = {
+		sprite = "amulet_vitality",
 		displayName = "Vitality Amulet",
 		description = "+25 max health while worn.",
 		rarity = "Uncommon",
@@ -517,6 +530,7 @@ local ItemDefinitions = {
 		iconPose = "block",
 	},
 	ManaAmulet = {
+		sprite = "amulet_mana",
 		displayName = "Mana Amulet",
 		description = "+25 max mana while worn.",
 		rarity = "Uncommon",
@@ -528,6 +542,7 @@ local ItemDefinitions = {
 		iconPose = "block",
 	},
 	SpellRing = {
+		sprite = "ring_spell",
 		displayName = "Spell Ring",
 		description = "+15% ability damage while worn.",
 		rarity = "Rare",
@@ -539,6 +554,7 @@ local ItemDefinitions = {
 		iconPose = "block",
 	},
 	BattleRing = {
+		sprite = "ring_battle",
 		displayName = "Battle Ring",
 		description = "+15% weapon damage while worn.",
 		rarity = "Rare",
@@ -745,6 +761,7 @@ local ItemDefinitions = {
 		value = 75,
 	},
 	VoidCore = {
+		sprite = "void_core",
 		icon = "rbxassetid://3000000601",
 		description = "A fragment of the void. Used to craft ultimate gear.",
 		rarity = "Legendary",

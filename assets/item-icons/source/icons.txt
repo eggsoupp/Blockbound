@@ -1,0 +1,1744 @@
+# Item icons. See build_item_atlas.cs for the format.
+#
+# The `pack`/`tint`/`icon` lines at the bottom are APPEND-ONLY: each is the
+# next slot on the atlas, in order, so only ever add new ones at the end.
+# Ramps and templates can be edited freely (that redraws, but never moves).
+
+# ---------------------------------------------------------------- ramps
+#        name        outline dark   base   light  highlight
+ramp copper      3b1e14 7a3a22 b8663a e39a5c fbd2a0
+ramp tin         2e3236 6e7680 a3acb5 c9d0d6 f2f5f7
+ramp lead        1e2230 3e4458 5e6680 8890a8 c0c8dc
+ramp iron        26282e 5a5f6b 8c93a0 b8bec9 e8ebf0
+ramp silver      30343c 7d8594 b4bcc8 dde3ea ffffff
+ramp gold        3d2408 9a5a12 e0a526 f7d454 fff3b0
+ramp platinum    2c3340 7e8ea6 b6c6dc dfe9f5 ffffff
+ramp mythril     0f3a33 1f7a62 35b38a 6fe0b2 c8fff0
+ramp magma       3a0a06 8c1d0c d9471a ff8a2a ffd36a
+ramp void        1a0b2e 3d1d6b 6a36b0 a070e6 e2ccff
+ramp cobalt      0b1f4a 1a4aa0 2f7be0 6cb0ff c6e6ff
+ramp crimson     3a0610 7a1022 b8213a e04a5a ff9aa4
+ramp hallow      3a2a4a 8a6ab0 c8a0e8 f0d0ff ffffff
+ramp corrupt     1f1430 4a2a6a 6e4a94 9c78c0 d0b8f0
+ramp frost       1a3a5a 4a8ac0 8ac8f0 c8ecff ffffff
+ramp stone       2a2a30 55565e 7c7e88 a3a6b0 d0d3da
+ramp darkstone   1a1a20 34343c 4c4d56 6a6c76 9a9ca6
+ramp sandstone   4a3418 9a7440 c8a060 e6c88a fff0c8
+ramp wood        2e1a0e 5e3a1e 8c5a30 b8834a e0b57a
+ramp leather     2e180c 6a3a1c 9a5a2c c4864a e8b884
+ramp paper       4a3a22 a08a60 d8c49a efe0bc fff8e6
+ramp bone        3a3428 8a8270 c8c0a8 e8e2cc fffdf0
+ramp leaf        102a10 2a6a1e 4aa02e 86d24a cff59a
+ramp jungle      0a2a1a 1a5a2e 2e8a3e 5ec25a b0f08a
+ramp gel         0e2a4a 1e5aa0 3a90e0 7cc4ff d0f0ff
+ramp gelgreen    0e3a1a 2a7a2e 4ec04a 8ef07a d8ffc8
+ramp red         3a0a0a 8a1a1a d0302a ff6a50 ffc0a8
+ramp pink        4a1030 a03070 e05aa0 ff96cc ffd8ee
+ramp purple      2a1040 5a2a8a 8a4ac8 b886f0 e6d0ff
+ramp blue        0a1a4a 1a3a9a 2a66e0 6aa4ff c8e0ff
+ramp cyan        0a3040 167a96 2ac0d8 7aeaf0 d8ffff
+ramp green       06301a 0e6a3a 1ea85a 4ee08a b8ffd8
+ramp yellow      4a3a08 a08010 e8c020 ffe85a fffac0
+ramp orange      4a1e06 a04a10 e8801e ffb04a ffe0a0
+ramp white       4a4a58 9a9aaa d0d0dc f0f0f6 ffffff
+ramp black       0a0a10 1e1e28 34343e 4e4e5a 7a7a88
+ramp glass       3a4a5a 7a96b0 b0cce0 dcecf6 ffffff
+ramp brown       2a1608 5a3214 8a5428 b8803e e0b070
+ramp meat        3a0e0a 8a2a1e c8503a f08a6a ffc8b0
+ramp cooked      2e1408 6a2e10 a85820 d88a3a f8c070
+ramp bread       3a2008 8a5018 c8842e eab45a fde4a8
+ramp cheese      4a3006 b07a10 e8b42a ffd85a fff4b0
+ramp fur         2a2a2e 5a5a62 8a8a94 b4b4be dcdce4
+ramp darkfur     140e0a 2e221a 4a3828 6a5240 927a62
+ramp diamond     3a4a60 8aa6c8 c8dcf0 eef6ff ffffff
+ramp amber       4a2406 a05a0e e09a1e ffc84a fff0b0
+ramp ecto        0a3a3a 2a8a8a 5ad0c8 a0f8ec e8fffc
+ramp coal        08080c 18181e 2a2a32 42424c 6a6a78
+ramp rot         1e200a 4a4a14 6e6e24 98963a c8c46a
+ramp flesh       3a1418 7a2e34 b0505a d8808a f8b8c0
+ramp moss        142a0a 2e5014 4a7a24 72a83a a8d468
+ramp venom       1a3008 3e6a10 6ea81e a8e03a e4ff9a
+ramp silk        5a5a6a a0a0b4 d4d4e4 f0f0fa ffffff
+ramp feather     5a5048 a89a8a dcd0c0 f4ecdc ffffff
+ramp shell       3a2410 7a5020 b08038 d8b060 f4e0a0
+
+# ---------------------------------------------------------------- templates
+# Raw materials --------------------------------------------------------------
+template bar
+........
+........
+........
+........
+........
+........
+....4w44
+...44333
+..433333
+.3222222
+.2222222
+.2222222
+.1222222
+.1111111
+........
+........
+end
+
+template ore flat - stone
+........
+........
+........
+.......c
+.....ccd
+...bccdd
+..bbc23c
+.bbcc34c
+.abbcc2c
+.ab23bcb
+.ab342bb
+.aab2bba
+..aabbaa
+....aaaa
+........
+........
+end
+
+template lump
+........
+........
+........
+........
+.....233
+...22334
+..223344
+..2333w4
+.1223333
+.1222333
+.1222222
+..112222
+...11111
+........
+........
+........
+end
+
+template gem
+........
+........
+........
+........
+....3344
+...34w44
+..233444
+..223344
+..122333
+...12233
+....1222
+.....122
+......12
+.......1
+........
+........
+end
+
+template shard
+........
+.......4
+......43
+......43
+.....342
+.....342
+....3w42
+....3442
+....3342
+....2342
+....2232
+.....222
+......21
+.......1
+........
+........
+end
+
+template orb
+........
+........
+.....122
+...12233
+..122334
+..12334w
+.1223344
+.1223334
+.1222333
+.1122222
+..112222
+..111122
+...11111
+.....111
+........
+........
+end
+
+template coin flat
+........
+........
+........
+.....333
+...33444
+..344222
+..342223
+.3422334
+.3422334
+.3422223
+.2422222
+..242222
+..222211
+...11111
+........
+........
+end
+
+template stick
+........
+.......3
+.......3
+.......3
+.......3
+......33
+.......3
+.......3
+.......3
+.......3
+.......3
+.......3
+.......3
+.......3
+.......2
+........
+end
+
+template log flat wood brown
+........
+........
+........
+........
+..aaaaaa
+.abbbbbb
+.bbccccc
+.bc22222
+.bc23332
+.bc23w32
+.bc22222
+.bbccccc
+.abbbbbb
+..aaaaaa
+........
+........
+end
+
+template leather
+........
+........
+........
+..2.....
+..322222
+..333333
+...33333
+...32322
+...22222
+...22222
+..222222
+..212222
+..1.1111
+........
+........
+........
+end
+
+template blob
+........
+........
+........
+........
+........
+......22
+....2233
+...22334
+..223w44
+..223344
+.1223333
+.1222333
+.1122222
+..111111
+........
+........
+end
+
+template dust
+........
+........
+........
+..4.....
+.4w4....
+..4.....
+........
+........
+......44
+.....344
+....3w44
+...33444
+..333333
+.2233333
+.1111111
+........
+end
+
+template skein - wood
+........
+........
+........
+........
+...3333.
+..343434
+.3434343
+.3434343
+.2323232
+.2323232
+.1212121
+..121212
+...1111.
+........
+........
+........
+end
+
+template web flat
+........
+.1......
+..1.....
+...1...1
+...21.1.
+.1..212.
+..1.1.21
+...12.12
+...21.12
+..1.1.21
+.1..212.
+...21.1.
+...1...1
+..1.....
+.1......
+........
+end
+
+template cloth - wood
+........
+........
+........
+........
+.3333333
+.4444444
+.3333333
+.2222222
+.3333333
+.2222222
+.1111111
+...abbbb
+...abbbb
+........
+........
+........
+end
+
+template rope
+........
+........
+........
+....3434
+..343434
+.3434343
+.34343..
+.3434...
+.2323...
+.23232..
+.2323232
+..232323
+...12121
+........
+........
+........
+end
+
+template chain flat
+........
+........
+.....22.
+....2..2
+....2..2
+.....22.
+......2.
+.....22.
+....2..2
+....2..2
+.....22.
+......2.
+.....22.
+....2..2
+.....22.
+........
+end
+
+template crown flat gold red
+........
+........
+........
+.......4
+.4.....4
+.4....43
+.43..433
+.433.433
+.4333333
+.3333333
+.2c22c22
+.2222222
+.1111111
+........
+........
+........
+end
+
+template herb flat leaf wood
+........
+.......3
+......34
+......43
+...3..43
+..344.32
+..4322.2
+...33222
+.....2.2
+...3..22
+..3442.2
+..23322.
+....122.
+.......b
+.......b
+........
+end
+
+# Creature parts ---------------------------------------------------------------
+template feather
+........
+.......4
+......34
+......34
+.....343
+.....343
+....3434
+....3432
+....3432
+....2421
+.....221
+.......2
+.......2
+.......2
+.......1
+........
+end
+
+template bone flat
+........
+........
+..33....
+.3443...
+.34433..
+..3333..
+....332.
+.....332
+......32
+......32
+.....332
+....332.
+..3332..
+.32222..
+.2212...
+..11....
+end
+
+template fang
+........
+........
+........
+...33333
+...34444
+...34w44
+...33444
+....3444
+....3344
+.....334
+.....334
+......33
+......32
+.......2
+........
+........
+end
+
+template claw flat
+........
+........
+........
+.2......
+.32.....
+.332....
+..332...
+..3432..
+...3432.
+...34432
+...34442
+....3w42
+....3442
+.....22.
+........
+........
+end
+
+template scale
+........
+........
+........
+.......4
+.....443
+....4433
+...43333
+...32233
+..332223
+..322223
+..322222
+...22221
+....2211
+.....11.
+........
+........
+end
+
+template pelt
+........
+........
+.3......
+.33.....
+..332222
+..333333
+...33333
+...33233
+...32333
+...33333
+...33323
+..333333
+.333.333
+.3...3..
+........
+........
+end
+
+template wool
+........
+........
+........
+......44
+...444w4
+..44w444
+.3444444
+.3344443
+.3333333
+.2333333
+..222222
+...22.22
+........
+........
+........
+........
+end
+
+template sac flat - leaf
+........
+........
+.....aa.
+......a.
+......b.
+.....222
+....2333
+...23334
+..233w44
+..233444
+..233344
+..223333
+...22233
+....2222
+.....111
+........
+end
+
+template stinger
+........
+........
+...22222
+..233333
+..234444
+...34w44
+...33444
+....3344
+....3344
+.....334
+.....334
+......33
+.......3
+.......2
+........
+........
+end
+
+template shell
+........
+........
+........
+.....444
+...44333
+..443434
+..434343
+.4343434
+.3434343
+.3333333
+.2323232
+..222222
+...11111
+........
+........
+........
+end
+
+template horns flat
+........
+.3......
+.4......
+.43.....
+.43.....
+.343....
+.3343...
+..3343..
+...3333.
+....3332
+.....222
+........
+........
+........
+........
+........
+end
+
+template vertebra flat
+........
+........
+.......3
+......43
+..33.433
+.344.433
+.3343433
+..334333
+...33333
+..334333
+.3343433
+.344.433
+..33.433
+......43
+.......3
+........
+end
+
+template eye flat - white
+........
+........
+........
+.....aaa
+...abcdd
+..abccc1
+..abcc12
+..bcc122
+..bcc12w
+..bcc122
+..abcc12
+..abccc1
+...abcdd
+.....aaa
+........
+........
+end
+
+template wing
+........
+........
+.3......
+.43.....
+.443....
+.4443...
+.34443..
+.334443.
+.3334443
+.2333443
+.2.33343
+..2.2333
+....2.22
+......2.
+........
+........
+end
+
+# Food -------------------------------------------------------------------------
+template apple flat - wood leaf
+.......b
+.......b
+......ce
+.....eff
+...2333g
+..23w333
+.2234444
+.2333333
+.2333333
+.2233333
+.2223333
+.1222333
+..122222
+...11111
+........
+........
+end
+
+template berries flat - leaf
+........
+.......c
+......cd
+......c.
+.....233
+....23w4
+....2333
+..233322
+.23w4321
+.2333322
+.2233321
+..222211
+...11111
+........
+........
+........
+end
+
+template mushroom flat - bone
+........
+........
+........
+.....233
+...22w34
+..223343
+..234433
+.2234443
+.2333333
+.1222222
+..111111
+....abbc
+....abbc
+....abbc
+....aaaa
+........
+end
+
+template bread
+........
+........
+........
+........
+.....333
+...33344
+..334344
+..343433
+.3443433
+.3343434
+.2333333
+.2222222
+..111111
+........
+........
+........
+end
+
+template steak flat - bone
+........
+.....cc.
+.....ccc
+.......c
+.......c
+....2233
+...23344
+..23w444
+..233444
+.2233344
+.2233334
+.1223333
+..122223
+...11122
+........
+........
+end
+
+template cheese flat
+........
+........
+........
+........
+.......4
+.....444
+...44444
+..444444
+.3333333
+.3323332
+.3333333
+.3233323
+.2222222
+.1111111
+........
+........
+end
+
+template carrot flat - leaf
+.....c..
+....cd..
+.....cd.
+......c.
+.....333
+.....343
+.....332
+.....332
+......32
+......32
+......32
+......32
+.......2
+.......2
+.......1
+........
+end
+
+template egg
+........
+........
+........
+.....444
+....4w44
+...34444
+...33444
+..333344
+..333334
+..233333
+..223333
+...22233
+....1222
+.....111
+........
+........
+end
+
+template pie flat - cooked
+........
+........
+........
+........
+........
+.....cdd
+...ccdcc
+..cdc1cd
+.ccd1c1c
+.cdccdcc
+.aabbbbb
+.a222222
+..222222
+...11111
+........
+........
+end
+
+template bowl flat - wood
+........
+........
+........
+........
+........
+........
+...44w44
+..344444
+.2333332
+.aabbbbb
+.abbcccc
+..abbccc
+...aabbb
+.....aaa
+........
+........
+end
+
+template cookie flat
+........
+........
+........
+.....333
+...33344
+..333434
+..343343
+.3x33433
+.3334333
+.3433x33
+.2333333
+..222332
+..222222
+...11111
+........
+........
+end
+
+# Bottles --------------------------------------------------------------------------
+template flask flat - glass wood
+........
+.....fff
+.....fgg
+......bb
+......bc
+......bc
+.....bbc
+....bccd
+...bc111
+..bc2222
+..b23w44
+..b23444
+..b22333
+...12222
+....1111
+........
+end
+
+# Life and magic ---------------------------------------------------------------
+template heart
+........
+........
+........
+..3333..
+.344433.
+.34w4433
+.3444333
+.3443332
+.2333322
+..233222
+...22222
+....2221
+.....221
+......11
+.......1
+........
+end
+
+template star
+........
+.......4
+.......4
+......44
+......43
+.3344w43
+..344443
+...34443
+....3443
+....3433
+...343.3
+...33..3
+...3....
+........
+........
+........
+end
+
+template soul
+........
+.......3
+......34
+.w....34
+.....343
+....3442
+...34w42
+...3w442
+..234442
+..234432
+..223332
+...22222
+...12221
+w...1111
+........
+........
+end
+
+template flower flat - leaf
+........
+........
+......3.
+....3344
+...33w43
+..33444w
+..344443
+...34433
+....3322
+.......b
+.......b
+....cc.b
+.....ccb
+.......b
+.......b
+........
+end
+
+# Armour and accessories ---------------------------------------------------------
+template helmet
+........
+....3333
+..334444
+.3344444
+.3444444
+.3444444
+.3444433
+.34xxxxx
+.3444333
+.344333x
+.334333x
+.233333x
+.2333322
+.222222.
+..1111..
+........
+end
+
+template greaves
+........
+........
+........
+..333333
+..244444
+..233333
+..233322
+..23332.
+..23332.
+..23332.
+..23332.
+..23332.
+.233332.
+.222222.
+.111111.
+........
+end
+
+template boots - leather
+........
+........
+........
+...aaaa.
+...3333.
+...3443.
+...3443.
+...3443.
+...3443.
+..33443.
+.344443.
+.344443.
+.233332.
+.111111.
+........
+........
+end
+
+template shield flat - gold
+........
+........
+.aaaaaaa
+.abbbbbb
+.ab23333
+.ab33333
+.ab33w33
+.ab33333
+.ab33333
+..ab3333
+..ab3333
+...ab333
+....ab33
+.....abb
+......aa
+........
+end
+
+template amulet flat gold red
+........
+.....2..
+....2...
+....2...
+...2....
+...2....
+....2...
+.....2..
+.....333
+....3433
+...34aab
+...3abcd
+...3abcc
+....3abb
+.....333
+........
+end
+
+template emblem flat gold red
+........
+........
+.4444444
+.4333333
+.43abbbb
+.43abccc
+.43abcdd
+.43abcdw
+.43abccc
+..3abbbb
+..43abbb
+...43abb
+....43ab
+.....433
+......33
+........
+end
+
+template cape - gold
+........
+........
+....1111
+...12222
+...2333c
+...34433
+..343443
+..343443
+.3433443
+.3433443
+.3433433
+.3423433
+.2422432
+.2322322
+.1.11.11
+........
+end
+
+template glove - leather
+........
+........
+........
+...3.3.3
+..343434
+..343434
+..343434
+..344444
+..344444
+.3444444
+.3444443
+..344433
+...22222
+...1aaaa
+...1bbbb
+........
+end
+
+template horseshoe flat
+........
+........
+........
+....3333
+...34444
+..344222
+..3422..
+.3442...
+.3432...
+.3432...
+.3432...
+.343....
+.333....
+.222....
+........
+........
+end
+
+# Keys, scrolls, books and bags ------------------------------------------------
+template key flat
+........
+.....333
+....3444
+....34..
+....34..
+....3444
+.....333
+.......3
+.......3
+.......3
+.......3233.....
+.......32.......
+.......3233.....
+.......32.......
+.......22.......
+........
+end
+
+template scroll flat paper wood
+........
+........
+..bbbbbb
+.bcccccc
+.ac44444
+..344444
+..344444
+..322222
+..344444
+..322222
+..344444
+..333333
+.bbbbbbb
+.bccccdd
+..aaaaaa
+........
+end
+
+template bag flat - gold
+........
+........
+........
+.....222
+.....233
+......aa
+.....bcc
+....3233
+...33444
+..334w44
+..344444
+..344443
+..333333
+...22222
+....1111
+........
+end
+
+template idol
+........
+........
+.....333
+....3444
+....3w44
+....x4x4
+....3444
+.....333
+....3444
+...33444
+...34444
+....3444
+...33333
+..333333
+..222222
+........
+end
+
+template hourglass flat - wood glass
+........
+........
+..aaaaaa
+..bbbbbb
+...ef...
+...eff..
+....ef22
+.....f22
+.....ef2
+....ef..
+...ef222
+...e2222
+..aaaaaa
+..bbbbbb
+........
+........
+end
+
+template bomb flat - black orange
+.......h
+......g.
+......f.
+.....aaa
+...aabbb
+..abbccd
+..abccdd
+.abbcccc
+.abbbccc
+.abbbbbc
+.aabbbbb
+..aabbbb
+...aaaaa
+.....aaa
+........
+........
+end
+
+template arrows flat - wood iron
+........
+.gg.....
+.gf.....
+...b....
+....b...
+.....b..
+......b.
+.......b
+.......b
+......b.
+.....b..
+....b...
+.33b....
+.333....
+..3.....
+........
+end
+
+template bullet - brown
+........
+........
+........
+........
+.......4
+......43
+......43
+......43
+.....aaa
+.....bcd
+.....bcd
+.....bcd
+.....bcd
+.....aaa
+........
+........
+end
+
+template lantern flat - black yellow
+........
+......aa
+.....a..
+......aa
+.....aaa
+....bbbb
+....aeff
+....aegh
+....aegh
+....aegh
+....aeff
+....bbbb
+.....aaa
+........
+........
+........
+end
+
+template cloud flat
+........
+........
+........
+........
+......44
+....4444
+...44w44
+..344444
+.3344444
+.3333333
+.2333333
+..222222
+........
+........
+........
+........
+end
+
+# ---------------------------------------------------------------- icons
+# The first twelve are the original pack picks, at their original places.
+pack bottle_empty    potions  1 0
+pack potion_red      potions  3 4
+pack potion_blue     potions 11 4
+pack armor_leather   armours  0 0
+pack armor_iron      armours  0 8
+pack chest_scroll    chests   5 0
+pack ingot_copper    cave     1 3
+pack ingot_iron      cave     2 3
+pack ingot_gold      cave     3 3
+pack ingot_mythril   cave     4 3
+pack crystal_void    cave     0 1
+pack gem_essence     cave     1 1
+
+# The two rings from the cave sheet.
+pack ring_spell          cave  4 1
+pack ring_battle         cave  5 1
+
+# --- Bars: the pack ingot recoloured, so every bar matches the first four.
+tint bar_tin             cave 2 3 tin
+tint bar_lead            cave 2 3 lead
+tint bar_silver          cave 2 3 silver
+tint bar_platinum        cave 2 3 platinum
+tint bar_cobalt          cave 2 3 cobalt
+tint bar_magma           cave 2 3 magma
+tint bar_void            cave 2 3 void
+tint bar_crimson         cave 2 3 crimson
+tint bar_corrupt         cave 2 3 corrupt
+tint bar_hallow          cave 2 3 hallow
+tint bar_frost           cave 2 3 frost
+
+# --- Ores
+icon ore_copper          ore copper
+icon ore_tin             ore tin
+icon ore_iron            ore iron
+icon ore_lead            ore lead
+icon ore_silver          ore silver
+icon ore_gold            ore gold
+icon ore_platinum        ore platinum
+icon ore_mythril         ore mythril
+icon ore_cobalt          ore cobalt
+icon ore_magma           ore magma
+icon ore_void            ore void
+icon ore_crimson         ore crimson
+icon ore_corrupt         ore corrupt
+icon ore_hallow          ore hallow
+icon ore_frost           ore frost
+icon coal                lump coal
+
+# --- Gems, crystals and orbs
+icon gem_ruby            gem red
+icon gem_sapphire        gem blue
+icon gem_emerald         gem green
+icon gem_topaz           gem amber
+icon gem_amethyst        gem purple
+icon gem_diamond         gem diamond
+icon amber               lump amber
+icon shard_frost         shard frost
+icon shard_magma         shard magma
+icon shard_hallow        shard hallow
+icon shard_crimson       shard crimson
+icon shard_corrupt       shard corrupt
+icon shard_mythril       shard mythril
+icon shard_ecto          shard ecto
+icon void_core           orb void
+icon orb_shadow          orb corrupt
+icon orb_crimson         orb crimson
+icon orb_light           orb yellow
+icon orb_frost           orb frost
+icon orb_magma           orb magma
+icon orb_nature          orb jungle
+icon orb_water           orb gel
+
+# --- Souls, life and mana
+icon soul_light          soul pink
+icon soul_night          soul purple
+icon soul_flight         soul cyan
+icon soul_might          soul blue
+icon soul_sight          soul green
+icon soul_fright         soul orange
+icon life_crystal        heart red
+icon heart_golden        heart gold
+icon life_fruit          apple gelgreen
+icon mana_crystal        star blue
+icon fallen_star         star yellow
+
+# --- Coins
+icon coin_copper         coin copper
+icon coin_silver         coin silver
+icon coin_gold           coin gold
+icon coin_platinum       coin platinum
+
+# --- Materials
+icon wood                log
+icon stick               stick wood
+icon leather             pelt leather
+icon herb                herb
+icon gel                 blob gel
+icon gel_green           blob gelgreen
+icon gel_pink            blob pink
+icon gel_purple          blob purple
+icon ectoplasm           blob ecto
+icon string              skein silk
+icon silk                cloth white
+icon cloth_red           cloth red
+icon cloth_purple        cloth purple
+icon cloth_blue          cloth blue
+icon cobweb              web silk
+icon rope                rope brown
+icon chain               chain iron
+icon feather             feather feather
+icon feather_red         feather crimson
+icon feather_black       feather black
+icon feather_harpy       feather cobalt
+icon bone                bone bone
+icon fang                fang bone
+icon claws               claw bone
+icon scale_green         scale green
+icon scale_red           scale red
+icon scale_blue          scale blue
+icon scale_gold          scale gold
+icon pelt                pelt fur
+icon pelt_dark           pelt darkfur
+icon pelt_snow           pelt white
+icon wool                wool white
+icon venom_sac           sac venom
+icon blood_sac           sac crimson leather
+icon stinger             stinger venom
+icon lens                eye red
+icon lens_black          eye black
+icon lens_void           eye void
+icon shell_turtle        shell shell
+icon shell_crab          shell red
+icon horns               horns bone
+icon horns_dark          horns darkfur
+icon vertebra            vertebra flesh
+icon rotten_chunk        lump rot
+icon flesh_chunk         lump flesh
+icon bat_wing            wing darkfur
+icon pixie_dust          dust pink
+icon spores              dust moss
+icon ancient_dust        dust sandstone
+icon ember_dust          dust magma
+icon frost_dust          dust frost
+icon mushroom_glowing    mushroom cyan
+
+# --- Herbs and flowers
+icon daybloom            flower yellow
+icon moonglow            flower cyan
+icon blinkroot           flower orange
+icon deathweed           flower corrupt
+icon waterleaf           flower blue
+icon fireblossom         flower magma
+icon shiverthorn         flower frost
+icon crimbloom           flower crimson
+icon hallowlily          flower hallow
+
+# --- Food
+icon apple               apple red
+icon apple_golden        apple gold
+icon berries             berries purple
+icon cherries            berries red
+icon mushroom            mushroom red
+icon bread               bread bread
+icon meat_raw            steak meat
+icon meat_cooked         steak cooked
+icon cheese              cheese cheese
+icon carrot              carrot orange
+icon egg                 egg white
+icon pie_berry           pie purple
+icon pie_apple           pie red
+icon stew                bowl orange
+icon soup                bowl green
+icon cookie              cookie bread
+
+# --- Bottled liquids
+icon bottle_water        flask gel
+icon flask_venom         flask venom
+icon flask_ichor         flask yellow
+icon flask_cursed        flask gelgreen
+icon flask_blood         flask crimson
+icon flask_ecto          flask ecto
+icon cloud_in_bottle     flask white
+icon cloud               cloud white
+
+# --- Potions: pack art (column = colour, row = bottle shape)
+pack potion_healing_lesser   potions  3 13
+pack potion_healing_greater  potions  3 10
+pack potion_healing_super    potions 18  7
+pack potion_mana_lesser      potions 12 13
+pack potion_mana_greater     potions 12 10
+pack potion_regeneration     potions 16  4
+pack potion_swiftness        potions  7  4
+pack potion_ironskin         potions 19  6
+pack potion_strength         potions  4  4
+pack potion_shine            potions  6  4
+pack potion_featherfall      potions 20  4
+pack potion_obsidian_skin    potions  2 10
+pack potion_gills            potions  9  4
+pack potion_thorns           potions  8  6
+pack potion_endurance        potions 13  6
+pack potion_lifeforce        potions 17 10
+pack potion_invisibility     potions  1 12
+pack potion_spelunker        potions  6 11
+pack potion_night_owl        potions 10  8
+pack potion_wrath            potions 18  4
+pack potion_rage             potions  5 12
+pack potion_luck             potions  8 10
+pack potion_warmth           potions  5  4
+pack potion_magic_power      potions 14  4
+pack potion_mana_regen       potions 11  6
+pack potion_summoning        potions 15  4
+pack potion_battle           potions  3  7
+pack potion_calming          potions 11 13
+pack potion_hunter           potions  4 13
+pack honey_bottle            potions  6 12
+
+# --- Drinks: pack art
+pack drink_ale               consumables  5  0
+pack drink_milk              consumables 20 13
+pack drink_tea               consumables  8 14
+pack drink_juice             consumables  4 13
+pack drink_soda              consumables  7  4
+pack drink_wine              consumables 25 11
+
+# --- Tomes: pack art
+pack tome_fire               books  3 3
+pack tome_frost              books 10 3
+pack tome_nature             books  8 3
+pack tome_arcane             books 11 3
+pack tome_shadow             books  1 3
+pack tome_lightning          books  6 3
+pack tome_water              books  9 3
+pack tome_holy               books  6 8
+pack tome_blood              books 13 8
+pack tome_void               books 12 8
+
+# --- Loot crates: pack art
+pack crate_wood              chests 0 0
+pack crate_iron              chests 2 4
+pack crate_gold              chests 4 3
+pack crate_frost             chests 6 2
+pack crate_crimson           chests 6 3
+
+# --- Chest armour: pack art, and the iron chestplate recoloured
+pack armor_cloth             armours 0  1
+pack armor_bronze            armours 0  2
+pack armor_mage              armours 0  4
+pack armor_copper            armours 0 11
+pack armor_silver            armours 0 13
+pack armor_gold              armours 0 15
+pack armor_emerald           armours 0 17
+pack armor_jade              armours 0 18
+tint armor_platinum          armours 0 8 platinum
+tint armor_mythril           armours 0 8 mythril
+tint armor_cobalt            armours 0 8 cobalt
+tint armor_magma             armours 0 8 magma
+tint armor_void              armours 0 8 void
+tint armor_crimson           armours 0 8 crimson
+tint armor_corrupt           armours 0 8 corrupt
+tint armor_hallow            armours 0 8 hallow
+tint armor_frost             armours 0 8 frost
+
+# --- Helmets and greaves for every armour material
+icon helmet_leather      helmet leather
+icon helmet_copper       helmet copper
+icon helmet_iron         helmet iron
+icon helmet_silver       helmet silver
+icon helmet_gold         helmet gold
+icon helmet_platinum     helmet platinum
+icon helmet_mythril      helmet mythril
+icon helmet_cobalt       helmet cobalt
+icon helmet_magma        helmet magma
+icon helmet_void         helmet void
+icon helmet_crimson      helmet crimson
+icon helmet_corrupt      helmet corrupt
+icon helmet_hallow       helmet hallow
+icon helmet_frost        helmet frost
+icon greaves_leather     greaves leather
+icon greaves_copper      greaves copper
+icon greaves_iron        greaves iron
+icon greaves_silver      greaves silver
+icon greaves_gold        greaves gold
+icon greaves_platinum    greaves platinum
+icon greaves_mythril     greaves mythril
+icon greaves_cobalt      greaves cobalt
+icon greaves_magma       greaves magma
+icon greaves_void        greaves void
+icon greaves_crimson     greaves crimson
+icon greaves_corrupt     greaves corrupt
+icon greaves_hallow      greaves hallow
+icon greaves_frost       greaves frost
+
+# --- Accessories
+tint ring_regeneration   cave 4 1 crimson
+tint ring_mana           cave 4 1 cobalt
+tint ring_gold           cave 4 1 gold
+tint ring_void           cave 4 1 void
+tint ring_nature         cave 4 1 jungle
+tint ring_frost          cave 4 1 frost
+icon amulet_vitality     amulet gold red
+icon amulet_mana         amulet silver blue
+icon amulet_void         amulet void purple
+icon amulet_frost        amulet silver cyan
+icon amulet_nature       amulet gold green
+icon emblem_warrior      emblem gold red
+icon emblem_ranger       emblem gold green
+icon emblem_sorcerer     emblem gold purple
+icon emblem_summoner     emblem gold cyan
+icon emblem_avenger      emblem silver orange
+icon boots_leather       boots leather brown
+icon boots_speed         boots cyan white
+icon boots_lava          boots magma darkstone
+icon boots_frost         boots frost silver
+icon boots_rocket        boots red iron
+icon boots_gold          boots gold brown
+icon shield_wood         shield wood iron
+icon shield_iron         shield iron gold
+icon shield_cobalt       shield cobalt silver
+icon shield_obsidian     shield black magma
+icon shield_holy         shield hallow gold
+icon shield_crimson      shield crimson gold
+icon cape_red            cape red
+icon cape_purple         cape purple
+icon cape_blue           cape blue
+icon cape_black          cape black
+icon cape_green          cape jungle
+icon wings_bat           wing darkfur
+icon wings_angel         wing white
+icon wings_fairy         wing hallow
+icon wings_flame         wing magma
+icon wings_frost         wing frost
+icon wings_demon         wing crimson
+icon wings_leaf          wing jungle
+icon glove_power         glove red
+icon glove_feral         glove leather brown
+icon glove_titan         glove iron leather
+icon glove_gold          glove gold leather
+icon horseshoe_lucky     horseshoe gold
+icon horseshoe_iron      horseshoe iron
+
+# --- Keys
+icon key_gold            key gold
+icon key_iron            key iron
+icon key_shadow          key void
+icon key_crimson         key crimson
+icon key_hallow          key hallow
+icon key_frost           key frost
+icon key_jungle          key jungle
+icon key_desert          key sandstone
+icon key_bone            key bone
+
+# --- Boss summons and treasure bags
+icon slime_crown         crown gold gel
+icon suspicious_eye      eye crimson
+icon idol_gold           idol gold
+icon idol_blood          idol crimson
+icon idol_void           idol void
+icon idol_frost          idol frost
+icon sigil_signus        emblem void purple
+icon bag_slime           bag gel
+icon bag_eye             bag crimson
+icon bag_worm            bag rot
+icon bag_signus          bag void
+icon bag_emperor         bag gold
+icon bag_coins           bag leather
+
+# --- Odds and ends
+icon scroll              scroll
+icon scroll_arcane       scroll paper purple
+icon hourglass           hourglass sandstone
+icon bomb                bomb
+icon arrows              arrows feather
+icon arrows_flame        arrows magma
+icon arrows_frost        arrows frost
+icon arrows_holy         arrows hallow
+icon bullet              bullet gold
+icon bullet_silver       bullet silver
+icon lantern             lantern

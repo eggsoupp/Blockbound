@@ -976,6 +976,9 @@
         },
         "CatMagician": {
           "$path": "src/ServerScriptService/Creatures/CatMagician.lua"
+        },
+        "GoatShaman": {
+          "$path": "src/ServerScriptService/Creatures/GoatShaman.lua"
         }
       },
       "BossService": {

@@ -226,6 +226,14 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.3, min = 1, max = 2 },
 	},
 
+	-- A shaman's bag: snow, mana and herbs, and sometimes the magic material.
+	GoatShaman = {
+		{ item = "Snow", chance = 0.6, min = 1, max = 3 },
+		{ item = "ManaPotion", chance = 0.3, min = 1, max = 1 },
+		{ item = "Herb", chance = 0.4, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

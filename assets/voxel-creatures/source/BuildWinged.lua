@@ -134,6 +134,18 @@ Build.Split = {
 		if cx > 45 then return "RightArm" end
 		return "Body"
 	end,
+	-- A robed goat with its staff held level in the right hand: the staff and
+	-- its orb are colours 12-13; head and horns above row 50; arms outside
+	-- x 34-62; legs below row 18.
+	GoatShaman = function(x, y, _z, w, h, _d, c)
+		local cx = x + w / 2
+		if c >= 12 then return "Staff" end
+		if y >= 50 then return "Head" end
+		if y + h <= 18 then return if cx < 48 then "LeftLeg" else "RightLeg" end
+		if cx < 34 then return "LeftArm" end
+		if cx > 62 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

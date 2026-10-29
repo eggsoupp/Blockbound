@@ -1143,6 +1143,57 @@ function handlers.poof(position: Vector3)
 	Kit.sound(host, SOUND_HIT, 0.4, 2.4)
 end
 
+-- ---------------------------------------------------------------------------
+-- Goat Shaman
+-- ---------------------------------------------------------------------------
+
+local blizzards = {}
+
+--[[
+	The blizzard: snow driven down over the whole circle from an invisible
+	host spread flat above it, and flakes and drift swirling at the ground,
+	until "blizzardend" or `seconds` run out.
+]]
+function handlers.blizzard(id: string, center: Vector3, radius: number, seconds: number)
+	local sky = Kit.host(folder, "Blizzard", CFrame.new(center + Vector3.new(0, 11, 0)))
+	sky.Size = Vector3.new(radius * 2, 0.2, radius * 2)
+	local snow = emitter("Puff", sky, {
+		Enabled = true, Rate = 70, Color = ColorSequence.new(SNOW), Size = NumberSequence.new(0.5),
+		Speed = NumberRange.new(12, 16), EmissionDirection = Enum.NormalId.Bottom,
+		SpreadAngle = Vector2.new(15, 15), Lifetime = NumberRange.new(0.8, 1), LockedToPart = false,
+	})
+	local ground = Kit.host(folder, "BlizzardDrift", CFrame.new(center + Vector3.new(0, 0.6, 0)))
+	ground.Size = Vector3.new(radius * 2, 0.2, radius * 2)
+	local drift = emitter("Puff", ground, {
+		Enabled = true, Rate = 18, Color = ColorSequence.new(Color3.fromRGB(220, 235, 250)), Size = NumberSequence.new(2.4),
+		Speed = NumberRange.new(3, 6), EmissionDirection = Enum.NormalId.Top, SpreadAngle = Vector2.new(80, 80),
+		LockedToPart = false,
+	})
+	local flakes = emitter("Glints", ground, {
+		Enabled = true, Rate = 25, Color = ColorSequence.new(Color3.fromRGB(200, 235, 255)), Size = NumberSequence.new(0.6),
+		LockedToPart = false,
+	})
+	local storm = { sky = sky, ground = ground, emitters = { snow, drift, flakes } }
+	blizzards[id] = storm
+	Kit.sound(ground, SOUND_HIT, 0.4, 0.3)
+	task.delay(seconds + 0.5, function()
+		if blizzards[id] == storm then
+			handlers.blizzardend(id)
+		end
+	end)
+end
+
+function handlers.blizzardend(id: string)
+	local storm = blizzards[id]
+	if not storm then
+		return
+	end
+	blizzards[id] = nil
+	stopEmitters(storm.emitters)
+	Debris:AddItem(storm.sky, 2)
+	Debris:AddItem(storm.ground, 2.5)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

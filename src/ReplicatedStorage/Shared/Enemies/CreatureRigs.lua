@@ -806,4 +806,60 @@ Rigs.CatMagician = {
 	end,
 }
 
+--[[
+	GOAT SHAMAN. A robed goat with a long staff held level in its right hand,
+	an orange orb at the tip. It shuffles, the staff bobbing. Its moves:
+	  lob    the staff swung up and forward, flinging the orb's fire
+	  chant  the staff raised upright and shaken, head thrown back, the other
+	         arm up - calling the blizzard, and held as long as it lasts
+	  jab    the staff thrust straight forward
+	The staff's hinge is the right fist: +pitch tips its tip (forward, -Z)
+	upward.
+]]
+Rigs.GoatShaman = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.2 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.35 * moving
+		local left = CFrame.Angles(-step * 0.5, 0, -0.05)
+		local right = CFrame.Angles(0.1, 0, 0.05)
+		local staff = CFrame.Angles(math.sin(s * 2) * 0.05 * moving, 0, 0)
+		local head = CFrame.Angles(math.sin(ctx.t * 1.1) * 0.06, math.sin(ctx.t * 0.6) * 0.2, 0)
+
+		if ctx.pose == "lob" then
+			local up = math.min(1, b * 2)
+			local fling = math.clamp(b * 2 - 0.8, 0, 1)
+			right = CFrame.Angles(0.6 * up + 0.5 * fling, 0, 0)
+			staff = CFrame.Angles(0.9 * up - 0.6 * fling, 0, 0)
+			head = CFrame.Angles(-0.15 * up, 0, 0)
+		elseif ctx.pose == "chant" then
+			local k = math.min(1, b * 2.5)
+			local shake = math.sin(ctx.t * 18) * 0.06
+			right = CFrame.Angles(0.9 * k + shake, 0, 0.15 * k)
+			staff = CFrame.Angles(1.45 * k, 0, shake)
+			left = CFrame.Angles(1.6 * k, 0, -0.5 * k)
+			head = CFrame.Angles(-0.45 * k, math.sin(ctx.t * 4) * 0.15, 0)
+		elseif ctx.pose == "jab" then
+			local k = math.sin(math.min(1, b * 1.6) * math.pi)
+			right = CFrame.Angles(0.5 * k, 0, 0)
+			staff = CFrame.Angles(-0.2 * k, 0, 0) * CFrame.new(0, 0, -0.8 * k)
+		end
+
+		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-step, 0, 0)
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Staff.Transform = staff
+		j.Head.Transform = head
+	end,
+}
+
 return Rigs

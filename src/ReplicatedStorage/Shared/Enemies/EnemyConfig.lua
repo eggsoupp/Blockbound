@@ -1531,6 +1531,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		GOAT SHAMAN - the Snow's weather-worker: lobs fire orbs from range and
+		calls a blizzard down where you stand, chanting while it lasts; hit it
+		hard enough and the chant breaks (ServerScriptService.Creatures.
+		GoatShaman; its rig is Shared.Enemies.CreatureRigs.GoatShaman).
+	]]
+	GoatShaman = {
+		asset = "GoatShaman",
+		displayName = "Goat Shaman",
+		health = 75,
+		movement = "Hop",
+		trait = "GoatShaman",
+
+		spawnBiomes = { "Snow" },
+		spawnWeight = 0.6,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 6,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3.2,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 9,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 36,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 9,
+		lungeWindup = 0.5,
+		lungeDamage = 4,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(150, 70, 50),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -1677,7 +1728,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman",
 }
 
 --[[

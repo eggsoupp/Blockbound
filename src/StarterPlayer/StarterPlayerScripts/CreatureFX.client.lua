@@ -694,6 +694,51 @@ function handlers.slam(position: Vector3, radius: number)
 end
 
 -- ---------------------------------------------------------------------------
+-- Bearid Wizard
+-- ---------------------------------------------------------------------------
+
+local FROST = Color3.fromRGB(175, 225, 255)
+
+-- A frost circle: a ring of ice glints on the ground, brightening until it erupts.
+function handlers.frostmark(point: Vector3, radius: number, delay: number)
+	local hosts = {}
+	for i = 0, 11 do
+		local angle = i / 12 * math.pi * 2
+		local host = Kit.host(folder, "FrostMark", CFrame.new(point + Vector3.new(math.cos(angle) * radius, 0.3, math.sin(angle) * radius)))
+		emitter("Glints", host, {
+			Enabled = true, Rate = 6, Color = ColorSequence.new(FROST), Size = NumberSequence.new(0.7),
+			Lifetime = NumberRange.new(0.4), LockedToPart = true,
+		})
+		table.insert(hosts, host)
+	end
+	local centre = Kit.host(folder, "FrostCentre", CFrame.new(point + Vector3.new(0, 0.3, 0)))
+	local mist = emitter("Puff", centre, {
+		Enabled = true, Rate = 6, Color = ColorSequence.new(FROST), Size = NumberSequence.new(radius * 0.8, radius * 1.2),
+		Lifetime = NumberRange.new(0.6), Transparency = NumberSequence.new(0.6, 1), Speed = NumberRange.new(0.2, 0.6),
+		LockedToPart = true,
+	})
+	local glow = light(centre, FROST, radius * 2.5, 0)
+	during(delay, function(elapsed)
+		glow.Brightness = 3 * (elapsed / delay)
+		mist.Rate = 6 + 14 * (elapsed / delay)
+	end, function()
+		for _, host in ipairs(hosts) do host:Destroy() end
+		centre:Destroy()
+	end)
+end
+
+-- The eruption: ice shards thrown up out of the circle.
+function handlers.frostspike(point: Vector3, radius: number)
+	local host = burst(point + Vector3.new(0, 0.5, 0), {
+		{ "Glints", 16, { Color = ColorSequence.new(FROST), Size = NumberSequence.new(1.2), Speed = NumberRange.new(10, 18), EmissionDirection = Enum.NormalId.Top, SpreadAngle = Vector2.new(25, 25), Acceleration = Vector3.new(0, -30, 0), Lifetime = NumberRange.new(0.8) } },
+		{ "Slash", 1, { Color = ColorSequence.new(Color3.fromRGB(230, 245, 255)), Size = NumberSequence.new(radius * 2), LockedToPart = false } },
+		{ "Puff", 5, { Color = ColorSequence.new(Color3.fromRGB(235, 245, 255)), Size = NumberSequence.new(2.4), Speed = NumberRange.new(3, 6), SpreadAngle = Vector2.new(70, 70) } },
+		{ "BoomSparks", 10, { Color = ColorSequence.new(FROST), Speed = NumberRange.new(20, 30), Acceleration = Vector3.new(0, -40, 0) } },
+	}, 2)
+	Kit.sound(host, SOUND_HIT, 0.5, 1.5)
+end
+
+-- ---------------------------------------------------------------------------
 -- Rabbic Cleric
 -- ---------------------------------------------------------------------------
 

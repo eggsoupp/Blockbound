@@ -134,6 +134,57 @@ Rigs.EvilRat = {
 }
 
 --[[
+	BEARID WIZARD. A heavy, robed bear: a short-stepping waddle with the
+	head rolling side to side, arms swinging a little. Its moves:
+	  channel  staff (right arm) raised overhead, left paw lifted - the
+	           frost-spike tell
+	  slam     the staff driven down to set the spikes off
+	  bonk     the staff swung over and down at whoever is close
+	Arms and legs hang from their joints: positive pitch swings them forward
+	(far enough, up and over the head).
+]]
+Rigs.BearidWizard = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 4, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.4 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.35 * moving
+		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-step, 0, 0)
+
+		local left = CFrame.Angles(-step * 0.6 + math.sin(ctx.t * 1.2) * 0.04, 0, 0)
+		local right = CFrame.Angles(step * 0.4, 0, 0)
+		local head = CFrame.Angles(math.sin(ctx.t * 0.9) * 0.05, 0, math.sin(s) * 0.08 * moving)
+
+		if ctx.pose == "channel" then
+			right = right:Lerp(CFrame.Angles(2.7, 0, -0.15), b)
+			left = left:Lerp(CFrame.Angles(1.6 + math.sin(ctx.t * 9) * 0.06, 0, 0.35), b)
+			head = head:Lerp(CFrame.Angles(-0.3, 0, 0), b)
+		elseif ctx.pose == "slam" then
+			right = right:Lerp(CFrame.Angles(0.5, 0, 0), math.min(1, b * 2))
+			left = left:Lerp(CFrame.Angles(0.8, 0, 0.2), b)
+			head = head:Lerp(CFrame.Angles(0.25, 0, 0), b)
+		elseif ctx.pose == "bonk" then
+			-- Up for the first half, then over and down.
+			local raise = math.min(1, b * 2)
+			local fall = math.max(0, b * 2 - 1)
+			right = CFrame.Angles(0.2 + 2.3 * raise - 2.1 * fall, 0, 0)
+		end
+
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Head.Transform = head
+	end,
+}
+
+--[[
 	FOOTED PIRANHA. An upright fish on eight stubby legs that patter in two
 	alternating sets (L1, R2, L3, R4 against the rest), its tail fin
 	waggling side to side the whole time. Its moves:

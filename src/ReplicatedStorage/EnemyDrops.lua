@@ -181,6 +181,13 @@ EnemyDrops.Tables = {
 		{ item = "Herb", chance = 0.3, min = 1, max = 1 },
 	},
 
+	-- A bear's hide, and the mage's reagents.
+	BearidWizard = {
+		{ item = "Leather", chance = 1, min = 1, max = 3 },
+		{ item = "EssenceShard", chance = 0.3, min = 1, max = 2 },
+		{ item = "ManaPotion", chance = 0.1, min = 1, max = 1 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

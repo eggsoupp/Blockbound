@@ -69,6 +69,18 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
+	-- arm right of x 60, legs below row 9.
+	BearidWizard = function(x, y, _z, w, h)
+		local cx = x + w / 2
+		if cx < 30 then return "LeftArm" end
+		if cx > 60 then return "RightArm" end
+		if y >= 33 then return "Head" end
+		if y + h <= 9 then
+			return if cx < 45 then "LeftLeg" else "RightLeg"
+		end
+		return "Body"
+	end,
 	-- An upright fish: tail fin behind z 29, a lower jaw (front, below row
 	-- 13), and four short legs a side below row 8, in z bands.
 	FootedPiranha = function(x, y, z, w, h, d)

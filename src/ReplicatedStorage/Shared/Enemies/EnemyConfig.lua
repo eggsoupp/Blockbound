@@ -1220,6 +1220,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		A robed bear mage of the snow: holds the middle distance, raises its
+		staff and erupts frost spikes under and beside you, and bonks you with
+		the staff up close (see its trait). Tough and slow. The Hop numbers
+		are only for climbing a step.
+	]]
+	BearidWizard = {
+		asset = "BearidWizard",
+		displayName = "Bearid Wizard",
+		health = 100,
+		movement = "Hop",
+		trait = "BearidWizard",
+
+		spawnBiomes = { "Snow" },
+		spawnWeight = 0.7,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 5.5,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 40,
+
+		contactRange = 4,
+		contactDamage = 6,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 9,
+		groundedSeconds = 0.2,
+		windupSeconds = 0.15,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 36,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 9,
+		lungeWindup = 0.5,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(120, 80, 44),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1318,7 +1369,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard",
 }
 
 --[[

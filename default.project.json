@@ -958,6 +958,9 @@
         },
         "FootedPiranha": {
           "$path": "src/ServerScriptService/Creatures/FootedPiranha.lua"
+        },
+        "BearidWizard": {
+          "$path": "src/ServerScriptService/Creatures/BearidWizard.lua"
         }
       },
       "BossService": {

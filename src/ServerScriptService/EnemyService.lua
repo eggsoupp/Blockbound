@@ -765,8 +765,14 @@ end
 
 EnemyService.inSafeZone = inSafeZone
 
+--[[
+	A `passive` creature - an ordinary animal - goes after nobody until it is
+	hurt, and then only after whoever hurt it (EnemyService.damage records
+	them in entry.provokedBy).
+]]
 local function findTarget(entry, position)
 	local best, bestDistance = nil, entry.def.aggroRange
+	local passive = entry.def.passive
 
 	for _, player in ipairs(Players:GetPlayers()) do
 		local character = player.Character
@@ -775,6 +781,9 @@ local function findTarget(entry, position)
 
 		-- A wild enemy leaves anybody inside the spawn clearing alone.
 		if hrp and entry.wild and inSafeZone(hrp.Position) then
+			hrp = nil
+		end
+		if passive and not (entry.provokedBy and entry.provokedBy[player]) then
 			hrp = nil
 		end
 
@@ -1748,6 +1757,11 @@ function EnemyService.damage(model, amount, dealer)
 	if dealt > 0 and dealer then
 		entry.dealer = dealer
 	end
+	-- Even a parried or shrugged-off blow provokes an animal.
+	if typeof(dealer) == "Instance" and dealer:IsA("Player") then
+		entry.provokedBy = entry.provokedBy or {}
+		entry.provokedBy[dealer] = true
+	end
 
 	if entry.def.boss and dealt > 0 then
 		BossService.update(entry)
@@ -2264,6 +2278,18 @@ local function stepAll(dt)
 				entry.lastSeenPlayerAt = now
 			else
 				entry.chasing = nil
+			end
+		end
+
+		-- A passive animal that nobody has provoked is not "abandoned" while
+		-- somebody is about: it is just minding its own business.
+		if not target and entry.def.passive then
+			for _, player in ipairs(Players:GetPlayers()) do
+				local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+				if hrp and (hrp.Position - position).Magnitude <= entry.def.aggroRange then
+					entry.lastSeenPlayerAt = now
+					break
+				end
 			end
 		end
 

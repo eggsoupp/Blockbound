@@ -16,13 +16,32 @@
 	    ctx.dt     frame time
 	    ctx.speed  horizontal studs/second the creature is actually moving
 	    ctx.pose   the Pose attribute the server sets ("walk", "rear", ...)
-	    ctx.blend  0..1, how far into the current pose (eases each change)
+	    ctx.blend  0..1 over the pose's first 0.18s: a WEIGHT for easing a
+	               held pose in, never a clock for a move
+	    ctx.elapsed  seconds since the pose began: the clock for a timed move
+	               (see phases)
 
 	Walking is driven by real speed, so a creature that is pushed, knocked or
 	sliding steps at the pace it moves, and stands still when it does.
+
+	CreatureFX smooths every joint toward what animate sets, so a pose may
+	jump between frames - entering or leaving one - without the model doing.
 ]]
 
 local Rigs = {}
+
+--[[
+	How far into a timed attack a pose is, as two 0..1 phases: `wind` over the
+	first `windup` seconds (eased), then `hit` over the `strike` seconds after
+	it. `windup` is the trait's own wind-up, so the blow visibly lands at the
+	moment the damage does; `strike` is kept short, so it reads as a blow.
+]]
+local function phases(ctx, windup: number, strike: number): (number, number)
+	local elapsed = ctx.elapsed or ctx.blend * 0.18
+	local wind = math.clamp(elapsed / windup, 0, 1)
+	wind = wind * wind * (3 - 2 * wind)
+	return wind, math.clamp((elapsed - windup) / strike, 0, 1)
+end
 
 -- The direction from a joint's hinge to the middle of its part, in the
 -- body's frame, flattened: which way a leg reaches.
@@ -166,18 +185,23 @@ Rigs.PitDevil = {
 		local head = CFrame.Angles(0, math.sin(math.floor(ctx.t * 2.5) * 1.7) * 0.25, math.sin(ctx.t * 1.1) * 0.12)
 
 		if ctx.pose == "swing" then
-			-- Wound back for the first third, then the sweep round to the front.
-			local wind = math.min(1, b * 3)
-			local sweep = math.clamp(b * 1.5 - 0.5, 0, 1)
-			weapon = CFrame.Angles(0, -0.5 * wind * (1 - sweep) + 1.9 * sweep, 0.3 * (1 - sweep))
-			right = CFrame.Angles(0.5 * wind - 0.2 * sweep, 0, 0)
-			head = CFrame.Angles(0.1, 0.3 * sweep, 0)
+			-- Both hands on the shaft: the halberd hauled up overhead, level,
+			-- then chopped down in front. It rides the arms; turning it about
+			-- the right fist would only swing the shaft, the blade being right
+			-- there at the fist.
+			local wind, hit = phases(ctx, 0.26, 0.12)
+			local raise = 2.5 * wind - 1.7 * hit
+			right = CFrame.Angles(raise, 0, 0)
+			left = CFrame.Angles(raise, 0, -0.1 * wind)
+			weapon = CFrame.Angles(0, 0, -0.15 * wind * (1 - hit))
+			head = CFrame.Angles(-0.25 * wind + 0.35 * hit, 0, 0)
 		elseif ctx.pose == "throw" then
-			local back = math.min(1, b * 2)
-			local fling = math.max(0, b * 2 - 1)
-			right = CFrame.Angles(2.6 * back - 2.2 * fling, 0, 0)
-			left = CFrame.Angles(0.9 * back, 0, 0.3)
-			weapon = CFrame.Angles(0, 1.5 * back, 0)
+			-- The right arm cocked back over the shoulder and flung forward;
+			-- the fire spear leaves at the fling (Creatures.PitDevil).
+			local wind, hit = phases(ctx, 0.45, 0.12)
+			right = CFrame.Angles(2.6 * wind - 2.2 * hit, 0, 0.2 * wind)
+			left = CFrame.Angles(0.7 * wind - 0.3 * hit, 0, -0.3 * wind)
+			head = CFrame.Angles(-0.15 * wind + 0.2 * hit, 0, 0)
 		elseif ctx.pose == "blink" then
 			right = CFrame.Angles(0.4, 0, 0.4)
 			left = CFrame.Angles(0.4, 0, -0.4)
@@ -229,10 +253,10 @@ Rigs.BearidWizard = {
 			left = left:Lerp(CFrame.Angles(0.8, 0, 0.2), b)
 			head = head:Lerp(CFrame.Angles(0.25, 0, 0), b)
 		elseif ctx.pose == "bonk" then
-			-- Up for the first half, then over and down.
-			local raise = math.min(1, b * 2)
-			local fall = math.max(0, b * 2 - 1)
-			right = CFrame.Angles(0.2 + 2.3 * raise - 2.1 * fall, 0, 0)
+			-- Up over the shoulder through the wind-up, then over and down.
+			local wind, hit = phases(ctx, 0.32, 0.1)
+			right = CFrame.Angles(0.2 + 2.3 * wind - 2.1 * hit, 0, 0)
+			head = CFrame.Angles(-0.1 * wind + 0.2 * hit, 0, 0)
 		end
 
 		j.LeftArm.Transform = left
@@ -462,8 +486,9 @@ Rigs.Pentasaurus = {
 			fl, fr = -0.25 * b, 0.25 * b
 			bl, br = 0.15 * b, -0.15 * b
 		elseif ctx.pose == "gore" then
-			local k = math.sin(math.min(1, b * 1.3) * math.pi)
-			headPitch = -0.7 * k
+			-- Head dipped, then the horns tossed up through you.
+			local wind, hit = phases(ctx, 0.14, 0.1)
+			headPitch = 0.3 * wind - 1.0 * hit
 		end
 
 		local splay = if ctx.pose == "stunned" then 0.18 * b else 0
@@ -522,9 +547,10 @@ Rigs.Gorilla = {
 			right = right:Lerp(CFrame.Angles(0.9, 0, -0.2), b)
 			head = head:Lerp(CFrame.Angles(0.25, 0, 0), b)
 		elseif ctx.pose == "swipe" then
-			-- The right arm swung out and across.
-			local k = math.sin(math.min(1, b * 1.2) * math.pi)
-			right = right:Lerp(CFrame.Angles(1.2, -0.9, -1.1 + 1.6 * b), k)
+			-- The right arm drawn up and out to the side, then swung across.
+			local wind, hit = phases(ctx, 0.27, 0.12)
+			right = CFrame.Angles(1.2 * wind, -0.9 * wind + 1.3 * hit, -1.1 * wind + 1.8 * hit)
+			head = CFrame.Angles(0, -0.2 * wind + 0.3 * hit, 0)
 		end
 
 		j.LeftArm.Transform = left
@@ -586,9 +612,8 @@ Rigs.CrabMonster = {
 			clawR = clawR:Lerp(CFrame.Angles(0.5, 0.55, 0), k)
 			head = head:Lerp(CFrame.Angles(0.2, 0, 0), k)
 		elseif ctx.pose == "pinch" then
-			-- Thrown wide for the first half, then snapped shut in front.
-			local open = math.min(1, b * 2)
-			local snap = math.clamp(b * 4 - 2.4, 0, 1)
+			-- Thrown wide through the wind-up, then snapped shut in front.
+			local open, snap = phases(ctx, 0.5, 0.08)
 			armL = CFrame.Angles(0.4 + 0.4 * snap, 0, 0)
 			armR = CFrame.Angles(0.4 + 0.4 * snap, 0, 0)
 			clawL = CFrame.Angles(0.2, 0.8 * open - 1.1 * snap, 0)
@@ -666,9 +691,8 @@ Rigs.Longleg = {
 			br = CFrame.Angles(-0.7 + gallop, 0, 0)
 			head = CFrame.Angles(-0.3, 0, 0)
 		elseif ctx.pose == "strike" then
-			-- Reared up for the first half, lashed down through the second.
-			local rear = math.min(1, b * 2)
-			local lash = math.clamp(b * 2 - 1, 0, 1)
+			-- Reared up through the wind-up, then lashed down.
+			local rear, lash = phases(ctx, 0.42, 0.1)
 			head = CFrame.Angles(0.7 * rear - 1.3 * lash, 0, 0)
 			fl = CFrame.Angles(-0.2 * rear + 0.4 * lash, 0, 0)
 			fr = CFrame.Angles(-0.2 * rear + 0.4 * lash, 0, 0)
@@ -714,9 +738,8 @@ Rigs.OgreBrute = {
 		local head = CFrame.Angles(0, 0, math.sin(s) * 0.06 * moving)
 
 		if ctx.pose == "chop" then
-			-- Up for the first half, down hard through the second.
-			local up = math.min(1, b * 2)
-			local down = math.clamp(b * 3 - 1.6, 0, 1)
+			-- Hauled up overhead through the wind-up, then down hard.
+			local up, down = phases(ctx, 0.6, 0.12)
 			local raise = 2.8 * up - 2.3 * down
 			left = CFrame.Angles(raise, 0, 0.15 * up)
 			right = CFrame.Angles(raise, 0, -0.15 * up)
@@ -736,8 +759,7 @@ Rigs.OgreBrute = {
 			right = CFrame.Angles(-0.1, 0, -0.1)
 			head = CFrame.Angles(0.25, math.sin(ctx.t * 3) * 0.3, math.cos(ctx.t * 3) * 0.25)
 		elseif ctx.pose == "throw" then
-			local back = math.min(1, b * 2.5)
-			local fling = math.clamp(b * 2.5 - 1.2, 0, 1)
+			local back, fling = phases(ctx, 0.5, 0.12)
 			right = CFrame.Angles(2.7 * back - 2.0 * fling, 0, 0.3 * back)
 			left = CFrame.Angles(0.5 * back, 0, -0.2)
 			head = CFrame.Angles(-0.15 * back + 0.2 * fling, 0, 0)
@@ -784,10 +806,13 @@ Rigs.CatMagician = {
 		local tail = CFrame.Angles(math.sin(ctx.t * 2.2) * 0.15, 0, math.sin(ctx.t * 1.4 + s) * 0.35)
 
 		if ctx.pose == "cast" then
-			local flourish = math.sin(math.min(1, b * 1.6) * math.pi) * 0.5
-			right = CFrame.Angles(1.3 * math.min(1, b * 2) + flourish, 0, 0.1)
-			wand = CFrame.Angles(-0.3 * math.min(1, b * 2), flourish, 0)
-			head = CFrame.Angles(0.1, 0, 0)
+			-- The wand raised to point through the wind-up, then flicked
+			-- forward as the bolt leaves.
+			local wind, hit = phases(ctx, 0.4, 0.12)
+			local flourish = math.sin(hit * math.pi) * 0.4
+			right = CFrame.Angles(0.3 + 1.0 * wind + flourish, 0, 0.1)
+			wand = CFrame.Angles(-0.3 * wind + 0.5 * hit, 0, 0)
+			head = CFrame.Angles(0.1 * wind, 0, 0)
 		elseif ctx.pose == "trick" then
 			local k = math.min(1, b * 2)
 			left = CFrame.Angles(0.3 * k, 0, -2.2 * k)
@@ -835,11 +860,12 @@ Rigs.GoatShaman = {
 		local head = CFrame.Angles(math.sin(ctx.t * 1.1) * 0.06, math.sin(ctx.t * 0.6) * 0.2, 0)
 
 		if ctx.pose == "lob" then
-			local up = math.min(1, b * 2)
-			local fling = math.clamp(b * 2 - 0.8, 0, 1)
-			right = CFrame.Angles(0.6 * up + 0.5 * fling, 0, 0)
-			staff = CFrame.Angles(0.9 * up - 0.6 * fling, 0, 0)
-			head = CFrame.Angles(-0.15 * up, 0, 0)
+			-- The staff tipped up through the wind-up, then whipped forward
+			-- past level as the orb's fire is flung.
+			local up, fling = phases(ctx, 0.45, 0.14)
+			right = CFrame.Angles(0.7 * up - 0.2 * fling, 0, 0)
+			staff = CFrame.Angles(1.3 * up - 1.6 * fling, 0, 0)
+			head = CFrame.Angles(-0.15 * up + 0.15 * fling, 0, 0)
 		elseif ctx.pose == "chant" then
 			local k = math.min(1, b * 2.5)
 			local shake = math.sin(ctx.t * 18) * 0.06
@@ -848,9 +874,10 @@ Rigs.GoatShaman = {
 			left = CFrame.Angles(1.6 * k, 0, -0.5 * k)
 			head = CFrame.Angles(-0.45 * k, math.sin(ctx.t * 4) * 0.15, 0)
 		elseif ctx.pose == "jab" then
-			local k = math.sin(math.min(1, b * 1.6) * math.pi)
-			right = CFrame.Angles(0.5 * k, 0, 0)
-			staff = CFrame.Angles(-0.2 * k, 0, 0) * CFrame.new(0, 0, -0.8 * k)
+			-- Drawn back, then thrust straight out.
+			local wind, hit = phases(ctx, 0.22, 0.1)
+			right = CFrame.Angles(-0.25 * wind + 0.55 * hit, 0, 0)
+			staff = CFrame.new(0, 0, 0.5 * wind - 1.3 * hit)
 		end
 
 		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
@@ -865,8 +892,8 @@ Rigs.GoatShaman = {
 --[[
 	TIGER BLADEMASTER. A caped tiger whose crossed arms and crossed swords
 	are one piece, hinged at the chest. It stalks upright. Its moves:
-	  stance  the crossed blades raised high before its face, utterly still
-	          but for a slow breath - the counter stance
+	  stance  the crossed blades lifted level, an X held out across its chest,
+	          utterly still but for a slow breath - the counter stance
 	  crouch  low, blades drawn back, before a dash
 	  dash    leaning in, blades back
 	  slash   the crossed blades swept across, side to side
@@ -891,7 +918,9 @@ Rigs.TigerBlademaster = {
 
 		if ctx.pose == "stance" then
 			local k = math.min(1, b * 3)
-			blades = CFrame.Angles(0.75 * k + math.sin(ctx.t * 2) * 0.03, 0, 0)
+			-- Lifted level and held out, the crossed blades an X across its
+			-- chest.
+			blades = CFrame.new(0, 0.3 * k, -0.2 * k) * CFrame.Angles(1.5 * k + math.sin(ctx.t * 2) * 0.03, 0, 0)
 			head = CFrame.Angles(0.1 * k, 0, 0)
 			legL = CFrame.Angles(0.35 * k, 0, 0)
 			legR = CFrame.Angles(-0.35 * k, 0, 0)
@@ -908,10 +937,26 @@ Rigs.TigerBlademaster = {
 			legL = CFrame.Angles(stride, 0, 0)
 			legR = CFrame.Angles(-stride, 0, 0)
 		elseif ctx.pose == "slash" then
-			-- Two sweeps across in the pose's first second.
-			local sweep = math.sin(math.min(1, b) * math.pi * 2)
-			blades = CFrame.Angles(0.35, 1.1 * sweep, 0.3 * sweep)
-			head = CFrame.Angles(0, -0.3 * sweep, 0)
+			-- The crossed blades lifted level in front and drawn to its right,
+			-- swept across to the left (the first cut, at 0.25s), then back
+			-- across to the right (the second, at 0.55s) - Creatures.
+			-- TigerBlademaster's cutTimes.
+			local e = ctx.elapsed or 0
+			local lift = math.clamp(e / 0.15, 0, 1)
+			local yaw
+			if e < 0.17 then
+				yaw = -0.9 * lift
+			elseif e < 0.29 then
+				yaw = -0.9 + 1.9 * (e - 0.17) / 0.12
+			elseif e < 0.47 then
+				yaw = 1.0
+			elseif e < 0.59 then
+				yaw = 1.0 - 1.9 * (e - 0.47) / 0.12
+			else
+				yaw = -0.9
+			end
+			blades = CFrame.Angles(0, yaw, 0) * CFrame.Angles(1.35 * lift, 0, 0)
+			head = CFrame.Angles(0, yaw * 0.3, 0)
 		end
 
 		j.LeftLeg.Transform = legL
@@ -951,9 +996,10 @@ Rigs.ZombieRat = {
 		local tail = CFrame.Angles(-0.1, math.sin(ctx.t * 1.6 + s) * 0.35, 0)
 
 		if ctx.pose == "bite" then
-			local k = math.sin(math.min(1, b * 1.5) * math.pi)
-			head = CFrame.Angles(-0.6 * k, 0, 0)
-			paws = CFrame.Angles(0.9 * k, 0, 0)
+			-- Head pulled back, paws up, then lunged forward and down.
+			local wind, hit = phases(ctx, 0.27, 0.08)
+			head = CFrame.Angles(0.3 * wind - 0.9 * hit, 0, 0)
+			paws = CFrame.Angles(0.9 * wind, 0, 0)
 			pawsR = paws
 		elseif ctx.pose == "down" then
 			local twitch = if math.sin(ctx.t * 7) > 0.92 then 0.2 else 0
@@ -1003,14 +1049,12 @@ Rigs.LavaGolem = {
 		local head = CFrame.Angles(math.sin(ctx.t * 0.8) * 0.05, math.sin(ctx.t * 0.5) * 0.12, 0)
 
 		if ctx.pose == "slam" then
-			local up = math.min(1, b * 1.6)
-			local down = math.clamp(b * 4 - 3, 0, 1)
+			local up, down = phases(ctx, 0.85, 0.12)
 			left = CFrame.Angles(2.9 * up - 2.6 * down, 0, 0.25 * up)
 			right = CFrame.Angles(2.9 * up - 2.6 * down, 0, -0.25 * up)
 			head = CFrame.Angles(-0.2 * up + 0.35 * down, 0, 0)
 		elseif ctx.pose == "punch" then
-			local back = math.min(1, b * 2)
-			local throw = math.clamp(b * 3 - 1.6, 0, 1)
+			local back, throw = phases(ctx, 0.5, 0.1)
 			right = CFrame.Angles(-0.6 * back + 2.1 * throw, 0, 0)
 			left = CFrame.Angles(0.3 * back, 0, -0.1)
 			head = CFrame.Angles(0.1 * throw, 0, 0)
@@ -1063,15 +1107,14 @@ Rigs.BatMutant = {
 			left = CFrame.Angles(0.3, 0, -1.2)
 			right = CFrame.Angles(0.3, 0, 1.2)
 		elseif ctx.pose == "screech" then
-			local back = math.min(1, b * 2.2)
-			local thrust = math.clamp(b * 2.2 - 1, 0, 1)
+			local back, thrust = phases(ctx, 0.45, 0.1)
 			local shake = math.sin(ctx.t * 45) * 0.05 * thrust
 			head = CFrame.Angles(-0.6 * back + 0.9 * thrust + shake, 0, shake)
 			left = CFrame.Angles(0.5 * thrust, 0, -1.3 * thrust)
 			right = CFrame.Angles(0.5 * thrust, 0, 1.3 * thrust)
 		elseif ctx.pose == "bite" then
-			local k = math.sin(math.min(1, b * 1.6) * math.pi)
-			head = CFrame.Angles(0.5 * k, 0, 0)
+			local wind, hit = phases(ctx, 0.17, 0.08)
+			head = CFrame.Angles(-0.25 * wind + 0.6 * hit, 0, 0)
 		end
 
 		j.LeftLeg.Transform = legL

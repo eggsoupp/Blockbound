@@ -1668,7 +1668,20 @@ RunService.RenderStepped:Connect(function(dt)
 				state.rigDef.animate(rig, {
 					t = t, dt = dt, speed = rig.speed, pose = pose,
 					blend = math.clamp((now - rig.poseAt) / 0.18, 0, 1),
+					elapsed = now - rig.poseAt,
 				})
+				-- Each joint eases toward what animate asked for, so a
+				-- change of pose never snaps. Fast enough that a 0.1s blow
+				-- still reads as a blow.
+				local ease = 1 - math.exp(-dt * 22)
+				rig.smooth = rig.smooth or {}
+				for _, joint in pairs(rig.joints) do
+					local goal = joint.Transform
+					local was = rig.smooth[joint]
+					local eased = if was then was:Lerp(goal, ease) else goal
+					rig.smooth[joint] = eased
+					joint.Transform = eased
+				end
 			end
 
 			if state.sheen then

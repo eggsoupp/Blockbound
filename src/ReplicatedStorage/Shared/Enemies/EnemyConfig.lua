@@ -1791,7 +1791,8 @@ EnemyConfig.Definitions = {
 	--[[
 		ROOSTER - the Plains' rabble-rouser: its crow makes every creature
 		nearby hit half again as hard for a while; on its own it pecks and
-		flutters at you (ServerScriptService.Creatures.Rooster; its rig is
+		flutters at you - once you have hit it: it is an animal, and
+		passive until provoked (ServerScriptService.Creatures.Rooster; its rig is
 		Shared.Enemies.CreatureRigs.Rooster). Fragile - kill it first.
 	]]
 	Rooster = {
@@ -1800,6 +1801,8 @@ EnemyConfig.Definitions = {
 		health = 30,
 		movement = "Hop",
 		trait = "Rooster",
+		-- An animal: it leaves you alone until you hit it.
+		passive = true,
 
 		spawnBiomes = { "Plains" },
 		spawnWeight = 0.6,

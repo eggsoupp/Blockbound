@@ -69,6 +69,24 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- A robed rabbit: two great ears spread above row 58, the head above row
+	-- 43, an arm either side of the robe (the right one holding the staff),
+	-- and short legs under the hem (row 15).
+	RabbicCleric = function(x, y, _z, w, h)
+		local cx = x + w / 2
+		if y >= 58 then
+			if cx < 44 then return "LeftEar" end
+			if cx > 62 then return "RightEar" end
+			return "Head"
+		end
+		if y >= 43 then return "Head" end
+		if cx < 36 then return "LeftArm" end
+		if cx > 66 then return "RightArm" end
+		if y + h <= 15 then
+			return if cx < 52 then "LeftLeg" else "RightLeg"
+		end
+		return "Body"
+	end,
 	-- A body down the middle (x 57-83), its mouth the front of it, and four
 	-- long arched legs: every box outside the body joins the leg whose
 	-- root-to-tip line it is nearest (traced from a top-down map).

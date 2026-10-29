@@ -684,6 +684,79 @@ function handlers.slam(position: Vector3, radius: number)
 end
 
 -- ---------------------------------------------------------------------------
+-- Rabbic Cleric
+-- ---------------------------------------------------------------------------
+
+local HOLY = Color3.fromRGB(255, 225, 130)
+local MEND = Color3.fromRGB(170, 255, 150)
+
+-- The holy orb: the server flies an invisible host; this lights it.
+function handlers.orb(host, seconds: number)
+	if typeof(host) ~= "Instance" or not host.Parent then
+		return
+	end
+	emitter("Flare", host, {
+		Enabled = true, Rate = 30, Color = ColorSequence.new(HOLY), Size = NumberSequence.new(2.2, 1.4),
+		Lifetime = NumberRange.new(0.25), LockedToPart = true,
+	})
+	emitter("Glints", host, {
+		Enabled = true, Rate = 14, Color = ColorSequence.new(HOLY), Size = NumberSequence.new(0.6),
+		Lifetime = NumberRange.new(0.6), LockedToPart = false, Speed = NumberRange.new(0.5, 1.5),
+		SpreadAngle = Vector2.new(180, 180),
+	})
+	local a0, a1 = Kit.attachment(host), Kit.attachment(host)
+	a0.Position, a1.Position = Vector3.new(0, 0.35, 0), Vector3.new(0, -0.35, 0)
+	Kit.trail(host, a0, a1, {
+		Texture = Library.Band.Texture, Color = ColorSequence.new(HOLY), LightEmission = 0.8,
+		Transparency = NumberSequence.new(0.3, 1), Lifetime = 0.35, FaceCamera = true,
+	})
+	light(host, HOLY, 10, 1.5)
+end
+
+function handlers.orbpop(position: Vector3)
+	local host = burst(position, {
+		{ "Flare", 1, { Color = ColorSequence.new(HOLY), Size = NumberSequence.new(4), Lifetime = NumberRange.new(0.3) } },
+		{ "Glints", 10, { Color = ColorSequence.new(HOLY), Size = NumberSequence.new(0.8), Speed = NumberRange.new(4, 8), SpreadAngle = Vector2.new(180, 180) } },
+	}, 1.5)
+	Kit.sound(host, SOUND_HIT, 0.4, 1.8)
+end
+
+-- Mending: a ring of light round the cleric while it calls the heal.
+function handlers.mend(model, seconds: number, radius: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local cframe, size = model:GetBoundingBox()
+	local feet = cframe.Position - Vector3.new(0, size.Y / 2 - 0.3, 0)
+	for i = 0, 11 do
+		local angle = i / 12 * math.pi * 2
+		burst(feet + Vector3.new(math.cos(angle), 0, math.sin(angle)) * radius * 0.25, {
+			{ "Glints", 2, { Color = ColorSequence.new(MEND), Size = NumberSequence.new(0.9), Speed = NumberRange.new(3, 5), EmissionDirection = Enum.NormalId.Top, SpreadAngle = Vector2.new(10, 10), Lifetime = NumberRange.new(seconds) } },
+		}, seconds + 1)
+	end
+	local glow = light(part, MEND, 14, 0)
+	during(seconds + 0.3, function(elapsed)
+		glow.Brightness = 2 * math.sin(math.min(1, elapsed / seconds) * math.pi)
+	end, function()
+		glow:Destroy()
+	end)
+end
+
+-- Healed: sparkles rising off whatever was mended.
+function handlers.healed(model)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local cframe, size = model:GetBoundingBox()
+	burst(cframe.Position, {
+		{ "Glints", 10, { Color = ColorSequence.new(MEND), Size = NumberSequence.new(0.9), Speed = NumberRange.new(2, 4), EmissionDirection = Enum.NormalId.Top, SpreadAngle = Vector2.new(40, 40), Lifetime = NumberRange.new(0.9) } },
+		{ "Flare", 1, { Color = ColorSequence.new(MEND), Size = NumberSequence.new(size.Y * 0.8), Lifetime = NumberRange.new(0.4) } },
+	}, 1.5)
+end
+
+-- ---------------------------------------------------------------------------
 -- Wormy Horror
 -- ---------------------------------------------------------------------------
 

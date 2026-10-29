@@ -134,6 +134,66 @@ Rigs.EvilRat = {
 }
 
 --[[
+	RABBIC CLERIC. A robed rabbit that bounds rather than walks: its legs
+	tuck while it is in the air and its great ears stream back as it rises
+	and flop up as it falls (worked out here from how fast the model is
+	actually going up or down). Standing, the ears twitch now and then and
+	the head tilts. Its moves:
+	  cast   the staff (right arm) thrust forward, left hand raised
+	  heal   both arms up, staff held high
+	Arms and legs hang from their joints: positive pitch about X swings them
+	forward. The ears stick out sideways: rolling the left one by -angle and
+	the right by +angle lifts both tips.
+]]
+Rigs.RabbicCleric = {
+	setup = function(rig)
+		rig.lastY = rig.body.Position.Y
+		rig.vertical = 0
+		rig.twitchAt = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local y = rig.body.Position.Y
+		local rise = (y - rig.lastY) / math.max(ctx.dt, 1e-3)
+		rig.lastY = y
+		rig.vertical += (rise - rig.vertical) * math.min(1, ctx.dt * 12)
+		local airborne = math.abs(rig.vertical) > 1.5
+
+		-- Ears: back and down while rising, up while falling, and a twitch now and then.
+		local earLift = math.clamp(-rig.vertical * 0.05, -0.5, 0.6)
+		if ctx.t > rig.twitchAt then
+			rig.twitchAt = ctx.t + 1.5 + (ctx.t * 7.3 % 2.5)
+			rig.twitchUntil = ctx.t + 0.18
+		end
+		local twitch = if rig.twitchUntil and ctx.t < rig.twitchUntil then 0.25 else 0
+		j.LeftEar.Transform = CFrame.Angles(0, 0, -(earLift + twitch))
+		j.RightEar.Transform = CFrame.Angles(0, 0, earLift + twitch * 0.4)
+
+		local tuck = if airborne then 0.7 else 0
+		j.LeftLeg.Transform = CFrame.Angles(tuck, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(tuck * 0.85, 0, 0)
+
+		local left = CFrame.Angles(math.sin(ctx.t * 1.4) * 0.05 + (if airborne then -0.3 else 0), 0, 0)
+		local right = CFrame.Angles(math.sin(ctx.t * 1.4 + 1) * 0.05, 0, 0)
+		local head = CFrame.Angles(0, 0, math.sin(ctx.t * 0.7) * 0.12)
+		if ctx.pose == "cast" then
+			right = right:Lerp(CFrame.Angles(1.1, 0, 0), b)
+			left = left:Lerp(CFrame.Angles(0.9, 0, 0.2), b)
+			head = head:Lerp(CFrame.Angles(-0.1, 0, 0), b)
+		elseif ctx.pose == "heal" then
+			right = right:Lerp(CFrame.Angles(2.6, 0, -0.2), b)
+			left = left:Lerp(CFrame.Angles(2.4, 0, 0.3), b)
+			head = head:Lerp(CFrame.Angles(-0.35, 0, 0), b)
+		end
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Head.Transform = head
+	end,
+}
+
+--[[
 	WORMY HORROR. Four long arched legs off a hanging body: a slow stilt-walk
 	on diagonal pairs (front-left with back-right), each leg lifted as it
 	swings forward, and a mouth that never quite stops working. Its moves:

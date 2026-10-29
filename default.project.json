@@ -952,6 +952,9 @@
         },
         "WormyHorror": {
           "$path": "src/ServerScriptService/Creatures/WormyHorror.lua"
+        },
+        "RabbicCleric": {
+          "$path": "src/ServerScriptService/Creatures/RabbicCleric.lua"
         }
       },
       "BossService": {

@@ -1119,6 +1119,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		A robed rabbit priest of the Hallow and a SUPPORT enemy: it bounds
+		about at a distance, looses homing holy orbs and heals every hurt
+		creature near it (see its trait). Frail - kill it first. The Hop
+		numbers are only the fallback when every way it could bound is blocked.
+	]]
+	RabbicCleric = {
+		asset = "RabbicCleric",
+		displayName = "Rabbic Cleric",
+		health = 45,
+		movement = "Hop",
+		trait = "RabbicCleric",
+
+		spawnBiomes = { "Hallow" },
+		spawnWeight = 0.8,
+		packSize = NumberRange.new(1, 2),
+
+		speed = 9,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 35,
+
+		contactRange = 3.5,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 34,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.3,
+		windupSeconds = 0.15,
+
+		sizeVariance = 0.08,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 34,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 10,
+		lungeWindup = 0.5,
+		lungeDamage = 4,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(240, 176, 96),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1217,7 +1268,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric",
 }
 
 --[[

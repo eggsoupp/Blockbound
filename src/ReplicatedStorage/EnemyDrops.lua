@@ -168,6 +168,13 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.2, min = 1, max = 2 },
 	},
 
+	-- A priest's purse: herbs from its satchel, and the magic material.
+	RabbicCleric = {
+		{ item = "Herb", chance = 0.7, min = 1, max = 3 },
+		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
+		{ item = "HallowedDirt", chance = 0.3, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

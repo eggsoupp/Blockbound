@@ -614,4 +614,72 @@ Rigs.CrabMonster = {
 	end,
 }
 
+--[[
+	LONGLEG. A hunched thing on four stilts with its head slung low in front.
+	It lopes on diagonal pairs (front-left with back-right), the long legs
+	swinging wide. Its moves:
+	  frozen  dead still - being watched - except for the odd sudden twitch
+	          of the head, snapped to a new angle rather than turned
+	  shriek  head thrown up and legs braced wide
+	  dash    legs stretched fore and aft, head low
+	  strike  head reared up, then lashed forward and down
+	The head's hinge sits at the neck, so +pitch lifts it and -pitch dips it.
+]]
+Rigs.Longleg = {
+	setup = function(rig)
+		rig.stride = 0
+		rig.twitch = CFrame.identity
+		rig.twitchAt = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 8, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 6 * math.pi * 2
+		local s = rig.stride
+
+		local swing = math.sin(s) * 0.55 * moving
+		local fl, br = CFrame.Angles(swing, 0, 0), CFrame.Angles(swing, 0, 0)
+		local fr, bl = CFrame.Angles(-swing, 0, 0), CFrame.Angles(-swing, 0, 0)
+		local head = CFrame.Angles(math.sin(s * 2) * 0.12 * moving - 0.05, math.sin(ctx.t * 0.7) * 0.2 * (1 - moving), 0)
+
+		if ctx.pose == "frozen" then
+			if ctx.t >= rig.twitchAt then
+				rig.twitchAt = ctx.t + 0.6 + math.random() * 1.6
+				rig.twitch = CFrame.Angles((math.random() - 0.5) * 0.5, (math.random() - 0.5) * 0.9, (math.random() - 0.5) * 0.8)
+			end
+			fl, fr, bl, br = CFrame.identity, CFrame.identity, CFrame.identity, CFrame.identity
+			head = rig.twitch
+		elseif ctx.pose == "shriek" then
+			local shake = math.sin(ctx.t * 40) * 0.06
+			head = CFrame.Angles(0.9 * b + shake, 0, shake)
+			fl = CFrame.Angles(0.15, 0, 0.25 * b)
+			fr = CFrame.Angles(0.15, 0, -0.25 * b)
+			bl = CFrame.Angles(-0.15, 0, 0.25 * b)
+			br = CFrame.Angles(-0.15, 0, -0.25 * b)
+		elseif ctx.pose == "dash" then
+			local gallop = math.sin(ctx.t * 22) * 0.35
+			fl = CFrame.Angles(0.7 + gallop, 0, 0)
+			fr = CFrame.Angles(0.7 - gallop, 0, 0)
+			bl = CFrame.Angles(-0.7 - gallop, 0, 0)
+			br = CFrame.Angles(-0.7 + gallop, 0, 0)
+			head = CFrame.Angles(-0.3, 0, 0)
+		elseif ctx.pose == "strike" then
+			-- Reared up for the first half, lashed down through the second.
+			local rear = math.min(1, b * 2)
+			local lash = math.clamp(b * 2 - 1, 0, 1)
+			head = CFrame.Angles(0.7 * rear - 1.3 * lash, 0, 0)
+			fl = CFrame.Angles(-0.2 * rear + 0.4 * lash, 0, 0)
+			fr = CFrame.Angles(-0.2 * rear + 0.4 * lash, 0, 0)
+		end
+
+		j.FrontLeftLeg.Transform = fl
+		j.FrontRightLeg.Transform = fr
+		j.BackLeftLeg.Transform = bl
+		j.BackRightLeg.Transform = br
+		j.Head.Transform = head
+	end,
+}
+
 return Rigs

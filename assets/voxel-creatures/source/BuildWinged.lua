@@ -98,6 +98,17 @@ Build.Split = {
 		if y >= 69 then return "Head" end
 		return "Body"
 	end,
+	-- A hunched stalker on four stilts: the head and neck hang forward of z 36
+	-- between rows 39 and 60; legs below row 42, front ones before z 66.
+	Longleg = function(x, y, z, w, h)
+		local cx = x + w / 2
+		if z + 1 <= 36 and y >= 39 and y < 60 then return "Head" end
+		if y + h <= 42 then
+			local side = if cx < 42 then "Left" else "Right"
+			return (if z < 66 then "Front" else "Back") .. side .. "Leg"
+		end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

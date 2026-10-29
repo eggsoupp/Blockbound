@@ -1375,6 +1375,59 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		LONGLEG - the Corruption's stalker: frozen while anyone faces it,
+		loping fast the moment nobody does, and done waiting after a few
+		seconds of being stared at - it shrieks and dashes in. Its long-necked
+		strike reaches well past arm's length
+		(ServerScriptService.Creatures.Longleg; its rig is
+		Shared.Enemies.CreatureRigs.Longleg).
+	]]
+	Longleg = {
+		asset = "Longleg",
+		displayName = "Longleg",
+		health = 70,
+		movement = "Hop",
+		trait = "Longleg",
+
+		spawnBiomes = { "Corruption" },
+		spawnWeight = 0.5,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 10,
+		aggroRange = 60,
+		giveUpRange = 110,
+		despawnSeconds = 40,
+
+		contactRange = 3.5,
+		contactDamage = 5,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 38,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.1,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.08,
+
+		stepUpBlocks = 2,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 7,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.5,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(70, 90, 130),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1473,7 +1526,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg",
 }
 
 --[[

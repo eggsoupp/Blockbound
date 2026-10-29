@@ -1002,6 +1002,57 @@ function handlers.snap(model, caught: boolean?)
 	Kit.sound(host, SOUND_HIT, if caught then 0.7 else 0.4, if caught then 0.6 else 1.4)
 end
 
+-- ---------------------------------------------------------------------------
+-- Longleg
+-- ---------------------------------------------------------------------------
+
+local GLOOM = Color3.fromRGB(110, 80, 170)
+
+-- Its head, slung low out in front of the body.
+local function headOf(model): Vector3
+	local head = model:FindFirstChild("Head")
+	if head and head:IsA("BasePart") then
+		return head.Position
+	end
+	return topOf(model)
+end
+
+-- Stared at too long: a shriek - a pulse of gloom off its head, dust kicked
+-- up under it, and a low, stretched scream.
+function handlers.shriek(model)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local cframe, size = model:GetBoundingBox()
+	local host = burst(headOf(model), {
+		{ "BoomGlow", 1, { Color = ColorSequence.new(GLOOM), Size = NumberSequence.new(9) } },
+		{ "Glints", 10, { Color = ColorSequence.new(Color3.fromRGB(190, 160, 255)), Size = NumberSequence.new(1) } },
+	}, 2)
+	burst(cframe.Position - Vector3.new(0, size.Y * 0.5 - 0.4, 0), {
+		{ "Puff", 8, { Color = ColorSequence.new(Color3.fromRGB(70, 60, 90)), Size = NumberSequence.new(2.6), Speed = NumberRange.new(4, 9), SpreadAngle = Vector2.new(80, 10) } },
+	}, 2)
+	Kit.sound(host, SOUND_BOOM, 0.6, 2.2)
+	Kit.sound(host, SOUND_HIT, 0.5, 0.35)
+end
+
+-- The head lashed down: a slash where it lands.
+function handlers.lash(model)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local look = model:GetPivot().LookVector
+	local at = Kit.attachment(part)
+	local from = headOf(model)
+	at.WorldCFrame = CFrame.lookAt(from + look * 1.5, from + look * 2.5)
+	emitter("Slash", at, {
+		Color = ColorSequence.new(Color3.fromRGB(170, 140, 230)), Size = NumberSequence.new(5), LockedToPart = false,
+	}):Emit(1)
+	Debris:AddItem(at, 1)
+	Kit.sound(part, SOUND_HIT, 0.5, 0.5)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

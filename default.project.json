@@ -967,6 +967,9 @@
         },
         "CrabMonster": {
           "$path": "src/ServerScriptService/Creatures/CrabMonster.lua"
+        },
+        "Longleg": {
+          "$path": "src/ServerScriptService/Creatures/Longleg.lua"
         }
       },
       "BossService": {

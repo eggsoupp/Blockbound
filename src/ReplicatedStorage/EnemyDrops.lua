@@ -203,6 +203,14 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.2, min = 1, max = 2 },
 	},
 
+	-- A stretched hide, the Corruption's dirt, and as often as not the magic
+	-- material - it is hard to kill well.
+	Longleg = {
+		{ item = "Leather", chance = 0.7, min = 1, max = 2 },
+		{ item = "CorruptedDirt", chance = 0.5, min = 1, max = 3 },
+		{ item = "EssenceShard", chance = 0.35, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

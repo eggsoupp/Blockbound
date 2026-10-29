@@ -2051,6 +2051,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		WEREWOLF LORD - the Snow's swordsman: a flat sweep that leaves you
+		bleeding, a long thrust, a leap, and below half health a howl after
+		which it fights enraged (ServerScriptService.Creatures.WerewolfLord;
+		its rig is Shared.Enemies.CreatureRigs.WerewolfLord).
+	]]
+	WerewolfLord = {
+		asset = "WerewolfLord",
+		displayName = "Werewolf Lord",
+		health = 130,
+		movement = "Hop",
+		trait = "WerewolfLord",
+
+		spawnBiomes = { "Snow" },
+		spawnWeight = 0.4,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 7.5,
+		aggroRange = 55,
+		giveUpRange = 95,
+		despawnSeconds = 40,
+
+		contactRange = 3.2,
+		contactDamage = 5,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 40,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 40,
+		lungeMaxDistance = 12,
+		lungeMaxSpeed = 17,
+		lungeWindup = 0.35,
+		lungeDamage = 10,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(90, 90, 100),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -2197,7 +2248,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon", "WerewolfLord",
 }
 
 --[[

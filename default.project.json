@@ -1006,6 +1006,9 @@
         },
         "SpottedDemon": {
           "$path": "src/ServerScriptService/Creatures/SpottedDemon.lua"
+        },
+        "WerewolfLord": {
+          "$path": "src/ServerScriptService/Creatures/WerewolfLord.lua"
         }
       },
       "BossService": {

@@ -245,6 +245,18 @@ Build.Split = {
 		if cz >= 45 and y + h <= 21 then return if cx < 31 then "LeftLeg" else "RightLeg" end
 		return "Body"
 	end,
+	-- A werewolf in a long coat with a long sword held out level in its right
+	-- hand: the sword's colours (10 and up) are the Sword; head above row 62;
+	-- arms outside x 25-53 above row 24; legs below row 15.
+	WerewolfLord = function(x, y, _z, w, h, _d, c)
+		local cx = x + w / 2
+		if c >= 10 then return "Sword" end
+		if y >= 62 then return "Head" end
+		if y + h <= 15 then return if cx < 40 then "LeftLeg" else "RightLeg" end
+		if y >= 24 and cx < 25 then return "LeftArm" end
+		if y >= 24 and cx > 53 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

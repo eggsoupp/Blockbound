@@ -1337,6 +1337,69 @@ Rigs.SpottedDemon = {
 	end,
 }
 
+--[[
+	WEREWOLF LORD. A wolf in a long coat with a long sword held out level
+	in its right fist. It prowls. Its moves:
+	  slash   the sword arm lifted to chest height and turned out to its
+	          right, then swept across to the left - turning the hanging arm
+	          about its own length swings the level blade flat round in front
+	  thrust  the arm and blade drawn back, then driven straight forward
+	  howl    head thrown back, arms flung wide
+	  leap    sword raised, legs tucked
+	Arms hang from the shoulder: +pitch swings a hand forward and up; +yaw
+	turns the blade from straight ahead toward its left.
+]]
+Rigs.WerewolfLord = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.6 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.5 * moving
+		local legL, legR = CFrame.Angles(step, 0, 0), CFrame.Angles(-step, 0, 0)
+		local left = CFrame.Angles(-step * 0.6, 0, -0.05)
+		local right = CFrame.Angles(step * 0.2, 0, 0.05)
+		local sword = CFrame.identity
+		local head = CFrame.Angles(math.sin(ctx.t * 1.1) * 0.05, math.sin(ctx.t * 0.6) * 0.2, 0)
+
+		if ctx.pose == "slash" then
+			local wind, hit = phases(ctx, 0.4, 0.12)
+			right = CFrame.Angles(0.5 * wind, -1.1 * wind + 2.1 * hit, 0.2 * wind)
+			head = CFrame.Angles(0, -0.3 * wind + 0.5 * hit, 0)
+		elseif ctx.pose == "thrust" then
+			local wind, hit = phases(ctx, 0.45, 0.1)
+			right = CFrame.Angles(-0.45 * wind + 0.75 * hit, 0, 0)
+			sword = CFrame.new(0, 0, 0.6 * wind - 1.2 * hit)
+			legL = CFrame.Angles(0.5 * hit, 0, 0)
+			legR = CFrame.Angles(-0.4 * hit, 0, 0)
+			head = CFrame.Angles(0.15 * hit, 0, 0)
+		elseif ctx.pose == "howl" then
+			local k = math.min(1, b * 2)
+			head = CFrame.Angles(-0.8 * k + math.sin(ctx.t * 30) * 0.04, 0, 0)
+			left = CFrame.Angles(0.4 * k, 0, -1.2 * k)
+			right = CFrame.Angles(0.4 * k, 0, 1.2 * k)
+		elseif ctx.pose == "leap" then
+			right = CFrame.Angles(1.3, 0, 0)
+			left = CFrame.Angles(0.6, 0, -0.4)
+			legL = CFrame.Angles(0.7, 0, 0)
+			legR = CFrame.Angles(-0.4, 0, 0)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Sword.Transform = sword
+		j.Head.Transform = head
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

@@ -257,6 +257,33 @@ Build.Split = {
 		if y >= 24 and cx > 53 then return "RightArm" end
 		return "Body"
 	end,
+	-- A beagle: head in front of z 16 above row 20, tail behind z 36 above
+	-- row 18, legs below row 10 (front ones before z 22).
+	Beagle = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz < 16 and y >= 20 then return "Head" end
+		if cz >= 36 and y >= 18 then return "Tail" end
+		if y + h <= 10 then return (if cz < 22 then "F" else "B") .. (if cx < 35 then "L" else "R") end
+		return "Body"
+	end,
+	-- An oryx: horned head in front of z 16 above row 32, tail behind z 46,
+	-- long legs below row 20 (front ones before z 34).
+	BeisaOryx = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz < 16 and y >= 32 then return "Head" end
+		if y + h <= 20 then return (if cz < 34 then "F" else "B") .. (if cx < 36 then "L" else "R") end
+		if cz >= 46 and y >= 24 then return "Tail" end
+		return "Body"
+	end,
+	-- A brontosaurus: neck in front of z 21 above row 42, its head above row
+	-- 70; tail behind z 72; legs below row 15 (front ones before z 51).
+	Bronto = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz < 21 and y >= 42 then return if y >= 70 then "Head" else "Neck" end
+		if cz >= 72 then return "Tail" end
+		if y + h <= 15 then return (if cz < 51 then "F" else "B") .. (if cx < 28 then "L" else "R") end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

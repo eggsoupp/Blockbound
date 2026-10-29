@@ -1400,6 +1400,102 @@ Rigs.WerewolfLord = {
 	end,
 }
 
+--[[
+	QUADRUPED. One four-legged rig for the plain animals (Beagle, Beisa Oryx,
+	Bronto): legs FL FR BL BR on diagonal pairs, a Head, an optional Neck
+	between body and head, an optional Tail. `spec` sets the stride length
+	and each timed move's wind-up (match the creature's trait). Its poses:
+	  walk, flee  the diagonal-pair walk (flee with the head low)
+	  charge      a gallop, head lowered
+	  bite        head drawn up, then snapped forward and down
+	  gore        head dipped, then horns tossed up
+	  bark        head up, jerking with each bark
+	  kick        hind legs drawn under, then kicked out behind
+	  stomp       reared up on the hind legs, front feet then driven down
+	  sweep       the tail swung round from one side to the other
+	A head or tail sits forward or behind its hinge, so +pitch raises a head
+	and lowers a tail; a neck rises from its hinge, so -pitch bows it.
+]]
+local function quadruped(spec)
+	return {
+		setup = function(rig)
+			rig.stride = 0
+		end,
+
+		animate = function(rig, ctx)
+			local j = rig.joints
+			local pose = ctx.pose
+			local galloping = pose == "charge" or pose == "flee"
+			local moving = math.clamp(ctx.speed / spec.walk, 0, 1)
+			rig.stride += ctx.dt * ctx.speed / (if galloping then spec.cycle * 1.6 else spec.cycle) * math.pi * 2
+			local s = rig.stride
+
+			local swing = math.sin(s) * (if galloping then 0.75 else 0.45) * moving
+			local fl, fr, bl, br = swing, -swing, -swing, swing
+			if galloping then
+				fl, fr, bl, br = swing, swing * 0.8, -swing, -swing * 0.8
+			end
+			local head = math.sin(s * 2) * 0.05 * moving
+			local headYaw = math.sin(ctx.t * 0.9) * 0.2 * (1 - moving)
+			local neck = math.sin(ctx.t * 0.7) * 0.04
+			local tail, tailYaw = 0.1, math.sin(ctx.t * 2 + s) * 0.3
+
+			if galloping then
+				head, headYaw, neck = -0.25, 0, -0.15
+			elseif pose == "bite" then
+				local wind, hit = phases(ctx, spec.bite or 0.2, 0.08)
+				head = 0.25 * wind - 0.55 * hit
+				neck = 0.15 * wind - 0.45 * hit
+				headYaw = 0
+			elseif pose == "gore" then
+				local wind, hit = phases(ctx, spec.gore or 0.25, 0.1)
+				head = -0.45 * wind + 1.0 * hit
+				headYaw = 0
+			elseif pose == "bark" then
+				head = 0.35 + math.max(0, math.sin(ctx.t * 16)) * 0.25
+				headYaw = 0
+				tailYaw = math.sin(ctx.t * 14) * 0.5
+			elseif pose == "kick" then
+				local wind, hit = phases(ctx, spec.kick or 0.25, 0.1)
+				bl = 0.45 * wind - 1.3 * hit
+				br = bl
+				head = -0.25 * wind
+			elseif pose == "stomp" then
+				local wind, hit = phases(ctx, spec.stomp or 0.8, 0.12)
+				fl = 1.1 * wind - 1.1 * hit
+				fr = fl
+				bl, br = -0.25 * wind, -0.25 * wind
+				neck = 0.35 * wind - 0.4 * hit
+				head = 0.2 * wind
+			elseif pose == "sweep" then
+				local wind, hit = phases(ctx, spec.sweep or 0.4, 0.2)
+				tailYaw = -1.0 * wind + 2.2 * hit
+				tail = -0.1
+				headYaw = 0.3 * wind - 0.3 * hit
+			elseif pose == "paw" then
+				head = -0.35
+				fr = math.sin(ctx.t * 11) * 0.7 - 0.2
+			end
+
+			j.FL.Transform = CFrame.Angles(fl, 0, 0)
+			j.FR.Transform = CFrame.Angles(fr, 0, 0)
+			j.BL.Transform = CFrame.Angles(bl, 0, 0)
+			j.BR.Transform = CFrame.Angles(br, 0, 0)
+			j.Head.Transform = CFrame.Angles(head, headYaw, 0)
+			if j.Neck then
+				j.Neck.Transform = CFrame.Angles(neck, headYaw * 0.5, 0)
+			end
+			if j.Tail then
+				j.Tail.Transform = CFrame.Angles(tail, tailYaw, 0)
+			end
+		end,
+	}
+end
+
+Rigs.Beagle = quadruped({ walk = 8, cycle = 1.4, bite = 0.2 })
+Rigs.BeisaOryx = quadruped({ walk = 8, cycle = 2.2, gore = 0.3, kick = 0.25 })
+Rigs.Bronto = quadruped({ walk = 4, cycle = 4, bite = 0.35, stomp = 0.9, sweep = 0.45 })
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

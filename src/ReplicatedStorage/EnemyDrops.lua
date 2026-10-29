@@ -301,6 +301,22 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.35, min = 1, max = 2 },
 	},
 
+	-- A scrap of hide.
+	Beagle = {
+		{ item = "Leather", chance = 0.6, min = 1, max = 1 },
+	},
+
+	-- A hide.
+	BeisaOryx = {
+		{ item = "Leather", chance = 1, min = 1, max = 2 },
+	},
+
+	-- A great deal of hide, and now and then the magic material.
+	Bronto = {
+		{ item = "Leather", chance = 1, min = 3, max = 6 },
+		{ item = "EssenceShard", chance = 0.3, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

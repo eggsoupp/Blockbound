@@ -2102,6 +2102,164 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		BEAGLE - a hound of the Plains, in packs, and an animal: passive until hurt,
+		then it barks the whole pack onto you and they bite (ServerScriptService.
+		Creatures.Beagle, on Creatures.Beast; rig Shared.Enemies.CreatureRigs.Beagle).
+	]]
+	Beagle = {
+		asset = "Beagle",
+		displayName = "Beagle",
+		health = 28,
+		movement = "Hop",
+		trait = "Beagle",
+		-- An animal: it leaves you alone until you hit it.
+		passive = true,
+
+		spawnBiomes = { "Plains" },
+		spawnWeight = 0.6,
+		packSize = NumberRange.new(2, 3),
+
+		speed = 9,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 10,
+		lungeMaxSpeed = 15,
+		lungeWindup = 0.35,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(160,100,40),
+	},
+
+	--[[
+		BEISA ORYX - a long-horned antelope of the Desert, and an animal: passive
+		until hurt, then the little herd gores from in front and kicks anyone who
+		gets behind (ServerScriptService.Creatures.BeisaOryx, on Creatures.Beast;
+		rig Shared.Enemies.CreatureRigs.BeisaOryx).
+	]]
+	BeisaOryx = {
+		asset = "BeisaOryx",
+		displayName = "Beisa Oryx",
+		health = 45,
+		movement = "Hop",
+		trait = "BeisaOryx",
+		-- An animal: it leaves you alone until you hit it.
+		passive = true,
+
+		spawnBiomes = { "Desert" },
+		spawnWeight = 0.6,
+		packSize = NumberRange.new(1, 3),
+
+		speed = 9,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 10,
+		lungeMaxSpeed = 15,
+		lungeWindup = 0.35,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(190,140,90),
+	},
+
+	--[[
+		BRONTO - the Swamp's long-necked giant, and an animal: passive until hurt,
+		then a stomping quake around it, a tail sweep behind it and a bite from
+		the end of its neck (ServerScriptService.Creatures.Bronto, on
+		Creatures.Beast; rig Shared.Enemies.CreatureRigs.Bronto). Very tough.
+	]]
+	Bronto = {
+		asset = "Bronto",
+		displayName = "Bronto",
+		health = 240,
+		movement = "Hop",
+		trait = "Bronto",
+		-- An animal: it leaves you alone until you hit it.
+		passive = true,
+
+		spawnBiomes = { "Swamp" },
+		spawnWeight = 0.3,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 4.5,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 10,
+		lungeMaxSpeed = 15,
+		lungeWindup = 0.35,
+		lungeDamage = 10,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(90,140,60),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -2248,7 +2406,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon", "WerewolfLord",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon", "WerewolfLord", "Beagle", "BeisaOryx", "Bronto",
 }
 
 --[[

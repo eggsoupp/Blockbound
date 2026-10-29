@@ -1009,6 +1009,18 @@
         },
         "WerewolfLord": {
           "$path": "src/ServerScriptService/Creatures/WerewolfLord.lua"
+        },
+        "Beast": {
+          "$path": "src/ServerScriptService/Creatures/Beast.lua"
+        },
+        "Bronto": {
+          "$path": "src/ServerScriptService/Creatures/Bronto.lua"
+        },
+        "BeisaOryx": {
+          "$path": "src/ServerScriptService/Creatures/BeisaOryx.lua"
+        },
+        "Beagle": {
+          "$path": "src/ServerScriptService/Creatures/Beagle.lua"
         }
       },
       "BossService": {

@@ -1616,6 +1616,16 @@ function EnemyService.setDamageScale(model, scale: number)
 	end
 end
 
+-- Sets a passive creature on a player as if that player had hurt it: a herd
+-- answering for one of its own.
+function EnemyService.provoke(model, player: Player)
+	local entry = entries[model]
+	if entry and typeof(player) == "Instance" and player:IsA("Player") then
+		entry.provokedBy = entry.provokedBy or {}
+		entry.provokedBy[player] = true
+	end
+end
+
 -- The scale a live enemy's damage is under now (1 when nothing has set one),
 -- so a temporary change can be made on top of it and taken back off.
 function EnemyService.damageScaleOf(model): number?

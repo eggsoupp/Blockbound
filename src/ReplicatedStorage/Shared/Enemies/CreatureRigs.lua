@@ -470,14 +470,15 @@ Rigs.Pentasaurus = {
 		local tailYaw = math.sin(s + 1) * 0.3 * moving + math.sin(ctx.t * 1.4) * 0.2 * (1 - moving)
 		local tailPitch = 0
 
+		-- The head hangs forward of its hinge, so a negative pitch lowers it.
 		if ctx.pose == "paw" then
 			-- Head down; the right front foot scrapes back and forth.
-			headPitch += (0.35 - headPitch) * b
+			headPitch += (-0.35 - headPitch) * b
 			headYaw *= 1 - b
 			fr = fr + (math.sin(ctx.t * 11) * 0.7 - 0.2 - fr) * b
 			tailPitch = 0.3 * b
 		elseif galloping then
-			headPitch += (0.3 - headPitch) * b
+			headPitch += (-0.3 - headPitch) * b
 			headYaw *= 0.3
 			tailPitch = 0.25 * b
 		elseif ctx.pose == "stunned" then
@@ -488,7 +489,7 @@ Rigs.Pentasaurus = {
 		elseif ctx.pose == "gore" then
 			-- Head dipped, then the horns tossed up through you.
 			local wind, hit = phases(ctx, 0.14, 0.1)
-			headPitch = 0.3 * wind - 1.0 * hit
+			headPitch = -0.4 * wind + 1.0 * hit
 		end
 
 		local splay = if ctx.pose == "stunned" then 0.18 * b else 0
@@ -1182,5 +1183,11 @@ Rigs.Rooster = {
 		j.Tail.Transform = tail
 	end,
 }
+
+
+-- The auroch is a bull built like the Pentasaurus - four legs on the same
+-- joints, a horned head, a tail - and fights the same way
+-- (Creatures.Auroch), so it moves the same way too.
+Rigs.Auroch = Rigs.Pentasaurus
 
 return Rigs

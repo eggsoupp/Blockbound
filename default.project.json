@@ -994,6 +994,9 @@
         },
         "Rooster": {
           "$path": "src/ServerScriptService/Creatures/Rooster.lua"
+        },
+        "Auroch": {
+          "$path": "src/ServerScriptService/Creatures/Auroch.lua"
         }
       },
       "BossService": {

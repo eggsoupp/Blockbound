@@ -198,6 +198,17 @@ Build.Split = {
 		if cx > 41 then return "RightWing" end
 		return "Body"
 	end,
+	-- A wild bull: head and horns in front of z 27 above row 27; tail behind
+	-- z 93; legs below row 24, the front pair before z 66.
+	Auroch = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz < 27 and y >= 27 then return "Head" end
+		if cz >= 93 then return "Tail" end
+		if y + h <= 24 then
+			return (if cz < 66 then "F" else "B") .. (if cx < 36 then "L" else "R")
+		end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

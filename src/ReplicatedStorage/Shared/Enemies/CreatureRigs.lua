@@ -134,6 +134,69 @@ Rigs.EvilRat = {
 }
 
 --[[
+	PENTASAURUS. A heavy four-legged walk on diagonal pairs, the frilled head
+	swinging a little and the tail swaying behind. Its moves:
+	  paw      head down, one front foot scraping at the ground - the charge tell
+	  charge   a fast gallop, head lowered, horns forward
+	  stunned  after a wall: head shaking, legs splayed, swaying
+	  gore     the head tossed up hard, horns first
+]]
+Rigs.Pentasaurus = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local galloping = ctx.pose == "charge"
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / (if galloping then 5 else 3) * math.pi * 2
+		local s = rig.stride
+
+		local swing = math.sin(s) * (if galloping then 0.8 else 0.45) * moving
+		local fl, fr, bl, br = swing, -swing, -swing, swing
+		if galloping then
+			-- A gallop pairs the front legs and the back legs.
+			fl, fr, bl, br = swing, swing * 0.8, -swing, -swing * 0.8
+		end
+
+		local headPitch = math.sin(s * 2) * 0.05 * moving
+		local headYaw = math.sin(s) * 0.08 * moving + math.sin(ctx.t * 0.9) * 0.12 * (1 - moving)
+		local tailYaw = math.sin(s + 1) * 0.3 * moving + math.sin(ctx.t * 1.4) * 0.2 * (1 - moving)
+		local tailPitch = 0
+
+		if ctx.pose == "paw" then
+			-- Head down; the right front foot scrapes back and forth.
+			headPitch += (0.35 - headPitch) * b
+			headYaw *= 1 - b
+			fr = fr + (math.sin(ctx.t * 11) * 0.7 - 0.2 - fr) * b
+			tailPitch = 0.3 * b
+		elseif galloping then
+			headPitch += (0.3 - headPitch) * b
+			headYaw *= 0.3
+			tailPitch = 0.25 * b
+		elseif ctx.pose == "stunned" then
+			headYaw = math.sin(ctx.t * 13) * 0.35 * b
+			headPitch = 0.2 * b
+			fl, fr = -0.25 * b, 0.25 * b
+			bl, br = 0.15 * b, -0.15 * b
+		elseif ctx.pose == "gore" then
+			local k = math.sin(math.min(1, b * 1.3) * math.pi)
+			headPitch = -0.7 * k
+		end
+
+		local splay = if ctx.pose == "stunned" then 0.18 * b else 0
+		j.FL.Transform = CFrame.Angles(fl, 0, -splay)
+		j.FR.Transform = CFrame.Angles(fr, 0, splay)
+		j.BL.Transform = CFrame.Angles(bl, 0, -splay)
+		j.BR.Transform = CFrame.Angles(br, 0, splay)
+		j.Head.Transform = CFrame.Angles(headPitch, headYaw, 0)
+		j.Tail.Transform = CFrame.Angles(tailPitch, tailYaw, 0)
+	end,
+}
+
+--[[
 	GORILLA. A knuckle-walk: each arm swings with the opposite leg, big and
 	slow, the head rolling a little with the gait. Standing it breathes - the
 	arms sway out and in. Its moves:

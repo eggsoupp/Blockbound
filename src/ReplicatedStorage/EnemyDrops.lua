@@ -156,6 +156,12 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.15, min = 1, max = 1 },
 	},
 
+	-- A tough hide, and now and then the magic material.
+	Pentasaurus = {
+		{ item = "Leather", chance = 1, min = 1, max = 3 },
+		{ item = "EssenceShard", chance = 0.08, min = 1, max = 1 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

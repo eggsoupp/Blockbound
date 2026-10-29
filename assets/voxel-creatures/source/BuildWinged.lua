@@ -69,6 +69,19 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- Horned head and frill in front, a drooping tail behind, four stubby
+	-- legs (top at row 11 or lower) under the front and back of the body.
+	Pentasaurus = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz < 28 then return "Head" end
+		if cz >= 74 then return "Tail" end
+		if y + h <= 11 then
+			local side = if cx < 21.5 then "L" else "R"
+			if cz >= 30 and cz <= 48 then return "F" .. side end
+			if cz >= 56 and cz <= 72 then return "B" .. side end
+		end
+		return "Body"
+	end,
 	-- Knuckle-walker: the arms are the outer columns (x < 30, x > 41) from
 	-- the shoulders to the ground, the head the middle above row 36, the
 	-- legs the short columns under the back half.
@@ -228,7 +241,7 @@ end
 	at the bottom centre of its own box. The pivot is the root's feet,
 	centred.
 ]]
-function Build.buildJointed(data, voxel, assetName, split, order, joints)
+function Build.buildJointed(data, voxel, assetName, split, order, joints, cuts)
 	local colors = {}
 	for r, g, b in string.gmatch(data.colors, "(%d+),(%d+),(%d+)") do
 		table.insert(colors, Color3.fromRGB(tonumber(r), tonumber(g), tonumber(b)))
@@ -240,17 +253,46 @@ function Build.buildJointed(data, voxel, assetName, split, order, joints)
 
 	local groups = {}
 	for _, name in ipairs(order) do groups[name] = {} end
-	for x, y, z, w, h, d, c in string.gmatch(data.boxes, "(%d+),(%d+),(%d+),(%d+),(%d+),(%d+),(%d+)") do
-		x, y, z, w, h, d, c = tonumber(x), tonumber(y), tonumber(z), tonumber(w), tonumber(h), tonumber(d), tonumber(c)
-		local p = Instance.new("Part")
-		p.Anchored, p.CanCollide = true, false
-		p.Material = Enum.Material.SmoothPlastic
-		p.TopSurface, p.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
-		p.Color = colors[c]
-		p.Size = Vector3.new(w, h, d) * voxel
-		p.Position = origin + Vector3.new(x + w / 2 - dims[1] / 2, y + h / 2, z + d / 2 - dims[3] / 2) * voxel
-		p.Parent = folder
-		table.insert(groups[split(x, y, z, w, h, d, c)], p)
+
+	--[[
+		`cuts` = { x = {...}, y = {...}, z = {...} } slices every box at those
+		planes before it is classified. The exporter merges same-coloured
+		voxels as far as they go, so a leg and the flank above it are often
+		one tall box; cutting at the hip lets each half go to its own part.
+	]]
+	local function slices(start, length, planes)
+		local pieces, from = {}, start
+		for _, plane in ipairs(planes or {}) do
+			if plane > from and plane < start + length then
+				table.insert(pieces, { from, plane - from })
+				from = plane
+			end
+		end
+		table.insert(pieces, { from, start + length - from })
+		return pieces
+	end
+	for _, axis in ipairs({ "x", "y", "z" }) do
+		if cuts and cuts[axis] then table.sort(cuts[axis]) end
+	end
+
+	for bx, by, bz, bw, bh, bd, c in string.gmatch(data.boxes, "(%d+),(%d+),(%d+),(%d+),(%d+),(%d+),(%d+)") do
+		bx, by, bz, bw, bh, bd, c = tonumber(bx), tonumber(by), tonumber(bz), tonumber(bw), tonumber(bh), tonumber(bd), tonumber(c)
+		for _, sx in ipairs(slices(bx, bw, cuts and cuts.x)) do
+			for _, sy in ipairs(slices(by, bh, cuts and cuts.y)) do
+				for _, sz in ipairs(slices(bz, bd, cuts and cuts.z)) do
+					local x, w, y, h, z, d = sx[1], sx[2], sy[1], sy[2], sz[1], sz[2]
+					local p = Instance.new("Part")
+					p.Anchored, p.CanCollide = true, false
+					p.Material = Enum.Material.SmoothPlastic
+					p.TopSurface, p.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
+					p.Color = colors[c]
+					p.Size = Vector3.new(w, h, d) * voxel
+					p.Position = origin + Vector3.new(x + w / 2 - dims[1] / 2, y + h / 2, z + d / 2 - dims[3] / 2) * voxel
+					p.Parent = folder
+					table.insert(groups[split(x, y, z, w, h, d, c)], p)
+				end
+			end
+		end
 	end
 	folder.Parent = workspace
 	task.wait()

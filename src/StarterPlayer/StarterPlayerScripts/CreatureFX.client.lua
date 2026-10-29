@@ -661,6 +661,72 @@ function handlers.slam(position: Vector3, radius: number)
 	Kit.sound(host, SOUND_BOOM, 0.8, 0.8)
 end
 
+-- ---------------------------------------------------------------------------
+-- Pentasaurus
+-- ---------------------------------------------------------------------------
+
+-- Pawing: dust kicked up under its front, and snorts from the nostrils.
+function handlers.snort(model, seconds: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local cframe, size = model:GetBoundingBox()
+	local look = model:GetPivot().LookVector
+	local front = cframe.Position + look * size.Z * 0.3 - Vector3.new(0, size.Y * 0.5 - 0.3, 0)
+	local nose = cframe.Position + look * size.Z * 0.5 + Vector3.new(0, size.Y * 0.05, 0)
+	local dust = Kit.host(folder, "Paw", CFrame.new(front))
+	local scrape = emitter("Puff", dust, {
+		Enabled = true, Rate = 16, Color = ColorSequence.new(DUST), Size = NumberSequence.new(1.6, 2.6),
+		Lifetime = NumberRange.new(0.6), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(60, 60),
+		LockedToPart = false,
+	})
+	local snorts = 0
+	during(seconds, function(elapsed)
+		local due = math.floor(elapsed / 0.4)
+		if due > snorts then
+			snorts = due
+			burst(nose, {
+				{ "Puff", 2, { Color = ColorSequence.new(Color3.fromRGB(230, 225, 215)), Size = NumberSequence.new(0.8, 1.6), Speed = NumberRange.new(3, 5), Lifetime = NumberRange.new(0.4), EmissionDirection = Enum.NormalId.Front } },
+			}, 1)
+		end
+	end, function()
+		scrape.Enabled = false
+		Debris:AddItem(dust, 1)
+	end)
+end
+
+-- Stunned: stars circling above its head.
+function handlers.stunned(model, seconds: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local at = Kit.attachment(part)
+	local stars = emitter("Glints", at, {
+		Color = ColorSequence.new(Color3.fromRGB(255, 225, 90)), Size = NumberSequence.new(0.9),
+		Lifetime = NumberRange.new(0.5), LockedToPart = false,
+	})
+	local emitted = 0
+	during(seconds, function(elapsed)
+		if not model.Parent then
+			return false
+		end
+		local cframe, size = model:GetBoundingBox()
+		local angle = elapsed * 7
+		at.WorldPosition = cframe.Position + model:GetPivot().LookVector * size.Z * 0.35
+			+ Vector3.new(math.cos(angle) * 1.1, size.Y * 0.55, math.sin(angle) * 1.1)
+		-- 25 a second, whatever the frame rate.
+		local due = math.floor(elapsed * 25)
+		if due > emitted then
+			emitted = due
+			stars:Emit(1)
+		end
+	end, function()
+		Debris:AddItem(at, 0.6)
+	end)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

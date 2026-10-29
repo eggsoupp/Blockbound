@@ -1018,6 +1018,56 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		A young horned dinosaur of the desert: paws the ground, then charges in
+		a straight line it cannot steer, and stands stunned if it hits a wall
+		(see its trait). The Hop numbers are only for climbing a step.
+	]]
+	Pentasaurus = {
+		asset = "Pentasaurus",
+		displayName = "Pentasaurus",
+		health = 90,
+		movement = "Hop",
+		trait = "Pentasaurus",
+
+		spawnBiomes = { "Desert" },
+		spawnWeight = 0.6,
+		packSize = NumberRange.new(1, 2),
+
+		speed = 6,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 35,
+
+		contactRange = 4,
+		contactDamage = 8,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 9,
+		groundedSeconds = 0.2,
+		windupSeconds = 0.15,
+
+		sizeVariance = 0.08,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 36,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 9,
+		lungeWindup = 0.5,
+		lungeDamage = 8,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(160, 40, 30),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1116,7 +1166,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus",
 }
 
 --[[

@@ -946,6 +946,9 @@
         },
         "Gorilla": {
           "$path": "src/ServerScriptService/Creatures/Gorilla.lua"
+        },
+        "Pentasaurus": {
+          "$path": "src/ServerScriptService/Creatures/Pentasaurus.lua"
         }
       },
       "BossService": {

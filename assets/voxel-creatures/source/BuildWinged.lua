@@ -156,6 +156,17 @@ Build.Split = {
 		if z + d <= 12 and y >= 18 then return "Blades" end
 		return "Body"
 	end,
+	-- A hunched rotting rat: head in front of z 24 above row 20, tail behind
+	-- z 62; below row 14 the front paws (before z 40) and hind legs.
+	ZombieRat = function(x, y, z, w, h, d)
+		local cx, cz = x + w / 2, z + d / 2
+		if cz < 24 and y >= 20 then return "Head" end
+		if cz >= 62 then return "Tail" end
+		if y + h <= 14 then
+			return (if cz < 40 then "F" else "B") .. (if cx < 46 then "L" else "R")
+		end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

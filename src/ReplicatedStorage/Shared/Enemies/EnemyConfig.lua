@@ -1634,6 +1634,58 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		ZOMBIE RAT - the Corruption's pack vermin that will not stay dead: a
+		rotting bite that keeps hurting, and a first death that does not take
+		- it collapses, then gets back up unless finished while it is down
+		(ServerScriptService.Creatures.ZombieRat; its rig is
+		Shared.Enemies.CreatureRigs.ZombieRat).
+	]]
+	ZombieRat = {
+		asset = "ZombieRat",
+		displayName = "Zombie Rat",
+		health = 22,
+		movement = "Hop",
+		trait = "ZombieRat",
+
+		spawnBiomes = { "Corruption" },
+		spawnWeight = 0.8,
+		packSize = NumberRange.new(2, 4),
+
+		speed = 6.5,
+		aggroRange = 45,
+		giveUpRange = 85,
+		despawnSeconds = 40,
+
+		contactRange = 2.5,
+		contactDamage = 3,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 34,
+		maxHopDistance = 5,
+		maxHopSpeed = 8,
+		groundedSeconds = 0.2,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.1,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 34,
+		lungeMaxDistance = 5,
+		lungeMaxSpeed = 8,
+		lungeWindup = 0.5,
+		lungeDamage = 3,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(90, 110, 60),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -1780,7 +1832,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat",
 }
 
 --[[

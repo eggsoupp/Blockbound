@@ -921,4 +921,62 @@ Rigs.TigerBlademaster = {
 	end,
 }
 
+--[[
+	ZOMBIE RAT. A hunched, rotting rat on its hind legs, front paws dangling.
+	It shambles - a lurching, uneven gait, head lolling - and its moves are:
+	  bite  head lunged forward and down, paws up
+	  down  collapsed: everything slack, the head on the ground, the odd
+	        twitch (its first death, which does not take)
+	  rise  dragged back up, jerking
+]]
+Rigs.ZombieRat = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 1.8 * math.pi * 2
+		local s = rig.stride
+
+		-- A lurch: the stride's halves are not even.
+		local lurch = (math.sin(s) + 0.4 * math.sin(s * 2)) * 0.55 * moving
+		local back = CFrame.Angles(lurch, 0, 0)
+		local backR = CFrame.Angles(-lurch, 0, 0)
+		local paws = CFrame.Angles(0.2 + math.sin(ctx.t * 2.3) * 0.15, 0, 0)
+		local pawsR = CFrame.Angles(0.2 + math.sin(ctx.t * 2.3 + 1) * 0.15, 0, 0)
+		local head = CFrame.Angles(math.sin(s) * 0.1 * moving, 0, math.sin(ctx.t * 1.1) * 0.3)
+		local tail = CFrame.Angles(-0.1, math.sin(ctx.t * 1.6 + s) * 0.35, 0)
+
+		if ctx.pose == "bite" then
+			local k = math.sin(math.min(1, b * 1.5) * math.pi)
+			head = CFrame.Angles(-0.6 * k, 0, 0)
+			paws = CFrame.Angles(0.9 * k, 0, 0)
+			pawsR = paws
+		elseif ctx.pose == "down" then
+			local twitch = if math.sin(ctx.t * 7) > 0.92 then 0.2 else 0
+			head = CFrame.Angles(-0.7 + twitch, 0, 0.5)
+			paws = CFrame.Angles(-0.6, 0, 0.3)
+			pawsR = CFrame.Angles(-0.5 + twitch, 0, -0.3)
+			back = CFrame.Angles(0.6, 0, 0.3)
+			backR = CFrame.Angles(0.6, 0, -0.3)
+			tail = CFrame.Angles(-0.4, 0.3, 0)
+		elseif ctx.pose == "rise" then
+			local jerk = math.sin(ctx.t * 25) * 0.15
+			head = CFrame.Angles(0.4 + jerk, jerk, 0)
+			paws = CFrame.Angles(1.2, 0, 0.4)
+			pawsR = CFrame.Angles(1.2, 0, -0.4)
+		end
+
+		j.BL.Transform = back
+		j.BR.Transform = backR
+		j.FL.Transform = paws
+		j.FR.Transform = pawsR
+		j.Head.Transform = head
+		j.Tail.Transform = tail
+	end,
+}
+
 return Rigs

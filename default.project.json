@@ -982,6 +982,9 @@
         },
         "TigerBlademaster": {
           "$path": "src/ServerScriptService/Creatures/TigerBlademaster.lua"
+        },
+        "ZombieRat": {
+          "$path": "src/ServerScriptService/Creatures/ZombieRat.lua"
         }
       },
       "BossService": {

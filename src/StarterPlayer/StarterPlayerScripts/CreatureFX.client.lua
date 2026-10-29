@@ -1258,6 +1258,45 @@ function handlers.dashtrail(model, seconds: number)
 	end)
 end
 
+-- ---------------------------------------------------------------------------
+-- Zombie Rat
+-- ---------------------------------------------------------------------------
+
+local ROT = Color3.fromRGB(120, 150, 70)
+
+-- Its first death: a sickly puff as it drops.
+function handlers.collapse(position: Vector3)
+	local host = burst(position + Vector3.new(0, 0.6, 0), {
+		{ "Puff", 7, { Color = ColorSequence.new(ROT), Size = NumberSequence.new(2), Speed = NumberRange.new(1, 3), SpreadAngle = Vector2.new(180, 180) } },
+	}, 2)
+	Kit.sound(host, SOUND_HIT, 0.4, 0.5)
+end
+
+-- Dragging itself back up: rot wells out of it, motes rising.
+function handlers.rise(position: Vector3)
+	local host = burst(position + Vector3.new(0, 0.4, 0), {
+		{ "Puff", 9, { Color = ColorSequence.new(Color3.fromRGB(70, 90, 50)), Size = NumberSequence.new(2.4), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(40, 40) } },
+		{ "Glints", 10, { Color = ColorSequence.new(Color3.fromRGB(170, 230, 90)), Size = NumberSequence.new(0.7) } },
+	}, 2)
+	Kit.sound(host, SOUND_HIT, 0.5, 0.35)
+end
+
+-- Rot in a bite wound: a green seep off the bitten for as long as it hurts.
+function handlers.rot(character, seconds: number)
+	local root = typeof(character) == "Instance" and character:FindFirstChild("HumanoidRootPart")
+	if not root then
+		return
+	end
+	local seep = emitter("Puff", root, {
+		Enabled = true, Rate = 10, Color = ColorSequence.new(ROT), Size = NumberSequence.new(1.2),
+		Speed = NumberRange.new(0.5, 1.5), LockedToPart = false,
+	})
+	task.delay(seconds, function()
+		seep.Enabled = false
+		Debris:AddItem(seep, 1.5)
+	end)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

@@ -242,6 +242,12 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.3, min = 1, max = 2 },
 	},
 
+	-- Scraps: a bit of hide and the Corruption's dirt.
+	ZombieRat = {
+		{ item = "Leather", chance = 0.3, min = 1, max = 1 },
+		{ item = "CorruptedDirt", chance = 0.3, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

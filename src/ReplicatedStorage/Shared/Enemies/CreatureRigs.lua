@@ -1713,6 +1713,63 @@ Rigs.HandlessNorg = {
 	end,
 }
 
+--[[
+	LEMURIAN WARRIOR. A ring-tailed lemur with a long blade held level at its
+	left hip, and a great tail. It walks springily, tail swaying high. Its
+	moves:
+	  slash  the blade arm turned out to the left, then swept across to the
+	         right - turning the arm about its length swings the level blade
+	         flat round in front
+	  crouch gathered low, tail coiled, before a vault
+	  vault  in the air: legs tucked, tail streaming, blade up
+	The tail rises from its hinge behind: +pitch tips it back, -pitch
+	forward over the head.
+]]
+Rigs.LemurianWarrior = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.2 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.55 * moving
+		local legL, legR = CFrame.Angles(step, 0, 0), CFrame.Angles(-step, 0, 0)
+		local left = CFrame.identity
+		local right = CFrame.Angles(-step * 0.4, 0, 0)
+		local head = CFrame.Angles(0, math.sin(ctx.t * 0.9) * 0.25, 0)
+		local tail = CFrame.Angles(math.sin(ctx.t * 1.6) * 0.08, 0, math.sin(ctx.t * 1.2 + s) * 0.18)
+
+		if ctx.pose == "slash" then
+			local wind, hit = phases(ctx, 0.3, 0.12)
+			left = CFrame.Angles(0.3 * wind, 0.9 * wind - 1.9 * hit, 0)
+			head = CFrame.Angles(0, 0.3 * wind - 0.5 * hit, 0)
+			tail = CFrame.Angles(0, 0, -0.3 * wind + 0.4 * hit)
+		elseif ctx.pose == "crouch" then
+			local k = math.min(1, ctx.blend * 2)
+			legL = CFrame.Angles(0.6 * k, 0, 0)
+			legR = CFrame.Angles(0.6 * k, 0, 0)
+			tail = CFrame.Angles(-0.35 * k, 0, 0)
+			head = CFrame.Angles(0.15 * k, 0, 0)
+		elseif ctx.pose == "vault" then
+			legL = CFrame.Angles(0.9, 0, 0)
+			legR = CFrame.Angles(0.9, 0, 0)
+			tail = CFrame.Angles(0.5, 0, 0)
+			left = CFrame.Angles(1.2, 0, 0)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Head.Transform = head
+		j.Tail.Transform = tail
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

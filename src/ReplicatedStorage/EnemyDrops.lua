@@ -349,6 +349,13 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
 	},
 
+	-- A ringed pelt, the Hallow's dirt, and sometimes the magic material.
+	LemurianWarrior = {
+		{ item = "Leather", chance = 0.8, min = 1, max = 2 },
+		{ item = "HallowedDirt", chance = 0.4, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

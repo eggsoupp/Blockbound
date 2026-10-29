@@ -331,6 +331,20 @@ Build.Split = {
 		if cz >= 60 then return "Tail" end
 		return "Body"
 	end,
+	-- A ring-tailed lemur with a long blade held level along its left side:
+	-- the blade (colours 1 and 2) is the Sword; the tail is
+	-- behind z 27 above row 21; head above row 54; arms the outer columns
+	-- (outside x 3-21); legs below row 10.
+	LemurianWarrior = function(x, y, z, w, h, d, c)
+		local cx, cz = x + w / 2, z + d / 2
+		if c == 1 or c == 2 then return "Sword" end
+		if cz >= 27 and y >= 21 then return "Tail" end
+		if y + h <= 10 then return if cx < 12 then "LeftLeg" else "RightLeg" end
+		if y >= 54 then return "Head" end
+		if cx < 3 then return "LeftArm" end
+		if cx > 21 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

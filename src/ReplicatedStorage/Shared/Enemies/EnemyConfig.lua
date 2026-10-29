@@ -2516,6 +2516,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		LEMURIAN WARRIOR - the Hallow's acrobat: it vaults clean over your head
+		and lands behind you slashing, and sweeps its blade flat across in front
+		(ServerScriptService.Creatures.LemurianWarrior; its rig is
+		Shared.Enemies.CreatureRigs.LemurianWarrior).
+	]]
+	LemurianWarrior = {
+		asset = "LemurianWarrior",
+		displayName = "Lemurian Warrior",
+		health = 70,
+		movement = "Hop",
+		trait = "LemurianWarrior",
+
+		spawnBiomes = { "Hallow" },
+		spawnWeight = 0.5,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 8.5,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 10,
+		lungeMaxSpeed = 15,
+		lungeWindup = 0.35,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(200,200,200),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -2662,7 +2713,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon", "WerewolfLord", "Beagle", "BeisaOryx", "Bronto", "GreenRaptor", "CatMonk", "Cannon", "PinkyDemon", "HandlessNorg",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon", "WerewolfLord", "Beagle", "BeisaOryx", "Bronto", "GreenRaptor", "CatMonk", "Cannon", "PinkyDemon", "HandlessNorg", "LemurianWarrior",
 }
 
 --[[

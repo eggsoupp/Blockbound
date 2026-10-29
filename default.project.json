@@ -940,6 +940,9 @@
         },
         "GreenSpider": {
           "$path": "src/ServerScriptService/Creatures/GreenSpider.lua"
+        },
+        "EvilRat": {
+          "$path": "src/ServerScriptService/Creatures/EvilRat.lua"
         }
       },
       "BossService": {

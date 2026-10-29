@@ -91,4 +91,46 @@ Rigs.GreenSpider = {
 	end,
 }
 
+--[[
+	EVIL RAT. A trot: diagonal pairs (front-left with back-right) swing
+	together about the hip, the head nods twice a stride and the tail whips
+	side to side behind. Standing, it sniffs - quick little head lifts - and
+	the tail curls lazily. Biting drives the head down and forward;
+	scurrying off ("flee") is just a faster trot with the tail held high.
+	Legs hang down from their hips, so a positive pitch about X swings the
+	foot forward (the model faces -Z).
+]]
+Rigs.EvilRat = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 7, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 1.6 * math.pi * 2
+		local s = rig.stride
+
+		local swing = math.sin(s) * 0.75 * moving
+		j.FL.Transform = CFrame.Angles(swing, 0, 0)
+		j.BR.Transform = CFrame.Angles(swing, 0, 0)
+		j.FR.Transform = CFrame.Angles(-swing, 0, 0)
+		j.BL.Transform = CFrame.Angles(-swing, 0, 0)
+
+		local nod = math.sin(s * 2) * 0.08 * moving
+		local sniff = (1 - moving) * math.max(0, math.sin(ctx.t * 9)) * 0.12 * (if math.sin(ctx.t * 0.7) > 0.3 then 1 else 0)
+		local headPitch = nod + sniff
+		local headYaw = (1 - moving) * math.sin(ctx.t * 1.3) * 0.25
+		if ctx.pose == "bite" then
+			headPitch += (-0.55 - headPitch) * ctx.blend
+			headYaw *= 1 - ctx.blend
+		end
+		j.Head.Transform = CFrame.Angles(headPitch, headYaw, 0)
+
+		local whip = math.sin(s * 1 + 1) * 0.45 * moving + math.sin(ctx.t * 1.8) * 0.3 * (1 - moving)
+		local raise = if ctx.pose == "flee" then 0.35 else 0.1 * moving
+		j.Tail.Transform = CFrame.Angles(raise, whip, 0)
+	end,
+}
+
 return Rigs

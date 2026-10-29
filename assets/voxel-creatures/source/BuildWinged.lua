@@ -56,6 +56,19 @@ Build.Split = {
 			return best
 		end
 	end)(),
+	-- Head in front, tail behind, and below the belly (top at row 7 or
+	-- lower) four legs, front or back by where they stand and left or right
+	-- of the spine at x 43.
+	EvilRat = function(x, y, z, w, h, d)
+		local cz = z + d / 2
+		if cz < 14 then return "Head" end
+		if cz >= 51 then return "Tail" end
+		if y + h <= 7 then
+			local side = if x + w / 2 < 43 then "L" else "R"
+			return (if cz < 32 then "F" else "B") .. side
+		end
+		return "Body"
+	end,
 	-- Factor-2 boxes. The wings are the raised V above the shoulders and the
 	-- feathers hanging down the outside of the body.
 	Shrike = function(x, y, _z, w, _h, _d, _c)

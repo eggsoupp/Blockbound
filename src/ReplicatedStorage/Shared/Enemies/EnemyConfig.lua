@@ -917,6 +917,55 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		The Crimson's vermin: packs of small, quick rats that dart in, bite and
+		scurry off again (see its trait). Frail on purpose - a pack is the
+		threat. The Hop numbers are only for climbing a step.
+	]]
+	EvilRat = {
+		asset = "EvilRat",
+		displayName = "Evil Rat",
+		health = 18,
+		movement = "Hop",
+		trait = "EvilRat",
+
+		spawnBiomes = { "Crimson" },
+		packSize = NumberRange.new(3, 5),
+
+		speed = 15,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 30,
+
+		contactRange = 3,
+		contactDamage = 5,
+		contactInterval = 0.8,
+
+		gravity = 120,
+		jumpPower = 32,
+		maxHopDistance = 6,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.1,
+		windupSeconds = 0.08,
+
+		sizeVariance = 0.12,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 32,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.3,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(56, 56, 56),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1015,7 +1064,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat",
 }
 
 --[[

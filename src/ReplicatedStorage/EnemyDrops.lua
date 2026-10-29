@@ -144,6 +144,12 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.05, min = 1, max = 1 },
 	},
 
+	-- Vermin: a scrap of leather now and then, and the Crimson's own dirt.
+	EvilRat = {
+		{ item = "Leather", chance = 0.3, min = 1, max = 1 },
+		{ item = "CrimsonDirt", chance = 0.25, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

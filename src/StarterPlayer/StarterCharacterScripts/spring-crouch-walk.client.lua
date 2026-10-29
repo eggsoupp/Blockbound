@@ -120,15 +120,21 @@ end)
 
 -- The one place WalkSpeed is written, so crouching while sprinting and
 -- releasing either one cannot leave the two states disagreeing about it.
+-- A SpeedMultiplier attribute on the character (set by the server - a
+-- spider's web) scales whichever speed applies, and is re-applied when it
+-- changes, so being slowed mid-sprint and recovering both just work.
 local function applySpeed()
+	local multiplier = character:GetAttribute("SpeedMultiplier") or 1
 	if isCrouching then
-		humanoid.WalkSpeed = CROUCH_SPEED
+		humanoid.WalkSpeed = CROUCH_SPEED * multiplier
 	elseif isSprinting then
-		humanoid.WalkSpeed = RUN_SPEED
+		humanoid.WalkSpeed = RUN_SPEED * multiplier
 	else
-		humanoid.WalkSpeed = NORMAL_SPEED
+		humanoid.WalkSpeed = NORMAL_SPEED * multiplier
 	end
 end
+
+character:GetAttributeChangedSignal("SpeedMultiplier"):Connect(applySpeed)
 
 local function setSprinting(sprinting)
 	if sprinting == isSprinting then

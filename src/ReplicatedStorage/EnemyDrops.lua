@@ -137,6 +137,13 @@ EnemyDrops.Tables = {
 		{ item = "Herb", chance = 0.2, min = 1, max = 1 },
 	},
 
+	-- Silk is not an item yet; leather and the odd herb from its lair.
+	GreenSpider = {
+		{ item = "Leather", chance = 0.5, min = 1, max = 2 },
+		{ item = "Herb", chance = 0.35, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.05, min = 1, max = 1 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

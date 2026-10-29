@@ -479,6 +479,9 @@
           },
           "CreatureParticles": {
             "$path": "src/ReplicatedStorage/Shared/Enemies/CreatureParticles.lua"
+          },
+          "CreatureRigs": {
+            "$path": "src/ReplicatedStorage/Shared/Enemies/CreatureRigs.lua"
           }
         },
         "Combat": {
@@ -934,6 +937,9 @@
         },
         "RainbowSlime": {
           "$path": "src/ServerScriptService/Creatures/RainbowSlime.lua"
+        },
+        "GreenSpider": {
+          "$path": "src/ServerScriptService/Creatures/GreenSpider.lua"
         }
       },
       "BossService": {

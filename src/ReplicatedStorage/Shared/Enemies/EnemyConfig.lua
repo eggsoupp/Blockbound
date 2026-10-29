@@ -868,6 +868,55 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		A swamp hunter on eight jointed legs: scuttles in bursts, spits a
+		slowing web, rears and pounces. See its trait. The Hop numbers are for
+		the pounce (the lunge, which the trait winds up itself - lungeRange 0
+		keeps the plain hop from ever choosing one) and for climbing a step.
+	]]
+	GreenSpider = {
+		asset = "GreenSpider",
+		displayName = "Green Spider",
+		health = 40,
+		movement = "Hop",
+		trait = "GreenSpider",
+
+		spawnBiomes = { "Swamp" },
+
+		speed = 11,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 30,
+
+		contactRange = 4,
+		contactDamage = 6,
+		contactInterval = 0.9,
+
+		gravity = 120,
+		jumpPower = 34,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.12,
+
+		sizeVariance = 0.1,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 34,
+		lungeMaxDistance = 14,
+		lungeMaxSpeed = 30,
+		lungeWindup = 0.55,
+		lungeDamage = 14,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(56, 136, 4),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -966,7 +1015,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider",
 }
 
 --[[

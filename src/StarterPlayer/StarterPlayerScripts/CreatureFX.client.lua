@@ -34,6 +34,7 @@ local RunService = game:GetService("RunService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Library = require(Shared:WaitForChild("Enemies"):WaitForChild("CreatureParticles"))
+local Rigs = require(Shared:WaitForChild("Enemies"):WaitForChild("CreatureRigs"))
 
 --[[
 	The few effect building blocks used below: invisible emitter hosts,
@@ -467,19 +468,24 @@ end
 
 local snowballs = {}
 
-function handlers.throw(id: string, origin: Vector3, velocity: Vector3, gravity: number)
-	-- The projectile itself: a packed block of snow.
+local WEB = Color3.fromRGB(236, 240, 228)
+
+-- `style` "web" is the spider's glob; anything else is a snowball.
+function handlers.throw(id: string, origin: Vector3, velocity: Vector3, gravity: number, style: string?)
+	-- The projectile itself: a packed block of snow, or a wad of web.
+	local web = style == "web"
 	local ball = Instance.new("Part")
-	ball.Name = "Snowball"
-	ball.Size = Vector3.one * 1.1
-	ball.Material = Enum.Material.Snow
-	ball.Color = SNOW
+	ball.Name = if web then "WebGlob" else "Snowball"
+	ball.Size = Vector3.one * (if web then 0.8 else 1.1)
+	ball.Material = if web then Enum.Material.Fabric else Enum.Material.Snow
+	ball.Color = if web then WEB else SNOW
 	ball.Anchored, ball.CanCollide, ball.CanTouch, ball.CanQuery = true, false, false, false
 	ball.CFrame = CFrame.new(origin)
 	ball.Parent = folder
 	emitter("Puff", ball, {
-		Enabled = true, Rate = 14, Color = ColorSequence.new(SNOW), Size = NumberSequence.new(1.1),
-		Lifetime = NumberRange.new(0.35), LockedToPart = false,
+		Enabled = true, Rate = if web then 24 else 14, Color = ColorSequence.new(if web then WEB else SNOW),
+		Size = NumberSequence.new(if web then 0.6 else 1.1),
+		Lifetime = NumberRange.new(if web then 0.25 else 0.35), LockedToPart = false,
 	})
 	snowballs[id] = ball
 
@@ -498,11 +504,20 @@ function handlers.throw(id: string, origin: Vector3, velocity: Vector3, gravity:
 	end)
 end
 
-function handlers.splash(id: string, point: Vector3)
+function handlers.splash(id: string, point: Vector3, style: string?)
 	local ball = snowballs[id]
 	snowballs[id] = nil
 	if ball then
 		ball:Destroy()
+	end
+	if style == "web" then
+		-- A splat of web: a white burst and a star of strands.
+		local host = burst(point, {
+			{ "Puff", 5, { Color = ColorSequence.new(WEB), Size = NumberSequence.new(1.8), Speed = NumberRange.new(2, 5), SpreadAngle = Vector2.new(180, 180) } },
+			{ "Slash", 1, { Color = ColorSequence.new(WEB), Size = NumberSequence.new(3.5), LockedToPart = false } },
+		}, 2)
+		Kit.sound(host, SOUND_HIT, 0.35, 1.6)
+		return
 	end
 	local host = burst(point, {
 		{ "Puff", 6, { Color = ColorSequence.new(SNOW), Size = NumberSequence.new(2.6), Speed = NumberRange.new(4, 8), SpreadAngle = Vector2.new(180, 180) } },
@@ -659,6 +674,22 @@ local function setUp(model)
 		state.wings = wings
 	end
 
+	-- A jointed rig with its own procedural animation (Shared.Enemies.CreatureRigs).
+	local rigName = model:GetAttribute("Rig")
+	local rigDef = rigName and Rigs[rigName]
+	if rigDef then
+		local joints = {}
+		for _, joint in ipairs(model:GetDescendants()) do
+			if joint:IsA("Motor6D") then
+				joints[joint.Name] = joint
+			end
+		end
+		local rig = { joints = joints, body = part, pose = "walk", poseAt = 0, last = model:GetPivot().Position }
+		rigDef.setup(rig)
+		state.rig = rig
+		state.rigDef = rigDef
+	end
+
 	-- A neck and head on joints (the Cobra): see snakePose below.
 	local neck = part:FindFirstChild("Neck")
 	local neckPart = model:FindFirstChild("Neck")
@@ -717,7 +748,7 @@ local function setUp(model)
 		state.last = part.Position
 	end
 
-	if not (state.wings or state.snake or state.sheen or state.snow) then
+	if not (state.wings or state.snake or state.rig or state.sheen or state.snow) then
 		return false
 	end
 	return state
@@ -829,6 +860,24 @@ RunService.RenderStepped:Connect(function(dt)
 
 			if state.snake then
 				snakePose(state.snake, model:GetAttribute("CobraPose") or "idle", t, dt)
+			end
+
+			if state.rig then
+				local rig = state.rig
+				local pivot = model:GetPivot().Position
+				local moved = (pivot - rig.last) * Vector3.new(1, 0, 1)
+				rig.last = pivot
+				-- Smoothed, so one long frame does not jolt the stride.
+				rig.speed = (rig.speed or 0) + (moved.Magnitude / math.max(dt, 1e-3) - (rig.speed or 0)) * math.min(1, dt * 10)
+
+				local pose = model:GetAttribute("Pose") or "walk"
+				if pose ~= rig.pose then
+					rig.pose, rig.poseAt = pose, now
+				end
+				state.rigDef.animate(rig, {
+					t = t, dt = dt, speed = rig.speed, pose = pose,
+					blend = math.clamp((now - rig.poseAt) / 0.18, 0, 1),
+				})
 			end
 
 			if state.sheen then

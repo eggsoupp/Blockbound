@@ -32,6 +32,30 @@ Build.Split = {
 		if y < 36 then return "Neck" end
 		return "Head"
 	end,
+	-- Body is the middle band; every other box joins the leg whose line
+	-- (root to tip, traced from a top-down map, voxel x/z) it is nearest.
+	GreenSpider = (function()
+		local legs = {
+			L1 = { 70, 16, 40, 4 }, L2 = { 70, 21, 30, 20 }, L3 = { 68, 26, 30, 36 }, L4 = { 68, 32, 38, 50 },
+			R1 = { 90, 16, 114, 4 }, R2 = { 90, 21, 126, 20 }, R3 = { 92, 26, 126, 35 }, R4 = { 92, 32, 116, 50 },
+		}
+		local function distance(px, pz, l)
+			local ax, az, bx, bz = l[1], l[2], l[3], l[4]
+			local dx, dz = bx - ax, bz - az
+			local t = math.clamp(((px - ax) * dx + (pz - az) * dz) / (dx * dx + dz * dz), 0, 1)
+			return math.sqrt((ax + dx * t - px) ^ 2 + (az + dz * t - pz) ^ 2)
+		end
+		return function(x, _y, z, w, _h, d)
+			local cx, cz = x + w / 2, z + d / 2
+			if cx >= 70 and cx <= 91 then return "Body" end
+			local best, bestDistance = "Body", math.huge
+			for name, line in pairs(legs) do
+				local dist = distance(cx, cz, line)
+				if dist < bestDistance then best, bestDistance = name, dist end
+			end
+			return best
+		end
+	end)(),
 	-- Factor-2 boxes. The wings are the raised V above the shoulders and the
 	-- feathers hanging down the outside of the body.
 	Shrike = function(x, y, _z, w, _h, _d, _c)
@@ -171,9 +195,11 @@ end
 
 --[[
 	A chain of unions on Motor6Ds, for a body that bends rather than flaps:
-	`joints` is a list of { parent, child } group names, the first group in
-	`order` is the anchored root, and each child hinges at the bottom centre
-	of its own box. The pivot is the root's feet, centred.
+	`joints` is a list of { parent, child, hinge? } group names, the first
+	group in `order` is the anchored root, and each child hinges at `hinge`
+	(a point in the boxes file's voxel units: x, height, z) or, without one,
+	at the bottom centre of its own box. The pivot is the root's feet,
+	centred.
 ]]
 function Build.buildJointed(data, voxel, assetName, split, order, joints)
 	local colors = {}
@@ -220,7 +246,10 @@ function Build.buildJointed(data, voxel, assetName, split, order, joints)
 
 	for _, pair in ipairs(joints) do
 		local parent, child = parts[pair[1]], parts[pair[2]]
-		local hinge = CFrame.new(child.Position - Vector3.new(0, child.Size.Y / 2, 0))
+		local at = pair[3]
+		local hinge = if at
+			then CFrame.new(origin + Vector3.new(at[1] - dims[1] / 2, at[2], at[3] - dims[3] / 2) * voxel)
+			else CFrame.new(child.Position - Vector3.new(0, child.Size.Y / 2, 0))
 		local joint = Instance.new("Motor6D")
 		joint.Name = pair[2]
 		joint.Part0, joint.Part1 = parent, child

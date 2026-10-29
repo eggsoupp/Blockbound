@@ -12,8 +12,10 @@
 	curated pack emitters in Shared.Enemies.CreatureParticles.
 ]]
 
+local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
@@ -159,6 +161,68 @@ function CreatureKit.slide(entry, step: Vector3, look: Vector3?, tilt: CFrame?, 
 	CreatureKit.place(entry, Vector3.new(ahead.X, ground, ahead.Z), look, tilt)
 	entry.groundY = ground
 	return true
+end
+
+--[[
+	Slows a player to `multiplier` of their speed for `seconds`, through the
+	SpeedMultiplier character attribute the walk script honours. A newer slow
+	replaces an older one; only the latest one's expiry clears it.
+]]
+local slowTokens = setmetatable({}, { __mode = "k" })
+
+function CreatureKit.slow(player: Player, multiplier: number, seconds: number)
+	local character = player.Character
+	if not character then
+		return
+	end
+	local token = {}
+	slowTokens[character] = token
+	character:SetAttribute("SpeedMultiplier", multiplier)
+	task.delay(seconds, function()
+		if slowTokens[character] == token and character.Parent then
+			slowTokens[character] = nil
+			character:SetAttribute("SpeedMultiplier", nil)
+		end
+	end)
+end
+
+--[[
+	A projectile on a real arc, simulated here and drawn by every client from
+	the same launch numbers (CreatureFX "throw"; `style` picks its look). It
+	bursts on the first block or player it meets, or after `maxLife`, and
+	`onHit(point, playersHit)` decides what that does. Its own Heartbeat
+	connection, so it outlives whatever threw it.
+]]
+function CreatureKit.projectile(spec)
+	local id = HttpService:GenerateGUID(false)
+	local origin, velocity, gravity = spec.origin, spec.velocity, spec.gravity
+	local startedAt = os.clock()
+	local last = origin
+	CreatureKit.fx("throw", id, origin, velocity, gravity, spec.style)
+
+	local connection
+	connection = RunService.Heartbeat:Connect(function()
+		local t = os.clock() - startedAt
+		local point = origin + velocity * t + Vector3.new(0, -0.5 * gravity * t * t, 0)
+
+		local players = CreatureKit.playersAlong(last, point, spec.hitRadius or 2)
+		local block = CreatureKit.firstBlock(last, point, 0.5) or (CreatureKit.solidAt(point) and point)
+		last = point
+
+		if #players > 0 or block or t >= (spec.maxLife or 3) then
+			connection:Disconnect()
+			local at = if block then block else point
+			CreatureKit.fx("splash", id, at, spec.style)
+			spec.onHit(at, players)
+		end
+	end)
+end
+
+-- Sets the Pose attribute a rigged creature's client animation reads.
+function CreatureKit.pose(entry, pose: string)
+	if entry.model:GetAttribute("Pose") ~= pose then
+		entry.model:SetAttribute("Pose", pose)
+	end
 end
 
 --[[

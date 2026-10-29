@@ -45,6 +45,10 @@
 	  /tp cave [large|small]  teleport to the nearest cave mouth (or nearest
 	                      plan origin when it has no mouth), for a look inside
 	  /coords             your position in blocks, relative to spawn
+	  /time [when]        the time of day, in EVERY server (see WorldClock): day,
+	                      night, morning, dusk, noon, midnight, dawn, evening,
+	                      an hour (8, 20.5) or a clock time (07:30). Alone, says
+	                      what time it is
 	  /tutorial           replay the tutorial from its first step. Takes back
 	                      the ability the tutorial gave, so the choice is real
 	  /bbcaves edit       standing in a cave: place, mine and refill through
@@ -90,6 +94,7 @@ local InventoryService = require(ServerScriptService:WaitForChild("InventoryServ
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 local TutorialService = require(ServerScriptService:WaitForChild("TutorialService"))
+local WorldClock = require(ServerScriptService:WaitForChild("WorldClock"))
 
 --[[
 	Says the same thing twice: once to the output window and once on the
@@ -444,6 +449,27 @@ local function findNearestBiome(biomeName, fromX, fromZ)
 	return nil
 end
 
+-- Named times for /time, as hours. Sunrise runs 05:00-08:00 and sunset
+-- 17:00-20:00 (LightingPreset), so "dawn" and "dusk" land mid-change.
+local NAMED_HOURS = {
+	dawn = 6, sunrise = 6, morning = 8, day = 12, noon = 12, midday = 12,
+	afternoon = 15, evening = 17.5, dusk = 19, sunset = 19, night = 22, midnight = 0,
+}
+
+-- "night", "8", "20.5" or "07:30" -> hours, or nil.
+local function parseHour(word)
+	if NAMED_HOURS[word] then
+		return NAMED_HOURS[word]
+	end
+	local h, m = string.match(word, "^(%d%d?):(%d%d)$")
+	if h then
+		h, m = tonumber(h), tonumber(m)
+		return if h <= 24 and m < 60 then h + m / 60 else nil
+	end
+	local number = tonumber(word)
+	return if number and number >= 0 and number <= 24 then number else nil
+end
+
 local function onChatted(player, message)
 	local words = string.split(string.lower(message), " ")
 	local command = words[1]
@@ -562,6 +588,21 @@ local function onChatted(player, message)
 				name, degrees, turned, degrees
 			), "good")
 		end
+	elseif command == "/time" then
+		local argument = words[2]
+		if not argument or argument == "" then
+			reply(player, "time", "It is " .. WorldClock.format(WorldClock.minutes()) .. " in every server. /time <day|night|morning|dusk|hour>.")
+			return
+		end
+		local hour = parseHour(argument)
+		if not hour then
+			reply(player, "time", "Usage: /time day, night, morning, dusk, noon, midnight, dawn, evening, an hour (0-24) or 07:30.", "bad")
+			return
+		end
+		local _, note = WorldClock.setHour(hour)
+		reply(player, "time", string.format(
+			"Time set to %s in every server%s.", WorldClock.format(hour * 60), if note then " (" .. note .. ")" else ""
+		), "good")
 	elseif command == "/god" then
 		--[[
 			Toggled rather than set, and reported either way.

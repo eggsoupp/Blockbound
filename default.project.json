@@ -687,6 +687,9 @@
       "LightingPreset": {
         "$path": "src/ServerScriptService/LightingPreset.server.lua"
       },
+      "WorldClock": {
+        "$path": "src/ServerScriptService/WorldClock.lua"
+      },
       "Day/Night Cycle": {
         "$path": "src/ServerScriptService/Day-Night Cycle.server.lua",
         "$properties": {

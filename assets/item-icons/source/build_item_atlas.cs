@@ -188,7 +188,7 @@ namespace ItemIcons
 						var use = new Color[3][];
 						for (int k = 0; k < 3; k++)
 						{
-							string name = (3 + k < w.Length) ? w[3 + k] : t.Ramps[k];
+							string name = (3 + k < w.Length && w[3 + k] != "-") ? w[3 + k] : t.Ramps[k];
 							if (name == null) continue;
 							if (!ramps.TryGetValue(name, out use[k])) throw new Exception(where + ": no ramp " + name);
 						}

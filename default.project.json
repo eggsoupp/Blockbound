@@ -536,6 +536,9 @@
             "StarterVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/StarterVFX.lua"
             },
+            "PixelFlipbooks": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/PixelFlipbooks.lua"
+            },
             "StarterParticles": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/StarterParticles.lua"
             },

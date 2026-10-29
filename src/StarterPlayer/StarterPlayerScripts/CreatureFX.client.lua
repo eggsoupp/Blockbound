@@ -515,6 +515,16 @@ local STYLES = {
 		},
 		pitch = 0.7,
 	},
+	-- The Black Cat Magician's wand bolt.
+	magic = {
+		name = "WandBolt", size = 0.6, material = Enum.Material.Neon, color = Color3.fromRGB(150, 220, 255),
+		trail = { rate = 45, size = 0.7, life = 0.3 },
+		burst = {
+			{ "Glints", 10, { Color = ColorSequence.new(Color3.fromRGB(200, 240, 255)), Size = NumberSequence.new(0.9) } },
+			{ "Flare", 1, { Color = ColorSequence.new(Color3.fromRGB(150, 210, 255)), Size = NumberSequence.new(3) } },
+		},
+		pitch = 2,
+	},
 	-- The Pit Devil's spear of fire.
 	fire = {
 		name = "FireSpear", size = 0.8, material = Enum.Material.Neon, color = HELLFIRE,
@@ -1118,6 +1128,19 @@ function handlers.axeflight(axe, seconds: number)
 	})
 	Debris:AddItem(at, seconds)
 	Kit.sound(axe, SOUND_HIT, 0.4, 1.7)
+end
+
+-- ---------------------------------------------------------------------------
+-- Black Cat Magician
+-- ---------------------------------------------------------------------------
+
+-- A conjuror's puff: thick grey smoke, a few stars, a pop.
+function handlers.poof(position: Vector3)
+	local host = burst(position, {
+		{ "Puff", 10, { Color = ColorSequence.new(Color3.fromRGB(190, 185, 205)), Size = NumberSequence.new(3.2), Speed = NumberRange.new(2, 5), SpreadAngle = Vector2.new(180, 180), Lifetime = NumberRange.new(0.8, 1.2) } },
+		{ "Glints", 8, { Color = ColorSequence.new(Color3.fromRGB(255, 240, 160)), Size = NumberSequence.new(0.9) } },
+	}, 2.5)
+	Kit.sound(host, SOUND_HIT, 0.4, 2.4)
 end
 
 function handlers.flare(model, color: Color3?)

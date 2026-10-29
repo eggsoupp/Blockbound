@@ -1479,6 +1479,106 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		BLACK CAT MAGICIAN - the Hallow's trickster: keeps its distance and
+		fires wand bolts, vanishes in smoke when you close in, and splits into
+		three round you with smoke and mirrors - two of them decoys
+		(ServerScriptService.Creatures.CatMagician; its rig is
+		Shared.Enemies.CreatureRigs.CatMagician).
+	]]
+	CatMagician = {
+		asset = "CatMagician",
+		displayName = "Black Cat Magician",
+		health = 60,
+		movement = "Hop",
+		trait = "CatMagician",
+
+		spawnBiomes = { "Hallow" },
+		spawnWeight = 0.5,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 7,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3,
+		contactDamage = 4,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 36,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 10,
+		lungeWindup = 0.5,
+		lungeDamage = 4,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(60, 70, 120),
+	},
+
+	--[[
+		The magician's smoke-and-mirrors copy. Conjured by the real one only
+		(no spawnBiomes, not in Order), the same model, name and size so it
+		cannot be told apart, but harmless: no contact damage, its bolts do
+		nothing, and any blow pops it (the trait's `guard`). No drops.
+	]]
+	CatMagicianDecoy = {
+		asset = "CatMagician",
+		displayName = "Black Cat Magician",
+		health = 60,
+		movement = "Hop",
+		trait = "CatMagician",
+		decoy = true,
+
+		speed = 7,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3,
+		contactDamage = 0,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 36,
+		maxHopDistance = 6,
+		maxHopSpeed = 10,
+		groundedSeconds = 0.15,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 36,
+		lungeMaxDistance = 6,
+		lungeMaxSpeed = 10,
+		lungeWindup = 0.5,
+		lungeDamage = 0,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(60, 70, 120),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1577,7 +1677,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician",
 }
 
 --[[

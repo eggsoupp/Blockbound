@@ -218,6 +218,14 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.2, min = 1, max = 2 },
 	},
 
+	-- A magician's pockets: mana, the Hallow's dirt, sometimes the magic
+	-- material. (Its decoys have no table, so they drop nothing.)
+	CatMagician = {
+		{ item = "ManaPotion", chance = 0.4, min = 1, max = 1 },
+		{ item = "HallowedDirt", chance = 0.5, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.3, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

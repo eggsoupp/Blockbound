@@ -757,4 +757,53 @@ Rigs.OgreBrute = {
 	end,
 }
 
+--[[
+	BLACK CAT MAGICIAN. A cat in a top hat with a long wand through its right
+	fist. It walks on dainty steps, tail swaying. Its moves:
+	  cast   the wand arm raised to point, a little flourish, then held level
+	  trick  both arms flung up and out, head back - the smoke and mirrors
+	The decoys it conjures are the same model and the same animation.
+]]
+Rigs.CatMagician = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.5 * moving
+		local left = CFrame.Angles(-step * 0.6, 0, -0.1)
+		local right = CFrame.Angles(0.3, 0, 0.05)
+		local wand = CFrame.Angles(math.sin(ctx.t * 1.3) * 0.1, 0, 0)
+		local head = CFrame.Angles(0, math.sin(ctx.t * 0.8) * 0.2, math.sin(ctx.t * 1.6) * 0.08)
+		local tail = CFrame.Angles(math.sin(ctx.t * 2.2) * 0.15, 0, math.sin(ctx.t * 1.4 + s) * 0.35)
+
+		if ctx.pose == "cast" then
+			local flourish = math.sin(math.min(1, b * 1.6) * math.pi) * 0.5
+			right = CFrame.Angles(1.3 * math.min(1, b * 2) + flourish, 0, 0.1)
+			wand = CFrame.Angles(-0.3 * math.min(1, b * 2), flourish, 0)
+			head = CFrame.Angles(0.1, 0, 0)
+		elseif ctx.pose == "trick" then
+			local k = math.min(1, b * 2)
+			left = CFrame.Angles(0.3 * k, 0, -2.2 * k)
+			right = CFrame.Angles(0.3 * k, 0, 2.2 * k)
+			head = CFrame.Angles(-0.35 * k, 0, 0)
+			tail = CFrame.Angles(0.4 * k, 0, math.sin(ctx.t * 12) * 0.3)
+		end
+
+		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-step, 0, 0)
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.Wand.Transform = wand
+		j.Head.Transform = head
+		j.Tail.Transform = tail
+	end,
+}
+
 return Rigs

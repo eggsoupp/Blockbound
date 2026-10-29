@@ -121,6 +121,19 @@ Build.Split = {
 		if cx < 13 or cx > 37 then return side .. "Arm" end
 		return "Body"
 	end,
+	-- A top-hatted cat with a wand held out forward in its right hand: the
+	-- wand's colours (12-15) are the wand; behind z 48 is the tail; head and
+	-- hat above row 48; arms outside x 25-45; legs below row 14.
+	CatMagician = function(x, y, z, w, h, _d, c)
+		local cx = x + w / 2
+		if c >= 12 then return "Wand" end
+		if z >= 48 then return "Tail" end
+		if y >= 48 then return "Head" end
+		if y + h <= 14 then return if cx < 36 then "LeftLeg" else "RightLeg" end
+		if cx < 25 then return "LeftArm" end
+		if cx > 45 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

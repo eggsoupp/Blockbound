@@ -973,6 +973,9 @@
         },
         "OgreBrute": {
           "$path": "src/ServerScriptService/Creatures/OgreBrute.lua"
+        },
+        "CatMagician": {
+          "$path": "src/ServerScriptService/Creatures/CatMagician.lua"
         }
       },
       "BossService": {

@@ -211,6 +211,13 @@ EnemyDrops.Tables = {
 		{ item = "EssenceShard", chance = 0.35, min = 1, max = 2 },
 	},
 
+	-- A heavy hide, and a fair chance of the metal off its axes.
+	OgreBrute = {
+		{ item = "Leather", chance = 1, min = 2, max = 4 },
+		{ item = "GoldOre", chance = 0.3, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.2, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

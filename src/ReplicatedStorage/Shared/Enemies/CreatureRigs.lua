@@ -682,4 +682,79 @@ Rigs.Longleg = {
 	end,
 }
 
+--[[
+	OGRE BRUTE. A broad ogre with a double axe hanging from each fist. It
+	lumbers, the axes swinging heavy. Its moves:
+	  chop     both axes hauled up overhead, then brought down together
+	  windup   arms flung out to the sides, axes level - the whirlwind's tell
+	  spin     the same, held, while the server turns the whole body
+	  dizzy    arms hanging slack, head lolling
+	  throw    right arm cocked back, then flung forward; the axe itself
+	           leaves the hand (ServerScriptService.Creatures.OgreBrute)
+	A sideways raise is a roll about Z: negative for the left arm, positive for
+	the right.
+]]
+Rigs.OgreBrute = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local b = ctx.blend
+		local moving = math.clamp(ctx.speed / 5, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 3.5 * math.pi * 2
+		local s = rig.stride
+
+		local swing = math.sin(s) * 0.4 * moving
+		local left = CFrame.Angles(-swing, 0, -0.08)
+		local right = CFrame.Angles(swing, 0, 0.08)
+		local axeL = CFrame.Angles(swing * 0.4, 0, 0)
+		local axeR = CFrame.Angles(-swing * 0.4, 0, 0)
+		local head = CFrame.Angles(0, 0, math.sin(s) * 0.06 * moving)
+
+		if ctx.pose == "chop" then
+			-- Up for the first half, down hard through the second.
+			local up = math.min(1, b * 2)
+			local down = math.clamp(b * 3 - 1.6, 0, 1)
+			local raise = 2.8 * up - 2.3 * down
+			left = CFrame.Angles(raise, 0, 0.15 * up)
+			right = CFrame.Angles(raise, 0, -0.15 * up)
+			axeL = CFrame.Angles(0.4 * up, 0, 0)
+			axeR = CFrame.Angles(0.4 * up, 0, 0)
+			head = CFrame.Angles(-0.2 * up + 0.35 * down, 0, 0)
+		elseif ctx.pose == "windup" or ctx.pose == "spin" then
+			local k = if ctx.pose == "windup" then b else 1
+			local wobble = if ctx.pose == "spin" then math.sin(ctx.t * 20) * 0.05 else 0
+			left = left:Lerp(CFrame.Angles(0, 0, -1.45 + wobble), k)
+			right = right:Lerp(CFrame.Angles(0, 0, 1.45 - wobble), k)
+			axeL = axeL:Lerp(CFrame.Angles(0, 0, 0.3), k)
+			axeR = axeR:Lerp(CFrame.Angles(0, 0, -0.3), k)
+			head = head:Lerp(CFrame.Angles(-0.3, 0, 0), k)
+		elseif ctx.pose == "dizzy" then
+			left = CFrame.Angles(-0.1, 0, 0.1)
+			right = CFrame.Angles(-0.1, 0, -0.1)
+			head = CFrame.Angles(0.25, math.sin(ctx.t * 3) * 0.3, math.cos(ctx.t * 3) * 0.25)
+		elseif ctx.pose == "throw" then
+			local back = math.min(1, b * 2.5)
+			local fling = math.clamp(b * 2.5 - 1.2, 0, 1)
+			right = CFrame.Angles(2.7 * back - 2.0 * fling, 0, 0.3 * back)
+			left = CFrame.Angles(0.5 * back, 0, -0.2)
+			head = CFrame.Angles(-0.15 * back + 0.2 * fling, 0, 0)
+		elseif ctx.pose == "catch" then
+			right = CFrame.Angles(1.1, 0, 0.2)
+			head = CFrame.Angles(-0.1, 0, 0)
+		end
+
+		local step = math.sin(s) * 0.35 * moving
+		j.LeftLeg.Transform = CFrame.Angles(step, 0, 0)
+		j.RightLeg.Transform = CFrame.Angles(-step, 0, 0)
+		j.LeftArm.Transform = left
+		j.RightArm.Transform = right
+		j.LeftAxe.Transform = axeL
+		j.RightAxe.Transform = axeR
+		j.Head.Transform = head
+	end,
+}
+
 return Rigs

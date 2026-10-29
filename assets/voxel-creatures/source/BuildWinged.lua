@@ -109,6 +109,18 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- An ogre holding a double axe low in each hand: the axes are the flat
+	-- layer in front of z 27; head above row 66 between x 14 and 36; arms
+	-- outside x 13-37; legs below row 12.
+	OgreBrute = function(x, y, z, w, h, d)
+		local cx = x + w / 2
+		local side = if cx < 25 then "Left" else "Right"
+		if z + d <= 27 and y + h <= 40 then return side .. "Axe" end
+		if y >= 66 and cx >= 14 and cx <= 36 then return "Head" end
+		if y + h <= 12 then return side .. "Leg" end
+		if cx < 13 or cx > 37 then return side .. "Arm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

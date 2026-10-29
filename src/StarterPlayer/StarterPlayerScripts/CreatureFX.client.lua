@@ -1053,6 +1053,73 @@ function handlers.lash(model)
 	Kit.sound(part, SOUND_HIT, 0.5, 0.5)
 end
 
+-- ---------------------------------------------------------------------------
+-- Ogre Brute
+-- ---------------------------------------------------------------------------
+
+local STEEL = Color3.fromRGB(225, 225, 230)
+
+-- Both axes down on the ground in front of it: a dust burst and grit.
+function handlers.chop(position: Vector3)
+	local host = burst(position + Vector3.new(0, 0.4, 0), {
+		{ "Puff", 9, { Color = ColorSequence.new(DUST), Size = NumberSequence.new(2.8), Speed = NumberRange.new(4, 9), SpreadAngle = Vector2.new(70, 20) } },
+		{ "BoomSparks", 10, { Color = ColorSequence.new(STEEL) } },
+	}, 2)
+	Kit.sound(host, SOUND_BOOM, 0.6, 1.2)
+end
+
+-- The whirlwind: steel slashes all the way round it while it turns, and sand
+-- thrown off at its feet.
+function handlers.whirl(model, seconds: number, radius: number)
+	local part = body(model)
+	if not part then
+		return
+	end
+	local at = Kit.attachment(part)
+	local slash = emitter("Slash", at, {
+		Color = ColorSequence.new(STEEL), Size = NumberSequence.new(radius * 1.1), LockedToPart = false,
+	})
+	local feet = Kit.attachment(part)
+	local sand = emitter("Puff", feet, {
+		Enabled = true, Rate = 18, Color = ColorSequence.new(DUST), Size = NumberSequence.new(2.2),
+		Speed = NumberRange.new(5, 9), SpreadAngle = Vector2.new(90, 10), LockedToPart = false,
+	})
+	local last = -1
+	during(seconds, function(elapsed)
+		if not model.Parent then
+			return false
+		end
+		local cframe, size = model:GetBoundingBox()
+		local center = cframe.Position
+		feet.WorldPosition = center - Vector3.new(0, size.Y * 0.45, 0)
+		local beat = math.floor(elapsed / 0.07)
+		if beat ~= last then
+			last = beat
+			local look = model:GetPivot().LookVector
+			at.WorldCFrame = CFrame.lookAt(center, center + look)
+			slash:Emit(1)
+		end
+	end, function()
+		sand.Enabled = false
+		Debris:AddItem(at, 0.5)
+		Debris:AddItem(feet, 1)
+	end)
+	Kit.sound(part, SOUND_HIT, 0.5, 0.6)
+end
+
+-- The thrown axe in flight: a glint trail off the blade and a whoosh.
+function handlers.axeflight(axe, seconds: number)
+	if typeof(axe) ~= "Instance" or not axe:IsA("BasePart") then
+		return
+	end
+	local at = Kit.attachment(axe)
+	emitter("Glints", at, {
+		Enabled = true, Rate = 40, Color = ColorSequence.new(STEEL), Size = NumberSequence.new(0.7), LockedToPart = false,
+	})
+	Debris:AddItem(at, seconds)
+	Kit.sound(axe, SOUND_HIT, 0.4, 1.7)
+end
+
 function handlers.flare(model, color: Color3?)
 	local part = body(model)
 	if not part then

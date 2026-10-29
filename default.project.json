@@ -970,6 +970,9 @@
         },
         "Longleg": {
           "$path": "src/ServerScriptService/Creatures/Longleg.lua"
+        },
+        "OgreBrute": {
+          "$path": "src/ServerScriptService/Creatures/OgreBrute.lua"
         }
       },
       "BossService": {

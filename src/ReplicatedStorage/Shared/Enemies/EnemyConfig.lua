@@ -1428,6 +1428,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		OGRE BRUTE - the Desert's heavy: a two-axe overhead chop, a whirlwind
+		that leaves it dizzy, and its own axe thrown out and caught again
+		(ServerScriptService.Creatures.OgreBrute; its rig is
+		Shared.Enemies.CreatureRigs.OgreBrute). Slow and very tough.
+	]]
+	OgreBrute = {
+		asset = "OgreBrute",
+		displayName = "Ogre Brute",
+		health = 160,
+		movement = "Hop",
+		trait = "OgreBrute",
+
+		spawnBiomes = { "Desert" },
+		spawnWeight = 0.5,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 5,
+		aggroRange = 55,
+		giveUpRange = 95,
+		despawnSeconds = 40,
+
+		contactRange = 3.8,
+		contactDamage = 6,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 34,
+		maxHopDistance = 5,
+		maxHopSpeed = 8,
+		groundedSeconds = 0.25,
+		windupSeconds = 0.15,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 34,
+		lungeMaxDistance = 5,
+		lungeMaxSpeed = 8,
+		lungeWindup = 0.5,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(90, 100, 50),
+	},
+
+	--[[
 		THE RAINBOW SLIME - the Hallow's rare giant. A slime in every way that
 		moves, only far tougher and harder-hitting, and drawn in shifting
 		rainbow colours by every client (its trait marks it; see
@@ -1526,7 +1577,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute",
 }
 
 --[[

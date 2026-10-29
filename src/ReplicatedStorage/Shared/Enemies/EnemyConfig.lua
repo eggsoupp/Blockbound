@@ -1896,6 +1896,57 @@ EnemyConfig.Definitions = {
 	},
 
 	--[[
+		LIZARD WARRIOR - the Swamp's duellist: a two-blade combo in front, a
+		tail lash for anyone at its back or flank, and a leaping strike
+		(ServerScriptService.Creatures.LizardWarrior; its rig is
+		Shared.Enemies.CreatureRigs.LizardWarrior).
+	]]
+	LizardWarrior = {
+		asset = "LizardWarrior",
+		displayName = "Lizard Warrior",
+		health = 85,
+		movement = "Hop",
+		trait = "LizardWarrior",
+
+		spawnBiomes = { "Swamp" },
+		spawnWeight = 0.5,
+		packSize = NumberRange.new(1, 2),
+
+		speed = 7.5,
+		aggroRange = 50,
+		giveUpRange = 90,
+		despawnSeconds = 40,
+
+		contactRange = 3,
+		contactDamage = 5,
+		contactInterval = 1.0,
+
+		gravity = 120,
+		jumpPower = 38,
+		maxHopDistance = 7,
+		maxHopSpeed = 11,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.06,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 2,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 38,
+		lungeMaxDistance = 10,
+		lungeMaxSpeed = 15,
+		lungeWindup = 0.35,
+		lungeDamage = 9,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(96, 128, 72),
+	},
+
+	--[[
 		The magician's smoke-and-mirrors copy. Conjured by the real one only
 		(no spawnBiomes, not in Order), the same model, name and size so it
 		cannot be told apart, but harmless: no contact damage, its bolts do
@@ -2042,7 +2093,7 @@ EnemyConfig.Order = {
 	"Ghost", "DemonEye", "BlueSlime", "GreenSlime",
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
-	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch",
+	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior",
 }
 
 --[[

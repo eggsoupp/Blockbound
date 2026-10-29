@@ -209,6 +209,22 @@ Build.Split = {
 		end
 		return "Body"
 	end,
+	-- A lizard with a sickle raised in its right hand and a second, low in its
+	-- left: the blades' greys (7, 8, 9, 16) and brown grips (1) above row 46
+	-- are the right-hand Weapon, below it the OffWeapon; head above row 48;
+	-- arms outside x 39-63 above row 30; tail behind z 44; legs below row 15.
+	LizardWarrior = function(x, y, z, w, h, d, c)
+		local cx, cz = x + w / 2, z + d / 2
+		if c == 7 or c == 8 or c == 9 or c == 16 or c == 1 then
+			return if y >= 46 then "Weapon" else "OffWeapon"
+		end
+		if y + h <= 15 then return if cx < 51 then "LeftLeg" else "RightLeg" end
+		if cz >= 44 then return "Tail" end
+		if y >= 48 and cx >= 42 and cx <= 60 then return "Head" end
+		if y >= 30 and cx < 39 then return "LeftArm" end
+		if y >= 30 and cx > 63 then return "RightArm" end
+		return "Body"
+	end,
 	-- A robed bear: head above row 33, the staff arm left of x 30, the orb
 	-- arm right of x 60, legs below row 9.
 	BearidWizard = function(x, y, _z, w, h)

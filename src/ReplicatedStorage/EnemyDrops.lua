@@ -273,6 +273,13 @@ EnemyDrops.Tables = {
 		{ item = "Leather", chance = 1, min = 2, max = 4 },
 	},
 
+	-- Scaled hide, swamp herbs, and now and then the magic material.
+	LizardWarrior = {
+		{ item = "Leather", chance = 1, min = 1, max = 2 },
+		{ item = "Herb", chance = 0.4, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 0.25, min = 1, max = 2 },
+	},
+
 	-- Rare, so it pays: a stack of gel, the magic material for certain, and
 	-- a fair chance of gold.
 	RainbowSlime = {

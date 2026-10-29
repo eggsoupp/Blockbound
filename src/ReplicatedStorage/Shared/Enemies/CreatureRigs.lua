@@ -1185,6 +1185,64 @@ Rigs.Rooster = {
 }
 
 
+--[[
+	LIZARD WARRIOR. A lizard on two legs with a sickle raised in its right
+	hand, a second blade low in its left, and a long tail. It stalks, tail
+	swaying. Its moves:
+	  combo  the right sickle hooked back over the shoulder through the wind-up
+	         and chopped down (Creatures.LizardWarrior comboWindup), then the
+	         left blade swept across low (comboSecond)
+	  sweep  the tail lashed round behind it
+	  leap   both blades raised, legs tucked, in the air
+	The right arm is held UP, so on it +pitch draws the sickle back over the
+	shoulder and -pitch brings it forward and down; the left hangs, the other
+	way round.
+]]
+Rigs.LizardWarrior = {
+	setup = function(rig)
+		rig.stride = 0
+	end,
+
+	animate = function(rig, ctx)
+		local j = rig.joints
+		local moving = math.clamp(ctx.speed / 6, 0, 1)
+		rig.stride += ctx.dt * ctx.speed / 2.4 * math.pi * 2
+		local s = rig.stride
+
+		local step = math.sin(s) * 0.55 * moving
+		local legL, legR = CFrame.Angles(step, 0, 0), CFrame.Angles(-step, 0, 0)
+		local right = CFrame.Angles(math.sin(ctx.t * 1.4) * 0.05, 0, 0)
+		local left = CFrame.Angles(-step * 0.4, 0, 0)
+		local head = CFrame.Angles(0, math.sin(ctx.t * 0.8) * 0.25, 0)
+		local tail = CFrame.Angles(0, math.sin(ctx.t * 1.7 + s) * 0.35, 0)
+
+		if ctx.pose == "combo" then
+			local wind, hit = phases(ctx, 0.35, 0.1)
+			local second = math.clamp(((ctx.elapsed or 0) - 0.62) / 0.12, 0, 1)
+			right = CFrame.Angles(0.7 * wind - 2.3 * hit, 0, 0)
+			left = CFrame.Angles(0.5 * wind, -0.9 * wind + 1.8 * second, 0)
+			head = CFrame.Angles(0.15 * hit, -0.3 * second, 0)
+		elseif ctx.pose == "sweep" then
+			local wind, hit = phases(ctx, 0.25, 0.15)
+			tail = CFrame.Angles(0.15, -0.9 * wind + 2.6 * hit, 0)
+			head = CFrame.Angles(0, 0.4 * wind - 0.4 * hit, 0)
+		elseif ctx.pose == "leap" then
+			right = CFrame.Angles(0.5, 0, 0)
+			left = CFrame.Angles(1.2, 0, -0.3)
+			legL = CFrame.Angles(0.6, 0, 0)
+			legR = CFrame.Angles(-0.4, 0, 0)
+			tail = CFrame.Angles(0.35, 0, 0)
+		end
+
+		j.LeftLeg.Transform = legL
+		j.RightLeg.Transform = legR
+		j.RightArm.Transform = right
+		j.LeftArm.Transform = left
+		j.Head.Transform = head
+		j.Tail.Transform = tail
+	end,
+}
+
 -- The auroch is a bull built like the Pentasaurus - four legs on the same
 -- joints, a horned head, a tail - and fights the same way
 -- (Creatures.Auroch), so it moves the same way too.

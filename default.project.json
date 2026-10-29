@@ -414,6 +414,9 @@
           "ItemThumbnails": {
             "$path": "src/ReplicatedStorage/Shared/UI/ItemThumbnails.lua"
           },
+          "ItemSprites": {
+            "$path": "src/ReplicatedStorage/Shared/UI/ItemSprites.lua"
+          },
           "ItemPreview": {
             "$path": "src/ReplicatedStorage/Shared/UI/ItemPreview.lua"
           },

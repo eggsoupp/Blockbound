@@ -11,6 +11,8 @@
 	frame.
 
 	CANDIDATES, IN ORDER
+	  0. definition.sprite      a 16x16 icon on the item atlas (Shared.UI.
+	                            ItemSprites, Theme.ItemAtlas), drawn pixelated
 	  1. definition.thumbnail   explicit override, any image content string
 	  2. definition.modelId     uploaded Model/Mesh asset id -> rbxthumb
 	  3. definition.icon        the hand-drawn icon
@@ -30,8 +32,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 local ItemModels = require(script.Parent:WaitForChild("ItemModels"))
+local ItemSprites = require(script.Parent:WaitForChild("ItemSprites"))
+local Theme = require(script.Parent:WaitForChild("Theme"))
 
 local ItemThumbnails = {}
+
+-- A sprite candidate is this prefix plus the sprite's name, so it travels
+-- through the same queue and cache as an ordinary image string.
+local SPRITE_PREFIX = "sprite:"
 
 -- One of the fixed set the thumbnail service accepts; the smallest that still
 -- looks right on a slot at 2x display scaling.
@@ -89,6 +97,11 @@ local function candidatesFor(itemName: string): { string }
 	end
 
 	if definition then
+		local sprite = definition.sprite
+		if type(sprite) == "string" and ItemSprites.Sprites[sprite] and Theme.ItemAtlas ~= "" then
+			add(SPRITE_PREFIX .. sprite)
+		end
+
 		add(definition.thumbnail)
 
 		local modelId = assetId(definition.modelId)
@@ -128,9 +141,36 @@ end
 
 -- Yields. Anything short of Success is a miss, except a failure of the call
 -- itself, which means "this engine will not tell us" and is answered yes.
+local function spriteOf(image: string)
+	if string.sub(image, 1, #SPRITE_PREFIX) == SPRITE_PREFIX then
+		return ItemSprites.Sprites[string.sub(image, #SPRITE_PREFIX + 1)]
+	end
+	return nil
+end
+
+--[[
+	Puts a resolved candidate on a label. Slots are reused for whatever item
+	moves into them, so every paint sets the atlas rect AND clears it again for
+	a plain image - a potion's rect left on a pickaxe thumbnail would crop it.
+]]
+local function paint(label: any, image: string)
+	local sprite = spriteOf(image)
+	if sprite then
+		label.Image = Theme.ItemAtlas
+		label.ImageRectOffset = sprite.offset
+		label.ImageRectSize = sprite.size
+		label.ResampleMode = Enum.ResamplerMode.Pixelated
+	else
+		label.Image = image
+		label.ImageRectOffset = Vector2.zero
+		label.ImageRectSize = Vector2.zero
+		label.ResampleMode = Enum.ResamplerMode.Default
+	end
+end
+
 local function loads(image: string): boolean
 	local probe = Instance.new("ImageLabel")
-	probe.Image = image
+	probe.Image = if spriteOf(image) then Theme.ItemAtlas else image
 
 	local good = true
 
@@ -152,7 +192,7 @@ local function applyTo(itemName: string, image: string)
 	for label, binding in pairs(bindings) do
 		if binding.item == itemName and label.Parent then
 			if image ~= "" then
-				label.Image = image
+				paint(label, image)
 			end
 
 			if binding.onResolved then
@@ -248,12 +288,12 @@ function ItemThumbnails.bind(label: any, itemName: string?, onResolved: ((string
 
 	if type(itemName) ~= "string" or itemName == "" then
 		bindings[label] = nil
-		label.Image = ""
+		paint(label, "")
 		return
 	end
 
 	bindings[label] = { item = itemName, onResolved = onResolved }
-	label.Image = ItemThumbnails.imageFor(itemName)
+	paint(label, ItemThumbnails.imageFor(itemName))
 
 	-- An item already known to have nothing gets its answer now rather than
 	-- never: the queue will not re-check it, so nobody else would say so.

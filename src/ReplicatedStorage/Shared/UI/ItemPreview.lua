@@ -625,6 +625,13 @@ function ItemPreview.fillSlot(icon: Instance?, itemName: string?): boolean
 		return false
 	end
 
+	-- A pixel icon on the item atlas is the item's chosen look in a slot, the
+	-- way `thumbnail` is; ItemThumbnails draws it.
+	local definition = ItemDefinitions[itemName]
+	if definition and type(definition.sprite) == "string" then
+		return false
+	end
+
 	local model = prepare(itemName)
 	if not model then
 		return false

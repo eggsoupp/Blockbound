@@ -119,7 +119,7 @@ ContentAudit.KnownItemFields = {
 	classification = true, maxStack = true, miningTime = true, miningSpeed = true,
 	miningPower = true, weaponClass = true, weaponSubclass = true, rarity = true, animation = true, iconPose = true, iconAngle = true, thumbnail = true,
 	modelId = true, icon = true, description = true, value = true, buffs = true,
-	displayName = true, look = true, dropOnly = true,
+	displayName = true, look = true, dropOnly = true, sprite = true,
 }
 
 -- Ids in this range were typed in as placeholders before there was any art;
@@ -298,6 +298,7 @@ function ContentAudit.run()
 	local SoundConfig = load(report, Shared:FindFirstChild("Audio"), "SoundConfig", "Shared.Audio.SoundConfig")
 	local Music = load(report, Shared:FindFirstChild("Audio"), "Music", "Shared.Audio.Music")
 	local BlockConfig = load(report, Shared:FindFirstChild("Blocks"), "BlockConfig", "Shared.Blocks.BlockConfig")
+	local ItemSprites = load(report, Shared:FindFirstChild("UI"), "ItemSprites", "Shared.UI.ItemSprites")
 	local StationConfig = load(report, Shared:FindFirstChild("Crafting"), "StationConfig", "Shared.Crafting.StationConfig")
 	local WeaponConfig = load(report, Shared:FindFirstChild("Combat"), "WeaponConfig", "Shared.Combat.WeaponConfig")
 
@@ -489,6 +490,15 @@ function ContentAudit.run()
 			or (blockAssets and blockAssets:FindFirstChild(name) ~= nil)
 			or type(definition.look) == "table"
 		local hasThumbnail = type(definition.thumbnail) == "string" and definition.thumbnail ~= ""
+		if definition.sprite ~= nil then
+			if ItemSprites and ItemSprites.Sprites[definition.sprite] then
+				-- The atlas icon is the image; a placeholder `icon` under it never shows.
+				hasThumbnail = true
+				icon = nil
+			else
+				add(report, "Errors", "Icons", itemLabel(name) .. ".sprite", string.format("%q is not on the item atlas (Shared.UI.ItemSprites)", tostring(definition.sprite)))
+			end
+		end
 
 		if icon == nil or icon == "" then
 			if hasThumbnail then
@@ -507,7 +517,7 @@ function ContentAudit.run()
 			))
 		end
 
-		if hasThumbnail then
+		if type(definition.thumbnail) == "string" and definition.thumbnail ~= "" then
 			checkId(report, "Icons", itemLabel(name) .. ".thumbnail", definition.thumbnail, "thumbnail")
 		end
 	end

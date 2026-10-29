@@ -41,6 +41,15 @@ Theme.SlotPitch = 68
 	Both want IMAGE ids. A Decal id will not display: paste it into any
 	ImageLabel's Image in Studio, and Studio swaps it for the image id.
 ]]
+--[[
+	The 16x16 item icons: assets/item-icons/atlas/item_icons_atlas.png, built
+	by assets/item-icons/source/build_item_atlas.ps1, which also writes where
+	each icon sits (Shared.UI.ItemSprites). Items pick one with `sprite` in
+	ItemDefinitions. Sprites are only ever appended to the atlas, so an older
+	upload still draws every icon it had.
+]]
+Theme.ItemAtlas = "rbxassetid://121801284522036"
+
 Theme.Pixel = {
 	-- assets/pixel-ui/atlas/pixel_ui_atlas.png, group-owned Image. Replaced
 	-- 79592529682718 when the HUD sprites were added; every older sprite sits in

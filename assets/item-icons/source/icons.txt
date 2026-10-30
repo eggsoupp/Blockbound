@@ -2766,54 +2766,7 @@ texture hallowed_stone 9c689d,b99ab9 0000000000000000000100011110000001000000000
 texture hallowed_dirt_top f8d0ff,fef9ff,f9e2fc,faddff 0111110011111222121000111011211111111111110111111012211222211101011112211111121111201112111222111001111000121101102222212211101222111100110001011011122111111211122221110000212201111110121111110110122221112211111111111011010122211000011101121122211111101331
 texture hallowed_dirt_side fef9ff,f9e2fc,f8d0ff,784b25,a66936,5f3e22 0111101111101112201103122112201004221323111041153335133314033335555333353333533533344445355533333353335333334433333553344433334334333335334333453333333335333353353344443355533335555333533444333344335533333333533334333444443353355533455533353533333333333353
 
-# ---------------------------------------------------------------- weapons
-# The game's own weapons, coloured after their models.
-weapon sword_wood        sword      wood     brown     brown
-weapon sword_stone       sword      stone    darkstone wood
-weapon sword_copper      sword      copper   brown     leather
-weapon sword_iron        sword      iron     darkstone leather
-weapon sword_gold        sword      gold     red       leather
-weapon sword_mythril     sword      mythril  silver    darkfur
-weapon sword_test        sword      silver   gold      leather
-weapon bloodfang         katana     crimson  black     black
-weapon thunderveil       broadsword cobalt   black     darkstone
-weapon void_reaver       greatsword void     purple    darkstone
-weapon light_lance       spear      white    gold      silver
 
-# More of each kind, in every material.
-weapon sword_tin         sword      tin      darkstone leather
-weapon sword_lead        sword      lead     darkstone leather
-weapon sword_silver      sword      silver   darkstone leather
-weapon sword_platinum    sword      platinum gold      leather
-weapon sword_cobalt      sword      cobalt   silver    darkfur
-weapon sword_magma       sword      magma    darkstone black
-weapon sword_crimson     sword      crimson  bone      flesh
-weapon sword_corrupt     sword      corrupt  rot       black
-weapon sword_hallow      sword      hallow   gold      white
-weapon sword_frost       sword      frost    silver    cobalt
-weapon katana_iron       katana     iron     gold      black
-weapon katana_void       katana     void     black     purple
-weapon katana_frost      katana     frost    silver    blue
-weapon katana_jade       katana     green    gold      black
-weapon broadsword_iron   broadsword iron     darkstone leather
-weapon broadsword_gold   broadsword gold     red       leather
-weapon broadsword_magma  broadsword magma    black     darkstone
-weapon broadsword_hallow broadsword hallow   gold      white
-weapon greatsword_gold   greatsword gold     cobalt    leather
-weapon greatsword_crimson greatsword crimson bone      black
-weapon greatsword_hallow greatsword hallow   gold      white
-weapon greatsword_frost  greatsword frost    cobalt    silver
-weapon spear_iron        spear      iron     darkstone wood
-weapon spear_gold        spear      gold     red       wood
-weapon spear_magma       spear      magma    darkstone black
-weapon spear_frost       spear      frost    silver    wood
-weapon spear_crimson     spear      crimson  bone      flesh
-weapon bow_wood          bow        wood     silk      leather
-weapon bow_gold          bow        gold     silk      leather
-weapon bow_frost         bow        frost    silk      cobalt
-weapon bow_magma         bow        magma    yellow    black
-weapon bow_hallow        bow        hallow   silk      gold
-weapon bow_void          bow        void     purple    black
 
 
 # ---------------------------------------------------------------- blocks

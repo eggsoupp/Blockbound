@@ -179,7 +179,6 @@ local ItemDefinitions = {
 	-- === Basic Tools, Pickaxes & Weapons ===
 	-- NOTE: items that should allow mining must have classification == "Pickaxe".
 	TestSword = {
-		sprite = "sword_test",
 		icon = "rbxassetid://79477131719769",
 		description = "test",
 		rarity = "Unobtainable",
@@ -225,7 +224,6 @@ local ItemDefinitions = {
 		miningPower = 2,
 	},
 	CopperSword = {
-		sprite = "sword_copper",
 		icon = "rbxassetid://3000000001",
 		description = "A simple copper sword. Better than fists.",
 		rarity = "Common",
@@ -262,7 +260,6 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(170, 0, 0),
 	},
 	WoodSword = {
-		sprite = "sword_wood",
 		-- PLACEHOLDER ICON.
 		icon = "rbxassetid://3000000014",
 		description = "A blunt wooden sword. Barely better than fists.",
@@ -285,7 +282,6 @@ local ItemDefinitions = {
 		miningPower = 2,
 	},
 	StoneSword = {
-		sprite = "sword_stone",
 		icon = "rbxassetid://3000000010",
 		description = "A basic sword carved from stone.",
 		rarity = "Common",
@@ -486,7 +482,6 @@ local ItemDefinitions = {
 		miningPower = 3,
 	},
 	IronSword = {
-		sprite = "sword_iron",
 		icon = "rbxassetid://3000000402",
 		description = "A sharp iron sword. Deals good melee damage.",
 		rarity = "Uncommon",
@@ -671,7 +666,6 @@ local ItemDefinitions = {
 		miningPower = 4,
 	},
 	GoldSword = {
-		sprite = "sword_gold",
 		icon = "rbxassetid://3000000421",
 		description = "More ceremony than weapon, but it swings fast.",
 		rarity = "Rare",
@@ -794,7 +788,6 @@ local ItemDefinitions = {
 
 	-- === High-End Gear (Craftable) ===
 	MythrilSword = {
-		sprite = "sword_mythril",
 		icon = "rbxassetid://3000000602",
 		description = "An elegant blade of Mythril. Fast and deadly.",
 		rarity = "Rare",
@@ -808,7 +801,6 @@ local ItemDefinitions = {
 
 
 	LightLance = {
-		sprite = "light_lance",
 		description = "A lance of hardened light. Calls a rain of blades down on a marked place, "
 			.. "or collapses a black star at its bearer's feet.",
 		rarity = "Legendary",
@@ -820,7 +812,6 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(0, 0, -100),
 	},
 	Thunderveil = {
-		sprite = "thunderveil",
 		description = "A sword of crackling thunder. Deals high damage and has a chance to stun enemies.",
 		rarity = "Legendary",
 		maxStack = 1,
@@ -831,7 +822,6 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(0, 0, 0),
 	},
 	Bloodfang = { 
-		sprite = "bloodfang",
 		description = "A sword that bleeds. Deals high damage and life steal.",
 		rarity = "Epic",
 		maxStack = 1,
@@ -844,7 +834,6 @@ local ItemDefinitions = {
 
 	-- === High-End Gear (Drop-Only) ===
 	VoidReaver = {
-		sprite = "void_reaver",
 		icon = "rbxassetid://3000000603",
 		description = "A cursed blade that deals high damage and life steal.",
 		rarity = "Legendary",

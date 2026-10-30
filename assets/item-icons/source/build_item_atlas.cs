@@ -40,7 +40,7 @@ namespace ItemIcons
 	{
 		const int Cell = 16, Pitch = 20, Pad = 2, Columns = 25, AtlasWidth = 512;
 
-		class Template { public string Name; public bool Flat; public string[] Ramps = new string[3]; public string[] Rows; }
+		class Template { public string Name; public bool Flat; public bool NoOutline; public string[] Ramps = new string[3]; public string[] Rows; }
 
 		static Color Hex(string s) { return ColorTranslator.FromHtml("#" + s); }
 		static double Luma(Color c) { return (0.299 * c.R + 0.587 * c.G + 0.114 * c.B) / 255.0; }
@@ -73,7 +73,7 @@ namespace ItemIcons
 					{
 						var t = new Template { Name = w[1] };
 						int r = 0;
-						for (int k = 2; k < w.Length; k++) { if (w[k] == "flat") t.Flat = true; else if (w[k] == "-") r++; else t.Ramps[r++] = w[k]; }
+						for (int k = 2; k < w.Length; k++) { if (w[k] == "flat") t.Flat = true; else if (w[k] == "nooutline") t.NoOutline = true; else if (w[k] == "-") r++; else t.Ramps[r++] = w[k]; }
 						var rows = new List<string>();
 						while (true)
 						{
@@ -265,12 +265,12 @@ namespace ItemIcons
 					ramp[x, y] = r; level[x, y] = l;
 				}
 			}
-			return Render(ramp, level, use);
+			return Render(ramp, level, use, t.NoOutline);
 		}
 
 		// Paints ramp/level maps and outlines them: every empty pixel touching a
 		// drawn one (4-neighbour) takes that pixel's ramp outline colour.
-		static Bitmap Render(int[,] ramp, int[,] level, Color[][] use)
+		static Bitmap Render(int[,] ramp, int[,] level, Color[][] use, bool noOutline = false)
 		{
 			var bmp = new Bitmap(Cell, Cell, PixelFormat.Format32bppArgb);
 			int[] dx = { 1, -1, 0, 0 }, dy = { 0, 0, 1, -1 };
@@ -281,6 +281,7 @@ namespace ItemIcons
 					if (r == -2) { bmp.SetPixel(x, y, Color.White); continue; }
 					if (r == -3) { bmp.SetPixel(x, y, Color.FromArgb(255, 18, 12, 20)); continue; }
 					if (r >= 0) { bmp.SetPixel(x, y, use[r][level[x, y]]); continue; }
+					if (noOutline) continue;
 					// Empty: outline if it touches something drawn.
 					for (int k = 0; k < 4; k++)
 					{

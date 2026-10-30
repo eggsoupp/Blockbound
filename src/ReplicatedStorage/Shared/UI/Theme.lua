@@ -48,7 +48,7 @@ Theme.SlotPitch = 68
 	ItemDefinitions. Sprites are only ever appended to the atlas, so an older
 	upload still draws every icon it had.
 ]]
-Theme.ItemAtlas = "rbxassetid://113578134960684"
+Theme.ItemAtlas = "rbxassetid://124927273841215"
 
 Theme.Pixel = {
 	-- assets/pixel-ui/atlas/pixel_ui_atlas.png, group-owned Image. Replaced

@@ -35,6 +35,9 @@ local Motion = require(Shared.UI:WaitForChild("Motion"))
 local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local MenuBackdrop = require(Shared.UI:WaitForChild("MenuBackdrop"))
 local AbilityPanel = require(Shared.UI:WaitForChild("AbilityPanel"))
+local Responsive = require(Shared.UI:WaitForChild("Responsive"))
+local Pointer = require(Shared.UI:WaitForChild("Pointer"))
+local TouchActions = require(Shared.UI:WaitForChild("TouchActions"))
 
 local AbilitiesShared = Shared:WaitForChild("Abilities")
 local AbilityConfig = require(AbilitiesShared:WaitForChild("AbilityConfig"))
@@ -48,7 +51,6 @@ local RequestReorder = Remotes.wait("RequestAbilityReorder")
 local RequestDrop = Remotes.wait("RequestAbilityDrop")
 
 local player = Players.LocalPlayer
-local mouse = player:GetMouse()
 
 --[[
 	How many casts may be drawn at once on this machine.
@@ -303,7 +305,9 @@ local function rebuildHud(abilities: { string }?)
 	hudRoot.Size = UDim2.fromOffset(
 		HUD.width, count * HUD.rowHeight + math.max(0, count - 1) * HUD.gap
 	)
-	hudGui.Enabled = count > 0
+	-- On a touch screen the ability buttons (TouchControls) carry the same
+	-- readout, and these rows would sit where the thumbstick is.
+	hudGui.Enabled = count > 0 and not Responsive.isTouch()
 end
 
 --[[
@@ -411,7 +415,9 @@ local function cast(abilityName: string, definition)
 	end
 	requestedAt[abilityName] = if player:GetAttribute("GodMode") then nil else now
 
-	local target = if definition.requiresTarget then mouse.Hit.Position else nil
+	-- The mouse on a computer; on a touch screen the enemy nearest the middle
+	-- of the view, since a finger cannot hover. See Shared.UI.Pointer.
+	local target = if definition.requiresTarget then Pointer.aim() else nil
 	log("requesting", abilityName)
 	RequestAbility:FireServer(abilityName, target)
 end
@@ -472,7 +478,10 @@ local function panelSlots(abilities: { string }, gained: string?)
 		local definition = abilityName and AbilityConfig.get(abilityName)
 
 		entries[slot] = {
-			label = string.format("slot %d  ~  %s", slot, slotKeyLabel(slot)),
+			-- No key to name on a touch screen: the slot's button is its ability.
+			label = if Responsive.isTouch()
+				then string.format("slot %d", slot)
+				else string.format("slot %d  ~  %s", slot, slotKeyLabel(slot)),
 
 			-- The raw name for an ability this client has no definition for,
 			-- which is a server newer than the client rather than nothing at
@@ -585,6 +594,42 @@ UserInputService.InputBegan:Connect(function(input, processed)
 			return
 		end
 	end
+end)
+
+-- The touch screen's ability buttons: the same cast as the slot's key.
+TouchActions.castRequested:Connect(function(slot)
+	local abilityName = loadout[slot]
+	local definition = abilityName and AbilityConfig.get(abilityName)
+	if definition then
+		cast(abilityName, definition)
+	end
+end)
+
+--[[
+	What those buttons draw: each slot's name and cooldown, from the same
+	server-confirmed clock as the rows above.
+]]
+RunService.Heartbeat:Connect(function()
+	local now = os.clock()
+	for slot = 1, AbilityConfig.SlotCount do
+		local abilityName = loadout[slot]
+		local definition = abilityName and AbilityConfig.get(abilityName)
+		if definition then
+			local cooldown = if player:GetAttribute("GodMode") then 0 else (definition.cooldown or 0)
+			local since = now - (castAt[abilityName] or -math.huge)
+			TouchActions.setSlot(slot, {
+				name = definition.displayName or abilityName,
+				cooldown = cooldown,
+				remaining = math.max(0, cooldown - since),
+			})
+		else
+			TouchActions.setSlot(slot, nil)
+		end
+	end
+end)
+
+Responsive.Changed:Connect(function()
+	hudGui.Enabled = next(hudRows) ~= nil and not Responsive.isTouch()
 end)
 
 -- ---------------------------------------------------------------------------

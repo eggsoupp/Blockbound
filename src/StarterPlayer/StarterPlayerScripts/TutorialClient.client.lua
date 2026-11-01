@@ -39,6 +39,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local UI = Shared:WaitForChild("UI")
 local MenuState = require(UI:WaitForChild("MenuState"))
 local TutorialSteps = require(UI:WaitForChild("TutorialSteps"))
+local Responsive = require(UI:WaitForChild("Responsive"))
 local TutorialPanel = require(UI:WaitForChild("TutorialPanel"))
 local TutorialChoice = require(UI:WaitForChild("TutorialChoice"))
 local TutorialMarker = require(UI:WaitForChild("TutorialMarker"))
@@ -149,10 +150,10 @@ end
 local function castLine(abilityName: string?): string
 	for _, card in ipairs(TutorialSteps.Choices) do
 		if card.name == abilityName and card.cast then
-			return card.cast
+			return if Responsive.isTouch() and card.touchCast then card.touchCast else card.cast
 		end
 	end
-	return TutorialSteps.DefaultCast
+	return if Responsive.isTouch() then TutorialSteps.Touch.DefaultCast else TutorialSteps.DefaultCast
 end
 
 -- ---------------------------------------------------------------------------
@@ -194,9 +195,11 @@ local function viewFor(stepId: string)
 		ability = displayName(chosen) or "your ability",
 	}
 
-	local body = step.body
+	-- A touch screen has buttons where a computer has keys; see TutorialSteps.Touch.
+	local touch = Responsive.isTouch()
+	local body = if touch and step.touchBody then step.touchBody else step.body
 	if stepId == "ability" and MenuState.isOpen("Crafting") then
-		body = TutorialSteps.Waits.closeCrafting
+		body = if touch then TutorialSteps.Touch.closeCrafting else TutorialSteps.Waits.closeCrafting
 	end
 	-- A plain replace, before the braces are filled: the line has braces of
 	-- its own.
@@ -307,7 +310,10 @@ local function updateChoice(stepId: string)
 		choice:showChosen(
 			chosen,
 			string.format(TutorialSteps.ChosenTitle, string.upper(name)),
-			string.format(TutorialSteps.ChosenSubtitle, player:GetAttribute("TutorialKey") or "Z")
+			string.format(
+				if Responsive.isTouch() then TutorialSteps.Touch.ChosenSubtitle else TutorialSteps.ChosenSubtitle,
+				player:GetAttribute("TutorialKey") or "Z"
+			)
 		)
 	else
 		choice:hide()

@@ -64,7 +64,7 @@ local function tryCraft(player, recipeId)
 	-- require the player to be genuinely standing at one right now.
 	if recipe.station and not StationService.isNear(player, recipe.station) then
 		return false, string.format(
-			"Stand at a %s and press E", StationConfig.getDisplayName(recipe.station)
+			"Stand at a %s to craft this", StationConfig.getDisplayName(recipe.station)
 		)
 	end
 

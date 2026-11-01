@@ -31,6 +31,8 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local PlayerSettings = require(Shared.UI:WaitForChild("PlayerSettings"))
+local Responsive = require(Shared.UI:WaitForChild("Responsive"))
+local MenuState = require(Shared.UI:WaitForChild("MenuState"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local CombatStats = Remotes.wait("CombatStats", 30)
@@ -75,13 +77,17 @@ screen.DisplayOrder = 5
 screen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screen.Parent = playerGui
 
+-- The bars are laid out in HUD pixels on this, which scales them down on a
+-- phone; the vignette below stays on the screen itself. See Shared.UI.Responsive.
+local canvas = Responsive.canvas(screen)
+
 local root = Instance.new("Frame")
 root.Name = "Health"
 root.AnchorPoint = Vector2.new(0, 1)
 root.Position = UDim2.new(0, L.pad, 1, -L.bottom)
 root.Size = UDim2.fromOffset(L.width, L.height)
 root.BackgroundTransparency = 1
-root.Parent = screen
+root.Parent = canvas
 
 local heart = PixelUI.image(root, "icon_heart")
 heart.Name = "Icon"
@@ -155,7 +161,7 @@ defence.AnchorPoint = Vector2.new(0, 0.5)
 defence.Position = UDim2.new(0, L.pad + L.width + L.defenceGap, 1, -(L.bottom + L.height / 2))
 defence.Size = PixelUI.size("icon_shield")
 defence.Visible = false
-defence.Parent = screen
+defence.Parent = canvas
 
 local shield = PixelUI.image(defence, "icon_shield")
 shield.Name = "Icon"
@@ -184,6 +190,36 @@ defenceLabel.TextSize = Theme.TextSize.Small
 defenceLabel.TextColor3 = P.OnWood
 defenceLabel.Text = ""
 defenceLabel.Parent = pill
+
+--[[
+	Where the column is: bottom left on a computer; on a touch screen wherever
+	Responsive.hudColumn finds room clear of the thumbstick and the buttons.
+	There the defence readout goes on the bar's LEFT, since its right is where
+	the ATTACK button reaches to.
+]]
+local columnX, columnYScale, columnYOffset = L.pad, 1, 0
+
+local function placeColumn()
+	columnX, columnYScale, columnYOffset = Responsive.hudColumn(L.width)
+	root.Position = UDim2.new(0, columnX, columnYScale, columnYOffset - L.bottom)
+
+	local y = UDim.new(columnYScale, columnYOffset - (L.bottom + L.height / 2))
+	if Responsive.isTouch() then
+		defence.AnchorPoint = Vector2.new(1, 0.5)
+		defence.Position = UDim2.new(UDim.new(0, columnX - L.defenceGap - 60), y)
+	else
+		defence.AnchorPoint = Vector2.new(0, 0.5)
+		defence.Position = UDim2.new(UDim.new(0, columnX + L.width + L.defenceGap), y)
+	end
+end
+
+Responsive.bind(placeColumn)
+
+-- On a touch screen the column is bottom centre, where the Tab menu's list is:
+-- it gives way to any full-screen menu there.
+MenuState.Changed:Connect(function(_, _, anyOpen)
+	canvas.Visible = not (anyOpen and Responsive.isTouch())
+end)
 
 -- ---------------------------------------------------------------------------
 -- Hit feedback
@@ -249,17 +285,24 @@ local DAMAGE_RISE = 34
 	more thing covering the world.
 ]]
 local function popDamageNumber(damage)
-	local x = L.pad + L.width + 10
-	if defence.Visible then
-		x = pill.AbsolutePosition.X + pill.AbsoluteSize.X - screen.AbsolutePosition.X + 10
-	end
+	local x = columnX + L.width + 10
 	local bottom = L.bottom + (L.height - DAMAGE_HEIGHT) / 2
+	if Responsive.isTouch() then
+		-- Over the right end of the column, clear of the ATTACK button.
+		x = columnX + L.width - 80
+		bottom = 126
+	elseif defence.Visible then
+		-- The pill is measured in screen pixels; the canvas is in HUD pixels.
+		local right = pill.AbsolutePosition.X + pill.AbsoluteSize.X - canvas.AbsolutePosition.X
+		x = right / Responsive.hudScale() + 10
+	end
+	bottom -= columnYOffset
 
 	local label = Instance.new("TextLabel")
 	label.Name = "Damage"
 	label.BackgroundTransparency = 1
 	label.AnchorPoint = Vector2.new(0, 1)
-	label.Position = UDim2.new(0, x, 1, -bottom)
+	label.Position = UDim2.new(0, x, columnYScale, -bottom)
 	label.Size = UDim2.fromOffset(80, DAMAGE_HEIGHT)
 	label.FontFace = Theme.Fonts.Number
 	label.TextSize = Theme.TextSize.Heading
@@ -268,13 +311,13 @@ local function popDamageNumber(damage)
 	label.TextStrokeTransparency = 0
 	label.TextXAlignment = Enum.TextXAlignment.Left
 	label.Text = string.format("-%d", damage)
-	label.Parent = screen
+	label.Parent = canvas
 
 	local rise = TweenService:Create(
 		label,
 		TweenInfo.new(0.75, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 		{
-			Position = UDim2.new(0, x, 1, -bottom - DAMAGE_RISE),
+			Position = UDim2.new(0, x, columnYScale, -bottom - DAMAGE_RISE),
 			TextTransparency = 1,
 			TextStrokeTransparency = 1,
 		}

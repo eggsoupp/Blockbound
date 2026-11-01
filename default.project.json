@@ -30,6 +30,9 @@
         "WorldBorderClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/WorldBorderClient.client.lua"
         },
+        "TouchControls": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/TouchControls.client.lua"
+        },
         "PauseMenu": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/PauseMenu.client.lua",
           "$properties": {
@@ -416,6 +419,15 @@
           },
           "PixelUI": {
             "$path": "src/ReplicatedStorage/Shared/UI/PixelUI.lua"
+          },
+          "Responsive": {
+            "$path": "src/ReplicatedStorage/Shared/UI/Responsive.lua"
+          },
+          "Pointer": {
+            "$path": "src/ReplicatedStorage/Shared/UI/Pointer.lua"
+          },
+          "TouchActions": {
+            "$path": "src/ReplicatedStorage/Shared/UI/TouchActions.lua"
           },
           "PixelSprites": {
             "$path": "src/ReplicatedStorage/Shared/UI/PixelSprites.lua"

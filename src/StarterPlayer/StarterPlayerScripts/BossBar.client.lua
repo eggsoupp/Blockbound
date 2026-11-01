@@ -52,6 +52,7 @@ local TweenService = game:GetService("TweenService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
+local Responsive = require(Shared.UI:WaitForChild("Responsive"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local BossState = Remotes.wait("BossState")
@@ -145,17 +146,48 @@ root.Parent = screen
 local rootScale = Instance.new("UIScale")
 rootScale.Parent = root
 
+--[[
+	On a touch screen the bottom of the screen is the thumbs': the thumbstick,
+	the health column and the buttons round the jump button. The bar goes top
+	centre instead, under the hotbar, and as wide as the screen allows up to
+	TOUCH_MAX_SCALE - beyond that it would cover the middle of the view.
+]]
+local TOUCH_MIN_SCALE = 0.45
+local TOUCH_MAX_SCALE = 0.8
+local TOUCH_MARGIN = 16
+
 local function fit()
-	local width = screen.AbsoluteSize.X
-	if width <= 0 then
+	local size = Responsive.viewport()
+	if size.X <= 0 then
 		return
 	end
-	local room = width - L.clear * 2
+
+	if Responsive.isTouch() then
+		local safe = Responsive.safe()
+		local top = Responsive.topStackBottom()
+		local left, right = safe.left + TOUCH_MARGIN, size.X - safe.right - TOUCH_MARGIN
+
+		-- Left of the buttons round the jump button, where it would reach
+		-- down among them - on a phone held sideways, always.
+		local cluster = Responsive.clusterRect()
+		local height = root.Size.Y.Offset * TOUCH_MAX_SCALE
+		if top + height > cluster.Min.Y then
+			right = math.min(right, cluster.Min.X - TOUCH_MARGIN)
+		end
+
+		rootScale.Scale = math.clamp((right - left) / root.Size.X.Offset, TOUCH_MIN_SCALE, TOUCH_MAX_SCALE)
+		root.AnchorPoint = Vector2.new(0.5, 0)
+		root.Position = UDim2.fromOffset((left + right) / 2, top)
+		return
+	end
+
+	local room = size.X - L.clear * 2
 	rootScale.Scale = math.clamp(room / root.Size.X.Offset, MIN_SCALE, 1)
+	root.AnchorPoint = Vector2.new(0.5, 1)
+	root.Position = UDim2.new(0.5, 0, 1, -L.bottom)
 end
 
-fit()
-screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
+Responsive.bind(fit)
 
 local banner, title = PixelUI.header(root, "", "header_red")
 banner.Name = "Title"

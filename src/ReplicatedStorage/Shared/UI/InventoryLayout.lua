@@ -56,7 +56,6 @@
 	in from the screen's edges than the tiles alone would need.
 ]]
 
-local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
@@ -64,6 +63,7 @@ local InventoryConstants = require(ReplicatedStorage:WaitForChild("InventoryCons
 local Theme = require(script.Parent:WaitForChild("Theme"))
 local SlotArt = require(script.Parent:WaitForChild("SlotArt"))
 local PixelUI = require(script.Parent:WaitForChild("PixelUI"))
+local Responsive = require(script.Parent:WaitForChild("Responsive"))
 
 local InventoryLayout = {}
 
@@ -121,12 +121,11 @@ local FRAME_PAD = (PixelUI.border("frame_parchment")) + 4
 -- Between the bottom of Roblox's top bar and the top of the open panel.
 local TOPBAR_CLEARANCE = 4
 
+-- Either side of TouchControls' Bag/Craft/Menu row, as TouchControls has it.
+local MENU_ROW_MARGIN = 10
+
 -- The gear column is wider than its slots, so its titles fit inside its panel.
 local GEAR_WIDTH = 104
-
--- The height Roblox's top bar is assumed to have when it reports none, the
--- same floor SettingsButton uses for the button it puts in that bar.
-local MIN_TOPBAR_HEIGHT = 36
 
 -- ---------------------------------------------------------------------------
 -- Fitting to the screen
@@ -156,12 +155,32 @@ local MAX_SCALE = 2
 -- The grid may take at most this share of the screen's width.
 local MAX_WIDTH_SHARE = 0.6
 
-local function scaleFor(screenSize: Vector2): number
+--[[
+	ON A TOUCH SCREEN a slot is something to put a finger on, so it is drawn
+	full size and may take more of the width - which keeps a hotbar slot at 44
+	points or more on the smallest phone. It is also capped by the height left
+	under the top bar, so the open bag never runs off the bottom of a phone.
+]]
+local TOUCH_INVENTORY_SIZE = 1
+local TOUCH_WIDTH_SHARE = 0.7
+-- Held upright, the hotbar is most of the screen's width or its slots go
+-- under a fingertip.
+local PORTRAIT_WIDTH_SHARE = 0.92
+
+local function scaleFor(screenSize: Vector2, heightRoom: number?): number
+	local touch = Responsive.isTouch()
+	local share = if not touch then MAX_WIDTH_SHARE
+		elseif screenSize.Y > screenSize.X then PORTRAIT_WIDTH_SHARE
+		else TOUCH_WIDTH_SHARE
 	local scale = math.min(
 		math.max(1, screenSize.Y / DESIGN_HEIGHT),
-		screenSize.X * MAX_WIDTH_SHARE / (GRID_WIDTH + FRAME_PAD * 2)
+		screenSize.X * share / (GRID_WIDTH + FRAME_PAD * 2)
 	)
-	return math.clamp(scale * INVENTORY_SIZE, MIN_SCALE, MAX_SCALE)
+	scale = math.clamp(scale * (if touch then TOUCH_INVENTORY_SIZE else INVENTORY_SIZE), MIN_SCALE, MAX_SCALE)
+	if touch and heightRoom then
+		scale = math.min(scale, heightRoom)
+	end
+	return scale
 end
 
 -- ---------------------------------------------------------------------------
@@ -522,23 +541,53 @@ function InventoryLayout.build(playerGui: Instance)
 	]]
 	local function fit()
 		local scale = bagScale.Scale
-		local screenSize = gui.AbsoluteSize
+		local gearFit = scale
+		local screenSize = Responsive.viewport()
+		local top = Responsive.topbarBottom()
+		local safe = Responsive.safe()
 		if screenSize.X > 0 and screenSize.Y > 0 then
-			scale = scaleFor(screenSize)
+			-- The height the open bag and the gear column each have, as a scale.
+			local room = screenSize.Y - safe.bottom - top - TOPBAR_CLEARANCE - Theme.Spacing.Edge
+			local fitRoom = room / (BAG_HEIGHT + FRAME_PAD * 2)
+			if Responsive.isTouch() and screenSize.X >= screenSize.Y then
+				--[[
+					Sideways, TouchControls' Bag/Craft/Menu row goes beside
+					the hotbar, and the hotbar gives way to it: under it, the
+					row would sit among the buttons round the jump button.
+				]]
+				local beside = screenSize.X - safe.left - safe.right - Theme.Spacing.Edge
+					- Responsive.MenuRow.X - MENU_ROW_MARGIN * 2
+				fitRoom = math.min(fitRoom, beside / (GRID_WIDTH + FRAME_PAD))
+			end
+			scale = scaleFor(screenSize, fitRoom)
+			gearFit = math.min(scale, (screenSize.Y - safe.bottom - top - Theme.Spacing.Edge * 2) / (gearHeight + FRAME_PAD * 2))
 			bagScale.Scale = scale
-			gearScale.Scale = scale
+			gearScale.Scale = gearFit
 		end
 
 		local hang = FRAME_PAD * scale
-		local inset = GuiService.TopbarInset
-		local top = inset.Min.Y + math.max(inset.Height, MIN_TOPBAR_HEIGHT)
-		bag.Position = UDim2.fromOffset(Theme.Spacing.Edge + hang, top + TOPBAR_CLEARANCE + hang)
-		gear.Position = UDim2.new(1, -(Theme.Spacing.Edge + hang), 1, -(Theme.Spacing.Edge + hang))
+		local gearHang = FRAME_PAD * gearFit
+		bag.Position = UDim2.fromOffset(safe.left + Theme.Spacing.Edge + hang, top + TOPBAR_CLEARANCE + hang)
+		gear.Position = UDim2.new(
+			1, -(safe.right + Theme.Spacing.Edge + gearHang),
+			1, -(safe.bottom + Theme.Spacing.Edge + gearHang)
+		)
+
+		--[[
+			The held item's name goes under the hotbar on a touch screen: its
+			place beside the hotbar is where the Bag, Craft and Menu buttons go
+			(TouchControls). It hides while the bag is open over it.
+		]]
+		if Responsive.isTouch() then
+			itemLabel.AnchorPoint = Vector2.new(0, 0)
+			itemLabel.Position = UDim2.fromOffset(0, SLOT + 4)
+		else
+			itemLabel.AnchorPoint = Vector2.new(0, 0.5)
+			itemLabel.Position = UDim2.fromOffset(GRID_WIDTH + FRAME_PAD + Theme.Spacing.Section, SLOT / 2)
+		end
 	end
 
-	fit()
-	gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
-	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(fit)
+	Responsive.bind(fit)
 
 	local layout = {
 		gui = gui,
@@ -551,8 +600,12 @@ function InventoryLayout.build(playerGui: Instance)
 		selectHotbar = selectHotbar,
 
 		-- Told when the bag opens and closes, so the marker keeps off the row
-		-- under the hotbar while it is there.
-		setOpen = tuckSelection,
+		-- under the hotbar while it is there - and, on a touch screen, so the
+		-- item's name under the hotbar gets out of the bag's way.
+		setOpen = function(open: boolean)
+			tuckSelection(open)
+			itemLabel.Visible = not (open and Responsive.isTouch())
+		end,
 	}
 
 	--[[

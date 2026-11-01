@@ -39,6 +39,7 @@ local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
 local Theme = require(Shared.UI:WaitForChild("Theme"))
 local MenuBackdrop = require(Shared.UI:WaitForChild("MenuBackdrop"))
 local AbilityPanel = require(Shared.UI:WaitForChild("AbilityPanel"))
+local Responsive = require(Shared.UI:WaitForChild("Responsive"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 
 local MENU_NAME = "PauseMenu"
@@ -107,6 +108,43 @@ hint.TextColor3 = Theme.Color.TextDim
 hint.TextTransparency = 1
 hint.Text = "Tab to resume"
 hint.Parent = backdropGui
+
+--[[
+	On a touch screen the hotbar and its Menu button stay over this menu, and a
+	phone is short: the loadout is centred in the room UNDER the hotbar rather
+	than on the screen, where its first card would be under the hotbar. The
+	hint names the button that closes it rather than a key.
+]]
+local panelScale = Instance.new("UIScale")
+panelScale.Name = "FitScale"
+panelScale.Parent = panel.root
+
+local function placeForScreen()
+	local root = panel.root
+	if not Responsive.isTouch() then
+		panelScale.Scale = 1
+		hint.Text = "Tab to resume"
+		hint.Position = UDim2.new(0.5, 0, 1, -18)
+		root.AnchorPoint = Vector2.new(0.5, 0.5)
+		root.Position = UDim2.fromScale(0.5, 0.5)
+		return
+	end
+
+	local safe = Responsive.safe()
+	hint.Text = "Tap Menu to resume"
+	hint.Position = UDim2.new(0.5, 0, 1, -(safe.bottom + 4))
+
+	local top = Responsive.hotbarBottom() + 8
+	local bottom = Responsive.viewport().Y - safe.bottom - hint.Size.Y.Offset - 8
+	-- Shrunk only as far as the room needs; AbilityPanel scales its drags to match.
+	panelScale.Scale = math.clamp((bottom - top) / math.max(1, root.Size.Y.Offset), 0.6, 1)
+	local height = root.Size.Y.Offset * panelScale.Scale
+	root.AnchorPoint = Vector2.new(0.5, 0)
+	root.Position = UDim2.new(0.5, 0, 0, math.max(top, (top + bottom - height) / 2))
+end
+
+Responsive.bind(placeForScreen)
+panel.root:GetPropertyChangedSignal("Size"):Connect(placeForScreen)
 
 local isOpen = false
 local previousCFrame = nil

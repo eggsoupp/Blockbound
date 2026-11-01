@@ -37,24 +37,28 @@ TutorialSteps.Steps = {
 		id = "tree",
 		title = "CHOP A TREE",
 		body = "Welcome to Blockbound. Hold your axe [{axe}] and click a tree to chop it down.",
+		touchBody = "Welcome to Blockbound. Tap your axe [{axe}] in the hotbar, then tap a tree to chop it down.",
 		goals = { "Chop down a tree" },
 	},
 	{
 		id = "table",
 		title = "CRAFT A TABLE",
 		body = "Press [B] to craft. Turn your wood into planks, then build a table.",
+		touchBody = "Tap [Craft] to craft. Turn your wood into planks, then build a table.",
 		goals = { "Craft Wood Planks", "Craft a Crafting Table" },
 	},
 	{
 		id = "ability",
 		title = "CHOOSE YOUR POWER",
 		body = "Something is coming. Press [Tab] to open your menu - your abilities live there - and pick one.",
+		touchBody = "Something is coming. Tap [Menu] to open your menu - your abilities live there - and pick one.",
 		goals = { "Choose an ability" },
 	},
 	{
 		id = "fight",
 		title = "DEFEAT THE SLIME",
 		body = "{cast} Finish it with your sword [{sword}].",
+		touchBody = "{cast} Finish it with your sword [{sword}] and the [ATTACK] button.",
 		goals = { "Defeat the slime" },
 	},
 	{
@@ -68,6 +72,7 @@ TutorialSteps.Steps = {
 		id = "done",
 		title = "WELCOME HOME",
 		body = "Place your crafting table and press [E] beside it for more recipes. [B] crafts by hand, [Tab] holds your powers.",
+		touchBody = "Place your crafting table and tap its prompt for more recipes. [Craft] crafts by hand, [Menu] holds your powers.",
 		goals = {},
 	},
 }
@@ -97,6 +102,7 @@ TutorialSteps.Choices = {
 		name = "Fireball",
 		blurb = "Hurls a ball of flame that bursts on impact.",
 		cast = "Aim at it and press [{key}] to throw {ability}.",
+		touchCast = "Face it and tap [{ability}] to throw it.",
 		tags = "RANGED  ·  SPLASH",
 		glyph = "fire",
 		color = Color3.fromRGB(255, 132, 52),
@@ -106,6 +112,7 @@ TutorialSteps.Choices = {
 		name = "WindBurst",
 		blurb = "A gust that throws nearby enemies back.",
 		cast = "Let it get close, then press [{key}] to blow it back with {ability}.",
+		touchCast = "Let it get close, then tap [{ability}] to blow it back.",
 		tags = "CLOSE  ·  KNOCKBACK",
 		glyph = "wind",
 		color = Color3.fromRGB(170, 232, 212),
@@ -115,6 +122,7 @@ TutorialSteps.Choices = {
 		name = "WaterBlade",
 		blurb = "A fast blade of water that cuts deep.",
 		cast = "Aim at it and press [{key}] to loose {ability}.",
+		touchCast = "Face it and tap [{ability}] to loose it.",
 		tags = "RANGED  ·  HEAVY HIT",
 		glyph = "water",
 		color = Color3.fromRGB(70, 158, 255),
@@ -126,6 +134,18 @@ TutorialSteps.ChoiceTitle = "CHOOSE YOUR POWER"
 TutorialSteps.ChoiceSubtitle = "A slime is on its way. Pick a power to face it with - it's yours to keep."
 TutorialSteps.ChosenTitle = "%s IS YOURS"
 TutorialSteps.ChosenSubtitle = "Cast it with [%s]. The slime is waiting."
+
+--[[
+	A touch screen has no keys, so the lines that name one have a touch twin:
+	a step's `touchBody`, a card's `touchCast`, and these. Buttons are named
+	the way TouchControls labels them - [Craft], [Menu], [ATTACK], and each
+	ability button by the ability's name. TutorialClient picks one or the other.
+]]
+TutorialSteps.Touch = {
+	closeCrafting = "Nice work. Close the crafting window [Craft], then tap [Menu] to choose a power.",
+	DefaultCast = "Face it and tap [{ability}] to cast it.",
+	ChosenSubtitle = "Cast it with its button, bottom right. The slime is waiting.",
+}
 
 local byId = {}
 for index, step in ipairs(TutorialSteps.Steps) do

@@ -28,6 +28,7 @@ local Workspace = game:GetService("Workspace")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
+local Pointer = require(Shared.UI:WaitForChild("Pointer"))
 local WorldFeedback = require(Shared.UI:WaitForChild("WorldFeedback"))
 local Feedback = require(Shared.UI:WaitForChild("Feedback"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
@@ -35,7 +36,6 @@ local InventoryMirror =
 	require(Shared:WaitForChild("Inventory"):WaitForChild("InventoryMirror"))
 
 local player = Players.LocalPlayer
-local mouse = player:GetMouse()
 local camera = Workspace.CurrentCamera
 
 local DEFAULT_GRID = 4
@@ -317,7 +317,9 @@ local function updatePreview()
 
 	local part = ensurePreview(slotData.name)
 
-	local mx, my = mouse.X, mouse.Y
+	-- The mouse, or the last place a finger touched the world (Shared.UI.Pointer).
+	local point = Pointer.screenPoint()
+	local mx, my = point.X, point.Y
 	if not mx or not my or (mx == 0 and my == 0) then
 		local size = camera.ViewportSize
 		mx, my = size.X * 0.5, size.Y * 0.5
@@ -484,11 +486,7 @@ RunService.RenderStepped:Connect(function(dt)
 	updatePreview()
 end)
 
-UserInputService.InputBegan:Connect(function(input, processed)
-	if processed or input.UserInputType ~= Enum.UserInputType.MouseButton1 then
-		return
-	end
-
+local function place()
 	if MenuState.isAnyOpen() then
 		return
 	end
@@ -509,4 +507,21 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	pendingCenter = cellIndicesToWorldPos(lastCellX, lastCellY, lastCellZ)
 
 	RequestPlaceBlock:FireServer(equippedSlot, lastCellX, lastCellY, lastCellZ)
+end
+
+UserInputService.InputBegan:Connect(function(input, processed)
+	if processed or input.UserInputType ~= Enum.UserInputType.MouseButton1 then
+		return
+	end
+	place()
+end)
+
+--[[
+	On a touch screen a quick tap on the world places, where it was tapped: the
+	preview is re-aimed at the tap first, since it last followed wherever the
+	finger was before. A drag is the camera turning and places nothing.
+]]
+Pointer.onTap(function()
+	updatePreview()
+	place()
 end)

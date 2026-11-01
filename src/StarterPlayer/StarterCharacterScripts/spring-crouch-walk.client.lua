@@ -133,11 +133,37 @@ end
 ContextActionService:BindAction("SprintAction", onSprint, false, SPRINT_KEY)
 ContextActionService:BindAction("CrouchAction", onCrouch, false, CROUCH_KEY)
 
+--[[
+	A touch screen's RUN and CROUCH buttons (StarterPlayerScripts.TouchControls)
+	are toggles kept as attributes on the player, so they outlive this script's
+	character; a new body starts standing and walking, so they start off.
+]]
+player:SetAttribute("TouchSprint", false)
+player:SetAttribute("TouchCrouch", false)
+
+player:GetAttributeChangedSignal("TouchSprint"):Connect(function()
+	local on = player:GetAttribute("TouchSprint") == true
+	if on and (MenuState.isAnyOpen() or camera.CameraType ~= Enum.CameraType.Custom) then
+		player:SetAttribute("TouchSprint", false)
+		return
+	end
+	setSprinting(on)
+end)
+
+player:GetAttributeChangedSignal("TouchCrouch"):Connect(function()
+	if MenuState.isAnyOpen() then
+		player:SetAttribute("TouchCrouch", isCrouching)
+		return
+	end
+	setCrouching(player:GetAttribute("TouchCrouch") == true)
+end)
+
 -- A menu opening swallows the key-up that would have ended a sprint, which
 -- otherwise leaves the player running at 25 with the animation looping.
 MenuState.Changed:Connect(function(_, _, anyOpen)
 	if anyOpen then
 		setSprinting(false)
+		player:SetAttribute("TouchSprint", false)
 	end
 end)
 

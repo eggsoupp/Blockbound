@@ -368,6 +368,9 @@ local function toggleInventory()
 		panel.Visible = inventoryVisible
 	end
 	layout.setOpen(inventoryVisible)
+	-- Read by TouchControls, which hides the thumbstick and lights its Bag
+	-- button while the bag is open.
+	player:SetAttribute("InventoryOpen", inventoryVisible)
 
 	-- Rows appearing moves nothing that was already on screen, but the hit boxes
 	-- for the rows that just became visible have to be measured now.
@@ -543,12 +546,35 @@ end
 ]]
 local dragStartedAt = -math.huge
 
+--[[
+	A finger drags too, but only with the bag open: with it shut, a tap on the
+	hotbar is a choice of what to hold (see the hotbar taps further down), and
+	a stack lifting off the slot under the finger would only get in the way.
+	The touch that started it is the only one that moves or drops it, so the
+	other thumb on the stick cannot.
+]]
+local dragTouch: InputObject? = nil
+
+local function isDragStart(input: InputObject): boolean
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		return true
+	end
+	return input.UserInputType == Enum.UserInputType.Touch and inventoryVisible
+end
+
+local function isDragInput(input: InputObject, mouseType: Enum.UserInputType): boolean
+	if input.UserInputType == Enum.UserInputType.Touch then
+		return input == dragTouch
+	end
+	return dragTouch == nil and input.UserInputType == mouseType
+end
+
 for i = 1, #slots do
 	local slot = slots[i]
 	local icon, num = getSlotElements(slot)
 	if icon then
 		local function beginDrag(input: InputObject)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 and icon.Visible then
+			if isDragStart(input) and icon.Visible then
 				if dragging and sourceIndex == i and os.clock() - dragStartedAt < 0.1 then
 					return
 				end
@@ -566,6 +592,7 @@ for i = 1, #slots do
 				updateCoordinateRanges()
 				dragging    = true
 				sourceIndex = i
+				dragTouch   = if input.UserInputType == Enum.UserInputType.Touch then input else nil
 				dragIcon = icon:Clone()
 				dragIcon.Parent = invUI
 				dragIcon.ZIndex = 101
@@ -623,17 +650,7 @@ end
 	Pressing the slot you are already on puts the tool away, which is the
 	quickest way to get your hands free.
 ]]
-UserInputService.InputBegan:Connect(function(input, processed)
-	-- Number keys should not swap what you are holding while a menu is up.
-	if processed or MenuState.isAnyOpen() then
-		return
-	end
-
-	local idx = keyToSlot[input.KeyCode]
-	if not idx then
-		return
-	end
-
+local function selectHotbarSlot(idx: number)
 	local name = slotItemNames[idx]
 	local def = name and ItemDefinitions[name]
 
@@ -658,6 +675,54 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	end
 
 	player:SetAttribute(EQUIPPED_SLOT_ATTRIBUTE, equippedSlot)
+end
+
+UserInputService.InputBegan:Connect(function(input, processed)
+	-- Number keys should not swap what you are holding while a menu is up.
+	if processed or MenuState.isAnyOpen() then
+		return
+	end
+
+	local idx = keyToSlot[input.KeyCode]
+	if idx then
+		selectHotbarSlot(idx)
+	end
+end)
+
+--[[
+	On a touch screen the hotbar's tiles are the number keys: a tap on one is
+	the same as its key, including tapping the slot in hand to put it away.
+	A finger that carries a stack to another slot never lifts on this tile, so
+	moving things does not change what is held. The mouse keeps the number
+	keys, as it always has.
+]]
+for idx = 1, HOTBAR_SLOTS do
+	local tile = slots[idx]
+	if tile and tile:IsA("GuiButton") then
+		tile.Activated:Connect(function(input: InputObject)
+			if input and input.UserInputType == Enum.UserInputType.Touch and not MenuState.isAnyOpen() then
+				selectHotbarSlot(idx)
+			end
+		end)
+	end
+end
+
+--[[
+	TouchControls' Bag button. A request, as MenuState describes: this script
+	still does the opening, so the sound and the hit boxes happen as for E.
+]]
+MenuState.OpenRequested:Connect(function(name)
+	if name == "Inventory" and not inventoryVisible then
+		toggleInventory()
+		Sounds.play("ui.open")
+	end
+end)
+
+MenuState.CloseRequested:Connect(function(name)
+	if name == "Inventory" and inventoryVisible then
+		toggleInventory()
+		Sounds.play("ui.close")
+	end
 end)
 
 --[[
@@ -694,7 +759,7 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+	if dragging and isDragInput(input, Enum.UserInputType.MouseMovement) then
 		-- The hit test reads the pointer in AbsolutePosition space; the preview
 		-- is placed in the ScreenGui's own. See pointerOf.
 		local x, y = pointerOf(input)
@@ -751,7 +816,7 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 UserInputService.InputEnded:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseButton1 then
+	if dragging and isDragInput(input, Enum.UserInputType.MouseButton1) then
 		log("drop event")
 		playClick()
 
@@ -811,6 +876,7 @@ UserInputService.InputEnded:Connect(function(input)
 		end
 
 		dragging = false
+		dragTouch = nil
 		sourceIndex = nil
 	end
 end)

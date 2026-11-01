@@ -44,6 +44,10 @@ local Feedback = {}
 local PAD_LEFT = 16
 local BOTTOM = 270
 local WIDTH = 620
+-- On a touch screen: the health column's width, and the top of its mana bar
+-- with a little room.
+local TOUCH_COLUMN_WIDTH = 260
+local TOUCH_BOTTOM = 128
 local LINE_HEIGHT = 20
 local GAP = 2
 
@@ -100,13 +104,35 @@ local function build()
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	gui.Parent = player:WaitForChild("PlayerGui")
 
+	-- Required here rather than at the top, for the same server-side reason.
+	local Responsive = require(script.Parent:WaitForChild("Responsive"))
+
 	root = Instance.new("Frame")
 	root.Name = "Lines"
 	root.AnchorPoint = Vector2.new(0, 1)
 	root.Position = UDim2.new(0, PAD_LEFT, 1, -BOTTOM)
 	root.Size = UDim2.fromOffset(WIDTH, MAX_LINES * (LINE_HEIGHT + GAP))
 	root.BackgroundTransparency = 1
-	root.Parent = gui
+	root.Parent = Responsive.canvas(gui)
+
+	--[[
+		On a touch screen the health column is bottom centre (Responsive.
+		hudColumn), and these stand on top of it as they stand on top of the
+		HUD on a computer - rather than in the bottom left, under the thumb.
+	]]
+	Responsive.bind(function()
+		if not Responsive.isTouch() then
+			root.Position = UDim2.new(0, PAD_LEFT, 1, -BOTTOM)
+			return
+		end
+		local x, yScale, yOffset = Responsive.hudColumn(TOUCH_COLUMN_WIDTH)
+		if Responsive.columnAtTop() then
+			-- The column is top left, under the hotbar: hang below it instead.
+			root.Position = UDim2.new(0, x, yScale, yOffset + GAP + root.Size.Y.Offset)
+		else
+			root.Position = UDim2.new(0, x, yScale, yOffset - TOUCH_BOTTOM)
+		end
+	end)
 
 	local layout = Instance.new("UIListLayout")
 	layout.FillDirection = Enum.FillDirection.Vertical

@@ -45,6 +45,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local MenuState = require(Shared.UI:WaitForChild("MenuState"))
+local Pointer = require(Shared.UI:WaitForChild("Pointer"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local Feedback = require(Shared.UI:WaitForChild("Feedback"))
 local WorldFeedback = require(Shared.UI:WaitForChild("WorldFeedback"))
@@ -79,7 +80,6 @@ local MINE_REACH = 34
 local HOVER_INTERVAL = 1 / 20
 
 local player = Players.LocalPlayer
-local mouse = player:GetMouse()
 
 local RequestMine = Remotes.wait("RequestMineBlock")
 local MiningStarted = Remotes.wait("MiningStarted")
@@ -562,7 +562,7 @@ function beginMining()
 
 	-- Refresh the ray for every swing; Mouse.Target can still refer to the
 	-- part removed by the previous break until the next rendered frame.
-	local ray = mouse.UnitRay
+	local ray = Pointer.ray()
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Exclude
 	-- Aim through water at the block behind it: water is Terrain now, and a
@@ -636,6 +636,28 @@ end)
 
 UserInputService.InputEnded:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		mouseHeld = false
+		stopSwing()
+		endMining()
+	end
+end)
+
+--[[
+	On a touch screen, a finger held still on a block is the held button: it
+	mines the block under it, carries on into the next as the finger (and the
+	camera) moves, and stops when it lifts. A finger that drags straight away
+	is turning the camera and never starts a swing. Shared.UI.Pointer tells
+	the two apart, and Pointer.ray() above follows the finger.
+]]
+Pointer.onHold(function(down)
+	if down then
+		if MenuState.isAnyOpen() then
+			return
+		end
+		mouseHeld = true
+		startSwing()
+		beginMining()
+	elseif mouseHeld then
 		mouseHeld = false
 		stopSwing()
 		endMining()
@@ -723,7 +745,7 @@ local function updateHover()
 		return
 	end
 
-	local ray = mouse.UnitRay
+	local ray = Pointer.ray()
 	local hit = workspace:Raycast(ray.Origin, ray.Direction * 512, hoverParams)
 	local part = hit and hit.Instance
 

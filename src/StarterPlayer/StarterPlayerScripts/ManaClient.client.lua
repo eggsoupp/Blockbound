@@ -38,6 +38,8 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local Motion = require(Shared.UI:WaitForChild("Motion"))
 local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
+local Responsive = require(Shared.UI:WaitForChild("Responsive"))
+local MenuState = require(Shared.UI:WaitForChild("MenuState"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local ManaChanged = Remotes.wait("ManaChanged")
@@ -118,7 +120,7 @@ root.AnchorPoint = Vector2.new(0, 1)
 root.Position = UDim2.new(0, L.pad, 1, -L.bottom)
 root.Size = UDim2.fromOffset(L.width, L.height)
 root.BackgroundTransparency = 1
-root.Parent = screen
+root.Parent = Responsive.canvas(screen)
 
 local star = PixelUI.image(root, "icon_mana")
 star.Name = "Icon"
@@ -177,6 +179,18 @@ amount.TextStrokeTransparency = 0
 amount.Text = ""
 amount.ZIndex = 4
 amount.Parent = root
+
+-- On the health bar, wherever HealthClient's column is: both ask
+-- Responsive.hudColumn, so they cannot come apart.
+Responsive.bind(function()
+	local x, yScale, yOffset = Responsive.hudColumn(L.width)
+	root.Position = UDim2.new(0, x, yScale, yOffset - L.bottom)
+end)
+
+-- Gives way to full-screen menus on a touch screen, as the health bar does.
+MenuState.Changed:Connect(function(_, _, anyOpen)
+	root.Parent.Visible = not (anyOpen and Responsive.isTouch())
+end)
 
 -- ---------------------------------------------------------------------------
 -- State

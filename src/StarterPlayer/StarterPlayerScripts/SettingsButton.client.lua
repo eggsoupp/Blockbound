@@ -60,6 +60,7 @@ local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local Motion = require(Shared.UI:WaitForChild("Motion"))
 local MenuState = require(Shared.UI:WaitForChild("MenuState"))
+local Responsive = require(Shared.UI:WaitForChild("Responsive"))
 local PlayerSettings = require(Shared.UI:WaitForChild("PlayerSettings"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
@@ -109,6 +110,11 @@ local L = {
 
 local DESIGN_HEIGHT = 1080
 local MIN_SCALE = 0.5
+
+-- On a touch screen too short for the whole window: the size it keeps, and the
+-- shortest it gets (the header and a few rows of the list).
+local TOUCH_SCALE = 0.7
+local TOUCH_MIN_HEIGHT = 420
 
 -- One press of a volume button, and how finely a drag settles.
 local VOLUME_STEP = 0.05
@@ -850,17 +856,34 @@ drawDistance()
 -- Never smaller than designed on an ordinary screen, bigger on a tall one, and
 -- shrunk only when the window would not otherwise fit.
 local function fit()
-	local size = screen.AbsoluteSize
+	local size = Responsive.viewport()
 	if size.X <= 0 or size.Y <= 0 then
 		return
 	end
 
-	local scale = math.min(
-		math.max(1, size.Y / DESIGN_HEIGHT),
-		size.Y * 0.9 / L.height,
-		size.X * 0.94 / L.width
-	)
-	rootScale.Scale = math.max(scale, MIN_SCALE)
+	--[[
+		On a touch screen too short to show it all at a readable size - a phone
+		held sideways - the window keeps TOUCH_SCALE and gets shorter instead
+		(its list scrolls), and keeps out of the notch and off the top bar's
+		buttons. Responsive.fitWindow. There is no Esc key to name, either.
+	]]
+	local touch = Responsive.isTouch()
+	hint.Text = if touch then "Tap X to close" else "Esc to close"
+	if touch then
+		local scale, height, centre = Responsive.fitWindow(L.width, L.height, TOUCH_MIN_HEIGHT, TOUCH_SCALE)
+		root.Size = UDim2.fromOffset(L.width, height)
+		root.Position = UDim2.fromOffset(centre.X, centre.Y)
+		rootScale.Scale = scale
+		return
+	end
+	root.Size = UDim2.fromOffset(L.width, L.height)
+	root.Position = UDim2.fromScale(0.5, 0.5)
+
+	local fits = math.min(size.Y * 0.9 / L.height, size.X * 0.94 / L.width)
+	local scale = math.min(math.max(1, size.Y / DESIGN_HEIGHT), fits)
+	-- The floor keeps text legible, but never at the cost of the window
+	-- running off a phone's screen.
+	rootScale.Scale = math.min(math.max(scale, MIN_SCALE), math.max(fits, 0.1))
 end
 
 screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)

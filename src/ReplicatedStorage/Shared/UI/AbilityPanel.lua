@@ -285,6 +285,21 @@ local function pointerAt(input: InputObject): (number?, number?)
 end
 
 --[[
+	The pointer in the panel's own pixels. The panel may be drawn smaller than
+	designed - PauseMenu shrinks it with a UIScale named FitScale to fit a phone - and a drag
+	moves cards by the distance the pointer travelled, so that distance is
+	divided by the scale or the card would run ahead of the finger.
+]]
+function AbilityPanel:_pointerAt(input: InputObject): (number?, number?)
+	local x, y = pointerAt(input)
+	local scale = self.root and self.root:FindFirstChild("FitScale")
+	if x and y and scale and scale.Scale > 0 then
+		return x / scale.Scale, y / scale.Scale
+	end
+	return x, y
+end
+
+--[[
 	Builds one of the drag targets out of its sprite, one Frame per '#'.
 
 	Returns the container and the pixels, because the pixels are what get
@@ -496,7 +511,7 @@ function AbilityPanel:_buildCard(index: number)
 
 	button.InputBegan:Connect(function(input)
 		if isPressInput(input) then
-			self:_beginDrag(card, pointerAt(input))
+			self:_beginDrag(card, self:_pointerAt(input))
 		end
 	end)
 
@@ -749,7 +764,7 @@ function AbilityPanel:_beginDrag(card, startX: number?, startY: number?)
 		instant that happens - the classic "it drops when I move quickly".
 	]]
 	drag.changed = UserInputService.InputChanged:Connect(function(input)
-		local x, y = pointerAt(input)
+		local x, y = self:_pointerAt(input)
 		if x and y then
 			self:_dragTo(x, y)
 		end

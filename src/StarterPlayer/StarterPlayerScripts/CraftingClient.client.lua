@@ -48,6 +48,7 @@ local ItemPreview = require(Shared.UI:WaitForChild("ItemPreview"))
 local InventoryMirror =
 	require(Shared:WaitForChild("Inventory"):WaitForChild("InventoryMirror"))
 local MenuState = require(Shared.UI:WaitForChild("MenuState"))
+local Responsive = require(Shared.UI:WaitForChild("Responsive"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 local WeaponClasses = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponClasses"))
@@ -125,6 +126,12 @@ L.listWidth = L.detailX - L.gutter - L.listX
 -- shrunk only when the window would not otherwise fit.
 local DESIGN_HEIGHT = 1080
 local MIN_SCALE = 0.5
+
+-- On a touch screen too short for the whole window: the size it keeps, and the
+-- shortest it gets (the detail column's picture, words, one ingredient and the
+-- craft button).
+local TOUCH_SCALE = 0.66
+local TOUCH_MIN_HEIGHT = 580
 
 -- Crafting several: the gap between requests (the server refuses anything
 -- under 0.12s), how long to wait for an answer before giving up on a batch,
@@ -446,7 +453,7 @@ closeHint.Text = "B or Esc to close"
 local listColumn = PixelUI.image(window, "inset_parchment")
 listColumn.Name = "Recipes"
 listColumn.Position = UDim2.fromOffset(L.listX, L.bodyTop)
-listColumn.Size = UDim2.fromOffset(L.listWidth, L.bodyHeight)
+listColumn.Size = UDim2.new(0, L.listWidth, 1, -(L.bodyTop + L.pad))
 PixelUI.padTo(listColumn, "inset_parchment", 4)
 
 local searchField = PixelUI.image(listColumn, "input")
@@ -555,7 +562,7 @@ emptyHint.TextWrapped = true
 local detail = PixelUI.image(window, "inset_parchment")
 detail.Name = "Detail"
 detail.Position = UDim2.fromOffset(L.detailX, L.bodyTop)
-detail.Size = UDim2.fromOffset(L.detailWidth, L.bodyHeight)
+detail.Size = UDim2.new(0, L.detailWidth, 1, -(L.bodyTop + L.pad))
 
 local detailBody = frame(detail, "Body")
 detailBody.Position = UDim2.fromOffset(L.detailPad, L.detailPad)
@@ -788,7 +795,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local function fit()
-	local size = screen.AbsoluteSize
+	local size = Responsive.viewport()
 	if size.X <= 0 or size.Y <= 0 then
 		return
 	end
@@ -806,12 +813,27 @@ local function fit()
 	end
 	local room = right - GUIDE_MARGIN
 
-	local scale = math.min(
-		math.max(1, size.Y / DESIGN_HEIGHT),
-		size.Y * 0.88 / L.height,
-		math.min(size.X * 0.94, room) / L.width
-	)
-	scale = math.max(scale, MIN_SCALE)
+	--[[
+		A phone held sideways is too short for the whole window at a size its
+		text can be read at. On a touch screen the window keeps TOUCH_SCALE and
+		gets shorter instead, down to TOUCH_MIN_HEIGHT - the recipe list and
+		the ingredients scroll, so only their visible run shrinks - and keeps
+		out of the notch and off the top bar's buttons. Responsive.fitWindow.
+	]]
+	if Responsive.isTouch() then
+		local scale, height, centre = Responsive.fitWindow(L.width, L.height, TOUCH_MIN_HEIGHT, TOUCH_SCALE, right)
+		root.Size = UDim2.fromOffset(L.width, height)
+		rootScale.Scale = scale
+		root.Position = UDim2.fromOffset(centre.X, centre.Y)
+		return
+	end
+	root.Size = UDim2.fromOffset(L.width, L.height)
+
+	local fits = math.min(size.Y * 0.88 / L.height, math.min(size.X * 0.94, room) / L.width)
+	local scale = math.min(math.max(1, size.Y / DESIGN_HEIGHT), fits)
+	-- The floor keeps text legible, but never at the cost of the window
+	-- running off a small window's edge.
+	scale = math.min(math.max(scale, MIN_SCALE), math.max(fits, 0.1))
 	rootScale.Scale = scale
 
 	-- Centred on the screen when it fits there, nudged left when the guide is
@@ -1204,12 +1226,14 @@ local function refreshHeader()
 	title.Text = if activeStation then name else "Crafting"
 	subtitle.TextColor3 = P.OnWoodDim
 
+	-- A touch screen has no keys to name: the window's X closes it there.
+	local touch = Responsive.isTouch()
 	if activeStation == nil then
-		subtitle.Text = "By hand - press E beside a station for more"
-		closeHint.Text = "B or Esc to close"
+		subtitle.Text = if touch then "By hand - use a station for more" else "By hand - press E beside a station for more"
+		closeHint.Text = if touch then "Tap X to close" else "B or Esc to close"
 	else
 		subtitle.Text = string.format("At your %s", name)
-		closeHint.Text = "E or Esc to close"
+		closeHint.Text = if touch then "Tap X to close" else "E or Esc to close"
 	end
 end
 
@@ -1498,7 +1522,21 @@ end)
 -- Clicking the dimmed area outside the window closes it. The window is drawn
 -- over the backdrop, so clicks on the panel never reach here.
 backdrop.InputBegan:Connect(function(input)
-	if isOpen and input.UserInputType == Enum.UserInputType.MouseButton1 then
+	if isOpen and (input.UserInputType == Enum.UserInputType.MouseButton1
+		or input.UserInputType == Enum.UserInputType.Touch) then
+		close()
+	end
+end)
+
+-- TouchControls' Craft button: hand recipes, as B opens.
+MenuState.OpenRequested:Connect(function(name)
+	if name == MENU_NAME and not isOpen then
+		open(nil)
+	end
+end)
+
+MenuState.CloseRequested:Connect(function(name)
+	if name == MENU_NAME then
 		close()
 	end
 end)

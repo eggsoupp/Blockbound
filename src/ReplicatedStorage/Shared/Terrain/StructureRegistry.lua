@@ -1270,7 +1270,14 @@ local function placeModel(candidate, writer)
 			else math.max(1, math.floor(entry.health))
 	end
 
-	local castShadow = options.castStructureShadows
+	--[[
+		Ground cover never casts a shadow. Measured on the same route: a desert
+		arrival averaged 40.8 ms a frame with flowers, rocks and logs casting,
+		24.2 ms with them not - the same as with no ground cover at all. Every
+		new caster is more shadow-map work while chunks stream in, and a
+		flower's shadow is too small to see.
+	]]
+	local castShadow = options.castStructureShadows and not entry.groundCover
 	for _, descendant in ipairs(model:GetDescendants()) do
 		if descendant:IsA("BasePart") then
 			descendant.Anchored = true

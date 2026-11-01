@@ -10,6 +10,12 @@
 	Registration hangs off the "TreePart" tag StructureRegistry already applies,
 	so leaves are picked up as their chunk streams in. Scanning the workspace at
 	startup found nothing, because terrain arrives afterwards.
+
+	Two kinds of leaf. A tree built from separate parts has parts named
+	"leaves", and their Color is cycled. The voxel-pack Hallow trees are one
+	mesh each, so their leaves cannot be a part of their own: a TintMask
+	SurfaceAppearance carries them instead, whose texture is grey where the
+	leaves are and masked off on the trunk, and its Color is what cycles.
 ]]
 
 local CollectionService = game:GetService("CollectionService")
@@ -30,30 +36,45 @@ local HUE_PER_SECOND = 0.12
 local leaves = {}
 local leafCount = 0
 
-local function isHallowLeaf(part)
+-- The instance whose Color is the leaf colour - the part itself, or a tinted
+-- SurfaceAppearance on it - or nil for anything that is not a Hallow leaf.
+local function hallowLeaf(part)
 	if not part:IsA("BasePart") then
-		return false
-	end
-
-	if not string.find(string.lower(part.Name), LEAF_MATCH, 1, true) then
-		return false
+		return nil
 	end
 
 	local model = part:FindFirstAncestorOfClass("Model")
-	return model ~= nil and string.sub(model.Name, 1, #MODEL_PREFIX) == MODEL_PREFIX
+	if not model or string.sub(model.Name, 1, #MODEL_PREFIX) ~= MODEL_PREFIX then
+		return nil
+	end
+
+	local tint = part:FindFirstChildOfClass("SurfaceAppearance")
+	if tint and tint.AlphaMode == Enum.AlphaMode.TintMask then
+		return tint
+	end
+
+	if string.find(string.lower(part.Name), LEAF_MATCH, 1, true) then
+		return part
+	end
+	return nil
 end
 
 local function register(part)
-	if isHallowLeaf(part) then
+	local leaf = hallowLeaf(part)
+	if leaf then
 		leafCount += 1
-		leaves[leafCount] = part
+		leaves[leafCount] = leaf
 	end
 end
 
 for _, part in ipairs(CollectionService:GetTagged(TREE_TAG)) do
 	register(part)
 end
-CollectionService:GetInstanceAddedSignal(TREE_TAG):Connect(register)
+-- Deferred: a streamed part's tag can arrive a moment before its children, and
+-- the SurfaceAppearance is one of them.
+CollectionService:GetInstanceAddedSignal(TREE_TAG):Connect(function(part)
+	task.defer(register, part)
+end)
 
 task.spawn(function()
 	local hue = 0
@@ -69,7 +90,7 @@ task.spawn(function()
 			-- the length of what is actually on screen.
 			for i = leafCount, 1, -1 do
 				local leaf = leaves[i]
-				if leaf and leaf.Parent then
+				if leaf and leaf.Parent and leaf.Parent.Parent then
 					leaf.Color = color
 				else
 					leaves[i] = leaves[leafCount]

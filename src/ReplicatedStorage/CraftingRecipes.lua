@@ -58,6 +58,7 @@ local CraftingRecipes = {
 	WoodSword     = { ingredients = { WoodPlank = 2, Stick = 1 }, station = "CraftingTable" },
 	StonePickaxe  = { ingredients = { Cobblestone = 3, Stick = 2 }, station = "CraftingTable" },
 	StoneSword    = { ingredients = { Cobblestone = 2, Stick = 1 }, station = "CraftingTable" },
+	StoneAxe      = { ingredients = { Cobblestone = 3, Stick = 2 }, station = "CraftingTable" },
 
 	-- Armor
 	LeatherArmor  = { ingredients = { Leather = 6 }, station = "CraftingTable" },

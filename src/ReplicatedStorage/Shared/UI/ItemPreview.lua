@@ -49,7 +49,7 @@ local CACHE_LIMIT = 48
 -- Slack on the camera distance once the silhouette is measured. 1 puts the
 -- item's edges exactly on the frame's.
 local PANEL_MARGIN = 1.1
-local SLOT_MARGIN = 0.97
+local SLOT_MARGIN = 1.04
 
 -- Used only before a viewport has been laid out and can report its own shape.
 local PANEL_ASPECT = 2
@@ -187,6 +187,22 @@ local function remember(itemName: string, model: Model)
 	end
 end
 
+local function cornersOf(part: BasePart): { Vector3 }
+	local half = part.Size * 0.5
+	local cf = part.CFrame
+	local corners = {}
+
+	for x = -1, 1, 2 do
+		for y = -1, 1, 2 do
+			for z = -1, 1, 2 do
+				table.insert(corners, cf * Vector3.new(half.X * x, half.Y * y, half.Z * z))
+			end
+		end
+	end
+
+	return corners
+end
+
 -- The world-aligned box around a set of parts. GetBoundingBox is oriented to
 -- the pivot and GetExtentsSize gives no centre; framing needs both, in the
 -- camera's axes.
@@ -195,17 +211,9 @@ local function worldBounds(parts: { BasePart }): (Vector3, Vector3)
 	local max = -min
 
 	for _, part in ipairs(parts) do
-		local half = part.Size * 0.5
-		local cf = part.CFrame
-
-		for x = -1, 1, 2 do
-			for y = -1, 1, 2 do
-				for z = -1, 1, 2 do
-					local corner = cf * Vector3.new(half.X * x, half.Y * y, half.Z * z)
-					min = min:Min(corner)
-					max = max:Max(corner)
-				end
-			end
+		for _, corner in cornersOf(part) do
+			min = min:Min(corner)
+			max = max:Max(corner)
 		end
 	end
 
@@ -216,7 +224,7 @@ end
 	Presentation, chosen by shape so nobody has to classify the catalogue by
 	hand: an item whose longest side is under BLOCK_RATIO times its shortest is
 	a "block" (three-quarter cube view), the rest are "tools" (laid along the
-	diagonal, head up and right, broad side to camera - a blade seen edge-on is
+	diagonal, head up and left, broad side to camera - a blade seen edge-on is
 	a line, and a line is not identifiable). Overridable per item with
 	`iconPose`, and nudged with `iconAngle`.
 ]]
@@ -225,8 +233,9 @@ local BLOCK_YAW = 35
 local BLOCK_PITCH = 24
 
 -- Where a tool's long axis points on screen, and which way its broad side
--- faces. The slight Z on the long target stops it reading as a flat sticker.
-local TOOL_LONG = Vector3.new(0.58, 0.78, 0.24)
+-- faces. An exact 45 degrees, head to the top left, with no depth: every slot
+-- reads as the same flat diagonal.
+local TOOL_LONG = Vector3.new(-1, 1, 0)
 local TOOL_FACE = Vector3.zAxis
 
 -- Orthonormal frame from a primary axis and a hint for a second, with the hint
@@ -271,18 +280,35 @@ local function poseModel(model: Model, parts: { BasePart }, itemName: string, ha
 		rotation = CFrame.Angles(math.rad(BLOCK_PITCH), math.rad(BLOCK_YAW), 0)
 	else
 		local along = longest[1]
+		local face = shortest[1]
 
-		-- The handle is the end you hold, so the axis points away from it -
-		-- that is what puts the business end up and to the right. Without one,
-		-- the model's own +axis is the guess `iconAngle` exists to correct.
+		-- The handle is the end you hold, so the shaft is whichever of its own
+		-- axes the model reaches furthest along, pointing away from it - that
+		-- puts the business end up and to the left. The world bounding box is
+		-- no use for this: a pickaxe head is nearly as wide as the shaft is long.
+		-- The thinnest of the other two faces the camera. Without a handle, the
+		-- model's own +axis is the guess `iconAngle` exists to correct.
 		if handle then
-			local offset = handle.Position - centre
-			if offset:Dot(along) > 0 then
-				along = -along
+			local reach = {}
+			for _, axis in { handle.CFrame.XVector, handle.CFrame.YVector, handle.CFrame.ZVector } do
+				local low, high = math.huge, -math.huge
+				for _, part in parts do
+					for _, corner in cornersOf(part) do
+						local d = (corner - handle.Position):Dot(axis)
+						low = math.min(low, d)
+						high = math.max(high, d)
+					end
+				end
+				table.insert(reach, { if high >= -low then axis else -axis, math.max(high, -low), high - low })
 			end
+			table.sort(reach, function(a, b)
+				return a[2] > b[2]
+			end)
+			along = reach[1][1]
+			face = if reach[2][3] < reach[3][3] then reach[2][1] else reach[3][1]
 		end
 
-		local modelX, modelY, modelZ = basis(along, shortest[1])
+		local modelX, modelY, modelZ = basis(along, face)
 		local targetX, targetY, targetZ = basis(TOOL_LONG, TOOL_FACE)
 
 		local from = CFrame.fromMatrix(Vector3.zero, modelX, modelY, modelZ)
@@ -296,6 +322,13 @@ local function poseModel(model: Model, parts: { BasePart }, itemName: string, ha
 	local nudge = definition and definition.iconAngle
 	if typeof(nudge) == "Vector3" then
 		rotation = rotation * CFrame.Angles(math.rad(nudge.X), math.rad(nudge.Y), math.rad(nudge.Z))
+	end
+
+	-- Turn in the plane of the screen, counter-clockwise, for a mesh whose
+	-- shaft was modelled on a slant to its own axes.
+	local roll = definition and definition.iconRoll
+	if type(roll) == "number" then
+		rotation = CFrame.Angles(0, 0, math.rad(roll)) * rotation
 	end
 
 	model:PivotTo(CFrame.new(centre) * rotation)
@@ -648,7 +681,9 @@ function ItemPreview.fillSlot(icon: Instance?, itemName: string?): boolean
 	view.LightDirection = Vector3.new(-0.6, -1, -0.4)
 
 	local cam = Instance.new("Camera")
-	cam.FieldOfView = 45
+	-- Narrow, so perspective does not bend the diagonal: the near end of a
+	-- long blade would otherwise draw visibly bigger than the far end.
+	cam.FieldOfView = 15
 	cam.Parent = view
 	view.CurrentCamera = cam
 

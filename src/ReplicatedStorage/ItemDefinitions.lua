@@ -63,7 +63,7 @@
 
 	  iconPose        "tool" or "block", overruling the shape rule that picks
 	                  between them. A tool is laid along the frame's diagonal
-	                  with its head up and to the right; a block is turned to
+	                  with its head up and to the left; a block is turned to
 	                  the three-quarter cube view.
 	  iconAngle       a Vector3 of degrees applied on top of that pose, about the
 	                  item's OWN axes rather than the screen's - so it survives
@@ -71,6 +71,9 @@
 	                  one is Vector3.new(0, 90, 0), which turns a blade that came
 	                  out edge-on to face the camera; Vector3.new(0, 0, 180) puts
 	                  the item on its head.
+	  iconRoll        degrees counter-clockwise in the plane of the screen,
+	                  after everything above - for a mesh whose shaft was
+	                  modelled on a slant, so it misses the slot's diagonal.
 
 	  THE FLAT-IMAGE FIELDS, for items with no model - materials, ingots, and
 	  anything else that has only ever been a picture:
@@ -228,6 +231,8 @@ local ItemDefinitions = {
 		description = "A copper-headed pickaxe for early mining.",
 		rarity = "Common",
 		maxStack = 1,
+		-- The shaft leans in the mesh; this squares it to the slot diagonal.
+		iconRoll = 12,
 		classification = "Pickaxe",
 		value = 5,
 		-- The reference tool: every block hardness in the game is written as
@@ -256,7 +261,8 @@ local ItemDefinitions = {
 		maxStack = 1,
 		classification = "Tool",
 		value = 3,
-		iconAngle = Vector3.new(25, 270, 35),
+		-- The shaft was modelled on a slant to the mesh's own axes.
+		iconRoll = 28,
 	},
 	WoodPickaxe = {
 		displayName = "Wood Pickaxe",
@@ -265,6 +271,8 @@ local ItemDefinitions = {
 		description = "A crude pickaxe. It will break stone, slowly.",
 		rarity = "Common",
 		maxStack = 1,
+		-- The shaft leans in the mesh; this squares it to the slot diagonal.
+		iconRoll = 12,
 		-- "Pickaxe" is not decoration: MiningServer refuses to mine with
 		-- anything else, and ToolConfig picks the fallback shape from it.
 		classification = "Pickaxe",
@@ -272,7 +280,6 @@ local ItemDefinitions = {
 		-- Below CopperPickaxe, so the copper tier is still an upgrade.
 		miningSpeed = 0.60,
 		miningPower = 1,
-		iconAngle = Vector3.new(170, 0, 0),
 	},
 	WoodSword = {
 		displayName = "Wood Sword",
@@ -285,7 +292,6 @@ local ItemDefinitions = {
 		weaponClass = "Sword",
 		weaponSubclass = "Longsword",
 		value = 3,
-		iconAngle = Vector3.new(0, 0, 0),
 	},
 	StonePickaxe = {
 		displayName = "Stone Pickaxe",
@@ -308,6 +314,14 @@ local ItemDefinitions = {
 		weaponClass = "Sword",
 		weaponSubclass = "Longsword",
 		value = 12,
+	},
+	StoneAxe = {
+		displayName = "Stone Axe",
+		description = "A chipped stone head lashed to a stick.",
+		rarity = "Common",
+		maxStack = 1,
+		classification = "Tool",
+		value = 10,
 	},
 
 	-- === Consumables ===
@@ -508,6 +522,8 @@ local ItemDefinitions = {
 		description = "An iron-headed pickaxe strong enough for tougher ores.",
 		rarity = "Uncommon",
 		maxStack = 1,
+		-- The shaft leans in the mesh; this squares it to the slot diagonal.
+		iconRoll = 12,
 		classification = "Pickaxe",
 		value = 15,
 		miningSpeed = 2.00,
@@ -705,6 +721,8 @@ local ItemDefinitions = {
 		description = "A finely edged gold pickaxe for fast mining.",
 		rarity = "Rare",
 		maxStack = 1,
+		-- The shaft leans in the mesh; this squares it to the slot diagonal.
+		iconRoll = 12,
 		classification = "Pickaxe",
 		value = 55,
 		miningSpeed = 2.70,
@@ -863,7 +881,8 @@ local ItemDefinitions = {
 		weaponClass = "Lance",
 		weaponSubclass = "Spear",
 		dropOnly = true,
-		iconAngle = Vector3.new(0, 0, -100),
+		-- Its handle sits mid-shaft, so the rule cannot tell tip from butt.
+		iconAngle = Vector3.new(0, 0, 180),
 	},
 	Thunderveil = {
 		displayName = "Thunderveil",
@@ -874,7 +893,6 @@ local ItemDefinitions = {
 		weaponClass = "HeavySword",
 		weaponSubclass = "Broadsword",
 		dropOnly = true,
-		iconAngle = Vector3.new(0, 0, 0),
 	},
 	Bloodfang = { 
 		displayName = "Bloodfang",
@@ -885,7 +903,6 @@ local ItemDefinitions = {
 		weaponClass = "Sword",
 		weaponSubclass = "Katana",
 		dropOnly = true,
-		iconAngle = Vector3.new(0, 0, 0),
 	},
 
 	-- === High-End Gear (Drop-Only) ===

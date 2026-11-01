@@ -49,9 +49,9 @@ PlayerSettings.Definitions = {
 	sfxVolume = { kind = "volume", default = 1 },
 	damageNumbers = { kind = "toggle", default = true },
 	hitFlash = { kind = "toggle", default = true },
-	-- How much ground cover is drawn: Low none, Medium all but the loose grass,
-	-- High everything. Read by GroundCoverLOD and GrassRing.
-	detailLevel = { kind = "choice", options = { "Low", "Medium", "High" }, default = "High" },
+	-- Whether ground cover is drawn: Low hides flowers, plants, rocks and logs,
+	-- High shows them. Read by GroundCoverLOD.
+	detailLevel = { kind = "choice", options = { "Low", "High" }, default = "High" },
 }
 
 -- How long after the last change the save is sent.

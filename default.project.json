@@ -156,12 +156,6 @@
             "Disabled": false
           }
         },
-        "GrassRing": {
-          "$path": "src/StarterPlayer/StarterPlayerScripts/GrassRing.client.lua",
-          "$properties": {
-            "Disabled": false
-          }
-        },
         "ManaClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/ManaClient.client.lua",
           "$properties": {

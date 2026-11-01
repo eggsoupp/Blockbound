@@ -3,8 +3,7 @@
 
 	Applies the Detail setting to the ground cover the server scatters -
 	flowers, shrubs, mushrooms, rocks, logs. Every part of it carries the
-	"GroundCover" tag (StructureRegistry). Low hides all of it; Medium and High
-	show it. The loose grass that High adds is GrassRing's.
+	"GroundCover" tag (StructureRegistry). Low hides all of it; High shows it.
 
 	Hidden locally, not removed: LocalTransparencyModifier takes it off screen,
 	and CanCollide and CanQuery off take it out of this player's way, so a

@@ -217,8 +217,6 @@ StructureConfig.TreeKeywords = {
 	  patch.mix       share of a patch drawn as any species rather than the
 	                  patch's own one
 
-	Loose grass is not here. It only matters near the camera, so the client
-	grows it around the player instead (StarterPlayerScripts.GrassRing).
 	Every part placed from this table carries the GroundCover tag, which the
 	client's level-of-detail setting hides (StarterPlayerScripts.GroundCoverLOD).
 ]]
@@ -239,7 +237,7 @@ local BOULDER_KEYWORDS = { { match = { "mossy" }, biome = "Swamp" } }
 local function cover(def)
 	def.kind = "Model"
 	def.randomYaw = true
-	def.scaleVariance = def.scaleVariance or 0.15
+	def.scaleVariance = def.scaleVariance or 0.3
 	def.priority = def.priority or 5
 	def.radius = def.radius or 0
 	def.flatness = def.flatness or 0
@@ -259,7 +257,7 @@ StructureConfig.GroundCover = {
 		spacing = 1,
 		patch = { size = 14, coverage = 0.4, radius = 4, mix = 0.12 },
 		surfaces = SOIL,
-		biomes = { Plains = 1.0, Hallow = 1.5, Swamp = 0.3 },
+		biomes = { Plains = 1.0, Swamp = 0.3 },
 		variants = MEADOW,
 	}),
 	-- Wheat fields: wide, dense, rare.
@@ -283,7 +281,7 @@ StructureConfig.GroundCover = {
 		spacing = 1,
 		patch = { size = 12, coverage = 0.35, radius = 3, mix = 0.35 },
 		surfaces = SOIL,
-		biomes = { Plains = 1.0, Swamp = 1.5, Hallow = 0.6 },
+		biomes = { Plains = 1.0, Swamp = 1.5 },
 		variants = WOODS,
 	}),
 	-- Small tight clusters of one kind.
@@ -323,6 +321,7 @@ StructureConfig.GroundCover = {
 	-- Scree: small spills of loose stone.
 	cover({
 		id = "Pebbles",
+		scaleVariance = 0.4,
 		modelSource = "Pebbles",
 		density = 0.6,
 		spacing = 1,
@@ -332,6 +331,8 @@ StructureConfig.GroundCover = {
 	}),
 	cover({
 		id = "Boulders",
+		-- Some boulders are knee-high, some twice that.
+		scaleVariance = 0.5,
 		-- Long and low: on a step one end hangs in the air, so only flat ground.
 		flatness = 0,
 		modelSource = "Boulders",
@@ -356,7 +357,7 @@ StructureConfig.GroundCover = {
 		surfaces = { "Grass", "Dirt", "Snow" },
 		biomes = { Plains = 1.0, Swamp = 1.5, Snow = 1.5 },
 		variants = WOODS,
-		scaleVariance = 0.1,
+		scaleVariance = 0.25,
 
 		-- Stumps and fallen logs chop like a small tree, for a little wood.
 		tag = "DeadwoodPart",
@@ -423,9 +424,11 @@ StructureConfig.Definitions = {
 			Swamp = 0.55,
 			Desert = 0.22,
 			Snow = 0.35,
-			Hallow = 0.35,
-			Crimson = 0.25,
-			Corruption = 0.25,
+			-- The three evil-and-holy biomes run thin on structures (BiomeConfig),
+			-- so their recoloured woods are pushed up to read as woods at all.
+			Hallow = 1.2,
+			Crimson = 1.4,
+			Corruption = 1.4,
 		},
 
 		--[[
@@ -457,11 +460,11 @@ StructureConfig.Definitions = {
 		health = "auto",
 		randomYaw = true,
 
-		-- Enough that a stand stops looking stamped, little enough that no tree
-		-- looks like a different species. Health is derived from height, so a
+		-- Wide: a stand has saplings and giants in it, never one size stamped
+		-- over and over. Health is derived from height, so a
 		-- taller tree also takes one more chop now and then, which is a
 		-- side effect worth having.
-		scaleVariance = 0.12,
+		scaleVariance = 0.3,
 
 		-- Chopping a tree is the only source of Wood, which the whole crafting
 		-- tree hangs off. HarvestServer reads this; nothing else does.

@@ -703,7 +703,7 @@ divider()
 choiceControl(
 	row(
 		"Detail",
-		"Plants, rocks and logs. Low hides them; Medium hides only loose grass."
+		"Flowers, plants, rocks and logs. Low hides them if the game runs slowly."
 	),
 	"detailLevel"
 )

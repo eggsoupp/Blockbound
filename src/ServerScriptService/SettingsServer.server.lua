@@ -86,7 +86,7 @@ local STORED = {
 	detailLevel = "detail",
 }
 
-local DETAIL_LEVELS = { Low = true, Medium = true, High = true }
+local DETAIL_LEVELS = { Low = true, High = true }
 
 --[[
 	Each player's saved settings.

@@ -83,7 +83,10 @@ local STORED = {
 	sfxVolume = "volume",
 	damageNumbers = "boolean",
 	hitFlash = "boolean",
+	detailLevel = "detail",
 }
+
+local DETAIL_LEVELS = { Low = true, Medium = true, High = true }
 
 --[[
 	Each player's saved settings.
@@ -111,7 +114,11 @@ local function cleanLocal(value)
 	end
 	for key, kind in pairs(STORED) do
 		local item = value[key]
-		if (kind == "volume" and isVolume(item)) or (kind == "boolean" and type(item) == "boolean") then
+		if
+			(kind == "volume" and isVolume(item))
+			or (kind == "boolean" and type(item) == "boolean")
+			or (kind == "detail" and DETAIL_LEVELS[item])
+		then
 			clean[key] = item
 		end
 	end

@@ -49,6 +49,9 @@ PlayerSettings.Definitions = {
 	sfxVolume = { kind = "volume", default = 1 },
 	damageNumbers = { kind = "toggle", default = true },
 	hitFlash = { kind = "toggle", default = true },
+	-- How much ground cover is drawn: Low none, Medium all but the loose grass,
+	-- High everything. Read by GroundCoverLOD and GrassRing.
+	detailLevel = { kind = "choice", options = { "Low", "Medium", "High" }, default = "High" },
 }
 
 -- How long after the last change the save is sent.
@@ -68,6 +71,9 @@ local function valid(key: string, value: any): boolean
 	end
 	if definition.kind == "volume" then
 		return type(value) == "number" and value == value and value >= 0 and value <= 1
+	end
+	if definition.kind == "choice" then
+		return table.find(definition.options, value) ~= nil
 	end
 	return type(value) == "boolean"
 end

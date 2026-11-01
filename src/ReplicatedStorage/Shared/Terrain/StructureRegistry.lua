@@ -104,6 +104,14 @@ local SALT_YAW = 5
 local SALT_MODEL = 6
 local SALT_CUSTOM = 7
 local SALT_SCALE = 8
+local SALT_PATCH = 9
+local SALT_PATCH_X = 10
+local SALT_PATCH_Z = 11
+local SALT_PATCH_MIX = 12
+
+-- CollectionService tag on every part of a ground-cover structure, so the
+-- client's detail setting can find them (StarterPlayerScripts.GroundCoverLOD).
+local GROUND_COVER_TAG = "GroundCover"
 
 local candidateCacheLimit = 400
 
@@ -312,6 +320,8 @@ local function prepareDefinition(def, index)
 		health = def.health,
 		randomYaw = def.randomYaw,
 		scaleVariance = def.scaleVariance,
+		patch = def.patch,
+		groundCover = def.groundCover,
 	}
 
 	entry.cellArea = entry.spacing * entry.spacing
@@ -546,6 +556,40 @@ local function footprintIsValid(entry, blockX, blockZ, surfaceY)
 end
 
 --[[
+	How strongly a column belongs to one of the definition's patches, 0..1, and
+	which patch.
+
+	The world is cut into square cells `patch.size` blocks across. A cell holds
+	a patch with chance `patch.coverage`: a disc of `patch.radius` blocks at a
+	jittered centre, kept inside its cell so a column only ever has to ask its
+	own. Thickest at the centre and thinning to nothing at the rim, so a patch
+	reads as a patch rather than a stamped square.
+]]
+local function patchWeight(entry, blockX, blockZ)
+	local patch = entry.patch
+	local size = patch.size
+	local px = math.floor(blockX / size)
+	local pz = math.floor(blockZ / size)
+
+	if hashUnit(px, pz, entry.index, SALT_PATCH) >= patch.coverage then
+		return 0, px, pz
+	end
+
+	local radius = math.min(patch.radius, size * 0.5)
+	local slack = size - radius * 2
+	local centreX = px * size + radius + hashUnit(px, pz, entry.index, SALT_PATCH_X) * slack
+	local centreZ = pz * size + radius + hashUnit(px, pz, entry.index, SALT_PATCH_Z) * slack
+
+	local dx = (blockX + 0.5 - centreX) / radius
+	local dz = (blockZ + 0.5 - centreZ) / radius
+	local d2 = dx * dx + dz * dz
+	if d2 >= 1 then
+		return 0, px, pz
+	end
+	return 1 - d2, px, pz
+end
+
+--[[
 	Every candidate whose origin lies inside chunk (cx, cz), post density roll
 	and post validation. Cached, because neighbouring chunks ask for the same
 	list during overlap resolution.
@@ -595,10 +639,19 @@ local function getCandidates(cx, cz)
 							local blockZ = gz * spacing
 								+ math.floor(hashUnit(gx, gz, entry.index, SALT_JITTER_Z) * spacing)
 
+							-- Outside every patch is out before the world is
+							-- sampled, which is most cells of a patchy family.
+							local inPatch, patchX, patchZ = 1, nil, nil
+							if entry.patch then
+								inPatch, patchX, patchZ = patchWeight(entry, blockX, blockZ)
+							end
+
 							-- The jittered point may land in a neighbouring
 							-- chunk; that chunk owns it.
 							if
-								blockX >= minBlockX and blockX <= maxBlockX
+								inPatch > 0
+								and roll < ceilingChance * inPatch
+								and blockX >= minBlockX and blockX <= maxBlockX
 								and blockZ >= minBlockZ and blockZ <= maxBlockZ
 								and options.isInWorld(blockX, blockZ)
 								and (options.allowStructureAt == nil or options.allowStructureAt(blockX, blockZ, entry.radius))
@@ -650,19 +703,19 @@ local function getCandidates(cx, cz)
 										* perVariant
 
 									if
-										roll < baseChance * multiplier
+										roll < baseChance * multiplier * inPatch
 										-- Nothing grows in standing water.
 										and (waterTop == nil or waterTop <= surfaceY)
 										and (entry.minSurfaceHeight == nil or surfaceY >= entry.minSurfaceHeight)
 										and (entry.maxSurfaceHeight == nil or surfaceY <= entry.maxSurfaceHeight)
 										and footprintIsValid(entry, blockX, blockZ, surfaceY)
 									then
-										table.insert(
-											list,
-											makeCandidate(
-												entry, gx, gz, blockX, blockZ, surfaceY, biome, variant, cx, cz
-											)
+										local candidate = makeCandidate(
+											entry, gx, gz, blockX, blockZ, surfaceY, biome, variant, cx, cz
 										)
+										candidate.patchX = patchX
+										candidate.patchZ = patchZ
+										table.insert(list, candidate)
 									end
 								end
 							end
@@ -1056,12 +1109,17 @@ end
 local function placeModel(candidate, writer)
 	local entry = candidate.entry
 
-	local template = pickModel(
-		entry,
-		candidate.biome,
-		candidate.variant,
-		hashUnit(candidate.gx, candidate.gz, entry.index, SALT_MODEL)
-	)
+	-- A patch is one species, rolled once for the whole patch, with `patch.mix`
+	-- of its members drawn on their own so it is not perfectly uniform.
+	local modelRoll = hashUnit(candidate.gx, candidate.gz, entry.index, SALT_MODEL)
+	if
+		candidate.patchX
+		and hashUnit(candidate.gx, candidate.gz, entry.index, SALT_PATCH_MIX) >= (entry.patch.mix or 0)
+	then
+		modelRoll = hashUnit(candidate.patchX, candidate.patchZ, entry.index, SALT_MODEL)
+	end
+
+	local template = pickModel(entry, candidate.biome, candidate.variant, modelRoll)
 	if not template then
 		return
 	end
@@ -1170,6 +1228,9 @@ local function placeModel(candidate, writer)
 			descendant.CastShadow = castShadow
 			if entry.tag then
 				CollectionService:AddTag(descendant, entry.tag)
+			end
+			if entry.groundCover then
+				CollectionService:AddTag(descendant, GROUND_COVER_TAG)
 			end
 		elseif descendant:IsA("Script") or descendant:IsA("LocalScript") then
 			descendant:Destroy()

@@ -639,6 +639,46 @@ local function toggleControl(controls: Frame, key: string)
 	end)
 end
 
+--[[
+	One button per option, for a setting that picks from a short list. The
+	chosen one is lit green, the rest are plain tan.
+]]
+local function choiceControl(controls: Frame, key: string)
+	local options = PlayerSettings.Definitions[key].options
+	local width = 92
+	local buttons = {}
+
+	for index, option in ipairs(options) do
+		local handle = PixelUI.button(controls, {
+			name = option,
+			text = string.upper(option),
+			textSize = Theme.TextSize.Small,
+			size = UDim2.fromOffset(width, L.button),
+			onClick = function()
+				PlayerSettings.set(key, option)
+			end,
+		})
+		handle.button.AnchorPoint = Vector2.new(1, 0)
+		handle.button.Position = UDim2.new(1, -(width + 4) * (#options - index), 0, 0)
+		buttons[option] = handle
+	end
+
+	caption(controls).Text = "DEFAULT " .. string.upper(PlayerSettings.getDefault(key))
+
+	local function draw(chosen: string)
+		for option, handle in pairs(buttons) do
+			handle.setColor(if option == chosen then "green" else "tan")
+		end
+	end
+
+	draw(PlayerSettings.get(key))
+	PlayerSettings.Changed.Event:Connect(function(changed, chosen)
+		if changed == key then
+			draw(chosen)
+		end
+	end)
+end
+
 -- ---------------------------------------------------------------------------
 -- The rows
 -- ---------------------------------------------------------------------------
@@ -659,6 +699,14 @@ local distanceRow = row(
 	"View distance",
 	"How far the world loads around you, in chunks. Lower it if the game runs slowly."
 )
+divider()
+choiceControl(
+	row(
+		"Detail",
+		"Plants, rocks and logs. Low hides them; Medium hides only loose grass."
+	),
+	"detailLevel"
+)
 
 section("Combat")
 toggleControl(
@@ -671,7 +719,7 @@ toggleControl(
 	"hitFlash"
 )
 
--- Reset, in the header row: audio and combat back to their defaults. View
+-- Reset, in the header row: audio, detail and combat back to their defaults. View
 -- distance is the server's, and is left where it is.
 local reset = PixelUI.button(window, {
 	name = "Reset",

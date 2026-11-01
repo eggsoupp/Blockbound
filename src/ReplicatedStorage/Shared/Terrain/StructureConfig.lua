@@ -201,6 +201,22 @@ StructureConfig.TreeKeywords = {
 	Plains' Open variant thins structures to 0.06 so the clearings stay clear
 	of trees. Ground cover wants the opposite, so its variants table hands
 	the clearings most of that back.
+
+	PATCHES. Nothing small is scattered evenly: a `patch` table gathers a
+	family into discs - a bed of one flower, a stand of wheat, a ring of
+	mushrooms - with bare ground between them. `density` is then the density
+	INSIDE a patch, at its centre.
+
+	  patch.size      cell size in blocks; at most one patch per cell
+	  patch.coverage  chance a cell holds a patch
+	  patch.radius    patch radius in blocks, at most size / 2
+	  patch.mix       share of a patch drawn as any species rather than the
+	                  patch's own one
+
+	Loose grass is not here. It only matters near the camera, so the client
+	grows it around the player instead (StarterPlayerScripts.GrassRing).
+	Every part placed from this table carries the GroundCover tag, which the
+	client's level-of-detail setting hides (StarterPlayerScripts.GroundCoverLOD).
 ]]
 local SOIL = { "Grass", "Dirt", "HallowedDirt" }
 local MEADOW = { Open = 12, OakForest = 0.6, BirchForest = 0.6 }
@@ -226,77 +242,83 @@ local function cover(def)
 	def.minSurfaceHeight = def.minSurfaceHeight or 2
 	-- Unmatched models are the family's general pool, not a naming mistake.
 	def.quietFallback = true
+	def.groundCover = true
 	return def
 end
 
 StructureConfig.GroundCover = {
-	cover({
-		id = "Grass",
-		modelSource = "Grass",
-		density = 0.09,
-		spacing = 2,
-		surfaces = SOIL,
-		biomes = { Plains = 1.0, Swamp = 1.4, Hallow = 0.8 },
-		variants = MEADOW,
-	}),
+	-- Flower beds: one colour each, a few strays mixed in.
 	cover({
 		id = "Flowers",
 		modelSource = "Flowers",
-		density = 0.045,
-		spacing = 2,
+		density = 1.0,
+		spacing = 1,
+		patch = { size = 14, coverage = 0.4, radius = 4, mix = 0.12 },
 		surfaces = SOIL,
 		biomes = { Plains = 1.0, Hallow = 1.5, Swamp = 0.3 },
 		variants = MEADOW,
 	}),
+	-- Wheat fields: wide, dense, rare.
 	cover({
 		id = "Wheat",
 		modelSource = "Wheat",
-		density = 0.012,
-		spacing = 3,
+		density = 1.4,
+		spacing = 1,
+		patch = { size = 24, coverage = 0.22, radius = 6, mix = 0.3 },
 		surfaces = { "Grass" },
 		biomes = { Plains = 1.0 },
 		variants = { Open = 12 },
 	}),
+	-- Thickets at the edges of the woods.
 	cover({
 		id = "Shrubs",
 		modelSource = "Shrubs",
-		density = 0.012,
-		spacing = 3,
+		density = 0.7,
+		spacing = 1,
+		patch = { size = 12, coverage = 0.35, radius = 3, mix = 0.35 },
 		surfaces = SOIL,
 		biomes = { Plains = 1.0, Swamp = 1.5, Hallow = 0.6 },
 		variants = WOODS,
 	}),
+	-- Small tight clusters of one kind.
 	cover({
 		id = "Mushrooms",
 		modelSource = "Mushrooms",
 		modelKeywords = MUSHROOM_KEYWORDS,
-		density = 0.012,
-		spacing = 3,
+		density = 1.2,
+		spacing = 1,
+		patch = { size = 12, coverage = 0.3, radius = 2 },
 		surfaces = { "Grass", "Dirt", "CrimsonDirt", "CorruptedDirt" },
 		biomes = { Plains = 1.0, Swamp = 2.0, Crimson = 3.0, Corruption = 3.0 },
 		variants = { OakForest = 1, BirchForest = 1 },
 	}),
+	-- Cactus groves with open sand between them.
 	cover({
 		id = "DesertPlants",
 		modelSource = "DesertPlants",
-		density = 0.012,
-		spacing = 3,
+		density = 0.9,
+		spacing = 1,
+		patch = { size = 14, coverage = 0.4, radius = 3, mix = 0.4 },
 		surfaces = { "Sand" },
 		biomes = { Desert = 4.0 },
 	}),
+	-- Bamboo groves and reed beds.
 	cover({
 		id = "Wetland",
 		modelSource = "Wetland",
-		density = 0.02,
-		spacing = 3,
+		density = 1.0,
+		spacing = 1,
+		patch = { size = 12, coverage = 0.5, radius = 4, mix = 0.15 },
 		surfaces = SOIL,
 		biomes = { Swamp = 2.0 },
 	}),
+	-- Scree: small spills of loose stone.
 	cover({
 		id = "Pebbles",
 		modelSource = "Pebbles",
-		density = 0.008,
-		spacing = 3,
+		density = 0.6,
+		spacing = 1,
+		patch = { size = 14, coverage = 0.25, radius = 2, mix = 0.5 },
 		biomes = { Plains = 1.0, Swamp = 1.0, Desert = 3.0, Snow = 2.0, Crimson = 2.0, Corruption = 2.0 },
 		variants = WOODS,
 	}),

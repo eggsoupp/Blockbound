@@ -414,7 +414,7 @@ local function prepareDefinition(def, index)
 								.. "after the biome (see StructureConfig.TreeKeywords).",
 							def.id, biomeName
 						))
-					else
+					elseif not def.quietFallback then
 						warn(string.format(
 							"[StructureRegistry] '%s' has no models named for %s, so the %d model(s) "
 								.. "matching no keyword at all will be used there. If that is not "
@@ -1132,7 +1132,12 @@ local function placeModel(candidate, writer)
 
 	-- Down by a hair, never up: a model that is a fraction too low is buried by
 	-- a fraction, and one that is a fraction too high is floating.
-	model:PivotTo(model:GetPivot() + Vector3.new(0, groundY - minY - SEAT_BIAS, 0))
+	-- A template may ask to be buried further, in studs at its authored scale -
+	-- a plant modelled in a pot stands in the ground with the pot under it.
+	local sink = template:GetAttribute("GroundSink")
+	sink = if type(sink) == "number" then sink * model:GetScale() / template:GetScale() else 0
+
+	model:PivotTo(model:GetPivot() + Vector3.new(0, groundY - minY - SEAT_BIAS - sink, 0))
 
 	if entry.nameFormat then
 		-- Both are passed, so a format may use either or both: "%sTree" names by

@@ -63,6 +63,10 @@
 	Model kind:
 	  modelSource   string    folder under ReplicatedStorage.TerrainAssets
 	  modelKeywords map       see TreeKeywords below; picks a per-biome pool
+	  quietFallback boolean?  a biome with no keyword pool silently uses the
+	                          unmatched models instead of warning about it
+	  GroundSink    attribute on a template model, in studs: buried that much
+	                          further than its lowest point (a plant in a pot)
 	  nameFormat    string?   string.format pattern receiving the biome name.
 	                          nil keeps the source model's own name.
 	  tag           string?   CollectionService tag applied to every BasePart
@@ -165,7 +169,11 @@ StructureConfig.ChopSeconds = 1.0
 	no models, so a typo announces itself rather than quietly emptying a forest.
 ]]
 StructureConfig.TreeKeywords = {
-	{ match = { "desert", "cactus" }, biome = "Desert" },
+	-- Bare broadleaves stand in the swamp; a bare pine is still a Snow pine.
+	{ match = { "maple_tree_leafless", "oak_tree_leafless" }, biome = "Swamp" },
+	-- Autumn colour belongs to the plains, ahead of "pine" and "oak" below.
+	{ match = { "autumn" }, biome = "Plains" },
+	{ match = { "desert", "cactus", "palm" }, biome = "Desert" },
 	{ match = { "snow", "pine", "spruce" }, biome = "Snow" },
 	{ match = { "hallow", "hollow" }, biome = "Hallow" },
 	{ match = { "corrupt" }, biome = "Corruption" },
@@ -176,7 +184,161 @@ StructureConfig.TreeKeywords = {
 	{ match = { "oak" }, biome = "Plains", variant = "OakForest" },
 	{ match = { "birch" }, biome = "Plains", variant = "BirchForest" },
 
-	{ match = { "plain", "grass" }, biome = "Plains" },
+	{ match = { "plain", "grass", "maple" }, biome = "Plains" },
+}
+
+--[[
+	GROUND COVER
+
+	Everything below the trees: flowers, grass, shrubs, rocks, fallen wood.
+	Each family is its own definition over its own TerrainAssets folder, so a
+	meadow's flowers and a forest's mushrooms get their own densities rather
+	than sharing one roll. The models are the imported voxel pack, scaled up
+	in place to sit with 4-stud blocks; anything you walk through has
+	CanCollide and CanQuery off on the template, so it never blocks a step, a
+	mining click or a chop.
+
+	Plains' Open variant thins structures to 0.06 so the clearings stay clear
+	of trees. Ground cover wants the opposite, so its variants table hands
+	the clearings most of that back.
+]]
+local SOIL = { "Grass", "Dirt", "HallowedDirt" }
+local MEADOW = { Open = 12, OakForest = 0.6, BirchForest = 0.6 }
+local WOODS = { Open = 3, OakForest = 1, BirchForest = 1 }
+
+-- Keyword tables for the families that split by biome.
+local DEADWOOD_KEYWORDS = { { match = { "mossy" }, biome = "Swamp" } }
+local MUSHROOM_KEYWORDS = {
+	{ match = { "pruple", "purple" }, biome = "Corruption" },
+	{ match = { "red" }, biome = "Crimson" },
+}
+local BOULDER_KEYWORDS = { { match = { "mossy" }, biome = "Swamp" } }
+
+-- Shared by every ground-cover definition: deterministic size jitter and a
+-- random facing, so a meadow never repeats itself in rows.
+local function cover(def)
+	def.kind = "Model"
+	def.randomYaw = true
+	def.scaleVariance = def.scaleVariance or 0.15
+	def.priority = def.priority or 5
+	def.radius = def.radius or 0
+	def.flatness = def.flatness or 1
+	def.minSurfaceHeight = def.minSurfaceHeight or 2
+	-- Unmatched models are the family's general pool, not a naming mistake.
+	def.quietFallback = true
+	return def
+end
+
+StructureConfig.GroundCover = {
+	cover({
+		id = "Grass",
+		modelSource = "Grass",
+		density = 0.09,
+		spacing = 2,
+		surfaces = SOIL,
+		biomes = { Plains = 1.0, Swamp = 1.4, Hallow = 0.8 },
+		variants = MEADOW,
+	}),
+	cover({
+		id = "Flowers",
+		modelSource = "Flowers",
+		density = 0.045,
+		spacing = 2,
+		surfaces = SOIL,
+		biomes = { Plains = 1.0, Hallow = 1.5, Swamp = 0.3 },
+		variants = MEADOW,
+	}),
+	cover({
+		id = "Wheat",
+		modelSource = "Wheat",
+		density = 0.012,
+		spacing = 3,
+		surfaces = { "Grass" },
+		biomes = { Plains = 1.0 },
+		variants = { Open = 12 },
+	}),
+	cover({
+		id = "Shrubs",
+		modelSource = "Shrubs",
+		density = 0.012,
+		spacing = 3,
+		surfaces = SOIL,
+		biomes = { Plains = 1.0, Swamp = 1.5, Hallow = 0.6 },
+		variants = WOODS,
+	}),
+	cover({
+		id = "Mushrooms",
+		modelSource = "Mushrooms",
+		modelKeywords = MUSHROOM_KEYWORDS,
+		density = 0.012,
+		spacing = 3,
+		surfaces = { "Grass", "Dirt", "CrimsonDirt", "CorruptedDirt" },
+		biomes = { Plains = 1.0, Swamp = 2.0, Crimson = 3.0, Corruption = 3.0 },
+		variants = { OakForest = 1, BirchForest = 1 },
+	}),
+	cover({
+		id = "DesertPlants",
+		modelSource = "DesertPlants",
+		density = 0.012,
+		spacing = 3,
+		surfaces = { "Sand" },
+		biomes = { Desert = 4.0 },
+	}),
+	cover({
+		id = "Wetland",
+		modelSource = "Wetland",
+		density = 0.02,
+		spacing = 3,
+		surfaces = SOIL,
+		biomes = { Swamp = 2.0 },
+	}),
+	cover({
+		id = "Pebbles",
+		modelSource = "Pebbles",
+		density = 0.008,
+		spacing = 3,
+		biomes = { Plains = 1.0, Swamp = 1.0, Desert = 3.0, Snow = 2.0, Crimson = 2.0, Corruption = 2.0 },
+		variants = WOODS,
+	}),
+	cover({
+		id = "Boulders",
+		-- Long and low: on a step one end hangs in the air, so only flat ground.
+		flatness = 0,
+		modelSource = "Boulders",
+		modelKeywords = BOULDER_KEYWORDS,
+		priority = 15,
+		density = 0.003,
+		spacing = 6,
+		radius = 1,
+		biomes = { Plains = 1.0, Swamp = 1.0, Desert = 3.0, Snow = 2.0, Crimson = 2.0, Corruption = 2.0 },
+		variants = WOODS,
+	}),
+	cover({
+		id = "Deadwood",
+		-- Long and low: on a step one end hangs in the air, so only flat ground.
+		flatness = 0,
+		modelSource = "Deadwood",
+		modelKeywords = DEADWOOD_KEYWORDS,
+		priority = 15,
+		density = 0.005,
+		spacing = 5,
+		radius = 1,
+		surfaces = { "Grass", "Dirt", "Snow" },
+		biomes = { Plains = 1.0, Swamp = 1.5, Snow = 1.5 },
+		variants = WOODS,
+		scaleVariance = 0.1,
+
+		-- Stumps and fallen logs chop like a small tree, for a little wood.
+		tag = "DeadwoodPart",
+		health = 2,
+		harvest = {
+			item = "Wood",
+			min = 1,
+			max = 2,
+			toolClass = "Tool",
+			damage = 1,
+		},
+	}),
 }
 
 StructureConfig.Definitions = {
@@ -406,6 +568,10 @@ StructureConfig.Definitions = {
 		randomYaw = true,
 	},
 }
+
+for _, def in ipairs(StructureConfig.GroundCover) do
+	table.insert(StructureConfig.Definitions, def)
+end
 
 --[[
 	Structural sanity check. Runs at require time.

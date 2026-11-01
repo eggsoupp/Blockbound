@@ -42,6 +42,8 @@
 	                number    surface height band, in blocks.
 	flatness        number    max height difference allowed across the
 	                          footprint. nil disables the check.
+	flatRadius      number?   how far out the flatness check reaches, when that
+	                          is wider than radius. Defaults to radius.
 	maxSink         number?   how far below its own column a structure may be
 	                          lowered to keep an overhanging base in contact
 	                          with ground that steps down. Defaults to
@@ -181,10 +183,12 @@ StructureConfig.TreeKeywords = {
 
 	-- Plains sub-biomes. These come before the generic Plains entry so a name
 	-- carrying a species wins over one merely carrying the biome.
+	-- The original birch models were retired to UnusedAssets for not matching
+	-- the voxel pack; the pack's green maples stand in the birch woods now.
 	{ match = { "oak" }, biome = "Plains", variant = "OakForest" },
-	{ match = { "birch" }, biome = "Plains", variant = "BirchForest" },
+	{ match = { "birch", "maple" }, biome = "Plains", variant = "BirchForest" },
 
-	{ match = { "plain", "grass", "maple" }, biome = "Plains" },
+	{ match = { "plain", "grass" }, biome = "Plains" },
 }
 
 --[[
@@ -238,7 +242,7 @@ local function cover(def)
 	def.scaleVariance = def.scaleVariance or 0.15
 	def.priority = def.priority or 5
 	def.radius = def.radius or 0
-	def.flatness = def.flatness or 1
+	def.flatness = def.flatness or 0
 	def.minSurfaceHeight = def.minSurfaceHeight or 2
 	-- Unmatched models are the family's general pool, not a naming mistake.
 	def.quietFallback = true
@@ -272,6 +276,8 @@ StructureConfig.GroundCover = {
 	-- Thickets at the edges of the woods.
 	cover({
 		id = "Shrubs",
+		-- Wider than a block, so the blocks around it must be level too.
+		flatRadius = 1,
 		modelSource = "Shrubs",
 		density = 0.7,
 		spacing = 1,
@@ -305,6 +311,8 @@ StructureConfig.GroundCover = {
 	-- Bamboo groves and reed beds.
 	cover({
 		id = "Wetland",
+		-- Wider than a block, so the blocks around it must be level too.
+		flatRadius = 1,
 		modelSource = "Wetland",
 		density = 1.0,
 		spacing = 1,
@@ -378,8 +386,13 @@ StructureConfig.Definitions = {
 
 		density = 0.035,
 		spacing = 3,
-		radius = 1,
-		flatness = 1,
+		-- Trunks four blocks apart at least: the pack's canopies are five wide.
+		radius = 2,
+		-- Level under the trunk and the blocks round it: on a step the trunk either
+		-- hangs in the air or sinks into the block. Roots reaching further sink a
+		-- little into a neighbour, which reads as roots.
+		flatRadius = 1,
+		flatness = 0,
 		minSurfaceHeight = 2,
 
 		--[[

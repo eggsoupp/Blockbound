@@ -159,6 +159,18 @@ local function grow(bx: number, bz: number)
 	local fromY = if root then root.Position.Y + 48 else 400
 	local origin = Vector3.new(bx * STUD + STUD * 0.5, fromY, bz * STUD + STUD * 0.5)
 	local hit = workspace:Raycast(origin, Vector3.new(0, -160, 0), rayParams)
+
+	-- Trees and logs live in the same chunk folders as the blocks. A ray that
+	-- lands on one carries on down from just under it, so a forest floor still
+	-- gets its grass; a ray that starts inside a part does not hit that part.
+	for _ = 1, 4 do
+		if not hit or not hit.Instance.Parent or not hit.Instance.Parent:IsA("Model") then
+			break
+		end
+		local from = hit.Position - Vector3.new(0, 0.05, 0)
+		hit = workspace:Raycast(from, Vector3.new(0, origin.Y - 160 - from.Y, 0), rayParams)
+	end
+
 	if not hit or hit.Instance.Name ~= "Grass" or hit.Normal.Y < 0.9 then
 		return
 	end

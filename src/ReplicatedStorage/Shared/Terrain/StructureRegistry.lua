@@ -165,6 +165,52 @@ local function poolKey(biome, variant)
 end
 
 --[[
+	Moves a template's pivot to the bottom centre of its parts.
+
+	Placement stands a model on the column its PIVOT names, and imported models
+	arrive with the pivot wherever the exporter left it - tens of studs from the
+	mesh, in some of the nature pack. The flatness check then vets one patch of
+	ground while the model is drawn over another, and it floats off one step
+	and sinks into the next. Only the position moves: the pivot's rotation is
+	what decides which way up the model stands.
+]]
+local function centrePivot(model)
+	local minY = math.huge
+	local minX, maxX, minZ, maxZ = math.huge, -math.huge, math.huge, -math.huge
+
+	for _, part in ipairs(model:GetDescendants()) do
+		if part:IsA("BasePart") then
+			local cf, size = part.CFrame, part.Size
+			local function half(axis)
+				return 0.5 * (
+					math.abs(cf.RightVector[axis]) * size.X
+					+ math.abs(cf.UpVector[axis]) * size.Y
+					+ math.abs(cf.LookVector[axis]) * size.Z
+				)
+			end
+			local p = cf.Position
+			minY = math.min(minY, p.Y - half("Y"))
+			minX = math.min(minX, p.X - half("X"))
+			maxX = math.max(maxX, p.X + half("X"))
+			minZ = math.min(minZ, p.Z - half("Z"))
+			maxZ = math.max(maxZ, p.Z + half("Z"))
+		end
+	end
+
+	if minY == math.huge then
+		return
+	end
+
+	local old = model:GetPivot()
+	local target = CFrame.new((minX + maxX) / 2, minY, (minZ + maxZ) / 2) * old.Rotation
+	if model.PrimaryPart then
+		model.PrimaryPart.PivotOffset = model.PrimaryPart.CFrame:ToObjectSpace(target)
+	else
+		model.WorldPivot = target
+	end
+end
+
+--[[
 	Sorts the models in a source folder into pools, using the definition's
 	keyword table.
 
@@ -206,6 +252,7 @@ local function buildModelPools(def)
 			end
 
 			model.PrimaryPart = primary
+			centrePivot(model)
 			table.insert(pools.__all, model)
 			total += 1
 
@@ -300,6 +347,9 @@ local function prepareDefinition(def, index)
 		density = def.density or 0,
 		spacing = math.max(1, math.floor(def.spacing or 4)),
 		radius = def.radius or 0,
+		-- How far out the ground is vetted, which can exceed how far apart
+		-- structures are kept: a tree's roots spread wider than its trunk.
+		flatRadius = def.flatRadius or def.radius or 0,
 		flatness = def.flatness,
 		minSurfaceHeight = def.minSurfaceHeight,
 		maxSurfaceHeight = def.maxSurfaceHeight,
@@ -524,7 +574,7 @@ end
 	apart.
 ]]
 local function footprintIsValid(entry, blockX, blockZ, surfaceY)
-	local radius = entry.radius
+	local radius = entry.flatRadius
 	if radius <= 0 or entry.flatness == nil then
 		return true
 	end

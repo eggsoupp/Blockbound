@@ -330,6 +330,21 @@ TerrainConfig.Water = {
 	Reflectance = 0.35,
 	WaveSize = 0.05,
 	WaveSpeed = 8,
+
+	--[[
+		Per-biome water, by the biome the player stands in. Terrain has one
+		water colour for the whole world, so this is a client-side look
+		(StarterPlayerScripts.BiomeWater) that eases over as the player crosses
+		into a biome; every lake in view takes it on together. Fields left out
+		keep the values above.
+	]]
+	Biomes = {
+		Hallow = { Color = Color3.fromRGB(255, 120, 205) },
+		Corruption = { Color = Color3.fromRGB(120, 50, 175) },
+		Crimson = { Color = Color3.fromRGB(175, 30, 40) },
+		-- Silty: sand-coloured and cloudier than clear water.
+		Desert = { Color = Color3.fromRGB(150, 132, 84), Transparency = 0.35 },
+	},
 }
 
 -- Tried in order when a biome asks for a template that is not in

@@ -150,6 +150,12 @@
             "Disabled": false
           }
         },
+        "BiomeWater": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/BiomeWater.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
         "GroundCoverLOD": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/GroundCoverLOD.client.lua",
           "$properties": {

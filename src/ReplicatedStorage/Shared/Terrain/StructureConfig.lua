@@ -225,7 +225,11 @@ local MEADOW = { Open = 12, OakForest = 0.6, BirchForest = 0.6 }
 local WOODS = { Open = 3, OakForest = 1, BirchForest = 1 }
 
 -- Keyword tables for the families that split by biome.
-local DEADWOOD_KEYWORDS = { { match = { "mossy" }, biome = "Swamp" } }
+local DEADWOOD_KEYWORDS = {
+	{ match = { "mossy" }, biome = "Swamp" },
+	-- A black stump, the only deadwood the Hallow gets.
+	{ match = { "hallow" }, biome = "Hallow" },
+}
 local MUSHROOM_KEYWORDS = {
 	{ match = { "pruple", "purple" }, biome = "Corruption" },
 	{ match = { "red" }, biome = "Crimson" },
@@ -354,8 +358,8 @@ StructureConfig.GroundCover = {
 		density = 0.005,
 		spacing = 5,
 		radius = 1,
-		surfaces = { "Grass", "Dirt", "Snow" },
-		biomes = { Plains = 1.0, Swamp = 1.5, Snow = 1.5 },
+		surfaces = { "Grass", "Dirt", "Snow", "HallowedDirt" },
+		biomes = { Plains = 1.0, Swamp = 1.5, Snow = 1.5, Hallow = 1.5 },
 		variants = WOODS,
 		scaleVariance = 0.25,
 

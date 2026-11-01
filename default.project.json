@@ -943,6 +943,9 @@
       "AbilityLoadout": {
         "$path": "src/ServerScriptService/AbilityLoadout.lua"
       },
+      "Purchases": {
+        "$path": "src/ServerScriptService/Purchases.lua"
+      },
       "SettingsServer": {
         "$path": "src/ServerScriptService/SettingsServer.server.lua",
         "$properties": {

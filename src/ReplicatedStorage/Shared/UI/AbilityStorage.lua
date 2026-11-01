@@ -1,9 +1,9 @@
 --[[
 	AbilityStorage
 
-	The panel behind the storage box in the ability screen: three slots an
-	ability can be parked in instead of thrown away, and the swap that gets one
-	back out when the loadout is already full.
+	The panel behind the storage box in the ability screen: slots an ability
+	can be parked in instead of thrown away, the swap that gets one back out
+	when the loadout is already full, and the button that buys more of them.
 
 	WHAT LIVES WHERE
 
@@ -17,37 +17,88 @@
 	So this file owns the BEHAVIOUR - what opens, what the slots say, and which
 	request goes to the server - and takes the finished button as an argument.
 
-	THE SERVER OWNS EVERYTHING REAL. Nothing here decides whether a player has
-	the gamepass, whether a slot is free, or what ends up stored; it asks, and
+	THE SERVER OWNS EVERYTHING REAL. Nothing here decides how many slots a
+	player has bought, whether one is free, or what ends up stored; it asks, and
 	redraws when AbilityLoadout pushes back. See the storage section there.
+
+	BUYING MORE
+
+	Storage is sold StorageConfig.SlotsPerPurchase slots at a time, as often as
+	a player likes up to MaxSlots, so the list scrolls and the button at the
+	bottom is always "+3 more" until there is no more to buy. The price is
+	Roblox's, read once per product and shown on the button.
 ]]
 
+local MarketplaceService = game:GetService("MarketplaceService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 
 local Theme = require(script.Parent.Theme)
 local Config = require(Shared.Abilities.AbilityConfig)
+local StorageConfig = require(Shared.Abilities.StorageConfig)
 local Remotes = require(Shared.Net.Remotes)
 
 local Request = Remotes.wait("AbilityStorageRequest")
 local Changed = Remotes.wait("AbilityStorageChanged")
 
--- Rows built. The server sends the capacity it actually enforces with every
--- push; anything past it is hidden rather than drawn as a slot that refuses.
-local SLOT_ROWS = 3
+-- Measured to stay inside the ability screen's panel, which clips: three rows
+-- show at once and the rest scroll.
+local HEADING_HEIGHT = 32
+local ROW_HEIGHT = 40
+local ROW_GAP = 4
+local VISIBLE_ROWS = 3
+local FOOTER_HEIGHT = 46
+local INSET = 8
+local LIST_HEIGHT = VISIBLE_ROWS * (ROW_HEIGHT + ROW_GAP)
+local PANEL_HEIGHT = HEADING_HEIGHT + LIST_HEIGHT + FOOTER_HEIGHT
 
-local SLOT_HEIGHT = 48
-local SLOT_GAP = 6
-local SLOT_INSET = 8
-local HEADING_HEIGHT = 35
-local PANEL_HEIGHT = HEADING_HEIGHT + SLOT_ROWS * (SLOT_HEIGHT + SLOT_GAP)
+local BUY_COLOR = Theme.Color.Good
+local BUY_TEXT = Color3.new(1, 1, 1)
 
 -- The last thing the server said. One copy for every panel on screen, because
 -- there is only ever one player.
-local state = { slots = {}, owned = false, capacity = SLOT_ROWS }
+local state = {
+	slots = {},
+	capacity = 0,
+	maxSlots = StorageConfig.MaxSlots,
+	perPurchase = StorageConfig.SlotsPerPurchase,
+	productId = StorageConfig.AbilityStorageProductId,
+	canBuy = false,
+}
 local views = {}
 
+-- productId -> "R$ 49", once Roblox has said.
+local prices: { [number]: string } = {}
+
+local function fetchPrice(productId: number?)
+	if type(productId) ~= "number" or productId <= 0 or prices[productId] then
+		return
+	end
+	prices[productId] = ""
+	task.spawn(function()
+		local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, productId, Enum.InfoType.Product)
+		if ok and info and info.PriceInRobux then
+			prices[productId] = "R$ " .. tostring(info.PriceInRobux)
+			for view in pairs(views) do
+				view.refresh()
+			end
+		end
+	end)
+end
+
 local AbilityStorage = {}
+
+local function newLabel(parent: Instance, text: string, size: number, color: Color3)
+	local label = Instance.new("TextLabel")
+	label.BackgroundTransparency = 1
+	label.FontFace = Theme.Fonts.BodyBold
+	label.TextSize = size
+	label.TextColor3 = color
+	label.Text = text
+	label.ZIndex = 31
+	label.Parent = parent
+	return label
+end
 
 --[[
 	button      the box, already built and placed by AbilityPanel
@@ -66,83 +117,114 @@ function AbilityStorage.create(parent, button, panelX, panelWidth, getActive)
 	panel.Visible = false
 	panel.Parent = parent
 
-	local heading = Instance.new("TextLabel")
-	heading.Size = UDim2.new(1, -35, 0, HEADING_HEIGHT)
-	heading.BackgroundTransparency = 1
-	heading.FontFace = Theme.Fonts.BodyBold
-	heading.TextColor3 = Theme.Color.Text
-	heading.TextSize = 14
-	heading.ZIndex = 31
-	heading.Parent = panel
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = Theme.Color.Stroke
+	stroke.Parent = panel
+
+	local heading = newLabel(panel, "", 14, Theme.Color.Text)
+	heading.Position = UDim2.fromOffset(INSET + 2, 0)
+	heading.Size = UDim2.new(1, -(INSET + 2), 0, HEADING_HEIGHT)
+	heading.TextXAlignment = Enum.TextXAlignment.Left
+
+	-- How many are used of how many bought, beside the close button.
+	local count = newLabel(panel, "", 14, Theme.Color.TextDim)
+	count.AnchorPoint = Vector2.new(1, 0)
+	count.Position = UDim2.new(1, -36, 0, 0)
+	count.Size = UDim2.fromOffset(70, HEADING_HEIGHT)
+	count.TextXAlignment = Enum.TextXAlignment.Right
 
 	local close = Instance.new("TextButton")
 	close.Text = "×"
-	close.Size = UDim2.fromOffset(30, 30)
-	close.Position = UDim2.new(1, -32, 0, 2)
+	close.Size = UDim2.fromOffset(32, 32)
+	close.Position = UDim2.new(1, -34, 0, 0)
 	close.BackgroundTransparency = 1
 	close.TextColor3 = Theme.Color.Text
-	close.TextSize = 20
+	close.TextSize = 22
 	close.ZIndex = 31
 	close.Parent = panel
 
+	local list = Instance.new("ScrollingFrame")
+	list.Name = "Slots"
+	list.Position = UDim2.fromOffset(INSET, HEADING_HEIGHT)
+	list.Size = UDim2.new(1, -INSET, 0, LIST_HEIGHT)
+	list.BackgroundTransparency = 1
+	list.BorderSizePixel = 0
+	list.ScrollBarThickness = 4
+	list.ScrollBarImageColor3 = Theme.Color.TextDim
+	list.ScrollingDirection = Enum.ScrollingDirection.Y
+	list.CanvasSize = UDim2.new()
+	list.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	list.ZIndex = 31
+	list.Parent = panel
+
+	local layout = Instance.new("UIListLayout")
+	layout.Padding = UDim.new(0, ROW_GAP)
+	layout.SortOrder = Enum.SortOrder.LayoutOrder
+	layout.Parent = list
+
+	-- Said instead of rows while there are none: what storage is, before
+	-- anyone has bought it.
+	local empty = newLabel(list, "", 13, Theme.Color.TextDim)
+	empty.FontFace = Theme.Fonts.Body
+	empty.Size = UDim2.new(1, -INSET, 0, LIST_HEIGHT - ROW_GAP)
+	empty.TextWrapped = true
+	empty.Text = string.format(
+		"Keep abilities you are not using here instead of dropping them. Each purchase adds %d slots.",
+		state.perPurchase
+	)
+
+	local buy = Instance.new("TextButton")
+	buy.Name = "Buy"
+	buy.AnchorPoint = Vector2.new(0, 1)
+	buy.Position = UDim2.new(0, INSET, 1, -INSET)
+	buy.Size = UDim2.new(1, -INSET * 2, 0, FOOTER_HEIGHT - INSET * 2 + 4)
+	buy.AutoButtonColor = true
+	buy.BorderSizePixel = 0
+	buy.FontFace = Theme.Fonts.BodyBold
+	buy.TextSize = 14
+	buy.ZIndex = 31
+	buy.Parent = panel
+
+	local buyCorner = Instance.new("UICorner")
+	buyCorner.CornerRadius = UDim.new(0, 4)
+	buyCorner.Parent = buy
+
 	-- Set while a stored ability is waiting to be traded for an active one, so
-	-- the same three buttons list the LOADOUT instead of the store.
+	-- the rows list the LOADOUT instead of the store.
 	local swapName = nil
-	local buttons = {}
+	local rows = {}
 
-	local function refresh()
-		heading.Text = if swapName
-			then "SWAP WITH ACTIVE ABILITY"
-			elseif state.owned then "ABILITY STORAGE"
-			else "+3 STORAGE · GAMEPASS"
-
-		local list = if swapName then getActive() else state.slots
-
-		local capacity = state.capacity or SLOT_ROWS
-
-		for index, slot in ipairs(buttons) do
-			slot.Visible = swapName ~= nil or index <= capacity
-
-			local name = list[index]
-			local def = name and Config.get(name)
-
-			slot.Text = if def
-				then (def.displayName or name) .. (if swapName then "" else "  ·  equip")
-				elseif state.owned then "Empty slot"
-				else "Locked · unlock +3 storage"
-
-			slot.TextColor3 = if def then Theme.rarityColor(def.rarity) else Theme.Color.TextDim
+	local function rowAt(index: number): TextButton
+		local row = rows[index]
+		if row then
+			return row
 		end
-	end
 
-	for index = 1, SLOT_ROWS do
-		local slot = Instance.new("TextButton")
-		slot.Size = UDim2.new(1, -SLOT_INSET * 2, 0, SLOT_HEIGHT)
-		slot.Position = UDim2.fromOffset(
-			SLOT_INSET, HEADING_HEIGHT + (index - 1) * (SLOT_HEIGHT + SLOT_GAP)
-		)
-		slot.BackgroundColor3 = Theme.Color.Panel
-		slot.BorderSizePixel = 1
-		slot.BorderColor3 = Theme.Color.Stroke
-		slot.FontFace = Theme.Fonts.Body
-		slot.TextSize = 14
-		slot.ZIndex = 31
-		slot.Parent = panel
-		buttons[index] = slot
+		row = Instance.new("TextButton")
+		row.Name = "Slot" .. index
+		row.LayoutOrder = index
+		row.Size = UDim2.new(1, -INSET, 0, ROW_HEIGHT)
+		row.BackgroundColor3 = Theme.Color.PanelRaised
+		row.BorderSizePixel = 0
+		row.FontFace = Theme.Fonts.Body
+		row.TextSize = 14
+		row.ZIndex = 31
+		row.Parent = list
 
-		slot.Activated:Connect(function()
-			if not state.owned then
-				Request:FireServer("unlock")
-				return
-			end
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 4)
+		corner.Parent = row
 
+		row.Activated:Connect(function()
 			if swapName then
 				-- Second half of a swap: this row is an ACTIVE ability now.
 				local active = getActive()[index]
 				if active then
 					Request:FireServer("swap", swapName, active)
 					swapName = nil
-					refresh()
+					for view in pairs(views) do
+						view.refresh()
+					end
 				end
 				return
 			end
@@ -154,16 +236,79 @@ function AbilityStorage.create(parent, button, panelX, panelWidth, getActive)
 
 			-- A full loadout has nowhere to put this, so the click becomes the
 			-- first half of a swap rather than a refusal.
-			-- Config.SlotCount, not a 3: the server checks the same number, and two
-			-- copies of it is how they come to disagree.
+			-- Config.SlotCount, not a 3: the server checks the same number, and
+			-- two copies of it is how they come to disagree.
 			if #getActive() >= Config.SlotCount then
 				swapName = name
-				refresh()
+				for view in pairs(views) do
+					view.refresh()
+				end
 			else
 				Request:FireServer("retrieve", name)
 			end
 		end)
+
+		rows[index] = row
+		return row
 	end
+
+	local function refresh()
+		local capacity = state.capacity or 0
+		local slots = state.slots or {}
+		local listed = if swapName then getActive() else slots
+
+		heading.Text = if swapName then "SWAP WITH ACTIVE ABILITY" else "ABILITY STORAGE"
+		count.Text = if swapName or capacity == 0 then "" else string.format("%d / %d", #slots, capacity)
+
+		-- Past what was bought only if something is still stored there, so
+		-- it can always be taken back out.
+		local shown = if swapName then #listed else math.max(capacity, #slots)
+		empty.Visible = shown == 0
+
+		for index = 1, math.max(shown, #rows) do
+			local row = rowAt(index)
+			row.Visible = index <= shown
+
+			local name = listed[index]
+			local def = name and Config.get(name)
+			row.Text = if def
+				then (def.displayName or name) .. (if swapName then "" else "  ·  take out")
+				else "Empty slot"
+			row.TextColor3 = if def then Theme.rarityColor(def.rarity) else Theme.Color.TextDim
+		end
+
+		if swapName then
+			buy.Text = "CANCEL"
+			buy.BackgroundColor3 = Theme.Color.PanelRaised
+			buy.TextColor3 = Theme.Color.Text
+			buy.Active = true
+		elseif state.canBuy then
+			fetchPrice(state.productId)
+			local price = prices[state.productId]
+			buy.Text = string.format("+%d SLOTS", state.perPurchase)
+				.. (if price and price ~= "" then "  ·  " .. price else "")
+			buy.BackgroundColor3 = BUY_COLOR
+			buy.TextColor3 = BUY_TEXT
+			buy.Active = true
+		else
+			buy.Text = if capacity >= (state.maxSlots or 0) and capacity > 0
+				then string.format("MAXIMUM STORAGE  ·  %d SLOTS", capacity)
+				else "MORE STORAGE IS NOT ON SALE YET"
+			buy.BackgroundColor3 = Theme.Color.PanelRaised
+			buy.TextColor3 = Theme.Color.TextDim
+			buy.Active = false
+		end
+		buy.AutoButtonColor = buy.Active
+	end
+
+	buy.Activated:Connect(function()
+		if swapName then
+			swapName = nil
+			refresh()
+		elseif state.canBuy then
+			Request:FireServer("buy")
+		end
+	end)
 
 	close.Activated:Connect(function()
 		panel.Visible = false

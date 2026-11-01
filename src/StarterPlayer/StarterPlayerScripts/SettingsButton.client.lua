@@ -79,15 +79,36 @@ local MENU_NAME = "Settings"
 -- ---------------------------------------------------------------------------
 
 --[[
-	Roblox's topbar numbers, matched rather than invented: a 32px square inside
-	the 36px bar, 8px from whatever is to its left, with a 8px corner radius and
-	a black background at 0.5.
+	A hotbar tile in the top bar: the pixel kit's slot art, the same frame the
+	inventory's tiles and this window are drawn from, with a pixel gear in it.
+	Sized from the bar - Roblox draws its own buttons BAR_MARGIN short of the
+	bar's height - and BUTTON_GAP from whatever is to its left.
+
+	Hover and an open window put the hotbar's gold selection ring round it, so
+	it reads as "the selected tile" the way the item in hand does.
 ]]
-local BUTTON_SIZE = 32
 local BUTTON_GAP = 8
-local BUTTON_CORNER = 8
-local BUTTON_TRANSPARENCY = 0.5
-local BUTTON_HOVER_TRANSPARENCY = 0.3
+local BAR_MARGIN = 8
+local MIN_BUTTON_SIZE = 32
+local MAX_BUTTON_SIZE = 48
+local RING_OUTSET = 3
+
+-- The gear, a texel to a character.
+local GEAR_SPRITE = {
+	".....##.....",
+	".##..##..##.",
+	".##.####.##.",
+	"...######...",
+	"..###..###..",
+	"####....####",
+	"####....####",
+	"..###..###..",
+	"...######...",
+	".##.####.##.",
+	".##..##..##.",
+	".....##.....",
+}
+local GEAR_SCALE = 0.6
 
 -- The window, in pixels on a 1080p screen. A UIScale fits it to the real one.
 local L = {
@@ -154,78 +175,71 @@ screen.Parent = playerGui
 -- The button
 -- ---------------------------------------------------------------------------
 
-local button = Instance.new("TextButton")
+local button = Instance.new("ImageButton")
 button.Name = "Gear"
-button.Text = ""
 button.AutoButtonColor = false
 button.AnchorPoint = Vector2.new(0, 0.5)
-button.Size = UDim2.fromOffset(BUTTON_SIZE, BUTTON_SIZE)
-button.BackgroundColor3 = Color3.new(0, 0, 0)
-button.BackgroundTransparency = BUTTON_TRANSPARENCY
+button.Size = UDim2.fromOffset(MIN_BUTTON_SIZE, MIN_BUTTON_SIZE)
+button.BackgroundTransparency = 1
 button.BorderSizePixel = 0
 -- Over the window's dimmed backdrop, so it can close what it opened.
 button.ZIndex = 3
 button.Parent = screen
 
-local buttonCorner = Instance.new("UICorner")
-buttonCorner.CornerRadius = UDim.new(0, BUTTON_CORNER)
-buttonCorner.Parent = button
+-- Its face drops a texel while pressed, as every kit button's does.
+local face = Instance.new("Frame")
+face.Name = "Content"
+face.BackgroundTransparency = 1
+face.Size = UDim2.fromScale(1, 1)
+face.ZIndex = 4
+face.Parent = button
+
+PixelUI.bindButton(button, { idle = "slot", hover = "slot", pressed = "slot_dark", text = P.Ink }, face)
+
+-- The hotbar's selection ring, outside the tile so it never covers the gear.
+local ring = PixelUI.image(button, "slot_highlight")
+ring.Name = "Selection"
+ring.AnchorPoint = Vector2.new(0.5, 0.5)
+ring.Position = UDim2.fromScale(0.5, 0.5)
+ring.Size = UDim2.new(1, RING_OUTSET * 2, 1, RING_OUTSET * 2)
+ring.ImageColor3 = P.Selection
+ring.ZIndex = 5
+ring.Visible = false
 
 --[[
-	The gear, drawn rather than uploaded.
-
-	A ring made from a circle with a smaller circle punched out of it - punched
-	by drawing the hole in the button's own colour would not work over a
-	translucent background, so the "hole" is a real gap: the ring is a circle
-	with a UIStroke and no fill. Eight teeth are then laid round it as small
-	rotated squares.
+	The gear, drawn a texel at a time in the kit's ink, the way the inventory
+	draws its bin: no upload to lose, and it is the same pixel grain as the
+	tile it sits on.
 ]]
 local function buildGear(parent: Instance)
 	local field = Instance.new("Frame")
 	field.Name = "Icon"
 	field.AnchorPoint = Vector2.new(0.5, 0.5)
 	field.Position = UDim2.fromScale(0.5, 0.5)
-	field.Size = UDim2.fromOffset(18, 18)
+	field.Size = UDim2.fromScale(GEAR_SCALE, GEAR_SCALE)
 	field.BackgroundTransparency = 1
+	field.ZIndex = 4
 	field.Parent = parent
 
-	for index = 1, 8 do
-		local angle = (index - 1) * (math.pi * 2 / 8)
-
-		local tooth = Instance.new("Frame")
-		tooth.AnchorPoint = Vector2.new(0.5, 0.5)
-		tooth.Position = UDim2.fromScale(
-			0.5 + math.cos(angle) * 0.42,
-			0.5 + math.sin(angle) * 0.42
-		)
-		tooth.Size = UDim2.fromOffset(6, 6)
-		tooth.Rotation = math.deg(angle)
-		tooth.BackgroundColor3 = Color3.new(1, 1, 1)
-		tooth.BorderSizePixel = 0
-		tooth.Parent = field
+	local rows, columns = #GEAR_SPRITE, #GEAR_SPRITE[1]
+	for row, line in ipairs(GEAR_SPRITE) do
+		for column = 1, columns do
+			if string.sub(line, column, column) == "#" then
+				local pixel = Instance.new("Frame")
+				pixel.BackgroundColor3 = P.Ink
+				pixel.BorderSizePixel = 0
+				pixel.ZIndex = 4
+				pixel.Position = UDim2.fromScale((column - 1) / columns, (row - 1) / rows)
+				pixel.Size = UDim2.fromScale(1 / columns, 1 / rows)
+				pixel.Parent = field
+			end
+		end
 	end
-
-	local ring = Instance.new("Frame")
-	ring.AnchorPoint = Vector2.new(0.5, 0.5)
-	ring.Position = UDim2.fromScale(0.5, 0.5)
-	ring.Size = UDim2.fromOffset(13, 13)
-	ring.BackgroundTransparency = 1
-	ring.BorderSizePixel = 0
-	ring.Parent = field
-
-	local ringCorner = Instance.new("UICorner")
-	ringCorner.CornerRadius = UDim.new(1, 0)
-	ringCorner.Parent = ring
-
-	local ringStroke = Instance.new("UIStroke")
-	ringStroke.Color = Color3.new(1, 1, 1)
-	ringStroke.Thickness = 3
-	ringStroke.Parent = ring
 
 	return field
 end
 
-buildGear(button)
+buildGear(face)
 
 --[[
 	The bar's height, with a floor under it.
@@ -242,14 +256,17 @@ local function barHeight(inset: Rect): number
 end
 
 --[[
-	Just right of whatever Roblox is drawing on the left of the topbar.
+	Just right of whatever Roblox is drawing on the left of the topbar, and as
+	tall as Roblox's own buttons there.
 
 	TopbarInset is in the same space as this ScreenGui, which ignores the inset,
 	so its numbers can be used directly.
 ]]
 local function place()
 	local inset = GuiService.TopbarInset
+	local size = math.clamp(barHeight(inset) - BAR_MARGIN * 2, MIN_BUTTON_SIZE, MAX_BUTTON_SIZE)
 
+	button.Size = UDim2.fromOffset(size, size)
 	button.Position = UDim2.fromOffset(
 		inset.Min.X + BUTTON_GAP,
 		inset.Min.Y + barHeight(inset) * 0.5
@@ -921,7 +938,7 @@ local function setOpen(shouldOpen: boolean)
 	-- the player moving.
 	MenuState.setOpen(MENU_NAME, shouldOpen, false)
 
-	button.BackgroundTransparency = if shouldOpen then BUTTON_HOVER_TRANSPARENCY else BUTTON_TRANSPARENCY
+	ring.Visible = shouldOpen
 	Sounds.play(if shouldOpen then "ui.open" else "ui.close")
 end
 
@@ -930,15 +947,12 @@ button.MouseButton1Click:Connect(function()
 end)
 
 button.MouseEnter:Connect(function()
-	if not open then
-		button.BackgroundTransparency = BUTTON_HOVER_TRANSPARENCY
-	end
+	ring.Visible = true
+	Sounds.play("ui.hover")
 end)
 
 button.MouseLeave:Connect(function()
-	if not open then
-		button.BackgroundTransparency = BUTTON_TRANSPARENCY
-	end
+	ring.Visible = open
 end)
 
 closeButton.MouseButton1Click:Connect(function()

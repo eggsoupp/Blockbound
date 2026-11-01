@@ -1,29 +1,36 @@
 --[[
 	StorageConfig
 
-	The gamepass that unlocks the three ability storage slots.
+	Ability storage: slots an ability can be parked in instead of thrown away,
+	sold three at a time, as many times over as a player likes up to MaxSlots.
 
-	Shared rather than server-only because the client needs it too: the panel
-	behind the storage box says "+3 STORAGE · GAMEPASS" while it is locked, and
-	AbilityLoadout sends the id down with every storage push so the client never
-	has to hard-code it a second time.
+	Shared rather than server-only because the client needs it too: the storage
+	panel shows the price, the "+3" and how far there is to go, and AbilityLoadout
+	sends the numbers down with every storage push so nothing is hard-coded twice.
 
-	SET THIS TO 0 TO TAKE THE FEATURE OFF SALE. Every path checks it: the
-	server refuses to prompt a purchase, refuses to unlock, and tells the player
-	it is not on sale yet rather than opening an empty purchase dialog.
+	A DEVELOPER PRODUCT, NOT A GAME PASS
 
-	Ownership itself is never stored here or anywhere else. It is asked of
-	MarketplaceService and cached for the session, because a gamepass is owned
-	on the Roblox account, not in our save file - a player who buys it, plays on
-	one server and joins another still owns it, and a refund has to be able to
-	take it away. What IS persisted is the contents of the slots (see the
-	abilityStorage section in AbilityLoadout), which survive whether or not the
-	pass is still owned.
+	A Game Pass can only ever be bought once, so a "+3, and again, and again"
+	purchase has to be a Developer Product. Unlike a pass, Roblox does not
+	remember who bought a product: each purchase arrives once through
+	ProcessReceipt (ServerScriptService.Purchases) and the slots it bought are
+	written into the player's save record before the purchase is confirmed.
+
+	SET AbilityStorageProductId TO 0 TO TAKE IT OFF SALE. Every path checks it:
+	the panel says it is not on sale, and the server refuses to prompt.
+
+	(The game has an older "+3 ability storage" Game Pass, 2040735675. It was
+	never put on sale, so nobody owns it, and nothing here reads it any more.)
 ]]
 
 return {
-	-- The "+3 ability storage" Game Pass of this experience (a Pass, not a
-	-- Developer Product: UserOwnsGamePassAsync can only answer for a Pass).
-	-- It has to be switched on for sale on the Creator Dashboard to be bought.
-	AbilityStoragePassId = 2040735675,
+	-- The "+3 ability storage" Developer Product, from the Creator Dashboard:
+	-- Monetization > Developer Products. R$300 when it was set up.
+	AbilityStorageProductId = 3726866739,
+
+	-- Slots one purchase adds.
+	SlotsPerPurchase = 3,
+
+	-- The most anyone can have. Ten purchases; the panel scrolls.
+	MaxSlots = 30,
 }

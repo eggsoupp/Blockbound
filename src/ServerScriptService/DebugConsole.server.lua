@@ -51,6 +51,9 @@
 	                      what time it is
 	  /tutorial           replay the tutorial from its first step. Takes back
 	                      the ability the tutorial gave, so the choice is real
+	  /bbstorage buy      in Studio only: a "+3 ability storage" purchase, granted
+	                      and saved through the same path a real receipt takes
+	  /bbstorage reset    in Studio only: take those purchases back off the save
 	  /bbcaves edit       standing in a cave: place, mine and refill through
 	                      the real terrain API and confirm it is all recorded
 
@@ -68,6 +71,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
+local RunService = game:GetService("RunService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
@@ -94,6 +98,7 @@ local InventoryService = require(ServerScriptService:WaitForChild("InventoryServ
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 local TutorialService = require(ServerScriptService:WaitForChild("TutorialService"))
+local AbilityLoadout = require(ServerScriptService:WaitForChild("AbilityLoadout"))
 local WorldClock = require(ServerScriptService:WaitForChild("WorldClock"))
 
 --[[
@@ -646,6 +651,21 @@ local function onChatted(player, message)
 		end
 		reply(player, "signus", string.format("%d Signus will cast '%s' next.", #models, tostring(spell)),
 			if #models > 0 then "good" else "bad")
+	elseif command == "/bbstorage" then
+		-- Studio only: in a live server this would be free paid slots.
+		if not RunService:IsStudio() then
+			reply(player, "bbstorage", "Only in Studio.", "bad")
+		elseif words[2] == "buy" then
+			local granted = AbilityLoadout.grantStoragePurchase(player, { PurchaseId = "studio-" .. os.time() .. "-" .. math.random(1e6) })
+			reply(player, "bbstorage", if granted then "Purchase granted and saved." else "Not granted: save not ready or failed.",
+				if granted then "good" else "bad")
+		elseif words[2] == "reset" then
+			local reset = AbilityLoadout.resetStoragePurchases(player)
+			reply(player, "bbstorage", if reset then "Storage purchases set back to none." else "Not reset: save not ready or failed.",
+				if reset then "good" else "bad")
+		else
+			reply(player, "bbstorage", "Usage: /bbstorage buy | reset", "bad")
+		end
 	elseif command == "/tutorial" then
 		TutorialService.Reset(player)
 		reply(player, "tutorial", "Tutorial restarted from the first step.", "good")

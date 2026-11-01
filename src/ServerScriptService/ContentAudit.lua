@@ -116,7 +116,7 @@ ContentAudit.NoCastAnimationByDesign = {
 -- reported, and one a letter or two off a real field is reported as a typo.
 ContentAudit.KnownItemFields = {
 	classification = true, maxStack = true, miningTime = true, miningSpeed = true,
-	miningPower = true, weaponClass = true, weaponSubclass = true, rarity = true, animation = true, iconPose = true, iconAngle = true, thumbnail = true,
+	miningPower = true, weaponClass = true, weaponSubclass = true, rarity = true, animation = true, iconPose = true, iconAngle = true, iconRoll = true, thumbnail = true,
 	modelId = true, icon = true, description = true, value = true, buffs = true,
 	displayName = true, look = true, dropOnly = true, sprite = true, catalogOnly = true,
 }

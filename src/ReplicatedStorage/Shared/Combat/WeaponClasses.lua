@@ -4,7 +4,8 @@
 	What kind of weapon something is: a main class and a subclass, set per item
 	in ItemDefinitions as `weaponClass` and `weaponSubclass`.
 
-		Sword       -> Longsword (the tier swords, VoidReaver), Katana (Bloodfang)
+		Sword       -> Shortsword (the tier swords; never shown), Longsword (VoidReaver),
+		               Katana (Bloodfang)
 		HeavySword  -> Broadsword (Thunderveil)
 		Lance       -> Spear (LightLance)
 
@@ -37,6 +38,11 @@ function WeaponClasses.classOf(definition)
 	return nil
 end
 
+-- Subclasses kept for development only: the item reads as its bare class.
+WeaponClasses.HiddenSubclasses = {
+	Shortsword = true,
+}
+
 -- "Sword -> Katana", "Lance" with no subclass, or nil for an unclassed item.
 function WeaponClasses.label(definition)
 	local key = WeaponClasses.classOf(definition)
@@ -46,7 +52,7 @@ function WeaponClasses.label(definition)
 
 	local name = WeaponClasses.Classes[key]
 	local subclass = definition.weaponSubclass
-	if type(subclass) == "string" and subclass ~= "" then
+	if type(subclass) == "string" and subclass ~= "" and not WeaponClasses.HiddenSubclasses[subclass] then
 		return string.format("%s -> %s", name, subclass)
 	end
 	return name

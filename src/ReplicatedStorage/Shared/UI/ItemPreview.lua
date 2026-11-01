@@ -518,8 +518,8 @@ local function positionNear(slot: GuiObject)
 	frame.Position = UDim2.fromOffset(x, y)
 end
 
--- Returns false for an item with no model, which is not a failure: a preview
--- panel containing an empty box is worse than no panel.
+-- Returns false only for a name that is neither a defined item nor a model. An
+-- item without a model gets the panel without its view, never an empty box.
 function ItemPreview.show(itemName: string?, slot: GuiObject?): boolean
 	if not (panel and viewport and nameLabel and descriptionLabel) then
 		return false
@@ -530,8 +530,8 @@ function ItemPreview.show(itemName: string?, slot: GuiObject?): boolean
 	end
 
 	if shownItem ~= itemName then
-		local model = prepare(itemName)
-		if not model then
+		local definition = ItemDefinitions[itemName]
+		if not definition and not ItemModels.find(itemName) then
 			ItemPreview.hide()
 			return false
 		end
@@ -543,11 +543,16 @@ function ItemPreview.show(itemName: string?, slot: GuiObject?): boolean
 			previous.Parent = nil
 		end
 
-		model.Parent = viewport
-		frameModel(model)
+		-- An item with no model - a material, an ingot - still gets its name
+		-- and description; the layout closes up over the hidden view.
+		local model = prepare(itemName)
+		viewport.Visible = model ~= nil
+		if model then
+			model.Parent = viewport
+			frameModel(model)
+		end
 
-		local definition = ItemDefinitions[itemName]
-		nameLabel.Text = itemName
+		nameLabel.Text = definition and definition.displayName or itemName
 		nameLabel.TextColor3 = Theme.rarityColor(definition and definition.rarity or "Common")
 
 		-- A weapon's class line ("Sword -> Katana") heads its description.

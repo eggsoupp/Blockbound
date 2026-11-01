@@ -248,7 +248,7 @@ local ItemDefinitions = {
 		maxStack = 1,
 		classification = "Weapon",
 		weaponClass = "Sword",
-		weaponSubclass = "Longsword",
+		weaponSubclass = "Shortsword",
 		value = 8,
 	},
 	-- The wood tier. Weakest of everything, and the first tools a player can
@@ -290,7 +290,7 @@ local ItemDefinitions = {
 		maxStack = 1,
 		classification = "Weapon",
 		weaponClass = "Sword",
-		weaponSubclass = "Longsword",
+		weaponSubclass = "Shortsword",
 		value = 3,
 	},
 	StonePickaxe = {
@@ -312,7 +312,7 @@ local ItemDefinitions = {
 		maxStack = 1,
 		classification = "Weapon",
 		weaponClass = "Sword",
-		weaponSubclass = "Longsword",
+		weaponSubclass = "Shortsword",
 		value = 12,
 	},
 	StoneAxe = {
@@ -537,7 +537,7 @@ local ItemDefinitions = {
 		maxStack = 1,
 		classification = "Weapon",
 		weaponClass = "Sword",
-		weaponSubclass = "Longsword",
+		weaponSubclass = "Shortsword",
 		value = 30,
 	},
 	LeatherArmor = {
@@ -736,7 +736,7 @@ local ItemDefinitions = {
 		maxStack = 1,
 		classification = "Weapon",
 		weaponClass = "Sword",
-		weaponSubclass = "Longsword",
+		weaponSubclass = "Shortsword",
 		value = 60,
 	},
 	MythrilPickaxe = {
@@ -866,7 +866,7 @@ local ItemDefinitions = {
 		maxStack = 1,
 		classification = "Weapon",
 		weaponClass = "Sword",
-		weaponSubclass = "Longsword",
+		weaponSubclass = "Shortsword",
 		value = 120,
 		buffs = { attackSpeed = 0.2 },
 	},

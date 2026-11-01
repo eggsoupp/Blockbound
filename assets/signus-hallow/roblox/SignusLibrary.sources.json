@@ -1,0 +1,105 @@
+{
+  "pack": "SoulShroud Ultimate VFX Pack V1.9",
+  "sourcePlace": "SoulShroud Ultimate VFX Pack V1.9.rbxl",
+  "destinationPlace": 127569658424596,
+  "format": "Engine-serialized .rbxm; complete assemblies, no source-library edits",
+  "assemblies": [
+    {
+      "scripts": 0,
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #7",
+      "name": "Storm",
+      "instances": 18
+    },
+    {
+      "scripts": 0,
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #29",
+      "name": "Column",
+      "instances": 12
+    },
+    {
+      "scripts": 0,
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #11",
+      "name": "Orb",
+      "instances": 8
+    },
+    {
+      "scripts": 0,
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #48",
+      "name": "Impact",
+      "instances": 10
+    },
+    {
+      "scripts": 0,
+      "path": "Workspace.Impact Structures + Larger VFX.Slash Example",
+      "name": "Slash",
+      "instances": 4
+    },
+    {
+      "scripts": 0,
+      "path": "Workspace.Impact Structures + Larger VFX.Wind Swirl",
+      "name": "Swirl",
+      "instances": 2
+    },
+    {
+      "name": "PurpleExplosion",
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #3.BZ1_SS3 VFX PART #64",
+      "instances": 17,
+      "scripts": 0
+    },
+    {
+      "name": "GrandExplosion",
+      "path": "Workspace.Impact Structures + Larger VFX.Explosion",
+      "instances": 10,
+      "scripts": 0
+    },
+    {
+      "name": "LungeBlade",
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Crescent Slash",
+      "instances": 6,
+      "scripts": 0
+    },
+    {
+      "name": "LungeWake",
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Stylized Wind",
+      "instances": 32,
+      "scripts": 0
+    },
+    {
+      "name": "LungeImpact",
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #61",
+      "instances": 10,
+      "scripts": 0
+    },
+    {
+      "name": "EclipseCorona",
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #4.Part",
+      "selector": "Complete host containing ParticleEmitter texture 97539784598939",
+      "instances": 7,
+      "scripts": 0
+    }
+  ],
+  "mapping": {
+    "Storm": "Umbral Maelstrom / Totality",
+    "Swirl": "Maelstrom upper/lower vortex, phase-two crown, impact decay",
+    "Column": "Maelstrom spine, Judgment, Worldrend contact, restrained aura",
+    "Orb": "Judgment/Worldrend cores; complete clone also forms the opaque eclipse core",
+    "Slash": "Crescent Lunge / Crescent carriers",
+    "Impact": "Restrained hand releases and movement accents",
+    "PurpleExplosion": "Maelstrom and Judgment impact; small Worldrend contacts; Totality, nova and death. All 14 authored particle layers, source curves and colors retained.",
+    "GrandExplosion": "Complete curved mesh shells on Maelstrom/Judgment impacts and major releases; violet/cyan palette, expansion/rotation/decay. Rocks mesh hidden; no additional cosmetic debris.",
+    "LungeBlade": "Single curved mesh sweep with all original particle layers; two-sided, lifted above ground, augmented with authored particle edge and short textured Trail.",
+    "LungeWake": "Layered authored wind wake, rush only",
+    "LungeImpact": "Directional crescent shatter at arrival",
+    "EclipseCorona": "Persistent violet corona behind phase-two Signus; source dark layers preserved"
+  },
+  "retained": "Original Signus beam textures, layered bands, lightning helix, ornate/star spell circles",
+  "includedScripts": 0,
+  "supplementalAuthoredTextures": [
+    {
+      "name": "CrescentEdge",
+      "path": "Workspace.SoulShroud VFX Packs.Crescents.Crescent Slash.Decal",
+      "texture": "rbxassetid://103611618276515",
+      "use": "Additional violet edge on the complete imported crescent assembly; no visible decal planes."
+    }
+  ]
+}

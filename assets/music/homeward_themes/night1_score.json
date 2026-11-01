@@ -1,0 +1,943 @@
+{
+  "title": "Lanterns Aloft",
+  "tempos": [
+    [
+      0,
+      72,
+      "Quietly, with space"
+    ]
+  ],
+  "meter": [
+    4,
+    4
+  ],
+  "key": "G",
+  "parts": {
+    "Piano - Homeward recollections": {
+      "channel": 0,
+      "program": 0,
+      "target_rms_db": -27,
+      "pan": 64,
+      "wet": 0.18,
+      "drums": false,
+      "render_gain": 15.18608638191428,
+      "instrument": "Grand Piano",
+      "raw_rms_db": -53.36,
+      "expression": 124
+    },
+    "Nylon guitar - quiet figures": {
+      "channel": 1,
+      "program": 24,
+      "target_rms_db": -31,
+      "pan": 38,
+      "wet": 0.16,
+      "drums": false,
+      "render_gain": 16.187921442102834,
+      "instrument": "Nylon Guitar",
+      "raw_rms_db": -56.91,
+      "expression": 127
+    },
+    "Warm string harmony": {
+      "channel": 2,
+      "program": 49,
+      "target_rms_db": -33,
+      "pan": 84,
+      "wet": 0.2,
+      "drums": false,
+      "render_gain": 7.255440864442273,
+      "instrument": "Slow Strings",
+      "raw_rms_db": -50.27,
+      "expression": 97
+    },
+    "Acoustic bass": {
+      "channel": 3,
+      "program": 32,
+      "target_rms_db": -34,
+      "pan": 58,
+      "wet": 0.09,
+      "drums": false,
+      "render_gain": 6.926033691703129,
+      "instrument": "Acoustic Bass",
+      "raw_rms_db": -52.15,
+      "expression": 96
+    }
+  },
+  "events": [
+    {
+      "part": "Warm string harmony",
+      "beat": 0,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 38
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 0,
+      "pitch": 59,
+      "length": 7.7,
+      "velocity": 38
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 0,
+      "pitch": 66,
+      "length": 7.7,
+      "velocity": 38
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 0,
+      "pitch": 40,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 0.4,
+      "pitch": 52,
+      "length": 2.1,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 3,
+      "pitch": 59,
+      "length": 1.8,
+      "velocity": 37
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 6,
+      "pitch": 67,
+      "length": 1.45,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 8,
+      "pitch": 52,
+      "length": 7.7,
+      "velocity": 38
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 8,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 38
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 8,
+      "pitch": 59,
+      "length": 7.7,
+      "velocity": 38
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 8,
+      "pitch": 36,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 8.5,
+      "pitch": 52,
+      "length": 2.4,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 12.5,
+      "pitch": 59,
+      "length": 2.1,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 16,
+      "pitch": 50,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 16,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 16,
+      "pitch": 64,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 16,
+      "pitch": 31,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 16.4,
+      "pitch": 43,
+      "length": 2.1,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 19,
+      "pitch": 55,
+      "length": 1.8,
+      "velocity": 37
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 22,
+      "pitch": 62,
+      "length": 1.45,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 24,
+      "pitch": 54,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 24,
+      "pitch": 57,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 24,
+      "pitch": 64,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 24,
+      "pitch": 38,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 24.5,
+      "pitch": 54,
+      "length": 2.4,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 28.5,
+      "pitch": 64,
+      "length": 2.1,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 32,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 32,
+      "pitch": 59,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 32,
+      "pitch": 66,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 32,
+      "pitch": 40,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 32.4,
+      "pitch": 52,
+      "length": 2.1,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 35,
+      "pitch": 59,
+      "length": 1.8,
+      "velocity": 37
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 38,
+      "pitch": 67,
+      "length": 1.45,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 40,
+      "pitch": 52,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 40,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 40,
+      "pitch": 59,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 40,
+      "pitch": 36,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 40.5,
+      "pitch": 52,
+      "length": 2.4,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 44.5,
+      "pitch": 59,
+      "length": 2.1,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 48,
+      "pitch": 52,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 48,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 48,
+      "pitch": 60,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 48,
+      "pitch": 33,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 48.4,
+      "pitch": 45,
+      "length": 2.1,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 51,
+      "pitch": 55,
+      "length": 1.8,
+      "velocity": 37
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 54,
+      "pitch": 64,
+      "length": 1.45,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 56,
+      "pitch": 54,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 56,
+      "pitch": 57,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 56,
+      "pitch": 64,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 56,
+      "pitch": 38,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 56.5,
+      "pitch": 54,
+      "length": 2.4,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 60.5,
+      "pitch": 64,
+      "length": 2.1,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 64,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 64,
+      "pitch": 59,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 64,
+      "pitch": 66,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 64,
+      "pitch": 40,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 64.4,
+      "pitch": 52,
+      "length": 2.1,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 67,
+      "pitch": 59,
+      "length": 1.8,
+      "velocity": 37
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 70,
+      "pitch": 67,
+      "length": 1.45,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 72,
+      "pitch": 52,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 72,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 72,
+      "pitch": 59,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 72,
+      "pitch": 36,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 72.5,
+      "pitch": 52,
+      "length": 2.4,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 76.5,
+      "pitch": 59,
+      "length": 2.1,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 80,
+      "pitch": 50,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 80,
+      "pitch": 54,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 80,
+      "pitch": 57,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 80,
+      "pitch": 35,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 80.4,
+      "pitch": 47,
+      "length": 2.1,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 83,
+      "pitch": 54,
+      "length": 1.8,
+      "velocity": 37
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 86,
+      "pitch": 62,
+      "length": 1.45,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 88,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 88,
+      "pitch": 59,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 88,
+      "pitch": 66,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 88,
+      "pitch": 40,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 88.5,
+      "pitch": 55,
+      "length": 2.4,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 92.5,
+      "pitch": 66,
+      "length": 2.1,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 96,
+      "pitch": 52,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 96,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 96,
+      "pitch": 59,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 96,
+      "pitch": 36,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 96.4,
+      "pitch": 48,
+      "length": 2.1,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 99,
+      "pitch": 55,
+      "length": 1.8,
+      "velocity": 37
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 102,
+      "pitch": 64,
+      "length": 1.45,
+      "velocity": 37
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 104,
+      "pitch": 50,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 104,
+      "pitch": 55,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Warm string harmony",
+      "beat": 104,
+      "pitch": 64,
+      "length": 7.7,
+      "velocity": 43
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 104,
+      "pitch": 31,
+      "length": 5.6,
+      "velocity": 42
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 104.5,
+      "pitch": 50,
+      "length": 2.4,
+      "velocity": 43
+    },
+    {
+      "part": "Nylon guitar - quiet figures",
+      "beat": 108.5,
+      "pitch": 64,
+      "length": 2.1,
+      "velocity": 37
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 16,
+      "pitch": 71,
+      "length": 1.87,
+      "velocity": 59
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 18,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 50
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 19.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 20.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 55
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 22.0,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 47
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 23.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 52
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 24,
+      "pitch": 69,
+      "length": 2.87,
+      "velocity": 57
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 27.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 49
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 28.0,
+      "pitch": 64,
+      "length": 1.87,
+      "velocity": 52
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 48,
+      "pitch": 71,
+      "length": 1.87,
+      "velocity": 60
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 50,
+      "pitch": 71,
+      "length": 0.9,
+      "velocity": 51
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 51.0,
+      "pitch": 69,
+      "length": 0.9,
+      "velocity": 49
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 52.0,
+      "pitch": 67,
+      "length": 1.87,
+      "velocity": 56
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 54.0,
+      "pitch": 64,
+      "length": 0.9,
+      "velocity": 48
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 55.0,
+      "pitch": 67,
+      "length": 0.9,
+      "velocity": 53
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 56,
+      "pitch": 69,
+      "length": 2.87,
+      "velocity": 58
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 59.0,
+      "pitch": 66,
+      "length": 0.9,
+      "velocity": 49
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 60.0,
+      "pitch": 62,
+      "length": 1.87,
+      "velocity": 51
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 80,
+      "pitch": 71,
+      "length": 1.8,
+      "velocity": 57
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 82.5,
+      "pitch": 69,
+      "length": 1.1,
+      "velocity": 57
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 84,
+      "pitch": 67,
+      "length": 2.2,
+      "velocity": 57
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 88,
+      "pitch": 74,
+      "length": 1.6,
+      "velocity": 57
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 90,
+      "pitch": 76,
+      "length": 2.5,
+      "velocity": 57
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 93,
+      "pitch": 74,
+      "length": 1.8,
+      "velocity": 57
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 96,
+      "pitch": 71,
+      "length": 1.5,
+      "velocity": 53
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 98,
+      "pitch": 69,
+      "length": 1.3,
+      "velocity": 53
+    },
+    {
+      "part": "Piano - Homeward recollections",
+      "beat": 100,
+      "pitch": 67,
+      "length": 3.5,
+      "velocity": 53
+    }
+  ],
+  "end": 112,
+  "markers": [
+    [
+      0,
+      "Night settles - no melody"
+    ],
+    [
+      16,
+      "A familiar lantern"
+    ],
+    [
+      32,
+      "Empty sky - no melody"
+    ],
+    [
+      48,
+      "Another memory"
+    ],
+    [
+      64,
+      "The quiet between islands"
+    ],
+    [
+      80,
+      "A little light"
+    ],
+    [
+      96,
+      "Home in the distance"
+    ]
+  ],
+  "quiet_sections": [
+    [
+      0,
+      16
+    ],
+    [
+      32,
+      48
+    ],
+    [
+      64,
+      80
+    ],
+    [
+      104,
+      112
+    ]
+  ],
+  "master_gain": 1.0822324938397814
+}

@@ -1,0 +1,169 @@
+{
+  "date": "2026-10-31",
+  "revision": "Five additional complete SoulShroud explosion assemblies at huge scale",
+  "gamePlaceId": 127569658424596,
+  "library": "SoulShroud Ultimate VFX Pack V1.9.rbxl",
+  "assemblies": [
+    {
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #3.BZ1_SS3 VFX PART #64",
+      "name": "GiantBlueDetonation",
+      "counts": {
+        "Part": 1,
+        "Attachment": 2,
+        "ParticleEmitter": 14
+      },
+      "scripts": [],
+      "externalDependencies": [],
+      "sourcePropertiesMatch": true,
+      "usedBy": [
+        "WraithfireOrb",
+        "RiftMaelstrom"
+      ],
+      "fingerprint": {
+        "hash": 765349841,
+        "bytes": 14017,
+        "instances": 17
+      }
+    },
+    {
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #14",
+      "name": "GiantAzureShock",
+      "counts": {
+        "Part": 1,
+        "Attachment": 1,
+        "ParticleEmitter": 14
+      },
+      "scripts": [],
+      "externalDependencies": [],
+      "sourcePropertiesMatch": true,
+      "usedBy": [
+        "CelestialLance",
+        "WraithfireOrb",
+        "VioletTempest",
+        "RiftMaelstrom"
+      ],
+      "fingerprint": {
+        "hash": 1337715457,
+        "bytes": 13726,
+        "instances": 16
+      }
+    },
+    {
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #102",
+      "name": "GiantArcBurst",
+      "counts": {
+        "Part": 1,
+        "Attachment": 1,
+        "ParticleEmitter": 19
+      },
+      "scripts": [],
+      "externalDependencies": [],
+      "sourcePropertiesMatch": true,
+      "usedBy": [
+        "CelestialLance",
+        "WraithfireOrb",
+        "VioletTempest"
+      ],
+      "fingerprint": {
+        "hash": 3064324426,
+        "bytes": 18119,
+        "instances": 21
+      }
+    },
+    {
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #131",
+      "name": "GiantVioletCrown",
+      "counts": {
+        "Part": 1,
+        "Attachment": 1,
+        "ParticleEmitter": 18
+      },
+      "scripts": [],
+      "externalDependencies": [],
+      "sourcePropertiesMatch": true,
+      "usedBy": [
+        "VioletTempest",
+        "RiftMaelstrom"
+      ],
+      "fingerprint": {
+        "hash": 2054095392,
+        "bytes": 16814,
+        "instances": 20
+      }
+    },
+    {
+      "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #27",
+      "name": "GiantMintRings",
+      "counts": {
+        "PointLight": 2,
+        "Beam": 4,
+        "Model": 1,
+        "Attachment": 11,
+        "ParticleEmitter": 6,
+        "MeshPart": 1
+      },
+      "scripts": [],
+      "externalDependencies": [],
+      "sourcePropertiesMatch": true,
+      "usedBy": [
+        "CelestialLance",
+        "RiftMaelstrom"
+      ],
+      "fingerprint": {
+        "hash": 432739262,
+        "bytes": 9708,
+        "instances": 25
+      }
+    }
+  ],
+  "performance": {
+    "visible": 0,
+    "travelled": 8.266960144042969,
+    "brokenBeams": 0,
+    "samples": 384,
+    "p95Ms": 18.59229989349842,
+    "peakEmitters": 291,
+    "remaining": 0,
+    "sounds": 0,
+    "peakEffects": 3,
+    "peakMs": 45.572299510240555,
+    "meanMs": 16.70571821887279
+  },
+  "visualChecks": {
+    "normalGameplayCamera": true,
+    "ordinaryClientScripts": true,
+    "realAbilityCasts": true,
+    "allFourExpandedImpacts": true,
+    "movingThreeCastOverlap": true,
+    "newTexturesFetchedSuccessfully": true,
+    "visibleMeshHosts": 0,
+    "peakInspection": "Initial Lance peak used a temporary particle hold; expanded impacts and final overlap were inspected live.",
+    "rejectedCandidate": "Pack #3 / BZ1_SS3 VFX PART #69: distracting square particles; removed from game and native import."
+  },
+  "checks": {
+    "rojoBuild": true,
+    "postStrikeCancellation": true,
+    "newModuleErrors": 0,
+    "cataclysmHashesUnchanged": true,
+    "libraryUntouched": true,
+    "importedSourcePropertiesMatch": true,
+    "studioAndEditorSourcesMatch": true
+  },
+  "cleanup": {
+    "temporaryScriptsRemoved": true,
+    "playtestStopped": true,
+    "capturedAndRestoredLoadout": [
+      "VioletTempest",
+      "AstralVerdict",
+      "WraithfireOrb"
+    ],
+    "testGodMode": false,
+    "treesRestored": true,
+    "published": false
+  },
+  "limits": [
+    "No separate observer client",
+    "No mobile/low-end hardware",
+    "No continuous exported gameplay video"
+  ]
+}

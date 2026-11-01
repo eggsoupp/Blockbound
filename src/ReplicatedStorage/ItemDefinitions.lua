@@ -94,9 +94,10 @@ local ItemDefinitions = {
 
 	-- === Basic Materials & Components ===
 	Stone = {
+		displayName = "Stone",
 		sprite = "block_stone",
 		icon = "rbxassetid://135294244542357",
-		description = "A simple stone. Used for crafting basic tools.",
+		description = "Solid stone for basic tools, furnaces, and building.",
 		rarity = "Common",
 		maxStack = 999,
 		classification = "Block",
@@ -106,9 +107,10 @@ local ItemDefinitions = {
 	
 
 	WoodPlank = {
+		displayName = "Wood Plank",
 		sprite = "block_oak_plank",
 		icon = "rbxassetid://82387679070340",
-		description = "Processed wood, used in many recipes.",
+		description = "Sawn wooden planks for building and basic crafting.",
 		rarity = "Common",
 		maxStack = 999,
 		classification = "Block",
@@ -118,33 +120,37 @@ local ItemDefinitions = {
 
 
 	Wood = {
+		displayName = "Wood",
 		sprite = "wood",
 		icon = "rbxassetid://82387679070340",
-		description = "Wood, used in many recipes.",
+		description = "A length of harvested timber, ready to cut into planks.",
 		rarity = "Common",
 		maxStack = 999,
 		classification = "Material",
 		value = 2,
 	},
 	Stick = {
+		displayName = "Stick",
 		sprite = "stick",
 		icon = "rbxassetid://3000000005",
-		description = "A wooden stick. Essential crafting component.",
+		description = "A straight wooden handle used in tools and other simple crafts.",
 		rarity = "Common",
 		maxStack = 999,
 		classification = "Material",
 		value = 1,
 	},
 	Leather = {
+		displayName = "Leather",
 		sprite = "leather",
 		icon = "rbxassetid://3000000006",
-		description = "Treated hide. Used for basic armor.",
-		rarity = "Uncommon",
+		description = "Tough animal hide used to make basic armor.",
+		rarity = "Common",
 		maxStack = 99,
 		classification = "Material",
 		value = 5,
 	},
 	Herb = {
+		displayName = "Herb",
 		sprite = "herb",
 		icon = "rbxassetid://3000000007",
 		description = "A medicinal herb. Used in potions.",
@@ -154,6 +160,7 @@ local ItemDefinitions = {
 		value = 3,
 	},
 	Bottle = {
+		displayName = "Bottle",
 		sprite = "bottle_empty",
 		icon = "rbxassetid://3000000008",
 		description = "Empty glass bottle. Holds liquids.",
@@ -166,6 +173,7 @@ local ItemDefinitions = {
 	-- What a slime is made of. Every slime sheds one or two (EnemyDrops), and a
 	-- hundred of them is the body of the Gelatinous Crown.
 	Gel = {
+		displayName = "Gel",
 		sprite = "gel",
 		-- PLACEHOLDER ICON, in the same made-up series as its neighbours.
 		icon = "rbxassetid://3000000015",
@@ -179,8 +187,9 @@ local ItemDefinitions = {
 	-- === Basic Tools, Pickaxes & Weapons ===
 	-- NOTE: items that should allow mining must have classification == "Pickaxe".
 	TestSword = {
+		displayName = "Test Sword",
 		icon = "rbxassetid://79477131719769",
-		description = "test",
+		description = "A developer blade for testing combat. Not part of normal progression.",
 		rarity = "Unobtainable",
 		maxStack = 1,
 		classification = "Weapon",
@@ -189,8 +198,9 @@ local ItemDefinitions = {
 		value = 999,
 	},
 	TestPickaxe = {
+		displayName = "Test Pickaxe",
 		icon = "rbxassetid://78053200894485",
-		description = "test",
+		description = "A developer pickaxe for rapid mining tests. Not part of normal progression.",
 		rarity = "Unobtainable",
 		maxStack = 1,
 		classification = "Pickaxe",
@@ -203,8 +213,9 @@ local ItemDefinitions = {
 		miningPower = 99,
 	},
 	TestAxe = {
+		displayName = "Test Axe",
 		icon = "rbxassetid://15599043650",
-		description = "test",
+		description = "A developer axe for testing tree harvesting. Not part of normal progression.",
 		rarity = "Unobtainable",
 		maxStack = 1,
 		classification = "Tool",
@@ -212,8 +223,9 @@ local ItemDefinitions = {
 	},
 
 	CopperPickaxe = {
+		displayName = "Copper Pickaxe",
 		icon = "rbxassetid://3000000000",
-		description = "A basic pickaxe used for mining copper ore.",
+		description = "A copper-headed pickaxe for early mining.",
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Pickaxe",
@@ -224,8 +236,9 @@ local ItemDefinitions = {
 		miningPower = 2,
 	},
 	CopperSword = {
+		displayName = "Copper Sword",
 		icon = "rbxassetid://3000000001",
-		description = "A simple copper sword. Better than fists.",
+		description = "A light copper blade with a dependable edge.",
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Weapon",
@@ -236,6 +249,7 @@ local ItemDefinitions = {
 	-- The wood tier. Weakest of everything, and the first tools a player can
 	-- make from what the world hands them without smelting anything.
 	WoodAxe = {
+		displayName = "Wood Axe",
 		icon = "rbxassetid://3000000002",
 		description = "A crude axe for chopping down trees.",
 		rarity = "Common",
@@ -245,6 +259,7 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(25, 270, 35),
 	},
 	WoodPickaxe = {
+		displayName = "Wood Pickaxe",
 		-- PLACEHOLDER ICON, in the same made-up series as its neighbours.
 		icon = "rbxassetid://3000000013",
 		description = "A crude pickaxe. It will break stone, slowly.",
@@ -260,9 +275,10 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(170, 0, 0),
 	},
 	WoodSword = {
+		displayName = "Wood Sword",
 		-- PLACEHOLDER ICON.
 		icon = "rbxassetid://3000000014",
-		description = "A blunt wooden sword. Barely better than fists.",
+		description = "A simple wooden blade for a beginner's first fights.",
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Weapon",
@@ -272,8 +288,9 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(0, 0, 0),
 	},
 	StonePickaxe = {
+		displayName = "Stone Pickaxe",
 		icon = "rbxassetid://3000000009",
-		description = "A sturdy pickaxe made of stone. More durable than copper.",
+		description = "A heavy stone pickaxe that mines faster than copper.",
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Pickaxe",
@@ -282,8 +299,9 @@ local ItemDefinitions = {
 		miningPower = 2,
 	},
 	StoneSword = {
+		displayName = "Stone Sword",
 		icon = "rbxassetid://3000000010",
-		description = "A basic sword carved from stone.",
+		description = "A rough stone blade with a heavy edge.",
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Weapon",
@@ -300,18 +318,20 @@ local ItemDefinitions = {
   description = "Select in your hotbar and click to open. Drops one random unowned ability scroll, visible only to you.",
  },
 	HealthPotion = {
+		displayName = "Health Potion",
 		sprite = "potion_red",
 		icon = "rbxassetid://3000000011",
-		description = "Restores a moderate amount of health.",
+		description = "A bottle of red medicinal tonic.",
 		rarity = "Common",
 		maxStack = 20,
 		classification = "Consumable",
 		value = 15,
 	},
 	ManaPotion = {
+		displayName = "Mana Potion",
 		sprite = "potion_blue",
 		icon = "rbxassetid://3000000012",
-		description = "Restores a moderate amount of mana.",
+		description = "A bottle of concentrated blue magical essence.",
 		rarity = "Common",
 		maxStack = 20,
 		classification = "Consumable",
@@ -333,7 +353,7 @@ local ItemDefinitions = {
 		displayName = "Gelatinous Crown",
 		-- PLACEHOLDER ICON.
 		icon = "rbxassetid://3000000016",
-		description = "A crown of set slime around a band of gold and iron. Use it on an altar to call the Slime Emperor.",
+		description = "A crown of gel, gold, and iron. Offer it at an altar to summon the Slime Emperor.",
 		rarity = "Epic",
 		maxStack = 1,
 		classification = "Consumable",
@@ -367,15 +387,17 @@ local ItemDefinitions = {
 	-- rest of this file already uses. Swap them for real asset ids when the art
 	-- exists; nothing else has to change.
 	Coal = {
+		displayName = "Coal",
 		sprite = "coal",
 		icon = "rbxassetid://3000000410",
-		description = "Sooty black rock. Fuel for every furnace.",
+		description = "A black mineral used as fuel when smelting ore.",
 		rarity = "Common",
 		maxStack = 999,
 		classification = "Material",
 		value = 2,
 	},
 	CopperOre = {
+		displayName = "Copper Ore",
 		sprite = "ore_copper",
 		icon = "rbxassetid://3000000411",
 		description = "Raw copper. Smelt it into an ingot.",
@@ -385,6 +407,7 @@ local ItemDefinitions = {
 		value = 3,
 	},
 	IronOre = {
+		displayName = "Iron Ore",
 		sprite = "ore_iron",
 		icon = "rbxassetid://3000000412",
 		description = "Raw iron. Smelt it into an ingot.",
@@ -394,6 +417,7 @@ local ItemDefinitions = {
 		value = 6,
 	},
 	GoldOre = {
+		displayName = "Gold Ore",
 		sprite = "ore_gold",
 		icon = "rbxassetid://3000000413",
 		description = "Raw gold, found only well below the surface.",
@@ -403,19 +427,21 @@ local ItemDefinitions = {
 		value = 18,
 	},
 	MythrilOre = {
+		displayName = "Mythril Ore",
 		sprite = "ore_mythril",
 		icon = "rbxassetid://3000000414",
 		description = "Faintly humming ore from the deep rock.",
-		rarity = "Rare",
+		rarity = "Epic",
 		maxStack = 999,
 		classification = "Material",
 		value = 40,
 	},
 	VoidCrystal = {
+		displayName = "Void Crystal",
 		sprite = "crystal_void",
 		icon = "rbxassetid://3000000415",
-		description = "A shard of nothing, pulled from the bottom of the world.",
-		rarity = "Legendary",
+		description = "A dark crystal found in the deepest rock and carried by the Blightborer.",
+		rarity = "Epic",
 		maxStack = 99,
 		classification = "Material",
 		value = 150,
@@ -423,6 +449,7 @@ local ItemDefinitions = {
 
 	-- === Mid-Game Materials & Ores ===
 	CopperIngot = {
+		displayName = "Copper Ingot",
 		sprite = "ingot_copper",
 		icon = "rbxassetid://3000000406",
 		description = "A refined bar of copper. The first real tool metal.",
@@ -432,6 +459,7 @@ local ItemDefinitions = {
 		value = 5,
 	},
 	IronIngot = {
+		displayName = "Iron Ingot",
 		sprite = "ingot_iron",
 		icon = "rbxassetid://3000000400",
 		description = "A refined bar of iron. Used for stronger tools.",
@@ -441,6 +469,7 @@ local ItemDefinitions = {
 		value = 10,
 	},
 	GoldIngot = {
+		displayName = "Gold Ingot",
 		sprite = "ingot_gold",
 		icon = "rbxassetid://3000000407",
 		description = "A refined bar of gold. Soft, valuable, and a little vain.",
@@ -450,9 +479,10 @@ local ItemDefinitions = {
 		value = 35,
 	},
 	MagmaOre = {
+		displayName = "Magma Ore",
 		sprite = "ore_magma",
 		icon = "rbxassetid://117405535919969",
-		description = "Burning-hot ore. Requires a strong pickaxe to mine.",
+		description = "Heat-scarred ore used to fire magma bricks.",
 		rarity = "Epic",
 		maxStack = 999,
 		classification = "Material",
@@ -460,6 +490,7 @@ local ItemDefinitions = {
 		miningTime = 2000,            -- 2000 ms (2.0s) because it's tougher
 	},
 	Cobblestone = {
+		displayName = "Cobblestone",
 		sprite = "block_cobblestone",
 		icon = "rbxassetid://3000000403",
 		description = "Rough stone. Useful for crafting and building.",
@@ -472,8 +503,9 @@ local ItemDefinitions = {
 
 	-- === Mid-Game Tools & Weapons ===
 	IronPickaxe = {
+		displayName = "Iron Pickaxe",
 		icon = "rbxassetid://3000000401",
-		description = "Stronger than copper, used to mine tougher ores.",
+		description = "An iron-headed pickaxe strong enough for tougher ores.",
 		rarity = "Uncommon",
 		maxStack = 1,
 		classification = "Pickaxe",
@@ -482,8 +514,9 @@ local ItemDefinitions = {
 		miningPower = 3,
 	},
 	IronSword = {
+		displayName = "Iron Sword",
 		icon = "rbxassetid://3000000402",
-		description = "A sharp iron sword. Deals good melee damage.",
+		description = "A sturdy iron longsword for reliable close combat.",
 		rarity = "Uncommon",
 		maxStack = 1,
 		classification = "Weapon",
@@ -492,6 +525,7 @@ local ItemDefinitions = {
 		value = 30,
 	},
 	LeatherArmor = {
+		displayName = "Leather Armor",
 		sprite = "armor_leather",
 		icon = "rbxassetid://3000000404",
 		description = "Basic armor made from leather. Provides light protection.",
@@ -502,6 +536,7 @@ local ItemDefinitions = {
 		buffs = { defense = 5 },
 	},
 	IronArmor = {
+		displayName = "Iron Armor",
 		sprite = "armor_iron",
 		icon = "rbxassetid://3000000405",
 		description = "Heavy iron armor. Greatly increases defense.",
@@ -523,7 +558,7 @@ local ItemDefinitions = {
 	VitalityAmulet = {
 		sprite = "amulet_vitality",
 		displayName = "Vitality Amulet",
-		description = "+25 max health while worn.",
+		description = "A red-gem amulet that grants 25 maximum health while worn.",
 		rarity = "Uncommon",
 		maxStack = 1,
 		classification = "Accessory",
@@ -535,7 +570,7 @@ local ItemDefinitions = {
 	ManaAmulet = {
 		sprite = "amulet_mana",
 		displayName = "Mana Amulet",
-		description = "+25 max mana while worn.",
+		description = "A blue-gem amulet that grants 25 maximum mana while worn.",
 		rarity = "Uncommon",
 		maxStack = 1,
 		classification = "Accessory",
@@ -547,7 +582,7 @@ local ItemDefinitions = {
 	SpellRing = {
 		sprite = "ring_spell",
 		displayName = "Spell Ring",
-		description = "+15% ability damage while worn.",
+		description = "A violet-gem ring that increases ability damage by 15% while worn.",
 		rarity = "Rare",
 		maxStack = 1,
 		classification = "Accessory",
@@ -559,7 +594,7 @@ local ItemDefinitions = {
 	BattleRing = {
 		sprite = "ring_battle",
 		displayName = "Battle Ring",
-		description = "+15% weapon damage while worn.",
+		description = "A fiery-gem ring that increases weapon damage by 15% while worn.",
 		rarity = "Rare",
 		maxStack = 1,
 		classification = "Accessory",
@@ -571,6 +606,7 @@ local ItemDefinitions = {
 
 	-- === Workbenches ===
 	CraftingTable = {
+		displayName = "Crafting Table",
 		sprite = "station_workbench",
 		icon = "rbxassetid://3000000500",
 		description = "Used to craft basic tools and items.",
@@ -582,6 +618,7 @@ local ItemDefinitions = {
 	-- Storage stations (Shared.Crafting.StationConfig): placed like a bench,
 	-- opened rather than crafted at. Islands only - see their station entries.
 	BasicChest = {
+		displayName = "Basic Chest",
 		sprite = "chest_basic",
 		description = "Holds 27 stacks. Place it on your island and open it to store things.",
 		rarity = "Common",
@@ -590,6 +627,7 @@ local ItemDefinitions = {
 		value = 20,
 	},
 	RareChest = {
+		displayName = "Rare Chest",
 		sprite = "chest_rare",
 		description = "Holds 36 stacks. Iron-bound, and a row bigger than a basic chest.",
 		rarity = "Rare",
@@ -598,6 +636,7 @@ local ItemDefinitions = {
 		value = 90,
 	},
 	LegendaryChest = {
+		displayName = "Legendary Chest",
 		sprite = "chest_legendary",
 		description = "Holds 54 stacks. Twice a basic chest, and a good deal finer.",
 		rarity = "Legendary",
@@ -606,6 +645,7 @@ local ItemDefinitions = {
 		value = 400,
 	},
 	Furnace = {
+		displayName = "Furnace",
 		sprite = "station_furnace",
 		icon = "rbxassetid://3000000501",
 		description = "Smelts ores into ingots.",
@@ -615,6 +655,7 @@ local ItemDefinitions = {
 		value = 25,
 	},
 	Anvil = {
+		displayName = "Anvil",
 		sprite = "station_anvil",
 		icon = "rbxassetid://3000000502",
 		description = "Used to forge weapons and armor.",
@@ -624,6 +665,7 @@ local ItemDefinitions = {
 		value = 50,
 	},
 	ArcaneForge = {
+		displayName = "Arcane Forge",
 		sprite = "station_arcane_forge",
 		icon = "rbxassetid://3000000503",
 		description = "Fuses magic into equipment. Required for enchanted gear.",
@@ -633,6 +675,7 @@ local ItemDefinitions = {
 		value = 100,
 	},
 	AlchemyBench = {
+		displayName = "Alchemy Bench",
 		sprite = "station_alchemy",
 		icon = "rbxassetid://3000000607",
 		description = "Used to craft potions and magical consumables.",
@@ -642,10 +685,11 @@ local ItemDefinitions = {
 		value = 80,
 	},
 	EnchantingTable = {
+		displayName = "Enchanting Table",
 		sprite = "station_enchanting",
 		icon = "rbxassetid://3000000608",
 		description = "Used to enchant weapons, tools, and armor.",
-		rarity = "Rare",
+		rarity = "Epic",
 		maxStack = 1,
 		classification = "Workbench",
 		value = 150,
@@ -656,8 +700,9 @@ local ItemDefinitions = {
 	-- for the ore. Every one of these is a working tool - Tools.ToolConfig builds
 	-- a template for anything holdable, so they equip and mine like the rest.
 	GoldPickaxe = {
+		displayName = "Gold Pickaxe",
 		icon = "rbxassetid://3000000420",
-		description = "Soft metal, sharp edge. Cuts stone quickly but not gently.",
+		description = "A finely edged gold pickaxe for fast mining.",
 		rarity = "Rare",
 		maxStack = 1,
 		classification = "Pickaxe",
@@ -666,8 +711,9 @@ local ItemDefinitions = {
 		miningPower = 4,
 	},
 	GoldSword = {
+		displayName = "Gold Sword",
 		icon = "rbxassetid://3000000421",
-		description = "More ceremony than weapon, but it swings fast.",
+		description = "A bright gold longsword with a keen edge.",
 		rarity = "Rare",
 		maxStack = 1,
 		classification = "Weapon",
@@ -676,9 +722,10 @@ local ItemDefinitions = {
 		value = 60,
 	},
 	MythrilPickaxe = {
+		displayName = "Mythril Pickaxe",
 		icon = "rbxassetid://3000000422",
-		description = "Hums as it cuts. Shrugs off the deep rock.",
-		rarity = "Rare",
+		description = "A powerful mythril pickaxe made for the deep rock.",
+		rarity = "Epic",
 		maxStack = 1,
 		classification = "Pickaxe",
 		value = 140,
@@ -686,8 +733,9 @@ local ItemDefinitions = {
 		miningPower = 5,
 	},
 	VoidPickaxe = {
+		displayName = "Void Pickaxe",
 		icon = "rbxassetid://3000000423",
-		description = "Built around a fragment of nothing. Stone barely registers.",
+		description = "A pickaxe shaped around void crystals, built for the toughest deposits.",
 		rarity = "Legendary",
 		maxStack = 1,
 		classification = "Pickaxe",
@@ -700,6 +748,7 @@ local ItemDefinitions = {
 	-- Placeable and mineable like any terrain block. TerrainManager builds their
 	-- parts from Blocks.BlockConfig.Generated, so they need no authored asset.
 	StoneBricks = {
+		displayName = "Stone Bricks",
 		sprite = "block_stone_bricks",
 		icon = "rbxassetid://3000000430",
 		description = "Cut and squared. For building something that lasts.",
@@ -710,10 +759,11 @@ local ItemDefinitions = {
 		miningTime = 1700,
 	},
 	MagmaBrick = {
+		displayName = "Magma Brick",
 		sprite = "block_magma_brick",
 		icon = "rbxassetid://3000000431",
-		description = "Fired with magma ore. Glows faintly, warm to the touch.",
-		rarity = "Uncommon",
+		description = "Dense brick fired with magma ore.",
+		rarity = "Rare",
 		maxStack = 999,
 		classification = "Block",
 		value = 8,
@@ -749,7 +799,7 @@ local ItemDefinitions = {
 		displayName = "Altar Core",
 		-- PLACEHOLDER ICON.
 		icon = "rbxassetid://3000000433",
-		description = "The heart of an altar. It hums when something worthy is set on it.",
+		description = "The heart of an altar, where offerings call powerful creatures.",
 		rarity = "Rare",
 		maxStack = 99,
 		classification = "Block",
@@ -759,15 +809,17 @@ local ItemDefinitions = {
 
 	-- === High-End Materials ===
 	MythrilIngot = {
+		displayName = "Mythril Ingot",
 		sprite = "ingot_mythril",
 		icon = "rbxassetid://3000000600",
 		description = "A rare, glowing metal that hums with energy.",
-		rarity = "Rare",
+		rarity = "Epic",
 		maxStack = 999,
 		classification = "Material",
 		value = 50,
 	},
 	EssenceShard = {
+		displayName = "Essence Shard",
 		sprite = "gem_essence",
 		icon = "rbxassetid://3000000610",
 		description = "Crystallized magic used in high-end crafting.",
@@ -777,9 +829,10 @@ local ItemDefinitions = {
 		value = 75,
 	},
 	VoidCore = {
+		displayName = "Void Core",
 		sprite = "void_core",
 		icon = "rbxassetid://3000000601",
-		description = "A fragment of the void. Used to craft ultimate gear.",
+		description = "Condensed void crystals used to forge a void pickaxe.",
 		rarity = "Legendary",
 		maxStack = 20,
 		classification = "Material",
@@ -788,9 +841,10 @@ local ItemDefinitions = {
 
 	-- === High-End Gear (Craftable) ===
 	MythrilSword = {
+		displayName = "Mythril Sword",
 		icon = "rbxassetid://3000000602",
-		description = "An elegant blade of Mythril. Fast and deadly.",
-		rarity = "Rare",
+		description = "A finely forged mythril blade with a quick swing.",
+		rarity = "Epic",
 		maxStack = 1,
 		classification = "Weapon",
 		weaponClass = "Sword",
@@ -801,8 +855,8 @@ local ItemDefinitions = {
 
 
 	LightLance = {
-		description = "A lance of hardened light. Calls a rain of blades down on a marked place, "
-			.. "or collapses a black star at its bearer's feet.",
+		displayName = "Light Lance",
+		description = "A radiant spear that channels Sacred Rain and Event Horizon.",
 		rarity = "Legendary",
 		maxStack = 1,
 		classification = "Weapon",
@@ -812,7 +866,8 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(0, 0, -100),
 	},
 	Thunderveil = {
-		description = "A sword of crackling thunder. Deals high damage and has a chance to stun enemies.",
+		displayName = "Thunderveil",
+		description = "A broad, thunder-themed sword with a formidable edge.",
 		rarity = "Legendary",
 		maxStack = 1,
 		classification = "Weapon",
@@ -822,7 +877,8 @@ local ItemDefinitions = {
 		iconAngle = Vector3.new(0, 0, 0),
 	},
 	Bloodfang = { 
-		description = "A sword that bleeds. Deals high damage and life steal.",
+		displayName = "Bloodfang",
+		description = "A crimson katana with a cruel, fang-like edge.",
 		rarity = "Epic",
 		maxStack = 1,
 		classification = "Weapon",
@@ -834,8 +890,9 @@ local ItemDefinitions = {
 
 	-- === High-End Gear (Drop-Only) ===
 	VoidReaver = {
+		displayName = "Void Reaver",
 		icon = "rbxassetid://3000000603",
-		description = "A cursed blade that deals high damage and life steal.",
+		description = "A dark longsword with a brutal cutting edge.",
 		rarity = "Legendary",
 		maxStack = 1,
 		classification = "Weapon",
@@ -846,8 +903,9 @@ local ItemDefinitions = {
 		dropOnly = true,
 	},
 	SkybreakerPick = {
+		displayName = "Skybreaker Pick",
 		icon = "rbxassetid://3000000604",
-		description = "A celestial pickaxe that breaks multiple blocks at once.",
+		description = "A celestial pickaxe with exceptional mining speed and power.",
 		rarity = "Legendary",
 		maxStack = 1,
 		classification = "Pickaxe",
@@ -858,8 +916,9 @@ local ItemDefinitions = {
 		dropOnly = true,
 	},
 	BuilderWand = {
+		displayName = "Builder Wand",
 		icon = "rbxassetid://3000000605",
-		description = "Places multiple blocks at once when building.",
+		description = "An ornate wand shaped for a master builder's hand.",
 		rarity = "Epic",
 		maxStack = 1,
 		classification = "Tool",
@@ -867,9 +926,10 @@ local ItemDefinitions = {
 		dropOnly = true,
 	},
 	FlameHammer = {
+		displayName = "Flame Hammer",
 		icon = "rbxassetid://3000000606",
-		description = "Smelts ores instantly on impact. Can be used as a weapon.",
-		rarity = "Rare",
+		description = "A heavy hammer with a head shaped like a rising flame.",
+		rarity = "Epic",
 		maxStack = 1,
 		classification = "Tool",
 		value = 180,
@@ -879,6 +939,7 @@ local ItemDefinitions = {
 
 	-- === Basic terrain block items (if you want them placeable / droppable as items) ===
 	Dirt = {
+		displayName = "Dirt",
 		sprite = "block_dirt",
 		icon = "rbxassetid://3000000700",
 		description = "Loose earth.",
@@ -889,6 +950,7 @@ local ItemDefinitions = {
 		miningTime = 550,
 	},
 	Grass = {
+		displayName = "Grass",
 		sprite = "block_grass",
 		icon = "rbxassetid://3000000701",
 		description = "Surface grass block.",
@@ -899,9 +961,10 @@ local ItemDefinitions = {
 		miningTime = 600,
 	},
 	Sand = {
+		displayName = "Sand",
 		sprite = "block_sand",
 		icon = "rbxassetid://3000000702",
-		description = "Loose sand. Flows into gaps.",
+		description = "Loose golden grains, useful for glassmaking and building.",
 		rarity = "Common",
 		maxStack = 999,
 		classification = "Block",
@@ -909,6 +972,7 @@ local ItemDefinitions = {
 		miningTime = 500,
 	},
 	Sandstone = {
+		displayName = "Sandstone",
 		sprite = "block_sandstone",
 		icon = "rbxassetid://3000000703",
 		description = "Compact sand turned to stone.",
@@ -919,6 +983,7 @@ local ItemDefinitions = {
 		miningTime = 1200,
 	},
 	Snow = {
+		displayName = "Snow",
 		sprite = "block_snow",
 		icon = "rbxassetid://3000000704",
 		description = "Packed snow block.",
@@ -931,6 +996,7 @@ local ItemDefinitions = {
 
 	-- === New biome/placeable blocks ===
 	CorruptedStone = {
+		displayName = "Corrupted Stone",
 		sprite = "block_corrupted_stone",
 		icon = "rbxassetid://3000000800",
 		description = "Dark, twisted stone infused with corruption.",
@@ -941,6 +1007,7 @@ local ItemDefinitions = {
 		miningTime = 1800,
 	},
 	CorruptedDirt = {
+		displayName = "Corrupted Dirt",
 		sprite = "block_corrupted_dirt",
 		icon = "rbxassetid://3000000801",
 		description = "Soil tainted by corruption.",
@@ -951,6 +1018,7 @@ local ItemDefinitions = {
 		miningTime = 700,
 	},
 	CrimsonStone = {
+		displayName = "Crimson Stone",
 		sprite = "block_crimson_stone",
 		icon = "rbxassetid://3000000802",
 		description = "A blood-red stone from the crimson lands.",
@@ -961,6 +1029,7 @@ local ItemDefinitions = {
 		miningTime = 1800,
 	},
 	CrimsonDirt = {
+		displayName = "Crimson Dirt",
 		sprite = "block_crimson_dirt",
 		icon = "rbxassetid://3000000803",
 		description = "Soil from the crimson biome.",
@@ -971,25 +1040,3516 @@ local ItemDefinitions = {
 		miningTime = 700,
 	},
 	HallowedStone = {
+		displayName = "Hallowed Stone",
 		sprite = "block_hallowed_stone",
 		icon = "rbxassetid://3000000804",
-		description = "Holy stone radiating light.",
-		rarity = "Rare",
+		description = "Bright stone found beneath the Hallow.",
+		rarity = "Uncommon",
 		maxStack = 999,
 		classification = "Block",
 		value = 3,
 		miningTime = 2000,
 	},
 	HallowedDirt = {
+		displayName = "Hallowed Dirt",
 		sprite = "block_hallowed_dirt",
 		icon = "rbxassetid://3000000805",
-		description = "Blessed soil glowing faintly.",
-		rarity = "Rare",
+		description = "Pale soil from the Hallow.",
+		rarity = "Uncommon",
 		maxStack = 999,
 		classification = "Block",
 		value = 2,
 		miningTime = 750,
 	},
+}
+
+
+-- Atlas catalog. catalogOnly entries intentionally have no acquisition source.
+-- Rarity describes tier, independently of availability. Reserved entries do
+-- not promise unimplemented effects. Remove catalogOnly when adding a source.
+ItemDefinitions.Ale = {
+	displayName = "Ale",
+	description = "A bottle of dark, foamy ale.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "drink_ale",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Amber = {
+	displayName = "Amber",
+	description = "Golden tree resin with tiny shapes trapped inside.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "amber",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Amethyst = {
+	displayName = "Amethyst",
+	description = "A cut amethyst with bright, glassy facets.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "gem_amethyst",
+	catalogOnly = true,
+}
+
+ItemDefinitions.AncientDust = {
+	displayName = "Ancient Dust",
+	description = "Powder shaken from something far older than it looks.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ancient_dust",
+	catalogOnly = true,
+}
+
+ItemDefinitions.AngelWings = {
+	displayName = "Angel Wings",
+	description = "A pair of angel wings mounted on a wearable frame.",
+	rarity = "Epic",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "wings_angel",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Ankh = {
+	displayName = "Ankh",
+	description = "An ancient looped cross worn smooth at the edges.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "ankh",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Apple = {
+	displayName = "Apple",
+	description = "A crisp red apple.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "apple",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ApplePie = {
+	displayName = "Apple Pie",
+	description = "A small pie filled with sweet apple pieces.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "pie_apple",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ArcaneScroll = {
+	displayName = "Scroll Arcane",
+	description = "A sealed scroll covered in intricate magical script.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "scroll_arcane",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ArcaneTome = {
+	displayName = "Arcane Tome",
+	description = "A bound volume of arcane lore, covered in careful annotations.",
+	rarity = "Rare",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_arcane",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Arrows = {
+	displayName = "Arrows",
+	description = "Straight wooden arrows tipped with sharpened metal.",
+	rarity = "Common",
+	classification = "Ammo",
+	maxStack = 999,
+	sprite = "arrows",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ArrowsFlame = {
+	displayName = "Flame Arrows",
+	description = "Arrows with ember-red heads and dark shafts.",
+	rarity = "Uncommon",
+	classification = "Ammo",
+	maxStack = 999,
+	sprite = "arrows_flame",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ArrowsFrost = {
+	displayName = "Frost Arrows",
+	description = "Arrows tipped with pale, icy crystals.",
+	rarity = "Uncommon",
+	classification = "Ammo",
+	maxStack = 999,
+	sprite = "arrows_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ArrowsHoly = {
+	displayName = "Holy Arrows",
+	description = "Bright arrows with finely worked golden heads.",
+	rarity = "Rare",
+	classification = "Ammo",
+	maxStack = 999,
+	sprite = "arrows_holy",
+	catalogOnly = true,
+}
+
+ItemDefinitions.AvengerEmblem = {
+	displayName = "Avenger Emblem",
+	description = "An engraved emblem bearing the symbol of the avenger.",
+	rarity = "Epic",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "emblem_avenger",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BatWing = {
+	displayName = "Bat Wing",
+	description = "A leathery wing stretched between fine bones.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bat_wing",
+}
+
+ItemDefinitions.BatWings = {
+	displayName = "Bat Wings",
+	description = "A pair of bat wings mounted on a wearable frame.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "wings_bat",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BattlePotion = {
+	displayName = "Battle Potion",
+	description = "A dark crimson brew with a pungent scent.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_battle",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Bell = {
+	displayName = "Bell",
+	description = "A small brass bell with a rounded lip.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bell",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BellSilver = {
+	displayName = "Bell Silver",
+	description = "A polished silver bell with a slender handle.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bell_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Berries = {
+	displayName = "Berries",
+	description = "A handful of ripe woodland berries.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "berries",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BerryPie = {
+	displayName = "Berry Pie",
+	description = "A golden pastry filled with dark berries.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "pie_berry",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BirchPlankBlock = {
+	displayName = "Birch Plank Block",
+	description = "A sample of birch plank with a firm, even shape.",
+	rarity = "Common",
+	classification = "Collectible",
+	maxStack = 999,
+	sprite = "block_birch_plank",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BlackCape = {
+	displayName = "Black Cape",
+	description = "A long black cape fastened with a simple clasp.",
+	rarity = "Uncommon",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "cape_black",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BlackFeather = {
+	displayName = "Black Feather",
+	description = "A glossy black feather from a dark-winged creature.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "feather_black",
+}
+
+ItemDefinitions.BlackLens = {
+	displayName = "Black Lens",
+	description = "A dark lens that catches almost no light.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "lens_black",
+}
+
+ItemDefinitions.BlankScroll = {
+	displayName = "Scroll",
+	description = "A rolled sheet of parchment tied with cord.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "scroll",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BlightborerPouch = {
+	displayName = "Blightborer Pouch",
+	description = "An earth-stained pouch marked with a burrowing creature.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bag_worm",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Blinkroot = {
+	displayName = "Blinkroot",
+	description = "A knotted root with tiny golden buds.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "blinkroot",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BloodFlask = {
+	displayName = "Blood Flask",
+	description = "A sealed flask of dark blood.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "flask_blood",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BloodSac = {
+	displayName = "Blood Sac",
+	description = "A swollen sac filled with dark blood.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "blood_sac",
+}
+
+ItemDefinitions.BloodTome = {
+	displayName = "Blood Tome",
+	description = "A bound volume of blood lore, covered in careful annotations.",
+	rarity = "Epic",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_blood",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BlueCape = {
+	displayName = "Blue Cape",
+	description = "A long blue cape fastened with a simple clasp.",
+	rarity = "Uncommon",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "cape_blue",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BlueCloth = {
+	displayName = "Blue Cloth",
+	description = "A neatly folded piece of blue cloth.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "cloth_blue",
+}
+
+ItemDefinitions.BlueScale = {
+	displayName = "Blue Scale",
+	description = "A tough blue scale from a creature's hide.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "scale_blue",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Bomb = {
+	displayName = "Bomb",
+	description = "A round iron casing packed tightly around a short fuse.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bomb",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Bone = {
+	displayName = "Bone",
+	description = "A weathered bone, stripped clean of flesh.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bone",
+}
+
+ItemDefinitions.BoneKey = {
+	displayName = "Bone Key",
+	description = "A bone key with an intricate, unfamiliar cut.",
+	rarity = "Epic",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_bone",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Bread = {
+	displayName = "Bread",
+	description = "A small loaf with a crisp golden crust.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "bread",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BronzeArmor = {
+	displayName = "Bronze Armor",
+	description = "A suit of bronze plates.",
+	rarity = "Uncommon",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_bronze",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BronzeTrophy = {
+	displayName = "Bronze Trophy",
+	description = "A polished bronze trophy on a solid pedestal.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 1,
+	sprite = "trophy_bronze",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Bullet = {
+	displayName = "Bullet",
+	description = "A small metal round with a blunt nose.",
+	rarity = "Common",
+	classification = "Ammo",
+	maxStack = 999,
+	sprite = "bullet",
+	catalogOnly = true,
+}
+
+ItemDefinitions.BulletSilver = {
+	displayName = "Silver Bullet",
+	description = "A polished silver round.",
+	rarity = "Uncommon",
+	classification = "Ammo",
+	maxStack = 999,
+	sprite = "bullet_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Cake = {
+	displayName = "Cake",
+	description = "A slice of soft cake topped with icing.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "cake",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CalmingPotion = {
+	displayName = "Calming Potion",
+	description = "A pale green brew scented with gentle herbs.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_calming",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Candle = {
+	displayName = "Candle",
+	description = "A short wax candle with a dark wick.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "candle",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CandlePurple = {
+	displayName = "Candle Purple",
+	description = "A violet candle with a smooth wax finish.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "candle_purple",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CandleRed = {
+	displayName = "Candle Red",
+	description = "A deep red candle with a braided wick.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "candle_red",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Carrot = {
+	displayName = "Carrot",
+	description = "A crunchy orange root with a leafy top.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "carrot",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Chain = {
+	displayName = "Chain",
+	description = "Linked metal rings, heavy and difficult to snap.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "chain",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Cheese = {
+	displayName = "Cheese",
+	description = "A wedge of firm yellow cheese.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "cheese",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Cherries = {
+	displayName = "Cherries",
+	description = "Sweet red cherries joined at the stem.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "cherries",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Claws = {
+	displayName = "Claws",
+	description = "Curved claws with edges worn sharp by hunting.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "claws",
+}
+
+ItemDefinitions.ClothArmor = {
+	displayName = "Cloth Armor",
+	description = "A suit of cloth.",
+	rarity = "Common",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_cloth",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Cloud = {
+	displayName = "Cloud",
+	description = "A small tuft of strangely solid cloud.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "cloud",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CloudInBottle = {
+	displayName = "Cloud In Bottle",
+	description = "A drifting cloud sealed inside a glass bottle.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "cloud_in_bottle",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CoalOreBlock = {
+	displayName = "Coal Ore Block",
+	description = "A stone sample threaded with coal ore.",
+	rarity = "Common",
+	classification = "Collectible",
+	maxStack = 999,
+	sprite = "block_coal_ore",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CobaltArmor = {
+	displayName = "Cobalt Armor",
+	description = "A suit of cobalt plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_cobalt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CobaltGreaves = {
+	displayName = "Cobalt Greaves",
+	description = "A pair of greaves made from cobalt plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_cobalt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CobaltHelmet = {
+	displayName = "Cobalt Helmet",
+	description = "A shaped helmet of cobalt plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_cobalt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CobaltIngot = {
+	displayName = "Cobalt Ingot",
+	description = "A refined bar of cobalt, ready for a smith's work.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_cobalt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CobaltOre = {
+	displayName = "Cobalt Ore",
+	description = "Raw cobalt ore with veins running through the stone.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_cobalt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CobaltShield = {
+	displayName = "Cobalt Shield",
+	description = "A cobalt shield with a solid central boss.",
+	rarity = "Epic",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "shield_cobalt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Cobweb = {
+	displayName = "Cobweb",
+	description = "A sticky tangle of spider silk.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "cobweb",
+}
+
+ItemDefinitions.CoinPurse = {
+	displayName = "Coin Purse",
+	description = "A small purse that jingles when shaken.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bag_coins",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Compass = {
+	displayName = "Compass",
+	description = "A brass compass with a finely balanced needle.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "compass",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CookedMeat = {
+	displayName = "Cooked Meat",
+	description = "A browned cut of meat with a crisp outer edge.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "meat_cooked",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Cookie = {
+	displayName = "Cookie",
+	description = "A crisp cookie dotted with chocolate.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "cookie",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CopperArmor = {
+	displayName = "Copper Armor",
+	description = "A suit of copper plates.",
+	rarity = "Common",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_copper",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CopperCoin = {
+	displayName = "Copper Coin",
+	description = "A stamped copper coin with a worn rim.",
+	rarity = "Common",
+	classification = "Currency",
+	maxStack = 999,
+	sprite = "coin_copper",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CopperGreaves = {
+	displayName = "Copper Greaves",
+	description = "A pair of greaves made from copper plates.",
+	rarity = "Common",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_copper",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CopperHelmet = {
+	displayName = "Copper Helmet",
+	description = "A shaped helmet of copper plates.",
+	rarity = "Common",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_copper",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CopperOreBlock = {
+	displayName = "Copper Ore Block",
+	description = "A stone sample threaded with copper ore.",
+	rarity = "Common",
+	classification = "Collectible",
+	maxStack = 999,
+	sprite = "block_copper_ore",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CorruptedArmor = {
+	displayName = "Corrupted Armor",
+	description = "A suit of corrupted plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_corrupt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CorruptedGreaves = {
+	displayName = "Corrupted Greaves",
+	description = "A pair of greaves made from corrupted plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_corrupt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CorruptedHelmet = {
+	displayName = "Corrupted Helmet",
+	description = "A shaped helmet of corrupted plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_corrupt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CorruptedIngot = {
+	displayName = "Corrupted Ingot",
+	description = "A refined bar of corrupted, ready for a smith's work.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_corrupt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CorruptedOre = {
+	displayName = "Corrupted Ore",
+	description = "Raw corrupted ore with veins running through the stone.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_corrupt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CorruptedShard = {
+	displayName = "Corrupted Shard",
+	description = "A jagged fragment of corrupted energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "shard_corrupt",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrabShell = {
+	displayName = "Crab Shell",
+	description = "A hard piece of shell from a clawed creature.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "shell_crab",
+}
+
+ItemDefinitions.Crimbloom = {
+	displayName = "Crimbloom",
+	description = "A red blossom rooted in crimson soil.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "crimbloom",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonArmor = {
+	displayName = "Crimson Armor",
+	description = "A suit of crimson plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonCrate = {
+	displayName = "Crimson Crate",
+	description = "A sealed crimson crate with reinforced corners.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 16,
+	sprite = "crate_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonGreaves = {
+	displayName = "Crimson Greaves",
+	description = "A pair of greaves made from crimson plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonHelmet = {
+	displayName = "Crimson Helmet",
+	description = "A shaped helmet of crimson plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonIngot = {
+	displayName = "Crimson Ingot",
+	description = "A refined bar of crimson, ready for a smith's work.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonKey = {
+	displayName = "Crimson Key",
+	description = "A crimson key with an intricate, unfamiliar cut.",
+	rarity = "Epic",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonOrb = {
+	displayName = "Crimson Orb",
+	description = "A smooth orb holding a flicker of crimson energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "orb_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonOre = {
+	displayName = "Crimson Ore",
+	description = "Raw crimson ore with veins running through the stone.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonShard = {
+	displayName = "Crimson Shard",
+	description = "A jagged fragment of crimson energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "shard_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrimsonShield = {
+	displayName = "Crimson Shield",
+	description = "A crimson shield with a solid central boss.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "shield_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrystalBall = {
+	displayName = "Crystal Ball",
+	description = "A clear sphere resting on an ornate stand.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "crystal_ball",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrystalBallBlood = {
+	displayName = "Crystal Ball Blood",
+	description = "A crimson sphere with dark shapes beneath its surface.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "crystal_ball_blood",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrystalBallFrost = {
+	displayName = "Crystal Ball Frost",
+	description = "A glass sphere clouded with delicate frost.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "crystal_ball_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CrystalBallNature = {
+	displayName = "Crystal Ball Nature",
+	description = "A green sphere filled with leaf-like patterns.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "crystal_ball_nature",
+	catalogOnly = true,
+}
+
+ItemDefinitions.CursedFlask = {
+	displayName = "Cursed Flask",
+	description = "A sealed flask of sickly green liquid.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "flask_cursed",
+	catalogOnly = true,
+}
+
+ItemDefinitions.DarkHorns = {
+	displayName = "Dark Horns",
+	description = "Dark horns ridged with signs of age.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "horns_dark",
+}
+
+ItemDefinitions.DarkPelt = {
+	displayName = "Dark Pelt",
+	description = "A dark pelt with coarse, dense fur.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "pelt_dark",
+}
+
+ItemDefinitions.Daybloom = {
+	displayName = "Daybloom",
+	description = "A small golden flower that opens toward the sun.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "daybloom",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Deathweed = {
+	displayName = "Deathweed",
+	description = "A wiry herb that thrives in tainted soil.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "deathweed",
+	catalogOnly = true,
+}
+
+ItemDefinitions.DemonWings = {
+	displayName = "Demon Wings",
+	description = "A pair of demon wings mounted on a wearable frame.",
+	rarity = "Epic",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "wings_demon",
+	catalogOnly = true,
+}
+
+ItemDefinitions.DesertKey = {
+	displayName = "Desert Key",
+	description = "A desert key with an intricate, unfamiliar cut.",
+	rarity = "Epic",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_desert",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Diamond = {
+	displayName = "Diamond",
+	description = "A cut diamond with bright, glassy facets.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "gem_diamond",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Donut = {
+	displayName = "Donut",
+	description = "A sweet ring of dough with a smooth glaze.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "donut",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Dreamcatcher = {
+	displayName = "Dreamcatcher",
+	description = "A woven hoop decorated with thread and feathers.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "dreamcatcher",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Ectoplasm = {
+	displayName = "Ectoplasm",
+	description = "A cold, translucent residue left behind by restless spirits.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ectoplasm",
+}
+
+ItemDefinitions.EctoplasmFlask = {
+	displayName = "Ectoplasm Flask",
+	description = "A sealed flask of pale spirit residue.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "flask_ecto",
+	catalogOnly = true,
+}
+
+ItemDefinitions.EctoplasmShard = {
+	displayName = "Ectoplasm Shard",
+	description = "A jagged fragment of condensed spirit residue.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "shard_ecto",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Egg = {
+	displayName = "Egg",
+	description = "A pale egg in a fragile shell.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "egg",
+}
+
+ItemDefinitions.EmberDust = {
+	displayName = "Ember Dust",
+	description = "Warm red dust with a faint ember glow.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ember_dust",
+}
+
+ItemDefinitions.Emerald = {
+	displayName = "Emerald",
+	description = "A cut emerald with bright, glassy facets.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "gem_emerald",
+	catalogOnly = true,
+}
+
+ItemDefinitions.EmeraldArmor = {
+	displayName = "Emerald Armor",
+	description = "A suit of emerald plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_emerald",
+	catalogOnly = true,
+}
+
+ItemDefinitions.EmperorPouch = {
+	displayName = "Emperor Pouch",
+	description = "A regal pouch marked with a slime crown.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bag_emperor",
+	catalogOnly = true,
+}
+
+ItemDefinitions.EndurancePotion = {
+	displayName = "Endurance Potion",
+	description = "A dense amber tonic with a bitter scent.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_endurance",
+	catalogOnly = true,
+}
+
+ItemDefinitions.EyePouch = {
+	displayName = "Eye Pouch",
+	description = "A sealed pouch bearing a watchful eye.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bag_eye",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FairyWings = {
+	displayName = "Fairy Wings",
+	description = "A pair of fairy wings mounted on a wearable frame.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "wings_fairy",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FallenStar = {
+	displayName = "Fallen Star",
+	description = "A fragment of starlight, cool enough to hold.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "fallen_star",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Fang = {
+	displayName = "Fang",
+	description = "A sharp tooth pulled from a predator's jaws.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "fang",
+}
+
+ItemDefinitions.Feather = {
+	displayName = "Feather",
+	description = "A light bird feather with a sturdy quill.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "feather",
+}
+
+ItemDefinitions.FeatherfallPotion = {
+	displayName = "Featherfall Potion",
+	description = "A pale brew with a feather suspended inside.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_featherfall",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FeralGlove = {
+	displayName = "Feral Glove",
+	description = "A feral glove with reinforced fingers.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "glove_feral",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FireTome = {
+	displayName = "Fire Tome",
+	description = "A bound volume of fire lore, covered in careful annotations.",
+	rarity = "Rare",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_fire",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Fireblossom = {
+	displayName = "Fireblossom",
+	description = "A bright flower that flourishes near intense heat.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "fireblossom",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FlameWings = {
+	displayName = "Flame Wings",
+	description = "A pair of flame wings mounted on a wearable frame.",
+	rarity = "Epic",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "wings_flame",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FleshChunk = {
+	displayName = "Flesh Chunk",
+	description = "A dense lump of crimson flesh.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "flesh_chunk",
+}
+
+ItemDefinitions.FrostAmulet = {
+	displayName = "Frost Amulet",
+	description = "An amulet set around a frost centerpiece.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "amulet_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostArmor = {
+	displayName = "Frost Armor",
+	description = "A suit of frost plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostBoots = {
+	displayName = "Frost Boots",
+	description = "A pair of frost boots with reinforced soles.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "boots_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostCrate = {
+	displayName = "Frost Crate",
+	description = "A sealed frost crate with reinforced corners.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 16,
+	sprite = "crate_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostDust = {
+	displayName = "Frost Dust",
+	description = "Pale powder that stays cold to the touch.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "frost_dust",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostGreaves = {
+	displayName = "Frost Greaves",
+	description = "A pair of greaves made from frost plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostHelmet = {
+	displayName = "Frost Helmet",
+	description = "A shaped helmet of frost plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostIngot = {
+	displayName = "Frost Ingot",
+	description = "A refined bar of frost, ready for a smith's work.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostKey = {
+	displayName = "Frost Key",
+	description = "A frost key with an intricate, unfamiliar cut.",
+	rarity = "Epic",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostOrb = {
+	displayName = "Frost Orb",
+	description = "A smooth orb holding a flicker of frost energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "orb_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostOre = {
+	displayName = "Frost Ore",
+	description = "Raw frost ore with veins running through the stone.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostRing = {
+	displayName = "Frost Ring",
+	description = "A frost ring with carefully worked markings.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "ring_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostShard = {
+	displayName = "Frost Shard",
+	description = "A jagged fragment of frost energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "shard_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostTome = {
+	displayName = "Frost Tome",
+	description = "A bound volume of frost lore, covered in careful annotations.",
+	rarity = "Rare",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.FrostWings = {
+	displayName = "Frost Wings",
+	description = "A pair of frost wings mounted on a wearable frame.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "wings_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GillsPotion = {
+	displayName = "Gills Potion",
+	description = "A sea-green brew with tiny drifting bubbles.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_gills",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldArmor = {
+	displayName = "Gold Armor",
+	description = "A suit of gold plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldBoots = {
+	displayName = "Gold Boots",
+	description = "A pair of gold boots with reinforced soles.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "boots_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldCoin = {
+	displayName = "Gold Coin",
+	description = "A stamped gold coin with a worn rim.",
+	rarity = "Rare",
+	classification = "Currency",
+	maxStack = 999,
+	sprite = "coin_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldCrate = {
+	displayName = "Gold Crate",
+	description = "A sealed gold crate with reinforced corners.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 16,
+	sprite = "crate_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldGlove = {
+	displayName = "Golden Glove",
+	description = "A gold glove with reinforced fingers.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "glove_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldGreaves = {
+	displayName = "Gold Greaves",
+	description = "A pair of greaves made from gold plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldHelmet = {
+	displayName = "Gold Helmet",
+	description = "A shaped helmet of gold plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldKey = {
+	displayName = "Gold Key",
+	description = "A gold key with an intricate, unfamiliar cut.",
+	rarity = "Rare",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldOreBlock = {
+	displayName = "Gold Ore Block",
+	description = "A stone sample threaded with gold ore.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 999,
+	sprite = "block_gold_ore",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldRing = {
+	displayName = "Gold Ring",
+	description = "A gold ring with carefully worked markings.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "ring_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldScale = {
+	displayName = "Gold Scale",
+	description = "A tough golden scale from a creature's hide.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "scale_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldTrophy = {
+	displayName = "Gold Trophy",
+	description = "A polished gold trophy on a solid pedestal.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 1,
+	sprite = "trophy_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GoldenApple = {
+	displayName = "Golden Apple",
+	description = "A golden apple with a brilliant, unblemished skin.",
+	rarity = "Rare",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "apple_golden",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Grapes = {
+	displayName = "Grapes",
+	description = "A bunch of juicy purple grapes.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "grapes",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GreaterHealingPotion = {
+	displayName = "Greater Healing Potion",
+	description = "A large bottle of concentrated red tonic.",
+	rarity = "Rare",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_healing_greater",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GreaterManaPotion = {
+	displayName = "Greater Mana Potion",
+	description = "A large bottle of concentrated blue essence.",
+	rarity = "Rare",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_mana_greater",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GreenCape = {
+	displayName = "Green Cape",
+	description = "A long green cape fastened with a simple clasp.",
+	rarity = "Uncommon",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "cape_green",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GreenGel = {
+	displayName = "Green Gel",
+	description = "A springy lump of green slime, still trying to hold its shape.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "gel_green",
+}
+
+ItemDefinitions.GreenGrapes = {
+	displayName = "Green Grapes",
+	description = "A bunch of fresh green grapes.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "grapes_green",
+	catalogOnly = true,
+}
+
+ItemDefinitions.GreenScale = {
+	displayName = "Green Scale",
+	description = "A tough green scale from a creature's hide.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "scale_green",
+}
+
+ItemDefinitions.HallowedArmor = {
+	displayName = "Hallowed Armor",
+	description = "A suit of hallowed plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_hallow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HallowedGreaves = {
+	displayName = "Hallowed Greaves",
+	description = "A pair of greaves made from hallowed plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_hallow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HallowedHelmet = {
+	displayName = "Hallowed Helmet",
+	description = "A shaped helmet of hallowed plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_hallow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HallowedIngot = {
+	displayName = "Hallowed Ingot",
+	description = "A refined bar of hallowed, ready for a smith's work.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_hallow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HallowedKey = {
+	displayName = "Hallowed Key",
+	description = "A hallowed key with an intricate, unfamiliar cut.",
+	rarity = "Epic",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_hallow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HallowedOre = {
+	displayName = "Hallowed Ore",
+	description = "Raw hallowed ore with veins running through the stone.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_hallow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HallowedShard = {
+	displayName = "Hallowed Shard",
+	description = "A jagged fragment of hallowed energy.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "shard_hallow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Hallowlily = {
+	displayName = "Hallowlily",
+	description = "A delicate lily with an unusually bright sheen.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "hallowlily",
+}
+
+ItemDefinitions.HarpyFeather = {
+	displayName = "Harpy Feather",
+	description = "A long, stiff feather from a powerful flying creature.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "feather_harpy",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HeartGolden = {
+	displayName = "Heart Golden",
+	description = "A golden heart polished to a mirror shine.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "heart_golden",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HolyShield = {
+	displayName = "Holy Shield",
+	description = "A holy shield with a solid central boss.",
+	rarity = "Epic",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "shield_holy",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HolyTome = {
+	displayName = "Holy Tome",
+	description = "A bound volume of sacred lore, covered in careful annotations.",
+	rarity = "Epic",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_holy",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HoneyBottle = {
+	displayName = "Honey Bottle",
+	description = "Thick golden honey sealed in a glass bottle.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "honey_bottle",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Horns = {
+	displayName = "Horns",
+	description = "A pair of sturdy, curved horns.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "horns",
+}
+
+ItemDefinitions.HorseshoeIron = {
+	displayName = "Horseshoe Iron",
+	description = "A worn iron horseshoe with square nail holes.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "horseshoe_iron",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HorseshoeLucky = {
+	displayName = "Horseshoe Lucky",
+	description = "A polished horseshoe kept as a token of good fortune.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "horseshoe_lucky",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Hourglass = {
+	displayName = "Hourglass",
+	description = "An hourglass with a fine stream of golden sand.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "hourglass",
+	catalogOnly = true,
+}
+
+ItemDefinitions.HunterPotion = {
+	displayName = "Hunter Potion",
+	description = "An amber brew with a clear, bright center.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_hunter",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IchorFlask = {
+	displayName = "Ichor Flask",
+	description = "A sealed flask of golden ichor.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "flask_ichor",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IdolBlood = {
+	displayName = "Idol Blood",
+	description = "A crimson idol carved with jagged markings.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 20,
+	sprite = "idol_blood",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IdolFrost = {
+	displayName = "Idol Frost",
+	description = "A pale idol etched with frost-like patterns.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 20,
+	sprite = "idol_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IdolGold = {
+	displayName = "Idol Gold",
+	description = "A small golden figure worn smooth by countless hands.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 20,
+	sprite = "idol_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IdolVoid = {
+	displayName = "Idol Void",
+	description = "A dark idol whose face is lost in shadow.",
+	rarity = "Legendary",
+	classification = "Collectible",
+	maxStack = 20,
+	sprite = "idol_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.InvisibilityPotion = {
+	displayName = "Invisibility Potion",
+	description = "A nearly transparent brew in a frosted bottle.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_invisibility",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IronCrate = {
+	displayName = "Iron Crate",
+	description = "A sealed iron crate with reinforced corners.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 16,
+	sprite = "crate_iron",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IronGreaves = {
+	displayName = "Iron Greaves",
+	description = "A pair of greaves made from iron plates.",
+	rarity = "Uncommon",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_iron",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IronHelmet = {
+	displayName = "Iron Helmet",
+	description = "A shaped helmet of iron plates.",
+	rarity = "Uncommon",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_iron",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IronKey = {
+	displayName = "Iron Key",
+	description = "A iron key with an intricate, unfamiliar cut.",
+	rarity = "Uncommon",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_iron",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IronOreBlock = {
+	displayName = "Iron Ore Block",
+	description = "A stone sample threaded with iron ore.",
+	rarity = "Common",
+	classification = "Collectible",
+	maxStack = 999,
+	sprite = "block_iron_ore",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IronShield = {
+	displayName = "Iron Shield",
+	description = "A iron shield with a solid central boss.",
+	rarity = "Uncommon",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "shield_iron",
+	catalogOnly = true,
+}
+
+ItemDefinitions.IronskinPotion = {
+	displayName = "Ironskin Potion",
+	description = "A gray tonic as thick as liquid metal.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_ironskin",
+	catalogOnly = true,
+}
+
+ItemDefinitions.JadeArmor = {
+	displayName = "Jade Armor",
+	description = "A suit of jade plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_jade",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Juice = {
+	displayName = "Juice",
+	description = "Sweet fruit juice in a small bottle.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "drink_juice",
+	catalogOnly = true,
+}
+
+ItemDefinitions.JungleKey = {
+	displayName = "Jungle Key",
+	description = "A jungle key with an intricate, unfamiliar cut.",
+	rarity = "Epic",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_jungle",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Lantern = {
+	displayName = "Lantern",
+	description = "A small lamp protected by a sturdy metal frame.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "lantern",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LavaBoots = {
+	displayName = "Lava Boots",
+	description = "A pair of lava boots with reinforced soles.",
+	rarity = "Uncommon",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "boots_lava",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LeadGreaves = {
+	displayName = "Lead Greaves",
+	description = "A pair of greaves made from lead plates.",
+	rarity = "Uncommon",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_lead",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LeadHelmet = {
+	displayName = "Lead Helmet",
+	description = "A shaped helmet of lead plates.",
+	rarity = "Uncommon",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_lead",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LeadIngot = {
+	displayName = "Lead Ingot",
+	description = "A refined bar of lead, ready for a smith's work.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_lead",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LeadOre = {
+	displayName = "Lead Ore",
+	description = "Raw lead ore with veins running through the stone.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_lead",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LeafWings = {
+	displayName = "Leaf Wings",
+	description = "A pair of leaf wings mounted on a wearable frame.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "wings_leaf",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LeatherBoots = {
+	displayName = "Leather Boots",
+	description = "A pair of leather boots with reinforced soles.",
+	rarity = "Common",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "boots_leather",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LeatherGreaves = {
+	displayName = "Leather Greaves",
+	description = "A pair of greaves made from leather.",
+	rarity = "Common",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_leather",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LeatherHelmet = {
+	displayName = "Leather Helmet",
+	description = "A shaped helmet of leather.",
+	rarity = "Common",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_leather",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Lens = {
+	displayName = "Lens",
+	description = "A clear lens taken from a watchful eye.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "lens",
+}
+
+ItemDefinitions.LesserHealingPotion = {
+	displayName = "Lesser Healing Potion",
+	description = "A small vial of mild red tonic.",
+	rarity = "Common",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_healing_lesser",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LesserManaPotion = {
+	displayName = "Lesser Mana Potion",
+	description = "A small vial of pale blue essence.",
+	rarity = "Common",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_mana_lesser",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LifeCrystal = {
+	displayName = "Life Crystal",
+	description = "A heart-shaped crystal with a warm red glow.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "life_crystal",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LifeFruit = {
+	displayName = "Life Fruit",
+	description = "A rare golden fruit wrapped in fresh green leaves.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "life_fruit",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LifeforcePotion = {
+	displayName = "Lifeforce Potion",
+	description = "A vivid crimson brew with a pulsing glow.",
+	rarity = "Rare",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_lifeforce",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LightOrb = {
+	displayName = "Light Orb",
+	description = "A smooth orb holding a flicker of light energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "orb_light",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LightningTome = {
+	displayName = "Lightning Tome",
+	description = "A bound volume of lightning lore, covered in careful annotations.",
+	rarity = "Rare",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_lightning",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LuckPotion = {
+	displayName = "Luck Potion",
+	description = "A green brew with a tiny clover tied to the neck.",
+	rarity = "Rare",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_luck",
+	catalogOnly = true,
+}
+
+ItemDefinitions.LuckyClover = {
+	displayName = "Lucky Clover",
+	description = "A rare four-leaf clover pressed flat for safekeeping.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "lucky_clover",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MageArmor = {
+	displayName = "Mage Armor",
+	description = "A suit of rich, embroidered cloth.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_mage",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagicMirror = {
+	displayName = "Magic Mirror",
+	description = "A silver mirror with an unfamiliar landscape in its glass.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "magic_mirror",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagicPowerPotion = {
+	displayName = "Magic Power Potion",
+	description = "A violet brew bright with suspended sparks.",
+	rarity = "Rare",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_magic_power",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagmaArmor = {
+	displayName = "Magma Armor",
+	description = "A suit of magma plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_magma",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagmaGreaves = {
+	displayName = "Magma Greaves",
+	description = "A pair of greaves made from magma plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_magma",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagmaHelmet = {
+	displayName = "Magma Helmet",
+	description = "A shaped helmet of magma plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_magma",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagmaIngot = {
+	displayName = "Magma Ingot",
+	description = "A refined bar of magma, ready for a smith's work.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_magma",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagmaOrb = {
+	displayName = "Magma Orb",
+	description = "A smooth orb holding a flicker of magma energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "orb_magma",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagmaOreBlock = {
+	displayName = "Magma Ore Block",
+	description = "A stone sample threaded with magma ore.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 999,
+	sprite = "block_magma_ore",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MagmaShard = {
+	displayName = "Magma Shard",
+	description = "A jagged fragment of magma energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "shard_magma",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ManaCrystal = {
+	displayName = "Mana Crystal",
+	description = "A blue crystal filled with a quiet magical glow.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "mana_crystal",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ManaRegenPotion = {
+	displayName = "Mana Regeneration Potion",
+	description = "A blue tonic with slowly circling flecks of light.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_mana_regen",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ManaRing = {
+	displayName = "Mana Ring",
+	description = "A mana ring with carefully worked markings.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "ring_mana",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Milk = {
+	displayName = "Milk",
+	description = "Fresh milk in a stoppered bottle.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "drink_milk",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MoonCharm = {
+	displayName = "Moon Charm",
+	description = "A small silver charm shaped like a crescent moon.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "moon_charm",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MoonCharmGold = {
+	displayName = "Moon Charm Gold",
+	description = "A golden crescent suspended from a fine loop.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "moon_charm_gold",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Moonglow = {
+	displayName = "Moonglow",
+	description = "A blue flower with petals as pale as moonlight.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "moonglow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Mushroom = {
+	displayName = "Mushroom",
+	description = "A stout mushroom with a broad cap.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "mushroom",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MushroomGlowing = {
+	displayName = "Mushroom Glowing",
+	description = "A luminous mushroom from a dark, damp place.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "mushroom_glowing",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MythrilArmor = {
+	displayName = "Mythril Armor",
+	description = "A suit of mythril plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_mythril",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MythrilGreaves = {
+	displayName = "Mythril Greaves",
+	description = "A pair of greaves made from mythril plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_mythril",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MythrilHelmet = {
+	displayName = "Mythril Helmet",
+	description = "A shaped helmet of mythril plates.",
+	rarity = "Epic",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_mythril",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MythrilOreBlock = {
+	displayName = "Mythril Ore Block",
+	description = "A stone sample threaded with mythril ore.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 999,
+	sprite = "block_mythril_ore",
+	catalogOnly = true,
+}
+
+ItemDefinitions.MythrilShard = {
+	displayName = "Mythril Shard",
+	description = "A jagged fragment of mythril energy.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "shard_mythril",
+	catalogOnly = true,
+}
+
+ItemDefinitions.NatureAmulet = {
+	displayName = "Nature Amulet",
+	description = "An amulet set around a nature centerpiece.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "amulet_nature",
+	catalogOnly = true,
+}
+
+ItemDefinitions.NatureOrb = {
+	displayName = "Nature Orb",
+	description = "A smooth orb holding a flicker of verdant energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "orb_nature",
+	catalogOnly = true,
+}
+
+ItemDefinitions.NatureRing = {
+	displayName = "Nature Ring",
+	description = "A nature ring with carefully worked markings.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "ring_nature",
+	catalogOnly = true,
+}
+
+ItemDefinitions.NatureTome = {
+	displayName = "Nature Tome",
+	description = "A bound volume of nature lore, covered in careful annotations.",
+	rarity = "Rare",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_nature",
+	catalogOnly = true,
+}
+
+ItemDefinitions.NightOwlPotion = {
+	displayName = "Night Owl Potion",
+	description = "A dark blue brew with a faint silver shine.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_night_owl",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ObsidianShield = {
+	displayName = "Obsidian Shield",
+	description = "A obsidian shield with a solid central boss.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "shield_obsidian",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ObsidianSkinPotion = {
+	displayName = "Obsidian Skin Potion",
+	description = "A black tonic with a glossy, stone-like sheen.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_obsidian_skin",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Pelt = {
+	displayName = "Pelt",
+	description = "A thick animal hide with its fur intact.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "pelt",
+}
+
+ItemDefinitions.Pineapple = {
+	displayName = "Pineapple",
+	description = "A spiky tropical fruit with golden flesh.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "pineapple",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PinkGel = {
+	displayName = "Pink Gel",
+	description = "Soft pink gel with an unusually elastic texture.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "gel_pink",
+}
+
+ItemDefinitions.PixieDust = {
+	displayName = "Pixie Dust",
+	description = "Fine golden dust that glitters as it settles.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "pixie_dust",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PlatinumArmor = {
+	displayName = "Platinum Armor",
+	description = "A suit of platinum plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_platinum",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PlatinumCoin = {
+	displayName = "Platinum Coin",
+	description = "A stamped platinum coin with a worn rim.",
+	rarity = "Rare",
+	classification = "Currency",
+	maxStack = 999,
+	sprite = "coin_platinum",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PlatinumGreaves = {
+	displayName = "Platinum Greaves",
+	description = "A pair of greaves made from platinum plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_platinum",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PlatinumHelmet = {
+	displayName = "Platinum Helmet",
+	description = "A shaped helmet of platinum plates.",
+	rarity = "Rare",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_platinum",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PlatinumIngot = {
+	displayName = "Platinum Ingot",
+	description = "A refined bar of platinum, ready for a smith's work.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_platinum",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PlatinumOre = {
+	displayName = "Platinum Ore",
+	description = "Raw platinum ore with veins running through the stone.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_platinum",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PowerGlove = {
+	displayName = "Power Glove",
+	description = "A power glove with reinforced fingers.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "glove_power",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Pumpkin = {
+	displayName = "Pumpkin",
+	description = "A round orange pumpkin with a thick rind.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "pumpkin",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PurpleCape = {
+	displayName = "Purple Cape",
+	description = "A long purple cape fastened with a simple clasp.",
+	rarity = "Uncommon",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "cape_purple",
+	catalogOnly = true,
+}
+
+ItemDefinitions.PurpleCloth = {
+	displayName = "Purple Cloth",
+	description = "A neatly folded piece of purple cloth.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "cloth_purple",
+}
+
+ItemDefinitions.PurpleGel = {
+	displayName = "Purple Gel",
+	description = "Dark violet gel flecked with strange residue.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "gel_purple",
+}
+
+ItemDefinitions.RagePotion = {
+	displayName = "Rage Potion",
+	description = "A fiery red brew with a harsh, smoky scent.",
+	rarity = "Rare",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_rage",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RangerEmblem = {
+	displayName = "Ranger Emblem",
+	description = "An engraved emblem bearing the symbol of the ranger.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "emblem_ranger",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RawMeat = {
+	displayName = "Raw Meat",
+	description = "A fresh cut of uncooked meat.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "meat_raw",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RedCape = {
+	displayName = "Red Cape",
+	description = "A long red cape fastened with a simple clasp.",
+	rarity = "Uncommon",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "cape_red",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RedCloth = {
+	displayName = "Red Cloth",
+	description = "A neatly folded piece of red cloth.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "cloth_red",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RedFeather = {
+	displayName = "Red Feather",
+	description = "A bright red feather with a dark quill.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "feather_red",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RedScale = {
+	displayName = "Red Scale",
+	description = "A tough red scale from a creature's hide.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "scale_red",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RegenerationPotion = {
+	displayName = "Regeneration Potion",
+	description = "A rose-colored brew with a slow, steady shimmer.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_regeneration",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RegenerationRing = {
+	displayName = "Regeneration Ring",
+	description = "A regeneration ring with carefully worked markings.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "ring_regeneration",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RocketBoots = {
+	displayName = "Rocket Boots",
+	description = "A pair of rocket boots with reinforced soles.",
+	rarity = "Epic",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "boots_rocket",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Rope = {
+	displayName = "Rope",
+	description = "Twisted cord for tying things together.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "rope",
+	catalogOnly = true,
+}
+
+ItemDefinitions.RottenChunk = {
+	displayName = "Rotten Chunk",
+	description = "A foul scrap of decaying flesh.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "rotten_chunk",
+}
+
+ItemDefinitions.Ruby = {
+	displayName = "Ruby",
+	description = "A cut ruby with bright, glassy facets.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "gem_ruby",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Sapphire = {
+	displayName = "Sapphire",
+	description = "A cut sapphire with bright, glassy facets.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "gem_sapphire",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ShadowKey = {
+	displayName = "Shadow Key",
+	description = "A shadow key with an intricate, unfamiliar cut.",
+	rarity = "Epic",
+	classification = "Key",
+	maxStack = 99,
+	sprite = "key_shadow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ShadowOrb = {
+	displayName = "Shadow Orb",
+	description = "A smooth orb holding a flicker of shadow energy.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "orb_shadow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ShadowTome = {
+	displayName = "Shadow Tome",
+	description = "A bound volume of shadow lore, covered in careful annotations.",
+	rarity = "Epic",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_shadow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ShinePotion = {
+	displayName = "Shine Potion",
+	description = "A golden brew that glows inside its bottle.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_shine",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Shiverthorn = {
+	displayName = "Shiverthorn",
+	description = "A thorny plant dusted with frost.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "shiverthorn",
+}
+
+ItemDefinitions.SignusPouch = {
+	displayName = "Signus Pouch",
+	description = "A dark sealed pouch bearing the mark of Signus.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bag_signus",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SignusSigil = {
+	displayName = "Signus Sigil",
+	description = "An ominous sigil bearing the mark of Signus.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 20,
+	sprite = "sigil_signus",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Silk = {
+	displayName = "Silk",
+	description = "Smooth thread gathered from tangled spider webs.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "silk",
+}
+
+ItemDefinitions.SilverArmor = {
+	displayName = "Silver Armor",
+	description = "A suit of silver plates.",
+	rarity = "Uncommon",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SilverCoin = {
+	displayName = "Silver Coin",
+	description = "A stamped silver coin with a worn rim.",
+	rarity = "Uncommon",
+	classification = "Currency",
+	maxStack = 999,
+	sprite = "coin_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SilverGreaves = {
+	displayName = "Silver Greaves",
+	description = "A pair of greaves made from silver plates.",
+	rarity = "Uncommon",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SilverHelmet = {
+	displayName = "Silver Helmet",
+	description = "A shaped helmet of silver plates.",
+	rarity = "Uncommon",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SilverIngot = {
+	displayName = "Silver Ingot",
+	description = "A refined bar of silver, ready for a smith's work.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SilverOre = {
+	displayName = "Silver Ore",
+	description = "Raw silver ore with veins running through the stone.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SilverTrophy = {
+	displayName = "Silver Trophy",
+	description = "A polished silver trophy on a solid pedestal.",
+	rarity = "Rare",
+	classification = "Collectible",
+	maxStack = 1,
+	sprite = "trophy_silver",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Skull = {
+	displayName = "Skull",
+	description = "A bleached skull with empty, watchful sockets.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "skull",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SkullCrimson = {
+	displayName = "Skull Crimson",
+	description = "A red skull with deep cracks across its brow.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "skull_crimson",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SkullFrost = {
+	displayName = "Skull Frost",
+	description = "A pale skull crusted with frost.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "skull_frost",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SkullObsidian = {
+	displayName = "Skull Obsidian",
+	description = "A skull carved from glossy black stone.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "skull_obsidian",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SlimePouch = {
+	displayName = "Slime Pouch",
+	description = "A sticky pouch marked with a slime emblem.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "bag_slime",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SnowPelt = {
+	displayName = "Snow Pelt",
+	description = "A pale pelt that kept its owner warm in the snow.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "pelt_snow",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Soda = {
+	displayName = "Soda",
+	description = "A bright, fizzy bottled drink.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "drink_soda",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SorcererEmblem = {
+	displayName = "Sorcerer Emblem",
+	description = "An engraved emblem bearing the symbol of the sorcerer.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "emblem_sorcerer",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SoulofFlight = {
+	displayName = "Soul of Flight",
+	description = "A restless wisp that never quite settles.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "soul_flight",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SoulofFright = {
+	displayName = "Soul of Fright",
+	description = "A shivering spirit fragment steeped in dread.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "soul_fright",
+}
+
+ItemDefinitions.SoulofLight = {
+	displayName = "Soul of Light",
+	description = "A radiant wisp of life, bright even in shadow.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "soul_light",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SoulofMight = {
+	displayName = "Soul of Might",
+	description = "A dense spirit fragment left by an immense creature.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "soul_might",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SoulofNight = {
+	displayName = "Soul of Night",
+	description = "A dark wisp that curls away from the light.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "soul_night",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SoulofSight = {
+	displayName = "Soul of Sight",
+	description = "A watchful spirit fragment with a shifting inner glow.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "soul_sight",
+}
+
+ItemDefinitions.Soup = {
+	displayName = "Soup",
+	description = "A warm bowl of simple vegetable broth.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "soup",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SpeedBoots = {
+	displayName = "Speed Boots",
+	description = "A pair of speed boots with reinforced soles.",
+	rarity = "Uncommon",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "boots_speed",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SpelunkerPotion = {
+	displayName = "Spelunker Potion",
+	description = "A golden tonic with glittering mineral flecks.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_spelunker",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Spores = {
+	displayName = "Spores",
+	description = "A pouch of tiny spores gathered from damp growth.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "spores",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Stew = {
+	displayName = "Stew",
+	description = "A hearty bowl of meat and vegetables.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "stew",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Stinger = {
+	displayName = "Stinger",
+	description = "A barbed insect stinger with a hollow tip.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "stinger",
+}
+
+ItemDefinitions.StrengthPotion = {
+	displayName = "Strength Potion",
+	description = "A dark red tonic with a sharp, earthy scent.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_strength",
+	catalogOnly = true,
+}
+
+ItemDefinitions.String = {
+	displayName = "String",
+	description = "A length of fine thread for binding small components.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "string",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SummonerEmblem = {
+	displayName = "Summoner Emblem",
+	description = "An engraved emblem bearing the symbol of the summoner.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "emblem_summoner",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SummoningPotion = {
+	displayName = "Summoning Potion",
+	description = "A cloudy purple brew with shifting shapes inside.",
+	rarity = "Rare",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_summoning",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SunCharm = {
+	displayName = "Sun Charm",
+	description = "A golden charm with rays around its center.",
+	rarity = "Uncommon",
+	classification = "Collectible",
+	maxStack = 99,
+	sprite = "sun_charm",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SuperHealingPotion = {
+	displayName = "Super Healing Potion",
+	description = "A brilliant red tonic in an ornate bottle.",
+	rarity = "Epic",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_healing_super",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SuspiciousEye = {
+	displayName = "Suspicious Eye",
+	description = "An unsettling eye that seems to follow movement.",
+	rarity = "Epic",
+	classification = "Collectible",
+	maxStack = 20,
+	sprite = "suspicious_eye",
+	catalogOnly = true,
+}
+
+ItemDefinitions.SwiftnessPotion = {
+	displayName = "Swiftness Potion",
+	description = "A light blue brew with bubbles that race to the surface.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_swiftness",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Tea = {
+	displayName = "Tea",
+	description = "A fragrant brew of steeped leaves.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "drink_tea",
+	catalogOnly = true,
+}
+
+ItemDefinitions.ThornsPotion = {
+	displayName = "Thorns Potion",
+	description = "A green tonic steeped with thorny stems.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_thorns",
+	catalogOnly = true,
+}
+
+ItemDefinitions.TinGreaves = {
+	displayName = "Tin Greaves",
+	description = "A pair of greaves made from tin plates.",
+	rarity = "Common",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_tin",
+	catalogOnly = true,
+}
+
+ItemDefinitions.TinHelmet = {
+	displayName = "Tin Helmet",
+	description = "A shaped helmet of tin plates.",
+	rarity = "Common",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_tin",
+	catalogOnly = true,
+}
+
+ItemDefinitions.TinIngot = {
+	displayName = "Tin Ingot",
+	description = "A refined bar of tin, ready for a smith's work.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_tin",
+	catalogOnly = true,
+}
+
+ItemDefinitions.TinOre = {
+	displayName = "Tin Ore",
+	description = "Raw tin ore with veins running through the stone.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_tin",
+	catalogOnly = true,
+}
+
+ItemDefinitions.TitanGlove = {
+	displayName = "Titan Glove",
+	description = "A titan glove with reinforced fingers.",
+	rarity = "Epic",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "glove_titan",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Topaz = {
+	displayName = "Topaz",
+	description = "A cut topaz with bright, glassy facets.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "gem_topaz",
+	catalogOnly = true,
+}
+
+ItemDefinitions.TurtleShell = {
+	displayName = "Turtle Shell",
+	description = "A broad shell covered in overlapping plates.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "shell_turtle",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VenomFlask = {
+	displayName = "Venom Flask",
+	description = "A sealed flask of cloudy venom.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "flask_venom",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VenomSac = {
+	displayName = "Venom Sac",
+	description = "A fragile sac of venom. Handle it with care.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "venom_sac",
+}
+
+ItemDefinitions.VoidAmulet = {
+	displayName = "Void Amulet",
+	description = "An amulet set around a void centerpiece.",
+	rarity = "Legendary",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "amulet_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VoidArmor = {
+	displayName = "Void Armor",
+	description = "A suit of void plates.",
+	rarity = "Legendary",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "armor_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VoidGreaves = {
+	displayName = "Void Greaves",
+	description = "A pair of greaves made from void plates.",
+	rarity = "Legendary",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "greaves_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VoidHelmet = {
+	displayName = "Void Helmet",
+	description = "A shaped helmet of void plates.",
+	rarity = "Legendary",
+	classification = "Armor",
+	maxStack = 1,
+	sprite = "helmet_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VoidIngot = {
+	displayName = "Void Ingot",
+	description = "A refined bar of void, ready for a smith's work.",
+	rarity = "Legendary",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bar_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VoidLens = {
+	displayName = "Void Lens",
+	description = "An eerie lens with a depth that is difficult to judge.",
+	rarity = "Epic",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "lens_void",
+}
+
+ItemDefinitions.VoidOre = {
+	displayName = "Void Ore",
+	description = "Raw void ore with veins running through the stone.",
+	rarity = "Legendary",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "ore_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VoidOreBlock = {
+	displayName = "Void Ore Block",
+	description = "A stone sample threaded with void ore.",
+	rarity = "Legendary",
+	classification = "Collectible",
+	maxStack = 999,
+	sprite = "block_void_ore",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VoidRing = {
+	displayName = "Void Ring",
+	description = "A void ring with carefully worked markings.",
+	rarity = "Legendary",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "ring_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.VoidTome = {
+	displayName = "Void Tome",
+	description = "A bound volume of void lore, covered in careful annotations.",
+	rarity = "Legendary",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_void",
+	catalogOnly = true,
+}
+
+ItemDefinitions.WarmthPotion = {
+	displayName = "Warmth Potion",
+	description = "An orange tonic that warms the glass around it.",
+	rarity = "Uncommon",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_warmth",
+	catalogOnly = true,
+}
+
+ItemDefinitions.WarriorEmblem = {
+	displayName = "Warrior Emblem",
+	description = "An engraved emblem bearing the symbol of the warrior.",
+	rarity = "Rare",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "emblem_warrior",
+	catalogOnly = true,
+}
+
+ItemDefinitions.WaterBottle = {
+	displayName = "Water Bottle",
+	description = "A clear glass bottle filled with water.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "bottle_water",
+	catalogOnly = true,
+}
+
+ItemDefinitions.WaterOrb = {
+	displayName = "Water Orb",
+	description = "A smooth orb holding a flicker of water energy.",
+	rarity = "Rare",
+	classification = "Material",
+	maxStack = 99,
+	sprite = "orb_water",
+	catalogOnly = true,
+}
+
+ItemDefinitions.WaterTome = {
+	displayName = "Water Tome",
+	description = "A bound volume of water lore, covered in careful annotations.",
+	rarity = "Rare",
+	classification = "Tome",
+	maxStack = 1,
+	sprite = "tome_water",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Waterleaf = {
+	displayName = "Waterleaf",
+	description = "A succulent herb with water-heavy leaves.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "waterleaf",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Watermelon = {
+	displayName = "Watermelon",
+	description = "A striped melon with sweet red flesh.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "watermelon",
+	catalogOnly = true,
+}
+
+ItemDefinitions.WhitePumpkin = {
+	displayName = "White Pumpkin",
+	description = "A pale pumpkin with a firm white rind.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "pumpkin_white",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Wine = {
+	displayName = "Wine",
+	description = "A bottle of deep red fruit wine.",
+	rarity = "Common",
+	classification = "Food",
+	maxStack = 99,
+	sprite = "drink_wine",
+	catalogOnly = true,
+}
+
+ItemDefinitions.WoodCrate = {
+	displayName = "Wood Crate",
+	description = "A sealed wooden crate with reinforced corners.",
+	rarity = "Common",
+	classification = "Collectible",
+	maxStack = 16,
+	sprite = "crate_wood",
+	catalogOnly = true,
+}
+
+ItemDefinitions.WoodShield = {
+	displayName = "Wood Shield",
+	description = "A wood shield with a solid central boss.",
+	rarity = "Common",
+	classification = "Accessory",
+	maxStack = 1,
+	sprite = "shield_wood",
+	catalogOnly = true,
+}
+
+ItemDefinitions.Wool = {
+	displayName = "Wool",
+	description = "A soft bundle of wool from a shaggy coat.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	sprite = "wool",
+}
+
+ItemDefinitions.WrathPotion = {
+	displayName = "Wrath Potion",
+	description = "A deep violet tonic with restless swirls.",
+	rarity = "Rare",
+	classification = "Consumable",
+	maxStack = 99,
+	sprite = "potion_wrath",
+	catalogOnly = true,
 }
 
 return ItemDefinitions

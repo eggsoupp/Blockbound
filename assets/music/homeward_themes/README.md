@@ -46,3 +46,10 @@ Rebuild with the bundled Python: `python -I compose_bosses.py`. Checks are in va
 
 Post-drop loudness is -14.5 dBFS RMS (Allseeingeye -13.9), each drop about 10 dB above its intro, peaks about -1 dBFS.
 Grit, lead, bass and drone voices are synthesized in the script; everything else is GeneralUser GS.
+
+## Additional night variants (compose_night_variants.py)
+
+- night1 - Lanterns Aloft: 95.8 seconds. A warm night exploration piece: slow Homeward piano recollections between soft guitar, strings and long pauses in the melody.
+- night2 - Beyond the Firelight: 92.5 seconds. An independent D-Dorian night melody: low clarinet calls, soft electric piano and sparse nylon guitar, with a quietly hopeful ending.
+
+WAV and editable MIDI for each; details in README_night_variants.md.

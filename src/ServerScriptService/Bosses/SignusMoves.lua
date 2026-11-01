@@ -16,14 +16,16 @@ local CELL=4
 	trench toward them.
 ]]
 local BEAM={
- charge={1.5,1.35},lock=.55,fire={3,3.8},collapse=.35,
- range={130,170},radius={4.5,6},tick=.25,damage={6,7},cap={32,40},
- track=140,sweep={0,15}, -- degrees a second: during the charge, and after firing
+ charge={1.15,.95},lock=.3,fire={2.4,2.85},collapse=.35,
+ range={145,180},radius={6,7.5},tick=.25,damage={8,10},cap={40,52},
+ track=160,sweep={12,36}, -- cut inward or change direction instead of kiting at long range
  bore={10,24},boreEvery={.32,.24},rend=8,
  standoff=20,backoff=16, -- studs it wants between it and its target, and how fast it backs off
  burn=12, -- its own rubble vaporised per beam
  depth=2, -- cells below where it first met the ground that it will dig to
 }
+local STORM={warn={.9,.75},active={1.8,1.7},strike=.22,radius={17,19},damage={34,40},cap={34,60}}
+local JUDGMENT={warn={.85,.72},travel={.38,.3},active={1.75,1.65},strike=.16,radius={16,18},damage={38,44},cap={38,64}}
 --[[
 	Cells its spells have dropped a block into. Committed rubble is recorded
 	as a placement, exactly like a block a player put down, so this is the only
@@ -145,9 +147,14 @@ function Moves.create(ctx)
   until os.clock()-began>=seconds
   update(1);return true
  end
- local function target(entry)
+ local function predicted(root,seconds)
+  local velocity=Vector3.new(root.AssemblyLinearVelocity.X,0,root.AssemblyLinearVelocity.Z)
+  if velocity.Magnitude>25 then velocity=velocity.Unit*25 end
+  return ctx.ground(root.Position+velocity*seconds)
+ end
+ local function target(entry,lead)
   local player=ctx.pickTarget(entry);local root=ctx.root(player)
-  if root then entry.focus=player;return ctx.ground(root.Position),root end
+  if root then entry.focus=player;return predicted(root,lead or 0),root end
  end
  local function hit(entry,point,radius,amount,ledger,key,cap)
   for _,p in ipairs(ctx.playersInCircle(point,radius)) do
@@ -178,84 +185,92 @@ function Moves.create(ctx)
 
  -- UMBRAL MAELSTROM. Phase two opens a second, smaller storm beside the first.
  local function maelstrom(entry,phase,centre,radius,cells,ledger,key,main)
+  local M=STORM;local warn,active=M.warn[phase],M.active[phase]
   local plan=Terrain:PlanExcavation(columns(centre,radius,1),{maxCells=cells})
-  cast(entry,"SpiralCast",centre,centre,4.6,radius,{Phase=phase})
-  if not ctx.pause(entry,1.25) then return end -- fixed warning; no chasing the player
+  cast(entry,"SpiralCast",centre,centre,warn+active+.35,radius,{Phase=phase,Warning=warn,StrikeAt=warn+active*M.strike,Active=active})
+  if not ctx.pause(entry,warn) then return end -- centre stays fixed after the warning appears
   if main then ctx.pose(entry,"raise",.22) end
   local blocks=displace(entry.scope,plan,centre,radius,"orbit")
   moved(entry,blocks.count)
   local erupted=false
-  if not run(entry,2.75,function(t)
+  if not run(entry,active,function(t)
    blocks:update(t)
-   if t>.4 and not erupted then
+   if t>=M.strike and not erupted then
     erupted=true;if main then ctx.pose(entry,"slam",.12) end
-    hit(entry,centre,radius,if phase==2 then 31 else 26,ledger,key,if phase==2 then 44 else 26)
+    hit(entry,centre,radius,M.damage[phase],ledger,key,M.cap[phase])
     ctx.fx("referenceImpact",centre,{style="spiral",radius=radius,phase=phase})
    end
   end) then return end
   blocks:finish()
  end
  function moves.spiral(entry,phase)
-  local centre=target(entry);if not centre then return end
-  local radius=if phase==2 then 14 else 12
+  local centre=target(entry,if phase==2 then .4 else .2);if not centre then return end
+  local radius=STORM.radius[phase]
   entry.motion="hold";lift(entry);ctx.pose(entry,"gather",.35)
   entry.model:SetAttribute("SignusLastMovedBlocks",0)
   local ledger={};local pending={count=0}
   if phase==2 then
-   local twin=besides(entry,centre,radius*1.8)
    pending.count+=1
    entry.scope:spawn(function()
-    if ctx.pause(entry,.45) then maelstrom(entry,phase,twin,radius-3,16,ledger,"spiral2",false) end
+    if ctx.pause(entry,.55) then
+     local root=ctx.root(entry.focus)
+     local twin=if root then predicted(root,.25) else besides(entry,centre,radius*1.8)
+     maelstrom(entry,phase,twin,15,16,ledger,"spiral2",false)
+    end
     pending.count-=1
    end)
   end
   maelstrom(entry,phase,centre,radius,28,ledger,"spiral",true)
   if not settle(entry,pending) then return end
-  ctx.pose(entry,"rest",.4);ctx.pause(entry,.6)
+  ctx.pose(entry,"rest",.25);ctx.pause(entry,.25)
  end
 
  -- ECLIPSE JUDGMENT. Phase two calls down two more columns either side.
  local function judgment(entry,phase,centre,radius,cells,ledger,key,main)
+  local J=JUDGMENT;local warn,travel,active=J.warn[phase],J.travel[phase],J.active[phase]
   local origin=ctx.hand(entry)
   local plan=Terrain:PlanExcavation(columns(centre,radius,2),{maxCells=cells})
-  cast(entry,"LanceCast",origin,centre,5.4,radius,{Phase=phase})
-  if not ctx.pause(entry,1.3) then return end
+  cast(entry,"LanceCast",origin,centre,warn+travel+active+.4,radius,{Phase=phase,Warning=warn,Travel=travel,StrikeAt=warn+travel+active*J.strike,Active=active})
+  if not ctx.pause(entry,warn) then return end
   if main then ctx.pose(entry,"release",.18) end
-  if not ctx.pause(entry,.65) then return end
+  if not ctx.pause(entry,travel) then return end
   if main then ctx.pose(entry,"raise",.2) end
   local blocks=displace(entry.scope,plan,centre,radius,"column")
   moved(entry,blocks.count)
   local struck=false
-  if not run(entry,2.65,function(t)
+  if not run(entry,active,function(t)
    blocks:update(t)
-   if t>.23 and not struck then
+   if t>=J.strike and not struck then
     struck=true
-    hit(entry,centre,radius,if main then (if phase==2 then 36 else 30) else 22,ledger,key,if phase==2 then 48 else 30)
+    hit(entry,centre,radius,if main then J.damage[phase] else 28,ledger,key,J.cap[phase])
     ctx.fx("referenceImpact",centre,{style="lance",radius=radius,phase=phase})
    end
   end) then return end
   blocks:finish()
  end
  function moves.lance(entry,phase)
-  local centre=target(entry);if not centre then return end
+  local centre=target(entry,if phase==2 then .25 else .2);if not centre then return end
   entry.motion="hold";lift(entry);ctx.pose(entry,"gather",.35)
   entry.model:SetAttribute("SignusLastMovedBlocks",0)
-  local radius=if phase==2 then 12 else 10
+  local radius=JUDGMENT.radius[phase]
   local ledger={};local pending={count=0}
   if phase==2 then
    local toward=ctx.flat(centre-entry.position);local side=Vector3.new(-toward.Z,0,toward.X)
    for i,s in ipairs({-1,1}) do
-    local spot=ctx.ground(centre+side*s*17+toward*4)
     pending.count+=1
     entry.scope:spawn(function()
-     if ctx.pause(entry,.3*i) then judgment(entry,phase,spot,8,10,ledger,"lance"..i,false) end
+     if ctx.pause(entry,.45*i) then
+      local root=ctx.root(entry.focus)
+      local spot=ctx.ground((if root then predicted(root,.25) else centre)+side*s*8)
+      judgment(entry,phase,spot,15,10,ledger,"lance"..i,false)
+     end
      pending.count-=1
     end)
    end
   end
   judgment(entry,phase,centre,radius,32,ledger,"lance",true)
   if not settle(entry,pending) then return end
-  ctx.pose(entry,"rest",.4);ctx.pause(entry,.8)
+  ctx.pose(entry,"rest",.25);ctx.pause(entry,.3)
  end
 
  function moves.beam(entry,phase)
@@ -363,7 +378,7 @@ function Moves.create(ctx)
      end
      ctx.fx("beamImpact",block.Position,{normal=block.Normal,phase=phase})
     end
-    local nowTick=math.floor(age/B.tick)
+    local nowTick=math.floor((age-charge)/B.tick)
     if nowTick~=tick then
      tick=nowTick
      local delta=finish-origin
@@ -385,7 +400,7 @@ function Moves.create(ctx)
   -- The collapse, and whatever is still in the air coming down.
   if not run(entry,1.1,function(t) carry(total+t*1.1) end) then return end
   for _,g in ipairs(groups) do if not g.done then g.moved:finish() end end
-  ctx.pause(entry,.5)
+  ctx.pause(entry,.15)
  end
 
  -- TOTALITY. It climbs, the sky goes to eclipse, the ground orbits it, and at

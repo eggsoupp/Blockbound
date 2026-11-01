@@ -140,6 +140,7 @@ function WeaponConfig.get(itemName)
 	end
 
 	local stats = {
+		weaponClass = definition.weaponClass or "Sword",
 		name = itemName,
 		damage = math.max(1, math.floor(damage + 0.5)),
 		cooldown = math.max(0.05, cooldown),

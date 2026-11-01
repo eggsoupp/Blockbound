@@ -27,6 +27,9 @@
       "StarterPlayerScripts": {
         "$className": "StarterPlayerScripts",
         "$ignoreUnknownInstances": true,
+        "WorldBorderClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/WorldBorderClient.client.lua"
+        },
         "PauseMenu": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/PauseMenu.client.lua",
           "$properties": {
@@ -222,6 +225,15 @@
     "ReplicatedStorage": {
       "$className": "ReplicatedStorage",
       "$ignoreUnknownInstances": true,
+      "SignusLibrary": {
+        "$path": "assets/signus-hallow/roblox/SignusLibrary.rbxm"
+      },
+      "AbilityVFXLibrary": {
+        "$path": "assets/vfx-library/AbilityVFXLibrary.rbxm"
+      },
+      "WorldBorderForceField": {
+        "$path": "assets/vfx-library/WorldBorderForceField.rbxm"
+      },
       "Perlin": {
         "$path": "src/ReplicatedStorage/Perlin.lua"
       },
@@ -460,6 +472,9 @@
           "LocomotionAnimations": {
             "$path": "src/ReplicatedStorage/Shared/Tools/LocomotionAnimations.lua"
           },
+          "LocomotionProfiles": {
+            "$path": "src/ReplicatedStorage/Shared/Tools/LocomotionProfiles.lua"
+          },
           "SwingAnimations": {
             "$path": "src/ReplicatedStorage/Shared/Tools/SwingAnimations.lua"
           }
@@ -501,6 +516,9 @@
           },
           "SwordCombo": {
             "$path": "src/ReplicatedStorage/Shared/Combat/SwordCombo.lua"
+          },
+          "WeaponAnimations": {
+            "$path": "src/ReplicatedStorage/Shared/Combat/WeaponAnimations.lua"
           }
         },
         "Abilities": {
@@ -515,17 +533,14 @@
           "VFX": {
             "$className": "Folder",
             "$ignoreUnknownInstances": true,
+            "PackAssembly": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/PackAssembly.lua"
+            },
             "SignusVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusVFX.lua"
             },
             "CataclysmVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CataclysmVFX.lua"
-            },
-            "VoidRendVFX": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/VoidRendVFX.lua"
-            },
-            "VoidRendParticles": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/VoidRendParticles.lua"
             },
             "CataclysmCamera": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CataclysmCamera.lua"
@@ -559,6 +574,9 @@
             },
             "SignusChoreography": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusChoreography.lua"
+            },
+            "SignusAssemblies": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusAssemblies.lua"
             },
             "ImpactFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/ImpactFX.lua"
@@ -611,8 +629,8 @@
             "CometVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CometVFX.lua"
             },
-            "CometParticles": {
-              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CometParticles.lua"
+            "ThunderVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/ThunderVFX.lua"
             },
             "TideVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/TideVFX.lua"
@@ -631,6 +649,12 @@
             },
             "AstralParticles": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/AstralParticles.lua"
+            },
+            "LegendaryVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/LegendaryVFX.lua"
+            },
+            "ReferenceVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/ReferenceVFX.lua"
             }
           },
           "StorageConfig": {
@@ -638,9 +662,6 @@
           },
           "CataclysmPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/CataclysmPlan.lua"
-          },
-          "VoidRendPlan": {
-            "$path": "src/ReplicatedStorage/Shared/Abilities/VoidRendPlan.lua"
           },
           "DawnbreakerPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/DawnbreakerPlan.lua"
@@ -666,6 +687,9 @@
           "CometPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/CometPlan.lua"
           },
+          "ThunderPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/ThunderPlan.lua"
+          },
           "TidePlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/TidePlan.lua"
           },
@@ -677,6 +701,9 @@
           },
           "StarterPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/StarterPlan.lua"
+          },
+          "ReferencePlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/ReferencePlan.lua"
           }
         },
         "Permissions": {
@@ -685,6 +712,15 @@
         "PlaceConfig": {
           "$path": "src/ReplicatedStorage/Shared/PlaceConfig.lua"
         }
+      },
+      "LegendaryAbilitySources": {
+        "$path": "assets/vfx-library/LegendaryAbilitySources.rbxm"
+      },
+      "LegendaryExplosionSources": {
+        "$path": "assets/vfx-library/LegendaryExplosionSources.rbxm"
+      },
+      "ReferenceAbilitySources": {
+        "$path": "assets/vfx-library/ReferenceAbilitySources.rbxm"
       }
     },
     "ServerScriptService": {
@@ -692,6 +728,9 @@
       "$ignoreUnknownInstances": true,
       "LightingPreset": {
         "$path": "src/ServerScriptService/LightingPreset.server.lua"
+      },
+      "WorldBorder": {
+        "$path": "src/ServerScriptService/WorldBorder.server.lua"
       },
       "WorldClock": {
         "$path": "src/ServerScriptService/WorldClock.lua"
@@ -819,9 +858,6 @@
         "Cataclysm": {
           "$path": "src/ServerScriptService/Abilities/Cataclysm.lua"
         },
-        "VoidRend": {
-          "$path": "src/ServerScriptService/Abilities/VoidRend.lua"
-        },
         "Dawnbreaker": {
           "$path": "src/ServerScriptService/Abilities/Dawnbreaker.lua"
         },
@@ -846,6 +882,9 @@
         "AzureComet": {
           "$path": "src/ServerScriptService/Abilities/AzureComet.lua"
         },
+        "Thunderhead": {
+          "$path": "src/ServerScriptService/Abilities/Thunderhead.lua"
+        },
         "Tidecaller": {
           "$path": "src/ServerScriptService/Abilities/Tidecaller.lua"
         },
@@ -857,6 +896,9 @@
         },
         "StarterAbilities": {
           "$path": "src/ServerScriptService/Abilities/StarterAbilities.lua"
+        },
+        "ReferenceAbilities": {
+          "$path": "src/ServerScriptService/Abilities/ReferenceAbilities.lua"
         }
       },
       "InitAbilities": {

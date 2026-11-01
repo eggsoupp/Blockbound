@@ -2,8 +2,7 @@
 	spring-crouch-walk
 
 	Sprint on Shift, crouch on C, with the field of view widening as you run.
-	The run animation here is for empty hands; with a tool out, ToolWalk plays
-	that tool's own run instead.
+	ToolWalk owns all grounded animations; this script only sets speed and FOV.
 
 	StarterCharacterScripts, so it re-runs per character and every reference
 	below belongs to the body it is holding.
@@ -29,7 +28,6 @@ local humanoid = character:WaitForChild("Humanoid")
 local camera = workspace.CurrentCamera
 
 -- === Editable config ===
-local ANIM_ID = 10862419793
 local NORMAL_SPEED = 16
 local RUN_SPEED = 25
 local CROUCH_SPEED = 8
@@ -42,27 +40,6 @@ local CROUCH_HIP_OFFSET = -1 -- studs taken off HipHeight while crouched
 -- Below this the run animation stops; above it, and sprinting, it plays.
 local RUN_ANIMATION_SPEED = 10
 
-local runAnimation = Instance.new("Animation")
-runAnimation.AnimationId = "rbxassetid://" .. ANIM_ID
-
---[[
-	Loaded through the Animator, not the Humanoid: Humanoid:LoadAnimation has
-	been deprecated for years and does not work at all from a LocalScript in
-	some contexts.
-
-	Roblox makes an Animator with the Humanoid, so the wait is about ordering -
-	but one is created if it somehow is not there, because a nil track would
-	turn a missing animation into half a dozen runtime errors below.
-]]
-local animator = humanoid:FindFirstChildOfClass("Animator")
-	or humanoid:WaitForChild("Animator", 5)
-if not animator then
-	animator = Instance.new("Animator")
-	animator.Parent = humanoid
-end
-
-local runTrack = animator:LoadAnimation(runAnimation)
-
 local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
 local tweenSprint = TweenService:Create(camera, tweenInfo, { FieldOfView = SPRINT_FOV })
 local tweenNormal = TweenService:Create(camera, tweenInfo, { FieldOfView = NORMAL_FOV })
@@ -70,53 +47,11 @@ local tweenNormal = TweenService:Create(camera, tweenInfo, { FieldOfView = NORMA
 local isSprinting = false
 local isCrouching = false
 
---[[
-	Whether the player is in the run - sprinting and actually moving at it.
-
-	Its own flag rather than runTrack.IsPlaying, which it used to be: the run
-	ANIMATION now only plays with empty hands, because a held tool has a run of
-	its own (StarterPlayerScripts.ToolWalk, ToolConfig.RunAnimations). The field
-	of view still follows running whatever is held, so it needs a state that
-	does not depend on the animation.
-]]
+-- ToolWalk is the sole grounded animation controller.
 local runMode = false
-
-local function holdingTool()
-	return character:FindFirstChildOfClass("Tool") ~= nil
-end
-
---[[
-	ToolWalk now plays a run for empty hands too (ToolConfig.RunAnimations.
-	Default), so this script's own run animation never plays; it is kept
-	stopped rather than deleted so switching back is one line.
-]]
-local OWN_RUN_ANIMATION = false
-
-local function syncRunAnimation()
-	local wanted = OWN_RUN_ANIMATION and runMode and not holdingTool()
-	if wanted and not runTrack.IsPlaying then
-		runTrack:Play()
-	elseif not wanted and runTrack.IsPlaying then
-		runTrack:Stop()
-	end
-end
-
 local function setRunMode(on)
-	runMode = on
-	syncRunAnimation()
+    runMode = on
 end
-
--- Taking a tool out mid-run hands the run to ToolWalk; putting it away takes it back.
-character.ChildAdded:Connect(function(child)
-	if child:IsA("Tool") then
-		syncRunAnimation()
-	end
-end)
-character.ChildRemoved:Connect(function(child)
-	if child:IsA("Tool") then
-		syncRunAnimation()
-	end
-end)
 
 -- The one place WalkSpeed is written, so crouching while sprinting and
 -- releasing either one cannot leave the two states disagreeing about it.
@@ -124,6 +59,7 @@ end)
 -- spider's web) scales whichever speed applies, and is re-applied when it
 -- changes, so being slowed mid-sprint and recovering both just work.
 local function applySpeed()
+	character:SetAttribute("Sprinting", isSprinting and not isCrouching)
 	local multiplier = character:GetAttribute("SpeedMultiplier") or 1
 	if isCrouching then
 		humanoid.WalkSpeed = CROUCH_SPEED * multiplier
@@ -167,6 +103,10 @@ local function setCrouching(crouching)
 end
 
 local function onSprint(_actionName, inputState)
+    if inputState == Enum.UserInputState.End or inputState == Enum.UserInputState.Cancel then
+        setSprinting(false)
+        return
+    end
 	if MenuState.isAnyOpen() then
 		return
 	end
@@ -221,5 +161,5 @@ humanoid.Jumping:Connect(function()
 	end
 end)
 
-humanoid.WalkSpeed = NORMAL_SPEED
+applySpeed()
 camera.FieldOfView = NORMAL_FOV

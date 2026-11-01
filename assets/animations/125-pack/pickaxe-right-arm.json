@@ -1,0 +1,9 @@
+{
+  "creatorGroupId": 275555347,
+  "weightedJoints": ["RightUpperArm", "RightLowerArm", "RightHand"],
+  "idle": {"source": 100990322178087, "published": 117479624548456},
+  "walk": {"source": 79693088484359, "published": 134569109224529},
+  "run": {"source": 79883353289365, "published": 133950607844393},
+  "mine": {"source": "Shared.Tools.SwingAnimations.build('PickaxeSwing')", "published": 87021460185064},
+  "notes": "All non-right-arm Pose weights are zero. Carry clips use Action; mining uses Action2. Unarmed Movement clips supply the rest of the body. Originals are preserved."
+}

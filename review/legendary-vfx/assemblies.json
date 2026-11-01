@@ -1,0 +1,464 @@
+[
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Soul Shroud Elementals.Flame Core",
+    "name": "RefFlameCore",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 5,
+      "PointLight": 1,
+      "ParticleEmitter": 14
+    },
+    "usedBy": [],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.SoulShroud Fire VFX.SS FIre VFX 9",
+    "name": "RefFire9",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "ParticleEmitter": 7
+    },
+    "usedBy": [
+      "WraithfireOrb"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.SoulShroud Fire VFX.SS FIre VFX 1",
+    "name": "RefFire1",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 3,
+      "ParticleEmitter": 12
+    },
+    "usedBy": [
+      "WraithfireOrb"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Soul Shroud Elementals.Lightning Surge",
+    "name": "RefLightning",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 2,
+      "ParticleEmitter": 4
+    },
+    "usedBy": [
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Portals.2",
+    "name": "RefPortal",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "PointLight": 1,
+      "ParticleEmitter": 10
+    },
+    "usedBy": [
+      "CelestialLance",
+      "WraithfireOrb",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.Ki (気) Blasts.Ki (気) Blast 1",
+    "name": "RefKi1",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Beam": 3,
+      "Model": 1,
+      "Part": 2,
+      "Attachment": 4,
+      "ParticleEmitter": 15
+    },
+    "usedBy": [
+      "WraithfireOrb"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.Ki (気) Blasts.Ki (気) Blast 2",
+    "name": "RefKi2",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Beam": 3,
+      "Model": 1,
+      "Part": 2,
+      "Attachment": 4,
+      "ParticleEmitter": 15
+    },
+    "usedBy": [
+      "CelestialLance",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.Weather VFX.Weather I.Stylized Thunder / Lightning ",
+    "name": "RefThunder",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 5,
+      "Attachment": 12,
+      "Model": 1,
+      "ParticleEmitter": 40
+    },
+    "usedBy": [
+      "VioletTempest"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #1",
+    "name": "RefImpact1",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 6,
+      "ParticleEmitter": 18
+    },
+    "usedBy": [
+      "CelestialLance",
+      "WraithfireOrb",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #10",
+    "name": "RefImpact10",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 2,
+      "Beam": 3,
+      "ParticleEmitter": 9
+    },
+    "usedBy": [],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #12",
+    "name": "RefImpact12",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 3,
+      "ParticleEmitter": 10
+    },
+    "usedBy": [
+      "CelestialLance",
+      "WraithfireOrb",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #20",
+    "name": "RefImpact20",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 11,
+      "Beam": 16,
+      "ParticleEmitter": 2
+    },
+    "usedBy": [],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #36",
+    "name": "RefImpact36",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "PointLight": 1,
+      "ParticleEmitter": 5
+    },
+    "usedBy": [
+      "WraithfireOrb",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #37",
+    "name": "RefImpact37",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "PointLight": 1,
+      "ParticleEmitter": 6
+    },
+    "usedBy": [
+      "CelestialLance",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #41",
+    "name": "RefImpact41",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 3,
+      "PointLight": 1,
+      "ParticleEmitter": 14
+    },
+    "usedBy": [
+      "WraithfireOrb"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #45",
+    "name": "RefImpact45",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "PointLight": 1,
+      "Attachment": 4,
+      "ParticleEmitter": 14
+    },
+    "usedBy": [
+      "CelestialLance",
+      "WraithfireOrb",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "name": "LegendWindSwirls",
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Wind Swirls",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 2,
+      "ParticleEmitter": 10
+    },
+    "usedBy": [
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "name": "LegendBlast",
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Blast",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Beam": 3,
+      "Model": 1,
+      "Part": 2,
+      "Attachment": 4,
+      "ParticleEmitter": 15
+    },
+    "usedBy": [
+      "CelestialLance"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "name": "LegendStylizedWind",
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Stylized Wind",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 6,
+      "ParticleEmitter": 25
+    },
+    "usedBy": [
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "name": "LegendLines",
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Soul Shroud Elementals.Lines",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "ParticleEmitter": 8
+    },
+    "usedBy": [
+      "CelestialLance",
+      "WraithfireOrb",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "name": "LegendCloudRipples",
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Soul Shroud Elementals.Stylized Cloud Ripples",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "ParticleEmitter": 4
+    },
+    "usedBy": [
+      "CelestialLance",
+      "WraithfireOrb",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "sourcePropertiesMatch": true
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #3.BZ1_SS3 VFX PART #64",
+    "name": "GiantBlueDetonation",
+    "counts": {
+      "Part": 1,
+      "Attachment": 2,
+      "ParticleEmitter": 14
+    },
+    "scripts": [],
+    "externalDependencies": [],
+    "sourcePropertiesMatch": true,
+    "usedBy": [
+      "WraithfireOrb",
+      "RiftMaelstrom"
+    ],
+    "fingerprint": {
+      "hash": 765349841,
+      "bytes": 14017,
+      "instances": 17
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #14",
+    "name": "GiantAzureShock",
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "ParticleEmitter": 14
+    },
+    "scripts": [],
+    "externalDependencies": [],
+    "sourcePropertiesMatch": true,
+    "usedBy": [
+      "CelestialLance",
+      "WraithfireOrb",
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "fingerprint": {
+      "hash": 1337715457,
+      "bytes": 13726,
+      "instances": 16
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #102",
+    "name": "GiantArcBurst",
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "ParticleEmitter": 19
+    },
+    "scripts": [],
+    "externalDependencies": [],
+    "sourcePropertiesMatch": true,
+    "usedBy": [
+      "CelestialLance",
+      "WraithfireOrb",
+      "VioletTempest"
+    ],
+    "fingerprint": {
+      "hash": 3064324426,
+      "bytes": 18119,
+      "instances": 21
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #131",
+    "name": "GiantVioletCrown",
+    "counts": {
+      "Part": 1,
+      "Attachment": 1,
+      "ParticleEmitter": 18
+    },
+    "scripts": [],
+    "externalDependencies": [],
+    "sourcePropertiesMatch": true,
+    "usedBy": [
+      "VioletTempest",
+      "RiftMaelstrom"
+    ],
+    "fingerprint": {
+      "hash": 2054095392,
+      "bytes": 16814,
+      "instances": 20
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #27",
+    "name": "GiantMintRings",
+    "counts": {
+      "PointLight": 2,
+      "Beam": 4,
+      "Model": 1,
+      "Attachment": 11,
+      "ParticleEmitter": 6,
+      "MeshPart": 1
+    },
+    "scripts": [],
+    "externalDependencies": [],
+    "sourcePropertiesMatch": true,
+    "usedBy": [
+      "CelestialLance",
+      "RiftMaelstrom"
+    ],
+    "fingerprint": {
+      "hash": 432739262,
+      "bytes": 9708,
+      "instances": 25
+    }
+  }
+]

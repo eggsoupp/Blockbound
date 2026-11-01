@@ -10,13 +10,26 @@ AbilityConfig.SlotKeys = {Enum.KeyCode.Z, Enum.KeyCode.X, Enum.KeyCode.V}
 AbilityConfig.DefaultCastWeapon = "TestSword"
 AbilityConfig.BroadcastRadius = 520
 AbilityConfig.Definitions = {
+ VioletTempest = {
+  displayName="Violet Tempest", rarity="Legendary", server="ReferenceAbilities", vfx="LegendaryVFX",
+  cooldown=18, manaCost=40, requiresTarget=true, castRange=110, maxConcurrent=1,
+ },
+ CelestialLance = {
+  displayName="Celestial Lance", rarity="Legendary", server="ReferenceAbilities", vfx="LegendaryVFX",
+  cooldown=16, manaCost=38, requiresTarget=true, castRange=140, maxConcurrent=1,
+ },
+ -- Keep the saved identifier so existing loadouts and scrolls retain this ability.
+ WraithfireOrb = {
+  displayName="Blighted Fireball", rarity="Legendary", server="ReferenceAbilities", vfx="LegendaryVFX",
+  cooldown=18, manaCost=42, requiresTarget=true, castRange=120, maxConcurrent=1,
+ },
+ RiftMaelstrom = {
+  displayName="Rift Maelstrom", rarity="Legendary", server="ReferenceAbilities", vfx="LegendaryVFX",
+  cooldown=22, manaCost=48, requiresTarget=true, castRange=110, maxConcurrent=1,
+ },
  Cataclysm = {
   displayName="Cataclysm", rarity="Legendary", server="Cataclysm", vfx="CataclysmVFX",
   cooldown=45, manaCost=80, requiresTarget=true, castRange=220, maxConcurrent=1,
- },
- VoidRend = {
-  displayName="Void Rend", rarity="Epic", server="VoidRend", vfx="VoidRendVFX",
-  cooldown=12, manaCost=30, requiresTarget=false, maxConcurrent=1,
  },
  Fireball = {
   displayName="Fireball", rarity="Common", server="StarterAbilities", vfx="StarterVFX",
@@ -69,6 +82,10 @@ AbilityConfig.Definitions = {
  AzureComet = {
   displayName="Azure Comet", rarity="Rare", server="AzureComet", vfx="CometVFX",
   cooldown=11, manaCost=30, requiresTarget=true, castRange=85, maxConcurrent=1,
+ },
+ Thunderhead = {
+  displayName="Thunderhead", rarity="Epic", server="Thunderhead", vfx="ThunderVFX",
+  cooldown=14, manaCost=36, requiresTarget=true, castRange=80, maxConcurrent=1,
  },
  Tidecaller = {
   displayName="Tidecaller", rarity="Uncommon", server="Tidecaller", vfx="TideVFX",

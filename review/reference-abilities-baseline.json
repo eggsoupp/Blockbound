@@ -1,0 +1,9 @@
+{
+  "src\\ReplicatedStorage\\Shared\\Abilities\\CataclysmPlan.lua": "816fbbc455492bf84c945bce03c958a5deede66757132f543777131816e95e21",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\CataclysmCamera.lua": "8b744d57481f44fd366dd5d59c1754c988deeccd6277517173730be99fe8e31b",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\CataclysmParticles.lua": "f1d5c4eb5f5f67d8478a1f3a21e1c8f218d2f32cab1c6b19710c35a9a47edc02",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\CataclysmVFX.lua": "378003ffd3b0714fb081783b37fcbb8144c09bc749eeeb065351f46152ac443d",
+  "src\\ServerScriptService\\Abilities\\Cataclysm.lua": "d0c0c02b9aa41bbd0f2296de37f6535bacdbbda373fbc38657052fd714d93ffe",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\StarterVFX.lua": "f938dcc4e3ca342b0c5929400e648db3bb8a98282d0b9767e425120e441b0419",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\CometVFX.lua": "31650318a74caad3223e529dc381b86f330cf2ed34c0b711ea62c4c9456cd624"
+}

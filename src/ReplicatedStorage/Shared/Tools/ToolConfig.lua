@@ -16,6 +16,7 @@ local RunService = game:GetService("RunService")
 local SwingAnimations = require(script.Parent:WaitForChild("SwingAnimations"))
 
 local ToolConfig = {}
+local WeaponAnimations = require(script.Parent.Parent:WaitForChild("Combat"):WaitForChild("WeaponAnimations"))
 
 --[[
 	Build stand-in Tools out of coloured boxes for holdable items with no
@@ -133,7 +134,7 @@ ToolConfig.SwingIds = {
 	SwordSlash2 = "",
 	SwordSlash3 = "",
 	SwordSlash4 = "",
-	PickaxeSwing = "",
+	PickaxeSwing = "rbxassetid://87021460185064",
 	AxeChop = "",
 }
 
@@ -217,6 +218,8 @@ ToolConfig.WalkReferenceSpeed = 16
 
 function ToolConfig.walkAnimationFor(definition)
 	local class = definition and definition.weaponClass
+	local profile = WeaponAnimations.Classes[class]
+	if profile and profile.walk then return profile.walk end
 	return (type(class) == "string" and ToolConfig.WalkAnimations[class]) or ToolConfig.WalkAnimations.Default
 end
 
@@ -252,11 +255,15 @@ ToolConfig.IdleAnimations = {
 
 function ToolConfig.idleAnimationFor(definition)
 	local class = definition and definition.weaponClass
+	local profile = WeaponAnimations.Classes[class]
+	if profile and profile.idle then return profile.idle end
 	return type(class) == "string" and ToolConfig.IdleAnimations[class] or nil
 end
 
 function ToolConfig.runAnimationFor(definition)
 	local class = definition and definition.weaponClass
+	local profile = WeaponAnimations.Classes[class]
+	if profile and profile.run then return profile.run end
 	return (type(class) == "string" and ToolConfig.RunAnimations[class]) or ToolConfig.RunAnimations.Default
 end
 

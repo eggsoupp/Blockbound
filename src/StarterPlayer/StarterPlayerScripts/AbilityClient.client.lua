@@ -398,12 +398,6 @@ local function cast(abilityName: string, definition)
 		return
 	end
 
-	-- A two-press ability (Void Rend) owns its key while it waits for the
-	-- second press; its VFX module sends that press itself.
-	if player:GetAttribute("AbilityFollowUp") == abilityName then
-		return
-	end
-
 	local now = os.clock()
 	local last = requestedAt[abilityName]
 	if not player:GetAttribute("GodMode") and last and now - last < (definition.cooldown or 0) then

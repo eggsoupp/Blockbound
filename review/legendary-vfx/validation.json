@@ -1,0 +1,331 @@
+{
+  "date": "2026-10-31",
+  "game": {
+    "name": "BlockBound",
+    "placeId": 127569658424596
+  },
+  "library": "SoulShroud Ultimate VFX Pack V1.9.rbxl",
+  "assemblies": {
+    "imported": 21,
+    "used": 17,
+    "propertyMatches": 21,
+    "missingDependencies": 0,
+    "sourceFingerprints": {
+      "RefImpact41": {
+        "hash": 2825051949,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 3,
+          "PointLight": 1,
+          "ParticleEmitter": 14
+        },
+        "instances": 19
+      },
+      "RefKi1": {
+        "hash": 2432377211,
+        "external": 0,
+        "classes": {
+          "Beam": 3,
+          "Model": 1,
+          "Part": 2,
+          "Attachment": 4,
+          "ParticleEmitter": 15
+        },
+        "instances": 25
+      },
+      "LegendWindSwirls": {
+        "hash": 1973852631,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 2,
+          "ParticleEmitter": 10
+        },
+        "instances": 13
+      },
+      "RefImpact12": {
+        "hash": 4036208412,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 3,
+          "ParticleEmitter": 10
+        },
+        "instances": 14
+      },
+      "RefFlameCore": {
+        "hash": 3500672529,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 5,
+          "PointLight": 1,
+          "ParticleEmitter": 14
+        },
+        "instances": 21
+      },
+      "RefKi2": {
+        "hash": 2695292067,
+        "external": 0,
+        "classes": {
+          "Beam": 3,
+          "Model": 1,
+          "Part": 2,
+          "Attachment": 4,
+          "ParticleEmitter": 15
+        },
+        "instances": 25
+      },
+      "LegendBlast": {
+        "hash": 3374047870,
+        "external": 0,
+        "classes": {
+          "Beam": 3,
+          "Model": 1,
+          "Part": 2,
+          "Attachment": 4,
+          "ParticleEmitter": 15
+        },
+        "instances": 25
+      },
+      "RefFire9": {
+        "hash": 2304629875,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 1,
+          "ParticleEmitter": 7
+        },
+        "instances": 9
+      },
+      "RefFire1": {
+        "hash": 3765778033,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 3,
+          "ParticleEmitter": 12
+        },
+        "instances": 16
+      },
+      "RefImpact37": {
+        "hash": 3139104998,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 1,
+          "PointLight": 1,
+          "ParticleEmitter": 6
+        },
+        "instances": 9
+      },
+      "RefImpact1": {
+        "hash": 2285576977,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 6,
+          "ParticleEmitter": 18
+        },
+        "instances": 25
+      },
+      "LegendCloudRipples": {
+        "hash": 154801949,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 1,
+          "ParticleEmitter": 4
+        },
+        "instances": 6
+      },
+      "RefThunder": {
+        "hash": 3555290972,
+        "external": 0,
+        "classes": {
+          "Part": 5,
+          "Attachment": 12,
+          "Model": 1,
+          "ParticleEmitter": 40
+        },
+        "instances": 58
+      },
+      "LegendLines": {
+        "hash": 1783031132,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 1,
+          "ParticleEmitter": 8
+        },
+        "instances": 10
+      },
+      "RefImpact10": {
+        "hash": 1565562794,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 2,
+          "Beam": 3,
+          "ParticleEmitter": 9
+        },
+        "instances": 15
+      },
+      "RefImpact45": {
+        "hash": 1652692466,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "PointLight": 1,
+          "Attachment": 4,
+          "ParticleEmitter": 14
+        },
+        "instances": 20
+      },
+      "RefImpact36": {
+        "hash": 871619032,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 1,
+          "PointLight": 1,
+          "ParticleEmitter": 5
+        },
+        "instances": 8
+      },
+      "LegendStylizedWind": {
+        "hash": 2728740995,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 6,
+          "ParticleEmitter": 25
+        },
+        "instances": 32
+      },
+      "RefLightning": {
+        "hash": 334544436,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 2,
+          "ParticleEmitter": 4
+        },
+        "instances": 7
+      },
+      "RefPortal": {
+        "hash": 3143382062,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 1,
+          "PointLight": 1,
+          "ParticleEmitter": 10
+        },
+        "instances": 13
+      },
+      "RefImpact20": {
+        "hash": 3339079076,
+        "external": 0,
+        "classes": {
+          "Part": 1,
+          "Attachment": 11,
+          "Beam": 16,
+          "ParticleEmitter": 2
+        },
+        "instances": 30
+      }
+    }
+  },
+  "damage": {
+    "VioletTempest": {
+      "inside": [
+        14,
+        14,
+        46
+      ],
+      "outside": 0
+    },
+    "CelestialLance": {
+      "direct": 72,
+      "splash": 32.4,
+      "outside": 0
+    },
+    "WraithfireOrb": {
+      "direct": 68,
+      "splash": 30.6,
+      "outside": 0
+    },
+    "RiftMaelstrom": {
+      "inside": [
+        10,
+        10,
+        10,
+        10,
+        42
+      ],
+      "outside": 0
+    }
+  },
+  "performance": {
+    "visible": 0,
+    "travelled": 8.266960144042969,
+    "brokenBeams": 0,
+    "samples": 387,
+    "p95Ms": 18.18929985165596,
+    "peakEmitters": 215,
+    "remaining": 0,
+    "sounds": 0,
+    "peakEffects": 3,
+    "peakMs": 31.329799443483353,
+    "meanMs": 16.663980373068295
+  },
+  "unequip": {
+    "Before": 1,
+    "AfterReleaseTime": 0,
+    "AfterHeartbeat": 0,
+    "Done": true
+  },
+  "visuals": {
+    "camera": "Normal Custom player camera",
+    "client": "Ordinary LocalScripts through RequestAbility",
+    "checked": [
+      "charge",
+      "release",
+      "travel",
+      "terrain impacts",
+      "decay",
+      "moving casts",
+      "three overlapping casts",
+      "vortex collapse"
+    ],
+    "peakInspection": "Some peak inspections temporarily held particles at 0.12 seconds after impact; live playback was also sampled.",
+    "limitations": [
+      "No remote observer client",
+      "No mobile/low-end hardware",
+      "No continuous exported gameplay video"
+    ]
+  },
+  "preserved": [
+    "Cataclysm sources and definition",
+    "other ability definitions",
+    "ReferenceVFX used by Fireball",
+    "source library"
+  ],
+  "cleanup": {
+    "editQAScripts": 0,
+    "loadoutRestored": null,
+    "playtestStopped": true,
+    "published": false,
+    "loadoutRestoreNote": "Earlier QA runs restored the loadout. The final cold-test restore was rejected by automatic approval review before play stopped; persistence of that test loadout was not verified."
+  },
+  "coldIntegration": {
+    "allFourLegendary": true,
+    "vfxModule": "LegendaryVFX",
+    "realReleaseAndHit": true,
+    "runtimeErrors": 0,
+    "normalizedStudioSourceMatches": 4,
+    "normalizedEditorSourceMatches": 4
+  }
+}

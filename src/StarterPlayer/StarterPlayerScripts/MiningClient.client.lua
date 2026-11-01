@@ -534,7 +534,7 @@ local function startSwing()
 	end
 
 	local id = ToolConfig.animationFor(pickaxe.classification, pickaxe)
-	local track = id and ToolAnimation.track(character, id)
+	local track = id and ToolAnimation.track(character, id, Enum.AnimationPriority.Action2)
 	if not track then
 		return
 	end

@@ -93,9 +93,9 @@ ContentAudit.UseHandlers = {
 ]]
 ContentAudit.VfxAssets = {
 	CataclysmVFX = {"CataclysmParticles", "CataclysmCamera"},
-	VoidRendVFX = {"VoidRendParticles"},
-	StarterVFX = {"StarterParticles", "CataclysmParticles"},
-	SignusVFX = {"SignusFX", "SignusParticles", "SignusVisuals", "SignusChoreography", "CataclysmParticles", "StarterParticles"},
+	StarterVFX = {"StarterParticles", "CataclysmParticles", "PackAssembly"},
+	ThunderVFX = {"PackAssembly"},
+	SignusVFX = {"SignusFX", "SignusParticles", "SignusVisuals", "SignusChoreography", "SignusAssemblies"},
 }
 
 -- Swing animations ToolConfig leaves blank on purpose (see ToolConfig.Animations).
@@ -105,10 +105,9 @@ ContentAudit.BlankAnimationsByDesign = true
 -- animation. Any other ability without one is reported as placeholder content.
 ContentAudit.NoCastAnimationByDesign = {
 	Cataclysm = "cast and impact are communicated by authored particles",
-	VoidRend = "the caster's flight path is the motion; leap, crescent and claw rake are particles and beams",
 	Fireball = "particle charge and release",
 	WindBurst = "particle gather and directional pressure fan",
-	WaterBlade = "particle charge and water crescent",
+	WaterBlade = "particle charge and crescent slash",
 	EchoStep = "departure, travel ribbon and arrival particles",
 	BlockWall = "physical terrain movement and dust particles",
 }
@@ -119,7 +118,7 @@ ContentAudit.KnownItemFields = {
 	classification = true, maxStack = true, miningTime = true, miningSpeed = true,
 	miningPower = true, weaponClass = true, weaponSubclass = true, rarity = true, animation = true, iconPose = true, iconAngle = true, thumbnail = true,
 	modelId = true, icon = true, description = true, value = true, buffs = true,
-	displayName = true, look = true, dropOnly = true, sprite = true,
+	displayName = true, look = true, dropOnly = true, sprite = true, catalogOnly = true,
 }
 
 -- Ids in this range were typed in as placeholders before there was any art;
@@ -816,6 +815,10 @@ function ContentAudit.run()
 		end
 
 		local subject = itemLabel(name)
+		if definition.catalogOnly == true then
+			add(report, "Exceptions", "Acquisition", subject, "atlas catalog entry; intentionally has no acquisition source yet")
+			continue
+		end
 		local testOnly = ContentAudit.TestOnlyItems[name]
 
 		if testOnly then
@@ -860,7 +863,7 @@ function ContentAudit.run()
 	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
 	for _, name in ipairs(itemNames) do
 		local definition = ItemDefinitions[name]
-		if type(definition) == "table" and definition.classification == "Consumable" then
+		if type(definition) == "table" and definition.classification == "Consumable" and not definition.catalogOnly then
 			local handler = ContentAudit.UseHandlers[name]
 			local subject = itemLabel(name)
 

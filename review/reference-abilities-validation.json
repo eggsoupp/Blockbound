@@ -1,0 +1,919 @@
+{
+  "date": "2026-10-30",
+  "game": {
+    "name": "BlockBound",
+    "placeId": 127569658424596
+  },
+  "library": {
+    "name": "SoulShroud Ultimate VFX Pack V1.9.rbxl",
+    "modified": false
+  },
+  "referenceMapping": {
+    "20:28": "VioletTempest",
+    "20:40": "CelestialLance",
+    "20:44": "WraithfireOrb",
+    "20:49": "RiftMaelstrom"
+  },
+  "assemblies": {
+    "imported": 16,
+    "criticalPropertyMatches": 16,
+    "fingerprintFailures": [],
+    "sourceFingerprints": {
+      "RefImpact1": {
+        "hash": 2256302030,
+        "instances": 25
+      },
+      "RefImpact45": {
+        "hash": 4047436076,
+        "instances": 20
+      },
+      "RefKi1": {
+        "hash": 3759185257,
+        "instances": 25
+      },
+      "RefImpact41": {
+        "hash": 337256746,
+        "instances": 19
+      },
+      "RefImpact37": {
+        "hash": 4266046441,
+        "instances": 9
+      },
+      "RefThunder": {
+        "hash": 787475872,
+        "instances": 58
+      },
+      "RefLightning": {
+        "hash": 316448965,
+        "instances": 7
+      },
+      "RefFlameCore": {
+        "hash": 2291791095,
+        "instances": 21
+      },
+      "RefImpact12": {
+        "hash": 1266661044,
+        "instances": 14
+      },
+      "RefKi2": {
+        "hash": 3529198187,
+        "instances": 25
+      },
+      "RefImpact20": {
+        "hash": 929068474,
+        "instances": 30
+      },
+      "RefImpact36": {
+        "hash": 676074429,
+        "instances": 8
+      },
+      "RefFire9": {
+        "hash": 4186589102,
+        "instances": 9
+      },
+      "RefFire1": {
+        "hash": 2143864808,
+        "instances": 16
+      },
+      "RefPortal": {
+        "hash": 2891089679,
+        "instances": 13
+      },
+      "RefImpact10": {
+        "hash": 1320130256,
+        "instances": 15
+      }
+    }
+  },
+  "damage": {
+    "CelestialLance": {
+      "direct": 36,
+      "splash": 16.2,
+      "healthAfter": [
+        4,
+        23.8
+      ]
+    },
+    "WraithfireOrb": {
+      "direct": 32,
+      "splash": 14.4,
+      "healthAfter": [
+        8,
+        25.6
+      ]
+    },
+    "VioletTempest": {
+      "ticks": [
+        10,
+        10,
+        28
+      ],
+      "healthAfterTicks": [
+        [
+          30,
+          30
+        ],
+        [
+          20,
+          20
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    "RiftMaelstrom": {
+      "ticks": [
+        7,
+        7,
+        7,
+        7,
+        28
+      ],
+      "healthAfterTicks": [
+        [
+          33,
+          33
+        ],
+        [
+          26,
+          26
+        ],
+        [
+          19,
+          19
+        ],
+        [
+          12,
+          12
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "movingOverlap": {
+    "Phase": "done",
+    "OverlapActive": 3,
+    "Movement": 7.200309753417969,
+    "Remaining": 0
+  },
+  "unequip": {
+    "Remaining": 0,
+    "Equipped": true,
+    "Done": true
+  },
+  "death": {
+    "Remaining": 0
+  },
+  "reset": {
+    "firstSample": 1,
+    "eventualRemaining": 0,
+    "instrumentedBeforeReset": 1,
+    "instrumentedAfterCharacterRemoving": 0,
+    "checkedOnNextHeartbeat": true
+  },
+  "client": {
+    "visibleCarriers": 0,
+    "sounds": 0,
+    "maxOverlappingEffects": 3,
+    "maxStreamingEmitters": 118,
+    "samples": [
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.341999500989914,
+        "meanMs": 16.669518345346056
+      },
+      {
+        "effects": 1,
+        "emitters": 28,
+        "peakMs": 20.158100873231888,
+        "meanMs": 16.673259995877743
+      },
+      {
+        "effects": 1,
+        "emitters": 0,
+        "peakMs": 35.43100133538246,
+        "meanMs": 16.64519842836212
+      },
+      {
+        "effects": 1,
+        "emitters": 0,
+        "peakMs": 18.583200871944427,
+        "meanMs": 16.660270433811867
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 19.435599446296692,
+        "meanMs": 16.688775484923454
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 21.414700895547867,
+        "meanMs": 16.6594623206336
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 17.902299761772156,
+        "meanMs": 16.65699017829582
+      },
+      {
+        "effects": 3,
+        "emitters": 88,
+        "peakMs": 20.06799913942814,
+        "meanMs": 16.672556692113478
+      },
+      {
+        "effects": 3,
+        "emitters": 56,
+        "peakMs": 37.43020072579384,
+        "meanMs": 16.647729549373757
+      },
+      {
+        "effects": 3,
+        "emitters": 0,
+        "peakMs": 40.829699486494064,
+        "meanMs": 16.674483350167673
+      },
+      {
+        "effects": 1,
+        "emitters": 0,
+        "peakMs": 18.823500722646713,
+        "meanMs": 16.681728465482593
+      },
+      {
+        "effects": 1,
+        "emitters": 0,
+        "peakMs": 37.27149963378906,
+        "meanMs": 16.672164977838595
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 19.643500447273254,
+        "meanMs": 16.646657352809044
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.543200567364693,
+        "meanMs": 16.672551569839317
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.011700361967087,
+        "meanMs": 16.662429529623907
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.51790025830269,
+        "meanMs": 16.675678299119078
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.422000110149384,
+        "meanMs": 16.64754594141831
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.261099234223366,
+        "meanMs": 16.69155169899265
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 17.954399809241295,
+        "meanMs": 16.656955597219895
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.234699964523315,
+        "meanMs": 16.652383658363192
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.24440062046051,
+        "meanMs": 16.677509977792703
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 28.340499848127365,
+        "meanMs": 16.674073436297476
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 36.6378016769886,
+        "meanMs": 16.67640170418337
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.49530078470707,
+        "meanMs": 16.646752378246823
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 22.975999861955643,
+        "meanMs": 16.660660612167884
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.36409978568554,
+        "meanMs": 16.66791335058709
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.1364007294178,
+        "meanMs": 16.669606606735556
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.78559961915016,
+        "meanMs": 16.667651742075883
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 41.561998426914215,
+        "meanMs": 16.958705025414627
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 21.484199911355972,
+        "meanMs": 16.644236112593628
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.824100494384766,
+        "meanMs": 16.689993349499392
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 29.546400532126427,
+        "meanMs": 16.642955803602447
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 31.532399356365204,
+        "meanMs": 16.66852490355571
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.045900389552116,
+        "meanMs": 16.647921233880716
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.043000251054764,
+        "meanMs": 16.679800100003682
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 20.92120051383972,
+        "meanMs": 16.654695078852722
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.414199352264404,
+        "meanMs": 16.667066731800634
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 30.680399388074875,
+        "meanMs": 16.6741550511991
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.05189996957779,
+        "meanMs": 16.66947843817373
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 19.30519938468933,
+        "meanMs": 16.667186878010877
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 19.137799739837646,
+        "meanMs": 16.672345916511585
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 17.688000574707985,
+        "meanMs": 16.669615001107257
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 25.2555999904871,
+        "meanMs": 16.662786913211228
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.167899921536446,
+        "meanMs": 16.67145003254215
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 23.44590052962303,
+        "meanMs": 16.660970589909397
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 336.69111132621765,
+        "meanMs": 23.35296062907825
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 30.557800084352493,
+        "meanMs": 16.600190203820098
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 35.56369990110397,
+        "meanMs": 16.6561557743393
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.11630092561245,
+        "meanMs": 16.67803164261083
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 24.28079955279827,
+        "meanMs": 16.64515564859402
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 22.34240062534809,
+        "meanMs": 16.682781651616096
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 19.576700404286385,
+        "meanMs": 16.646770485600488
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.93780007958412,
+        "meanMs": 16.687101731076837
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.341999500989914,
+        "meanMs": 16.65708677629467
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.33220012485981,
+        "meanMs": 16.669485035041966
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.037600442767143,
+        "meanMs": 16.670009943967063
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 17.663100734353065,
+        "meanMs": 16.667069929341476
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 23.578699678182602,
+        "meanMs": 16.66640659763676
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 24.813400581479073,
+        "meanMs": 16.64907540209958
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.94720084965229,
+        "meanMs": 16.67688498273492
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.49360018968582,
+        "meanMs": 16.679711548275638
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.566200509667397,
+        "meanMs": 16.651955708006366
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 21.390400826931,
+        "meanMs": 16.668236597130694
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 21.07110060751438,
+        "meanMs": 16.670234501361847
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.405400216579437,
+        "meanMs": 16.648278648003203
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.534300848841667,
+        "meanMs": 16.675731710468728
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.57770048081875,
+        "meanMs": 16.673699906095862
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.221499398350716,
+        "meanMs": 16.659249093566764
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.10609921813011,
+        "meanMs": 16.65864913861771
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 19.154200330376625,
+        "meanMs": 16.679914963121217
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.14029924571514,
+        "meanMs": 16.650091704042232
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.337199464440346,
+        "meanMs": 16.677593284597
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 17.949100583791733,
+        "meanMs": 16.661622927936374
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 28.429700061678886,
+        "meanMs": 16.666119673945865
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.956299871206284,
+        "meanMs": 16.671234436455318
+      },
+      {
+        "effects": 1,
+        "emitters": 14,
+        "peakMs": 20.170599222183228,
+        "meanMs": 16.657880324198572
+      },
+      {
+        "effects": 1,
+        "emitters": 44,
+        "peakMs": 25.113800540566444,
+        "meanMs": 16.67664333557089
+      },
+      {
+        "effects": 1,
+        "emitters": 0,
+        "peakMs": 21.096400916576385,
+        "meanMs": 16.672243488331635
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 20.808400586247444,
+        "meanMs": 16.65599999918801
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 17.737599089741707,
+        "meanMs": 16.668636724352837
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.367499113082886,
+        "meanMs": 16.68102943078905
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 17.700299620628357,
+        "meanMs": 16.65225734964746
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 25.594599545001984,
+        "meanMs": 16.662486951004286
+      },
+      {
+        "effects": 1,
+        "emitters": 14,
+        "peakMs": 19.567500799894333,
+        "meanMs": 16.67628323969742
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 20.951300859451294,
+        "meanMs": 16.64409520806836
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 26.928599923849106,
+        "meanMs": 16.676020063459873
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 23.8645002245903,
+        "meanMs": 16.670529562674584
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 51.14080011844635,
+        "meanMs": 19.685927458910967
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 46.702999621629715,
+        "meanMs": 19.479878855725893
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 47.88070172071457,
+        "meanMs": 16.934466641396284
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 24.765899404883385,
+        "meanMs": 16.673603232522478
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 25.8799996227026,
+        "meanMs": 16.665170564636835
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 50.13800039887428,
+        "meanMs": 17.522851711717145
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.14340054988861,
+        "meanMs": 16.669581613192953
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.953600898385048,
+        "meanMs": 16.661960677411713
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 20.762600004673004,
+        "meanMs": 16.67867156987389
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 21.457800641655922,
+        "meanMs": 16.64705580619515
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.840499222278595,
+        "meanMs": 16.68057502247393
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 20.82829922437668,
+        "meanMs": 16.65304590505166
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.34069937467575,
+        "meanMs": 16.682858346030116
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.265100196003914,
+        "meanMs": 16.643106403043035
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 24.684300646185875,
+        "meanMs": 16.684258356690407
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.296800553798676,
+        "meanMs": 16.642436125605812
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.852999433875084,
+        "meanMs": 16.67447996636232
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.357999622821808,
+        "meanMs": 16.67748166558643
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.770599737763405,
+        "meanMs": 16.666909817178716
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 31.56990185379982,
+        "meanMs": 16.648540960349997
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.993999809026718,
+        "meanMs": 16.681033357356984
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 19.98949982225895,
+        "meanMs": 16.66488197677937
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 21.804900839924812,
+        "meanMs": 16.667611500034567
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 20.86080051958561,
+        "meanMs": 16.67573916741082
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 18.06100085377693,
+        "meanMs": 16.648755714175156
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 41.4418987929821,
+        "meanMs": 17.09430341182624
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 37.8292016685009,
+        "meanMs": 17.389663888526886
+      },
+      {
+        "effects": 1,
+        "emitters": 44,
+        "peakMs": 31.7951999604702,
+        "meanMs": 16.665645890304297
+      },
+      {
+        "effects": 1,
+        "emitters": 44,
+        "peakMs": 18.669499084353447,
+        "meanMs": 16.664939291286665
+      },
+      {
+        "effects": 1,
+        "emitters": 0,
+        "peakMs": 19.56460066139698,
+        "meanMs": 16.665529429179724
+      },
+      {
+        "effects": 1,
+        "emitters": 0,
+        "peakMs": 18.274499103426933,
+        "meanMs": 16.66272285043216
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 26.12989954650402,
+        "meanMs": 16.668301673295595
+      },
+      {
+        "effects": 0,
+        "emitters": 0,
+        "peakMs": 17.77070015668869,
+        "meanMs": 16.64863768048951
+      }
+    ]
+  },
+  "finalAssetRootSmoke": {
+    "mounts": 2,
+    "brokenBeams": 0,
+    "visible": 0,
+    "sounds": 0,
+    "remaining": 0
+  },
+  "rojoBuild": "passed",
+  "limitations": [
+    "One Studio client; no separate remote observer client or mobile/low-end device QA.",
+    "Visual QA used repeated still captures at normal gameplay camera distance; no exported continuous gameplay recording."
+  ]
+}

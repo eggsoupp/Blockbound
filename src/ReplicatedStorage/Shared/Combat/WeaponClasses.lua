@@ -14,8 +14,8 @@
 		WeaponClasses.label(definition)        -> "Sword -> Katana"
 		WeaponClasses.description(definition)  -> "Sword -> Katana\nA sword that bleeds. ..."
 
-	Presentation only. Damage, range and cooldown are WeaponConfig's and do
-	not read the class.
+	The class also selects the purchased combat animation set in WeaponAnimations.
+	Damage, range and attack-speed modifiers remain in WeaponConfig.
 ]]
 
 local WeaponClasses = {}

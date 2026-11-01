@@ -1,0 +1,1162 @@
+{
+  "title": "Beyond the Firelight",
+  "tempos": [
+    [
+      0,
+      64,
+      "Still, gently swaying"
+    ]
+  ],
+  "meter": [
+    3,
+    4
+  ],
+  "key": "Dm",
+  "parts": {
+    "Clarinet - independent night melody": {
+      "channel": 0,
+      "program": 71,
+      "target_rms_db": -27,
+      "pan": 62,
+      "wet": 0.2,
+      "drums": false,
+      "render_gain": 11.233638504265212,
+      "instrument": "Clarinet",
+      "raw_rms_db": -50.61,
+      "expression": 112
+    },
+    "Soft electric piano harmony": {
+      "channel": 1,
+      "program": 4,
+      "target_rms_db": -31,
+      "pan": 78,
+      "wet": 0.18,
+      "drums": false,
+      "render_gain": 16.597827688831945,
+      "instrument": "Tine Electric Piano",
+      "raw_rms_db": -55.73,
+      "expression": 127
+    },
+    "Nylon guitar responses": {
+      "channel": 2,
+      "program": 24,
+      "target_rms_db": -33,
+      "pan": 34,
+      "wet": 0.21,
+      "drums": false,
+      "render_gain": 14.408346072201317,
+      "instrument": "Nylon Guitar",
+      "raw_rms_db": -59.84,
+      "expression": 121
+    },
+    "Low warm atmosphere": {
+      "channel": 3,
+      "program": 89,
+      "target_rms_db": -36,
+      "pan": 64,
+      "wet": 0.24,
+      "drums": false,
+      "render_gain": 2.6030663755691013,
+      "instrument": "Warm Pad",
+      "raw_rms_db": -44.31,
+      "expression": 68
+    },
+    "Acoustic bass": {
+      "channel": 4,
+      "program": 32,
+      "target_rms_db": -35,
+      "pan": 56,
+      "wet": 0.1,
+      "drums": false,
+      "render_gain": 6.16920689084355,
+      "instrument": "Acoustic Bass",
+      "raw_rms_db": -51.69,
+      "expression": 91
+    }
+  },
+  "events": [
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 0.0,
+      "pitch": 53,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 0.025,
+      "pitch": 60,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 0.05,
+      "pitch": 64,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 0,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 0,
+      "pitch": 57,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 0,
+      "pitch": 38,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 2.5,
+      "pitch": 60,
+      "length": 1.7,
+      "velocity": 41
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 4.5,
+      "pitch": 65,
+      "length": 1.2,
+      "velocity": 35
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 6.0,
+      "pitch": 52,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 6.025,
+      "pitch": 55,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 6.05,
+      "pitch": 59,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 6,
+      "pitch": 48,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 6,
+      "pitch": 55,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 6,
+      "pitch": 36,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 9.5,
+      "pitch": 59,
+      "length": 1.7,
+      "velocity": 38
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 12.0,
+      "pitch": 53,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 12.025,
+      "pitch": 60,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 12.05,
+      "pitch": 64,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 12,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 12,
+      "pitch": 57,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 12,
+      "pitch": 38,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 14.5,
+      "pitch": 60,
+      "length": 1.7,
+      "velocity": 41
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 16.5,
+      "pitch": 65,
+      "length": 1.2,
+      "velocity": 35
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 18.0,
+      "pitch": 52,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 18.025,
+      "pitch": 55,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 18.05,
+      "pitch": 59,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 18,
+      "pitch": 43,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 18,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 18,
+      "pitch": 31,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 21.5,
+      "pitch": 59,
+      "length": 1.7,
+      "velocity": 38
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 24.0,
+      "pitch": 52,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 24.025,
+      "pitch": 55,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 24.05,
+      "pitch": 60,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 24,
+      "pitch": 45,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 24,
+      "pitch": 52,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 24,
+      "pitch": 33,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 26.5,
+      "pitch": 55,
+      "length": 1.7,
+      "velocity": 41
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 28.5,
+      "pitch": 64,
+      "length": 1.2,
+      "velocity": 35
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 30.0,
+      "pitch": 53,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 30.025,
+      "pitch": 60,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 30.05,
+      "pitch": 64,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 30,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 30,
+      "pitch": 57,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 30,
+      "pitch": 38,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 33.5,
+      "pitch": 64,
+      "length": 1.7,
+      "velocity": 38
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 36.0,
+      "pitch": 53,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 36.025,
+      "pitch": 60,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 36.05,
+      "pitch": 64,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 36,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 36,
+      "pitch": 57,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 36,
+      "pitch": 38,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 38.5,
+      "pitch": 60,
+      "length": 1.7,
+      "velocity": 41
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 40.5,
+      "pitch": 65,
+      "length": 1.2,
+      "velocity": 35
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 42.0,
+      "pitch": 52,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 42.025,
+      "pitch": 55,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 42.05,
+      "pitch": 59,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 42,
+      "pitch": 48,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 42,
+      "pitch": 55,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 42,
+      "pitch": 36,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 45.5,
+      "pitch": 59,
+      "length": 1.7,
+      "velocity": 38
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 48.0,
+      "pitch": 52,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 48.025,
+      "pitch": 55,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 48.05,
+      "pitch": 59,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 48,
+      "pitch": 43,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 48,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 48,
+      "pitch": 31,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 50.5,
+      "pitch": 55,
+      "length": 1.7,
+      "velocity": 41
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 52.5,
+      "pitch": 64,
+      "length": 1.2,
+      "velocity": 35
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 54.0,
+      "pitch": 53,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 54.025,
+      "pitch": 60,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 54.05,
+      "pitch": 64,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 54,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 54,
+      "pitch": 57,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 54,
+      "pitch": 38,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 57.5,
+      "pitch": 64,
+      "length": 1.7,
+      "velocity": 38
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 60.0,
+      "pitch": 52,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 60.025,
+      "pitch": 55,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 60.05,
+      "pitch": 59,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 60,
+      "pitch": 48,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 60,
+      "pitch": 55,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 60,
+      "pitch": 36,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 62.5,
+      "pitch": 55,
+      "length": 1.7,
+      "velocity": 41
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 64.5,
+      "pitch": 64,
+      "length": 1.2,
+      "velocity": 35
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 66.0,
+      "pitch": 52,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 66.025,
+      "pitch": 55,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 66.05,
+      "pitch": 60,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 66,
+      "pitch": 45,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 66,
+      "pitch": 52,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 66,
+      "pitch": 33,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 69.5,
+      "pitch": 60,
+      "length": 1.7,
+      "velocity": 38
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 72.0,
+      "pitch": 53,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 72.025,
+      "pitch": 60,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 72.05,
+      "pitch": 64,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 72,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 72,
+      "pitch": 57,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 72,
+      "pitch": 38,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 74.5,
+      "pitch": 60,
+      "length": 1.7,
+      "velocity": 41
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 76.5,
+      "pitch": 65,
+      "length": 1.2,
+      "velocity": 35
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 78.0,
+      "pitch": 52,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 78.025,
+      "pitch": 55,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 78.05,
+      "pitch": 59,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 78,
+      "pitch": 43,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 78,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 78,
+      "pitch": 31,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 81.5,
+      "pitch": 59,
+      "length": 1.7,
+      "velocity": 38
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 84.0,
+      "pitch": 53,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 84.025,
+      "pitch": 57,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 84.05,
+      "pitch": 62,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 84,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 84,
+      "pitch": 57,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 84,
+      "pitch": 38,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 86.5,
+      "pitch": 57,
+      "length": 1.7,
+      "velocity": 41
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 88.5,
+      "pitch": 65,
+      "length": 1.2,
+      "velocity": 35
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 90.0,
+      "pitch": 53,
+      "length": 5.35,
+      "velocity": 42
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 90.025,
+      "pitch": 57,
+      "length": 5.35,
+      "velocity": 39
+    },
+    {
+      "part": "Soft electric piano harmony",
+      "beat": 90.05,
+      "pitch": 62,
+      "length": 5.35,
+      "velocity": 36
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 90,
+      "pitch": 50,
+      "length": 5.85,
+      "velocity": 35
+    },
+    {
+      "part": "Low warm atmosphere",
+      "beat": 90,
+      "pitch": 57,
+      "length": 5.85,
+      "velocity": 33
+    },
+    {
+      "part": "Acoustic bass",
+      "beat": 90,
+      "pitch": 38,
+      "length": 4.7,
+      "velocity": 40
+    },
+    {
+      "part": "Nylon guitar responses",
+      "beat": 93.5,
+      "pitch": 62,
+      "length": 1.7,
+      "velocity": 38
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 12,
+      "pitch": 62,
+      "length": 1.35,
+      "velocity": 59
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 13.5,
+      "pitch": 57,
+      "length": 0.85,
+      "velocity": 54
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 15,
+      "pitch": 60,
+      "length": 1.8,
+      "velocity": 59
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 17,
+      "pitch": 64,
+      "length": 0.75,
+      "velocity": 54
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 18,
+      "pitch": 62,
+      "length": 2.4,
+      "velocity": 59
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 21,
+      "pitch": 57,
+      "length": 1.4,
+      "velocity": 59
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 36,
+      "pitch": 62,
+      "length": 1.35,
+      "velocity": 60
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 37.5,
+      "pitch": 57,
+      "length": 0.85,
+      "velocity": 55
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 39,
+      "pitch": 60,
+      "length": 1.8,
+      "velocity": 60
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 41,
+      "pitch": 64,
+      "length": 0.75,
+      "velocity": 55
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 42,
+      "pitch": 65,
+      "length": 2.4,
+      "velocity": 60
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 45,
+      "pitch": 64,
+      "length": 1.4,
+      "velocity": 60
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 48,
+      "pitch": 64,
+      "length": 1.8,
+      "velocity": 60
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 50.25,
+      "pitch": 67,
+      "length": 0.6,
+      "velocity": 55
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 51,
+      "pitch": 65,
+      "length": 2,
+      "velocity": 60
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 54,
+      "pitch": 64,
+      "length": 1.4,
+      "velocity": 60
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 56,
+      "pitch": 60,
+      "length": 0.8,
+      "velocity": 55
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 57,
+      "pitch": 57,
+      "length": 1.8,
+      "velocity": 60
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 72,
+      "pitch": 62,
+      "length": 1.35,
+      "velocity": 57
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 73.5,
+      "pitch": 57,
+      "length": 0.85,
+      "velocity": 52
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 75,
+      "pitch": 60,
+      "length": 1.8,
+      "velocity": 57
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 77,
+      "pitch": 64,
+      "length": 0.75,
+      "velocity": 52
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 78,
+      "pitch": 62,
+      "length": 2.4,
+      "velocity": 57
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 81,
+      "pitch": 57,
+      "length": 1.4,
+      "velocity": 57
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 84,
+      "pitch": 65,
+      "length": 1.3,
+      "velocity": 55
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 85.5,
+      "pitch": 64,
+      "length": 1.2,
+      "velocity": 55
+    },
+    {
+      "part": "Clarinet - independent night melody",
+      "beat": 87,
+      "pitch": 62,
+      "length": 2.7,
+      "velocity": 55
+    }
+  ],
+  "end": 96,
+  "markers": [
+    [
+      0,
+      "Beyond the firelight"
+    ],
+    [
+      12,
+      "First call"
+    ],
+    [
+      24,
+      "Stillness"
+    ],
+    [
+      36,
+      "A distant answer"
+    ],
+    [
+      48,
+      "Something opens"
+    ],
+    [
+      60,
+      "Listening"
+    ],
+    [
+      72,
+      "The call returns"
+    ],
+    [
+      90,
+      "Safe for now"
+    ]
+  ],
+  "quiet_sections": [
+    [
+      0,
+      12
+    ],
+    [
+      24,
+      36
+    ],
+    [
+      60,
+      72
+    ],
+    [
+      90,
+      96
+    ]
+  ],
+  "master_gain": 0.9746448301706859
+}

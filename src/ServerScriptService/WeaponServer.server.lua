@@ -1,32 +1,4 @@
---[[
-	WeaponServer
-
-	Makes swinging a weapon hurt things.
-
-	  the player activates a Tool
-	  -> is it a weapon?            ItemDefinitions classification
-	  -> which swing of the combo?  SwordCombo, from the same clicks the client sees
-	  -> at that swing's hit time:  SwingAnimations' `hit`, not the click
-	  -> what is in front of them?  EnemyService, within reach and inside the arc
-	  -> hurt it                    EnemyService.damage
-
-	NO REMOTE, ON PURPOSE. Tool.Activated and Deactivated fire on the SERVER
-	too, so the whole path is server-side already. A RequestAttack remote would
-	be a message a client could send whenever it liked, naming whatever target
-	it liked, plus a pile of validation to undo that. Listening to the Tool means
-	the only thing a client can do is activate one it is genuinely holding - and
-	the combo's own timing, not the click rate, decides how often that swings.
-
-	The client runs the same SwordCombo on the same clicks to play the swings
-	(WeaponClient), which is how the blow lands when the blade visibly passes.
-
-	The cost is that the server picks the swing direction itself, from the
-	character's facing at the moment of the hit. Hence a forgiving hitbox:
-	reach to the near side of an enemy, a wide arc, anything touching counts.
-
-	No player-versus-player.
-]]
-
+-- Server-authoritative melee: validated press/release input, one animation/damage clock.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -34,9 +6,10 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local WeaponConfig = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponConfig"))
 local SwordCombo = require(Shared.Combat:WaitForChild("SwordCombo"))
+local WeaponAnimations = require(Shared.Combat:WaitForChild("WeaponAnimations"))
+local ToolAnimation = require(Shared.Tools:WaitForChild("ToolAnimation"))
 local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
-local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 local GearService = require(ServerScriptService:WaitForChild("GearService"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
@@ -47,6 +20,8 @@ local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 	EnemyService once the damage is real; see the note there. A receipt only.
 ]]
 local CombatFeedback = Remotes.ensure("CombatFeedback", "RemoteEvent")
+local WeaponInput = Remotes.ensure("WeaponInput", "RemoteEvent")
+local nextAttackAt, lastPressAt = {}, {}
 
 local DEBUG = false
 local function log(...)
@@ -123,7 +98,7 @@ local function bodyRadius(model)
 end
 
 -- One blow, at the moment it lands.
-local function strike(player, stats, step)
+local function strike(player, stats, step, hitModels, remaining)
 	local origin, facing = swingFrame(player)
 	if not origin then
 		return
@@ -138,6 +113,7 @@ local function strike(player, stats, step)
 	-- so taking the first found would make the target depend on table order.
 	local found = {}
 	EnemyService.forEachNear(origin, reach + SwordCombo.BodyAllowance, function(model, position)
+		if hitModels[model] then return end
 		local offset = position - origin
 		local gap = offset.Magnitude - bodyRadius(model)
 		if gap > reach then
@@ -159,8 +135,7 @@ local function strike(player, stats, step)
 	if #found == 0 then
 		Profiler.count("Weapon.miss")
 		Profiler.leave("Weapon.swing")
-		CombatFeedback:FireClient(player, "miss")
-		return
+		return 0
 	end
 
 	table.sort(found, function(a, b)
@@ -170,8 +145,9 @@ local function strike(player, stats, step)
 	-- Weapon damage gear (a Battle Ring) applies here, at the moment of the hit.
 	local damage = math.max(1, math.floor(stats.damage * step.damage * GearService.weaponMultiplier(player) + 0.5))
 
-	for i = 1, math.min(#found, step.maxTargets or stats.maxTargets) do
+	for i = 1, math.min(#found, remaining) do
 		local model = found[i].model
+		hitModels[model] = true
 		local name = EnemyService.describe(model)
 		local alive = EnemyService.damage(model, damage, player)
 
@@ -188,6 +164,7 @@ local function strike(player, stats, step)
 	end
 
 	Profiler.leave("Weapon.swing")
+	return math.min(#found, remaining)
 end
 
 -- ---------------------------------------------------------------------------
@@ -198,32 +175,104 @@ local function stopCombo(player)
 	local state = combos[player]
 	if state then
 		state.combo:cancel()
+		if state.playing then state.playing:Stop(0.08) end
 		combos[player] = nil
 	end
 end
 
 local function comboFor(player, tool, stats)
-	local state = combos[player]
-	if state and state.tool == tool then
-		return state.combo
-	end
+	local existing = combos[player]
+	if existing and existing.tool == tool then return existing end
 	stopCombo(player)
-
+	local state = {tool = tool, ready = false, tracks = {}, pending = false, down = false}
 	local combo
-	combo = SwordCombo.new(stats, function(_, step)
-		task.wait(SwordCombo.hitDelay(step, combo.speed))
-
-		-- Still swinging this weapon: not put away, not dead, not a new combo.
-		local current = combos[player]
-		if not current or current.combo ~= combo or tool.Parent ~= player.Character then
-			return
-		end
-		strike(player, stats, step)
+	local function valid(token)
+		local character = player.Character
+		local hum = character and character:FindFirstChildOfClass("Humanoid")
+		return combos[player] == state and combo.token == token
+			and tool.Parent == character and hum and hum.Health > 0
+	end
+	combo = SwordCombo.new(stats, function(index, step, token)
+		if not valid(token) then combo:cancel() return end
+		local track = state.tracks[index]
+		if not track then combo:cancel() return end
+		if state.playing then state.playing:Stop(0.04) end
+		track.Looped = false
+		track:Play(0.04, 1, combo.speed)
+		state.playing = track
+		local started = os.clock()
+		nextAttackAt[player] = started + step.recover / combo.speed
+		-- Exposed for timing diagnostics; never read from the client for damage.
+		tool:SetAttribute("AttackStep", index)
+		tool:SetAttribute("AttackStarted", workspace:GetServerTimeNow())
+		tool:SetAttribute("AttackHitDelay", step.hit / combo.speed)
+		local hitModels, count = {}, 0
+		local cap = step.maxTargets or stats.maxTargets
+		local hitAt = started + step.hit / combo.speed
+		local endsAt = started + step.hitEnd / combo.speed
+		task.wait(math.max(0, hitAt - os.clock()))
+		repeat
+			if not valid(token) then return end
+			count += strike(player, stats, step, hitModels, cap - count) or 0
+			if count >= cap or os.clock() >= endsAt then break end
+			task.wait(math.min(SwordCombo.SampleInterval, math.max(0, endsAt - os.clock())))
+		until false
+		if count == 0 then CombatFeedback:FireClient(player, "miss") end
+		-- Some Glaive clips have an idle tail after their authored Reset.
+		task.wait(math.max(0, started + step.recover / combo.speed - os.clock()))
+		if valid(token) and state.playing == track then track:Stop(0.06) end
 	end)
-
-	combos[player] = { tool = tool, combo = combo }
-	return combo
+	state.combo = combo
+	combos[player] = state
+	-- Warm every track on equip, before starting its damage clock. A cold
+	-- asset fetch must never consume the windup and make the first hit invisible.
+	task.spawn(function()
+		local character = player.Character
+		for index, step in ipairs(WeaponAnimations.forClass(stats.weaponClass).steps) do
+			if combos[player] ~= state or tool.Parent ~= character then return end
+			local track = ToolAnimation.track(character, step.animationId)
+			if not track then return end
+			state.tracks[index] = track
+		end
+		local deadline = os.clock() + 10
+		while os.clock() < deadline do
+			if combos[player] ~= state then return end
+			local ready = true
+			for _, track in ipairs(state.tracks) do if track.Length <= 0 then ready = false end end
+			if ready then state.ready = true break end
+			task.wait(0.05)
+		end
+		if not state.ready then warn("[WeaponServer] weapon animations failed to load: " .. stats.name) return end
+		if state.pending and tool.Parent == player.Character and os.clock() >= (nextAttackAt[player] or 0) then
+			combo:press()
+			if not state.down then combo:release() end
+		end
+	end)
+	return state
 end
+
+WeaponInput.OnServerEvent:Connect(function(player, tool, down)
+	if typeof(tool) ~= "Instance" or not tool:IsA("Tool") or type(down) ~= "boolean" then return end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if tool.Parent ~= character or not humanoid or humanoid.Health <= 0 then return end
+	local stats = WeaponConfig.get(itemNameFor(tool))
+	if not stats then return end
+	local state = combos[player]
+	if not state or state.tool ~= tool then state = comboFor(player, tool, stats) end
+	if not down then
+		state.down = false
+		state.combo:release()
+		return
+	end
+	local now = os.clock()
+	if now - (lastPressAt[player] or -math.huge) < 0.03 then return end
+	lastPressAt[player] = now
+	-- Unequipping and re-equipping cannot bypass an attack's recovery.
+	if not state.combo.busy and now < (nextAttackAt[player] or 0) then return end
+	state.down = true
+	if state.ready then state.combo:press() else state.pending = true end
+end)
 
 -- ---------------------------------------------------------------------------
 -- Watching for tools
@@ -257,17 +306,8 @@ local function track(player, child)
 		return
 	end
 
-	connections[child] = {
-		child.Activated:Connect(function()
-			comboFor(player, child, stats):press()
-		end),
-		child.Deactivated:Connect(function()
-			local state = combos[player]
-			if state and state.tool == child then
-				state.combo:release()
-			end
-		end),
-	}
+	connections[child] = {}
+	comboFor(player, child, stats)
 end
 
 local function watchCharacter(player, character)
@@ -306,4 +346,7 @@ for _, player in ipairs(Players:GetPlayers()) do
 	watchPlayer(player)
 end
 
-Players.PlayerRemoving:Connect(stopCombo)
+Players.PlayerRemoving:Connect(function(player)
+	stopCombo(player)
+	nextAttackAt[player], lastPressAt[player] = nil, nil
+end)

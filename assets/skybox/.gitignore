@@ -1,0 +1,6 @@
+# Purchased textures remain local; commit only conversion and integration code.
+/original/
+/converted/
+/biome-upload/
+/*preview.png
+/*preview.jpg

@@ -1,0 +1,1289 @@
+{
+  "sourceFile": "125+ Animations & Weapons Pack.rbxl",
+  "group": {
+    "id": 275555347,
+    "name": "saile stone studios"
+  },
+  "animations": [
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.AirAttack",
+      "name": "SSS_Blade_AttackAir",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.8166666626930237,
+      "frames": 50,
+      "source": "AirAttack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.DashAttack",
+      "name": "SSS_Blade_AttackDash",
+      "category": "Blade",
+      "loop": false,
+      "duration": 1.149999976158142,
+      "frames": 70,
+      "source": "DashAttack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.M2",
+      "name": "SSS_Blade_AttackHeavy",
+      "category": "Blade",
+      "loop": false,
+      "duration": 1.9166666269302368,
+      "frames": 116,
+      "source": "M2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.M1_1",
+      "name": "SSS_Blade_AttackLight_01",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.9833333492279053,
+      "frames": 60,
+      "source": "M1_1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.M1_2",
+      "name": "SSS_Blade_AttackLight_02",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.9833333492279053,
+      "frames": 60,
+      "source": "M1_2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.M1_3",
+      "name": "SSS_Blade_AttackLight_03",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.9833333492279053,
+      "frames": 60,
+      "source": "M1_3"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.M1_4",
+      "name": "SSS_Blade_AttackLight_04",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.9833333492279053,
+      "frames": 60,
+      "source": "M1_4"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.M1_5",
+      "name": "SSS_Blade_AttackLight_05",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.9833333492279053,
+      "frames": 60,
+      "source": "M1_5"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.Blocking",
+      "name": "SSS_Blade_Block",
+      "category": "Blade",
+      "loop": true,
+      "duration": 2,
+      "frames": 121,
+      "source": "Blocking"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.Block1",
+      "name": "SSS_Blade_BlockHit_01",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.1666666716337204,
+      "frames": 11,
+      "source": "Block1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.Dash",
+      "name": "SSS_Blade_Dash",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.8999999761581421,
+      "frames": 55,
+      "source": "Dash"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.Idle",
+      "name": "SSS_Blade_Idle",
+      "category": "Blade",
+      "loop": true,
+      "duration": 2,
+      "frames": 121,
+      "source": "Idle"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.Parried",
+      "name": "SSS_Blade_Parried",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.5,
+      "frames": 31,
+      "source": "Parried"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.Parry",
+      "name": "SSS_Blade_Parry",
+      "category": "Blade",
+      "loop": false,
+      "duration": 0.3166666626930237,
+      "frames": 20,
+      "source": "Parry"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.Run",
+      "name": "SSS_Blade_Run",
+      "category": "Blade",
+      "loop": true,
+      "duration": 0.46666666865348816,
+      "frames": 15,
+      "source": "Run"
+    },
+    {
+      "priority": "Movement",
+      "path": "Workspace.125+ Animations & Weapons Pack.Blade Animations.AnimSaves.Walk",
+      "name": "SSS_Blade_Walk",
+      "category": "Blade",
+      "loop": true,
+      "duration": 1,
+      "frames": 31,
+      "source": "Walk"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.SentinelAirSlam",
+      "name": "SSS_Glaive_AirSlam",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 0.75,
+      "frames": 91,
+      "source": "SentinelAirSlam"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.aerial",
+      "name": "SSS_Glaive_AttackAir",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 0.4166666567325592,
+      "frames": 11,
+      "source": "aerial"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.DashAttack",
+      "name": "SSS_Glaive_AttackDash",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 8,
+      "source": "DashAttack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.Spear Heavy",
+      "name": "SSS_Glaive_AttackHeavy",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 2.5166666507720947,
+      "frames": 46,
+      "source": "Spear Heavy"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.M1 - 1",
+      "name": "SSS_Glaive_AttackLight_01",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 1,
+      "frames": 28,
+      "source": "M1 - 1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.M1 - 2",
+      "name": "SSS_Glaive_AttackLight_02",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 1,
+      "frames": 9,
+      "source": "M1 - 2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.M1 - 3",
+      "name": "SSS_Glaive_AttackLight_03",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 1,
+      "frames": 10,
+      "source": "M1 - 3"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.M1 - 4",
+      "name": "SSS_Glaive_AttackLight_04",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 1,
+      "frames": 11,
+      "source": "M1 - 4"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.M1 - 5",
+      "name": "SSS_Glaive_AttackLight_05",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 1,
+      "frames": 9,
+      "source": "M1 - 5"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Glaive Animations.AnimSaves.SentinelUpTilt",
+      "name": "SSS_Glaive_UpTilt",
+      "category": "Glaive",
+      "loop": false,
+      "duration": 0.7400000095367432,
+      "frames": 75,
+      "source": "SentinelUpTilt"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.RegSwordAirSlam",
+      "name": "SSS_Grimoire_AirSlam",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 0.75,
+      "frames": 91,
+      "source": "RegSwordAirSlam"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Air Attack",
+      "name": "SSS_Grimoire_AttackAir",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 0.8500000238418579,
+      "frames": 13,
+      "source": "Grimoire Air Attack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Dash Attack",
+      "name": "SSS_Grimoire_AttackDash",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 0.8166666626930237,
+      "frames": 18,
+      "source": "Grimoire Dash Attack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Heavy",
+      "name": "SSS_Grimoire_AttackHeavy",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 2.5333333015441895,
+      "frames": 28,
+      "source": "Grimoire Heavy"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Hit 1",
+      "name": "SSS_Grimoire_AttackLight_01",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 1.850000023841858,
+      "frames": 27,
+      "source": "Grimoire Hit 1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Hit 2",
+      "name": "SSS_Grimoire_AttackLight_02",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 1.649999976158142,
+      "frames": 18,
+      "source": "Grimoire Hit 2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Hit 3",
+      "name": "SSS_Grimoire_AttackLight_03",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 2.133333444595337,
+      "frames": 26,
+      "source": "Grimoire Hit 3"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Hit 4",
+      "name": "SSS_Grimoire_AttackLight_04",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 1.7833333015441895,
+      "frames": 20,
+      "source": "Grimoire Hit 4"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Hit 5",
+      "name": "SSS_Grimoire_AttackLight_05",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 1.7666666507720947,
+      "frames": 22,
+      "source": "Grimoire Hit 5"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Block",
+      "name": "SSS_Grimoire_Block",
+      "category": "Grimoire",
+      "loop": true,
+      "duration": 12,
+      "frames": 721,
+      "source": "Grimoire Block"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Block hit 2",
+      "name": "SSS_Grimoire_BlockHit_02",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 0.4166666567325592,
+      "frames": 26,
+      "source": "Block hit 2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Parry",
+      "name": "SSS_Grimoire_Parry",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 1.0499999523162842,
+      "frames": 11,
+      "source": "Parry"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.Grimoire Parry Hit",
+      "name": "SSS_Grimoire_ParryHit",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 0.1666666716337204,
+      "frames": 8,
+      "source": "Grimoire Parry Hit"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Grimoire Animations.AnimSaves.RegSwordUpTilt",
+      "name": "SSS_Grimoire_UpTilt",
+      "category": "Grimoire",
+      "loop": false,
+      "duration": 0.5833333134651184,
+      "frames": 71,
+      "source": "RegSwordUpTilt"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.AirAttack",
+      "name": "SSS_LightAxe_AttackAir",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "AirAttack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.DashAttack",
+      "name": "SSS_LightAxe_AttackDash",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "DashAttack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.M2",
+      "name": "SSS_LightAxe_AttackHeavy",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.5666666626930237,
+      "frames": 35,
+      "source": "M2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.M1_1",
+      "name": "SSS_LightAxe_AttackLight_01",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.4833333194255829,
+      "frames": 30,
+      "source": "M1_1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.M1_2",
+      "name": "SSS_LightAxe_AttackLight_02",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.4833333194255829,
+      "frames": 30,
+      "source": "M1_2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.M1_3",
+      "name": "SSS_LightAxe_AttackLight_03",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.4833333194255829,
+      "frames": 30,
+      "source": "M1_3"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.M1_4",
+      "name": "SSS_LightAxe_AttackLight_04",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.4833333194255829,
+      "frames": 30,
+      "source": "M1_4"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.M1_5",
+      "name": "SSS_LightAxe_AttackLight_05",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.5666666626930237,
+      "frames": 35,
+      "source": "M1_5"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.Block",
+      "name": "SSS_LightAxe_Block",
+      "category": "LightAxe",
+      "loop": true,
+      "duration": 1.649999976158142,
+      "frames": 100,
+      "source": "Block"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.Guard1",
+      "name": "SSS_LightAxe_BlockHit_01",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.15000000596046448,
+      "frames": 10,
+      "source": "Guard1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.Dash",
+      "name": "SSS_LightAxe_Dash",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.6499999761581421,
+      "frames": 40,
+      "source": "Dash"
+    },
+    {
+      "priority": "Movement",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.Idle",
+      "name": "SSS_LightAxe_Idle",
+      "category": "LightAxe",
+      "loop": true,
+      "duration": 1,
+      "frames": 31,
+      "source": "Idle"
+    },
+    {
+      "priority": "Idle",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.AxeIdle",
+      "name": "SSS_LightAxe_IdleAxe",
+      "category": "LightAxe",
+      "loop": true,
+      "duration": 2.6500000953674316,
+      "frames": 160,
+      "source": "AxeIdle"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.Landing Animation",
+      "name": "SSS_LightAxe_Land",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 1.4666666984558105,
+      "frames": 13,
+      "source": "Landing Animation"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.Parried 2",
+      "name": "SSS_LightAxe_Parried_02",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.8666666746139526,
+      "frames": 53,
+      "source": "Parried 2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.Parry",
+      "name": "SSS_LightAxe_Parry",
+      "category": "LightAxe",
+      "loop": false,
+      "duration": 0.3166666626930237,
+      "frames": 20,
+      "source": "Parry"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Light Axe Animations.AnimSaves.Run",
+      "name": "SSS_LightAxe_Run",
+      "category": "LightAxe",
+      "loop": true,
+      "duration": 0.46666666865348816,
+      "frames": 15,
+      "source": "Run"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.M2",
+      "name": "SSS_MediumAxe_AttackHeavy",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "M2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.JumpAttack",
+      "name": "SSS_MediumAxe_AttackJump",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "JumpAttack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.m1_1",
+      "name": "SSS_MediumAxe_AttackLight_01",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "m1_1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.m1_2",
+      "name": "SSS_MediumAxe_AttackLight_02",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "m1_2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.m1_2",
+      "name": "SSS_MediumAxe_AttackLight_02_Variant02",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "m1_2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.m1_3",
+      "name": "SSS_MediumAxe_AttackLight_03",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "m1_3"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.m1_4",
+      "name": "SSS_MediumAxe_AttackLight_04",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "m1_4"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.m1_5",
+      "name": "SSS_MediumAxe_AttackLight_05",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "m1_5"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.Blocking",
+      "name": "SSS_MediumAxe_Block",
+      "category": "MediumAxe",
+      "loop": true,
+      "duration": 1.4833333492279053,
+      "frames": 90,
+      "source": "Blocking"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.Guard1",
+      "name": "SSS_MediumAxe_BlockHit_01",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.15000000596046448,
+      "frames": 10,
+      "source": "Guard1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.Dash",
+      "name": "SSS_MediumAxe_Dash",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "Dash"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.Idle",
+      "name": "SSS_MediumAxe_Idle",
+      "category": "MediumAxe",
+      "loop": true,
+      "duration": 2,
+      "frames": 121,
+      "source": "Idle"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.Landing Animation",
+      "name": "SSS_MediumAxe_Land",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 1.4666666984558105,
+      "frames": 13,
+      "source": "Landing Animation"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.Parried",
+      "name": "SSS_MediumAxe_Parried",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.4833333194255829,
+      "frames": 30,
+      "source": "Parried"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Medium Axe Animations.AnimSaves.Parry",
+      "name": "SSS_MediumAxe_Parry",
+      "category": "MediumAxe",
+      "loop": false,
+      "duration": 0.3166666626930237,
+      "frames": 15,
+      "source": "Parry"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.RegSwordAirSlam",
+      "name": "SSS_Pickaxe_AirSlam",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.75,
+      "frames": 91,
+      "source": "RegSwordAirSlam"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.Dash Attack",
+      "name": "SSS_Pickaxe_AttackDash",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.8833333253860474,
+      "frames": 54,
+      "source": "Dash Attack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.Heavy",
+      "name": "SSS_Pickaxe_AttackHeavy",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 1.0833333730697632,
+      "frames": 15,
+      "source": "Heavy"
+    },
+    {
+      "priority": "Action4",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.Jump Attack",
+      "name": "SSS_Pickaxe_AttackJump",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 45,
+      "source": "Jump Attack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.1",
+      "name": "SSS_Pickaxe_AttackLight_01",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.6333333253860474,
+      "frames": 16,
+      "source": "1"
+    },
+    {
+      "priority": "Action2",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.2",
+      "name": "SSS_Pickaxe_AttackLight_02",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.6333333253860474,
+      "frames": 17,
+      "source": "2"
+    },
+    {
+      "priority": "Action3",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.3",
+      "name": "SSS_Pickaxe_AttackLight_03",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.36666667461395264,
+      "frames": 8,
+      "source": "3"
+    },
+    {
+      "priority": "Action4",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.4",
+      "name": "SSS_Pickaxe_AttackLight_04",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.4000000059604645,
+      "frames": 9,
+      "source": "4"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.5",
+      "name": "SSS_Pickaxe_AttackLight_05",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 1.1666666269302368,
+      "frames": 49,
+      "source": "5"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.Block",
+      "name": "SSS_Pickaxe_Block",
+      "category": "Pickaxe",
+      "loop": true,
+      "duration": 4,
+      "frames": 241,
+      "source": "Block"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.Block hit 2",
+      "name": "SSS_Pickaxe_BlockHit_02",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.4166666567325592,
+      "frames": 26,
+      "source": "Block hit 2"
+    },
+    {
+      "priority": "Action4",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.Dazed",
+      "name": "SSS_Pickaxe_Dazed",
+      "category": "Pickaxe",
+      "loop": true,
+      "duration": 4.766666889190674,
+      "frames": 287,
+      "source": "Dazed"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.PickAxeIdle",
+      "name": "SSS_Pickaxe_Idle",
+      "category": "Pickaxe",
+      "loop": true,
+      "duration": 1.6666666269302368,
+      "frames": 101,
+      "source": "PickAxeIdle"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.Parry",
+      "name": "SSS_Pickaxe_Parry",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 1.0499999523162842,
+      "frames": 11,
+      "source": "Parry"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.PickAxeRun",
+      "name": "SSS_Pickaxe_Run",
+      "category": "Pickaxe",
+      "loop": true,
+      "duration": 0.42124998569488525,
+      "frames": 42,
+      "source": "PickAxeRun"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.RegSwordUpTilt",
+      "name": "SSS_Pickaxe_UpTilt",
+      "category": "Pickaxe",
+      "loop": false,
+      "duration": 0.5833333134651184,
+      "frames": 71,
+      "source": "RegSwordUpTilt"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Pickaxe Animations.AnimSaves.PickAxeWalk",
+      "name": "SSS_Pickaxe_Walk",
+      "category": "Pickaxe",
+      "loop": true,
+      "duration": 0.75,
+      "frames": 61,
+      "source": "PickAxeWalk"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.DuelistsAirSlam",
+      "name": "SSS_Rapier_AirSlam",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.75,
+      "frames": 91,
+      "source": "DuelistsAirSlam"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Air Attack",
+      "name": "SSS_Rapier_AttackAir",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 15,
+      "source": "Air Attack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Dash Attack",
+      "name": "SSS_Rapier_AttackDash",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 1,
+      "frames": 14,
+      "source": "Dash Attack"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Rapier Heavy",
+      "name": "SSS_Rapier_AttackHeavy",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 1.25,
+      "frames": 17,
+      "source": "Rapier Heavy"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.M1 - 1",
+      "name": "SSS_Rapier_AttackLight_01",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 1.4666666984558105,
+      "frames": 24,
+      "source": "M1 - 1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.M1 - 2",
+      "name": "SSS_Rapier_AttackLight_02",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 1.4666666984558105,
+      "frames": 18,
+      "source": "M1 - 2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.M1 - 3",
+      "name": "SSS_Rapier_AttackLight_03",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 1.399999976158142,
+      "frames": 25,
+      "source": "M1 - 3"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.M1 - 4",
+      "name": "SSS_Rapier_AttackLight_04",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 1.4166666269302368,
+      "frames": 21,
+      "source": "M1 - 4"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.M1 - 5",
+      "name": "SSS_Rapier_AttackLight_05",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 1.6333333253860474,
+      "frames": 31,
+      "source": "M1 - 5"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Rapier Block",
+      "name": "SSS_Rapier_Block",
+      "category": "Rapier",
+      "loop": true,
+      "duration": 4,
+      "frames": 241,
+      "source": "Rapier Block"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Blocked",
+      "name": "SSS_Rapier_Blocked",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.20000000298023224,
+      "frames": 13,
+      "source": "Blocked"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Back Dash P",
+      "name": "SSS_Rapier_DashBackward_P",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.6666666865348816,
+      "frames": 41,
+      "source": "Back Dash P"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Front Dash P",
+      "name": "SSS_Rapier_DashForward_P",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.6666666865348816,
+      "frames": 41,
+      "source": "Front Dash P"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Left Dash P",
+      "name": "SSS_Rapier_DashLeft_P",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.6666666865348816,
+      "frames": 41,
+      "source": "Left Dash P"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Right Dash P",
+      "name": "SSS_Rapier_DashRight_P",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.6666666865348816,
+      "frames": 41,
+      "source": "Right Dash P"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Rapier Idle",
+      "name": "SSS_Rapier_Idle",
+      "category": "Rapier",
+      "loop": true,
+      "duration": 4,
+      "frames": 241,
+      "source": "Rapier Idle"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Landing Animation",
+      "name": "SSS_Rapier_Land",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 1.4666666984558105,
+      "frames": 13,
+      "source": "Landing Animation"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Parried",
+      "name": "SSS_Rapier_Parried",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.4833333194255829,
+      "frames": 30,
+      "source": "Parried"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.R Parry",
+      "name": "SSS_Rapier_Parry",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.30000001192092896,
+      "frames": 4,
+      "source": "R Parry"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Parry Hit",
+      "name": "SSS_Rapier_ParryHit",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.1666666716337204,
+      "frames": 8,
+      "source": "Parry Hit"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Rapier Run",
+      "name": "SSS_Rapier_Run",
+      "category": "Rapier",
+      "loop": true,
+      "duration": 0.5333333611488342,
+      "frames": 18,
+      "source": "Rapier Run"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.DuelistUpTilt",
+      "name": "SSS_Rapier_UpTilt",
+      "category": "Rapier",
+      "loop": false,
+      "duration": 0.8999999761581421,
+      "frames": 91,
+      "source": "DuelistUpTilt"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Rapier Animations.AnimSaves.Rapier Walk",
+      "name": "SSS_Rapier_Walk",
+      "category": "Rapier",
+      "loop": true,
+      "duration": 1,
+      "frames": 51,
+      "source": "Rapier Walk"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.M1 - 1",
+      "name": "SSS_Shield_AttackLight_01",
+      "category": "Shield",
+      "loop": false,
+      "duration": 1.600000023841858,
+      "frames": 40,
+      "source": "M1 - 1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.M1 - 2",
+      "name": "SSS_Shield_AttackLight_02",
+      "category": "Shield",
+      "loop": false,
+      "duration": 1,
+      "frames": 20,
+      "source": "M1 - 2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.M1 - 3",
+      "name": "SSS_Shield_AttackLight_03",
+      "category": "Shield",
+      "loop": false,
+      "duration": 1.600000023841858,
+      "frames": 29,
+      "source": "M1 - 3"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.M1 - 4",
+      "name": "SSS_Shield_AttackLight_04",
+      "category": "Shield",
+      "loop": false,
+      "duration": 1.5,
+      "frames": 23,
+      "source": "M1 - 4"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.M1 - 5",
+      "name": "SSS_Shield_AttackLight_05",
+      "category": "Shield",
+      "loop": false,
+      "duration": 1.5,
+      "frames": 34,
+      "source": "M1 - 5"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Block",
+      "name": "SSS_Shield_Block",
+      "category": "Shield",
+      "loop": true,
+      "duration": 2,
+      "frames": 121,
+      "source": "Block"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Block Hit - 1",
+      "name": "SSS_Shield_BlockHit_01",
+      "category": "Shield",
+      "loop": false,
+      "duration": 0.5,
+      "frames": 31,
+      "source": "Block Hit - 1"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Block Hit - 2",
+      "name": "SSS_Shield_BlockHit_02",
+      "category": "Shield",
+      "loop": false,
+      "duration": 0.5,
+      "frames": 31,
+      "source": "Block Hit - 2"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Block Hit - 3",
+      "name": "SSS_Shield_BlockHit_03",
+      "category": "Shield",
+      "loop": false,
+      "duration": 0.5,
+      "frames": 31,
+      "source": "Block Hit - 3"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Backward Dash",
+      "name": "SSS_Shield_DashBackward",
+      "category": "Shield",
+      "loop": false,
+      "duration": 0.5833333134651184,
+      "frames": 11,
+      "source": "Backward Dash"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Forward Dash",
+      "name": "SSS_Shield_DashForward",
+      "category": "Shield",
+      "loop": false,
+      "duration": 0.6833333373069763,
+      "frames": 10,
+      "source": "Forward Dash"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Dash Left",
+      "name": "SSS_Shield_DashLeft",
+      "category": "Shield",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 10,
+      "source": "Dash Left"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Dash Right",
+      "name": "SSS_Shield_DashRight",
+      "category": "Shield",
+      "loop": false,
+      "duration": 0.7333333492279053,
+      "frames": 10,
+      "source": "Dash Right"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Idle",
+      "name": "SSS_Shield_Idle",
+      "category": "Shield",
+      "loop": true,
+      "duration": 2,
+      "frames": 121,
+      "source": "Idle"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Run",
+      "name": "SSS_Shield_Run",
+      "category": "Shield",
+      "loop": true,
+      "duration": 0.6666666865348816,
+      "frames": 41,
+      "source": "Run"
+    },
+    {
+      "priority": "Action",
+      "path": "Workspace.125+ Animations & Weapons Pack.Shield Animations.AnimSaves.Walk",
+      "name": "SSS_Shield_Walk",
+      "category": "Shield",
+      "loop": true,
+      "duration": 1,
+      "frames": 61,
+      "source": "Walk"
+    }
+  ]
+}

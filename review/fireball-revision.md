@@ -1,0 +1,9 @@
+# Blighted Fireball and red Fireball revision
+
+- Used Roblox Studio MCP against BlockBound (place 127569658424596). The separate SoulShroud library remains intact. No desktop control was used.
+- Renamed the displayed ability and command lookup to **Blighted Fireball**. Its saved `WraithfireOrb` identifier remains compatible with existing loadouts and scrolls. Its blue VFX and server mechanics are preserved.
+- Fireball uses the same complete `RefFire1`, `RefPortal` and `RefKi1` particle/beam assemblies, body scale, orbiting wisps, halo and directional tail as Blighted Fireball, tinted red. It retains StarterPlan's 0.22-second windup, speed 70, range 90, radius 1.35, damage 20 and splash 5. No server code or tuning changed.
+- Fireball still calls its original `fireBlast` explosion function, with the original assemblies, scale, emission, tint and 0.17/0.34-second secondary beats. A source comparison confirms only optional sound gating differs in that function. Sound is disabled for this cast.
+- Running ordinary client scripts cast both real abilities through RequestAbility. Gameplay-camera captures showed the blue Blighted Fireball, red Fireball projectile, and original orange/red explosion. A held Ghost went from 40 to 20 health for Fireball and from 40 to 8 for Blighted Fireball. The new display name appeared in the HUD and command resolution succeeded.
+- Runtime inspection found zero visible effect hosts and zero sounds. Repeated Fireball casts returned to zero effect folders. Rojo build passed. Test loadouts and temporarily moved trees were restored, and temporary QA scripts were not retained in the edit DataModel.
+- Visual QA used still captures from one Studio client; separate observer clients and mobile hardware were not rechecked in this revision. Cataclysm was not changed.

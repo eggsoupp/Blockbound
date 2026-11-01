@@ -1,0 +1,32 @@
+[
+  {
+    "Algorithm": "SHA256",
+    "Hash": "8B744D57481F44FD366DD5D59C1754C988DEECCD6277517173730BE99FE8E31B",
+    "Path": "C:\\Users\\Elias\\Documents\\Blockbound\\src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\CataclysmCamera.lua"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "F1D5C4EB5F5F67D8478A1F3A21E1C8F218D2F32CAB1C6B19710C35A9A47EDC02",
+    "Path": "C:\\Users\\Elias\\Documents\\Blockbound\\src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\CataclysmParticles.lua"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "378003FFD3B0714FB081783B37FCBB8144C09BC749EEEB065351F46152AC443D",
+    "Path": "C:\\Users\\Elias\\Documents\\Blockbound\\src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\CataclysmVFX.lua"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "816FBBC455492BF84C945BCE03C958A5DEEDE66757132F543777131816E95E21",
+    "Path": "C:\\Users\\Elias\\Documents\\Blockbound\\src\\ReplicatedStorage\\Shared\\Abilities\\CataclysmPlan.lua"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "D0C0C02B9AA41BBD0F2296DE37F6535BACDBBDA373FBC38657052FD714D93FFE",
+    "Path": "C:\\Users\\Elias\\Documents\\Blockbound\\src\\ServerScriptService\\Abilities\\Cataclysm.lua"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "C0006A977A7B8140A4C87D2A12970AF9C2E35025B3559DB78F3423D120AE39E8",
+    "Path": "C:\\Users\\Elias\\Documents\\Blockbound\\src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\ReferenceVFX.lua"
+  }
+]

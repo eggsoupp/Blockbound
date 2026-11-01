@@ -124,20 +124,18 @@ local Colors = {
 --[[
 	BALANCE
 
-	A player has 100 health. Against an iron or gold sword - 18 to 24 damage a
-	second while in reach, plus an ability now and then - 2000 health is a
-	fight of a minute and a half to two: a little under the Eye's health,
-	because Signus is in reach more of the time, but it holds still less.
-
-	ONE mistake is survivable from full and THREE in a row is a death. The
-	Nova is the one thing that hits for more than 18, and it is the one thing
-	a wall stops outright. Numbers in pairs are { phase one, phase two }.
+	Second boss tier: 2300 health, between the Eye and Blightborer. Against
+	base movement (walk 16, sprint 25), commitment and direction changes
+	beat the fixed telegraphs; simply circling no longer clears every spell.
+	Major hits cost roughly a third of unarmoured health. Phase two uses
+	reacquired follow-ups and two committed lunges, with a per-action cap.
+	Short grounded recoveries remain the melee opening.
 ]]
 local Tuning = {
 	phase2At = 0.5,
 
-	restMin = { 1.6, 1.2 },
-	restMax = { 2.4, 1.9 },
+	restMin = { 0.7, 0.45 },
+	restMax = { 1.05, 0.7 },
 
 	-- Where it waits between spells: a ring around whoever it is after.
 	hover = {
@@ -202,17 +200,18 @@ local Tuning = {
 	},
 
 	lunge = {
-		farDistance = 38,
-		farSeconds = 4,
-		hiddenSeconds = 4,
-		windup = 0.7,
+		farDistance = 34,
+		farSeconds = 2,
+		hiddenSeconds = 2.5,
+		windup = { 0.6, 0.5 },
 		rearBack = 4,
-		speed = 60,
+		speed = { 90, 108 },
 		overshoot = 6,
-		reach = 5.5,
-		damage = 16,
-		cooldown = 12,
-		recover = 1.5,
+		reach = { 7, 8.5 },
+		damage = { 28, 34 },
+		cap = { 28, 48 },
+		cooldown = { 8, 5.5 },
+		recover = { 0.85, 0.7 },
 		bladeRadius = 4.2,
 	},
 
@@ -262,10 +261,10 @@ local Tuning = {
 		ring = 30,
 		speed = 26,
 		drift = 1.8, -- the ring slides round this much faster
-		bobAmplitude = 1.8,
-		bank = 0.4, -- most it rolls into a turn, radians
-		perch = { 2.2, 3 }, -- seconds on the ground after a spell
-		airTime = 1.3, -- seconds aloft before the next spell
+		bobAmplitude = 0.4,
+		bank = 0, -- an upright, weightless glide rather than banking the robe
+		perch = { 1.25, 1.7 }, -- a deliberate melee punish window
+		airTime = 0.55,
 	},
 
 	-- Leaving: nobody near it for this long.
@@ -275,11 +274,11 @@ local Tuning = {
 	leaveSeconds = 2.4,
 }
 
--- What it does, in order, by phase. Lunge and Veil Step are not in the
--- cycle: they answer what the player is doing, between its turns.
+-- Lunge is part of the pressure cycle as well as the answer to distant
+-- targets. Veil Step remains a response to prolonged close pressure.
 local CYCLES = {
-	{ "spiral", "lance", "beam", "spiral", "lance" },
-	{ "lance", "spiral", "beam", "lance", "beam" },
+	{ "spiral", "lunge", "lance", "beam", "spiral", "lance" },
+	{ "lance", "lunge", "spiral", "beam", "lunge", "lance", "spiral", "beam" },
 }
 
 local ATTACK_NAMES = {
@@ -735,6 +734,7 @@ end
 
 local POSES = {
 	rest = {},
+	flight = sleeves(0.06, 0.2),
 	gather = sleeves(-1.25, 0.15, { hood = CFrame.Angles(-0.18, 0, 0) }),
 	release = sleeves(-0.85, 0.55, { hood = CFrame.Angles(0.22, 0, 0), core = CFrame.Angles(0.08, 0, 0) }),
 	raise = sleeves(-2.6, 0.45, { hood = CFrame.Angles(-0.3, 0, 0) }),
@@ -777,7 +777,11 @@ end
 	touched, so the two never fight.
 ]]
 local function setPose(entry, name: string, seconds: number)
-	local pose = POSES[name] or POSES.rest
+	local flying = name == "rest" and entry.transformed and os.clock() >= (entry.perchUntil or 0)
+	local pose = POSES[if flying then "flight" else name] or POSES.rest
+	entry.poseName = name
+	entry.flightPose = flying == true
+	entry.poseSettledAt = os.clock() + seconds
 	local trackName = POSE_TRACK[name]
 	local animator = entry.animator
 
@@ -1511,119 +1515,92 @@ end
 	along a shallow arc. The blade cuts whoever is near its path. It arrives
 	low, hem on the ground, spent, and stays there for the recovery.
 ]]
-local function lunge(entry, _phase: number)
-	local L = Tuning.lunge
-	local scope = entry.scope
-
-	local target = entry.lungeTarget or pickTarget(entry) or nearestPlayer(entry.position)
-	entry.lungeTarget = nil
-	local root = livingRoot(target)
-	if not root then
-		return
-	end
-	entry.focus = target
-	entry.motion = "scripted"
-	entry.lean = 0
-	entry.bob = 0
-
-	setPose(entry, "lunge", 0.3)
-
-	-- The eyes, and the blade.
-	local eyes = newPart(Vector3.new(2.2, 0.6, 0.6), Colors.pearl, 0.2, "Eyes")
-	eyes.Parent = workspace
-	scope:add(eyes)
-	newLight(eyes, Colors.pearl, 20, 3)
-	local blade = makeArc(scope, 9, Colors.orchid, 0.1)
-	local bladeMid = blade[1]
-	newLight(bladeMid, Colors.orchid, 16, 2)
-	moteStream(bladeMid, Colors.orchid, 40, 1, 6)
-
-	local function layBlade(scale: number, spin: number)
-		local pivot = entry.model:GetPivot()
-		local frame = pivot * CFrame.new(0, -2, -7) * CFrame.Angles(0, math.rad(90), 0) * CFrame.Angles(spin, 0, 0)
-		layArc(blade, frame, L.bladeRadius * scale, math.pi * 0.55, math.pi * 1.45, 0.7 * scale + 0.05, true)
-		eyes.CFrame = pivot * EYES
-	end
-
-	-- WIND UP: back off, locking on.
-	local start = entry.position
-	local began = os.clock()
-	local last = began
-	local direction = flat(root.Position - entry.position)
-	while os.clock() - began < L.windup do
-		if entry.signusFinished then
-			return
-		end
-		local now = os.clock()
-		local dt = math.min(now - last, 0.1)
-		last = now
-		if livingRoot(target) == root then
-			direction = flat(root.Position - entry.position)
-		end
-		entry.look = turnFlat(entry.look, direction, math.rad(360) * dt)
-		local alpha = (now - began) / L.windup
-		local eased = alpha * alpha * (3 - 2 * alpha)
-		entry.position = start - direction * L.rearBack * eased
-		entry.lean = -0.25 * eased
-		applyPose(entry)
-		layBlade(eased, alpha * 4)
-		task.wait()
-	end
-
-	-- COMMIT: the path is fixed now, to where you are, ending low.
-	if livingRoot(target) == root then
-		direction = flat(root.Position - entry.position)
-	end
-	entry.look = direction
-	local landing = groundUnder(root.Position + direction * L.overshoot)
-	local goal = Vector3.new(landing.X, pivotHeight(entry, landing, 0.6), landing.Z)
-	local from = entry.position
-	local travel = (goal - from).Magnitude
-	local seconds = math.clamp(travel / L.speed, 0.25, 1.6)
-	local ledger = {}
-
-	began = os.clock()
-	last = began
-	local spin = 0
-	while os.clock() - began < seconds do
-		if entry.signusFinished then
-			return
-		end
-		local now = os.clock()
-		local dt = math.min(now - last, 0.1)
-		last = now
-		local alpha = math.clamp((now - began) / seconds, 0, 1)
-		entry.position = from:Lerp(goal, alpha) + Vector3.new(0, math.sin(alpha * math.pi) * 3, 0)
-		entry.lean = 0.35 * math.sin(alpha * math.pi)
-		applyPose(entry)
-		spin += dt * 12
-		layBlade(1, spin)
-
-		local cutter = entry.position - Vector3.new(0, entry.feetOffset * 0.6, 0)
-		for _, player in ipairs(livingPlayers()) do
-			local victim = rootOf(player)
-			if victim and (victim.Position - cutter).Magnitude <= L.reach then
-				hitOnce(ledger, "lunge", player, L.damage, L.damage)
-			end
-		end
-		task.wait()
-	end
-
-	-- ARRIVAL: the blade shatters; it hangs there, spent.
-	entry.position = goal
-	entry.lean = 0.1
-	applyPose(entry)
-	fx("lunge", entry.position - Vector3.new(0, entry.feetOffset * 0.6, 0))
-	for _, part in ipairs(blade) do
-		part:Destroy()
-	end
-	eyes:Destroy()
-	setPose(entry, "droop", 0.4)
-	entry.motion = "ground"
-	entry.leanGoal = 0.1
-	pause(entry, L.recover)
-	setPose(entry, "rest", 0.5)
-	entry.leanGoal = 0
+local function lunge(entry, phase: number)
+ local L=Tuning.lunge
+ local target=entry.lungeTarget or pickTarget(entry) or nearestPlayer(entry.position)
+ entry.lungeTarget=nil
+ local root=livingRoot(target);if not root then return end
+ entry.focus=target
+ local ledger={}
+ entry.nextLungeAt=os.clock()+L.cooldown[phase]
+ for rush=1,(if phase==2 then 2 else 1) do
+  if entry.signusFinished or not livingRoot(target) then return end
+  entry.motion="scripted";entry.lean=0;entry.bob=0;entry.roll=0
+  setPose(entry,"gather",.18)
+  local windup=L.windup[phase]
+  local lockDuration=if phase==2 then .28 else .22
+  local blade=newPart(Vector3.one,Colors.orchid,0,"CrescentLunge")
+  blade:SetAttribute("Phase",phase);blade:SetAttribute("Stage","Charge")
+  blade:SetAttribute("StartedAt",workspace:GetServerTimeNow());blade:SetAttribute("Charge",windup)
+  blade:SetAttribute("Lock",lockDuration)
+  blade:SetAttribute("Radius",L.reach[phase]);blade:SetAttribute("Rush",rush)
+  blade.CFrame=entry.model:GetPivot()*CFrame.new(0,-2,-6)
+  blade.Parent=workspace;entry.scope:add(blade)
+  local start=entry.position
+  local direction=flat(root.Position-entry.position)
+  local lockedAim=root.Position
+  local began,last=os.clock(),os.clock()
+  while os.clock()-began<windup do
+   if entry.signusFinished or entry.scope:isDead() then return end
+   local now=os.clock();local dt=math.min(now-last,.1);last=now
+   local live=livingRoot(target);if not live then return end
+   local velocity=Vector3.new(live.AssemblyLinearVelocity.X,0,live.AssemblyLinearVelocity.Z)
+   if velocity.Magnitude>25 then velocity=velocity.Unit*25 end
+   if now-began<windup-lockDuration then lockedAim=live.Position+velocity*.16 end
+   direction=flat(lockedAim-entry.position)
+   entry.look=turnFlat(entry.look,direction,math.rad(360)*dt)
+   local a=math.clamp((now-began)/windup,0,1);local eased=a*a*(3-2*a)
+   entry.position=start-direction*L.rearBack*eased
+   entry.lean=-.1*eased;applyPose(entry)
+   blade.CFrame=entry.model:GetPivot()*CFrame.new(0,-2,-6)
+   blade:SetAttribute("Target",blade.Position+direction*50)
+   task.wait()
+  end
+  local live=livingRoot(target);if not live then return end
+  -- The final, brightly marked part of the warning and the rush keep this aim.
+  -- A deliberate dodge has a real window; circling is predicted, not tracked forever.
+  local aim=lockedAim
+  direction=flat(aim-entry.position);entry.look=direction
+  local landing=groundUnder(aim+direction*L.overshoot)
+  local goal=Vector3.new(landing.X,pivotHeight(entry,landing,.6),landing.Z)
+  local from=entry.position
+  local seconds=math.clamp((goal-from).Magnitude/L.speed[phase],.22,1.15)
+  blade:SetAttribute("Stage","Rush");blade:SetAttribute("RushAt",workspace:GetServerTimeNow())
+  blade:SetAttribute("Travel",seconds);blade:SetAttribute("Target",goal-Vector3.yAxis*entry.feetOffset*.6)
+  setPose(entry,"lunge",.1)
+  local previous=entry.position-Vector3.yAxis*entry.feetOffset*.6
+  began=os.clock()
+  repeat
+   if entry.signusFinished or entry.scope:isDead() then return end
+   local a=math.clamp((os.clock()-began)/seconds,0,1)
+   entry.position=from:Lerp(goal,a)+Vector3.yAxis*math.sin(a*math.pi)*1.2
+   entry.lean=.12*math.sin(a*math.pi);applyPose(entry)
+   local cutter=entry.position-Vector3.yAxis*entry.feetOffset*.6
+   blade.CFrame=CFrame.lookAt(cutter+direction*3,cutter+direction*4)
+   local delta=cutter-previous
+   for _,player in livingPlayers() do
+    local victim=rootOf(player)
+    if victim then
+     local f=math.clamp((victim.Position-previous):Dot(delta)/math.max(delta:Dot(delta),.001),0,1)
+     local closest=previous+delta*f
+     if (victim.Position-closest).Magnitude<=L.reach[phase] and not sightBlock(closest,victim.Position) then
+      hitOnce(ledger,"rush"..rush,player,L.damage[phase],L.cap[phase])
+     end
+    end
+   end
+   previous=cutter
+   if a>=1 then break end
+   task.wait()
+  until false
+  entry.position=goal;entry.lean=0;applyPose(entry)
+  blade:SetAttribute("Stage","Decay");blade:SetAttribute("DecayAt",workspace:GetServerTimeNow())
+  Debris:AddItem(blade,.45)
+  fx("lungeImpact",previous,{direction=direction,phase=phase,radius=L.reach[phase]})
+  setPose(entry,"droop",.18)
+  if rush==1 and phase==2 and not pause(entry,.18) then return end
+ end
+ entry.motion="ground";entry.leanGoal=0
+ pause(entry,L.recover[phase]);setPose(entry,"rest",.3)
 end
 
 --[[
@@ -1945,6 +1922,7 @@ end
 local function performAttack(entry, pick: string, phase: number)
 	setBossPhase(entry, ATTACK_NAMES[pick])
 	entry.busy = true
+	entry.activeAttack = pick
 
 	local scope = AbilityScope.new()
 	entry.scope = scope
@@ -1956,6 +1934,7 @@ local function performAttack(entry, pick: string, phase: number)
 			entry.scope = nil
 		end
 		scope:destroy()
+		entry.activeAttack = nil
 
 		if entry.signusFinished then
 			return
@@ -1995,6 +1974,8 @@ end
 
 -- Touching the robe: a short cylinder around its centre.
 local function contactDamage(entry, now: number)
+	-- The rush capsule owns lunge damage, including its shared two-rush cap.
+	if entry.activeAttack == "lunge" then return end
 	local C = Tuning.contact
 	for _, player in ipairs(livingPlayers()) do
 		local root = rootOf(player)
@@ -2076,7 +2057,7 @@ local function situational(entry, now: number, phase: number): string?
 	if lungeDue and now >= (entry.nextLungeAt or 0) then
 		entry.farSince = nil
 		entry.hiddenSince = nil
-		entry.nextLungeAt = now + L.cooldown
+		entry.nextLungeAt = now + L.cooldown[phase]
 		entry.lungeTarget = focusPlayer
 		return "lunge"
 	end
@@ -2304,12 +2285,25 @@ function Signus.step(entry, dt: number, now: number)
 			entry.look = turnFlat(entry.look, focus.Position - entry.position, math.rad(H.turnRate) * dt)
 		end
 
-		-- Flying, it banks into its turns and leans into its speed.
+		-- The silhouette stays upright; only the hanging sleeves breathe in flight.
 		if entry.transformed and entry.motion == "hover" then
-			local right = flat(entry.look):Cross(Vector3.yAxis)
-			local bank = if flying then -math.clamp(entry.velocity:Dot(right) / F.speed, -1, 1) * F.bank else 0
-			entry.roll += (bank - entry.roll) * math.clamp(dt * 3, 0, 1)
-			entry.leanGoal = if flying then 0.18 * math.clamp(entry.velocity:Dot(flat(entry.look)) / F.speed, -1, 1) else 0
+			entry.roll += (0 - entry.roll) * math.clamp(dt * 6, 0, 1)
+			entry.leanGoal = 0
+			if not entry.busy then
+				if entry.poseName ~= "rest" or entry.flightPose ~= flying then
+					setPose(entry, "rest", 0.35)
+				elseif flying and now >= (entry.poseSettledAt or 0) and entry.rig
+					and not (entry.animator and entry.animator:has("Hover")) then
+					for _, key in { "left", "right" } do
+						local motor = entry.rig.motors[key]
+						if motor and motor.Parent then
+							local phaseOffset = if key == "left" then 0 else 0.8
+							local flutter = math.sin(entry.bobPhase * 2.1 + phaseOffset) * 0.025
+							motor.C0 = entry.rig.rest[key] * POSES.flight[key] * CFrame.Angles(flutter, 0, 0)
+						end
+					end
+				end
+			end
 		end
 
 		applyPose(entry)

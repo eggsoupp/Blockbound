@@ -1,8 +1,5 @@
 -- Shared particle/beam construction. Every texture comes from the supplied packs.
-local Content=game:GetService("ContentProvider")
 local Pack=require(script.Parent.SignusParticles)
-local Base=require(script.Parent.CataclysmParticles)
-local Starter=require(script.Parent.StarterParticles)
 local FX={Pack=Pack}
 FX.Colors={
  plum=Color3.fromRGB(34,8,59),violet=Color3.fromRGB(145,38,245),
@@ -10,25 +7,6 @@ FX.Colors={
  teal=Color3.fromRGB(172,103,255),gold=Color3.fromRGB(224,164,255),
  black=Color3.new(0,0,0),
 }
-local loaded=false
-function FX.preload()
- if loaded then return end
- loaded=true
- task.spawn(function()
-  local assets={}
-  for _,library in ipairs({Pack,Base,Starter}) do
-   for _,data in pairs(library) do table.insert(assets,data.Texture) end
-  end
-  local sounds={}
-  for _,id in pairs(FX.Sounds) do
-   local sound=Instance.new("Sound");sound.SoundId=id;table.insert(assets,sound);table.insert(sounds,sound)
-  end
-  pcall(function() Content:PreloadAsync(assets,function(id,status)
-   if status~=Enum.AssetFetchStatus.Success then warn("[SignusVFX] Asset unavailable: "..id) end
-  end) end)
-  for _,sound in ipairs(sounds) do sound:Destroy() end
- end)
-end
 function FX.host(scope,position,name)
  local part=scope:add(Instance.new("Part"))
  part.Name=name or "SignusParticleHost";part.Size=Vector3.one*.1;part.Transparency=1
@@ -40,7 +18,7 @@ function FX.attachment(parent,cf)
  local a=Instance.new("Attachment");a.CFrame=cf or CFrame.identity;a.Parent=parent;return a
 end
 function FX.emitter(kind,parent,props)
- local data=Pack[kind] or Base[kind] or Starter[kind]
+ local data=Pack[kind]
  assert(data,"Unknown Signus particle "..kind)
  local e=Instance.new("ParticleEmitter");e.Name="Signus_"..kind
  e.Enabled=false;e.Rate=0;e.Lifetime=NumberRange.new(.5);e.Speed=NumberRange.new(0)
@@ -55,6 +33,21 @@ function FX.emitter(kind,parent,props)
 end
 function FX.burst(kind,parent,count,props)
  local e=FX.emitter(kind,parent,props);e:Emit(count);return e
+end
+local function ns(a,b) return NumberSequence.new(a,b or a) end
+local function kp(t,v) return NumberSequenceKeypoint.new(t,v) end
+local function merge(base,props) for k,v in pairs(props or {}) do base[k]=v end;return base end
+-- Fades in, holds, fades out, so a slow stream of long particles crossfades
+-- into one steady image.
+FX.Hold=NumberSequence.new({kp(0,1),kp(.2,0),kp(.75,0),kp(1,1)})
+-- A steady magic circle (or any flat sheet) on `parent`, whose Front is the
+-- circle's normal. Copies crossfade at random turns, so a symmetric circle
+-- reads as one turning slowly.
+function FX.circle(parent,kind,size,color,props)
+ return FX.emitter(kind,parent,merge({Enabled=true,Rate=1.7,Lifetime=NumberRange.new(1.2),Speed=NumberRange.new(.01),
+  EmissionDirection=Enum.NormalId.Front,SpreadAngle=Vector2.zero,LockedToPart=true,
+  Orientation=Enum.ParticleOrientation.VelocityPerpendicular,Size=ns(size),Color=ColorSequence.new(color),
+  LightEmission=1,Brightness=2,Transparency=FX.Hold,Rotation=NumberRange.new(-180,180),RotSpeed=NumberRange.new(30)},props))
 end
 function FX.beam(parent,from,to,width,color,texture)
  local a=FX.attachment(parent,CFrame.new(from));local b=FX.attachment(parent,CFrame.new(to))

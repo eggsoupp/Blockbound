@@ -1,0 +1,353 @@
+{
+  "placeId": 127569658424596,
+  "health": {
+    "before": 2000,
+    "after": 2300,
+    "allSeeingEye": 2200,
+    "blightborer": 2400
+  },
+  "assets": {
+    "completeAssemblies": 12,
+    "newImports": [
+      "Pack #2 / Spellcasting + Small Impact VFX / Crescent Slash",
+      "Pack #2 / Spellcasting + Small Impact VFX / Stylized Wind",
+      "Impact VFX #61",
+      "Alternate Effects #4 / complete dark corona host"
+    ],
+    "supplementalEdge": {
+      "source": "Workspace.SoulShroud VFX Packs.Crescents.Crescent Slash.Decal",
+      "texture": "rbxassetid://103611618276515",
+      "status": "Success"
+    },
+    "assemblyOriginalComponentsMatch": {
+      "LungeImpact": {
+        "matches": true
+      },
+      "EclipseCorona": {
+        "matches": true
+      },
+      "LungeBlade": {
+        "matches": true
+      },
+      "LungeWake": {
+        "matches": true
+      }
+    }
+  },
+  "lunge": {
+    "phase1": {
+      "windup": 0.6,
+      "aimLockedLast": 0.22,
+      "speed": 90,
+      "damageCap": 28
+    },
+    "phase2": {
+      "rushes": 2,
+      "windup": 0.5,
+      "aimLockedLast": 0.28,
+      "speed": 108,
+      "hit": 34,
+      "sharedDamageCap": 48
+    },
+    "collision": "Server swept capsule; lunge body contact excluded from duplicate damage",
+    "visual": "Complete authored blade/wind/impact assemblies, violet particle edge and short textured Trail. One committed sweep, two-sided and raised above ground."
+  },
+  "phaseTwoMarker": "Opaque imported orb mesh with authored violet corona, centred 7.5 studs above and 14 studs behind the boss; persistent across spells and flight, scoped to the encounter.",
+  "strikeTimes": {
+    "maelstrom": {
+      "before": 2.35,
+      "after": [
+        1.296,
+        1.124
+      ]
+    },
+    "judgment": {
+      "before": 2.5595,
+      "after": [
+        1.51,
+        1.284
+      ]
+    },
+    "beamCharge": {
+      "before": [
+        1.5,
+        1.35
+      ],
+      "after": [
+        1.15,
+        0.95
+      ]
+    }
+  },
+  "pressure": {
+    "phaseTwoRecoveryBefore": [
+      3.5,
+      4.3
+    ],
+    "phaseTwoRecoveryAfter": [
+      1.8,
+      2.25
+    ],
+    "groundedMeleeOpening": [
+      1.25,
+      1.7
+    ],
+    "beamSweepDegreesPerSecond": [
+      12,
+      36
+    ],
+    "spellCaps": {
+      "maelstrom": [
+        34,
+        60
+      ],
+      "judgment": [
+        38,
+        64
+      ],
+      "beam": [
+        40,
+        52
+      ]
+    },
+    "notes": "Predictive target selection locks when the warning appears. Phase-two follow-up warnings reacquire once. Lunge included in normal cycles; damage remains server-owned. Terrain displacement/cover budgets unchanged."
+  },
+  "validation": {
+    "normalRuntime": true,
+    "normalCamera": "Custom third-person",
+    "newAssemblyFetches": {
+      "count": 41,
+      "failures": []
+    },
+    "phaseOneStationaryCaps": [
+      {
+        "hits": [
+          {
+            "at": 0.8674180507659912,
+            "amount": 28
+          }
+        ],
+        "cap": 28,
+        "damage": 28,
+        "phase": 1,
+        "mode": "stationary",
+        "speed": 0,
+        "attack": "lunge"
+      },
+      {
+        "hits": [
+          {
+            "at": 1.366697072982788,
+            "amount": 34
+          }
+        ],
+        "cap": 34,
+        "damage": 34,
+        "phase": 1,
+        "mode": "stationary",
+        "speed": 0,
+        "attack": "spiral"
+      },
+      {
+        "hits": [
+          {
+            "at": 1.5505449771881104,
+            "amount": 38
+          }
+        ],
+        "cap": 38,
+        "damage": 38,
+        "phase": 1,
+        "mode": "stationary",
+        "speed": 0,
+        "attack": "lance"
+      },
+      {
+        "hits": [
+          {
+            "at": 1.167937994003296,
+            "amount": 8
+          },
+          {
+            "at": 1.4161100387573242,
+            "amount": 8
+          },
+          {
+            "at": 1.666208028793335,
+            "amount": 8
+          },
+          {
+            "at": 1.9168319702148438,
+            "amount": 8
+          },
+          {
+            "at": 2.1677260398864746,
+            "amount": 8
+          }
+        ],
+        "cap": 40,
+        "damage": 40,
+        "phase": 1,
+        "mode": "stationary",
+        "speed": 0,
+        "attack": "beam"
+      }
+    ],
+    "pressureOnEarlierOpenRoutes": [
+      {
+        "hits": [
+          {
+            "at": 1.1665802001953125,
+            "amount": 40
+          }
+        ],
+        "cap": 60,
+        "damage": 40,
+        "phase": 2,
+        "mode": "circle",
+        "speed": 25,
+        "attack": "spiral"
+      },
+      {
+        "hits": [
+          {
+            "at": 0.9868199825286865,
+            "amount": 10
+          },
+          {
+            "at": 1.2373340129852295,
+            "amount": 10
+          },
+          {
+            "at": 1.4684300422668457,
+            "amount": 10
+          },
+          {
+            "at": 1.735563039779663,
+            "amount": 10
+          },
+          {
+            "at": 1.9845471382141113,
+            "amount": 10
+          },
+          {
+            "at": 2.237278938293457,
+            "amount": 2
+          }
+        ],
+        "cap": 52,
+        "damage": 52,
+        "phase": 2,
+        "mode": "circle",
+        "speed": 25,
+        "attack": "beam"
+      }
+    ],
+    "finalControlledMovementCases": [
+      {
+        "hits": [
+          {
+            "at": 0.8667089939117432,
+            "amount": 28
+          }
+        ],
+        "cap": 28,
+        "damage": 28,
+        "phase": 1,
+        "mode": "stationary",
+        "speed": 0,
+        "attack": "lunge"
+      },
+      {
+        "hits": [
+          {
+            "at": 0.683243989944458,
+            "amount": 34
+          },
+          {
+            "at": 1.5317609310150146,
+            "amount": 14
+          }
+        ],
+        "cap": 48,
+        "damage": 48,
+        "phase": 2,
+        "mode": "stationary",
+        "speed": 0,
+        "attack": "lunge"
+      },
+      {
+        "hits": [],
+        "cap": 48,
+        "damage": 0,
+        "phase": 2,
+        "mode": "circle",
+        "speed": 25,
+        "attack": "lunge"
+      },
+      {
+        "hits": [
+          {
+            "at": 1.6988651752471924,
+            "amount": 34
+          }
+        ],
+        "cap": 48,
+        "damage": 34,
+        "phase": 2,
+        "mode": "reactive",
+        "speed": 25,
+        "attack": "lunge"
+      },
+      {
+        "hits": [],
+        "cap": 60,
+        "damage": 0,
+        "phase": 2,
+        "mode": "reactive",
+        "speed": 25,
+        "attack": "spiral"
+      },
+      {
+        "hits": [],
+        "cap": 64,
+        "damage": 0,
+        "phase": 2,
+        "mode": "reactive",
+        "speed": 25,
+        "attack": "lance"
+      },
+      {
+        "hits": [],
+        "cap": 52,
+        "damage": 0,
+        "phase": 2,
+        "mode": "circle",
+        "speed": 25,
+        "attack": "beam"
+      }
+    ],
+    "fixtureNote": "One earlier stationary beam expectation failed because terrain blocked the beam. The product respected cover; that test expectation was removed. Paths use normal server attack scripts with an invulnerable avatar moved at measured base speeds 16/25. These are controlled trajectory checks, not a human play session.",
+    "naturalPhaseTwoSequence": [
+      "lance",
+      "lunge",
+      "spiral",
+      "beam"
+    ],
+    "fullCombatPassFrameP95ms": 18.054179847240448,
+    "fullCombatPassPeakAssemblies": 20,
+    "persistentEclipseSamples": 3641,
+    "deathServerCarriers": 0,
+    "resetServerCarriers": 0,
+    "afterDeathAndResetClientAssemblies": 0,
+    "finalVisualCleanup": {
+      "finished": true,
+      "remainingAssemblies": 0,
+      "edgeTexture": "Success"
+    },
+    "runtimeErrors": [],
+    "sourceSync": "All edited behavior/VFX modules compared with workspace files; matched.",
+    "temporaryObjectsRemoved": true,
+    "remaining": "Single-client Studio only; mobile/multiplayer balancing untested. Terrain/foliage can obstruct continuous camera inspection. Imported crescent construction was inspected separately in a normal moving LocalScript as well as real lunges. No source-library assets modified."
+  }
+}

@@ -3,8 +3,8 @@
 -- because some Studio versions restrict changing them from gameplay scripts.
 local Lighting = game:GetService("Lighting")
 
-local DAY_AMBIENT = Color3.fromRGB(70, 70, 75)
-local DAY_OUTDOOR = Color3.fromRGB(110, 110, 115)
+local DAY_AMBIENT = Color3.fromRGB(110, 110, 115)
+local DAY_OUTDOOR = Color3.fromRGB(155, 155, 160)
 local NIGHT_AMBIENT = Color3.fromRGB(30, 35, 55)
 local NIGHT_OUTDOOR = Color3.fromRGB(45, 55, 80)
 

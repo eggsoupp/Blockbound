@@ -1,44 +1,13 @@
---[[
-	WeaponClient
-
-	Swinging a weapon, as the player sees it: the four-swing combo's
-	animations, the swoosh on each swing, and a faint wind trail off the blade
-	while it moves.
-
-	THE COMBO
-
-	Runs Shared.Combat.SwordCombo on this player's clicks - the same rules on
-	the same clicks WeaponServer runs, which is how the blow the server lands
-	matches the swing played here. Nothing is sent: Tool.Activated already
-	reaches the server by itself. See SwordCombo for the rhythm.
-
-	The animations are Shared.Tools.SwingAnimations' SwordSlash1-4, played at
-	the weapon's attack speed. Unpublished ones are previewed in Studio and
-	play nothing in a live server (ToolConfig.swingId); the combo still swings
-	and still hits either way.
-
-	THE TRAIL
-
-	Drawn for EVERY character, not only this one: whenever any character's
-	Animator starts one of the sword swings, the held weapon gets a trail for
-	that swing's `trail` window. A client-made Trail is seen by this client
-	alone, so each client draws everyone's, keyed off the animation everyone
-	already sees. The tip and base are found from the weapon's own geometry,
-	so any sword gets one without setup.
-]]
-
+-- Tool input goes to the server; replicated attack tracks drive local trails and sound.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
-local ToolConfig = require(Shared:WaitForChild("Tools"):WaitForChild("ToolConfig"))
-local ToolAnimation = require(Shared.Tools:WaitForChild("ToolAnimation"))
-local SwingAnimations = require(Shared.Tools:WaitForChild("SwingAnimations"))
+local WeaponAnimations = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponAnimations"))
+local WeaponInput = require(Shared:WaitForChild("Net"):WaitForChild("Remotes")).wait("WeaponInput")
 local WeaponConfig = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponConfig"))
-local SwordCombo = require(Shared.Combat:WaitForChild("SwordCombo"))
-local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 
 local player = Players.LocalPlayer
 
@@ -215,13 +184,7 @@ local function swingNameFor(track)
 	end
 
 	local key = assetKey(id)
-	for _, name in ipairs(SwingAnimations.SwordCombo) do
-		local known = ToolConfig.swingId(name)
-		if known and assetKey(known) == key then
-			return name
-		end
-	end
-	return nil
+	return WeaponAnimations.forId(key)
 end
 
 local function watchAnimator(character)
@@ -232,9 +195,17 @@ local function watchAnimator(character)
 	end
 
 	animator.AnimationPlayed:Connect(function(track)
-		local name = swingNameFor(track)
-		if name then
-			trailDuring(character, track, SwingAnimations.Swings[name])
+		local swing = swingNameFor(track)
+		if swing then
+			trailDuring(character, track, swing)
+			if character == player.Character then
+				task.spawn(function()
+					while track.IsPlaying and track.TimePosition < swing.swingTime do
+						RunService.RenderStepped:Wait()
+					end
+					if track.IsPlaying then Sounds.play("tool.swing") end
+				end)
+			end
 		end
 	end)
 end
@@ -253,110 +224,33 @@ for _, other in ipairs(Players:GetPlayers()) do
 	watchPlayer(other)
 end
 
--- ---------------------------------------------------------------------------
--- This player's combo
--- ---------------------------------------------------------------------------
-
--- { tool, combo, connections } for the weapon in hand, or nil.
+-- Only input is sent. The client cannot choose damage, combo index or targets.
 local held = nil
-
--- The swing track playing now, so the next swing can take over from it.
-local playing = nil
-
-local function playSwing(character, step, speed)
-	local id = ToolConfig.swingId(step.swing)
-	local track = id and ToolAnimation.track(character, id)
-	if not track then
-		return
-	end
-
-	if playing and playing ~= track and playing.IsPlaying then
-		playing:Stop(0.1)
-	end
-	if track.IsPlaying then
-		track:Stop(0)
-	end
-
-	track.Looped = false
-	track:Play(0.06, 1, speed)
-	playing = track
-end
-
 local function putAway()
-	if held then
-		held.combo:cancel()
-		for _, connection in ipairs(held.connections) do
-			connection:Disconnect()
-		end
-		held = nil
-	end
-
-	if playing and playing.IsPlaying then
-		playing:Stop(0.15)
-	end
-	playing = nil
+	if not held then return end
+	WeaponInput:FireServer(held.tool, false)
+	for _, connection in ipairs(held.connections) do connection:Disconnect() end
+	held = nil
 end
-
 local function takeOut(tool)
-	local itemName = itemNameFor(tool)
-	local stats = WeaponConfig.get(itemName)
-	if not stats then
-		return
-	end
+	if not WeaponConfig.get(itemNameFor(tool)) then return end
 	putAway()
-
-	local animated = SwordCombo.animates(ItemDefinitions[itemName])
-
-	local combo
-	combo = SwordCombo.new(stats, function(_, step)
-		local character = player.Character
-		if not character or tool.Parent ~= character then
-			return
-		end
-
-		Sounds.play("tool.swing")
-		if animated then
-			playSwing(character, step, combo.speed)
-		end
-	end)
-
-	held = {
-		tool = tool,
-		combo = combo,
-		connections = {
-			tool.Activated:Connect(function()
-				combo:press()
-			end),
-			tool.Deactivated:Connect(function()
-				combo:release()
-			end),
-		},
-	}
+	held = {tool = tool, connections = {
+		tool.Activated:Connect(function() WeaponInput:FireServer(tool, true) end),
+		tool.Deactivated:Connect(function() WeaponInput:FireServer(tool, false) end),
+	}}
 end
-
 local function watchCharacter(character)
 	putAway()
-
 	for _, child in ipairs(character:GetChildren()) do
-		if child:IsA("Tool") then
-			takeOut(child)
-		end
+		if child:IsA("Tool") then takeOut(child) end
 	end
-
 	character.ChildAdded:Connect(function(child)
-		if child:IsA("Tool") then
-			takeOut(child)
-		end
+		if child:IsA("Tool") then takeOut(child) end
 	end)
-
 	character.ChildRemoved:Connect(function(child)
-		if held and held.tool == child then
-			putAway()
-		end
+		if held and held.tool == child then putAway() end
 	end)
 end
-
 player.CharacterAdded:Connect(watchCharacter)
-if player.Character then
-	watchCharacter(player.Character)
-end
+if player.Character then watchCharacter(player.Character) end

@@ -4,7 +4,9 @@ local Content=game:GetService("ContentProvider")
 local Plan=require(script.Parent.Parent.StarterPlan)
 local Library=require(script.Parent.StarterParticles)
 local Base=require(script.Parent.CataclysmParticles)
-local Pixel=require(script.Parent.PixelFlipbooks)
+local Pack=require(script.Parent.PackAssembly)
+local ImpactFX=require(script.Parent.ImpactFX)
+local ReferenceVFX=require(script.Parent.ReferenceVFX)
 local Remotes=require(RS.Shared.Net.Remotes)
 local VFX={}
 local shots={}
@@ -38,25 +40,6 @@ end
 local function burst(kind,parent,count,props)
 	local p=emitter(kind,parent,props);p:Emit(count);return p
 end
--- Fireball is drawn from the pixel-art flipbooks (PixelFlipbooks), crisp unlit
--- sprites rather than the soft pack textures the other starters use.
-local function pixel(kind,parent,props)
-	local data=Pixel[kind]
-	local p=Instance.new("ParticleEmitter")
-	p.Name=kind;p.Texture=data.Texture
-	p.FlipbookLayout=Enum.ParticleFlipbookLayout.Grid8x8
-	p.FlipbookMode=if data.Loop then Enum.ParticleFlipbookMode.Loop else Enum.ParticleFlipbookMode.OneShot
-	p.FlipbookFramerate=NumberRange.new(60);p.FlipbookStartRandom=data.Loop
-	p.Orientation=Enum.ParticleOrientation.FacingCamera;p.LightInfluence=0;p.LightEmission=0;p.Brightness=1
-	p.Speed=NumberRange.new(0);p.Rotation=NumberRange.new(0);p.RotSpeed=NumberRange.new(0)
-	p.Enabled=false;p.Rate=0;p.ZOffset=0
-	for key,value in pairs(props or {}) do p[key]=value end
-	p.Parent=parent
-	return p
-end
-local function pixelBurst(kind,parent,count,props)
-	local p=pixel(kind,parent,props);p:Emit(count);return p
-end
 local function sound(parent,id,volume,pitch)
 	local s=Instance.new("Sound")
 	s.SoundId=id;s.Volume=volume;s.PlaybackSpeed=pitch or 1
@@ -74,6 +57,7 @@ local function ring(parent,color,from,to,lifetime)
 	})
 end
 function VFX.preload()
+	ReferenceVFX.preload()
 	if not listening and RunService:IsRunning() and RunService:IsClient() then
 		listening=true
 		Remotes.wait("AbilityImpact").OnClientEvent:Connect(function(payload)
@@ -82,12 +66,12 @@ function VFX.preload()
 			end
 		end)
 	end
+	Pack.preload()
 	if preloaded then return end
 	preloaded=true
 	task.spawn(function()
 		local assets={}
 		for _,data in pairs(Library) do table.insert(assets,data.Texture) end
-		for _,data in pairs(Pixel) do table.insert(assets,data.Texture) end
 		for _,kind in ipairs({"Flame","FireballA","Smoke","Embers","Flash","PressureRing","Rock","Streaks"}) do table.insert(assets,Base[kind].Texture) end
 		local sounds={}
 		for _,id in ipairs({"rbxassetid://12222208","rbxassetid://5540424854","rbxasset://sounds/impact_water.mp3"}) do
@@ -101,65 +85,134 @@ function VFX.preload()
 end
 function VFX.duration() return Plan.duration() end
 
-local function impact(folder,kind,point,direction)
-	local p=host(folder,"Impact",point,direction)
-	if kind=="Fireball" then
-		pixelBurst("FireBurst",p,1,{Size=NumberSequence.new(13),Lifetime=NumberRange.new(.78),Rotation=NumberRange.new(0,360),LightEmission=.2})
-		pixelBurst("FireFlame",p,6,{Size=ns(3,1.2),Lifetime=NumberRange.new(.35,.6),Speed=NumberRange.new(4,9),SpreadAngle=Vector2.new(70,70),Acceleration=Vector3.new(0,10,0),Drag=3,LightEmission=.2})
-		sound(p,"rbxassetid://5540424854",.3,1.7)
-	else
-		burst("WaterSplash",p,8,{Size=ns(4,9),Lifetime=NumberRange.new(.3,.65),Speed=NumberRange.new(8,22),SpreadAngle=Vector2.new(95,95),Color=ColorSequence.new(FOAM,WATER),Brightness=1.3,LightEmission=.45,Acceleration=Vector3.new(0,-20,0)})
-		burst("Embers",p,20,{Size=ns(.3,0),Lifetime=NumberRange.new(.35,.65),Speed=NumberRange.new(15,28),Drag=1,Acceleration=Vector3.new(0,-35,0),Color=ColorSequence.new(FOAM,WATER),LightEmission=.6})
-		ring(p,FOAM,2,12,.3)
-		sound(p,"rbxasset://sounds/impact_water.mp3",.45,1.4)
+-- Fireball shares Blighted Fireball's particle body in ReferenceVFX;
+-- its original authored explosion and tint remain here.
+local MUZZLE=3.5
+local Shots={
+	Fireball={
+		tint={deep=Color3.fromRGB(150,12,3),main=Color3.fromRGB(255,58,8),hot=Color3.fromRGB(255,142,44)},
+	},
+	WaterBlade={
+		tint={deep=Color3.fromRGB(8,74,190),main=WATER,hot=FOAM},
+		body={"CrescentSlash",1,90},bodyPart="Crescent Slash",meshTint={deep=Color3.fromRGB(6,58,170),main=Color3.fromRGB(16,112,235),hot=FOAM},
+		-- The arc cuts forward, tipped up and rolled so its face stays to the camera;
+		-- lying flat it turns edge-on from behind the caster.
+		lie=CFrame.Angles(math.rad(58),0,math.rad(-16))*CFrame.fromMatrix(Vector3.zero,Vector3.yAxis,-Vector3.xAxis,Vector3.zAxis),
+		glow={"Droplets69",.55,40},tail={"KiBlast2",.09},length=15,
+		muzzle={"SlashImpact1",1.2,1},light=WATER,launch=1.5,
+	},
+}
+
+local function fireBlast(scope,folder,point,direction,tint,silent)
+	local frame=CFrame.lookAt(point,point+direction)
+	local function mount(name,scale,budget,extra)
+		local options={cframe=frame,scale=scale,budget=budget,tint=extra or tint,brightness=1.6}
+		return Pack.mount(scope,folder,name,options)
 	end
+	local p=host(folder,"Impact",point,direction)
+	local light=Instance.new("PointLight");light.Color=FIRE;light.Brightness=2.5;light.Range=32;light.Shadows=false;light.Parent=p
+	scope:tween(light,TweenInfo.new(.7,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{Brightness=0})
+	-- First beat: flame spikes inside a swirling rim of fire.
+	mount("Impact45",1.1):burst(1)
+	mount("Impact1",1.4):burst(.9)
+	mount("FireVFX5",.95):burst(.45)
+	if not silent then sound(p,"rbxassetid://5540424854",.6,1.25) end
+	ImpactFX.shake(point,1.4,.4,70);ImpactFX.punch(point,4,.35,70)
+	-- Second beat: the fireball itself rolls out, then breaks into embers and smoke.
+	scope:delay(.17,function()
+		mount("Impact41",2.2):burst(1)
+		mount("FireVFX8",1.8):burst(1)
+		mount("Impact20",1.15):burst(1)
+		Pack.mount(scope,folder,"Rocks",{cframe=CFrame.new(point),scale=.5,tint=tint,brightness=2}):burst(1)
+		if not silent then sound(p,"rbxassetid://5540424854",.5,.8) end
+	end)
+	local smoke=Color3.fromRGB(22,14,14)
+	scope:delay(.34,function()
+		Pack.mount(scope,folder,"SmokePuff",{cframe=frame,scale=2.2,tint={deep=smoke,main=smoke,hot=Color3.fromRGB(60,34,28)}}):burst(1.4)
+		local linger=mount("FireVFX6",2.4,120)
+		linger:stream(true)
+		scope:delay(.45,function() linger:stream(false) end)
+	end)
+end
+
+local function waterSplash(scope,folder,point,direction,tint)
+	local frame=CFrame.lookAt(point,point+direction)
+	local p=host(folder,"Impact",point,direction)
+	local function mount(name,scale,budget)
+		return Pack.mount(scope,folder,name,{cframe=frame,scale=scale,budget=budget,tint=tint,brightness=2})
+	end
+	mount("SlashImpact1",2.6):burst(1)
+	mount("SlashImpact3",2.2):burst(1)
+	mount("Impact36",2.4):burst(1)
+	mount("Droplets69",.8):burst(1)
+	local splash=Pack.mount(scope,folder,"IceSplash",{cframe=CFrame.new(point),scale=.16,tint=tint,brightness=2,visible=true})
+	splash:burst(1)
+	splash:grow(scope,.3,.45)
+	local drops=mount("Droplets69",.55,36)
+	drops:stream(true)
+	scope:delay(.3,function() drops:stream(false) end)
+	sound(p,"rbxasset://sounds/impact_water.mp3",.6,1.3)
+	ImpactFX.shake(point,.9,.3,60);ImpactFX.punch(point,2,.3,60)
 end
 
 local function projectile(payload,scope,folder,age)
 	local tuning=Plan[payload.ability]
+	local shot=Shots[payload.ability]
 	local origin=payload.origin.Position
 	local direction=payload.direction
+	local frame=CFrame.lookAt(origin,origin+direction)
 	local p=host(folder,"Projectile",origin,direction)
-	local isFire=payload.ability=="Fireball"
-	local color=if isFire then GOLD else FOAM
-	local charge=if isFire
-		then pixelBurst("FireRing",p,1,{Size=ns(.6,4.5),Lifetime=NumberRange.new(tuning.windup),LockedToPart=true,RotSpeed=NumberRange.new(-240),LightEmission=.2})
-		else burst("Flash",p,1,{Size=ns(.5,7),Lifetime=NumberRange.new(tuning.windup),Transparency=ns(.4,1),Color=ColorSequence.new(color),Brightness=1})
-	local moving={}
-	if isFire then
-		-- A spinning ring of fire for the ball, one big flame streaming back off it
-		-- (VelocityParallel turns the flame's tip along its backward drift), and
-		-- small flames shed behind as the wake.
-		table.insert(moving,pixel("FireRing",p,{Rate=7,Size=NumberSequence.new(4.5),Lifetime=NumberRange.new(.3),LockedToPart=true,Rotation=NumberRange.new(0,360),RotSpeed=NumberRange.new(-260,-180),Transparency=ns(0,.35),LightEmission=.2}))
-		table.insert(moving,pixel("FireFlame",p,{Rate=14,Size=ns(5,3.5),Lifetime=NumberRange.new(.22,.3),LockedToPart=true,EmissionDirection=Enum.NormalId.Back,Speed=NumberRange.new(.05),Orientation=Enum.ParticleOrientation.VelocityParallel,LightEmission=.2}))
-		table.insert(moving,pixel("FireFlame",p,{Rate=40,Size=ns(2.4,.6),Lifetime=NumberRange.new(.25,.4),EmissionDirection=Enum.NormalId.Back,Speed=NumberRange.new(3,7),SpreadAngle=Vector2.new(25,25),Orientation=Enum.ParticleOrientation.VelocityParallel,LightEmission=.2}))
-		local light=Instance.new("PointLight");light.Color=FIRE;light.Brightness=1;light.Range=12;light.Parent=p
-	else
-		-- Authored animated water crescent, with a second foam edge and a wet wake.
-		table.insert(moving,emitter("WaterCrescent",p,{Rate=5,Size=NumberSequence.new(7),Squash=NumberSequence.new(-.65),Lifetime=NumberRange.new(.24),Speed=NumberRange.new(.001),Rotation=NumberRange.new(-12),LockedToPart=true,Color=ColorSequence.new(WATER,FOAM),LightEmission=.5,Brightness=1.1,Transparency=ns(.05,.4)}))
-		table.insert(moving,emitter("WaterSlash",p,{Rate=5,Size=NumberSequence.new(6),Squash=NumberSequence.new(-.65),Lifetime=NumberRange.new(.24),Speed=NumberRange.new(.001),Rotation=NumberRange.new(-12),LockedToPart=true,Color=ColorSequence.new(FOAM),LightEmission=.6,Brightness=1.2,Transparency=ns(.25,1)}))
-		table.insert(moving,emitter("WaterTrail",p,{Rate=24,Size=ns(1.7,.5),Lifetime=NumberRange.new(.15,.27),Speed=NumberRange.new(0,2),Color=ColorSequence.new(WATER,FOAM),LightEmission=.4,Brightness=1,Transparency=ns(.4,1)}))
+	local function part(entry,extra)
+		local options={cframe=frame,scale=entry[2],budget=entry[3],tint=shot.tint,brightness=2}
+		for key,value in pairs(extra or {}) do options[key]=value end
+		return Pack.mount(scope,folder,entry[1],options)
 	end
+	local body=part(shot.body,{visible=true,locked=true,meshTint=shot.meshTint})
+	if shot.bodyPart then body:alignPart(shot.bodyPart,shot.lie) end
+	if shot.head then body:trailBeams(shot.head) end
+	if shot.slim then body:slim(shot.slim) end
+	local glow,tail=part(shot.glow),part(shot.tail)
+	tail:taper(.2)
+	-- The body gathers at the muzzle through the windup, small, then swells.
+	body:rescale(shot.body[2]*.35)
+	body:stream(true)
+	local function place(at)
+		local to=CFrame.lookAt(at,at+direction)
+		body:place(to)
+		glow:place(to)
+	end
+	place(origin+direction*MUZZLE)
+	local light=Instance.new("PointLight");light.Color=shot.light;light.Brightness=2;light.Range=18;light.Parent=p
 	local stopped,launched=false,false
 	local function stop(packet)
 		if stopped then return end
 		stopped=true;p.Position=packet.position
-		for _,e in ipairs(moving) do e.Enabled=false;if e.LockedToPart then e:Clear() end end
-		charge:Clear()
-		for _,d in ipairs(p:GetChildren()) do if d:IsA("Light") then d.Enabled=false end end
-		if not packet.cancelled then impact(folder,payload.ability,packet.position,packet.normal or -direction) end
+		body:clear();body:fade(0);glow:stream(false);tail:clear()
+		light.Enabled=false
+		if not packet.cancelled then
+			local normal=packet.normal or -direction
+			waterSplash(scope,folder,packet.position,normal,shot.tint)
+		end
+		-- The shot is over: its server cast may still be open, its visuals need not be.
+		scope:delay(2.2,function() scope:destroy() end)
 	end
 	if payload.id then shots[payload.id]=stop;scope:add(function() shots[payload.id]=nil end) end
 	local function update()
 		if stopped then return end
 		local elapsed=workspace:GetServerTimeNow()-payload.startedAt
 		local travel=math.clamp((elapsed-tuning.windup)*tuning.speed,0,tuning.range)
-		p.CFrame=CFrame.lookAt(origin+direction*travel,origin+direction*(travel+1))
+		local at=origin+direction*(travel+math.min(MUZZLE,tuning.range-travel))
+		p.CFrame=CFrame.lookAt(at,at+direction)
+		if not launched then body:rescale(shot.body[2]*(.35+.65*math.clamp(elapsed/tuning.windup,0,1))) end
+		place(at)
 		if elapsed>=tuning.windup and not launched then
 			launched=true
-			for _,e in ipairs(moving) do e.Enabled=true;e:Emit(if isFire then 2 else 1) end
-			sound(p,"rbxassetid://12222208",.3,if isFire then 1.2 else 1.5)
+			body:rescale(shot.body[2])
+			glow:stream(true);tail:beamsOn(true);body:beamsOn(true)
+			Pack.mount(scope,folder,shot.muzzle[1],{cframe=frame,scale=shot.muzzle[2],tint=shot.tint,brightness=2}):burst(shot.muzzle[3])
+			sound(p,"rbxassetid://12222208",.3,shot.launch)
 		end
+		if launched then tail:stretch(at,at-direction*math.min(travel,shot.length)) end
 		if elapsed>tuning.windup+tuning.range/tuning.speed+.3 then stop({position=p.Position}) end
 		local caster=payload.caster
 		if caster and (not caster.Character or not caster.Character:FindFirstChildOfClass("Humanoid") or caster.Character:FindFirstChildOfClass("Humanoid").Health<=0) then stop({position=p.Position,cancelled=true}) end
@@ -240,12 +293,17 @@ function VFX.play(payload,scope)
 	local age=workspace:GetServerTimeNow()-payload.startedAt
 	if age>=Plan.duration() then return false end
 	VFX.preload()
+	if payload.ability=="Fireball" then
+		return ReferenceVFX.play(payload,scope,function(impactScope,impactFolder,point,normal)
+			fireBlast(impactScope,impactFolder,point,normal,Shots.Fireball.tint,true)
+		end)
+	end
 	local folder=scope:add(Instance.new("Folder"));folder.Name=payload.ability.."VFX";folder.Parent=workspace
 	local function at(t,callback)
 		if age>t+.3 then return end
 		scope:delay(math.max(0,t-age),callback)
 	end
-	if payload.ability=="Fireball" or payload.ability=="WaterBlade" then projectile(payload,scope,folder,age)
+	if payload.ability=="WaterBlade" then projectile(payload,scope,folder,age)
 	elseif payload.ability=="WindBurst" then wind(payload,scope,folder,at)
 	elseif payload.ability=="EchoStep" then echo(payload,scope,folder,at)
 	elseif payload.ability=="BlockWall" then wall(payload,scope,folder,at)

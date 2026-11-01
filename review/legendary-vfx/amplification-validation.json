@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-31",
+  "revision": "Amplified explosions and fuller charge/travel/sustain",
+  "changedCode": [
+    "src/ReplicatedStorage/Shared/Abilities/VFX/LegendaryVFX.lua"
+  ],
+  "sourcesUsed": 18,
+  "newlyActivatedCompleteAssembly": "LegendCloudRipples (Stylized Cloud Ripples)",
+  "nativeImportsChanged": false,
+  "performance": {
+    "visible": 0,
+    "travelled": 8.26654052734375,
+    "brokenBeams": 0,
+    "samples": 386,
+    "p95Ms": 18.56349967420101,
+    "peakEmitters": 315,
+    "remaining": 0,
+    "sounds": 0,
+    "peakEffects": 3,
+    "peakMs": 49.26450178027153,
+    "meanMs": 16.707013271884133
+  },
+  "checks": {
+    "ordinaryClientScripts": true,
+    "realRequestAbility": true,
+    "normalCustomCamera": true,
+    "mcpVisualChecks": true,
+    "individualImpacts": true,
+    "riftSustain": true,
+    "movingOverlap": true,
+    "postStrikeCancellation": true,
+    "build": true,
+    "studioAndEditorSourceMatch": true,
+    "newRuntimeErrors": 0
+  },
+  "visualNotes": "Individual impact peak inspections used temporary +0.12s particle holds; live charge, Rift sustain, flame decay and moving overlaps were also inspected. Three-cast glare reduced while maintaining single-cast scale.",
+  "cleanup": {
+    "testScriptsRemoved": true,
+    "playtestStopped": true,
+    "restoredLoadout": [
+      "VioletTempest",
+      "AstralVerdict",
+      "CelestialLance"
+    ],
+    "godMode": false,
+    "temporaryTreeRelocationRestored": true,
+    "published": false
+  },
+  "limitations": [
+    "No separate observer client",
+    "No mobile/low-end device testing",
+    "No continuous exported gameplay video"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "placeId": 127569658424596,
+  "sourceLibrary": "SoulShroud Ultimate VFX Pack V1.9.rbxl",
+  "importedTemplates": 8,
+  "newExplosionAssets": {
+    "PurpleExplosion": {
+      "components": 14,
+      "sourcePropertiesMatch": true
+    },
+    "GrandExplosion": {
+      "components": 9,
+      "sourcePropertiesMatch": true
+    }
+  },
+  "newDependencyFetches": {
+    "checked": 24,
+    "failed": 0
+  },
+  "flight": {
+    "procedural": true,
+    "hoverSamples": 323,
+    "maxRootTiltDegrees": 0,
+    "changes": "Upright travel, reduced bob, stable torso/hood, gentle sleeve motion; existing cast poses retained"
+  },
+  "normalCamera": "Custom third-person; invulnerable observer. Runtime-only foliage removal and one sidestep used to inspect impacts without camera obstruction.",
+  "coverage": [
+    "phase-one Maelstrom and Judgment",
+    "Totality transformation",
+    "phase-two Maelstrom and Judgment",
+    "Worldrend",
+    "full authored explosion layer inspection in an ordinary LocalScript",
+    "actual Maelstrom impact alignment and decay after dodging the marked point",
+    "death",
+    "repeat spawn/reset",
+    "imported settings compared with original library templates"
+  ],
+  "renderErrors": [],
+  "measuredFinalFrameP95ms": 18.062906339764595,
+  "peakImportedAssemblies": 18,
+  "afterDeath": {
+    "serverCarriers": 0,
+    "clientAssemblies": 0
+  },
+  "afterReset": {
+    "serverCarriers": 0,
+    "clientAssemblies": 0
+  },
+  "mechanics": "SignusMoves.lua, damage, hitboxes, movement speed and attack schedules unchanged. Signus.lua edits affect flight presentation only.",
+  "cleanup": "Temporary QA scripts removed. Play stopped, restoring runtime-only terrain/foliage changes. Source library transfer objects removed.",
+  "remaining": "Physical displaced terrain can obstruct the normal camera. All new VFX were visually inspected, but not every overlapping attack was continuously visible. Single-client Studio testing; mobile/multiplayer performance untested. Signus uses procedural poses because published Signus tracks are absent.",
+  "supersededBy": "signus-pressure-validation.json"
+}

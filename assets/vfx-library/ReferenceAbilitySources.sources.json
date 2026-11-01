@@ -1,0 +1,175 @@
+[
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Soul Shroud Elementals.Flame Core",
+    "name": "RefFlameCore",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Attachment": 5,
+      "PointLight": 1,
+      "ParticleEmitter": 14
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.SoulShroud Fire VFX.SS FIre VFX 9",
+    "name": "RefFire9",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "ParticleEmitter": 7,
+      "Attachment": 1
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.SoulShroud Fire VFX.SS FIre VFX 1",
+    "name": "RefFire1",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "ParticleEmitter": 12,
+      "Attachment": 3
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Soul Shroud Elementals.Lightning Surge",
+    "name": "RefLightning",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "ParticleEmitter": 4,
+      "Attachment": 2
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #2.Spellcasting + Small Impact VFX.Portals.2",
+    "name": "RefPortal",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Attachment": 1,
+      "PointLight": 1,
+      "ParticleEmitter": 10
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.Ki (気) Blasts.Ki (気) Blast 1",
+    "name": "RefKi1",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 2,
+      "Attachment": 4,
+      "Beam": 3,
+      "ParticleEmitter": 15
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.Ki (気) Blasts.Ki (気) Blast 2",
+    "name": "RefKi2",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 2,
+      "Attachment": 4,
+      "Beam": 3,
+      "ParticleEmitter": 15
+    }
+  },
+  {
+    "path": "Workspace.Weather VFX.Weather I.Stylized Thunder / Lightning ",
+    "name": "RefThunder",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Part": 5,
+      "Attachment": 12,
+      "ParticleEmitter": 40
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #1",
+    "name": "RefImpact1",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "ParticleEmitter": 18,
+      "Attachment": 6
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #10",
+    "name": "RefImpact10",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Attachment": 2,
+      "Beam": 3,
+      "ParticleEmitter": 9
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #12",
+    "name": "RefImpact12",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "ParticleEmitter": 10,
+      "Attachment": 3
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #20",
+    "name": "RefImpact20",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Attachment": 11,
+      "Beam": 16,
+      "ParticleEmitter": 2
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #36",
+    "name": "RefImpact36",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Attachment": 1,
+      "PointLight": 1,
+      "ParticleEmitter": 5
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #37",
+    "name": "RefImpact37",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Attachment": 1,
+      "PointLight": 1,
+      "ParticleEmitter": 6
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #41",
+    "name": "RefImpact41",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "Attachment": 3,
+      "PointLight": 1,
+      "ParticleEmitter": 14
+    }
+  },
+  {
+    "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #45",
+    "name": "RefImpact45",
+    "scripts": [],
+    "external": [],
+    "counts": {
+      "PointLight": 1,
+      "Attachment": 4,
+      "ParticleEmitter": 14
+    }
+  }
+]

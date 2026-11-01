@@ -1,0 +1,185 @@
+{
+  "passed": true,
+  "mapping": {
+    "HeavySword": "Blade",
+    "Lance": "Glaive",
+    "Sword": "LightAxe"
+  },
+  "tests": [
+    {
+      "item": "Bloodfang",
+      "damage": 22,
+      "expected": 0.25,
+      "step": 1,
+      "actual": 0.2500920295715332
+    },
+    {
+      "item": "Bloodfang",
+      "damage": 22,
+      "expected": 0.23333333333333334,
+      "step": 2,
+      "actual": 0.25020480155944824
+    },
+    {
+      "item": "Bloodfang",
+      "damage": 22,
+      "expected": 0.2,
+      "step": 3,
+      "actual": 0.2158050537109375
+    },
+    {
+      "item": "Bloodfang",
+      "damage": 22,
+      "expected": 0.2,
+      "step": 4,
+      "actual": 0.21697998046875
+    },
+    {
+      "item": "Bloodfang",
+      "damage": 33,
+      "expected": 0.2833333333333333,
+      "step": 5,
+      "actual": 0.2837638854980469
+    },
+    {
+      "item": "Thunderveil",
+      "damage": 25,
+      "expected": 0.6166666666666667,
+      "step": 1,
+      "actual": 0.6168930530548096
+    },
+    {
+      "item": "Thunderveil",
+      "damage": 25,
+      "expected": 0.55,
+      "step": 2,
+      "actual": 0.5500679016113281
+    },
+    {
+      "item": "Thunderveil",
+      "damage": 25,
+      "expected": 0.6166666666666667,
+      "step": 3,
+      "actual": 0.6330881118774414
+    },
+    {
+      "item": "Thunderveil",
+      "damage": 25,
+      "expected": 0.6,
+      "step": 4,
+      "actual": 0.6010041236877441
+    },
+    {
+      "item": "Thunderveil",
+      "damage": 38,
+      "expected": 0.5333333333333333,
+      "step": 5,
+      "actual": 0.5493600368499756
+    },
+    {
+      "item": "LightLance",
+      "damage": 35,
+      "expected": 0.26666666666666666,
+      "step": 1,
+      "actual": 0.282991886138916
+    },
+    {
+      "item": "LightLance",
+      "damage": 35,
+      "expected": 0.2,
+      "step": 2,
+      "actual": 0.2003462314605713
+    },
+    {
+      "item": "LightLance",
+      "damage": 35,
+      "expected": 0.2,
+      "step": 3,
+      "actual": 0.20111918449401855
+    },
+    {
+      "item": "LightLance",
+      "damage": 35,
+      "expected": 0.2,
+      "step": 4,
+      "actual": 0.20038700103759766
+    },
+    {
+      "item": "LightLance",
+      "damage": 53,
+      "expected": 0.23333333333333334,
+      "step": 5,
+      "actual": 0.234968900680542
+    },
+    {
+      "hits": 1,
+      "case": "side forgiveness"
+    },
+    {
+      "hits": 1,
+      "case": "touching behind"
+    },
+    {
+      "hits": 0,
+      "case": "distant behind misses"
+    },
+    {
+      "hits": 0,
+      "case": "outside reach misses"
+    },
+    {
+      "hits": 1,
+      "case": "enters contact window"
+    },
+    {
+      "hits": 0,
+      "case": "unequip during windup"
+    }
+  ],
+  "heldComboAtSpeed125": [
+    {
+      "trackTime": 0.2916666567325592,
+      "amount": 18,
+      "elapsed": 0.21581387519836426,
+      "expected": 0.2,
+      "step": 1
+    },
+    {
+      "trackTime": 0.2552083134651184,
+      "amount": 18,
+      "elapsed": 0.20043206214904785,
+      "expected": 0.18666666666666668,
+      "step": 2
+    },
+    {
+      "trackTime": 0.2135416567325592,
+      "amount": 18,
+      "elapsed": 0.16692113876342773,
+      "expected": 0.16,
+      "step": 3
+    },
+    {
+      "trackTime": 0.2083333432674408,
+      "amount": 18,
+      "elapsed": 0.16622114181518555,
+      "expected": 0.16,
+      "step": 4
+    },
+    {
+      "trackTime": 0.2916666865348816,
+      "amount": 27,
+      "elapsed": 0.23396015167236328,
+      "expected": 0.22666666666666666,
+      "step": 5
+    }
+  ],
+  "realEnemyDamage": {
+    "Before": 25,
+    "Finished": true,
+    "After": 20,
+    "Command": "tap",
+    "Passed": true
+  },
+  "maxBaseTimingErrorSeconds": 0.01697998046874999,
+  "method": "Normal server Script and LocalScript in Studio Play. Geometry/timing harness substitutes deterministic targets in EnemyService. Separate real GreenSlime test uses unmodified EnemyService; health 25 -> 20 through Tool.Activated input. No mouse or keyboard automation."
+}

@@ -525,9 +525,9 @@ EnemyConfig.Definitions = {
 		boss = true,
 		behaviour = "Signus",
 
-		-- A little under the Eye's: it is in melee reach more of the time,
-		-- but holds still less often. See the BALANCE note in the module.
-		health = 2000,
+		-- Second boss tier: above the Eye, below Blightborer. Pressure comes
+		-- from shorter, predictive combinations rather than health alone.
+		health = 2300,
 
 		sizeVariance = 0,
 		modelRotation = Vector3.new(0, 0, 0),

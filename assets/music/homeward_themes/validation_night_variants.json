@@ -1,0 +1,70 @@
+[
+  {
+    "slug": "night1",
+    "title": "Lanterns Aloft",
+    "description": "A warm night exploration piece: slow Homeward piano recollections between soft guitar, strings and long pauses in the melody.",
+    "duration_seconds": 95.833,
+    "bpm": 72,
+    "meter": "4/4",
+    "peak_dbfs": -6.26,
+    "rms_dbfs": -24.16,
+    "theme_relationship": "Two half-speed Homeward quotations plus derivatives",
+    "no_lead_sections_seconds": [
+      [
+        0.0,
+        13.33
+      ],
+      [
+        26.67,
+        40.0
+      ],
+      [
+        53.33,
+        66.67
+      ],
+      [
+        86.67,
+        93.33
+      ]
+    ],
+    "lead_is_monophonic": true,
+    "no_drums": true,
+    "midi_notes": 118,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 93.333
+  },
+  {
+    "slug": "night2",
+    "title": "Beyond the Firelight",
+    "description": "An independent D-Dorian night melody: low clarinet calls, soft electric piano and sparse nylon guitar, with a quietly hopeful ending.",
+    "duration_seconds": 92.5,
+    "bpm": 64,
+    "meter": "3/4",
+    "peak_dbfs": -8.06,
+    "rms_dbfs": -24.16,
+    "theme_relationship": "Independent melody; no Homeward quotations",
+    "no_lead_sections_seconds": [
+      [
+        0.0,
+        11.25
+      ],
+      [
+        22.5,
+        33.75
+      ],
+      [
+        56.25,
+        67.5
+      ],
+      [
+        84.38,
+        90.0
+      ]
+    ],
+    "lead_is_monophonic": true,
+    "no_drums": true,
+    "midi_notes": 147,
+    "midi_notes_balanced": true,
+    "midi_duration_seconds": 90.0
+  }
+]

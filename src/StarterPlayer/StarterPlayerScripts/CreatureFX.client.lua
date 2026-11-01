@@ -1629,6 +1629,13 @@ local function setUp(model)
 		rigDef.setup(rig)
 		state.rig = rig
 		state.rigDef = rigDef
+
+		-- Joints that stream in after the body join the rig when they land.
+		state.jointAdded = model.DescendantAdded:Connect(function(joint)
+			if joint:IsA("Motor6D") then
+				joints[joint.Name] = joint
+			end
+		end)
 	end
 
 	-- A neck and head on joints (the Cobra): see snakePose below.
@@ -1698,6 +1705,9 @@ end
 local function tearDown(state)
 	if state.sheen then
 		state.sheen:Destroy()
+	end
+	if state.jointAdded then
+		state.jointAdded:Disconnect()
 	end
 end
 
@@ -1815,11 +1825,17 @@ RunService.RenderStepped:Connect(function(dt)
 				if pose ~= rig.pose then
 					rig.pose, rig.poseAt = pose, now
 				end
-				state.rigDef.animate(rig, {
+				-- A rig still missing a joint (streaming, or a limb broken off)
+				-- skips the frame instead of erroring every frame; said once.
+				local ok, err = pcall(state.rigDef.animate, rig, {
 					t = t, dt = dt, speed = rig.speed, pose = pose,
 					blend = math.clamp((now - rig.poseAt) / 0.18, 0, 1),
 					elapsed = now - rig.poseAt,
 				})
+				if not ok and not rig.warned then
+					rig.warned = true
+					warn(string.format("[CreatureFX] %s rig skipped a frame: %s", model.Name, tostring(err)))
+				end
 				-- Each joint eases toward what animate asked for, so a
 				-- change of pose never snaps. Fast enough that a 0.1s blow
 				-- still reads as a blow.

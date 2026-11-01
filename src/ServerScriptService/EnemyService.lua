@@ -1351,6 +1351,11 @@ function EnemyService.spawn(name, position)
 		return nil, string.format("'%s' has no BasePart in it", def.asset)
 	end
 
+	-- The place streams, and a jointed creature that arrived body first and
+	-- legs a moment later was animated with joints missing (CreatureFX).
+	-- Atomic sends the whole model in one piece.
+	model.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
+
 	--[[
 		A little variation in size, so a group does not read as one model
 		duplicated.

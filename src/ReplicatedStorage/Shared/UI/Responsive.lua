@@ -178,14 +178,17 @@ function Responsive.topbarBottom(): number
 end
 
 --[[
-	The right edge of what is drawn on the top bar's left: Roblox's own
-	buttons end at TopbarInset.Min.X, and SettingsButton's gear sits just past
-	them. The rest of the bar is empty, and a window may go up into it.
+	What is drawn on the top bar: Roblox's own buttons on the left, ending at
+	TopbarInset.Min.X, and the game's (settings, island) on the right, starting
+	at TopbarButtons.leftEdge(). Between them the bar is empty, and a window
+	may go up into it.
 ]]
-local GEAR_ROOM = 60
-
 function Responsive.topbarLeftUsed(): number
-	return GuiService.TopbarInset.Min.X + GEAR_ROOM
+	return GuiService.TopbarInset.Min.X
+end
+
+function Responsive.topbarRightUsed(): number
+	return require(script.Parent:WaitForChild("TopbarButtons")).leftEdge()
 end
 
 -- ---------------------------------------------------------------------------
@@ -212,8 +215,8 @@ function Responsive.fitWindow(width: number, height: number, minHeight: number, 
 	local rightEdge = math.min(right or size.X, size.X - safe.right) - WINDOW_MARGIN
 	local bottom = size.Y - safe.bottom - WINDOW_MARGIN
 
-	local function attempt(top: number, left: number)
-		local roomX, roomY = rightEdge - left, bottom - top
+	local function attempt(top: number, left: number, right: number)
+		local roomX, roomY = right - left, bottom - top
 		local wide = roomX / width
 		local fits = math.min(roomY / height, wide, 1)
 		local h = height
@@ -221,16 +224,19 @@ function Responsive.fitWindow(width: number, height: number, minHeight: number, 
 			h = math.clamp(roomY / math.min(readable, wide), minHeight, height)
 			fits = math.min(roomY / h, wide, 1)
 		end
-		return fits, h, Vector2.new((left + rightEdge) / 2, (top + bottom) / 2)
+		return fits, h, Vector2.new((left + right) / 2, (top + bottom) / 2)
 	end
 
+	-- Up into the bar, between Roblox's buttons and the game's.
 	local besideScale, besideHeight, besideCentre = attempt(
 		safe.top + WINDOW_MARGIN,
-		math.max(safe.left, Responsive.topbarLeftUsed()) + WINDOW_MARGIN
+		math.max(safe.left, Responsive.topbarLeftUsed()) + WINDOW_MARGIN,
+		math.min(rightEdge, Responsive.topbarRightUsed() - WINDOW_MARGIN)
 	)
 	local underScale, underHeight, underCentre = attempt(
 		Responsive.topbarBottom() + WINDOW_MARGIN,
-		safe.left + WINDOW_MARGIN
+		safe.left + WINDOW_MARGIN,
+		rightEdge
 	)
 	if besideScale >= underScale then
 		return besideScale, besideHeight, besideCentre

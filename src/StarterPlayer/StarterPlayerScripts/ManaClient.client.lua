@@ -187,9 +187,10 @@ Responsive.bind(function()
 	root.Position = UDim2.new(0, x, yScale, yOffset - L.bottom)
 end)
 
--- Gives way to full-screen menus on a touch screen, as the health bar does.
+-- Gives way to menus as the health bar does: full-screen ones on a touch
+-- screen, and the Tab menu everywhere.
 MenuState.Changed:Connect(function(_, _, anyOpen)
-	root.Parent.Visible = not (anyOpen and Responsive.isTouch())
+	root.Parent.Visible = not (anyOpen and (Responsive.isTouch() or MenuState.isOpen("PauseMenu")))
 end)
 
 -- ---------------------------------------------------------------------------

@@ -33,6 +33,9 @@
         "TouchControls": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/TouchControls.client.lua"
         },
+        "IslandRecallClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/IslandRecallClient.client.lua"
+        },
         "PauseMenu": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/PauseMenu.client.lua",
           "$properties": {
@@ -249,6 +252,9 @@
       "WorldBorderForceField": {
         "$path": "assets/vfx-library/WorldBorderForceField.rbxm"
       },
+      "RecallAura": {
+        "$path": "assets/vfx-library/RecallAura.rbxm"
+      },
       "Perlin": {
         "$path": "src/ReplicatedStorage/Perlin.lua"
       },
@@ -428,6 +434,9 @@
           },
           "TouchActions": {
             "$path": "src/ReplicatedStorage/Shared/UI/TouchActions.lua"
+          },
+          "TopbarButtons": {
+            "$path": "src/ReplicatedStorage/Shared/UI/TopbarButtons.lua"
           },
           "PixelSprites": {
             "$path": "src/ReplicatedStorage/Shared/UI/PixelSprites.lua"
@@ -945,6 +954,12 @@
       },
       "Purchases": {
         "$path": "src/ServerScriptService/Purchases.lua"
+      },
+      "Travel": {
+        "$path": "src/ServerScriptService/Travel.lua"
+      },
+      "IslandRecall": {
+        "$path": "src/ServerScriptService/IslandRecall.server.lua"
       },
       "SettingsServer": {
         "$path": "src/ServerScriptService/SettingsServer.server.lua",

@@ -756,6 +756,13 @@ StorageRequest.OnServerEvent:Connect(function(player, action, name, other)
 				return
 			end
 			active[to], bank[from] = bank[from], active[to]
+		elseif action == "move" then
+			-- Reordering the store itself, from the Tab menu's drag.
+			local from, to = tonumber(name), tonumber(other)
+			if not (from and to and bank[from] and to >= 1 and to <= #bank) or from == to then
+				return
+			end
+			table.insert(bank, to, table.remove(bank, from))
 		else
 			return
 		end

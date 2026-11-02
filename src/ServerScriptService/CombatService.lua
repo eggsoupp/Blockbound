@@ -129,6 +129,9 @@ end
 -- Damage
 -- ---------------------------------------------------------------------------
 
+-- Told about every hit; see CombatService.onDamaged.
+local damageListeners = {}
+
 --[[
 	Hurts a player, after armour.
 
@@ -204,7 +207,21 @@ function CombatService.applyDamage(player, amount, source)
 	})
 	sentDefense[player] = defense
 
+	for _, listener in ipairs(damageListeners) do
+		task.spawn(listener, player, dealt, source)
+	end
+
 	return dealt
+end
+
+--[[
+	Called with (player, dealt, source) after every hit that landed - after
+	armour, never for a fully absorbed one. For things a hit interrupts, such as
+	IslandRecall's channel; health going down for other reasons (a gear change
+	lowering the maximum) is not a hit.
+]]
+function CombatService.onDamaged(listener)
+	table.insert(damageListeners, listener)
 end
 
 --[[

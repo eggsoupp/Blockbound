@@ -13,21 +13,11 @@
 	exist; until then nobody else has an island worth going to. Who counts is
 	Permissions.isAdmin, the same rule every other command uses.
 
-	WHAT A TRIP COSTS
-
-	The player leaves this server and joins another, so everything that saves
-	on leaving - their inventory, and the island they are leaving if it is
-	theirs - saves on the way out exactly as it would if they had quit. The
-	server they arrive at waits for that save to land before loading them; see
-	InventoryStore's session lock.
-
-	Teleports do not work in Studio. Typing these there says so instead of
-	failing silently.
+	The trip itself is ServerScriptService.Travel's.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local TeleportService = game:GetService("TeleportService")
 
@@ -36,8 +26,8 @@ local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
 local Permissions = require(Shared:WaitForChild("Permissions"))
 
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
-local IslandDirectory = require(ServerScriptService:WaitForChild("IslandDirectory"))
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
+local Travel = require(ServerScriptService:WaitForChild("Travel"))
 
 local tell = CommandFeedback.tell
 
@@ -60,54 +50,8 @@ local MIN_INTERVAL = 3
 
 local lastTravelAt = {}
 
-local function teleport(player, placeId, accessCode)
-	local options = Instance.new("TeleportOptions")
-	if accessCode then
-		options.ReservedServerAccessCode = accessCode
-	end
-
-	local ok, err = pcall(TeleportService.TeleportAsync, TeleportService, placeId, { player }, options)
-	if not ok then
-		tell(player, "Teleport failed: " .. tostring(err), "bad")
-	end
-end
-
 local function travel(player, destination)
-	if RunService:IsStudio() then
-		tell(player, "Teleports don't work in Studio. Publish the game and try this in a live server.", "bad")
-		return
-	end
-
-	if destination == "world" then
-		if PlaceConfig.isWorld() then
-			tell(player, "You're already in the world.", "bad")
-			return
-		end
-		if PlaceConfig.WorldPlaceId == 0 then
-			tell(player, "The World place ID isn't set in PlaceConfig.", "bad")
-			return
-		end
-
-		tell(player, "Heading to the world...", "good")
-		teleport(player, PlaceConfig.WorldPlaceId)
-		return
-	end
-
-	-- To their island. Already there only if this IS their island's server.
-	if PlaceConfig.isIsland() and workspace:GetAttribute("IslandOwnerId") == player.UserId then
-		tell(player, "You're already on your island.", "bad")
-		return
-	end
-
-	tell(player, "Heading to your island...", "good")
-
-	local code, err = IslandDirectory.accessCodeFor(player.UserId)
-	if not code then
-		tell(player, "Couldn't find your island: " .. tostring(err), "bad")
-		return
-	end
-
-	teleport(player, PlaceConfig.IslandPlaceId, code)
+	Travel.go(player, destination)
 end
 
 -- The island half of /savestatus, read off the attributes IslandService keeps

@@ -307,7 +307,7 @@ local function rebuildHud(abilities: { string }?)
 	)
 	-- On a touch screen the ability buttons (TouchControls) carry the same
 	-- readout, and these rows would sit where the thumbstick is.
-	hudGui.Enabled = count > 0 and not Responsive.isTouch()
+	hudGui.Enabled = count > 0 and not Responsive.isTouch() and not MenuState.isOpen("PauseMenu")
 end
 
 --[[
@@ -628,9 +628,13 @@ RunService.Heartbeat:Connect(function()
 	end
 end)
 
-Responsive.Changed:Connect(function()
-	hudGui.Enabled = next(hudRows) ~= nil and not Responsive.isTouch()
-end)
+-- Off on a touch screen, and under the Tab menu, which lists the same
+-- abilities over the spot these rows sit in.
+local function showHudRows()
+	hudGui.Enabled = next(hudRows) ~= nil and not Responsive.isTouch() and not MenuState.isOpen("PauseMenu")
+end
+Responsive.Changed:Connect(showHudRows)
+MenuState.Changed:Connect(showHudRows)
 
 -- ---------------------------------------------------------------------------
 -- Drawing what the server says happened

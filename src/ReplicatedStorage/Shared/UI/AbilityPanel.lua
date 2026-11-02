@@ -2,8 +2,9 @@
 	AbilityPanel
 
 	The loadout, listed over the Tab menu's wireframe solid, and draggable: a
-	card per slot, dragged up or down to change which key casts what, or
-	sideways onto the bin to throw it away.
+	card per slot, dragged up or down to change which key casts what, right onto
+	the bin to throw it away, or left into the storage column beside it
+	(Shared.UI.AbilityStorage) to keep it. Stored cards drag back the other way.
 
 		local panel = AbilityPanel.new(someFrame)
 		panel:setVisible(true)
@@ -67,6 +68,7 @@ local Sounds = require(
 
 local StorageUI = require(script.Parent.AbilityStorage)
 local StorageAbilityConfig = require(ReplicatedStorage.Shared.Abilities.AbilityConfig)
+local AbilityConfigSlotCount = StorageAbilityConfig.SlotCount
 local AbilityPanel = {}
 AbilityPanel.__index = AbilityPanel
 
@@ -146,18 +148,27 @@ local BIN_WIDTH = #BIN_SPRITE[1] * BIN_PIXEL
 local BIN_HEIGHT = #BIN_SPRITE * BIN_PIXEL
 
 --[[
-	The panel is CARD_WIDTH wide plus the bin's side TWICE - once for the bin
-	and once for nothing at all.
-
-	The empty column on the left is deliberate. The whole root is centred on the
-	screen, so without it the cards would sit half a bin's width left of centre
-	and stop being centred on the solid they are drawn over. Padding the other
-	side costs a few pixels of transparent CanvasGroup and keeps the thing that
-	is actually being looked at in the middle.
+	Two columns of cards and the bin: the STORAGE column on the left (Shared.UI.
+	AbilityStorage), the LOADOUT in the middle, the bin on the right. Both
+	columns put their cards on the same rows under a heading line, so a card
+	carried across lands level with where it left.
 ]]
 local BIN_SIDE = BIN_WIDTH + BIN_GAP
-local CARDS_X = BIN_SIDE
-local BIN_X = BIN_SIDE + CARD_WIDTH + BIN_GAP
+local COLUMN_GAP = 40
+local HEADER_HEIGHT = 22
+local LIST_TOP = HEADER_HEIGHT + 6
+local STORE_X = 0
+local CARDS_X = CARD_WIDTH + COLUMN_GAP
+local BIN_X = CARDS_X + CARD_WIDTH + BIN_GAP
+local ROOT_WIDTH = BIN_X + BIN_WIDTH
+
+-- How far left a loadout card is carried before storage takes it: half way.
+local STORE_REACH = (CARDS_X - STORE_X) * 0.5
+
+-- Where loadout card `index` rests, `dx` to the side of its column.
+local function slotPosition(index: number, dx: number?): UDim2
+	return UDim2.fromOffset(CARDS_X + (dx or 0), LIST_TOP + (index - 1) * PITCH)
+end
 
 --[[
 	How far right a card has to be dragged before the bin takes it: half the
@@ -173,37 +184,6 @@ local BIN_REACH = BIN_SIDE * 0.5
 
 local BIN_IDLE_TRANSPARENCY = 0.55
 local BIN_ARMED_TRANSPARENCY = 0
-
---[[
-	THE STORAGE BOX, the bin's opposite number.
-
-	Same grid as BIN_SPRITE and drawn by the same code at the same pixel size,
-	so the two controls come out identical in size and weight. They are the two
-	things a card can be dragged onto and they sit one above the other; a pair
-	that did not match would read as one control and one decoration.
-
-	Three compartments, because that is what it holds. The bin says what happens
-	to an ability and this says what happens to an ability, so neither carries a
-	label - the drag hint underneath names them both.
-]]
-local STORAGE_SPRITE = {
-	"...........",
-	".#########.",
-	".#.......#.",
-	".#.......#.",
-	".#########.",
-	".#.......#.",
-	".#.......#.",
-	".#########.",
-	".#.......#.",
-	".#.......#.",
-	".#########.",
-	"...........",
-}
-
--- Between the bin and the box. Smaller than BIN_GAP because that one separates
--- the cards from the controls, and these two belong together.
-local STORAGE_GAP = 10
 
 --[[
 	The card's own box, which is invisible until it is pointed at.
@@ -228,8 +208,8 @@ local DRAG_THRESHOLD = 4
 local GAIN_HOLD = 4
 
 local EMPTY_TEXT = "Empty"
-local DRAG_HINT = "drag to reorder, bin to drop, or storage to keep"
-local DRAG_HINT_ONE = "drag to bin to drop, or storage to keep"
+local DRAG_HINT = "drag to reorder, left into storage to keep, or to the bin to drop"
+local DRAG_HINT_ONE = "drag left into storage to keep, or to the bin to drop"
 
 -- ---------------------------------------------------------------------------
 -- Building
@@ -368,6 +348,46 @@ local function isPressInput(input: InputObject): boolean
 		or input.UserInputType == Enum.UserInputType.Touch
 end
 
+--[[
+	One card: the box, the capitals line, the name and the tier. Shared with the
+	storage column (Shared.UI.AbilityStorage) and with the ghost a stored card
+	is carried as, so all three are the same card and cannot drift apart.
+]]
+local function newCard(parent: Instance)
+	local button = Instance.new("TextButton")
+	button.Text = ""
+	button.AutoButtonColor = false
+	button.Size = UDim2.fromOffset(CARD_WIDTH, CARD_HEIGHT)
+	button.BackgroundColor3 = Theme.Color.Panel
+	button.BackgroundTransparency = CARD_REST
+	button.BorderSizePixel = 0
+	button.Parent = parent
+
+	local stroke = Instance.new("UIStroke")
+	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	stroke.Color = Theme.Color.Stroke
+	stroke.Thickness = 1
+	stroke.Transparency = STROKE_REST
+	stroke.Parent = button
+
+	return {
+		button = button,
+		stroke = stroke,
+		label = newText(
+			button, LABEL_Y, LABEL_HEIGHT,
+			Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim
+		),
+		name = newText(
+			button, NAME_Y, NAME_HEIGHT,
+			Theme.TextSize.Heading, Theme.Fonts.Heading, Theme.Color.Text
+		),
+		rarity = newText(
+			button, RARITY_Y, RARITY_HEIGHT,
+			Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim
+		),
+	}
+end
+
 -- ---------------------------------------------------------------------------
 -- Instance
 -- ---------------------------------------------------------------------------
@@ -386,7 +406,7 @@ function AbilityPanel.new(parent: Instance)
 	root.Name = "AbilityPanel"
 	root.AnchorPoint = Vector2.new(0.5, 0.5)
 	root.Position = UDim2.fromScale(0.5, 0.5)
-	root.Size = UDim2.fromOffset(CARD_WIDTH + BIN_SIDE * 2, PITCH)
+	root.Size = UDim2.fromOffset(ROOT_WIDTH, PITCH)
 	root.BackgroundTransparency = 1
 	root.GroupTransparency = 1
 	root.Visible = false
@@ -410,29 +430,35 @@ function AbilityPanel.new(parent: Instance)
 	hint.Parent = root
 
 	local bin, binPixels = buildSprite(root, BIN_SPRITE, "Bin", 0)
-	local box, boxPixels = buildSprite(root, STORAGE_SPRITE, "AbilityStorage", 0)
+
+	-- The loadout's heading, level with the storage column's.
+	local heading = newText(root, 0, HEADER_HEIGHT, Theme.TextSize.Small, Theme.Fonts.Heading, Theme.Color.TextDim)
+	heading.Name = "LoadoutHeading"
+	heading.Position = UDim2.fromOffset(CARDS_X, 0)
+	heading.Size = UDim2.fromOffset(CARD_WIDTH, HEADER_HEIGHT)
+	heading.TextXAlignment = Enum.TextXAlignment.Left
+	heading.Text = "LOADOUT"
 
 	self.root = root
 	self.hint = hint
 	self.bin = bin
 	self.binPixels = binPixels
-	self.box = box
-	self.boxPixels = boxPixels
 
-	-- The box's LOOK belongs here, with the bin's; what opening it does belongs
-	-- to AbilityStorage. So the button is built and armed on this side and
-	-- handed over, and the two controls cannot drift apart no matter what the
-	-- storage panel grows into.
-	self.storage = StorageUI.create(root, box, CARDS_X, CARD_WIDTH, function()
-		local names = {}
-		for _, entry in ipairs(slots) do
-			local name = entry.name and StorageAbilityConfig.resolve(entry.name)
-			if name then
-				table.insert(names, name)
-			end
-		end
-		return names
-	end)
+	-- The storage column, from the same cards. A press on a stored ability
+	-- starts a drag here, since a card can be carried into the loadout.
+	self.storage = StorageUI.create(root, {
+		x = STORE_X,
+		listTop = LIST_TOP,
+		width = CARD_WIDTH,
+		pitch = PITCH,
+		cardHeight = CARD_HEIGHT,
+		cardGap = CARD_GAP,
+		visibleRows = AbilityConfigSlotCount,
+		newCard = newCard,
+		onPress = function(index, input)
+			self:_beginStoredDrag(index, self:_pointerAt(input))
+		end,
+	})
 	self.cards = {}
 	self.filled = 0
 	self.visible = false
@@ -449,49 +475,21 @@ function AbilityPanel.new(parent: Instance)
 end
 
 function AbilityPanel:_buildCard(index: number)
-	local button = Instance.new("TextButton")
+	local card = newCard(self.root)
+	local button = card.button
 	button.Name = "Slot" .. index
-	button.Text = ""
-	button.AutoButtonColor = false
-	button.Position = UDim2.fromOffset(CARDS_X, (index - 1) * PITCH)
-	button.Size = UDim2.fromOffset(CARD_WIDTH, CARD_HEIGHT)
-	button.BackgroundColor3 = Theme.Color.Panel
-	button.BackgroundTransparency = CARD_REST
-	button.BorderSizePixel = 0
-	button.Parent = self.root
+	button.Position = slotPosition(index)
 
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Theme.Color.Stroke
-	stroke.Thickness = 1
-	stroke.Transparency = STROKE_REST
-	stroke.Parent = button
-
-	local card = {
-		button = button,
-		stroke = stroke,
-		label = newText(
-			button, LABEL_Y, LABEL_HEIGHT,
-			Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim
-		),
-		name = newText(
-			button, NAME_Y, NAME_HEIGHT,
-			Theme.TextSize.Heading, Theme.Fonts.Heading, Theme.Color.Text
-		),
-		rarity = newText(
-			button, RARITY_Y, RARITY_HEIGHT,
-			Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim
-		),
-		slot = index,
-		filled = false,
-		hovered = false,
-		gained = false,
-		rarityColor = nil,
-		gainToken = 0,
-
-		-- The tween carrying this card into the slot it was dropped on, while
-		-- one is running. See _rebuild for why it is worth holding on to.
-		settle = nil,
-	}
+	card.slot = index
+	card.filled = false
+	card.hovered = false
+	card.gained = false
+	-- Picked out as where a stored card would land, during a drag from storage.
+	card.armed = false
+	card.rarityColor = nil
+	card.gainToken = 0
+	-- The tween carrying this card into the slot it was dropped on, while one
+	-- is running (card.settle). See _rebuild for why it is worth holding on to.
 
 	button.MouseEnter:Connect(function()
 		card.hovered = true
@@ -528,7 +526,7 @@ end
 ]]
 function AbilityPanel:_refreshCard(card)
 	local lifted = self.drag ~= nil and self.drag.card == card
-	local raised = lifted or (card.filled and (card.hovered or card.gained))
+	local raised = lifted or card.armed or (card.filled and (card.hovered or card.gained))
 
 	if lifted then
 		card.button.BackgroundTransparency = CARD_LIFTED
@@ -541,7 +539,9 @@ function AbilityPanel:_refreshCard(card)
 		card.stroke.Transparency = STROKE_REST
 	end
 
-	if card.gained and card.rarityColor then
+	if card.armed then
+		card.stroke.Color = Theme.Color.Good
+	elseif card.gained and card.rarityColor then
 		card.stroke.Color = card.rarityColor
 	elseif lifted then
 		card.stroke.Color = Theme.Color.Accent
@@ -616,7 +616,7 @@ function AbilityPanel:_rebuild()
 			card.settle = nil
 		end
 
-		card.button.Position = UDim2.fromOffset(CARDS_X, (index - 1) * PITCH)
+		card.button.Position = slotPosition(index)
 		card.button.ZIndex = 1
 
 		-- Bumped per fill, so an earlier card's hold cannot clear the pick-out
@@ -646,46 +646,23 @@ function AbilityPanel:_rebuild()
 	local stack = math.max(PITCH, count * PITCH - CARD_GAP)
 
 	--[[
-		The two drag targets, stacked against the cards.
-
-		The PAIR is centred rather than the bin alone, so that adding the
-		storage box below it did not shove the bin off the middle of the stack.
+		The bin, centred against the stack. Never above the top of the list: a
+		CanvasGroup does not overflow, it cuts, and the panel rebuilds itself
+		once in the constructor with no slots at all.
 	]]
-	--[[
-		Never above the top of the panel. The pair is taller than one card, so
-		centring it against a SHORT stack puts the bin off the top - and a
-		CanvasGroup does not overflow, it cuts. That state is real: the panel
-		rebuilds itself once in the constructor, before the server has pushed
-		anything, with no slots at all.
-	]]
-	local column = BIN_HEIGHT * 2 + STORAGE_GAP
-	local binTop = math.max(0, math.floor((stack - column) * 0.5))
-	local boxTop = binTop + BIN_HEIGHT + STORAGE_GAP
-
+	local binTop = LIST_TOP + math.max(0, math.floor((stack - BIN_HEIGHT) * 0.5))
 	self.bin.Position = UDim2.fromOffset(BIN_X, binTop)
-	self.box.Position = UDim2.fromOffset(BIN_X, boxTop)
 
 	-- Nothing to throw away with an empty loadout, and a bin with nothing that
-	-- can reach it is a control that does not work. The box stays: it is worth
-	-- opening even with nothing to put in it, to see what is already in there.
+	-- can reach it is a control that does not work.
 	self.bin.Visible = filled > 0
-
-	--[[
-		Where a dragged card stops being binned and starts being stored: the
-		middle of the gap between the two, in the ROOT's coordinates.
-
-		Kept as a number rather than tested against the box's AbsolutePosition,
-		because a drag only ever knows how far it has travelled - see pointerAt.
-		Mixing the two spaces is how a drop zone ends up a topbar's height away
-		from the control it is drawn under.
-	]]
-	self.storageSplit = binTop + BIN_HEIGHT + STORAGE_GAP * 0.5
 
 	self:_setBinArmed(false)
 
+	-- As tall as the taller column: the storage column ends in its buy button.
 	self.root.Size = UDim2.fromOffset(
-		CARD_WIDTH + BIN_SIDE * 2,
-		math.max(stack, binTop + column) + HINT_GAP + HINT_HEIGHT
+		ROOT_WIDTH,
+		math.max(LIST_TOP + stack, self.storage.height()) + HINT_GAP + HINT_HEIGHT
 	)
 end
 
@@ -716,7 +693,7 @@ function AbilityPanel:_layoutAround(from: number, to: number)
 			local card = self.cards[slot]
 			if card then
 				TweenService:Create(card.button, Theme.Tween.Open, {
-					Position = UDim2.fromOffset(CARDS_X, (position - 1) * PITCH),
+					Position = slotPosition(position),
 				}):Play()
 			end
 		end
@@ -737,7 +714,7 @@ function AbilityPanel:_beginDrag(card, startX: number?, startY: number?)
 		carried sideways into the bin, which is the only way to make room for a
 		scroll when the one ability you have is not the one you want.
 	]]
-	if not card.filled or self.filled < 1 or not self.visible then
+	if not card.filled or self.filled < 1 or not self.visible or self.storedDrag then
 		return
 	end
 
@@ -753,6 +730,11 @@ function AbilityPanel:_beginDrag(card, startX: number?, startY: number?)
 		-- While it is, the stack stops reordering: a card on its way out is not
 		-- also being put somewhere.
 		binned = false,
+
+		-- Whether it is far enough left that letting go would store it, and on
+		-- which stored card.
+		storing = false,
+		storeTarget = nil,
 	}
 	self.drag = drag
 
@@ -801,32 +783,27 @@ function AbilityPanel:_dragTo(x: number, y: number)
 	end
 
 	--[[
-		Sideways travel, held between the stack and the bin.
-
-		Clamped for the same reason the vertical is: past the bin there is
-		nothing to drop onto, and the CanvasGroup would cut the card in half on
-		the way out.
+		Sideways travel: right toward the bin, left across into the storage
+		column. Clamped to the two, since past either there is nothing to drop
+		onto and the CanvasGroup would cut the card in half on the way out.
 	]]
-	local lift = math.clamp(sideways, 0, BIN_SIDE)
+	local lift = math.clamp(sideways, STORE_X - CARDS_X, BIN_SIDE)
 
 	--[[
-		Which of the two targets the card is over.
-
-		Sideways decides whether it has left the stack at all; height decides
-		which one it has reached. Both are measured as TRAVEL from where the
-		drag began, added to where the card started in the root - never against
-		a control's AbsolutePosition, which is in a different screen space than
+		Which target the card is over, measured as TRAVEL from where the drag
+		began, added to where the card started in the root - never against a
+		control's AbsolutePosition, which is in a different screen space than
 		the pointer and would put the boundary a topbar's height out. See
 		pointerAt.
 	]]
-	local carriedTop = (drag.from - 1) * PITCH + delta
-	local storing = lift >= BIN_REACH
-		and (carriedTop + CARD_HEIGHT * 0.5) >= (self.storageSplit or math.huge)
+	local storing = lift <= -STORE_REACH
+	local binned = lift >= BIN_REACH
 
-	self:_setStorageArmed(storing)
-	drag.storing = storing
-
-	local binned = lift >= BIN_REACH and not storing
+	if storing ~= drag.storing then
+		drag.storing = storing
+		Sounds.play(if storing then "ui.hover" else "ui.close")
+		self:_layoutAround(drag.from, if storing then drag.from else drag.target)
+	end
 
 	if binned ~= drag.binned then
 		drag.binned = binned
@@ -839,24 +816,34 @@ function AbilityPanel:_dragTo(x: number, y: number)
 	end
 
 	--[[
-		Held inside the stack rather than allowed to follow the cursor anywhere.
-
-		Two reasons, and either would be enough. A CanvasGroup renders its
-		descendants into a buffer its own size, so a card carried past the top
-		of the panel is not merely off the list, it is cut in half. And there is
-		nowhere outside the stack for it to go: this is a reorder, not a drag to
-		discard, and a card that can be lifted somewhere it cannot be dropped is
-		a card that lies about what happens when you let go.
+		Held inside the stack - or, over the storage column, inside that
+		column's rows - rather than allowed to follow the cursor anywhere. A
+		CanvasGroup renders its descendants into a buffer its own size, so a
+		card carried past its edge is cut in half, and a card lifted somewhere
+		it cannot be dropped lies about what letting go will do.
 	]]
-	local reach = math.max(0, self.filled - 1) * PITCH
+	local reach = math.max(0, if storing then AbilityConfigSlotCount - 1 else self.filled - 1) * PITCH
 	local carried = math.clamp((drag.from - 1) * PITCH + delta, 0, reach)
-	drag.card.button.Position = UDim2.fromOffset(CARDS_X + lift, carried)
+	drag.card.button.Position = UDim2.fromOffset(CARDS_X + lift, LIST_TOP + carried)
+
+	if storing then
+		-- Which stored card it would swap with, or the next free slot.
+		local middle = LIST_TOP + carried + CARD_HEIGHT * 0.5
+		self.storage.nudge(middle)
+		drag.storeTarget = self.storage.rowAt(middle)
+		self.storage.setTarget(drag.storeTarget)
+		return
+	end
+	if drag.storeTarget then
+		drag.storeTarget = nil
+		self.storage.setTarget(nil)
+	end
 
 	-- On its way to the bin it is not also choosing a slot. Leaving the target
 	-- where it was means dragging back off the bin returns to the arrangement
 	-- that was on screen before, rather than to wherever the pointer's height
 	-- happens to be by then.
-	if binned or storing then
+	if binned then
 		return
 	end
 
@@ -876,16 +863,10 @@ end
 -- Red, because binning is the one that cannot be undone.
 function AbilityPanel:_setBinArmed(armed: boolean)
 	if not self.drag then
-		self:_setStorageArmed(false)
+		self.storage.setTarget(nil)
 	end
 
 	setSpriteArmed(self.binPixels, armed, Theme.Color.Bad)
-end
-
--- Green against the bin's red: the two targets sit one above the other and the
--- colour is the fastest way to be sure which one a card is about to land on.
-function AbilityPanel:_setStorageArmed(armed: boolean)
-	setSpriteArmed(self.boxPixels, armed, Theme.Color.Good)
 end
 
 function AbilityPanel:_endDrag()
@@ -905,7 +886,7 @@ function AbilityPanel:_endDrag()
 		-- A click on a card, which this panel has nothing to do with. Left
 		-- exactly where it was rather than treated as a drop onto itself.
 		card.button.ZIndex = 1
-		card.button.Position = UDim2.fromOffset(CARDS_X, (drag.from - 1) * PITCH)
+		card.button.Position = slotPosition(drag.from)
 		return
 	end
 
@@ -922,15 +903,31 @@ function AbilityPanel:_endDrag()
 		ability by the time the player says yes, and dropping that one would be
 		this feature doing the exact thing it exists to prevent.
 	]]
- if drag.storing then
-  local ability=StorageAbilityConfig.resolve(card.name.Text)
-  self:_rebuild()
-  self.storage.store(ability)
-  return
- end
+	--[[
+		Into storage: onto a stored ability, a swap when storage has no room
+		left; anywhere else in the column, stored in the next free slot. The
+		stack goes back as it was until the server's push says what happened.
+	]]
+	if drag.storing then
+		local ability = StorageAbilityConfig.resolve(card.name.Text)
+		local store = StorageUI.state()
+		local over = drag.storeTarget and store.slots[drag.storeTarget]
+		self:_rebuild()
+		if not ability then
+			return
+		end
+		if over and #store.slots >= (store.capacity or 0) then
+			self.storage.swap(over, ability)
+		else
+			self.storage.store(ability)
+		end
+		Sounds.play("ui.click")
+		return
+	end
+
 	if drag.binned then
 		card.button.ZIndex = 1
-		card.button.Position = UDim2.fromOffset(CARDS_X, (drag.from - 1) * PITCH)
+		card.button.Position = slotPosition(drag.from)
 
 		local name = card.name.Text
 
@@ -961,7 +958,7 @@ function AbilityPanel:_endDrag()
 
 	-- Settles into the gap the rest of the stack has already opened for it.
 	local settle = TweenService:Create(card.button, Theme.Tween.Open, {
-		Position = UDim2.fromOffset(CARDS_X, (drag.target - 1) * PITCH),
+		Position = slotPosition(drag.target),
 	})
 	card.settle = settle
 
@@ -1046,7 +1043,7 @@ function AbilityPanel:_applyDrop(slot: number)
 
 	for index, entry in ipairs(self.cards) do
 		entry.slot = index
-		entry.button.Position = UDim2.fromOffset(CARDS_X, (index - 1) * PITCH)
+		entry.button.Position = slotPosition(index)
 	end
 
 	self.filled = math.max(0, self.filled - 1)
@@ -1110,8 +1107,200 @@ function AbilityPanel:_cancelDrag()
 		end
 
 		card.button.ZIndex = 1
-		card.button.Position = UDim2.fromOffset(CARDS_X, (slot - 1) * PITCH)
+		card.button.Position = slotPosition(slot)
 		self:_refreshCard(card)
+	end
+end
+
+-- ---------------------------------------------------------------------------
+-- Dragging out of storage
+-- ---------------------------------------------------------------------------
+
+--[[
+	A stored card is carried as a GHOST: a copy of the card made from the same
+	builder, on top of the whole panel. The real row stays in the storage list,
+	dimmed, because that list scrolls - and anything inside a ScrollingFrame is
+	cut off at its edge the moment it leaves.
+
+	Dropped on the loadout column it is taken out, into the next free slot, or
+	- with every slot full - swapped with the card it was dropped on. Dropped
+	back in the storage column it moves to that row. Anywhere else it goes back.
+	The same distances-travelled rule as the loadout drag decides all of it;
+	see pointerAt.
+]]
+function AbilityPanel:_beginStoredDrag(index: number, startX: number?, startY: number?)
+	if self.drag or self.storedDrag or not (startX and startY) or not self.visible then
+		return
+	end
+
+	local name = StorageUI.state().slots[index]
+	if not name then
+		return
+	end
+
+	local drag = {
+		index = index,
+		name = name,
+		startX = startX,
+		startY = startY,
+		top = self.storage.rowTop(index),
+		moved = false,
+	}
+	self.storedDrag = drag
+
+	drag.changed = UserInputService.InputChanged:Connect(function(input)
+		local x, y = self:_pointerAt(input)
+		if x and y then
+			self:_storedDragTo(x, y)
+		end
+	end)
+
+	drag.ended = UserInputService.InputEnded:Connect(function(input)
+		if isPressInput(input) then
+			self:_endStoredDrag(true)
+		end
+	end)
+end
+
+-- Picks out the loadout card a stored card would land on, or none.
+function AbilityPanel:_armLoadout(slot: number?)
+	for index, card in ipairs(self.cards) do
+		local armed = index == slot
+		if card.armed ~= armed then
+			card.armed = armed
+			self:_refreshCard(card)
+		end
+	end
+end
+
+function AbilityPanel:_storedDragTo(x: number, y: number)
+	local drag = self.storedDrag
+	if not drag then
+		return
+	end
+
+	local dx, dy = x - drag.startX, y - drag.startY
+
+	if not drag.moved then
+		if math.max(math.abs(dx), math.abs(dy)) < DRAG_THRESHOLD then
+			return
+		end
+		drag.moved = true
+
+		local definition = StorageAbilityConfig.get(drag.name)
+		local ghost = newCard(self.root)
+		ghost.button.Name = "CarriedStored"
+		ghost.button.ZIndex = 20
+		ghost.button.BackgroundTransparency = CARD_LIFTED
+		ghost.stroke.Transparency = STROKE_LIFTED
+		ghost.stroke.Color = Theme.PixelColor.Selection
+		ghost.label.Text = "STORED"
+		ghost.label.TextColor3 = Theme.PixelColor.Selection
+		ghost.name.Text = definition and definition.displayName or drag.name
+		ghost.rarity.Text = if definition and definition.rarity then string.upper(definition.rarity) else ""
+		ghost.rarity.TextColor3 = Theme.rarityColor(definition and definition.rarity)
+		for _, text in ipairs({ ghost.label, ghost.name, ghost.rarity }) do
+			text.ZIndex = 21
+		end
+		drag.ghost = ghost
+
+		self.storage.setLifted(drag.index)
+		Sounds.play("ui.click")
+	end
+
+	-- Between the two columns, and level with their rows.
+	local left = math.clamp(STORE_X + dx, STORE_X, CARDS_X)
+	local top = math.clamp(drag.top + dy, LIST_TOP, LIST_TOP + (AbilityConfigSlotCount - 1) * PITCH)
+	drag.ghost.button.Position = UDim2.fromOffset(left, top)
+
+	local middle = top + CARD_HEIGHT * 0.5
+
+	if left >= (STORE_X + CARDS_X) * 0.5 then
+		-- Over the loadout: the card it would replace when every slot is full,
+		-- otherwise the empty slot it would fill.
+		local full = self.filled >= #self.cards
+		local slot = if full
+			then math.clamp(math.floor((middle - LIST_TOP) / PITCH) + 1, 1, #self.cards)
+			else self.filled + 1
+
+		if drag.storeTarget then
+			drag.storeTarget = nil
+			self.storage.setTarget(nil)
+		end
+		if slot ~= drag.loadoutTarget then
+			drag.loadoutTarget = slot
+			self:_armLoadout(slot)
+			Sounds.play("ui.hover")
+		end
+		return
+	end
+
+	if drag.loadoutTarget then
+		drag.loadoutTarget = nil
+		self:_armLoadout(nil)
+	end
+
+	self.storage.nudge(middle)
+	local row = self.storage.rowAt(middle)
+	row = if row and row ~= drag.index then row else nil
+	if row ~= drag.storeTarget then
+		drag.storeTarget = row
+		self.storage.setTarget(row)
+		if row then
+			Sounds.play("ui.hover")
+		end
+	end
+end
+
+-- Lets go: `commit` false only when the screen closed under the drag.
+function AbilityPanel:_endStoredDrag(commit: boolean)
+	local drag = self.storedDrag
+	if not drag then
+		return
+	end
+	self.storedDrag = nil
+
+	drag.changed:Disconnect()
+	drag.ended:Disconnect()
+	if drag.ghost then
+		drag.ghost.button:Destroy()
+	end
+	self.storage.setLifted(nil)
+	self.storage.setTarget(nil)
+	self:_armLoadout(nil)
+
+	if not commit then
+		return
+	end
+
+	local full = self.filled >= #self.cards
+
+	if not drag.moved then
+		-- A click: take it out when there is room, the way the old list did.
+		if not full then
+			self.storage.retrieve(drag.name)
+			Sounds.play("ui.click")
+		end
+		return
+	end
+
+	if drag.loadoutTarget then
+		if not full then
+			self.storage.retrieve(drag.name)
+		else
+			local card = self.cards[drag.loadoutTarget]
+			local active = card and StorageAbilityConfig.resolve(card.name.Text)
+			if active then
+				self.storage.swap(drag.name, active)
+			end
+		end
+		Sounds.play("ui.click")
+	elseif drag.storeTarget then
+		local count = #StorageUI.state().slots
+		self.storage.move(drag.index, math.min(drag.storeTarget, count))
+		Sounds.play("ui.click")
+	else
+		Sounds.play("ui.close")
 	end
 end
 
@@ -1145,6 +1334,7 @@ function AbilityPanel:_show(visible: boolean)
 	end
 
 	self:_cancelDrag()
+	self:_endStoredDrag(false)
 
 	-- Storage closes with the screen it lives on. Left open it is still open
 	-- the next time the screen appears, which is a panel nobody asked for over

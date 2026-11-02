@@ -216,9 +216,10 @@ end
 Responsive.bind(placeColumn)
 
 -- On a touch screen the column is bottom centre, where the Tab menu's list is:
--- it gives way to any full-screen menu there.
+-- it gives way to any full-screen menu there. Everywhere it gives way to the
+-- Tab menu, whose storage column reaches down into the bottom left.
 MenuState.Changed:Connect(function(_, _, anyOpen)
-	canvas.Visible = not (anyOpen and Responsive.isTouch())
+	canvas.Visible = not (anyOpen and (Responsive.isTouch() or MenuState.isOpen("PauseMenu")))
 end)
 
 -- ---------------------------------------------------------------------------

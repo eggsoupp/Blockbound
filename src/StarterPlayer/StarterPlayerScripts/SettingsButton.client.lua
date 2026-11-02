@@ -1,7 +1,7 @@
 --[[
 	SettingsButton
 
-	The gear in the topbar, next to Roblox's own chat button, and the settings
+	The gear at the right of the topbar, beside the island button, and the settings
 	window it opens: audio, view distance and the combat feedback options.
 
 	WHY IT IS NOT IN THE TAB MENU
@@ -14,24 +14,22 @@
 	window does not lock movement, and closes on Esc, on its cross, on the gear,
 	or on a click outside it.
 
-	THE BUTTON LOOKS LIKE ROBLOX'S OWN; THE WINDOW LOOKS LIKE THE GAME'S
+	THE BUTTON AND THE WINDOW ARE BOTH THE GAME'S
 
-	The gear is chrome in Roblox's topbar, so it matches the core buttons beside
-	it: same size and spacing, the same translucent black rounded square, the
-	same white glyph, drawn from Frames rather than being an image. The window
-	it opens is the game's, so it is drawn from the pixel-art kit like every
-	other window (Shared.UI.PixelUI): a wooden frame and its green title banner,
+	The gear is an inventory tile - the pixel kit's slot, a pixel gear drawn
+	from Frames - the size of Roblox's own buttons. The window is drawn from the
+	pixel-art kit like every other window (Shared.UI.PixelUI): a wooden frame
+	and its green title banner,
 	and on parchment inside it, a row per setting - a gold marker, its name, a
 	line on what it does, and its control on the right with its default under
 	it.
 
 	WHERE IT SITS IS ASKED FOR, NOT GUESSED
 
-	GuiService.TopbarInset is the region Roblox leaves free for developer UI:
-	its left edge is exactly where the core buttons stop. Hard-coding an offset
-	would be a number that is wrong the next time Roblox changes its topbar,
-	and it changes. The inset is also watched, because it moves when the chat
-	button appears and disappears.
+	GuiService.TopbarInset is the region Roblox leaves free for developer UI.
+	The button sits at its right end, beside the island button, both placed by
+	Shared.UI.TopbarButtons from the inset - which is watched, because Roblox
+	redraws its bar.
 
 	THE VALUES LIVE IN Shared.UI.PlayerSettings
 
@@ -50,7 +48,6 @@
 ]]
 
 local Players = game:GetService("Players")
-local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -61,6 +58,7 @@ local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local Motion = require(Shared.UI:WaitForChild("Motion"))
 local MenuState = require(Shared.UI:WaitForChild("MenuState"))
 local Responsive = require(Shared.UI:WaitForChild("Responsive"))
+local TopbarButtons = require(Shared.UI:WaitForChild("TopbarButtons"))
 local PlayerSettings = require(Shared.UI:WaitForChild("PlayerSettings"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
@@ -81,16 +79,11 @@ local MENU_NAME = "Settings"
 --[[
 	A hotbar tile in the top bar: the pixel kit's slot art, the same frame the
 	inventory's tiles and this window are drawn from, with a pixel gear in it.
-	Sized from the bar - Roblox draws its own buttons BAR_MARGIN short of the
-	bar's height - and BUTTON_GAP from whatever is to its left.
+	Sized and placed by Shared.UI.TopbarButtons, at the right of the top bar.
 
 	Hover and an open window put the hotbar's gold selection ring round it, so
 	it reads as "the selected tile" the way the item in hand does.
 ]]
-local BUTTON_GAP = 8
-local BAR_MARGIN = 8
-local MIN_BUTTON_SIZE = 32
-local MAX_BUTTON_SIZE = 48
 local RING_OUTSET = 3
 
 -- The gear, a texel to a character.
@@ -179,7 +172,6 @@ local button = Instance.new("ImageButton")
 button.Name = "Gear"
 button.AutoButtonColor = false
 button.AnchorPoint = Vector2.new(0, 0.5)
-button.Size = UDim2.fromOffset(MIN_BUTTON_SIZE, MIN_BUTTON_SIZE)
 button.BackgroundTransparency = 1
 button.BorderSizePixel = 0
 -- Over the window's dimmed backdrop, so it can close what it opened.
@@ -241,40 +233,11 @@ end
 
 buildGear(face)
 
---[[
-	The bar's height, with a floor under it.
-
-	Read rather than assumed, because it is taller on a phone and that is what
-	keeps this lined up with the chat button there. The floor is for a client
-	that has not finished setting its topbar up and reports an empty inset: a
-	height of zero would centre the button on the very top edge of the screen
-	with half of it off it, and 36 - Roblox's own desktop bar - is the right
-	thing to be wrong with.
-]]
-local function barHeight(inset: Rect): number
-	return math.max(inset.Height, 36)
-end
-
---[[
-	Just right of whatever Roblox is drawing on the left of the topbar, and as
-	tall as Roblox's own buttons there.
-
-	TopbarInset is in the same space as this ScreenGui, which ignores the inset,
-	so its numbers can be used directly.
-]]
-local function place()
-	local inset = GuiService.TopbarInset
-	local size = math.clamp(barHeight(inset) - BAR_MARGIN * 2, MIN_BUTTON_SIZE, MAX_BUTTON_SIZE)
-
-	button.Size = UDim2.fromOffset(size, size)
-	button.Position = UDim2.fromOffset(
-		inset.Min.X + BUTTON_GAP,
-		inset.Min.Y + barHeight(inset) * 0.5
-	)
-end
-
-place()
-GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(place)
+-- At the right end of the top bar, with the island button beside it, and a
+-- line on what it opens under it on hover. See Shared.UI.TopbarButtons.
+TopbarButtons.add(button, 1, function()
+	return "Settings - sound, world and combat options"
+end)
 
 -- ---------------------------------------------------------------------------
 -- The window

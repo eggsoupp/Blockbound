@@ -100,6 +100,7 @@ local lastDisplayedName = nil
 -- Forward declaration: toggleInventory and the drag handler both need to put a
 -- hovered tile back, and both are written above the hover code that defines it.
 local clearHover
+local cancelDrag
 
 local keyToSlot = {
 	[Enum.KeyCode.One]   = 1, [Enum.KeyCode.Two]   = 2,
@@ -359,6 +360,9 @@ end
 
 local function toggleInventory()
 	inventoryVisible = not inventoryVisible
+	if not inventoryVisible and cancelDrag then
+		cancelDrag()
+	end
 
 	-- Rows closing under the cursor never fire MouseLeave, so the swollen tile
 	-- and its tooltip have to be told directly or they would be left behind on a
@@ -368,6 +372,7 @@ local function toggleInventory()
 		panel.Visible = inventoryVisible
 	end
 	layout.setOpen(inventoryVisible)
+	MenuState.setCursorRequired("Inventory", inventoryVisible)
 	-- Read by TouchControls, which hides the thumbstick and lights its Bag
 	-- button while the bag is open.
 	player:SetAttribute("InventoryOpen", inventoryVisible)
@@ -547,19 +552,31 @@ end
 local dragStartedAt = -math.huge
 
 --[[
-	A finger drags too, but only with the bag open: with it shut, a tap on the
-	hotbar is a choice of what to hold (see the hotbar taps further down), and
-	a stack lifting off the slot under the finger would only get in the way.
+	Mouse and touch only drag with the bag open. With it shut, a click or tap
+	on the hotbar selects what to hold.
 	The touch that started it is the only one that moves or drops it, so the
 	other thumb on the stick cannot.
 ]]
 local dragTouch: InputObject? = nil
 
 local function isDragStart(input: InputObject): boolean
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		return true
+	return inventoryVisible and not MenuState.isAnyOpen()
+		and (input.UserInputType == Enum.UserInputType.MouseButton1
+			or input.UserInputType == Enum.UserInputType.Touch)
+end
+
+cancelDrag = function()
+	if lastHoverSlot then
+		resetSlotSize(lastHoverSlot)
+		resetSlotTint(lastHoverSlot)
+		lastHoverSlot = nil
 	end
-	return input.UserInputType == Enum.UserInputType.Touch and inventoryVisible
+	if dragIcon then dragIcon:Destroy() end
+	if dragNum then dragNum:Destroy() end
+	dragIcon, dragNum = nil, nil
+	dragging = false
+	dragTouch = nil
+	sourceIndex = nil
 end
 
 local function isDragInput(input: InputObject, mouseType: Enum.UserInputType): boolean
@@ -689,21 +706,28 @@ UserInputService.InputBegan:Connect(function(input, processed)
 	end
 end)
 
---[[
-	On a touch screen the hotbar's tiles are the number keys: a tap on one is
-	the same as its key, including tapping the slot in hand to put it away.
-	A finger that carries a stack to another slot never lifts on this tile, so
-	moving things does not change what is held. The mouse keeps the number
-	keys, as it always has.
-]]
+-- With the bag closed, clicking or tapping a hotbar item equips it.
+-- Both the tile and its overlaid icon are buttons; listen to both, once per input.
+local lastHotbarInput: InputObject? = nil
+local lastHotbarAt = -math.huge
 for idx = 1, HOTBAR_SLOTS do
 	local tile = slots[idx]
 	if tile and tile:IsA("GuiButton") then
-		tile.Activated:Connect(function(input: InputObject)
-			if input and input.UserInputType == Enum.UserInputType.Touch and not MenuState.isAnyOpen() then
+		local function activate(input: InputObject)
+			if input and not (input == lastHotbarInput and os.clock() - lastHotbarAt < 0.05)
+				and not inventoryVisible and not MenuState.isAnyOpen()
+				and (input.UserInputType == Enum.UserInputType.MouseButton1
+					or input.UserInputType == Enum.UserInputType.Touch) then
+				lastHotbarInput = input
+				lastHotbarAt = os.clock()
 				selectHotbarSlot(idx)
 			end
-		end)
+		end
+		tile.Activated:Connect(activate)
+		local icon = getSlotElements(tile)
+		if icon and icon:IsA("GuiButton") then
+			icon.Activated:Connect(activate)
+		end
 	end
 end
 
@@ -912,6 +936,7 @@ InventoryMirror.onChanged(function(snapshot, changed)
 end)
 
 player.CharacterAdded:Connect(function()
+	if inventoryVisible then toggleInventory() end
 	log("character added; clearing UI and requesting inventory")
 	clearSlots()
 	RequestFullInv:FireServer()

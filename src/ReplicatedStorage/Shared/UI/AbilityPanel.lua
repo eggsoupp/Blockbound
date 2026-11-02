@@ -67,6 +67,8 @@ local Sounds = require(
 )
 
 local StorageUI = require(script.Parent.AbilityStorage)
+local QuestState = require(script.Parent:WaitForChild("QuestState"))
+local BestiaryState = require(script.Parent:WaitForChild("BestiaryState"))
 local StorageAbilityConfig = require(ReplicatedStorage.Shared.Abilities.AbilityConfig)
 local AbilityConfigSlotCount = StorageAbilityConfig.SlotCount
 local AbilityPanel = {}
@@ -103,14 +105,31 @@ local heldBack = false
 -- Pixels. Fixed rather than proportional, like every other panel in the game:
 -- text that scales with the window is text that is the wrong size twice.
 local CARD_WIDTH = 340
-local CARD_HEIGHT = 62
-local CARD_GAP = 10
+local CARD_HEIGHT = 56
+local CARD_GAP = 8
 local PITCH = CARD_HEIGHT + CARD_GAP
 
--- Row offsets inside a card: the capitals line, the name, the tier.
+-- Row offsets inside a card: the name over its tier. (The capitals line is
+-- kept for the code that writes it, but no longer shown: the keycap says it.)
 local LABEL_Y, LABEL_HEIGHT = 3, 15
-local NAME_Y, NAME_HEIGHT = 18, 26
-local RARITY_Y, RARITY_HEIGHT = 44, 16
+local NAME_Y, NAME_HEIGHT = 7, 26
+local RARITY_Y, RARITY_HEIGHT = 33, 16
+
+-- A card is a row: a thin bar in the tier's colour down its left edge, the
+-- slot's keycap, then the name. The row is darkest at the keycap and fades
+-- out to the right, so the three read as a list rather than as three boxes.
+local ACCENT_WIDTH = 3
+local BADGE_SIZE = 36
+local BADGE_LEFT = 14
+local BADGE_INSET = (CARD_HEIGHT - BADGE_SIZE) // 2
+local TEXT_LEFT = BADGE_LEFT + BADGE_SIZE + 14
+
+-- Each column sits in its own framed panel, this far in from the frame.
+local PANEL_PAD = 14
+
+-- Room round the frames inside the root: a CanvasGroup cuts at its edge, and
+-- a frame's stroke is drawn just outside it.
+local EDGE = 3
 
 local HINT_GAP = 10
 local HINT_HEIGHT = 16
@@ -143,27 +162,52 @@ local BIN_SPRITE = {
 }
 
 local BIN_PIXEL = 6
-local BIN_GAP = 18
+local BIN_GAP = 30
 local BIN_WIDTH = #BIN_SPRITE[1] * BIN_PIXEL
 local BIN_HEIGHT = #BIN_SPRITE * BIN_PIXEL
 
 --[[
-	Two columns of cards and the bin: the STORAGE column on the left (Shared.UI.
-	AbilityStorage), the LOADOUT in the middle, the bin on the right. Both
-	columns put their cards on the same rows under a heading line, so a card
-	carried across lands level with where it left.
+	The LOADOUT is the panel, in the middle, with the bin on its right.
+	Storage (Shared.UI.AbilityStorage) is a drawer that opens to the loadout's
+	left from the gold tab under it, shut unless the player opens it. Both
+	columns put their cards on the same rows, under the room storage needs for
+	its heading, so a card carried across lands level with where it left.
+
+	The root is as wide on the right of the loadout as on its left, so the
+	loadout is in the middle of the screen with the drawer open or shut. That
+	makes the left-to-right positions depend on the drawer: layoutFor sets them.
 ]]
 local BIN_SIDE = BIN_WIDTH + BIN_GAP
+local TAB_GAP_X = 12
+local PILL_LENGTH = (CARD_WIDTH - TAB_GAP_X) // 2
+local TAB_LENGTH = PILL_LENGTH
+local TAB_HEIGHT = 30
+local TAB_GAP = 12
 local COLUMN_GAP = 40
 local HEADER_HEIGHT = 22
-local LIST_TOP = HEADER_HEIGHT + 6
-local STORE_X = 0
-local CARDS_X = CARD_WIDTH + COLUMN_GAP
-local BIN_X = CARDS_X + CARD_WIDTH + BIN_GAP
-local ROOT_WIDTH = BIN_X + BIN_WIDTH
+local HEADER_TOP = EDGE + PANEL_PAD
+local LIST_TOP = HEADER_TOP + HEADER_HEIGHT + 8
+-- The NEXT line fills the room over the cards that storage keeps for its heading.
+local GUIDE_HEIGHT = LIST_TOP - EDGE - 8
 
--- How far left a loadout card is carried before storage takes it: half way.
-local STORE_REACH = (CARDS_X - STORE_X) * 0.5
+local OPEN_SIDE = EDGE + PANEL_PAD * 2 + CARD_WIDTH + COLUMN_GAP
+local SHUT_SIDE = BIN_SIDE
+
+local STORE_X, CARDS_X, BIN_X, ROOT_WIDTH, STORE_REACH = 0, 0, 0, 0, 0
+
+local function layoutFor(open: boolean)
+	local side = if open then OPEN_SIDE else SHUT_SIDE
+	CARDS_X = side
+	STORE_X = side - OPEN_SIDE + EDGE + PANEL_PAD
+	BIN_X = CARDS_X + CARD_WIDTH + BIN_GAP
+	ROOT_WIDTH = side * 2 + CARD_WIDTH
+	-- How far left a loadout card is carried before storage takes it: half way.
+	STORE_REACH = (CARDS_X - STORE_X) * 0.5
+end
+
+-- Shut until opened, and remembered for as long as the client runs.
+local storageOpen = false
+layoutFor(storageOpen)
 
 -- Where loadout card `index` rests, `dx` to the side of its column.
 local function slotPosition(index: number, dx: number?): UDim2
@@ -186,19 +230,20 @@ local BIN_IDLE_TRANSPARENCY = 0.55
 local BIN_ARMED_TRANSPARENCY = 0
 
 --[[
-	The card's own box, which is invisible until it is pointed at.
+	The card's own box: always there, so the three slots read as three slots,
+	and brighter when pointed at.
 
 	LIFTED is the one being dragged. It is the most opaque of the three on
 	purpose: while it is in the air it has to read as a thing that came off the
 	stack rather than as another row of it.
 ]]
-local CARD_REST = 1
-local CARD_HOVER = 0.55
-local CARD_LIFTED = 0.3
+local CARD_REST = 0.3
+local CARD_HOVER = 0.05
+local CARD_LIFTED = 0
 
 local STROKE_REST = 1
-local STROKE_HOVER = 0.45
-local STROKE_LIFTED = 0.1
+local STROKE_HOVER = 0.5
+local STROKE_LIFTED = 0.2
 
 -- How far the pointer travels before a press stops being a click and becomes a
 -- drag. Without it every click nudges the stack by a pixel and back.
@@ -210,6 +255,15 @@ local GAIN_HOLD = 4
 local EMPTY_TEXT = "Empty"
 local DRAG_HINT = "drag to reorder, left into storage to keep, or to the bin to drop"
 local DRAG_HINT_ONE = "drag left into storage to keep, or to the bin to drop"
+local SHUT_HINT = "drag to reorder, or to the bin to drop"
+local SHUT_HINT_ONE = "drag to the bin to drop"
+
+local function hintFor(filled: number): string
+	if storageOpen then
+		return if filled > 1 then DRAG_HINT else DRAG_HINT_ONE
+	end
+	return if filled > 1 then SHUT_HINT else SHUT_HINT_ONE
+end
 
 -- ---------------------------------------------------------------------------
 -- Building
@@ -363,16 +417,64 @@ local function newCard(parent: Instance)
 	button.BorderSizePixel = 0
 	button.Parent = parent
 
+	-- Darkest behind the keycap, gone by the right-hand end. Also fades the
+	-- outline a hover draws, so a raised row has no hard right edge either.
+	local fade = Instance.new("UIGradient")
+	fade.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0),
+		NumberSequenceKeypoint.new(0.45, 0.35),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	fade.Parent = button
+
+	-- The tier's colour down the left edge.
+	local accent = Instance.new("Frame")
+	accent.Name = "Accent"
+	accent.Size = UDim2.new(0, ACCENT_WIDTH, 1, 0)
+	accent.BackgroundColor3 = Theme.Color.TextFaint
+	accent.BorderSizePixel = 0
+	accent.Parent = button
+
 	local stroke = Instance.new("UIStroke")
 	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	stroke.Color = Theme.Color.Stroke
-	stroke.Thickness = 1
+	stroke.Thickness = 1.5
 	stroke.Transparency = STROKE_REST
 	stroke.Parent = button
 
-	return {
+	-- The slot's keycap: the key that casts it, or its number where there is
+	-- no key to name.
+	local badge = Instance.new("TextLabel")
+	badge.Name = "Badge"
+	badge.Position = UDim2.fromOffset(BADGE_LEFT, BADGE_INSET)
+	badge.Size = UDim2.fromOffset(BADGE_SIZE, BADGE_SIZE)
+	badge.BackgroundColor3 = Theme.Color.Panel
+	badge.BackgroundTransparency = 0.15
+	badge.BorderSizePixel = 0
+	badge.FontFace = Theme.Fonts.Heading
+	badge.TextSize = Theme.TextSize.Heading
+	badge.TextColor3 = Theme.Color.Text
+	badge.TextStrokeTransparency = 1
+	badge.Text = ""
+	badge.Parent = button
+
+	local badgeCorner = Instance.new("UICorner")
+	badgeCorner.CornerRadius = UDim.new(0, 4)
+	badgeCorner.Parent = badge
+
+	local badgeStroke = Instance.new("UIStroke")
+	badgeStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	badgeStroke.Color = Theme.Color.Stroke
+	badgeStroke.Thickness = 1
+	badgeStroke.Transparency = 0.3
+	badgeStroke.Parent = badge
+
+	local card = {
 		button = button,
 		stroke = stroke,
+		badge = badge,
+		badgeStroke = badgeStroke,
+		accent = accent,
 		label = newText(
 			button, LABEL_Y, LABEL_HEIGHT,
 			Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim
@@ -386,6 +488,24 @@ local function newCard(parent: Instance)
 			Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim
 		),
 	}
+
+	card.label.Visible = false
+
+	-- Cooldown and mana, on the tier's line at the right.
+	card.stats = newText(button, RARITY_Y, RARITY_HEIGHT, Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim)
+	card.stats.Name = "Stats"
+	card.stats.Size = UDim2.new(1, -14, 0, RARITY_HEIGHT)
+	card.stats.TextXAlignment = Enum.TextXAlignment.Right
+
+	-- Beside the badge rather than centred across the whole card.
+	for _, text in ipairs({ card.label, card.name, card.rarity }) do
+		text.Position = UDim2.fromOffset(TEXT_LEFT, text.Position.Y.Offset)
+		text.Size = UDim2.new(1, -TEXT_LEFT - 10, 0, text.Size.Y.Offset)
+		text.TextXAlignment = Enum.TextXAlignment.Left
+		text.TextTruncate = Enum.TextTruncate.AtEnd
+	end
+
+	return card
 end
 
 -- ---------------------------------------------------------------------------
@@ -431,13 +551,148 @@ function AbilityPanel.new(parent: Instance)
 
 	local bin, binPixels = buildSprite(root, BIN_SPRITE, "Bin", 0)
 
-	-- The loadout's heading, level with the storage column's.
-	local heading = newText(root, 0, HEADER_HEIGHT, Theme.TextSize.Small, Theme.Fonts.Heading, Theme.Color.TextDim)
-	heading.Name = "LoadoutHeading"
-	heading.Position = UDim2.fromOffset(CARDS_X, 0)
-	heading.Size = UDim2.fromOffset(CARD_WIDTH, HEADER_HEIGHT)
-	heading.TextXAlignment = Enum.TextXAlignment.Left
-	heading.Text = "LOADOUT"
+	-- The storage drawer's handle: a gold tab under the loadout, with the way
+	-- the drawer opens on its left, STORAGE in the middle and the count on its
+	-- right.
+	local tab = Instance.new("TextButton")
+	tab.Name = "StorageTab"
+	tab.Text = ""
+	tab.AutoButtonColor = false
+	tab.Size = UDim2.fromOffset(TAB_LENGTH, TAB_HEIGHT)
+	tab.BackgroundColor3 = Theme.Color.Panel
+	tab.BackgroundTransparency = 0.1
+	tab.BorderSizePixel = 0
+	tab.Parent = root
+
+	local tabCorner = Instance.new("UICorner")
+	tabCorner.CornerRadius = UDim.new(0, 6)
+	tabCorner.Parent = tab
+
+	local tabStroke = Instance.new("UIStroke")
+	tabStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	tabStroke.Color = Theme.PixelColor.Selection
+	tabStroke.Thickness = 1.5
+	tabStroke.Transparency = 0.35
+	tabStroke.Parent = tab
+
+	local tabArrow = newText(tab, 0, TAB_HEIGHT, Theme.TextSize.Body, Theme.Fonts.Heading, Theme.PixelColor.Selection)
+	tabArrow.Name = "Arrow"
+	tabArrow.Position = UDim2.fromOffset(8, 0)
+	tabArrow.Size = UDim2.fromOffset(20, TAB_HEIGHT)
+
+	local tabLabel = newText(tab, 0, TAB_HEIGHT, Theme.TextSize.Small, Theme.Fonts.Heading, Theme.PixelColor.Selection)
+	tabLabel.Name = "Label"
+	tabLabel.Text = "STORAGE"
+
+	local tabCount = newText(tab, 0, TAB_HEIGHT, Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim)
+	tabCount.Name = "Count"
+	tabCount.Position = UDim2.fromOffset(0, 0)
+	tabCount.Size = UDim2.new(1, -10, 0, TAB_HEIGHT)
+	tabCount.TextXAlignment = Enum.TextXAlignment.Right
+
+	tab.MouseEnter:Connect(function()
+		tabStroke.Transparency = 0
+		Sounds.play("ui.hover")
+	end)
+	tab.MouseLeave:Connect(function()
+		tabStroke.Transparency = 0.35
+	end)
+	tab.Activated:Connect(function()
+		Sounds.play("ui.click")
+		self:_setStorageOpen(not storageOpen)
+	end)
+
+	self.tab = tab
+	self.tabArrow = tabArrow
+	self.tabCount = tabCount
+
+	--[[
+		The two other pages of the menu, opened through callbacks PauseMenu
+		sets (onGuide, onBestiary): the QUEST line over the cards, naming the
+		first quest that can be worked on, and the BESTIARY pill beside storage.
+	]]
+	local function navButton(name: string, width: number, height: number, accent: Color3)
+		local button = Instance.new("TextButton")
+		button.Name = name
+		button.Text = ""
+		button.AutoButtonColor = false
+		button.Size = UDim2.fromOffset(width, height)
+		button.BackgroundColor3 = Theme.Color.Panel
+		button.BackgroundTransparency = 0.1
+		button.BorderSizePixel = 0
+		button.Parent = root
+
+		local buttonCorner = Instance.new("UICorner")
+		buttonCorner.CornerRadius = UDim.new(0, 6)
+		buttonCorner.Parent = button
+
+		local stroke = Instance.new("UIStroke")
+		stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		stroke.Color = accent
+		stroke.Thickness = 1.5
+		stroke.Transparency = 0.5
+		stroke.Parent = button
+
+		button.MouseEnter:Connect(function()
+			stroke.Transparency = 0
+			Sounds.play("ui.hover")
+		end)
+		button.MouseLeave:Connect(function()
+			stroke.Transparency = 0.5
+		end)
+		return button
+	end
+
+	local guide = navButton("GuideButton", CARD_WIDTH, GUIDE_HEIGHT, Theme.Color.Text)
+	local guideTag = newText(guide, 0, GUIDE_HEIGHT, Theme.TextSize.Small, Theme.Fonts.Heading, Theme.PixelColor.Selection)
+	guideTag.Position = UDim2.fromOffset(12, 0)
+	guideTag.Size = UDim2.fromOffset(60, GUIDE_HEIGHT)
+	guideTag.TextXAlignment = Enum.TextXAlignment.Left
+	guideTag.Text = "QUEST"
+	local guideText = newText(guide, 0, GUIDE_HEIGHT, Theme.TextSize.Body, Theme.Fonts.BodyBold, Theme.Color.Text)
+	guideText.Position = UDim2.fromOffset(74, 0)
+	guideText.Size = UDim2.new(1, -108, 0, GUIDE_HEIGHT)
+	guideText.TextXAlignment = Enum.TextXAlignment.Left
+	guideText.TextTruncate = Enum.TextTruncate.AtEnd
+	local guideArrow = newText(guide, 0, GUIDE_HEIGHT, Theme.TextSize.Body, Theme.Fonts.Heading, Theme.Color.TextDim)
+	guideArrow.Position = UDim2.new(1, -28, 0, 0)
+	guideArrow.Size = UDim2.fromOffset(20, GUIDE_HEIGHT)
+	guideArrow.Text = ">"
+	guide.Activated:Connect(function()
+		Sounds.play("ui.click")
+		if self.onGuide then
+			self.onGuide()
+		end
+	end)
+
+	local bestiary = navButton("BestiaryButton", PILL_LENGTH, TAB_HEIGHT, Theme.Color.Text)
+	local bestiaryLabel = newText(bestiary, 0, TAB_HEIGHT, Theme.TextSize.Small, Theme.Fonts.Heading, Theme.Color.Text)
+	bestiaryLabel.Position = UDim2.fromOffset(12, 0)
+	bestiaryLabel.Size = UDim2.new(1, -24, 0, TAB_HEIGHT)
+	bestiaryLabel.TextXAlignment = Enum.TextXAlignment.Left
+	bestiaryLabel.Text = "BESTIARY"
+	local bestiaryCount = newText(bestiary, 0, TAB_HEIGHT, Theme.TextSize.Small, Theme.Fonts.BodyBold, Theme.Color.TextDim)
+	bestiaryCount.Size = UDim2.new(1, -12, 0, TAB_HEIGHT)
+	bestiaryCount.TextXAlignment = Enum.TextXAlignment.Right
+	bestiary.Activated:Connect(function()
+		Sounds.play("ui.click")
+		if self.onBestiary then
+			self.onBestiary()
+		end
+	end)
+
+	local function refreshNav()
+		local quest = QuestState.focus()
+		guideText.Text = if quest then quest.title else "Every quest complete"
+		local met, all = BestiaryState.counts()
+		bestiaryCount.Text = string.format("%d/%d", met, all)
+	end
+	QuestState.Changed:Connect(refreshNav)
+	BestiaryState.Changed:Connect(refreshNav)
+	refreshNav()
+
+	self.guide = guide
+	self.bestiary = bestiary
 
 	self.root = root
 	self.hint = hint
@@ -449,6 +704,8 @@ function AbilityPanel.new(parent: Instance)
 	self.storage = StorageUI.create(root, {
 		x = STORE_X,
 		listTop = LIST_TOP,
+		headerTop = HEADER_TOP,
+		pad = PANEL_PAD,
 		width = CARD_WIDTH,
 		pitch = PITCH,
 		cardHeight = CARD_HEIGHT,
@@ -457,6 +714,9 @@ function AbilityPanel.new(parent: Instance)
 		newCard = newCard,
 		onPress = function(index, input)
 			self:_beginStoredDrag(index, self:_pointerAt(input))
+		end,
+		onRefresh = function(state)
+			self:_refreshTab(state)
 		end,
 	})
 	self.cards = {}
@@ -550,6 +810,8 @@ function AbilityPanel:_refreshCard(card)
 	end
 
 	card.label.TextColor3 = if card.gained then Theme.Color.Good else Theme.Color.TextDim
+	card.badge.TextColor3 = if card.filled then Theme.Color.Text else Theme.Color.TextFaint
+	card.badgeStroke.Color = card.stroke.Color
 end
 
 --[[
@@ -591,6 +853,11 @@ function AbilityPanel:_rebuild()
 		card.rarityColor = if entry.rarity then Theme.rarityColor(entry.rarity) else nil
 
 		card.label.Text = string.upper(tostring(entry.label or ""))
+		card.badge.Text = if type(entry.key) == "string" and entry.key ~= "" then entry.key else tostring(index)
+		card.accent.BackgroundColor3 = if has then card.rarityColor or Theme.Color.Text else Theme.Color.TextFaint
+		card.accent.BackgroundTransparency = if has then 0 else 0.6
+
+		card.stats.Text = if has and type(entry.stats) == "string" then entry.stats else ""
 
 		if has then
 			card.name.Text = abilityName
@@ -641,7 +908,7 @@ function AbilityPanel:_rebuild()
 	-- Worth saying as soon as there is anything to drag, but only worth
 	-- mentioning REORDERING once there are two things to put in an order.
 	self.hint.Visible = filled > 0
-	self.hint.Text = if filled > 1 then DRAG_HINT else DRAG_HINT_ONE
+	self.hint.Text = hintFor(filled)
 
 	local stack = math.max(PITCH, count * PITCH - CARD_GAP)
 
@@ -657,13 +924,57 @@ function AbilityPanel:_rebuild()
 	-- can reach it is a control that does not work.
 	self.bin.Visible = filled > 0
 
+	-- Everything left-to-right moves with the drawer; see layoutFor.
+	local tabTop = LIST_TOP + stack + TAB_GAP
+	self.tab.Position = UDim2.fromOffset(CARDS_X, tabTop)
+	self.bestiary.Position = UDim2.fromOffset(CARDS_X + CARD_WIDTH - PILL_LENGTH, tabTop)
+	self.guide.Position = UDim2.fromOffset(CARDS_X, LIST_TOP - GUIDE_HEIGHT - 8)
+	self.tabArrow.Text = if storageOpen then ">" else "<"
+	self.storage.column.Position = UDim2.fromOffset(STORE_X, 0)
+	self.storage.column.Visible = storageOpen
+
 	self:_setBinArmed(false)
 
-	-- As tall as the taller column: the storage column ends in its buy button.
+	-- As tall as the taller column: an open drawer ends in its buy button.
 	self.root.Size = UDim2.fromOffset(
 		ROOT_WIDTH,
-		math.max(LIST_TOP + stack, self.storage.height()) + HINT_GAP + HINT_HEIGHT
+		math.max(tabTop + TAB_HEIGHT, if storageOpen then self.storage.height() else 0) + EDGE + HINT_GAP + HINT_HEIGHT
 	)
+end
+
+--[[
+	Opens or shuts the storage drawer. The root changes width round the
+	loadout, so PauseMenu re-centres it and the loadout does not move.
+]]
+function AbilityPanel:_setStorageOpen(open: boolean)
+	if open == storageOpen then
+		return
+	end
+	storageOpen = open
+	layoutFor(open)
+	self.storage.dismiss()
+	self:_rebuild()
+
+	if open then
+		-- Slides out from behind the tab.
+		local column = self.storage.column
+		column.Position = UDim2.fromOffset(STORE_X + 40, 0)
+		TweenService:Create(
+			column,
+			TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+			{ Position = UDim2.fromOffset(STORE_X, 0) }
+		):Play()
+	end
+end
+
+-- The tab's line: what is in storage, or that there is none yet.
+function AbilityPanel:_refreshTab(state)
+	if not self.tabCount then
+		return
+	end
+	local capacity = state.capacity or 0
+	local stored = #(state.slots or {})
+	self.tabCount.Text = if capacity == 0 and stored == 0 then "+" else string.format("%d/%d", stored, capacity)
 end
 
 -- ---------------------------------------------------------------------------
@@ -787,7 +1098,7 @@ function AbilityPanel:_dragTo(x: number, y: number)
 		column. Clamped to the two, since past either there is nothing to drop
 		onto and the CanvasGroup would cut the card in half on the way out.
 	]]
-	local lift = math.clamp(sideways, STORE_X - CARDS_X, BIN_SIDE)
+	local lift = math.clamp(sideways, if storageOpen then STORE_X - CARDS_X else 0, BIN_SIDE)
 
 	--[[
 		Which target the card is over, measured as TRAVEL from where the drag
@@ -1048,7 +1359,7 @@ function AbilityPanel:_applyDrop(slot: number)
 
 	self.filled = math.max(0, self.filled - 1)
 	self.hint.Visible = self.filled > 0
-	self.hint.Text = if self.filled > 1 then DRAG_HINT else DRAG_HINT_ONE
+	self.hint.Text = hintFor(self.filled)
 	self.bin.Visible = self.filled > 0
 end
 
@@ -1199,7 +1510,10 @@ function AbilityPanel:_storedDragTo(x: number, y: number)
 		ghost.name.Text = definition and definition.displayName or drag.name
 		ghost.rarity.Text = if definition and definition.rarity then string.upper(definition.rarity) else ""
 		ghost.rarity.TextColor3 = Theme.rarityColor(definition and definition.rarity)
-		for _, text in ipairs({ ghost.label, ghost.name, ghost.rarity }) do
+		ghost.badge.Text = tostring(drag.index)
+		ghost.badge.TextColor3 = Theme.PixelColor.Selection
+		ghost.badgeStroke.Color = Theme.PixelColor.Selection
+		for _, text in ipairs({ ghost.label, ghost.name, ghost.rarity, ghost.badge }) do
 			text.ZIndex = 21
 		end
 		drag.ghost = ghost

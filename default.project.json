@@ -379,8 +379,18 @@
           "BlockConfig": {
             "$path": "src/ReplicatedStorage/Shared/Blocks/BlockConfig.lua"
           },
+          "PlacementGeometry": {
+            "$path": "src/ReplicatedStorage/Shared/Blocks/PlacementGeometry.lua"
+          },
           "BreakOverlay": {
             "$path": "src/ReplicatedStorage/Shared/Blocks/BreakOverlay.lua"
+          }
+        },
+        "Quests": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "QuestBook": {
+            "$path": "src/ReplicatedStorage/Shared/Quests/QuestBook.lua"
           }
         },
         "Crafting": {
@@ -418,6 +428,12 @@
           },
           "Music": {
             "$path": "src/ReplicatedStorage/Shared/Audio/Music.lua"
+          },
+          "DownloadedSounds": {
+            "$path": "src/ReplicatedStorage/Shared/Audio/DownloadedSounds.lua"
+          },
+          "Ambience": {
+            "$path": "src/ReplicatedStorage/Shared/Audio/Ambience.lua"
           }
         },
         "UI": {
@@ -488,6 +504,21 @@
           },
           "AbilityStorage": {
             "$path": "src/ReplicatedStorage/Shared/UI/AbilityStorage.lua"
+          },
+          "BestiaryState": {
+            "$path": "src/ReplicatedStorage/Shared/UI/BestiaryState.lua"
+          },
+          "BestiaryWindow": {
+            "$path": "src/ReplicatedStorage/Shared/UI/BestiaryWindow.lua"
+          },
+          "QuestState": {
+            "$path": "src/ReplicatedStorage/Shared/UI/QuestState.lua"
+          },
+          "QuestWindow": {
+            "$path": "src/ReplicatedStorage/Shared/UI/QuestWindow.lua"
+          },
+          "MenuWindow": {
+            "$path": "src/ReplicatedStorage/Shared/UI/MenuWindow.lua"
           },
           "TutorialSteps": {
             "$path": "src/ReplicatedStorage/Shared/UI/TutorialSteps.lua"
@@ -875,6 +906,12 @@
       },
       "TutorialService": {
         "$path": "src/ServerScriptService/TutorialService.lua"
+      },
+      "Bestiary": {
+        "$path": "src/ServerScriptService/Bestiary.lua"
+      },
+      "QuestService": {
+        "$path": "src/ServerScriptService/QuestService.lua"
       },
       "TerrainBench": {
         "$path": "src/ServerScriptService/TerrainBench.lua"

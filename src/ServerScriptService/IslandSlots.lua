@@ -29,7 +29,8 @@
 	  /switchisland        to the other island
 	  /switchisland 2      to island 2 (offers the pass if it is not owned)
 
-	It changes where the island button goes; it does not move the player.
+	Selecting an owned island, here or in the picker, travels there immediately
+	unless the player is already on that island.
 
 	NAMES
 
@@ -45,6 +46,7 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
+local TeleportService = game:GetService("TeleportService")
 
 local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("IslandSlots"))
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
@@ -66,6 +68,7 @@ local chosen = setmetatable({}, { __mode = "k" })
 -- player -> { [slot] = name }, only for islands that have been renamed.
 local names = setmetatable({}, { __mode = "k" })
 local lastMenuAt = {}
+local switching = {}
 
 function IslandSlots.name(player: Player, slot: number): string
 	local custom = names[player] and names[player][slot]
@@ -124,7 +127,10 @@ local function checkPass(player: Player)
 	end
 end
 
-local function choose(player: Player, slot: number, quiet: boolean?)
+local function choose(player: Player, slot: number)
+	if switching[player] then
+		return
+	end
 	if slot > IslandSlots.count(player) then
 		if PASS_ID > 0 then
 			MarketplaceService:PromptGamePassPurchase(player, PASS_ID)
@@ -136,8 +142,20 @@ local function choose(player: Player, slot: number, quiet: boolean?)
 	chosen[player] = slot
 	InventoryStore.markDirty(player)
 	publish(player)
-	if not quiet then
-		CommandFeedback.tell(player, string.format("The island button now takes you to %s.", IslandSlots.name(player, slot)), "good")
+	-- Travel requires IslandSlots, so resolve it only when a choice is made,
+	-- after this module has finished loading.
+	local Travel = require(ServerScriptService:WaitForChild("Travel"))
+	if Travel.onOwnIsland(player) then
+		return
+	end
+	switching[player] = true
+	local ok, sent = pcall(Travel.go, player, "island")
+	if not ok or not sent then
+		switching[player] = nil
+		if not ok then
+			warn("[IslandSlots] Switch failed:", sent)
+			CommandFeedback.tell(player, "Couldn't switch islands. Please try again.", "bad")
+		end
 	end
 end
 
@@ -175,7 +193,7 @@ Menu.OnServerEvent:Connect(function(player, action, slot, text)
 		return
 	end
 	if action == "select" then
-		choose(player, slot, true)
+		choose(player, slot)
 	elseif action == "rename" and type(text) == "string" and #text <= 200 then
 		if slot > IslandSlots.count(player) then
 			return
@@ -204,10 +222,16 @@ end
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passId, purchased)
 	if passId == PASS_ID and purchased then
 		owned[player] = true
-		chosen[player] = 2
-		InventoryStore.markDirty(player)
-		publish(player)
-		CommandFeedback.tell(player, "Island 2 is yours. The island button now takes you there; /switchisland swaps back.", "good")
+		CommandFeedback.tell(player, "Island 2 is yours. Heading there now...", "good")
+		choose(player, 2)
+	end
+end)
+
+-- An accepted teleport can still fail later. Allow another selection then.
+TeleportService.TeleportInitFailed:Connect(function(player)
+	if switching[player] then
+		switching[player] = nil
+		CommandFeedback.tell(player, "Couldn't switch islands. Select the island to try again.", "bad")
 	end
 end)
 
@@ -230,6 +254,7 @@ end
 Players.PlayerRemoving:Connect(function(player)
 	owned[player] = nil
 	lastMenuAt[player] = nil
+	switching[player] = nil
 end)
 
 return IslandSlots

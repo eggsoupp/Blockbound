@@ -162,7 +162,7 @@ local GLINT_SPAN = SHAPE_SPAN * 0.42
 	PauseMenu's own black dim, and darkening it is half of what gives the pale
 	lines something to be pale against.
 ]]
-local WASH_TRANSPARENCY = 0.2
+local WASH_TRANSPARENCY = 0.06
 
 -- The near and far ends of the depth fade on the wireframe. The gap between
 -- them is what reads as three dimensions without any shading, and it is the
@@ -172,7 +172,7 @@ local EDGE_FAR_TRANSPARENCY = 0.68
 local VERTEX_TRANSPARENCY = 0.05
 
 local STREAK_TRANSPARENCY = 0.52
-local STAR_TRANSPARENCY = 0.78
+local STAR_TRANSPARENCY = 0.25
 
 -- The glint is the one thing allowed to be bright, because in the reference it
 -- is the only thing that is.
@@ -200,7 +200,24 @@ local GLINT_HALO_SIZE = 34
 local GLINT_CORE_SIZE = 10
 
 local STREAK_COUNT = 7
-local STAR_COUNT = 46
+local STAR_COUNT = 110
+
+--[[
+	The starfield drifts: every star creeps sideways at its own pace (the
+	dimmer, the slower, so the nearer ones read as nearer) and wraps round.
+	Now and then a shooting star crosses it - a short bright streak with a
+	fading tail, gone in under a second.
+]]
+local STAR_DRIFT_MIN = 0.002
+local STAR_DRIFT_MAX = 0.009
+local SHOOTING_GAP_MIN = 1.6
+local SHOOTING_GAP_MAX = 4.5
+local SHOOTING_LIFE = 0.75
+-- Pixels a second. Flown in pixels, not in fractions of the screen, so it
+-- travels exactly the way it points on a screen of any shape.
+local SHOOTING_SPEED = 1100
+local SHOOTING_LENGTH_MIN = 90
+local SHOOTING_LENGTH_MAX = 170
 
 --[[
 	The projection.
@@ -562,13 +579,24 @@ local function buildStars(parent: Instance, look): { Frame }
 	local stars = {}
 
 	for _ = 1, look.stars do
-		local star = newSquare(field, (if random:NextNumber() < 0.2 then 3 else 2), Theme.Color.MenuWire)
-		star.Position = UDim2.fromScale(random:NextNumber(), random:NextNumber())
+		local roll = random:NextNumber()
+		local star = newSquare(field, (if roll < 0.1 then 4 elseif roll < 0.4 then 3 else 2), Theme.Color.MenuWire)
+		local x, y = random:NextNumber(), random:NextNumber()
+		star.Position = UDim2.fromScale(x, y)
 		star.ZIndex = 1
 
 		-- Each keeps its own dimming on top of the shared one, so the field has
-		-- depth rather than being one flat sheet of dots.
-		table.insert(stars, { frame = star, dim = random:NextNumber(0.35, 1) })
+		-- depth rather than being one flat sheet of dots - and drifts at a pace
+		-- that goes with it.
+		local dim = random:NextNumber(0.35, 1)
+		-- Each its own way and speed, so the field shimmers rather than scrolls.
+		local heading = random:NextNumber(0, math.pi * 2)
+		local speed = STAR_DRIFT_MIN + (STAR_DRIFT_MAX - STAR_DRIFT_MIN) * random:NextNumber()
+		table.insert(stars, {
+			frame = star, dim = dim, x = x, y = y,
+			vx = math.cos(heading) * speed,
+			vy = math.sin(heading) * speed,
+		})
 	end
 
 	return stars
@@ -712,6 +740,10 @@ function MenuBackdrop.new(parent: Instance, options: { look: string? }?)
 
 	self.root = root
 	self.stars = buildStars(root, look)
+	self.starField = root:FindFirstChild("Stars")
+	self.shooting = {}
+	self.shootingRandom = Random.new()
+	self.nextShooting = 0
 	self.streakField, self.streaks = buildStreaks(root, look)
 	self.wireField, self.edgeLines, self.vertexDots = buildWire(root, look)
 	self.glint = buildGlint(root, look)
@@ -967,6 +999,11 @@ function MenuBackdrop:_step(deltaTime: number)
 		-- wireframe left gold would still be gold the next time it opens.
 		self:_applyTint(0)
 
+		for _, shot in ipairs(self.shooting) do
+			shot.frame:Destroy()
+		end
+		table.clear(self.shooting)
+
 		self.root.Visible = false
 		self:_disconnect()
 		return
@@ -974,6 +1011,8 @@ function MenuBackdrop:_step(deltaTime: number)
 
 	local time = self.clock
 	local alpha = self.alpha
+
+	self:_driftStars(deltaTime, alpha)
 
 	-- Drifts under its own speed, and is whipped round on top of that for as
 	-- long as the burst is throwing the shape outward.
@@ -1006,6 +1045,84 @@ function MenuBackdrop:_step(deltaTime: number)
 
 	if DEBUG then
 		self:_report()
+	end
+end
+
+--[[
+	The starfield's motion: each star creeps along and wraps round, and now and
+	then a shooting star is launched across the field and flown out.
+]]
+function MenuBackdrop:_driftStars(deltaTime: number, alpha: number)
+	if #self.stars == 0 then
+		return
+	end
+
+	for _, star in ipairs(self.stars) do
+		star.x = (star.x + star.vx * deltaTime) % 1
+		star.y = (star.y + star.vy * deltaTime) % 1
+		star.frame.Position = UDim2.fromScale(star.x, star.y)
+	end
+
+	local random = self.shootingRandom
+	if self.clock >= self.nextShooting and alpha > 0.5 then
+		self.nextShooting = self.clock + random:NextNumber(SHOOTING_GAP_MIN, SHOOTING_GAP_MAX)
+
+		-- A thin line, bright at its head and fading to nothing along its tail,
+		-- pointed the way it flies: down and across, from somewhere up top.
+		local line = Instance.new("Frame")
+		line.Name = "ShootingStar"
+		-- Centred: a GuiObject turns about its middle whatever its AnchorPoint,
+		-- so the middle is what gets placed, half a length behind the head.
+		line.AnchorPoint = Vector2.new(0.5, 0.5)
+		line.Size = UDim2.fromOffset(0, 2)
+		line.BackgroundTransparency = 1
+		line.BackgroundColor3 = Color3.new(1, 1, 1)
+		line.BorderSizePixel = 0
+		line.ZIndex = 1
+		local gradient = Instance.new("UIGradient")
+		gradient.Transparency = NumberSequence.new({
+			NumberSequenceKeypoint.new(0, 1),
+			NumberSequenceKeypoint.new(0.85, 0.35),
+			NumberSequenceKeypoint.new(1, 0),
+		})
+		gradient.Parent = line
+
+		local leftward = random:NextNumber() < 0.5
+		local angle = math.rad(random:NextNumber(18, 38))
+		local direction = Vector2.new(if leftward then -math.cos(angle) else math.cos(angle), math.sin(angle))
+		line.Rotation = math.deg(math.atan2(direction.Y, direction.X))
+		line.Parent = self.starField
+
+		table.insert(self.shooting, {
+			frame = line,
+			age = 0,
+			length = random:NextNumber(SHOOTING_LENGTH_MIN, SHOOTING_LENGTH_MAX),
+			position = self.starField.AbsoluteSize
+				* Vector2.new(random:NextNumber(0.1, 0.9), random:NextNumber(0.02, 0.45)),
+			direction = direction,
+		})
+	end
+
+	for index = #self.shooting, 1, -1 do
+		local shot = self.shooting[index]
+		shot.age += deltaTime
+		if shot.age >= SHOOTING_LIFE then
+			shot.frame:Destroy()
+			table.remove(self.shooting, index)
+		else
+			shot.position += shot.direction * SHOOTING_SPEED * deltaTime
+			-- The tail draws out behind the head as it gets going, and the whole
+			-- streak eases out over the rest of its flight.
+			local life = shot.age / SHOOTING_LIFE
+			local grow = math.min(life * 4, 1)
+			local length = shot.length * (1 - (1 - grow) ^ 2)
+			local middle = shot.position - shot.direction * (length * 0.5)
+			shot.frame.Size = UDim2.fromOffset(length, 2)
+			shot.frame.Position = UDim2.fromOffset(middle.X, middle.Y)
+			local fadeOut = 1 - math.max(0, (life - 0.35) / 0.65)
+			local brightness = fadeOut * fadeOut * (3 - 2 * fadeOut)
+			shot.frame.BackgroundTransparency = 1 - brightness * alpha
+		end
 	end
 end
 

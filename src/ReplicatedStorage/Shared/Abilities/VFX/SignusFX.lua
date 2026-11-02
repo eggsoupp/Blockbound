@@ -67,9 +67,10 @@ FX.Sounds={
  thunder="rbxasset://sounds/HalloweenThunder.wav",
  wind="rbxasset://sounds/action_falling.ogg",
 }
+local Sounds = require(game:GetService("ReplicatedStorage").Shared.Audio.Sounds)
 function FX.sound(parent,volume,pitch,id,looped)
  local sound=Instance.new("Sound");sound.SoundId=id or FX.Sounds.boom
- sound.Volume=volume;sound.PlaybackSpeed=pitch or 1;sound.RollOffMinDistance=15;sound.RollOffMaxDistance=220
+ sound.Volume=Sounds.volume(volume);sound.PlaybackSpeed=pitch or 1;sound.RollOffMinDistance=15;sound.RollOffMaxDistance=220
  sound.Looped=looped==true;sound.Parent=parent;sound:Play()
  return sound
 end

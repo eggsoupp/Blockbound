@@ -1847,6 +1847,7 @@ function EnemyService.damage(model, amount, dealer)
 		awardDrops(entry, where)
 		if entry.dealer then
 			require(game:GetService("ServerScriptService").TutorialService).EnemyDefeated(entry.dealer)
+			require(game:GetService("ServerScriptService").Bestiary).killed(entry.dealer, entry.name)
 		end
 
 		removeEntry(model, "died")

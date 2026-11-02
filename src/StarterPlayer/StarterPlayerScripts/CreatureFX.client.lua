@@ -32,6 +32,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
+local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Library = require(Shared:WaitForChild("Enemies"):WaitForChild("CreatureParticles"))
 local Rigs = require(Shared:WaitForChild("Enemies"):WaitForChild("CreatureRigs"))
@@ -105,7 +106,7 @@ end
 
 function Kit.sound(parent, id, volume, pitch)
 	local s = Instance.new("Sound")
-	s.SoundId, s.Volume, s.PlaybackSpeed = id, volume or 0.5, pitch or 1
+	s.SoundId, s.Volume, s.PlaybackSpeed = id, Sounds.volume(volume), pitch or 1
 	s.RollOffMinDistance, s.RollOffMaxDistance = 12, 180
 	s.Parent = parent
 	s:Play()

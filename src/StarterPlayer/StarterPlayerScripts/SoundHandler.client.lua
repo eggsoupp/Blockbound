@@ -23,3 +23,6 @@ local Music = require(
 )
 
 Music.start()
+
+local Ambience = require(ReplicatedStorage.Shared.Audio:WaitForChild("Ambience"))
+Ambience.start()

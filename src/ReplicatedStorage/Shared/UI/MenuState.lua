@@ -20,6 +20,7 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
+local GuiService = game:GetService("GuiService")
 
 local MenuState = {}
 
@@ -100,7 +101,40 @@ local openCount = 0
 
 local isLocked = false
 local controls = nil
-local savedMouseBehavior = nil
+local cursorRequests = {}
+local cursorHeld = false
+local recovery = false
+local windowFocused = true
+local cursorModal = nil
+
+-- Cursor ownership is independent of movement: settings and the bag allow
+-- walking, but must still release shift-lock / first-person mouse capture.
+local function updateCursor()
+	if not RunService:IsClient() then return end
+	local release = openCount > 0 or next(cursorRequests) ~= nil or recovery
+		or not windowFocused or GuiService.MenuIsOpen
+		or UserInputService:GetFocusedTextBox() ~= nil
+	if cursorModal then cursorModal.Visible = release end
+	if release or cursorHeld then
+		-- Never restore a snapshot of MouseBehavior. It may represent a shift
+		-- lock or right-drag that ended while the menu was open. On release the
+		-- camera computes its current intent again on the next frame.
+		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+		UserInputService.MouseIconEnabled = true
+	end
+	cursorHeld = release
+end
+
+-- For non-modal UI, without changing isAnyOpen or gameplay input guards.
+function MenuState.setCursorRequired(name, required)
+	cursorRequests[name] = if required then true else nil
+	updateCursor()
+end
+
+function MenuState.recoverCursor()
+	recovery = true
+	updateCursor()
+end
 
 -- ---------------------------------------------------------------------------
 -- Movement lock
@@ -152,15 +186,6 @@ local function setLocked(shouldLock)
 		end
 	end
 
-	-- Free the cursor so menus are clickable from shift-lock or first person,
-	-- then put it back exactly as it was.
-	if shouldLock then
-		savedMouseBehavior = UserInputService.MouseBehavior
-		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
-	elseif savedMouseBehavior then
-		UserInputService.MouseBehavior = savedMouseBehavior
-		savedMouseBehavior = nil
-	end
 end
 
 -- ---------------------------------------------------------------------------
@@ -192,6 +217,7 @@ function MenuState.setOpen(name, open, locksMovement)
 		end
 	end
 	setLocked(shouldLock)
+	updateCursor()
 
 	MenuState.Changed:Fire(name, open, openCount > 0)
 end
@@ -219,6 +245,7 @@ function MenuState.closeAll()
 	table.clear(openMenus)
 	openCount = 0
 	setLocked(false)
+	updateCursor()
 
 	for _, name in ipairs(names) do
 		MenuState.Changed:Fire(name, false, false)
@@ -226,11 +253,62 @@ function MenuState.closeAll()
 end
 
 if RunService:IsClient() then
+	-- Tell the standard camera that UI owns the cursor. This also avoids
+	-- camera rotation under menus. A tiny transparent button captures no panel.
+	task.spawn(function()
+		local gui = Instance.new("ScreenGui")
+		gui.Name = "MenuCursorGuard"
+		gui.ResetOnSpawn = false
+		gui.DisplayOrder = -100
+		local modal = Instance.new("TextButton")
+		modal.Name = "CursorModal"
+		modal.Size = UDim2.fromOffset(1, 1)
+		modal.BackgroundTransparency = 1
+		modal.Text = ""
+		modal.Active = false
+		modal.Selectable = false
+		modal.Modal = true
+		modal.Visible = false
+		modal.Parent = gui
+		gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+		cursorModal = modal
+		updateCursor()
+	end)
+
+	-- Failsafe after the camera update, including right-drag while UI is up.
+	-- No work outside cursor ownership except checking the current intent.
+	RunService:BindToRenderStep("BlockboundMenuCursor", Enum.RenderPriority.Last.Value, updateCursor)
+	GuiService.MenuOpened:Connect(updateCursor)
+	GuiService.MenuClosed:Connect(updateCursor)
+	UserInputService.WindowFocusReleased:Connect(function()
+		windowFocused = false
+		updateCursor()
+	end)
+	UserInputService.WindowFocused:Connect(function()
+		windowFocused = true
+		updateCursor()
+	end)
+	UserInputService.InputBegan:Connect(function(input, processed)
+		-- Emergency escape hatch even if another GUI consumed the key. Remains
+		-- free until the player deliberately requests camera control again.
+		if input.KeyCode == Enum.KeyCode.F8 then
+			MenuState.recoverCursor()
+		-- Roblox's shift-lock action can mark Shift as processed itself.
+		elseif UserInputService:GetFocusedTextBox() == nil and
+			(input.KeyCode == Enum.KeyCode.LeftShift
+			or input.KeyCode == Enum.KeyCode.RightShift
+			or (not processed and input.UserInputType == Enum.UserInputType.MouseButton2)) then
+			recovery = false
+		end
+	end)
 	-- Respawning drops the old controls object, so a lock held across a death
 	-- would never be released.
 	Players.LocalPlayer.CharacterAdded:Connect(function()
 		controls = nil
+		table.clear(cursorRequests)
+		recovery = false
 		MenuState.closeAll()
+		updateCursor()
 	end)
 end
 

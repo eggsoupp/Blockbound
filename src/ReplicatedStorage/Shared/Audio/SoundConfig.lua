@@ -1,46 +1,5 @@
---[[
-	SoundConfig
-
-	Every sound the game plays, and which blocks map to which material.
-
-	===========================================================================
-	PALETTE
-	===========================================================================
-	Asset ids are declared ONCE, below, and referenced by name everywhere else.
-	Swapping the game's audio is editing the Palette table, not hunting through
-	thirty entries.
-
-	  Palette.UiSoft / UiClick   yours
-	  everything else            Roblox built-in rbxasset:// sounds
-
-	The built-ins are used because they are guaranteed to exist in every place,
-	so a bad id can never make the game silently mute. They are shaped rather
-	than used raw - see SHAPING below - which is what carries most of the
-	character. When you have real SFX, replace the Palette entry and every sound
-	built on it follows.
-
-	===========================================================================
-	SHAPING
-	===========================================================================
-	The same source asset becomes a different sound depending on how it is used,
-	and this is where the blocky-material feel actually comes from:
-
-	  pitch      stone is slow and heavy, wood is mid, sand is fast and airy
-	  volume     things that fire often are mixed well under things that do not
-	  pitchVary  +/- jitter per play, so a repeated sound is never identical
-	  throttle   minimum gap between two plays of the same key
-	  layer      a second sound played on top, for weight - a break is a thud
-	             AND a crack, which reads as one richer sound rather than two
-
-	===========================================================================
-	MATERIAL GROUPS
-	===========================================================================
-	Mining and placement pick their sound from the BLOCK's material group, so
-	digging sand sounds different from chipping stone. Blocks match by exact name
-	first, then by the suffix rules, then the default. Adding a block usually
-	needs nothing here; adding an ore needs nothing at all, because "...Ore"
-	already routes to the ore group.
-]]
+-- Sound routing for Blockbound. Imported audio is owned by saile stone studios.
+-- Legacy built-ins remain for material sounds not covered by the download.
 
 local SoundConfig = {}
 
@@ -213,33 +172,7 @@ SoundConfig.Sounds = {
 		range = 420,
 	},
 
-	-- === Placement ========================================================
-	-- A block landing: the material's own tap, with a low thump under it for
-	-- weight. This is the sound the player hears most while building.
-	["place.stone"] = {
-		id = Palette.Tap,
-		volume = 0.5,
-		pitch = 0.55,
-		pitchVary = 0.07,
-		layer = { id = Palette.Thump, volume = 0.16, pitch = 2.4 },
-	},
-	["place.soft"] = { id = Palette.Tap, volume = 0.42, pitch = 0.95, pitchVary = 0.09 },
-	["place.sand"] = { id = Palette.Granular, volume = 0.34, pitch = 1.35, pitchVary = 0.1 },
-	["place.wood"] = {
-		id = Palette.Tap,
-		volume = 0.46,
-		pitch = 1.15,
-		pitchVary = 0.07,
-		layer = { id = Palette.Thump, volume = 0.12, pitch = 2.8 },
-	},
-	["place.ore"] = { id = Palette.Tap, volume = 0.5, pitch = 0.45, pitchVary = 0.06 },
-	["place.station"] = {
-		id = Palette.Clack,
-		volume = 0.45,
-		pitch = 0.75,
-		pitchVary = 0.05,
-		layer = { id = Palette.Tap, volume = 0.3, pitch = 0.9 },
-	},
+	-- Placement is configured below using the two private group clips.
 
 	-- === Mining: the tick while you are chipping away ======================
 	-- Quiet and heavily jittered; several of these fire per block.
@@ -292,6 +225,63 @@ SoundConfig.Sounds = {
 -- ---------------------------------------------------------------------------
 -- Material groups
 -- ---------------------------------------------------------------------------
+
+-- Curated group-owned imports. Keep the existing gameplay keys so every UI
+-- consumer picks up the new assets without changing its event handlers.
+local Imported = require(script.Parent:WaitForChild("DownloadedSounds"))
+local imports = {
+    ["ui.hover"] = {"ui_hover", .12, .05},
+    ["ui.click"] = {"ui_click", .4},
+    ["ui.tab"] = {"ui_tab", .25},
+    ["ui.open"] = {"ui_open", .32},
+    ["ui.close"] = {"ui_close", .28},
+    ["ui.denied"] = {"ui_denied", .3, .12},
+    ["ui.notify"] = {"ui_notify", .3},
+    ["craft.success"] = {"craft_success", .4},
+    ["craft.fail"] = {"ui_denied", .3},
+    ["tool.swing"] = {"ability_whoosh", .2, .08},
+    ["ability.sacredrain.portal"] = {"ability_portal", .45},
+    ["ability.sacredrain.impact"] = {"ability_impact_heavy", .55},
+    ["ability.eclipse.charge"] = {"ability_charge", .5},
+    ["ability.eclipse.burst"] = {"ability_impact_heavy", .8},
+    ["ability.eclipse.aftershock"] = {"ability_impact_heavy", .4},
+}
+for key, entry in pairs(imports) do
+    SoundConfig.Sounds[key] = {id = Imported[entry[1]], volume = entry[2], throttle = entry[3],
+        pitch = 1, pitchVary = .025, lifetime = if entry[1] == "ability_charge" then 15 else 7,
+        range = if string.sub(key, 1, 8) == "ability." then 300 else 90}
+end
+for key, id in pairs(Imported) do
+    if string.sub(key, 1, 8) == "ability_" then
+        SoundConfig.Sounds["ability." .. string.sub(key, 9)] = {id = id, volume = .45, pitch = 1, range = 180,
+            lifetime = if key == "ability_charge" then 15 else 7}
+    end
+end
+
+-- Local input feedback: full-level, dry transients with no distance attenuation.
+SoundConfig.Sounds["place.hard"] = {
+    id = Imported.ui_click, volume = .85, pitch = .95, pitchVary = .025,
+    tone = {low = 2, mid = 0, high = -3},
+}
+SoundConfig.Sounds["place.soft"] = {
+    -- Pro Sound Effects: Rock Hit Dirt Impact 14 (Roblox Creator Store).
+    id = "rbxassetid://9118598279", volume = .85, pitch = 1.12, pitchVary = .035,
+    clipLength = .22, tone = {low = 1, mid = 0, high = -2},
+}
+-- One short pluck for a batch of pickups, instead of the old 1.57-second effect.
+SoundConfig.Sounds["loot.pickup"] = {
+    id = Imported.ui_tab, volume = .65, pitch = 1.2, pitchVary = .035,
+    clipLength = .16, throttle = .12,
+}
+SoundConfig.Sounds["place.denied"] = {
+    id = Imported.ui_open, volume = .14, pitch = .48, pitchVary = .015,
+    throttle = .7, tone = {low = 1, mid = -6, high = -16},
+}
+-- Keep older callers on the same two placement mixes.
+for _, group in ipairs({"stone", "wood", "ore", "station"}) do
+    SoundConfig.Sounds["place." .. group] = SoundConfig.Sounds["place.hard"]
+end
+SoundConfig.Sounds["place.sand"] = SoundConfig.Sounds["place.soft"]
 
 SoundConfig.DefaultGroup = "stone"
 
@@ -360,6 +350,10 @@ end
 	  SoundConfig.keyFor("mine.hit", "CoalOre") -> "mine.hit.ore"
 ]]
 function SoundConfig.keyFor(prefix, blockName)
+	if prefix == "place" then
+		local group = SoundConfig.groupFor(blockName)
+		return if group == "soft" or group == "sand" then "place.soft" else "place.hard"
+	end
 	return prefix .. "." .. SoundConfig.groupFor(blockName)
 end
 

@@ -14,7 +14,7 @@
 	    abilities   one button per filled slot, named, with the cooldown
 	                draining over it. They cast through AbilityClient, so a
 	                tap obeys every rule a key press does.
-	    RUN, CROUCH toggles, above the abilities.
+	    RUN toggle, above the abilities.
 
 	  Beside the hotbar, top left:
 	    BAG, CRAFT, MENU   the E, B and Tab keys.
@@ -80,7 +80,6 @@ local ABILITY_ANGLES = { 145, 115, 85 }
 ]]
 local TOGGLE_SIZE = 48
 local RUN_OFFSET = Vector2.new(-165, -60)
-local CROUCH_OFFSET = Vector2.new(-158, -122)
 
 -- Apple's and Google's smallest comfortable target.
 local MIN_TOUCH = 44
@@ -326,7 +325,7 @@ for slot = 1, AbilityConfig.SlotCount do
 end
 
 -- ---------------------------------------------------------------------------
--- RUN and CROUCH
+-- RUN
 -- ---------------------------------------------------------------------------
 
 --[[
@@ -336,15 +335,9 @@ end
 	itself when a menu stops a sprint, so the lit state is read back from them.
 ]]
 local run = roundButton("Run", "RUN")
-local crouch = roundButton("Crouch", "CROUCH")
 
 run.onPress(function()
 	player:SetAttribute("TouchSprint", not player:GetAttribute("TouchSprint"))
-	Sounds.play("ui.click")
-end)
-
-crouch.onPress(function()
-	player:SetAttribute("TouchCrouch", not player:GetAttribute("TouchCrouch"))
 	Sounds.play("ui.click")
 end)
 
@@ -429,7 +422,6 @@ local function layout()
 		place(handle, jump + offset * k, ABILITY_SIZE * k)
 	end
 	place(run, jump + RUN_OFFSET * k, TOGGLE_SIZE * k)
-	place(crouch, jump + CROUCH_OFFSET * k, TOGGLE_SIZE * k)
 
 	--[[
 		Right of the hotbar, centred on it. A screen too narrow for that - a
@@ -524,11 +516,9 @@ RunService.RenderStepped:Connect(function()
 		end
 	end
 
-	for handle, attribute in pairs({ [run] = "TouchSprint", [crouch] = "TouchCrouch" }) do
-		local on = player:GetAttribute(attribute) == true
-		if handle.lit ~= on then
-			handle.lit = on
-			handle.paint()
-		end
+	local on = player:GetAttribute("TouchSprint") == true
+	if run.lit ~= on then
+		run.lit = on
+		run.paint()
 	end
 end)

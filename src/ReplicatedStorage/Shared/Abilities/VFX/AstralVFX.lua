@@ -1,3 +1,4 @@
+local ImportedAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.DownloadedSounds)
 -- Astral Verdict, drawn from one message:
 --   chart    stars pop into the sky over the aim one by one and are joined
 --            into a constellation in the shape of a sword, while a star seal
@@ -30,9 +31,9 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_CHIME = "rbxasset://sounds/electronicpingshort.wav"
-local SOUND_SWISH = "rbxassetid://12222208"
-local SOUND_BOOM = "rbxassetid://5540424854"
+local SOUND_CHIME = ImportedAudio.ability_magic_glow
+local SOUND_SWISH = ImportedAudio.ability_whoosh
+local SOUND_BOOM = ImportedAudio.ability_impact_heavy
 local SOUND_HIT = "rbxasset://sounds/hit.wav"
 
 function VFX.preload()

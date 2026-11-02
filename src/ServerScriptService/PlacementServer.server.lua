@@ -44,8 +44,8 @@ local MIN_REQUEST_INTERVAL = 0.06
 
 local lastRequestTime = {}
 
-local function sendResult(player, success, message)
-	PlacementResult:FireClient(player, success, message)
+local function sendResult(player, success, message, itemName, centre)
+	PlacementResult:FireClient(player, success, message, itemName, centre)
 end
 
 --[[
@@ -136,5 +136,8 @@ RequestPlaceBlock.OnServerEvent:Connect(function(player, slotIndex, a, b, c)
 		))
 	end
 
-	sendResult(player, true, "Placed")
+	-- Describe the placement that actually succeeded, so rapid requests cannot
+	-- play the next request's material sound or lose its confirmation.
+	sendResult(player, true, "Placed", itemName,
+		Vector3.new((ix + .5) * GRID_SIZE, (iy + .5) * GRID_SIZE, (iz + .5) * GRID_SIZE))
 end)

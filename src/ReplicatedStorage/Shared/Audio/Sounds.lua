@@ -28,7 +28,13 @@ local IS_CLIENT = RunService:IsClient()
 -- Master volume, so everything can be ducked at once later.
 Sounds.MasterVolume = 1
 
+-- About +5 dB over the old mix; the user's SFX slider still applies afterwards.
+function Sounds.volume(base, scale)
+	return (base or .5) * 1.8 * Sounds.MasterVolume * (scale or 1)
+end
+
 local pool = {} -- key -> Sound, for non-positional playback
+local playVersions = {}
 local lastPlayed = {} -- key -> os.clock() of the previous play
 local warned = {} -- key -> true, so an unknown key complains only once
 
@@ -99,7 +105,7 @@ local function playLayer(layer, position, volumeScale)
 
 	local sound = Instance.new("Sound")
 	sound.SoundId = layer.id
-	sound.Volume = (layer.volume or 0.3) * Sounds.MasterVolume * (volumeScale or 1)
+	sound.Volume = Sounds.volume(layer.volume or 0.3, volumeScale)
 	sound.PlaybackSpeed = randomPitch(layer)
 
 	if position then
@@ -124,6 +130,43 @@ local function playLayer(layer, position, volumeScale)
 	end
 end
 
+-- Optional tonal shaping keeps frequent feedback from becoming bright and tiring.
+local function applyTone(sound, definition)
+	local tone = definition.tone
+	if not tone then return end
+	local equalizer = Instance.new("EqualizerSoundEffect")
+	equalizer.Name = "FeedbackTone"
+	equalizer.LowGain = tone.low or 0
+	equalizer.MidGain = tone.mid or 0
+	equalizer.HighGain = tone.high or 0
+	equalizer.Parent = sound
+end
+
+local function pooledSound(key, definition)
+	local sound = pool[key]
+	if not sound then
+		sound = Instance.new("Sound")
+		sound.Name, sound.SoundId = key, definition.id
+		applyTone(sound, definition)
+		sound.Parent = getContainer()
+		pool[key] = sound
+	end
+	return sound
+end
+
+-- Warm the same instances used by input feedback, without blocking input.
+function Sounds.preload(keys)
+	if not IS_CLIENT then return end
+	local assets = {}
+	for _, key in ipairs(keys) do
+		local definition = definitionFor(key)
+		if definition then table.insert(assets, pooledSound(key, definition)) end
+	end
+	task.spawn(function()
+		pcall(function() game:GetService("ContentProvider"):PreloadAsync(assets) end)
+	end)
+end
+
 -- Non-positional. One Sound per key: replaying restarts it, which is what you
 -- want for UI anyway.
 function Sounds.play(key, volumeScale)
@@ -136,21 +179,22 @@ function Sounds.play(key, volumeScale)
 		return
 	end
 
-	local sound = pool[key]
-	if not sound then
-		sound = Instance.new("Sound")
-		sound.Name = key
-		sound.SoundId = definition.id
-		sound.Parent = getContainer()
-		pool[key] = sound
+	local sound = pooledSound(key, definition)
+
+	sound.Volume = Sounds.volume(definition.volume, volumeScale)
+	sound.PlaybackSpeed = randomPitch(definition)
+	sound.TimePosition = definition.startAt or 0
+	sound:Play()
+	local version = (playVersions[key] or 0) + 1
+	playVersions[key] = version
+	if definition.clipLength then
+		task.delay(definition.clipLength / sound.PlaybackSpeed, function()
+			if playVersions[key] == version and sound.Parent then sound:Stop() end
+		end)
 	end
 
-	sound.Volume = (definition.volume or 0.5) * Sounds.MasterVolume * (volumeScale or 1)
-	sound.PlaybackSpeed = randomPitch(definition)
-	sound.TimePosition = 0
-	sound:Play()
-
 	playLayer(definition.layer, nil, volumeScale)
+	return sound
 end
 
 -- Positional, on a throwaway part so it attenuates with distance. Overlapping
@@ -178,13 +222,15 @@ function Sounds.playAt(key, position, volumeScale)
 
 	local sound = Instance.new("Sound")
 	sound.SoundId = definition.id
-	sound.Volume = (definition.volume or 0.5) * Sounds.MasterVolume * (volumeScale or 1)
+	applyTone(sound, definition)
+	sound.Volume = Sounds.volume(definition.volume, volumeScale)
 	sound.PlaybackSpeed = randomPitch(definition)
 	sound.RollOffMaxDistance = definition.range or 90
 	sound.Parent = anchor
 	sound:Play()
 
-	Debris:AddItem(anchor, 4)
+	sound.Ended:Once(function() anchor:Destroy() end)
+	Debris:AddItem(anchor, definition.lifetime or 4)
 
 	playLayer(definition.layer, position, volumeScale)
 end

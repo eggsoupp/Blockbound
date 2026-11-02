@@ -32,6 +32,8 @@ local Pointer = require(Shared.UI:WaitForChild("Pointer"))
 local WorldFeedback = require(Shared.UI:WaitForChild("WorldFeedback"))
 local Feedback = require(Shared.UI:WaitForChild("Feedback"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
+local PlacementGeometry = require(Shared:WaitForChild("Blocks"):WaitForChild("PlacementGeometry"))
+Sounds.preload({"place.hard", "place.soft"})
 local InventoryMirror =
 	require(Shared:WaitForChild("Inventory"):WaitForChild("InventoryMirror"))
 
@@ -269,19 +271,7 @@ local function overlapsCharacter(worldCenter)
 end
 
 local function isCellBlocked(worldCenter)
-	local parts = Workspace:GetPartBoundsInBox(
-		CFrame.new(worldCenter),
-		Vector3.new(Grid - 0.1, Grid - 0.1, Grid - 0.1),
-		overlapParams
-	)
-
-	for _, part in ipairs(parts) do
-		if part:IsA("BasePart") and part.CanCollide then
-			return true
-		end
-	end
-
-	return false
+	return PlacementGeometry.isCellBlocked(worldCenter, Grid, overlapParams)
 end
 
 local function hidePreview()
@@ -423,14 +413,7 @@ local function playPlacementEffect(itemName, worldCenter)
 	-- A green edge on the settling ghost: "that one is yours now".
 	WorldFeedback.flash(ghost, "Confirm", 0.3)
 
-	-- Workbenches are furniture, not masonry, so they get their own thunk;
-	-- everything else uses its material group.
-	local def = ItemDefinitions[itemName]
-	if def and def.classification == "Workbench" then
-		Sounds.playAt("place.station", worldCenter)
-	else
-		Sounds.playBlock("place", itemName, worldCenter)
-	end
+	-- The confirmation handler plays audio before doing this visual work.
 end
 
 -- The cell the last request was fired at, so the confirmation can be played
@@ -457,15 +440,17 @@ local function reportRefusal(message)
 end
 
 if PlacementResult and PlacementResult:IsA("RemoteEvent") then
-	PlacementResult.OnClientEvent:Connect(function(success, message)
+	PlacementResult.OnClientEvent:Connect(function(success, message, confirmedItem, confirmedCenter)
 		resultFlashSuccess = success == true
 		resultFlashUntil = os.clock() + 0.18
 		setPreviewState(resultFlashSuccess)
 
-		if success and pendingItemName and pendingCenter then
-			playPlacementEffect(pendingItemName, pendingCenter)
+		local itemName = confirmedItem or pendingItemName
+		local centre = confirmedCenter or pendingCenter
+		if success and type(itemName) == "string" and typeof(centre) == "Vector3" then
+			Sounds.playBlock("place", itemName)
+			playPlacementEffect(itemName, centre)
 		elseif not success then
-			Sounds.play("ui.denied")
 			-- The reason was always sent and never shown; a build limit that
 			-- only says "no" looks exactly like a broken preview.
 			reportRefusal(message)
@@ -497,8 +482,7 @@ local function place()
 	end
 
 	if not lastCanPlace then
-		-- Say no out loud rather than silently ignoring the click.
-		Sounds.play("ui.denied")
+		-- Refusals are visual only; never play a placement sound for a failed click.
 		WorldFeedback.flash(preview, "Invalid")
 		return
 	end
@@ -506,6 +490,8 @@ local function place()
 	pendingItemName = slotData.name
 	pendingCenter = cellIndicesToWorldPos(lastCellX, lastCellY, lastCellZ)
 
+	-- Success audio is preloaded, but waits for validation so rejected requests
+	-- stay completely silent.
 	RequestPlaceBlock:FireServer(equippedSlot, lastCellX, lastCellY, lastCellZ)
 end
 

@@ -1,3 +1,5 @@
+local ImportedAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.DownloadedSounds)
+local Sounds = require(game:GetService("ReplicatedStorage").Shared.Audio.Sounds)
 local RS=game:GetService("ReplicatedStorage")
 local RunService=game:GetService("RunService")
 local Content=game:GetService("ContentProvider")
@@ -42,7 +44,7 @@ local function burst(kind,parent,count,props)
 end
 local function sound(parent,id,volume,pitch)
 	local s=Instance.new("Sound")
-	s.SoundId=id;s.Volume=volume;s.PlaybackSpeed=pitch or 1
+	s.SoundId=id;s.Volume=Sounds.volume(volume);s.PlaybackSpeed=pitch or 1
 	s.RollOffMinDistance=6;s.RollOffMaxDistance=100;s.Parent=parent;s:Play()
 end
 local function attach(parent,position)
@@ -74,7 +76,7 @@ function VFX.preload()
 		for _,data in pairs(Library) do table.insert(assets,data.Texture) end
 		for _,kind in ipairs({"Flame","FireballA","Smoke","Embers","Flash","PressureRing","Rock","Streaks"}) do table.insert(assets,Base[kind].Texture) end
 		local sounds={}
-		for _,id in ipairs({"rbxassetid://12222208","rbxassetid://5540424854","rbxasset://sounds/impact_water.mp3"}) do
+		for _,id in ipairs({ImportedAudio.ability_whoosh,ImportedAudio.ability_impact_heavy,"rbxasset://sounds/impact_water.mp3"}) do
 			local s=Instance.new("Sound");s.SoundId=id;table.insert(sounds,s);table.insert(assets,s)
 		end
 		pcall(function() Content:PreloadAsync(assets,function(asset,status)
@@ -116,7 +118,7 @@ local function fireBlast(scope,folder,point,direction,tint,silent)
 	mount("Impact45",1.1):burst(1)
 	mount("Impact1",1.4):burst(.9)
 	mount("FireVFX5",.95):burst(.45)
-	if not silent then sound(p,"rbxassetid://5540424854",.6,1.25) end
+	if not silent then sound(p,ImportedAudio.ability_impact_heavy,.6,1.25) end
 	ImpactFX.shake(point,1.4,.4,70);ImpactFX.punch(point,4,.35,70)
 	-- Second beat: the fireball itself rolls out, then breaks into embers and smoke.
 	scope:delay(.17,function()
@@ -124,7 +126,7 @@ local function fireBlast(scope,folder,point,direction,tint,silent)
 		mount("FireVFX8",1.8):burst(1)
 		mount("Impact20",1.15):burst(1)
 		Pack.mount(scope,folder,"Rocks",{cframe=CFrame.new(point),scale=.5,tint=tint,brightness=2}):burst(1)
-		if not silent then sound(p,"rbxassetid://5540424854",.5,.8) end
+		if not silent then sound(p,ImportedAudio.ability_impact_heavy,.5,.8) end
 	end)
 	local smoke=Color3.fromRGB(22,14,14)
 	scope:delay(.34,function()
@@ -210,7 +212,7 @@ local function projectile(payload,scope,folder,age)
 			body:rescale(shot.body[2])
 			glow:stream(true);tail:beamsOn(true);body:beamsOn(true)
 			Pack.mount(scope,folder,shot.muzzle[1],{cframe=frame,scale=shot.muzzle[2],tint=shot.tint,brightness=2}):burst(shot.muzzle[3])
-			sound(p,"rbxassetid://12222208",.3,shot.launch)
+			sound(p,ImportedAudio.ability_whoosh,.3,shot.launch)
 		end
 		if launched then tail:stretch(at,at-direction*math.min(travel,shot.length)) end
 		if elapsed>tuning.windup+tuning.range/tuning.speed+.3 then stop({position=p.Position}) end
@@ -226,7 +228,7 @@ local function wind(payload,scope,folder,at)
 	local root=host(folder,"WindGather",origin+direction*2,direction)
 	burst("Wind",root,1,{Size=ns(4,1),Lifetime=NumberRange.new(.16),Speed=NumberRange.new(.001),SpreadAngle=Vector2.zero,EmissionDirection=Enum.NormalId.Front,Color=ColorSequence.new(WIND),Transparency=ns(.7,.2)})
 	at(Plan.WindBurst.windup,function()
-		sound(root,"rbxassetid://12222208",.5,.8)
+		sound(root,ImportedAudio.ability_whoosh,.5,.8)
 		-- Fixed emitter stations and widening arcs read as a short shove, not a ball.
 		for i=1,3 do
 			local p=host(folder,"WindFan",origin+direction*(2+i*3),direction)
@@ -258,7 +260,7 @@ local function echo(payload,scope,folder,at)
 		ring(to,FOAM,2,9,.35)
 		burst("Embers",to,16,{Size=ns(.25,0),Lifetime=NumberRange.new(.3,.6),Speed=NumberRange.new(5,15),Color=ColorSequence.new(FOAM,ECHO),LightEmission=1})
 	end)
-	sound(from,"rbxassetid://12222208",.35,1.8)
+	sound(from,ImportedAudio.ability_whoosh,.35,1.8)
 	scope:add(RunService.Heartbeat:Connect(function()
 		beam.Transparency=NumberSequence.new(math.clamp(.2+(workspace:GetServerTimeNow()-payload.startedAt)/.35,0,1))
 	end))
@@ -284,7 +286,7 @@ local function wall(payload,scope,folder,at)
 		for _,v in ipairs(movers) do
 			burst("Smoke",v.host,3,{Size=ns(2,4),Lifetime=NumberRange.new(.35,.6),Speed=NumberRange.new(3,8),Color=ColorSequence.new(EARTH),Transparency=ns(.5,1),LightEmission=.1})
 		end
-		if movers[1] then sound(movers[1].host,"rbxassetid://5540424854",.15,1.1) end
+		if movers[1] then sound(movers[1].host,ImportedAudio.ability_impact_heavy,.15,1.1) end
 	end)
 end
 

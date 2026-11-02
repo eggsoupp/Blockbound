@@ -482,12 +482,15 @@ local function panelSlots(abilities: { string }, gained: string?)
 			label = if Responsive.isTouch()
 				then string.format("slot %d", slot)
 				else string.format("slot %d  ~  %s", slot, slotKeyLabel(slot)),
+			-- The keycap on the card; nil on touch, where the card shows the number.
+			key = if Responsive.isTouch() then nil else slotKeyLabel(slot),
 
 			-- The raw name for an ability this client has no definition for,
 			-- which is a server newer than the client rather than nothing at
 			-- all; nil only for a slot that is genuinely empty.
 			name = if definition then definition.displayName or abilityName else abilityName,
 			rarity = definition and definition.rarity or nil,
+			stats = definition and AbilityConfig.statsText(definition) or nil,
 			gained = abilityName ~= nil and abilityName == gained,
 		}
 	end

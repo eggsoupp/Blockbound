@@ -2,8 +2,8 @@
 	IslandPickerClient
 
 	The wide button in the top bar beside the travel tile: it shows the name of
-	the island the travel tile goes to, and opens a list of the player's
-	islands - pick one to make it the destination, or press the pencil to
+	the current island, and opens a list of the player's
+	islands - pick one to travel there immediately, or press the pencil to
 	rename it.
 
 	The server owns all of it (ServerScriptService.IslandSlots): this sends
@@ -11,12 +11,20 @@
 	attributes the server keeps on the player - IslandCount, ActiveIsland,
 	IslandName1, IslandName2. An island not yet bought is listed too, locked,
 	and choosing it offers the pass.
+
+	Only shown in the Island place; both places use this same script.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
+local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
+
+if not PlaceConfig.isIsland() then
+	return
+end
+
 local UI = Shared:WaitForChild("UI")
 local Theme = require(UI:WaitForChild("Theme"))
 local PixelUI = require(UI:WaitForChild("PixelUI"))
@@ -73,6 +81,9 @@ local function islandName(slot: number): string
 end
 
 local function activeSlot(): number
+	if workspace:GetAttribute("IslandOwnerId") == player.UserId then
+		return workspace:GetAttribute("IslandSlot") or 1
+	end
 	return player:GetAttribute("ActiveIsland") or 1
 end
 
@@ -128,7 +139,7 @@ fit.MaxTextSize = Theme.TextSize.Body
 fit.Parent = current
 
 local tip = TopbarButtons.add(button, 3, function()
-	return "Your islands - choose where the island button goes, or rename one"
+	return "Your islands - select an island to switch to it, or rename one"
 end, WIDTH_SCALE)
 
 -- ---------------------------------------------------------------------------
@@ -167,7 +178,7 @@ local function buildRow(slot: number)
 	row.Parent = rowsHolder
 	PixelUI.apply(row, "row")
 
-	-- The gold marker on the island the travel tile goes to.
+	-- The gold marker on the island currently loaded.
 	local marker = Instance.new("Frame")
 	marker.Name = "Marker"
 	marker.BackgroundColor3 = P.Selection
@@ -258,6 +269,9 @@ local function buildRow(slot: number)
 		end
 		Sounds.play("ui.click")
 		Menu:FireServer("select", slot)
+		if slot <= (player:GetAttribute("IslandCount") or 1) then
+			list.Visible = false
+		end
 	end)
 
 	pencil.Activated:Connect(function()
@@ -320,6 +334,8 @@ refresh()
 for _, attribute in ipairs({ "IslandCount", "ActiveIsland", "IslandName1", "IslandName2" }) do
 	player:GetAttributeChangedSignal(attribute):Connect(refresh)
 end
+workspace:GetAttributeChangedSignal("IslandOwnerId"):Connect(refresh)
+workspace:GetAttributeChangedSignal("IslandSlot"):Connect(refresh)
 
 button.MouseButton1Click:Connect(function()
 	Sounds.play(if list.Visible then "ui.close" else "ui.open")

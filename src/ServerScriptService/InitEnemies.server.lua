@@ -11,3 +11,6 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 
 EnemyService.init()
+require(ServerScriptService:WaitForChild("Bestiary")).init()
+-- Quests read the bestiary, so they start after it.
+require(ServerScriptService:WaitForChild("QuestService")).init()

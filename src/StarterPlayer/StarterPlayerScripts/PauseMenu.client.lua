@@ -39,6 +39,8 @@ local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
 local Theme = require(Shared.UI:WaitForChild("Theme"))
 local MenuBackdrop = require(Shared.UI:WaitForChild("MenuBackdrop"))
 local AbilityPanel = require(Shared.UI:WaitForChild("AbilityPanel"))
+local QuestWindow = require(Shared.UI:WaitForChild("QuestWindow"))
+local BestiaryWindow = require(Shared.UI:WaitForChild("BestiaryWindow"))
 local Responsive = require(Shared.UI:WaitForChild("Responsive"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 
@@ -97,6 +99,41 @@ local art = MenuBackdrop.new(backdrop)
 -- inside the same frame so it inherits the dim's position and nothing else.
 local panel = AbilityPanel.new(backdrop)
 
+--[[
+	The menu's other pages, opened from the loadout (its QUEST line and its
+	BESTIARY pill) and each with a BACK to it. One page shows at a time.
+]]
+local page = nil
+
+local function showPage(window)
+	if page == window then
+		return
+	end
+	if page then
+		page:setVisible(false)
+	end
+	page = window
+	if window then
+		panel:setVisible(false)
+		window:setVisible(true)
+	else
+		panel:setVisible(true)
+	end
+end
+
+local guide = QuestWindow.new(backdrop, function()
+	showPage(nil)
+end)
+local bestiary = BestiaryWindow.new(backdrop, function()
+	showPage(nil)
+end)
+panel.onGuide = function()
+	showPage(guide)
+end
+panel.onBestiary = function()
+	showPage(bestiary)
+end
+
 local hint = Instance.new("TextLabel")
 hint.AnchorPoint = Vector2.new(0.5, 1)
 hint.Position = UDim2.new(0.5, 0, 1, -18)
@@ -132,7 +169,9 @@ local function placeForScreen()
 		hint.Position = UDim2.new(0.5, 0, 1, -18)
 	end
 
-	local top = Responsive.hotbarBottom() + 8
+	-- The hotbar is hidden while this is open (see setHudHidden), so the room
+	-- starts under the top bar.
+	local top = Responsive.topbarBottom() + 8
 	local bottom = Responsive.viewport().Y - safe.bottom - hint.Size.Y.Offset - 8
 	-- Shrunk only as far as the room needs; AbilityPanel scales its drags to match.
 	local wide = (Responsive.viewport().X - safe.left - safe.right - 16) / math.max(1, root.Size.X.Offset)
@@ -140,12 +179,32 @@ local function placeForScreen()
 	local height = root.Size.Y.Offset * panelScale.Scale
 	root.AnchorPoint = Vector2.new(0.5, 0)
 	root.Position = UDim2.new(0.5, 0, 0, math.max(top, (top + bottom - height) / 2))
+
+	local width = Responsive.viewport().X - safe.left - safe.right
+	guide:place(top, bottom, width)
+	bestiary:place(top, bottom, width)
 end
 
 Responsive.bind(placeForScreen)
 panel.root:GetPropertyChangedSignal("Size"):Connect(placeForScreen)
 
 local isOpen = false
+
+--[[
+	The hotbar and the island button are hidden while the menu is up: neither
+	does anything here, and both sit in the room the panel wants. The settings
+	gear stays, since settings are still worth reaching from the menu.
+]]
+local HIDDEN_HUD = { "InventoryUI", "IslandRecall" }
+
+local function setHudHidden(hidden: boolean)
+	for _, name in ipairs(HIDDEN_HUD) do
+		local gui = playerGui:FindFirstChild(name)
+		if gui and gui:IsA("ScreenGui") then
+			gui.Enabled = not hidden
+		end
+	end
+end
 local previousCFrame = nil
 local cameraTween = nil
 
@@ -186,6 +245,7 @@ local function openMenu()
 
 	isOpen = true
 	previousCFrame = camera.CFrame
+	setHudHidden(true)
 
 	backdropGui.Enabled = true
 	art:setVisible(true)
@@ -211,6 +271,11 @@ end
 
 local function closeMenu()
 	isOpen = false
+	if page then
+		page:setVisible(false)
+		page = nil
+	end
+	setHudHidden(false)
 
 	art:setVisible(false)
 	panel:setVisible(false)

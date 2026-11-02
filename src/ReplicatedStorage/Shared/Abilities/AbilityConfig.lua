@@ -161,6 +161,18 @@ end
 	keys someone has bound - but the readout says so rather than showing a blank
 	where a key should be.
 ]]
+-- "18s  40 mana": the line the Tab menu shows under an ability.
+function AbilityConfig.statsText(def): string
+	local parts = {}
+	if type(def.cooldown) == "number" then
+		table.insert(parts, string.format("%gs", def.cooldown))
+	end
+	if type(def.manaCost) == "number" and def.manaCost > 0 then
+		table.insert(parts, string.format("%d mana", def.manaCost))
+	end
+	return table.concat(parts, "  ")
+end
+
 function AbilityConfig.keyForSlot(index: number)
 	return AbilityConfig.SlotKeys[index]
 end

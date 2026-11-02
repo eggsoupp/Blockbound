@@ -1,3 +1,4 @@
+local ImportedAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.DownloadedSounds)
 -- Thunderhead, built from complete pack assemblies:
 --   gather  the Storm Cloud rolls in over the aim, the world darkens, and
 --           Lightning Surge crackles at each spot about to be struck
@@ -24,9 +25,9 @@ local STORM = {deep = Color3.fromRGB(128, 132, 146), main = Color3.fromRGB(128, 
 local live = 0
 local preloaded = false
 
-local SOUND_RUMBLE = "rbxassetid://12222208"
-local SOUND_BOOM = "rbxassetid://5540424854"
-local SOUND_HIT = "rbxasset://sounds/hit.wav"
+local SOUND_RUMBLE = ImportedAudio.ability_charge
+local SOUND_BOOM = ImportedAudio.ability_lightning
+local SOUND_HIT = ImportedAudio.ability_impact_heavy
 
 function VFX.preload()
 	Pack.preload()

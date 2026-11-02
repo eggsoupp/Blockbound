@@ -2,14 +2,15 @@
 	AbilityStorage
 
 	The storage column of the Tab menu: the abilities a player has bought room
-	to keep, drawn as the same cards as the loadout beside it, with a premium
-	gold frame, and the button that buys more.
+	to keep, drawn as the same rows as the loadout beside it in a panel of the
+	menu's own colours, and the button that buys more.
 
 		local column = AbilityStorage.create(root, {
 			x, listTop, width,       where it sits in the panel's root
 			pitch, cardHeight, cardGap, visibleRows,
 			newCard = fn(parent) -> card,   AbilityPanel's card builder
 			onPress = fn(index, input),     a press on a stored ability
+			onRefresh = fn(state),          after every redraw
 		})
 
 	THE SAME CARDS AS THE LOADOUT
@@ -17,7 +18,8 @@
 	A stored ability is bought, so it must not look like a lesser thing than one
 	in use. The cards come from AbilityPanel's own builder - the slot line, the
 	name, the tier in its colour - so the two columns cannot drift apart; this
-	file only adds the gold that says these slots were paid for.
+	file only adds the touches of gold that say these slots were paid for: the
+	PREMIUM tag and the buy button.
 
 	DRAGGING BELONGS TO AbilityPanel
 
@@ -37,6 +39,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 
 local Theme = require(script.Parent.Theme)
+local MenuWindow = require(script.Parent.MenuWindow)
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local Config = require(Shared.Abilities.AbilityConfig)
 local StorageConfig = require(Shared.Abilities.StorageConfig)
@@ -45,20 +48,23 @@ local Remotes = require(Shared.Net.Remotes)
 local Request = Remotes.wait("AbilityStorageRequest")
 local Changed = Remotes.wait("AbilityStorageChanged")
 
--- The premium accent: the hotbar's selection gold.
+-- The premium accent: the hotbar's selection gold, kept to the touches that
+-- say "paid for" - the tag by the heading and the button that buys more.
 local GOLD = Theme.PixelColor.Selection
-local GOLD_DEEP = Color3.fromRGB(120, 86, 22)
+
+-- The menu's own greens (Shared.UI.MenuWindow), so the drawer belongs with
+-- the loadout and the other pages rather than sitting beside them.
+local PALETTE = MenuWindow.Palette
 
 local HEADER_HEIGHT = 22
 local FOOTER_GAP = 10
-local BUY_HEIGHT = 38
+local BUY_HEIGHT = 36
 
--- A stored card at rest: framed in faint gold where a loadout card is bare,
--- so the column reads as its own premium shelf.
-local CARD_REST = 0.88
-local CARD_HOVER = 0.55
-local STROKE_REST = 0.55
-local STROKE_HOVER = 0.1
+-- Rows as the loadout draws them (AbilityPanel's CARD_ and STROKE_ values).
+local CARD_REST = 0.3
+local CARD_HOVER = 0.05
+local STROKE_REST = 1
+local STROKE_HOVER = 0.5
 
 local LOCKED_ROWS = 3
 
@@ -111,21 +117,71 @@ function AbilityStorage.create(root: Instance, opts)
 	column.Size = UDim2.fromOffset(opts.width, opts.listTop + listHeight + FOOTER_GAP + BUY_HEIGHT)
 	column.Parent = root
 
+	-- Its own panel, in the menu's colours: the same dark green and thin
+	-- outline as the quest and bestiary pages.
+	local pad = opts.pad or 0
+	local headerTop = opts.headerTop or 0
+	local frame = Instance.new("Frame")
+	frame.Name = "Frame"
+	frame.Position = UDim2.fromOffset(-pad, headerTop - pad)
+	frame.Size = UDim2.fromOffset(opts.width + pad * 2, opts.listTop + listHeight + FOOTER_GAP + BUY_HEIGHT + pad * 2 - headerTop)
+	frame.BackgroundColor3 = PALETTE.Base
+	frame.BackgroundTransparency = 0.06
+	frame.BorderSizePixel = 0
+	frame.ZIndex = 0
+	frame.Parent = column
+
+	local frameCorner = Instance.new("UICorner")
+	frameCorner.CornerRadius = UDim.new(0, 6)
+	frameCorner.Parent = frame
+
+	local frameStroke = Instance.new("UIStroke")
+	frameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	frameStroke.Color = PALETTE.Line
+	frameStroke.Thickness = 1.5
+	frameStroke.Parent = frame
+
+	local rule = Instance.new("Frame")
+	rule.Name = "Rule"
+	rule.Position = UDim2.fromOffset(0, headerTop + HEADER_HEIGHT + 2)
+	rule.Size = UDim2.fromOffset(opts.width, 1)
+	rule.BackgroundColor3 = PALETTE.Line
+	rule.BorderSizePixel = 0
+	rule.Parent = column
+
 	local heading = Instance.new("TextLabel")
 	heading.Name = "Heading"
 	heading.BackgroundTransparency = 1
+	heading.Position = UDim2.fromOffset(0, headerTop)
 	heading.Size = UDim2.new(1, -80, 0, HEADER_HEIGHT)
 	heading.FontFace = Theme.Fonts.Heading
 	heading.TextSize = Theme.TextSize.Small
-	heading.TextColor3 = GOLD
+	heading.TextColor3 = Theme.Color.Text
 	heading.TextXAlignment = Enum.TextXAlignment.Left
-	heading.Text = "PREMIUM STORAGE"
+	heading.Text = "STORAGE"
 	heading.Parent = column
+
+	-- A small gold tag after the heading: what makes these slots different.
+	local tag = Instance.new("TextLabel")
+	tag.Name = "Premium"
+	tag.BackgroundTransparency = 1
+	tag.Size = UDim2.fromOffset(80, HEADER_HEIGHT)
+	tag.FontFace = Theme.Fonts.BodyBold
+	tag.TextSize = Theme.TextSize.Small
+	tag.TextColor3 = GOLD
+	tag.TextXAlignment = Enum.TextXAlignment.Left
+	tag.Text = "PREMIUM"
+	tag.Parent = column
+	local function placeTag()
+		tag.Position = UDim2.fromOffset(heading.TextBounds.X + 10, headerTop)
+	end
+	heading:GetPropertyChangedSignal("TextBounds"):Connect(placeTag)
+	placeTag()
 
 	local count = Instance.new("TextLabel")
 	count.Name = "Count"
 	count.AnchorPoint = Vector2.new(1, 0)
-	count.Position = UDim2.fromScale(1, 0)
+	count.Position = UDim2.new(1, 0, 0, headerTop)
 	count.BackgroundTransparency = 1
 	count.Size = UDim2.fromOffset(80, HEADER_HEIGHT)
 	count.FontFace = Theme.Fonts.BodyBold
@@ -141,35 +197,52 @@ function AbilityStorage.create(root: Instance, opts)
 	list.BackgroundTransparency = 1
 	list.BorderSizePixel = 0
 	list.ScrollBarThickness = 3
-	list.ScrollBarImageColor3 = GOLD
+	list.ScrollBarImageColor3 = PALETTE.Line
 	list.ScrollingDirection = Enum.ScrollingDirection.Y
 	list.CanvasSize = UDim2.fromOffset(0, listHeight)
 	list.Parent = column
 
-	-- The button that buys more, in the gold the column is framed in.
+	-- The button that buys more: dark, outlined in gold, with what it buys on
+	-- the left and the price on the right. Warms toward gold when pointed at.
 	local buy = Instance.new("TextButton")
 	buy.Name = "Buy"
 	buy.Position = UDim2.fromOffset(0, opts.listTop + listHeight + FOOTER_GAP)
 	buy.Size = UDim2.fromOffset(opts.width, BUY_HEIGHT)
 	buy.AutoButtonColor = false
 	buy.BorderSizePixel = 0
-	buy.FontFace = Theme.Fonts.Heading
-	buy.TextSize = Theme.TextSize.Body
+	buy.BackgroundColor3 = PALETTE.Raised
+	buy.Text = ""
 	buy.Parent = column
 
 	local buyCorner = Instance.new("UICorner")
-	buyCorner.CornerRadius = UDim.new(0, 4)
+	buyCorner.CornerRadius = UDim.new(0, 6)
 	buyCorner.Parent = buy
 
 	local buyStroke = Instance.new("UIStroke")
 	buyStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	buyStroke.Thickness = 2
+	buyStroke.Thickness = 1.5
 	buyStroke.Parent = buy
 
-	local buyShine = Instance.new("UIGradient")
-	buyShine.Rotation = 90
-	buyShine.Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(205, 205, 205))
-	buyShine.Parent = buy
+	local buyLabel = Instance.new("TextLabel")
+	buyLabel.Name = "Label"
+	buyLabel.BackgroundTransparency = 1
+	buyLabel.Position = UDim2.fromOffset(14, 0)
+	buyLabel.Size = UDim2.new(1, -28, 1, 0)
+	buyLabel.FontFace = Theme.Fonts.Heading
+	buyLabel.TextSize = Theme.TextSize.Small
+	buyLabel.TextXAlignment = Enum.TextXAlignment.Left
+	buyLabel.Parent = buy
+
+	local buyPrice = Instance.new("TextLabel")
+	buyPrice.Name = "Price"
+	buyPrice.BackgroundTransparency = 1
+	buyPrice.Position = UDim2.fromOffset(14, 0)
+	buyPrice.Size = UDim2.new(1, -28, 1, 0)
+	buyPrice.FontFace = Theme.Fonts.BodyBold
+	buyPrice.TextSize = Theme.TextSize.Body
+	buyPrice.TextColor3 = Theme.Color.Text
+	buyPrice.TextXAlignment = Enum.TextXAlignment.Right
+	buyPrice.Parent = buy
 
 	local rows = {}
 	local target: number? = nil
@@ -180,8 +253,9 @@ function AbilityStorage.create(root: Instance, opts)
 		local row = rows[index]
 		local raised = index == target or index == hovered
 		row.button.BackgroundTransparency = if index == lifted then 0.95 elseif raised then CARD_HOVER else CARD_REST
-		row.stroke.Transparency = if index == lifted then 0.8 elseif raised then STROKE_HOVER else STROKE_REST
-		row.stroke.Color = if index == target then Theme.Color.Good else GOLD
+		row.stroke.Transparency = if index == target then 0 elseif index == lifted then 1 elseif raised then STROKE_HOVER else STROKE_REST
+		row.stroke.Color = if index == target then Theme.Color.Good else Theme.Color.Text
+		row.badgeStroke.Color = if index == target then Theme.Color.Good else PALETTE.Line
 		row.name.TextTransparency = if index == lifted then 0.6 else 0
 	end
 
@@ -194,9 +268,7 @@ function AbilityStorage.create(root: Instance, opts)
 		row = opts.newCard(list)
 		row.button.Name = "Stored" .. index
 		row.button.Position = UDim2.fromOffset(0, (index - 1) * pitch)
-		row.button.BackgroundColor3 = GOLD_DEEP
-		row.stroke.Color = GOLD
-		row.stroke.Thickness = 1.5
+		row.badge.BackgroundColor3 = PALETTE.Deep
 		rows[index] = row
 
 		row.button.MouseEnter:Connect(function()
@@ -238,23 +310,29 @@ function AbilityStorage.create(root: Instance, opts)
 
 			local name = slots[index]
 			local def = name and Config.get(name)
-			row.label.Text = if locked then "PREMIUM SLOT" else string.format("STORED  %d", index)
-			row.label.TextColor3 = GOLD
+			row.badge.Text = if locked then "-" else tostring(index)
+			row.badge.TextColor3 = if def then Theme.Color.Text else Theme.Color.TextFaint
+			row.accent.BackgroundColor3 = if def then Theme.rarityColor(def.rarity) else PALETTE.Line
+			row.accent.BackgroundTransparency = if def or not locked then 0 else 0.5
 
 			if def then
 				row.name.Text = def.displayName or name
 				row.name.TextColor3 = Theme.Color.Text
 				row.rarity.Text = if def.rarity then string.upper(def.rarity) else ""
 				row.rarity.TextColor3 = Theme.rarityColor(def.rarity)
+				row.stats.Text = Config.statsText(def)
 			elseif locked then
+				row.stats.Text = ""
 				row.name.Text = "Locked"
 				row.name.TextColor3 = Theme.Color.TextFaint
-				row.rarity.Text = string.format("+%d SLOTS UNLOCKS STORAGE", state.perPurchase or 3)
-				row.rarity.TextColor3 = Theme.Color.TextDim
+				row.rarity.Text = "BUY SLOTS TO UNLOCK"
+				row.rarity.TextColor3 = Theme.Color.TextFaint
 			else
+				row.stats.Text = ""
 				row.name.Text = "Empty"
 				row.name.TextColor3 = Theme.Color.TextFaint
-				row.rarity.Text = ""
+				row.rarity.Text = "DRAG AN ABILITY HERE"
+				row.rarity.TextColor3 = Theme.Color.TextFaint
 			end
 			paintRow(index)
 		end
@@ -264,31 +342,41 @@ function AbilityStorage.create(root: Instance, opts)
 		if state.canBuy then
 			fetchPrice(state.productId)
 			local price = prices[state.productId]
-			buy.Text = string.format("+%d SLOTS", state.perPurchase)
-				.. (if price and price ~= "" then "   " .. price else "")
-			buy.BackgroundColor3 = GOLD
-			buy.TextColor3 = Color3.fromRGB(43, 24, 16)
-			buyStroke.Color = GOLD_DEEP
+			buyLabel.Text = string.format("+%d SLOTS", state.perPurchase)
+			buyLabel.TextColor3 = GOLD
+			buyLabel.TextXAlignment = Enum.TextXAlignment.Left
+			buyPrice.Text = if price and price ~= "" then price else ""
+			buyStroke.Color = GOLD
+			buyStroke.Transparency = 0.3
 			buy.Active = true
 		else
-			buy.Text = if capacity >= (state.maxSlots or 0) and capacity > 0
-				then "STORAGE IS AT ITS MAXIMUM"
-				else "MORE STORAGE IS NOT ON SALE YET"
-			buy.BackgroundColor3 = Theme.Color.PanelRaised
-			buy.TextColor3 = Theme.Color.TextDim
-			buyStroke.Color = Theme.Color.Stroke
+			buyLabel.Text = if capacity >= (state.maxSlots or 0) and capacity > 0
+				then "STORAGE IS FULL"
+				else "NOT ON SALE YET"
+			buyLabel.TextColor3 = Theme.Color.TextFaint
+			buyLabel.TextXAlignment = Enum.TextXAlignment.Center
+			buyPrice.Text = ""
+			buyStroke.Color = PALETTE.Line
+			buyStroke.Transparency = 0
 			buy.Active = false
+		end
+		buy.BackgroundColor3 = PALETTE.Raised
+
+		if opts.onRefresh then
+			opts.onRefresh(state)
 		end
 	end
 
 	buy.MouseEnter:Connect(function()
 		if buy.Active then
-			buyStroke.Color = Color3.new(1, 1, 1)
+			buy.BackgroundColor3 = PALETTE.Raised:Lerp(GOLD, 0.18)
+			buyStroke.Transparency = 0
 			Sounds.play("ui.hover")
 		end
 	end)
 	buy.MouseLeave:Connect(function()
-		buyStroke.Color = if buy.Active then GOLD_DEEP else Theme.Color.Stroke
+		buy.BackgroundColor3 = PALETTE.Raised
+		buyStroke.Transparency = if buy.Active then 0.3 else 0
 	end)
 	buy.Activated:Connect(function()
 		if state.canBuy then
@@ -358,7 +446,7 @@ function AbilityStorage.create(root: Instance, opts)
 	end
 
 	function view.height(): number
-		return opts.listTop + listHeight + FOOTER_GAP + BUY_HEIGHT
+		return opts.listTop + listHeight + FOOTER_GAP + BUY_HEIGHT + pad
 	end
 
 	-- Requests, each answered by a push that redraws every column.

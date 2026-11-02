@@ -1,0 +1,192 @@
+[
+  {
+    "file": "cosmic_dragon.vox",
+    "models": 34,
+    "voxels": 333839
+  },
+  {
+    "file": "planet_earth.vox",
+    "models": 1,
+    "voxels": 44473
+  },
+  {
+    "file": "planet_ember.vox",
+    "models": 1,
+    "voxels": 24405
+  },
+  {
+    "file": "planet_ringed.vox",
+    "models": 2,
+    "voxels": 67595
+  },
+  {
+    "file": "parts\\chest.vox",
+    "models": 1,
+    "voxels": 54105
+  },
+  {
+    "file": "parts\\foot_-1.vox",
+    "models": 1,
+    "voxels": 1510
+  },
+  {
+    "file": "parts\\foot_1.vox",
+    "models": 1,
+    "voxels": 1510
+  },
+  {
+    "file": "parts\\forearm_-1.vox",
+    "models": 1,
+    "voxels": 2693
+  },
+  {
+    "file": "parts\\forearm_1.vox",
+    "models": 1,
+    "voxels": 2693
+  },
+  {
+    "file": "parts\\hand_-1.vox",
+    "models": 1,
+    "voxels": 1672
+  },
+  {
+    "file": "parts\\hand_1.vox",
+    "models": 1,
+    "voxels": 1672
+  },
+  {
+    "file": "parts\\head.vox",
+    "models": 1,
+    "voxels": 14786
+  },
+  {
+    "file": "parts\\jaw.vox",
+    "models": 1,
+    "voxels": 1355
+  },
+  {
+    "file": "parts\\neck_lower.vox",
+    "models": 1,
+    "voxels": 22958
+  },
+  {
+    "file": "parts\\neck_upper.vox",
+    "models": 1,
+    "voxels": 13190
+  },
+  {
+    "file": "parts\\pelvis.vox",
+    "models": 1,
+    "voxels": 27411
+  },
+  {
+    "file": "parts\\shin_-1.vox",
+    "models": 1,
+    "voxels": 2250
+  },
+  {
+    "file": "parts\\shin_1.vox",
+    "models": 1,
+    "voxels": 2250
+  },
+  {
+    "file": "parts\\tail_01.vox",
+    "models": 1,
+    "voxels": 23173
+  },
+  {
+    "file": "parts\\tail_02.vox",
+    "models": 1,
+    "voxels": 21867
+  },
+  {
+    "file": "parts\\tail_03.vox",
+    "models": 1,
+    "voxels": 18649
+  },
+  {
+    "file": "parts\\tail_04.vox",
+    "models": 1,
+    "voxels": 13084
+  },
+  {
+    "file": "parts\\tail_05.vox",
+    "models": 1,
+    "voxels": 10224
+  },
+  {
+    "file": "parts\\tail_06.vox",
+    "models": 1,
+    "voxels": 9310
+  },
+  {
+    "file": "parts\\tail_07.vox",
+    "models": 1,
+    "voxels": 8550
+  },
+  {
+    "file": "parts\\tail_08.vox",
+    "models": 1,
+    "voxels": 6512
+  },
+  {
+    "file": "parts\\tail_09.vox",
+    "models": 1,
+    "voxels": 3787
+  },
+  {
+    "file": "parts\\tail_10.vox",
+    "models": 1,
+    "voxels": 2207
+  },
+  {
+    "file": "parts\\tail_11.vox",
+    "models": 1,
+    "voxels": 1156
+  },
+  {
+    "file": "parts\\tail_12.vox",
+    "models": 1,
+    "voxels": 639
+  },
+  {
+    "file": "parts\\thigh_-1.vox",
+    "models": 1,
+    "voxels": 8201
+  },
+  {
+    "file": "parts\\thigh_1.vox",
+    "models": 1,
+    "voxels": 8201
+  },
+  {
+    "file": "parts\\upper_arm_-1.vox",
+    "models": 1,
+    "voxels": 5782
+  },
+  {
+    "file": "parts\\upper_arm_1.vox",
+    "models": 1,
+    "voxels": 5782
+  },
+  {
+    "file": "parts\\wing_fan_-1.vox",
+    "models": 1,
+    "voxels": 13637
+  },
+  {
+    "file": "parts\\wing_fan_1.vox",
+    "models": 1,
+    "voxels": 13637
+  },
+  {
+    "file": "parts\\wing_root_-1.vox",
+    "models": 1,
+    "voxels": 4693
+  },
+  {
+    "file": "parts\\wing_root_1.vox",
+    "models": 1,
+    "voxels": 4693
+  }
+]

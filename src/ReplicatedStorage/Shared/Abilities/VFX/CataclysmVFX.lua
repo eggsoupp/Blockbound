@@ -300,7 +300,7 @@ local function render(payload, scope, previewAge)
 	flashLight.Parent = impact
 	local sound = Instance.new("Sound")
 	sound.Name, sound.SoundId = "MeteorImpact", "rbxassetid://5540424854"
-	sound.Volume, sound.PlaybackSpeed = 1.3, .68
+	sound.Volume, sound.PlaybackSpeed = require(game:GetService("ReplicatedStorage").Shared.Audio.Sounds).volume(1.3), .68
 	sound.RollOffMinDistance, sound.RollOffMaxDistance = 35, 320
 	sound.Parent = impact
 	local impacted = false

@@ -5,6 +5,7 @@
 -- Every visible effect made here is a ParticleEmitter, Beam or Trail. Parts
 -- are anchored, invisible, non-colliding hosts only.
 local RunService = game:GetService("RunService")
+local Sounds = require(game:GetService("ReplicatedStorage").Shared.Audio.Sounds)
 
 local Kit = {}
 
@@ -138,7 +139,7 @@ end
 
 function Kit.sound(parent, id, volume, pitch)
 	local s = Instance.new("Sound")
-	s.SoundId, s.Volume, s.PlaybackSpeed = id, volume or 0.5, pitch or 1
+	s.SoundId, s.Volume, s.PlaybackSpeed = id, Sounds.volume(volume), pitch or 1
 	s.RollOffMinDistance, s.RollOffMaxDistance = 12, 180
 	s.Parent = parent
 	s:Play()

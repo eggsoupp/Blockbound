@@ -6,6 +6,8 @@
 	players - IslandService turns the live island into a plain snapshot and
 	back, and this only stores snapshots.
 
+	  (ownerUserId is the island's key: the owner's UserId for island 1,
+	  "<UserId>_<n>" for a later one - see IslandService.)
 	  IslandStore.load(ownerUserId)                         -> record?, info
 	  IslandStore.save(ownerUserId, payload, why, release?) -> ok, err
 	  IslandStore.release(ownerUserId)
@@ -556,14 +558,14 @@ function IslandStore.load(ownerUserId)
 				return nil, { source = "memory", readOnly = true, reason = "datastore unavailable" }
 			end
 
-			swarn(string.format("Could not read island %d; loading read-only.", ownerUserId))
+			swarn(string.format("Could not read island %s; loading read-only.", ownerUserId))
 			return nil, { source = "fallback", readOnly = true, reason = "datastore error" }
 		end
 
 		if result.blocked == "unreadable" then
 			session.readOnly = true
 			swarn(string.format(
-				"Island %d's save is unreadable (newer format or corrupt); loading the bare island read-only so it is not overwritten.",
+				"Island %s's save is unreadable (newer format or corrupt); loading the bare island read-only so it is not overwritten.",
 				ownerUserId
 			))
 			return nil, { source = "fallback", readOnly = true, reason = "unreadable" }
@@ -581,7 +583,7 @@ function IslandStore.load(ownerUserId)
 		else
 			session.readOnly = true
 			swarn(string.format(
-				"Island %d is held by another server; showing its last save read-only.",
+				"Island %s is held by another server; showing its last save read-only.",
 				ownerUserId
 			))
 			return result.record, { source = "datastore", readOnly = true, reason = "locked" }
@@ -617,12 +619,12 @@ function IslandStore.save(ownerUserId, payload, reason, release)
 
 	local encodedOk, encoded = pcall(HttpService.JSONEncode, HttpService, payload)
 	if not encodedOk then
-		swarn(string.format("Island %d could not be encoded: %s", ownerUserId, tostring(encoded)))
+		swarn(string.format("Island %s could not be encoded: %s", ownerUserId, tostring(encoded)))
 		return false, "encode failed"
 	end
 	if #encoded > CONFIG.MaxRecordCharacters then
 		swarn(string.format(
-			"Island %d is too large to save (%d characters, limit %d). Nothing was written.",
+			"Island %s is too large to save (%d characters, limit %d). Nothing was written.",
 			ownerUserId, #encoded, CONFIG.MaxRecordCharacters
 		))
 		return false, "too large"
@@ -659,7 +661,7 @@ function IslandStore.save(ownerUserId, payload, reason, release)
 
 	if not result then
 		swarn(string.format(
-			"Skipped saving island %d (%s): another server holds it now.",
+			"Skipped saving island %s (%s): another server holds it now.",
 			ownerUserId, tostring(reason)
 		))
 		return false, "lock lost"

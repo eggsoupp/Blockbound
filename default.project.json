@@ -748,6 +748,9 @@
         "Permissions": {
           "$path": "src/ReplicatedStorage/Shared/Permissions.lua"
         },
+        "IslandSlots": {
+          "$path": "src/ReplicatedStorage/Shared/IslandSlots.lua"
+        },
         "PlaceConfig": {
           "$path": "src/ReplicatedStorage/Shared/PlaceConfig.lua"
         }
@@ -966,6 +969,9 @@
       },
       "Travel": {
         "$path": "src/ServerScriptService/Travel.lua"
+      },
+      "IslandSlots": {
+        "$path": "src/ServerScriptService/IslandSlots.lua"
       },
       "IslandRecall": {
         "$path": "src/ServerScriptService/IslandRecall.server.lua"

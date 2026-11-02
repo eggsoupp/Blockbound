@@ -3,8 +3,12 @@
 
 	Which private server is whose island.
 
-		IslandDirectory.accessCodeFor(ownerUserId) -> accessCode?, err
-		IslandDirectory.ownerOfServer(privateServerId) -> ownerUserId?, err
+		IslandDirectory.accessCodeFor(ownerUserId, slot?) -> accessCode?, err
+		IslandDirectory.ownerOfServer(privateServerId) -> ownerUserId?, slot | err
+
+	A player can own more than one island (Shared.IslandSlots). Island 1 keeps
+	the keys it always had, so existing islands are found where they were;
+	island 2 is "owner_<id>_2", and its server records "<id>_2" as its owner.
 
 	Every player gets ONE reserved server of the Island place, reserved the
 	first time anyone travels to their island and remembered from then on.
@@ -72,9 +76,12 @@ end
 	same player at once, whichever writes second sees the first's code and
 	keeps it, so the player never ends up with two islands.
 ]]
-function IslandDirectory.accessCodeFor(ownerUserId)
-	if codeCache[ownerUserId] then
-		return codeCache[ownerUserId]
+function IslandDirectory.accessCodeFor(ownerUserId, slot)
+	slot = slot or 1
+	local suffix = if slot > 1 then "_" .. slot else ""
+	local cacheKey = tostring(ownerUserId) .. suffix
+	if codeCache[cacheKey] then
+		return codeCache[cacheKey]
 	end
 
 	if PlaceConfig.IslandPlaceId == 0 then
@@ -86,7 +93,7 @@ function IslandDirectory.accessCodeFor(ownerUserId)
 		return nil, storeError
 	end
 
-	local key = "owner_" .. ownerUserId
+	local key = "owner_" .. ownerUserId .. suffix
 
 	local ok, existing = withRetry(function()
 		return dataStore:GetAsync(key)
@@ -130,13 +137,15 @@ function IslandDirectory.accessCodeFor(ownerUserId)
 		- without which the island server could not tell whose island it is.
 	]]
 	local linked, linkError = withRetry(function()
-		dataStore:SetAsync("server_" .. record.serverId, ownerUserId)
+		-- Island 1 stays a bare number, as every server reserved before islands
+		-- had numbers recorded it.
+		dataStore:SetAsync("server_" .. record.serverId, if slot > 1 then cacheKey else ownerUserId)
 	end)
 	if not linked then
 		return nil, "could not record the island server: " .. tostring(linkError)
 	end
 
-	codeCache[ownerUserId] = record.code
+	codeCache[cacheKey] = record.code
 	return record.code
 end
 
@@ -161,7 +170,14 @@ function IslandDirectory.ownerOfServer(privateServerId)
 		return nil, result
 	end
 
-	return tonumber(result)
+	-- A number for island 1; "<id>_<slot>" for any later one.
+	if type(result) == "string" then
+		local owner, slot = string.match(result, "^(%d+)_(%d+)$")
+		if owner then
+			return tonumber(owner), tonumber(slot)
+		end
+	end
+	return tonumber(result), 1
 end
 
 return IslandDirectory

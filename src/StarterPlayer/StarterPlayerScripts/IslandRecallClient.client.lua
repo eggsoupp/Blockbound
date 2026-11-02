@@ -66,6 +66,22 @@ local ISLAND_SPRITE = {
 	"...######...",
 	".....##.....",
 }
+
+-- A globe - the main world - shown when the button leads there instead.
+local WORLD_SPRITE = {
+	"....####....",
+	"..##.##.##..",
+	".#..#..#..#.",
+	".#..#..#..#.",
+	"############",
+	"#...#..#...#",
+	"#...#..#...#",
+	"############",
+	".#..#..#..#.",
+	".#..#..#..#.",
+	"..##.##.##..",
+	"....####....",
+}
 local ICON_SCALE = 0.62
 
 -- ---------------------------------------------------------------------------
@@ -105,17 +121,26 @@ ring.ImageColor3 = P.Selection
 ring.ZIndex = 5
 ring.Visible = false
 
-do
-	local field = Instance.new("Frame")
-	field.Name = "Icon"
-	field.AnchorPoint = Vector2.new(0.5, 0.5)
-	field.Position = UDim2.fromScale(0.5, 0.5)
-	field.Size = UDim2.fromScale(ICON_SCALE, ICON_SCALE)
-	field.BackgroundTransparency = 1
-	field.Parent = face
+local iconField = Instance.new("Frame")
+iconField.Name = "Icon"
+iconField.AnchorPoint = Vector2.new(0.5, 0.5)
+iconField.Position = UDim2.fromScale(0.5, 0.5)
+iconField.Size = UDim2.fromScale(ICON_SCALE, ICON_SCALE)
+iconField.BackgroundTransparency = 1
+iconField.Parent = face
 
-	local rows, columns = #ISLAND_SPRITE, #ISLAND_SPRITE[1]
-	for row, line in ipairs(ISLAND_SPRITE) do
+local drawnSprite = nil
+
+-- Draws one of the sprites into the tile, a texel per Frame.
+local function drawIcon(sprite)
+	if sprite == drawnSprite then
+		return
+	end
+	drawnSprite = sprite
+	iconField:ClearAllChildren()
+	local field = iconField
+	local rows, columns = #sprite, #sprite[1]
+	for row, line in ipairs(sprite) do
 		for column = 1, columns do
 			if string.sub(line, column, column) == "#" then
 				local pixel = Instance.new("Frame")
@@ -130,15 +155,34 @@ do
 end
 
 -- What the button does from here, worded for the tooltip and the countdown.
+-- Home is the island chosen with /switchisland (ActiveIsland); standing on it,
+-- the button leads back to the world instead.
 local function goingHome(): boolean
-	return not (PlaceConfig.isIsland() and workspace:GetAttribute("IslandOwnerId") == player.UserId)
+	return not (
+		PlaceConfig.isIsland()
+		and workspace:GetAttribute("IslandOwnerId") == player.UserId
+		and (workspace:GetAttribute("IslandSlot") or 1) == (player:GetAttribute("ActiveIsland") or 1)
+	)
 end
 
 local function destinationText(destination: string?): string
-	return if (destination or (if goingHome() then "island" else "world")) == "world"
-		then "THE WORLD"
-		else "YOUR ISLAND"
+	if (destination or (if goingHome() then "island" else "world")) == "world" then
+		return "THE WORLD"
+	end
+	if (player:GetAttribute("IslandCount") or 1) > 1 then
+		return "ISLAND " .. (player:GetAttribute("ActiveIsland") or 1)
+	end
+	return "YOUR ISLAND"
 end
+
+-- The globe when the button leads to the world, the island otherwise.
+local function refreshIcon()
+	drawIcon(if goingHome() then ISLAND_SPRITE else WORLD_SPRITE)
+end
+refreshIcon()
+workspace:GetAttributeChangedSignal("IslandOwnerId"):Connect(refreshIcon)
+workspace:GetAttributeChangedSignal("IslandSlot"):Connect(refreshIcon)
+player:GetAttributeChangedSignal("ActiveIsland"):Connect(refreshIcon)
 
 
 -- ---------------------------------------------------------------------------

@@ -27,6 +27,7 @@ local TeleportService = game:GetService("TeleportService")
 local PlaceConfig = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("PlaceConfig"))
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 local IslandDirectory = require(ServerScriptService:WaitForChild("IslandDirectory"))
+local IslandSlots = require(ServerScriptService:WaitForChild("IslandSlots"))
 
 local tell = CommandFeedback.tell
 
@@ -45,9 +46,12 @@ local function teleport(player, placeId, accessCode): boolean
 	return ok
 end
 
--- Whether `player` is standing on their own island right now.
+-- Whether `player` is standing on the island they would travel to - their own,
+-- and the one they have chosen (IslandSlots) - right now.
 function Travel.onOwnIsland(player): boolean
-	return PlaceConfig.isIsland() and workspace:GetAttribute("IslandOwnerId") == player.UserId
+	return PlaceConfig.isIsland()
+		and workspace:GetAttribute("IslandOwnerId") == player.UserId
+		and (workspace:GetAttribute("IslandSlot") or 1) == IslandSlots.active(player)
 end
 
 function Travel.go(player, destination: string): boolean
@@ -76,9 +80,12 @@ function Travel.go(player, destination: string): boolean
 		return false
 	end
 
-	tell(player, "Heading to your island...", "good")
+	tell(player, if IslandSlots.count(player) > 1
+		then string.format("Heading to island %d...", IslandSlots.active(player))
+		else "Heading to your island...", "good")
 
-	local code, err = IslandDirectory.accessCodeFor(player.UserId)
+	local slot = IslandSlots.active(player)
+	local code, err = IslandDirectory.accessCodeFor(player.UserId, slot)
 	if not code then
 		tell(player, "Couldn't find your island: " .. tostring(err), "bad")
 		return false

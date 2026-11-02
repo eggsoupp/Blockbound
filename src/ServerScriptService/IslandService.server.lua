@@ -85,6 +85,15 @@ local CHARACTER_HOLD_LIMIT = 30
 local MESSAGE_DELAY = 4
 
 local ownerUserId = nil
+-- Which of the owner's islands this is (Shared.IslandSlots): 1 unless the
+-- server was reserved for a later one.
+local islandSlot = 1
+
+-- The key IslandStore keeps this island under: the owner's UserId for island
+-- 1, as it always was, and "<UserId>_<slot>" for a later one.
+local function storeKey()
+	return if islandSlot > 1 then tostring(ownerUserId) .. "_" .. islandSlot else ownerUserId
+end
 local loaded = false
 local readOnly = true
 local readOnlyReason = nil
@@ -186,7 +195,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local function loadIsland()
-	local record, info = IslandStore.load(ownerUserId)
+	local record, info = IslandStore.load(storeKey())
 	readOnly = info.readOnly
 	readOnlyReason = info.reason
 
@@ -222,6 +231,7 @@ local function finishLoading()
 	lastSaveAt = os.clock()
 
 	workspace:SetAttribute("IslandOwnerId", ownerUserId)
+	workspace:SetAttribute("IslandSlot", islandSlot)
 	workspace:SetAttribute("IslandSaving", not readOnly)
 	workspace:SetAttribute("IslandSaveProblem", if readOnly then readOnlyReason or "unknown" else nil)
 
@@ -247,10 +257,11 @@ end
 local function resolveOwner(firstPlayer)
 	local serverId = game.PrivateServerId
 	if serverId ~= "" and game.PrivateServerOwnerId == 0 then
-		local owner, err = IslandDirectory.ownerOfServer(serverId)
+		local owner, slotOrErr = IslandDirectory.ownerOfServer(serverId)
 		if owner then
-			return owner, false
+			return owner, false, slotOrErr
 		end
+		local err = slotOrErr
 		warn("[IslandService] Could not tell whose island this server is:", err)
 		return firstPlayer.UserId, true
 	end
@@ -270,13 +281,14 @@ local function beginLoading(firstPlayer)
 	end)
 
 	task.spawn(function()
-		local resolved, owner, unknown = pcall(resolveOwner, firstPlayer)
+		local resolved, owner, unknown, slot = pcall(resolveOwner, firstPlayer)
 		if not resolved then
 			warn("[IslandService] Owner lookup errored:", owner)
 			owner, unknown = firstPlayer.UserId, true
 		end
 		ownerUserId = owner
-		log(string.format("This server is island %d.", ownerUserId))
+		islandSlot = if type(slot) == "number" and slot > 1 then slot else 1
+		log(string.format("This server is island %d (slot %d).", ownerUserId, islandSlot))
 
 		if unknown then
 			readOnly = true
@@ -293,7 +305,7 @@ local function beginLoading(firstPlayer)
 			-- locked out for the timeout.
 			readOnly = true
 			readOnlyReason = readOnlyReason or "load error"
-			IslandStore.release(ownerUserId)
+			IslandStore.release(storeKey())
 		end
 		finishLoading()
 	end)
@@ -384,7 +396,7 @@ local function saveNow(reason, release)
 		if skipped > 0 then
 			warn(string.format("[IslandService] %d island entries could not be encoded and were left out.", skipped))
 		end
-		return IslandStore.save(ownerUserId, payload, reason, release)
+		return IslandStore.save(storeKey(), payload, reason, release)
 	end)
 
 	saving = false
@@ -405,7 +417,7 @@ local function saveNow(reason, release)
 
 	if release then
 		if not saved then
-			IslandStore.release(ownerUserId)
+			IslandStore.release(storeKey())
 		end
 		readOnly = true
 	end

@@ -30,6 +30,9 @@
         "WorldBorderClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/WorldBorderClient.client.lua"
         },
+        "BiomeSky": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/BiomeSky.client.lua"
+        },
         "TouchControls": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/TouchControls.client.lua"
         },
@@ -314,6 +317,9 @@
           },
           "BiomeConfig": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/BiomeConfig.lua"
+          },
+          "BiomeSkies": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/BiomeSkies.lua"
           },
           "NoiseField": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/NoiseField.lua"
@@ -954,6 +960,9 @@
       },
       "Purchases": {
         "$path": "src/ServerScriptService/Purchases.lua"
+      },
+      "PlayerBiome": {
+        "$path": "src/ServerScriptService/PlayerBiome.server.lua"
       },
       "Travel": {
         "$path": "src/ServerScriptService/Travel.lua"

@@ -15,7 +15,7 @@
 ]]
 
 return {
-	SecondIslandPassId = 0,
+	SecondIslandPassId = 2064556930,
 
 	-- The most islands anyone can have. Raising it needs a pass per island.
 	MaxIslands = 2,

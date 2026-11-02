@@ -39,6 +39,9 @@
         "IslandRecallClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/IslandRecallClient.client.lua"
         },
+        "IslandPickerClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/IslandPickerClient.client.lua"
+        },
         "PauseMenu": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/PauseMenu.client.lua",
           "$properties": {

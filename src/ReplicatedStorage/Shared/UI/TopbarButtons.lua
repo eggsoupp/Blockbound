@@ -10,7 +10,9 @@
 		end)
 
 	`order` counts from the right: 1 is the last button on the bar, 2 sits
-	left of it, and so on. The button must be in a ScreenGui that ignores the
+	left of it, and so on. An optional fourth argument makes a button wider
+	than it is tall, in multiples of its height (the island picker's name).
+ The button must be in a ScreenGui that ignores the
 	GUI inset (TopbarInset is measured from the window's corner). The summary
 	is asked for again every frame it is showing, so it can change while the
 	pointer rests on the button (the recall's "Cancel teleport").
@@ -53,20 +55,38 @@ function TopbarButtons.size(): number
 	return math.clamp(barHeight(GuiService.TopbarInset) - BAR_MARGIN * 2, MIN_SIZE, MAX_SIZE)
 end
 
+-- How wide the button at `order` is, and the x of its right edge.
+local function widthOf(order: number, size: number): number
+	for _, entry in ipairs(entries) do
+		if entry.order == order then
+			return size * entry.widthScale
+		end
+	end
+	return size
+end
+
+local function rightEdgeOf(order: number, size: number): number
+	local right = GuiService.TopbarInset.Max.X - GAP
+	for below = 1, order - 1 do
+		right -= widthOf(below, size) + GAP
+	end
+	return right
+end
+
 -- The x of the left edge of the button furthest from the right.
 function TopbarButtons.leftEdge(): number
 	local size = TopbarButtons.size()
-	return GuiService.TopbarInset.Max.X - GAP - highest * size - math.max(0, highest - 1) * GAP
+	return rightEdgeOf(highest, size) - widthOf(highest, size)
 end
 
 local function place(entry)
 	local inset = GuiService.TopbarInset
 	local size = TopbarButtons.size()
-	local right = inset.Max.X - GAP - (entry.order - 1) * (size + GAP)
+	local right = rightEdgeOf(entry.order, size)
 	local middle = inset.Min.Y + barHeight(inset) * 0.5
 
 	entry.button.AnchorPoint = Vector2.new(1, 0.5)
-	entry.button.Size = UDim2.fromOffset(size, size)
+	entry.button.Size = UDim2.fromOffset(size * entry.widthScale, size)
 	entry.button.Position = UDim2.fromOffset(right, middle)
 
 	-- Under the button, its right edge on the button's, so it never runs off
@@ -80,7 +100,7 @@ GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(function()
 	end
 end)
 
-function TopbarButtons.add(button: GuiButton, order: number, summary: () -> string): Frame
+function TopbarButtons.add(button: GuiButton, order: number, summary: () -> string, widthScale: number?): Frame
 	local tip = PixelUI.image(button.Parent, "badge")
 	tip.Name = button.Name .. "Tip"
 	tip.AnchorPoint = Vector2.new(1, 0)
@@ -105,10 +125,13 @@ function TopbarButtons.add(button: GuiButton, order: number, summary: () -> stri
 	label.ZIndex = 11
 	label.Parent = tip
 
-	local entry = { button = button, order = order, tip = tip }
+	local entry = { button = button, order = order, tip = tip, widthScale = widthScale or 1 }
 	table.insert(entries, entry)
 	highest = math.max(highest, order)
-	place(entry)
+	-- A wider button moves everything left of it, so all are placed again.
+	for _, other in ipairs(entries) do
+		place(other)
+	end
 
 	local watching: RBXScriptConnection? = nil
 	button.MouseEnter:Connect(function()

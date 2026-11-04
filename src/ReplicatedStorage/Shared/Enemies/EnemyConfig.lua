@@ -153,9 +153,9 @@ EnemyConfig.DropFlightSeconds = 0.55
 	    spawned" and "nothing lives here".
 
 	  hiddenAngle / hiddenWithin
-	    Nothing appears in the cone you are looking down unless it is far
-	    enough away not to be seen arriving. You find things by turning round
-	    or cresting a rise, never by watching them fade in.
+	    Nothing appears in the cone your CAMERA is looking down unless it is
+	    far away AND something solid hides it from you. You find things by
+	    turning round or cresting a rise, never by watching them fade in.
 
 	  groupMin / groupMax
 	    Packs, scattered, at one point - not a ring, and not one at a time. Four
@@ -180,13 +180,22 @@ EnemyConfig.Spawning = {
 
 	-- How many placements it will try before giving up for this interval. More
 	-- than one because the checks below reject rather than nudge, and exactly
-	-- one try would make looking around a way to turn spawning off.
-	tries = 3,
+	-- one try would make looking around a way to turn spawning off. Six since
+	-- a spot also has to be good to stand on (EnemyService.findStandingSpot),
+	-- which forests, cliffs and lakes refuse often.
+	tries = 6,
 
-	-- The masking. See above.
+	-- How far above or below the player, in blocks, a pack may stand. Further
+	-- than this is up a mountain or down a ravine from them.
+	heightBand = 12,
+
+	-- The masking. See above. hiddenAngle is the half-width of the camera's
+	-- view cone; 65 covers a wide phone screen with some margin. Past
+	-- hiddenWithin, a spot in that cone is allowed only if something solid
+	-- hides it from the player's eyes (EnemySpawner.inPlainSight).
 	cellSize = 110,
 	emptyCells = 0.45,
-	hiddenAngle = 55,
+	hiddenAngle = 65,
 	hiddenWithin = 120,
 
 	--[[

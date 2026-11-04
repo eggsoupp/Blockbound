@@ -59,6 +59,8 @@ local EnemyConfig = require(Shared:WaitForChild("Enemies"):WaitForChild("EnemyCo
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
 local BiomeMap = require(Shared.Terrain:WaitForChild("BiomeMap"))
 
+local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
+
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 
 local DEBUG = false
@@ -151,32 +153,75 @@ local function cellIsAlive(x: number, z: number): boolean
 end
 
 --[[
+	Where each player's CAMERA is pointing, as their client last said
+	(StarterPlayerScripts.CameraFacing): player -> { look, at }.
+
+	The character's facing was used before, and it is the wrong thing to ask:
+	stand still and swing the camera round and the body does not turn with
+	it, so a pack was "behind" you while you were looking straight at it.
+	The body's facing is still the fallback when a client has not reported
+	lately.
+]]
+local CameraFacing = Remotes.ensure("CameraFacing", "UnreliableRemoteEvent")
+local cameraLook = setmetatable({}, { __mode = "k" })
+local CAMERA_LOOK_FRESH = 3 -- seconds a report is trusted for
+
+CameraFacing.OnServerEvent:Connect(function(player, look)
+	-- Only ever used to hide spawns from this player, so a lie gains nothing;
+	-- checked anyway so a bad value cannot break the maths below.
+	if typeof(look) == "Vector3" and look == look and look.Magnitude > 0.5 and look.Magnitude < 1.5 then
+		cameraLook[player] = { look = look.Unit, at = os.clock() }
+	end
+end)
+
+local function viewDirection(player: Player, root: BasePart): Vector3
+	local reported = cameraLook[player]
+	if reported and os.clock() - reported.at < CAMERA_LOOK_FRESH then
+		return reported.look
+	end
+	return root.CFrame.LookVector
+end
+
+local sightRay = RaycastParams.new()
+sightRay.FilterType = Enum.RaycastFilterType.Include
+sightRay.IgnoreWater = true
+
+--[[
 	Whether a point is somewhere the player could watch something arrive at.
 
-	True if it is inside the cone they are facing AND close enough to see
-	clearly. Far things are allowed in front, because at that distance a spawn
-	is a dot on a hillside rather than a monster fading in at arm's length.
-
-	The character's facing, not the camera's - the server does not have the
-	camera, and the two rarely disagree enough to matter for this.
+	Inside the cone the camera is looking down, AND either close (anything
+	inside hiddenWithin, wall or no wall: nobody wants a pack turning up a few
+	steps ahead) or actually visible - nothing solid between the player's
+	eyes and the spot. A pack can still turn up ahead of you, but only behind
+	a hill or round a corner, which is where you would come across it anyway.
 ]]
-local function inPlainSight(origin: Vector3, look: Vector3, point: Vector3): boolean
-	local offset = point - origin
+local function inPlainSight(eye: Vector3, look: Vector3, point: Vector3): boolean
+	local offset = point - eye
 	local distance = offset.Magnitude
-
-	if distance >= S.hiddenWithin or distance <= 0 then
+	if distance <= 0 then
 		return false
 	end
 
 	local flat = Vector3.new(offset.X, 0, offset.Z)
 	local facing = Vector3.new(look.X, 0, look.Z)
-
 	if flat.Magnitude <= 0 or facing.Magnitude <= 0 then
 		return false
 	end
 
-	local cosine = flat.Unit:Dot(facing.Unit)
-	return cosine >= math.cos(math.rad(S.hiddenAngle))
+	if flat.Unit:Dot(facing.Unit) < math.cos(math.rad(S.hiddenAngle)) then
+		return false
+	end
+
+	if distance < S.hiddenWithin then
+		return true
+	end
+
+	local terrain = workspace:FindFirstChild("GeneratedTerrain")
+	if not terrain then
+		return true
+	end
+	sightRay.FilterDescendantsInstances = { terrain }
+	return workspace:Raycast(eye, offset, sightRay) == nil
 end
 
 --[[
@@ -221,7 +266,8 @@ local function attempt(player: Player)
 	end
 
 	local position = root.Position
-	local look = root.CFrame.LookVector
+	local look = viewDirection(player, root)
+	local eye = position + Vector3.new(0, 2, 0)
 
 	if nearbyCount(position) >= S.perPlayerCap then
 		return
@@ -264,17 +310,19 @@ local function attempt(player: Player)
 		local angle = random:NextNumber(0, math.pi * 2)
 		local distance = random:NextNumber(S.minRadius, S.maxRadius)
 
-		local point = position + Vector3.new(
-			math.cos(angle) * distance,
-			0,
-			math.sin(angle) * distance
-		)
+		local x = position.X + math.cos(angle) * distance
+		local z = position.Z + math.sin(angle) * distance
 
 		-- Nothing in the spawn clearing, and nothing whose scatter would
 		-- reach into it.
-		local clear = (Vector3.new(point.X, 0, point.Z)).Magnitude >= SAFE_RADIUS + S.packSpread
+		local clear = (Vector3.new(x, 0, z)).Magnitude >= SAFE_RADIUS + S.packSpread
 
-		if clear and not inPlainSight(position, look, point) then
+		-- A real floor with room on it, near the player's own height: not
+		-- inside a hill, a cliff, a tree or a lake. See findStandingSpot.
+		local groundY = clear and EnemyService.findStandingSpot(x, z, position.Y, S.heightBand)
+		local point = groundY and Vector3.new(x, groundY, z)
+
+		if point and not inPlainSight(eye, look, point + Vector3.new(0, 3, 0)) then
 			local biome = biomeAt(point.X, point.Z)
 			local candidates = biome and byBiome[biome]
 

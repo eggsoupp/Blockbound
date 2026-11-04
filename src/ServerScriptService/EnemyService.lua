@@ -1544,6 +1544,102 @@ function EnemyService.groundAt(x: number, z: number, referenceY: number): number
 end
 
 --[[
+	Somewhere a WILD enemy can be put down at (x, z): the height its feet go
+	at, or nil when there is nowhere good in that column.
+
+	groundAt is the wrong question for the ambient spawner. It scans down from
+	just above `referenceY`, which is the PLAYER's height, and stops at the
+	first solid block - so a point 100 studs away up a hill started its scan
+	inside the hill and put the enemy there, and a player in a cave got
+	enemies set into the rock around them. That was most of "enemies spawn
+	stuck".
+
+	This looks for a real floor instead: a solid block with STANDING_ROOM empty
+	blocks over it, the nearest such floor to `nearY` within `band` blocks
+	either way. Then it checks the spot is not under water and that nothing
+	drawn - a cliff face, a tree trunk, a boulder - is inside the space the
+	enemy needs. A column with no such floor is simply refused; the caller
+	tries somewhere else.
+]]
+local STANDING_ROOM = 3 -- empty blocks above the floor
+local SPOT_CLEARANCE = Vector3.new(6, 8, 6) -- studs an enemy needs around it
+
+local spotOverlap = OverlapParams.new()
+spotOverlap.FilterType = Enum.RaycastFilterType.Include
+spotOverlap.RespectCanCollide = true
+
+local spotWaterRay = RaycastParams.new()
+spotWaterRay.FilterType = Enum.RaycastFilterType.Include
+spotWaterRay.IgnoreWater = false
+
+function EnemyService.findStandingSpot(x: number, z: number, nearY: number, band: number?): number?
+	local studs = TerrainConfig.StudSize
+	local blockX = math.floor(x / studs)
+	local blockZ = math.floor(z / studs)
+	local nearBlock = math.floor(nearY / studs + 0.5)
+	band = band or 12
+
+	local function solid(by)
+		return TerrainManager:IsSolidAt(blockX, by, blockZ)
+	end
+
+	-- Nearest to nearY first: 0, +1, -1, +2, -2, ...
+	local floorBlock = nil
+	for step = 0, band * 2 do
+		local offset = if step % 2 == 0 then -(step // 2) else (step + 1) // 2
+		local by = nearBlock + offset
+		if solid(by - 1) then
+			local open = true
+			for above = 0, STANDING_ROOM - 1 do
+				if solid(by + above) then
+					open = false
+					break
+				end
+			end
+			if open then
+				floorBlock = by
+				break
+			end
+		end
+	end
+
+	if not floorBlock then
+		return nil
+	end
+
+	local groundY = floorBlock * studs
+	local terrainRoot = workspace:FindFirstChild("GeneratedTerrain")
+
+	-- Not under water: a lake bed is solid ground with open "air" above it as
+	-- far as the blocks are concerned, but the water is Roblox Terrain.
+	spotWaterRay.FilterDescendantsInstances = { workspace.Terrain }
+	local wet = workspace:Raycast(
+		Vector3.new(x, groundY + STANDING_ROOM * studs, z),
+		Vector3.new(0, -STANDING_ROOM * studs + 0.5, 0),
+		spotWaterRay
+	)
+	if wet then
+		return nil
+	end
+
+	-- Room to stand: nothing solid that is drawn - a cliff beside the column,
+	-- a tree, a boulder - inside the space above the floor.
+	if terrainRoot then
+		spotOverlap.FilterDescendantsInstances = { terrainRoot }
+		local inside = workspace:GetPartBoundsInBox(
+			CFrame.new(x, groundY + 0.5 + SPOT_CLEARANCE.Y * 0.5, z),
+			SPOT_CLEARANCE,
+			spotOverlap
+		)
+		if #inside > 0 then
+			return nil
+		end
+	end
+
+	return groundY
+end
+
+--[[
 	Stands an enemy on the ground at a point, facing a direction.
 
 	THE ONE PLACE A MODEL IS PUT ANYWHERE, and the reason it is public: a boss
@@ -1675,10 +1771,37 @@ function EnemyService.spawnPack(name, center, count, spread, wild: boolean?)
 
 	local spawned, lastReason = 0, nil
 
-	for _ = 1, count do
-		local x = center.X + (math.random() - 0.5) * 2 * spread
-		local z = center.Z + (math.random() - 0.5) * 2 * spread
-		local y = groundAt(x, z, center.Y)
+	for index = 1, count do
+		local x, y, z
+
+		if wild and index == 1 then
+			-- The spawner already found this spot good to stand on.
+			x, y, z = center.X, center.Y, center.Z
+		elseif wild then
+			--[[
+				The rest scatter around it, each checked on its own. One whose
+				scatter lands in a wall, a tree or a pond tries a few other
+				offsets and is otherwise left out: a pack of three is better
+				than a slime in a cliff.
+			]]
+			for _ = 1, 4 do
+				local tryX = center.X + (math.random() - 0.5) * 2 * spread
+				local tryZ = center.Z + (math.random() - 0.5) * 2 * spread
+				local ground = EnemyService.findStandingSpot(tryX, tryZ, center.Y, 3)
+				if ground then
+					x, y, z = tryX, ground, tryZ
+					break
+				end
+			end
+			if not x then
+				lastReason = "no room to stand beside the pack"
+				continue
+			end
+		else
+			x = center.X + (math.random() - 0.5) * 2 * spread
+			z = center.Z + (math.random() - 0.5) * 2 * spread
+			y = groundAt(x, z, center.Y)
+		end
 
 		local model, reason = EnemyService.spawn(name, Vector3.new(x, y, z))
 		if model then

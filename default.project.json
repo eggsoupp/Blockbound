@@ -195,6 +195,12 @@
             "Disabled": false
           }
         },
+        "CameraFacing": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/CameraFacing.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
         "ItemFeedback": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/ItemFeedback.client.lua",
           "$properties": {
@@ -856,7 +862,7 @@
       "HallowTreeRainbowThing": {
         "$path": "src/ServerScriptService/HallowTreeRainbowThing.server.lua",
         "$properties": {
-          "Disabled": false
+          "Disabled": true
         }
       },
       "MiningServer": {

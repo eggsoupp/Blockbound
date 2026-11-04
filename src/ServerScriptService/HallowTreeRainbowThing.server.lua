@@ -1,3 +1,12 @@
+--[[
+	DISABLED (default.project.json) - superseded by
+	StarterPlayerScripts.HallowTreeRainbow, which colours the generated
+	Hallow trees on each client instead of replicating a Color write per leaf
+	per frame. Nothing in the place is named "hallowTree1" any more, so this
+	only cost a callback for every instance added to the workspace and an
+	empty loop every Heartbeat. Kept for reference.
+]]
+
 -- Services
 local RunService = game:GetService("RunService")
 

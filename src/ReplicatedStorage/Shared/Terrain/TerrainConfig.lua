@@ -173,6 +173,11 @@ TerrainConfig.MaxViewDistanceChunks = 7
 -- the radius, which grows the loaded set quadratically.
 TerrainConfig.UnloadGraceSeconds = 5
 
+-- Unloading is spread over frames at this much server time per frame (always
+-- at least one chunk). Everything left behind by a teleport expires at once,
+-- and unloading 225 chunks in one Heartbeat was a 200ms+ freeze.
+TerrainConfig.UnloadBudgetSeconds = 0.002
+
 TerrainConfig.MovementCheckInterval = 0.22
 
 -- ===========================================================================
@@ -193,9 +198,16 @@ TerrainConfig.MovementCheckInterval = 0.22
 	chunk at view distance 5, on a server that was not busy.
 
 	GenerateBudgetSeconds is the starting point, not the limit.
+
+	The floor was 4ms while parts of generation could not yield at all: a
+	forest chunk ran 30-70ms of unbroken structure, mesh and model work, so the
+	real cost per frame was far above the floor anyway, in hitches. Every phase
+	is sliced now and the floor is what generation actually spends on a busy
+	server (and always in Studio, whose frames include the client's rendering),
+	so it was raised to keep the world filling as fast as it used to.
 ]]
-TerrainConfig.GenerateBudgetSeconds = 0.004
-TerrainConfig.GenerateBudgetMinSeconds = 0.004
+TerrainConfig.GenerateBudgetSeconds = 0.006
+TerrainConfig.GenerateBudgetMinSeconds = 0.006
 TerrainConfig.GenerateBudgetMaxSeconds = 0.012
 
 -- A 60Hz frame is 16.7ms; the target sits just above so the loop keeps pushing
@@ -231,13 +243,21 @@ TerrainConfig.LatticeStep = 4
 
 	  (2 * ViewDistanceChunks + 1)^2 * ChunkSize^2
 	    VD 2 -> 6,400   VD 3 -> 12,544   VD 4 -> 20,736   VD 5 -> 30,976
+	    VD 7 -> 57,600, and 73,984 with the ring of neighbours the edges ask about
 
-	Sized for VD 5 with room to spare. Watch Terrain.columnCacheRotated in the
+	Sized for VD 7, the most a player can choose (MaxViewDistanceChunks). It
+	was sized for VD 5, so at full render distance the working set no longer
+	fit and the cache churned. Watch Terrain.columnCacheRotated in the
 	profiler: rotations climbing while the player stands still means too small.
+
+	Candidates are per CHUNK, and each chunk's structures look two chunks out,
+	so one player's working set is (2 * ViewDistanceChunks + 5)^2 - 361 at VD 7.
+	The old 400, one table wiped whenever it filled, was wiped every few chunks
+	of travel at that distance.
 ]]
 TerrainConfig.LatticeCacheLimit = 40000
-TerrainConfig.ColumnCacheLimit = 100000
-TerrainConfig.CandidateCacheLimit = 400
+TerrainConfig.ColumnCacheLimit = 160000
+TerrainConfig.CandidateCacheLimit = 1200
 
 --[[
 	Parts are pooled per block name rather than destroyed. MaxPoolPerType is the

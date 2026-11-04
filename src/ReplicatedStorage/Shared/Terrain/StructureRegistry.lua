@@ -2,11 +2,12 @@
 	StructureRegistry
 
 	Decides what gets scattered on the terrain, and where. The terrain generator
-	calls three functions and never learns what a "tree" is.
+	calls these and never learns what a "tree" is.
 
 	  StructureRegistry.init(options)
+	  StructureRegistry.prepare(cx, cz, slice?)       -- the costly part, may yield
 	  StructureRegistry.applyBlocks(cx, cz, writer)   -- before visibility pass
-	  StructureRegistry.applyModels(cx, cz, writer)   -- after visibility pass
+	  StructureRegistry.applyModels(cx, cz, writer, slice?) -- after visibility pass
 	  StructureRegistry.register(def)                 -- add a structure at runtime
 
 	===========================================================================
@@ -90,8 +91,17 @@ local studSize = 4
 local hashSeed = 0
 local isReady = false
 
+--[[
+	Candidate lists per chunk, in two generations like TerrainManager's column
+	cache: a full young generation is demoted, and a hit in the old one is
+	promoted back - the SAME list, so acceptance memoised on its candidates
+	survives. It used to be one table wiped when full, and at a wide view
+	distance the working set was close to the cap, so travelling wiped it every
+	few chunks and the next chunk paid to rebuild 25 chunks of candidates.
+]]
 local candidateCache = {}
 local candidateCacheCount = 0
+local oldCandidateCache = {}
 
 local KEY_OFFSET = 8192
 local KEY_STRIDE = 65536
@@ -651,9 +661,19 @@ local function getCandidates(cx, cz)
 		return cached
 	end
 
-	if candidateCacheCount >= candidateCacheLimit then
-		table.clear(candidateCache)
+	-- Each generation holds half the limit, so the ceiling is unchanged.
+	if candidateCacheCount >= candidateCacheLimit // 2 then
+		oldCandidateCache = candidateCache
+		candidateCache = {}
 		candidateCacheCount = 0
+	end
+
+	local aged = oldCandidateCache[key]
+	if aged then
+		oldCandidateCache[key] = nil
+		candidateCache[key] = aged
+		candidateCacheCount += 1
+		return aged
 	end
 
 	local list = {}
@@ -704,7 +724,6 @@ local function getCandidates(cx, cz)
 								and blockX >= minBlockX and blockX <= maxBlockX
 								and blockZ >= minBlockZ and blockZ <= maxBlockZ
 								and options.isInWorld(blockX, blockZ)
-								and (options.allowStructureAt == nil or options.allowStructureAt(blockX, blockZ, entry.radius))
 							then
 								local surfaceY, biome, variant, waterTop, surfaceBlock =
 									options.getColumn(blockX, blockZ)
@@ -758,6 +777,10 @@ local function getCandidates(cx, cz)
 										and (waterTop == nil or waterTop <= surfaceY)
 										and (entry.minSurfaceHeight == nil or surfaceY >= entry.minSurfaceHeight)
 										and (entry.maxSurfaceHeight == nil or surfaceY <= entry.maxSurfaceHeight)
+										-- Last but one: it probes the caves at up
+										-- to nine columns, and every test above is
+										-- a pure check that rejects far more cheaply.
+										and (options.allowStructureAt == nil or options.allowStructureAt(blockX, blockZ, entry.radius))
 										and footprintIsValid(entry, blockX, blockZ, surfaceY)
 									then
 										local candidate = makeCandidate(
@@ -1380,7 +1403,42 @@ end
 
 function StructureRegistry.clearCaches()
 	table.clear(candidateCache)
+	table.clear(oldCandidateCache)
 	candidateCacheCount = 0
+end
+
+--[[
+	Works out, ahead of applyBlocks and applyModels, everything they will ask
+	about chunk (cx, cz): the candidates of the 5x5 chunks around it and which
+	ones in the 3x3 win their overlap contests. Both are cached, so the two
+	calls that follow - which cannot yield - only read answers.
+
+	`slice` is called between chunks, and may yield. Optional.
+]]
+function StructureRegistry.prepare(cx, cz, slice)
+	if not isReady or #prepared == 0 then
+		return
+	end
+
+	for ox = cx - 2, cx + 2 do
+		for oz = cz - 2, cz + 2 do
+			getCandidates(ox, oz)
+			if slice then
+				slice()
+			end
+		end
+	end
+
+	for ox = cx - 1, cx + 1 do
+		for oz = cz - 1, cz + 1 do
+			for _, candidate in ipairs(getCandidates(ox, oz)) do
+				isAccepted(candidate)
+			end
+			if slice then
+				slice()
+			end
+		end
+	end
 end
 
 --[[
@@ -1417,20 +1475,26 @@ end
 	Phase 2: models. Only the chunk that owns a candidate's origin builds it, so
 	a model is never duplicated by a neighbour.
 ]]
-function StructureRegistry.applyModels(cx, cz, writer)
+function StructureRegistry.applyModels(cx, cz, writer, slice)
 	if not isReady or #prepared == 0 then
 		return
 	end
 
-	table.clear(scratchCandidates)
+	-- Its own list when it may yield: the shared scratch buffer would be
+	-- reused by another chunk's call in the meantime.
+	local list = if slice then {} else scratchCandidates
+	table.clear(list)
 	for _, candidate in ipairs(getCandidates(cx, cz)) do
 		if candidate.entry.kind == "Model" and isAccepted(candidate) then
-			table.insert(scratchCandidates, candidate)
+			table.insert(list, candidate)
 		end
 	end
 
-	for _, candidate in ipairs(scratchCandidates) do
+	for _, candidate in ipairs(list) do
 		placeModel(candidate, writer)
+		if slice then
+			slice()
+		end
 	end
 end
 

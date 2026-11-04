@@ -1517,6 +1517,22 @@ local function flushChunkMesh(data)
 end
 
 --[[
+	flushChunkMesh for a chunk that is still being generated, and so is not in
+	the world yet: a layer at a time, calling `slice` (which may yield) between
+	layers. Each layer is planned and applied with no yield in between, so an
+	edit that flushes the same chunk during a yield always sees a whole layer.
+]]
+local function flushChunkMeshSliced(data, slice)
+	while data.dirtyCount > 0 do
+		local by = next(data.dirtyLayers)
+		data.dirtyLayers[by] = nil
+		data.dirtyCount -= 1
+		applyLayerPlans({ planLayer(data, by) })
+		slice()
+	end
+end
+
+--[[
 	Records that a block should be drawn, and that its layer therefore needs
 	rebuilding.
 
@@ -2321,6 +2337,18 @@ local budgetUsed = 0
 local currentBudget = TerrainConfig.GenerateBudgetSeconds
 local smoothedFrame = 1 / 60
 
+--[[
+	This frame's allowance: currentBudget, or the most the config allows while a
+	player is missing ground right around them - a chunk queued or building at
+	priority URGENT_PRIORITY or less, which is the 3x3 they are standing in the
+	middle of. Those are the chunks a player is held still waiting for after a
+	teleport or respawn (StreamingIntegrityMode pauses them), so they go first
+	and fast; the rest of the view fills at the normal pace.
+]]
+local URGENT_PRIORITY = 2
+local frameAllowance = currentBudget
+local urgentGenerations = 0 -- in-flight chunks queued at URGENT_PRIORITY or less
+
 local function chargeBudget(seconds)
 	if budgetTick ~= frameTick then
 		budgetTick = frameTick
@@ -2331,9 +2359,29 @@ end
 
 local function budgetRemaining()
 	if budgetTick ~= frameTick then
-		return currentBudget
+		return frameAllowance
 	end
-	return currentBudget - budgetUsed
+	return frameAllowance - budgetUsed
+end
+
+-- Whether any chunk at URGENT_PRIORITY or less is building, or queued and
+-- still wanted. Only the first few buckets are looked at, and they are small.
+local function hasUrgentWork()
+	if urgentGenerations > 0 then
+		return true
+	end
+	for priority = 0, URGENT_PRIORITY do
+		local bucket = queueBuckets[priority]
+		if bucket then
+			for i = #bucket, 1, -1 do
+				local item = bucket[i]
+				if queuedPriority[item.key] == item.priority and (usageCounts[item.key] or 0) > 0 then
+					return true
+				end
+			end
+		end
+	end
+	return false
 end
 
 --[[
@@ -2367,6 +2415,9 @@ local function yieldIfOverBudget(ctx)
 
 	ctx.cpu += spent
 	chargeBudget(spent)
+	-- The longest stretch generation ran without a chance to yield. Its max is
+	-- the worst frame hitch terrain can cause, whatever the budget says.
+	Profiler.sample("Terrain.sliceMs", spent * 1000, "ms")
 
 	if budgetRemaining() > 0 then
 		ctx.sliceStart = now
@@ -2413,7 +2464,9 @@ local function updateGenerationBudget(dt)
 		currentBudget = maxBudget
 	end
 
-	Profiler.sample("Terrain.genBudgetMs", currentBudget * 1000, "ms")
+	frameAllowance = if hasUrgentWork() then maxBudget else currentBudget
+
+	Profiler.sample("Terrain.genBudgetMs", frameAllowance * 1000, "ms")
 	Profiler.sample("Terrain.serverFrameMs", smoothedFrame * 1000, "ms")
 end
 
@@ -2651,12 +2704,13 @@ local function generateChunk(cx, cz)
 		chunk gets the shared empty record back in a few hash lookups; one a
 		cave crosses carves in time slices like everything else.
 	]]
+	local function slice()
+		yieldIfOverBudget(ctx)
+	end
+
 	local caveRecord = nil
 	if CAVES_ENABLED then
 		phaseStart = chunkCpuSpent(ctx)
-		local function slice()
-			yieldIfOverBudget(ctx)
-		end
 		caveRecord = CaveMap.prepareRecord(cx, cz, slice)
 
 		-- The neighbours' records too, while we can still yield: the
@@ -2675,9 +2729,28 @@ local function generateChunk(cx, cz)
 		end
 	end
 
+	--[[
+		Phase 0c: which structures stand in and around this chunk. Working that
+		out means candidates for the 5x5 chunks around it and an overlap contest
+		over the 3x3, and on fresh ground that measured up to 50ms - in one
+		frame, because applyBlocks below cannot yield. Done here in slices
+		instead; applyBlocks and applyModels then read the cached answer.
+	]]
+	phaseStart = chunkCpuSpent(ctx)
+	StructureRegistry.prepare(cx, cz, slice)
+	Profiler.sample("Terrain.gen.1d_structurePlan", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
+
+	if not isChunkWanted(key) then
+		return
+	end
+
+	-- Built OUT of the world and parented once at the end of generation (see
+	-- Phase 5). Parenting each Part into the live world one by one measured
+	-- about a third more server time than building them in a loose folder and
+	-- parenting that, and only the loose build can be sliced across frames.
+	-- It also means a client receives the chunk whole, not layer by layer.
 	local model = Instance.new("Folder")
 	model.Name = string.format("Chunk_%d_%d", cx, cz)
-	model.Parent = TerrainRoot
 
 	local data = {
 		cx = cx,
@@ -2771,26 +2844,29 @@ local function generateChunk(cx, cz)
 		yieldIfOverBudget(ctx)
 	end
 
-	-- One that finished DURING the pass may have changed an edge column after
+	-- One that finished DURING a yield may have changed an edge column after
 	-- it was scanned, and left this flag rather than drawing us half-built (see
 	-- refreshChunkBorders). Re-read the edges until no yield brings another.
-	-- Nothing yields between here and the end of generation, so once this loop
-	-- exits the flush below is the last word.
-	while data.bordersStale do
-		data.bordersStale = nil
-		for j = 0, CHUNK_SIZE - 1 do
-			updateColumnVisibility(cx, cz, 0, j)
-			updateColumnVisibility(cx, cz, CHUNK_SIZE - 1, j)
-			updateColumnVisibility(cx, cz, j, 0)
-			updateColumnVisibility(cx, cz, j, CHUNK_SIZE - 1)
-			yieldIfOverBudget(ctx)
+	local function settleBorders()
+		while data.bordersStale do
+			data.bordersStale = nil
+			for j = 0, CHUNK_SIZE - 1 do
+				updateColumnVisibility(cx, cz, 0, j)
+				updateColumnVisibility(cx, cz, CHUNK_SIZE - 1, j)
+				updateColumnVisibility(cx, cz, j, 0)
+				updateColumnVisibility(cx, cz, j, CHUNK_SIZE - 1)
+				yieldIfOverBudget(ctx)
+			end
 		end
 	end
+	settleBorders()
 
 	-- Every column has decided what it wants drawn; now turn that into the
 	-- smallest set of Parts that draws it. Meshing after the whole chunk rather
-	-- than per column is what lets a rectangle span columns at all.
-	flushChunkMesh(data)
+	-- than per column is what lets a rectangle span columns at all. A layer at
+	-- a time, yielding between: the chunk is not in the world yet, so nobody
+	-- can see it half drawn.
+	flushChunkMeshSliced(data, slice)
 
 	-- Water last, once every edit has been replayed: a block a player put in a
 	-- lake has to be in place before the water around it is written.
@@ -2805,20 +2881,34 @@ local function generateChunk(cx, cz)
 		Profiler.sample("Terrain.plainChunkVisibleBlocks", data.visibleCount, "blocks")
 	end
 
-	-- Phase 4: structure models.
+	-- Phase 4: structure models, sliced between models: cloning, scaling and
+	-- seating a forest's worth used to run as one unbroken block.
 	phaseStart = chunkCpuSpent(ctx)
-	StructureRegistry.applyModels(cx, cz, writer)
+	StructureRegistry.applyModels(cx, cz, writer, slice)
+
+	-- Those yields are a window for a neighbour to finish too. Nothing yields
+	-- after this loop, so once it exits the flush below is the last word.
+	settleBorders()
+	flushChunkMesh(data)
 	Profiler.sample("Terrain.gen.5models", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
 
-	-- Phase 5: let already-loaded neighbours see anything that crossed into
-	-- them.
+	-- Phase 5: into the world, whole, and let already-loaded neighbours see
+	-- anything that crossed into them - in the same frame, so the seam between
+	-- them never shows.
 	phaseStart = chunkCpuSpent(ctx)
+	model.Parent = TerrainRoot
 	refreshChunkBorders(cx, cz)
 	Profiler.sample("Terrain.gen.6borders", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
 
 	-- Whole-chunk CPU, excluding the between-slice sleeps. Compare against
 	-- Terrain.chunkLatencyMs to see how much of a chunk's wall clock was work.
 	Profiler.sample("Terrain.chunkCpuMs", chunkCpuSpent(ctx) * 1000, "ms")
+
+	-- The last stretch since the final yield is charged too, or a frame that
+	-- finished a chunk would read cheaper than it was.
+	local tail = os.clock() - ctx.sliceStart
+	chargeBudget(tail)
+	Profiler.sample("Terrain.sliceMs", tail * 1000, "ms")
 end
 
 function TerrainManager:_UnloadChunk(cx, cz)
@@ -2864,9 +2954,13 @@ function TerrainManager:_UnloadChunk(cx, cz)
 
 	clearChunkWater(data)
 
-	-- Unload is not time-sliced: it runs to completion inside one Heartbeat, so
-	-- unlike generation its wall clock IS its cost, and a slow one shows up
-	-- directly as a server frame spike.
+	--[[
+		A chunk is not split across frames: its Parts leave together, so each
+		client rebuilds what it draws there once. Releasing them a few at a time
+		measured fewer frames per second in the client than the unload ever
+		cost, for a few large chunks' worth of server time. processPendingUnloads
+		spreads whole chunks over frames instead.
+	]]
 	Profiler.sample("Terrain.chunkUnloadMs", (os.clock() - startedAt) * 1000, "ms")
 	Profiler.sample("Terrain.chunkUnloadParts", released, "parts")
 	Profiler.count("Terrain.chunkUnloaded")
@@ -3031,8 +3125,23 @@ local function onPlayerRemoving(player)
 	playerViewDistance[player] = nil
 end
 
+--[[
+	Unloads whatever has outlived its grace period, a few per frame.
+
+	Everything a player leaves behind falls due together: teleport, respawn or
+	travel and every chunk of the old view expires in the same Heartbeat, 5
+	seconds later. Unloading all of them at once measured 213ms in one frame at
+	view distance 7 (225 chunks at ~1ms each) - a freeze arriving five seconds
+	after the move that caused it. Spread over frames it is invisible, and a
+	chunk nobody can see lingering a few frames longer changes nothing.
+
+	At least one per frame, so the backlog always drains however slow the frame.
+]]
 local function processPendingUnloads()
 	local now = os.clock()
+	local deadline = now + TerrainConfig.UnloadBudgetSeconds
+	local unloaded = 0
+
 	for key, entry in pairs(pendingUnload) do
 		if isChunkWanted(key) then
 			pendingUnload[key] = nil
@@ -3040,9 +3149,17 @@ local function processPendingUnloads()
 			-- Leave it scheduled; the generator re-checks on completion.
 			continue
 		elseif now >= entry.dueAt then
+			if unloaded > 0 and os.clock() >= deadline then
+				break
+			end
 			pendingUnload[key] = nil
 			TerrainManager:_UnloadChunk(entry.cx, entry.cz)
+			unloaded += 1
 		end
+	end
+
+	if unloaded > 0 then
+		Profiler.sample("Terrain.unloadFrameMs", (os.clock() - now) * 1000, "ms")
 	end
 end
 
@@ -3065,6 +3182,10 @@ local pumpGeneration
 local function startGeneration(item)
 	activeGenerations += 1
 	generatingChunks[item.key] = true
+	local urgent = item.priority <= URGENT_PRIORITY
+	if urgent then
+		urgentGenerations += 1
+	end
 
 	local requestedAt = queuedAt[item.key]
 	queuedAt[item.key] = nil
@@ -3079,6 +3200,9 @@ local function startGeneration(item)
 		local ok, err = pcall(generateChunk, item.cx, item.cz)
 		generatingChunks[item.key] = nil
 		activeGenerations -= 1
+		if urgent then
+			urgentGenerations -= 1
+		end
 
 		if not ok then
 			warn("[TerrainManager] Chunk generation failed:", err)
@@ -3091,6 +3215,9 @@ local function startGeneration(item)
 			-- number that decides whether a view distance feels playable, and
 			-- the one that CPU cost alone hides.
 			Profiler.sample("Terrain.chunkLatencyMs", (os.clock() - requestedAt) * 1000, "ms")
+			if urgent then
+				Profiler.sample("Terrain.urgentLatencyMs", (os.clock() - requestedAt) * 1000, "ms")
+			end
 		end
 
 		-- A chunk finishing halfway through a frame used to waste the rest of
@@ -3136,6 +3263,11 @@ function pumpGeneration()
 end
 
 local function onHeartbeatGenerate(dt)
+	-- What generation actually spent last frame, slices and overruns included.
+	-- serverFrameMs is the whole frame - in Studio, the client's rendering too.
+	if budgetTick == frameTick then
+		Profiler.sample("Terrain.genFrameWorkMs", budgetUsed * 1000, "ms")
+	end
 	frameTick += 1
 	updateGenerationBudget(dt)
 

@@ -1,0 +1,23 @@
+{
+  "mutedBeds": {
+    "rain_light": {
+      "playing": false,
+      "volume": 0
+    },
+    "wind": {
+      "playing": false,
+      "volume": 0
+    }
+  },
+  "spatialCleanup": true,
+  "rain": {
+    "id": "rbxassetid://89541543479502",
+    "loaded": true,
+    "playing": true
+  },
+  "mutePassed": true,
+  "spatialFire": {
+    "loaded": true,
+    "playing": true
+  }
+}

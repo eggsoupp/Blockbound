@@ -1,0 +1,257 @@
+{
+  "groupId": 275555347,
+  "universeId": 10771290192,
+  "sounds": {
+    "ambience_rain_heavy": {
+      "source": "downloaded\\Ambience_Background\\Audio_Rain_16665524404.ogg",
+      "sourceId": "16665524404",
+      "publishedId": "89541543479502",
+      "status": "client_load_verified",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ambience_wind": {
+      "source": "downloaded\\Ambience_Background\\Barstow Wind Light Blustery Low Howl 2 (SFX)_9113286969.ogg",
+      "sourceId": "9113286969",
+      "publishedId": "96075055892597",
+      "status": "client_load_verified",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ambience_fire": {
+      "source": "downloaded\\Ambience_Background\\Fire Loop_9082326368.ogg",
+      "sourceId": "9082326368",
+      "publishedId": "138595839171422",
+      "status": "client_load_verified",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ambience_rain_light": {
+      "source": "downloaded\\Ambience_Background\\Light-Rain-Loop (actually loops)_7127218501.ogg",
+      "sourceId": "7127218501",
+      "publishedId": "106908818229091",
+      "status": "uploaded_not_approved",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ambience_night": {
+      "source": "downloaded\\Ambience_Background\\Night Ambience_179507208.ogg",
+      "sourceId": "179507208",
+      "publishedId": "98492522972935",
+      "status": "client_load_verified",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ambience_sea": {
+      "source": "downloaded\\Ambience_Background\\Sea Ambience_898059911.ogg",
+      "sourceId": "898059911",
+      "publishedId": "127640388678637",
+      "status": "client_load_verified",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ambience_snow": {
+      "source": "downloaded\\Ambience_Background\\Snow Ambient_336392497.ogg",
+      "sourceId": "336392497",
+      "publishedId": "118921273657411",
+      "status": "client_load_verified",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ambience_thunderstorm": {
+      "source": "downloaded\\Ambience_Background\\thunderstorm_85853358822578.ogg",
+      "sourceId": "85853358822578",
+      "publishedId": "73857507440986",
+      "status": "client_load_verified",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ambience_waterfall": {
+      "source": "downloaded\\Ambience_Background\\Waterfall Background Water Roar 1 (SFX)_9120549564.ogg",
+      "sourceId": "9120549564",
+      "publishedId": "109920952255959",
+      "status": "uploaded_not_approved",
+      "loop": true,
+      "suggestedVolume": 0.14
+    },
+    "ability_impact_heavy": {
+      "source": "downloaded\\Combat_Impacts\\Ground Slam Impact Shockwave_74149238738530.ogg",
+      "sourceId": "74149238738530",
+      "publishedId": "75298384523205",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_ice_break": {
+      "source": "downloaded\\Combat_Impacts\\Ice Break_113464341514942.ogg",
+      "sourceId": "113464341514942",
+      "publishedId": "100027213660268",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_charge": {
+      "source": "downloaded\\SciFi_Magic_Abilities\\Charge Up SFX_113313795928049.ogg",
+      "sourceId": "113313795928049",
+      "publishedId": "80469422281117",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_shield_off": {
+      "source": "downloaded\\SciFi_Magic_Abilities\\Force Shield Off_814169516.ogg",
+      "sourceId": "814169516",
+      "publishedId": "76077051791587",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_shield_on": {
+      "source": "downloaded\\SciFi_Magic_Abilities\\Force Shield On_814168787.ogg",
+      "sourceId": "814168787",
+      "publishedId": "124877493276727",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_lightning": {
+      "source": "downloaded\\SciFi_Magic_Abilities\\Lightning Flashes Quick Electrical Bursts 45 (SFX)_9116278972.ogg",
+      "sourceId": "9116278972",
+      "publishedId": "127370356416000",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_magic_cast": {
+      "source": "downloaded\\SciFi_Magic_Abilities\\magic cast 43_182765513.ogg",
+      "sourceId": "182765513",
+      "publishedId": "130227553369088",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_magic_glow": {
+      "source": "downloaded\\SciFi_Magic_Abilities\\Magic Glows Soft Clusters Of Chiming Hits 5 (SFX)_9116395085.ogg",
+      "sourceId": "9116395085",
+      "publishedId": "113620206226997",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_magic_poof": {
+      "source": "downloaded\\SciFi_Magic_Abilities\\Magic Poofs Thumpy Wheezy Exhale 1 (SFX)_9116406375.ogg",
+      "sourceId": "9116406375",
+      "publishedId": "110759823118127",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_portal": {
+      "source": "downloaded\\SciFi_Magic_Abilities\\Rift Portal Enter_4604281976.ogg",
+      "sourceId": "4604281976",
+      "publishedId": "71057281988091",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ui_denied": {
+      "source": "downloaded\\UI_Notifications\\error_1388726556.ogg",
+      "sourceId": "1388726556",
+      "publishedId": "129559530621871",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ui_close": {
+      "source": "downloaded\\UI_Notifications\\Menu Close_6698737249.ogg",
+      "sourceId": "6698737249",
+      "publishedId": "74195717999229",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ui_notify": {
+      "source": "downloaded\\UI_Notifications\\notification_6044781309.ogg",
+      "sourceId": "6044781309",
+      "publishedId": "75501362722952",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "loot_pickup": {
+      "source": "downloaded\\UI_Notifications\\pickup_collect_4612375802.ogg",
+      "sourceId": "4612375802",
+      "publishedId": "80088927282585",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ui_hover": {
+      "source": "downloaded\\UI_Notifications\\RBLX UI Hover 02 (SFX)_10066936758.ogg",
+      "sourceId": "10066936758",
+      "publishedId": "112826496895979",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.18
+    },
+    "ui_tab": {
+      "source": "downloaded\\UI_Notifications\\RBLX UI Select 01 (SFX)_10128760939.ogg",
+      "sourceId": "10128760939",
+      "publishedId": "122341039414321",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "craft_success": {
+      "source": "downloaded\\UI_Notifications\\ui-confirm1_3785105076.ogg",
+      "sourceId": "3785105076",
+      "publishedId": "125419495288005",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ui_click": {
+      "source": "downloaded\\UI_Notifications\\ui-simple-button-click_88442833509532.ogg",
+      "sourceId": "88442833509532",
+      "publishedId": "116350521860867",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ui_open": {
+      "source": "downloaded\\UI_Notifications\\ui-simple-inventory-open_127877437691780.ogg",
+      "sourceId": "127877437691780",
+      "publishedId": "105535261809859",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    },
+    "ability_whoosh": {
+      "source": "downloaded\\UI_Notifications\\Whoosh Thick Quick Multiple Variations 2 (SFX)_9120742716.ogg",
+      "sourceId": "9120742716",
+      "publishedId": "139339817665085",
+      "status": "client_load_verified",
+      "loop": false,
+      "suggestedVolume": 0.4
+    }
+  },
+  "uiRouting": {
+    "ui.hover": "ui_hover",
+    "ui.click": "ui_click",
+    "ui.tab": "ui_tab",
+    "ui.open": "ui_open",
+    "ui.close": "ui_close",
+    "ui.denied": "ui_denied",
+    "craft.success": "craft_success"
+  },
+  "ambientRouting": {
+    "default": "ambience_wind",
+    "night": "ambience_night",
+    "Snow": "ambience_snow",
+    "Ocean": "ambience_sea",
+    "Rain": "ambience_rain_light",
+    "Storm": "ambience_rain_heavy"
+  },
+  "note": "27/29 client load verified. Light rain falls back to approved heavy rain; waterfall disabled pending Roblox approval.",
+  "privacy": "Group-owned private uploads; no Creator Store listing"
+}

@@ -1,0 +1,26 @@
+{
+  "playingOnReturn": true,
+  "pickupInvisibleHost": true,
+  "loot.pickup": {
+    "id": "rbxassetid://122341039414321",
+    "preloaded": true,
+    "effectiveVolume": 1.1700000000000002
+  },
+  "place.soft": {
+    "id": "rbxassetid://110759823118127",
+    "preloaded": true,
+    "effectiveVolume": 1.71
+  },
+  "pickupCleaned": true,
+  "oldEffectCount": 0,
+  "pickupHosts": 8,
+  "place.hard": {
+    "id": "rbxassetid://116350521860867",
+    "preloaded": true,
+    "effectiveVolume": 1.53
+  },
+  "softStartsAt": 0.03999999910593033,
+  "pickupTrails": 3,
+  "softStopped": true,
+  "synchronousCallSeconds": 0.00117500004125759
+}

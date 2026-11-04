@@ -62,6 +62,7 @@ local CraftingRecipes = {
 
 	-- Armor
 	LeatherArmor  = { ingredients = { Leather = 6 }, station = "CraftingTable" },
+	LeatherBoots  = { ingredients = { Leather = 3 }, station = "CraftingTable" },
 
 	-- =======================================================================
 	-- Furnace. Ore in, metal out - this is what the depth progression feeds.

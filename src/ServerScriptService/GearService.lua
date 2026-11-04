@@ -14,6 +14,8 @@
 	  bonuses.maxMana         flat, added to AbilityConfig.MaxMana
 	  bonuses.abilityDamage   fraction: 0.15 is +15% ability damage
 	  bonuses.weaponDamage    fraction: 0.15 is +15% weapon damage
+	  bonuses.dash            dash charges, mirrored to the player's
+	                          DashCharges attribute for WeaponClient
 
 	WHERE THE NUMBERS COME FROM
 
@@ -50,7 +52,7 @@ local InventoryService = require(ServerScriptService:WaitForChild("InventoryServ
 local GearService = {}
 
 -- The buffs this module adds up, and so the fields every bonuses table has.
-local STATS = { "defense", "maxHealth", "maxMana", "abilityDamage", "weaponDamage" }
+local STATS = { "defense", "maxHealth", "maxMana", "abilityDamage", "weaponDamage", "dash" }
 
 -- Read-only, for ServerScriptService.ContentAudit: which buffs gear actually does
 -- something with, so a buff nothing reads can be reported.
@@ -128,6 +130,7 @@ local function sweep()
 		local bonuses = GearService.get(player)
 		if not sameBonuses(bonuses, lastReported[player]) then
 			lastReported[player] = bonuses
+			player:SetAttribute("DashCharges", bonuses.dash)
 			for _, listener in ipairs(listeners) do
 				task.spawn(listener, player, bonuses)
 			end

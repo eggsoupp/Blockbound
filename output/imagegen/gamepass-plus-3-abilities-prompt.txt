@@ -1,0 +1,7 @@
+Use case: stylized-concept
+Asset type: square Roblox gamepass icon for a voxel fantasy game, +3 abilities upgrade.
+Primary request: a huge bold pixel-art "+3" in the foreground with a voxel parchment ability scroll behind it.
+Style/medium: polished chunky pixel art, deliberately visible square pixels, hard stair-step edges, limited shaded color clusters, blocky voxel depth. Make it feel like a premium collectible game inventory icon. No smooth vector shapes or photorealism.
+Composition: square 1:1 canvas. A single rolled parchment scroll, diagonally tilted behind the huge centered +3; visible squared rolled ends and parchment edges surrounding the lettering. The +3 dominates and is instantly readable at thumbnail size. Keep comfortable margins around the complete silhouette.
+Materials and lighting: warm parchment with dark blocky outlines; bold luminous gold +3 with chunky dark extruded pixel shadow and bright pale highlights; deep dark contrasting backdrop with restrained pixel glow behind the emblem. Crisp, cohesive pixel grid.
+Text (verbatim): "+3". Only this text. No other words, letters, labels, logos, watermark, UI frames, or extra objects.

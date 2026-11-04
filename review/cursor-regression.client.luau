@@ -1,0 +1,36 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UIS = game:GetService("UserInputService")
+local menu = require(game.ReplicatedStorage.Shared.UI.MenuState)
+local results = {}
+local function check(name, condition)
+ table.insert(results, {name=name, passed=condition})
+end
+local function frames()
+ for _=1,4 do RunService.RenderStepped:Wait() end
+end
+menu.closeAll()
+menu.setCursorRequired("Inventory", false)
+RunService:BindToRenderStep("CursorRegressionInjection", Enum.RenderPriority.Camera.Value+1, function()
+ UIS.MouseBehavior=Enum.MouseBehavior.LockCenter
+ UIS.MouseIconEnabled=false
+end)
+frames()
+check("gameplay camera retains mouse ownership", UIS.MouseBehavior==Enum.MouseBehavior.LockCenter)
+menu.setOpen("CursorTestSettings", true, false)
+frames()
+check("settings defeats continuous camera relock", UIS.MouseBehavior==Enum.MouseBehavior.Default and UIS.MouseIconEnabled)
+menu.setOpen("CursorTestPause", true)
+menu.setOpen("CursorTestSettings", false)
+frames()
+check("overlap retains cursor ownership", UIS.MouseBehavior==Enum.MouseBehavior.Default)
+menu.setCursorRequired("CursorTestBag", true)
+menu.setOpen("CursorTestPause", false)
+frames()
+check("inventory owns cursor without movement menu", not menu.isAnyOpen() and UIS.MouseBehavior==Enum.MouseBehavior.Default)
+menu.setCursorRequired("CursorTestBag", false)
+menu.recoverCursor()
+frames()
+check("emergency recovery defeats continuous relock", UIS.MouseBehavior==Enum.MouseBehavior.Default)
+RunService:UnbindFromRenderStep("CursorRegressionInjection")
+Players.LocalPlayer:SetAttribute("CursorRegressionResults", game.HttpService:JSONEncode(results))

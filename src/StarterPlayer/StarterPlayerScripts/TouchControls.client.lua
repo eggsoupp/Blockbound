@@ -15,6 +15,7 @@
 	                draining over it. They cast through AbilityClient, so a
 	                tap obeys every rule a key press does.
 	    RUN toggle, above the abilities.
+	    DASH        under RUN, only with dash gear worn (Leather Boots).
 
 	  Beside the hotbar, top left:
 	    BAG, CRAFT, MENU   the E, B and Tab keys.
@@ -80,6 +81,7 @@ local ABILITY_ANGLES = { 145, 115, 85 }
 ]]
 local TOGGLE_SIZE = 48
 local RUN_OFFSET = Vector2.new(-165, -60)
+local DASH_OFFSET = Vector2.new(-178, 12)
 
 -- Apple's and Google's smallest comfortable target.
 local MIN_TOUCH = 44
@@ -342,6 +344,18 @@ run.onPress(function()
 end)
 
 -- ---------------------------------------------------------------------------
+-- DASH
+-- ---------------------------------------------------------------------------
+
+-- The Q key, for gear that gives dash charges. WeaponClient does the dash
+-- when TouchDash changes and reports the recharge back in DashShade.
+local dashButton = roundButton("Dash", "DASH")
+
+dashButton.onPress(function()
+	player:SetAttribute("TouchDash", (player:GetAttribute("TouchDash") or 0) + 1)
+end)
+
+-- ---------------------------------------------------------------------------
 -- BAG, CRAFT, MENU
 -- ---------------------------------------------------------------------------
 
@@ -422,6 +436,7 @@ local function layout()
 		place(handle, jump + offset * k, ABILITY_SIZE * k)
 	end
 	place(run, jump + RUN_OFFSET * k, TOGGLE_SIZE * k)
+	place(dashButton, jump + DASH_OFFSET * k, TOGGLE_SIZE * k)
 
 	--[[
 		Right of the hotbar, centred on it. A screen too narrow for that - a
@@ -515,6 +530,10 @@ RunService.RenderStepped:Connect(function()
 			handle.stroke.Transparency = if cooling then 0.5 else 0.1
 		end
 	end
+
+	dashButton.button.Visible = (tonumber(player:GetAttribute("DashCharges")) or 0) > 0
+	local dashShade = tonumber(player:GetAttribute("DashShade")) or 0
+	dashButton.shade.Size = UDim2.fromScale(1, dashShade)
 
 	local on = player:GetAttribute("TouchSprint") == true
 	if run.lit ~= on then

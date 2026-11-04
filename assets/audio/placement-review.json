@@ -1,0 +1,23 @@
+{
+  "denialTreble": -24,
+  "repeatedDenialsSuppressed": true,
+  "burstPlays": 1,
+  "mixes": {
+    "place.denied": {
+      "loaded": true,
+      "duration": 0.09735243055555556,
+      "volume": 0.08
+    },
+    "place.soft": {
+      "loaded": true,
+      "duration": 0.07301432291666667,
+      "volume": 0.14
+    },
+    "place.hard": {
+      "loaded": true,
+      "duration": 0.04326923076923077,
+      "volume": 0.18
+    }
+  },
+  "nextDenialPlays": true
+}

@@ -569,6 +569,7 @@ local ItemDefinitions = {
 	-- twice gives its bonus twice - see GearService, which reads `buffs`:
 	--   maxHealth / maxMana             flat amounts
 	--   abilityDamage / weaponDamage    fractions: 0.15 is +15%
+	--   dash                            dash charges on Q (Leather Boots)
 	-- No art exists yet, so `look` has Shared.UI.ItemModels build a simple
 	-- model in code for the slot and the tooltip to show.
 	VitalityAmulet = {
@@ -1109,8 +1110,8 @@ local ItemDefinitions = {
 		rarity = "Common",
 		maxStack = 1,
 		classification = "Weapon",
-		weaponClass = "HeavySword",
-		weaponSubclass = "Axe",
+		weaponClass = "Axe",
+		weaponSubclass = "Hatchet",
 		value = 25,
 		buffs = { damage = 10, attackSpeed = -0.1 },
 		dropOnly = true,
@@ -1133,8 +1134,8 @@ local ItemDefinitions = {
 		rarity = "Uncommon",
 		maxStack = 1,
 		classification = "Weapon",
-		weaponClass = "HeavySword",
-		weaponSubclass = "Axe",
+		weaponClass = "Axe",
+		weaponSubclass = "Hand Axe",
 		value = 50,
 		buffs = { damage = 12, attackSpeed = -0.05 },
 		dropOnly = true,
@@ -1157,8 +1158,8 @@ local ItemDefinitions = {
 		rarity = "Uncommon",
 		maxStack = 1,
 		classification = "Weapon",
-		weaponClass = "HeavySword",
-		weaponSubclass = "Axe",
+		weaponClass = "Axe",
+		weaponSubclass = "Battleaxe",
 		value = 60,
 		buffs = { damage = 13, attackSpeed = -0.1 },
 		dropOnly = true,
@@ -1169,8 +1170,8 @@ local ItemDefinitions = {
 		rarity = "Uncommon",
 		maxStack = 1,
 		classification = "Weapon",
-		weaponClass = "HeavySword",
-		weaponSubclass = "Axe",
+		weaponClass = "Axe",
+		weaponSubclass = "Tomahawk",
 		value = 60,
 		buffs = { damage = 13, attackSpeed = -0.05 },
 		dropOnly = true,
@@ -1181,8 +1182,8 @@ local ItemDefinitions = {
 		rarity = "Rare",
 		maxStack = 1,
 		classification = "Weapon",
-		weaponClass = "HeavySword",
-		weaponSubclass = "Axe",
+		weaponClass = "Axe",
+		weaponSubclass = "Hand Axe",
 		value = 100,
 		buffs = { damage = 15, attackSpeed = -0.05 },
 		dropOnly = true,
@@ -1229,8 +1230,8 @@ local ItemDefinitions = {
 		rarity = "Epic",
 		maxStack = 1,
 		classification = "Weapon",
-		weaponClass = "HeavySword",
-		weaponSubclass = "Axe",
+		weaponClass = "Axe",
+		weaponSubclass = "Battleaxe",
 		value = 190,
 		buffs = { damage = 21, attackSpeed = -0.15 },
 		dropOnly = true,
@@ -1241,8 +1242,8 @@ local ItemDefinitions = {
 		rarity = "Legendary",
 		maxStack = 1,
 		classification = "Weapon",
-		weaponClass = "HeavySword",
-		weaponSubclass = "Axe",
+		weaponClass = "Axe",
+		weaponSubclass = "Battleaxe",
 		value = 300,
 		buffs = { damage = 24, attackSpeed = -0.15 },
 		dropOnly = true,
@@ -3524,12 +3525,14 @@ ItemDefinitions.LeafWings = {
 
 ItemDefinitions.LeatherBoots = {
 	displayName = "Leather Boots",
-	description = "A pair of leather boots with reinforced soles.",
+	description = "Light boots with reinforced soles. Worn, they let you dash: press Q.",
 	rarity = "Common",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "boots_leather",
-	catalogOnly = true,
+	value = 30,
+	-- One dash charge each; GearService adds them up, so two pairs give two.
+	buffs = { dash = 1 },
 }
 
 ItemDefinitions.LeatherGreaves = {

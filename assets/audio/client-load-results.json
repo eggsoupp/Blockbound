@@ -1,0 +1,205 @@
+{
+  "ability_magic_glow": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://113620206226997",
+    "duration": 4.464708333333333,
+    "status": "Success"
+  },
+  "ability_shield_on": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://124877493276727",
+    "duration": 2.1812244897959183,
+    "status": "Success"
+  },
+  "loot_pickup": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://80088927282585",
+    "duration": 1.5717006802721087,
+    "status": "Success"
+  },
+  "ui_click": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://116350521860867",
+    "duration": 0.03375,
+    "status": "Success"
+  },
+  "ability_portal": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://71057281988091",
+    "duration": 2.56,
+    "status": "Success"
+  },
+  "ambience_fire": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://138595839171422",
+    "duration": 6,
+    "status": "Success"
+  },
+  "ui_denied": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://129559530621871",
+    "duration": 0.19736961451247165,
+    "status": "Success"
+  },
+  "ui_tab": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://122341039414321",
+    "duration": 0.5773333333333334,
+    "status": "Success"
+  },
+  "ability_magic_cast": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://130227553369088",
+    "duration": 1.2288208616780045,
+    "status": "Success"
+  },
+  "ambience_sea": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://127640388678637",
+    "duration": 60,
+    "status": "Success"
+  },
+  "ui_close": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://74195717999229",
+    "duration": 1.3133333333333332,
+    "status": "Success"
+  },
+  "ui_notify": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://75501362722952",
+    "duration": 0.5108390022675737,
+    "status": "Success"
+  },
+  "ambience_waterfall": {
+    "ok": true,
+    "loaded": false,
+    "id": "rbxassetid://109920952255959",
+    "duration": 0,
+    "status": "Failure"
+  },
+  "ambience_rain_light": {
+    "ok": true,
+    "loaded": false,
+    "id": "rbxassetid://106908818229091",
+    "duration": 0,
+    "status": "Failure"
+  },
+  "ability_shield_off": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://76077051791587",
+    "duration": 2.3582766439909295,
+    "status": "Success"
+  },
+  "ambience_wind": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://96075055892597",
+    "duration": 37.02047916666667,
+    "status": "Success"
+  },
+  "ui_hover": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://112826496895979",
+    "duration": 0.09508333333333334,
+    "status": "Success"
+  },
+  "ability_whoosh": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://139339817665085",
+    "duration": 0.5380833333333334,
+    "status": "Success"
+  },
+  "ambience_night": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://98492522972935",
+    "duration": 120.0065306122449,
+    "status": "Success"
+  },
+  "ambience_snow": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://118921273657411",
+    "duration": 120,
+    "status": "Success"
+  },
+  "ability_charge": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://80469422281117",
+    "duration": 9.914920634920636,
+    "status": "Success"
+  },
+  "ambience_rain_heavy": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://89541543479502",
+    "duration": 128.13061224489795,
+    "status": "Success"
+  },
+  "ability_ice_break": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://100027213660268",
+    "duration": 2.0455625,
+    "status": "Success"
+  },
+  "ui_open": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://105535261809859",
+    "duration": 0.04672916666666667,
+    "status": "Success"
+  },
+  "ambience_thunderstorm": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://73857507440986",
+    "duration": 267.96,
+    "status": "Success"
+  },
+  "ability_magic_poof": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://110759823118127",
+    "duration": 1.078375,
+    "status": "Success"
+  },
+  "ability_lightning": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://127370356416000",
+    "duration": 0.6323958333333334,
+    "status": "Success"
+  },
+  "craft_success": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://125419495288005",
+    "duration": 0.45466666666666666,
+    "status": "Success"
+  },
+  "ability_impact_heavy": {
+    "ok": true,
+    "loaded": true,
+    "id": "rbxassetid://75298384523205",
+    "duration": 2.1942857142857144,
+    "status": "Success"
+  }
+}

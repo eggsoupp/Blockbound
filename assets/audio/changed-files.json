@@ -1,0 +1,13 @@
+[
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\AstralVFX.lua",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\BlossomVFX.lua",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\ThunderVFX.lua",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\CometVFX.lua",
+  "src\\ReplicatedStorage\\Shared\\Abilities\\VFX\\StarterVFX.lua",
+  "src\\StarterPlayer\\StarterPlayerScripts\\DropFlight.client.lua",
+  "src/ReplicatedStorage/Shared/Audio/DownloadedSounds.lua",
+  "src/ReplicatedStorage/Shared/Audio/SoundConfig.lua",
+  "src/ReplicatedStorage/Shared/Audio/Ambience.lua",
+  "src/StarterPlayer/StarterPlayerScripts/SoundHandler.client.lua",
+  "src/ReplicatedStorage/Shared/Audio/Sounds.lua"
+]

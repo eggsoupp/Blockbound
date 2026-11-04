@@ -8,6 +8,7 @@
 		               Katana (Bloodfang)
 		HeavySword  -> Broadsword (Thunderveil)
 		Lance       -> Spear (LightLance)
+		Axe         -> Hatchet, Hand Axe, Tomahawk, Battleaxe (the cozy axes)
 
 	The class decides how a weapon is carried - its walk, in ToolConfig.
 	WalkAnimations - and both are shown at the head of its description:
@@ -26,6 +27,7 @@ WeaponClasses.Classes = {
 	Sword = "Sword",
 	HeavySword = "Heavy Sword",
 	Lance = "Lance",
+	Axe = "Axe",
 }
 
 -- The class key of an item definition, or nil for anything that is not a

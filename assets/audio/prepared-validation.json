@@ -1,0 +1,176 @@
+[
+  {
+    "key": "ambience_rain_heavy",
+    "frames": 5650560,
+    "bytes": 8206117,
+    "valid": true
+  },
+  {
+    "key": "ambience_wind",
+    "frames": 1776983,
+    "bytes": 2864202,
+    "valid": true
+  },
+  {
+    "key": "ambience_fire",
+    "frames": 264600,
+    "bytes": 687549,
+    "valid": true
+  },
+  {
+    "key": "ambience_rain_light",
+    "frames": 1005568,
+    "bytes": 2719297,
+    "valid": true
+  },
+  {
+    "key": "ambience_night",
+    "frames": 5292288,
+    "bytes": 8093870,
+    "valid": true
+  },
+  {
+    "key": "ambience_sea",
+    "frames": 2646000,
+    "bytes": 5370330,
+    "valid": true
+  },
+  {
+    "key": "ambience_snow",
+    "frames": 5292000,
+    "bytes": 7638119,
+    "valid": true
+  },
+  {
+    "key": "ambience_thunderstorm",
+    "frames": 5908518,
+    "bytes": 8774653,
+    "valid": true
+  },
+  {
+    "key": "ambience_waterfall",
+    "frames": 2688512,
+    "bytes": 6432852,
+    "valid": true
+  },
+  {
+    "key": "ability_impact_heavy",
+    "frames": 96768,
+    "bytes": 147133,
+    "valid": true
+  },
+  {
+    "key": "ability_ice_break",
+    "frames": 98187,
+    "bytes": 92577,
+    "valid": true
+  },
+  {
+    "key": "ability_charge",
+    "frames": 437248,
+    "bytes": 1002091,
+    "valid": true
+  },
+  {
+    "key": "ability_shield_off",
+    "frames": 104000,
+    "bytes": 65012,
+    "valid": true
+  },
+  {
+    "key": "ability_shield_on",
+    "frames": 96192,
+    "bytes": 70043,
+    "valid": true
+  },
+  {
+    "key": "ability_lightning",
+    "frames": 30355,
+    "bytes": 44413,
+    "valid": true
+  },
+  {
+    "key": "ability_magic_cast",
+    "frames": 54191,
+    "bytes": 101049,
+    "valid": true
+  },
+  {
+    "key": "ability_magic_glow",
+    "frames": 214306,
+    "bytes": 500326,
+    "valid": true
+  },
+  {
+    "key": "ability_magic_poof",
+    "frames": 51762,
+    "bytes": 49646,
+    "valid": true
+  },
+  {
+    "key": "ability_portal",
+    "frames": 112896,
+    "bytes": 214337,
+    "valid": true
+  },
+  {
+    "key": "ui_denied",
+    "frames": 4352,
+    "bytes": 5403,
+    "valid": true
+  },
+  {
+    "key": "ui_close",
+    "frames": 63040,
+    "bytes": 43641,
+    "valid": true
+  },
+  {
+    "key": "ui_notify",
+    "frames": 22528,
+    "bytes": 22294,
+    "valid": true
+  },
+  {
+    "key": "loot_pickup",
+    "frames": 69312,
+    "bytes": 99762,
+    "valid": true
+  },
+  {
+    "key": "ui_hover",
+    "frames": 4564,
+    "bytes": 4599,
+    "valid": true
+  },
+  {
+    "key": "ui_tab",
+    "frames": 27712,
+    "bytes": 20210,
+    "valid": true
+  },
+  {
+    "key": "craft_success",
+    "frames": 21824,
+    "bytes": 37425,
+    "valid": true
+  },
+  {
+    "key": "ui_click",
+    "frames": 1620,
+    "bytes": 1194,
+    "valid": true
+  },
+  {
+    "key": "ui_open",
+    "frames": 2243,
+    "bytes": 1042,
+    "valid": true
+  },
+  {
+    "key": "ability_whoosh",
+    "frames": 25828,
+    "bytes": 24820,
+    "valid": true
+  }
+]

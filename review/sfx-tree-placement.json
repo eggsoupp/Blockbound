@@ -1,0 +1,24 @@
+{
+  "client": {
+    "softVolume": 0.468,
+    "muteVolume": 0,
+    "hardVolume": 0.54,
+    "abilityMuted": true,
+    "expectedUiVolume": 0.18000000000000002,
+    "treePreviouslyBlockedNowFree": 16,
+    "treeCollidingCellsStillBlocked": 9,
+    "uiVolume": 0.18000000715255737,
+    "solidBlockStillBlocked": true
+  },
+  "server": {
+    "placed": true,
+    "success": true,
+    "cell": [
+      -18,
+      53,
+      27
+    ],
+    "tree": "Workspace.GeneratedTerrain.Chunk_-1_1.PlainsTree.Untitled",
+    "reason": "Placed"
+  }
+}

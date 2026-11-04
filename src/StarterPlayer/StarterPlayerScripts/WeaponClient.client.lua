@@ -254,3 +254,190 @@ local function watchCharacter(character)
 end
 player.CharacterAdded:Connect(watchCharacter)
 if player.Character then watchCharacter(player.Character) end
+
+-- ---------------------------------------------------------------------------
+-- Dash
+-- ---------------------------------------------------------------------------
+
+--[[
+	Q, or the touch DASH button (it bumps the TouchDash attribute), dashes the
+	way the character is moving, or the way it faces when standing still. Only
+	with charges from worn gear: GearService mirrors them into DashCharges
+	(Leather Boots give one). Each spent charge refills on its own.
+
+	The clip goes by the held weapon (WeaponAnimations): a class with one
+	`dash` clip turns to face the dash; empty hands, tools and lances use the
+	rapier's four-way set, picked by the dash's angle to the facing. The
+	character is the client's to move, so the dash and its clip replicate the
+	same way walking does. The streak is the slash pack's wind trail again.
+]]
+local UserInputService = game:GetService("UserInputService")
+local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
+
+local DASH = {
+	speed = 64,
+	time = 0.2,
+	recharge = 1.5,
+	clipSpeed = 1.3,
+	key = Enum.KeyCode.Q,
+}
+
+local refills = {} -- os.clock() at which each spent charge is back
+local dashing = false
+local loadedClips = setmetatable({}, { __mode = "k" }) -- animator -> id -> track
+
+local function chargesLeft()
+	local now = os.clock()
+	for index = #refills, 1, -1 do
+		if refills[index] <= now then table.remove(refills, index) end
+	end
+	return (tonumber(player:GetAttribute("DashCharges")) or 0) - #refills
+end
+
+local function dashClip(character, root, direction)
+	local tool = character:FindFirstChildOfClass("Tool")
+	local stats = tool and WeaponConfig.get(itemNameFor(tool))
+	local profile = stats and WeaponAnimations.Classes[stats.weaponClass]
+	if profile and profile.dash then
+		return profile.dash, true
+	end
+	local set = profile and profile.dashes or WeaponAnimations.DefaultDashes
+	local ahead = direction:Dot(root.CFrame.LookVector)
+	local side = direction:Dot(root.CFrame.RightVector)
+	if math.abs(ahead) >= math.abs(side) then
+		return if ahead >= 0 then set.Forward else set.Back, false
+	end
+	return if side >= 0 then set.Right else set.Left, false
+end
+
+local function playClip(animator, id)
+	local tracks = loadedClips[animator]
+	if not tracks then
+		tracks = {}
+		loadedClips[animator] = tracks
+	end
+	local track = tracks[id]
+	if not track then
+		local animation = Instance.new("Animation")
+		animation.AnimationId = id
+		track = animator:LoadAnimation(animation)
+		track.Priority = Enum.AnimationPriority.Action2
+		track.Looped = false
+		tracks[id] = track
+	end
+	track:Play(0.05, 1, DASH.clipSpeed)
+end
+
+local function streakFor(root)
+	local trail = root:FindFirstChild("DashStreak")
+	if trail then return trail end
+	local top = Instance.new("Attachment")
+	top.Name = "DashStreakTop"
+	top.Position = Vector3.new(0, 1.1, 0.3)
+	top.Parent = root
+	local bottom = Instance.new("Attachment")
+	bottom.Name = "DashStreakBottom"
+	bottom.Position = Vector3.new(0, -1.3, 0.3)
+	bottom.Parent = root
+	trail = Instance.new("Trail")
+	trail.Name = "DashStreak"
+	trail.Texture = TRAIL.texture
+	trail.TextureMode = Enum.TextureMode.Static
+	trail.TextureLength = TRAIL.textureLength
+	trail.Color = TRAIL.color
+	trail.Transparency = TRAIL.transparency
+	trail.WidthScale = TRAIL.widthScale
+	trail.Lifetime = 0.22
+	trail.LightEmission = TRAIL.lightEmission
+	trail.LightInfluence = 0
+	trail.FaceCamera = true
+	trail.Attachment0 = top
+	trail.Attachment1 = bottom
+	trail.Enabled = false
+	trail.Parent = root
+	return trail
+end
+
+local function dash()
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = humanoid and humanoid.RootPart
+	local animator = humanoid and humanoid:FindFirstChildOfClass("Animator")
+	if dashing or not animator or humanoid.Health <= 0 or humanoid.Sit or MenuState.isAnyOpen() then
+		return
+	end
+	if chargesLeft() <= 0 then
+		return
+	end
+
+	local direction = humanoid.MoveDirection * Vector3.new(1, 0, 1)
+	if direction.Magnitude < 0.1 then
+		direction = root.CFrame.LookVector * Vector3.new(1, 0, 1)
+	end
+	if direction.Magnitude < 0.1 then
+		return
+	end
+	direction = direction.Unit
+
+	dashing = true
+	table.insert(refills, os.clock() + DASH.recharge)
+
+	local clip, turns = dashClip(character, root, direction)
+	local autoRotate = humanoid.AutoRotate
+	if turns then
+		humanoid.AutoRotate = false
+		root.CFrame = CFrame.lookAt(root.Position, root.Position + direction)
+	end
+	playClip(animator, clip)
+	Sounds.play("tool.swing")
+
+	local push = Instance.new("LinearVelocity")
+	push.Name = "Dash"
+	push.Attachment0 = root:FindFirstChild("RootAttachment") or root:FindFirstChildOfClass("Attachment")
+	push.RelativeTo = Enum.ActuatorRelativeTo.World
+	push.VelocityConstraintMode = Enum.VelocityConstraintMode.Plane
+	push.PrimaryTangentAxis = Vector3.xAxis
+	push.SecondaryTangentAxis = Vector3.zAxis
+	push.PlaneVelocity = Vector2.new(direction.X, direction.Z) * DASH.speed
+	push.MaxForce = root.AssemblyMass * 4000
+	push.Parent = root
+
+	local streak = streakFor(root)
+	streak:Clear()
+	streak.Enabled = true
+
+	task.delay(DASH.time, function()
+		push:Destroy()
+		streak.Enabled = false
+		if root.Parent then
+			-- Leave the dash at a run rather than stopping dead.
+			local velocity = root.AssemblyLinearVelocity
+			root.AssemblyLinearVelocity = direction * humanoid.WalkSpeed + Vector3.new(0, velocity.Y, 0)
+		end
+		if turns and humanoid.Parent then
+			humanoid.AutoRotate = autoRotate
+		end
+		dashing = false
+	end)
+end
+
+UserInputService.InputBegan:Connect(function(input, processed)
+	if not processed and input.KeyCode == DASH.key then
+		dash()
+	end
+end)
+player:GetAttributeChangedSignal("TouchDash"):Connect(dash)
+
+-- For the touch button's shade: how much of the next charge is still to come,
+-- 0 with a charge in hand.
+RunService.Heartbeat:Connect(function()
+	local shade = 0
+	if chargesLeft() <= 0 and #refills > 0 then
+		local soonest = math.huge
+		for _, at in ipairs(refills) do soonest = math.min(soonest, at) end
+		shade = math.clamp((soonest - os.clock()) / DASH.recharge, 0, 1)
+	end
+	if player:GetAttribute("DashShade") ~= shade then
+		player:SetAttribute("DashShade", shade)
+	end
+end)

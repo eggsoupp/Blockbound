@@ -14,6 +14,9 @@
     "Workspace": {
       "$className": "Workspace",
       "$ignoreUnknownInstances": true,
+      "$properties": {
+        "StreamingTargetRadius": 896
+      },
       "ToDo": {
         "$path": "src/Workspace/ToDo.server.lua",
         "$properties": {

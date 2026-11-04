@@ -30,6 +30,46 @@ Sync is one-way (files → Studio). Edit scripts here, not in Studio, or your St
 
 New scripts need an entry in `default.project.json` (or put them under a folder you map with `$path`).
 
+## Luau limit: 200 local variables per scope
+
+Luau can only hold **200 local variables at once in one function scope**, and
+a script's top level counts as one scope. Every `local x = ...` and
+`local function f()` written at the top of a script uses one slot, and slots
+are only freed when their scope ends, which for the top level is never.
+
+Go over it and the **whole script fails to load** with:
+
+```
+Out of local registers when trying to allocate <name>: exceeded limit 200
+```
+
+When that script is a ModuleScript, everything that `require`s it breaks too.
+Breaking TerrainManager took mining, enemies, weapons, crafting, spawning and
+the debug console down with it.
+
+The count is not exactly the number of `local` lines (temporaries use slots
+too), so treat it as a budget and keep a margin. In practice:
+TerrainManager ran fine at 215 top-level `local` lines and failed at 230.
+
+**How to stay under it** when adding to a big script:
+
+- Group related constants and helpers into one table:
+  `local Faces = {}` then `function Faces.show(...)` uses one slot, not ten.
+- Put helpers that are only used together inside a `do ... end` block. Locals
+  declared there free their slots at `end`. Expose what the rest of the file
+  needs through a table declared before the block.
+- Or move a self-contained feature into its own ModuleScript.
+
+Scripts closest to the limit (top-level `local` lines, 2026-11-04):
+
+| Script | Count |
+| --- | --- |
+| `ServerScriptService/TerrainManager.lua` | 215 (at the limit) |
+| `StarterPlayerScripts/CraftingClient.client.lua` | 166 |
+| `Shared/Terrain/BiomeMap.lua` | 127 |
+
+Count them with: `grep -cE '^local ' path/to/Script.lua`
+
 ## Places
 
 BlockBound is one game with two places, both synced from this same project:

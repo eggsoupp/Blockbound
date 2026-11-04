@@ -168,6 +168,11 @@ TerrainConfig.ViewDistanceChunks = 4
 TerrainConfig.MinViewDistanceChunks = 1
 TerrainConfig.MaxViewDistanceChunks = 7
 
+-- Where a phone or tablet starts instead of ViewDistanceChunks, until its
+-- player picks a distance in the options menu (SettingsServer). 3 is 49 chunks
+-- against the default's 81.
+TerrainConfig.TouchViewDistanceChunks = 3
+
 -- A chunk out of every player's view is kept this long before unloading, so
 -- walking back and forth over a border does not thrash. Cheaper than widening
 -- the radius, which grows the loaded set quadratically.

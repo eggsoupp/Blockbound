@@ -42,9 +42,14 @@ local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
 
+local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
+
 local RequestViewDistance = Remotes.ensure("RequestViewDistance", "RemoteEvent")
 local ViewDistanceChanged = Remotes.ensure("ViewDistanceChanged", "RemoteEvent")
 local SettingsSync = Remotes.ensure("SettingsSync", "RemoteEvent")
+
+-- client -> DeviceProfile("touch"), once at startup on a phone or tablet.
+local DeviceProfile = Remotes.ensure("DeviceProfile", "RemoteEvent")
 
 --[[
 	Minimum gap between one player's requests.
@@ -102,6 +107,28 @@ local saved = setmetatable({}, { __mode = "k" })
 -- a session that could not read the record must not write a guess over it.
 local loadedFor = {}
 
+-- Players whose client said it is a phone or tablet.
+local onTouch = setmetatable({}, { __mode = "k" })
+
+--[[
+	A phone or tablet starts nearer than a PC (TerrainConfig.
+	TouchViewDistanceChunks) - unless its player has a distance saved, which
+	always wins. Not saved itself: it is the device's default, not a choice,
+	so the same player on a PC still gets the PC's. A distance they pick in
+	the menu is saved as usual.
+
+	Called from both ends, because the client's word and the save record can
+	arrive in either order.
+]]
+local function applyTouchDefault(player)
+	local entry = saved[player]
+	if not onTouch[player] or (entry and entry.viewDistance ~= nil) then
+		return
+	end
+	TerrainManager:SetPlayerViewDistance(player, TerrainConfig.TouchViewDistanceChunks)
+	reply(player)
+end
+
 local function isVolume(value)
 	return type(value) == "number" and value == value and value >= 0 and value <= 1
 end
@@ -140,6 +167,17 @@ end, function(player, value)
 	saved[player] = entry
 	loadedFor[player] = true
 	SettingsSync:FireClient(player, cleanLocal(entry))
+	applyTouchDefault(player)
+end)
+
+DeviceProfile.OnServerEvent:Connect(function(player, profile)
+	-- Only ever lowers this player's own starting distance, so a client lying
+	-- about its device gains nothing.
+	if profile ~= "touch" or onTouch[player] then
+		return
+	end
+	onTouch[player] = true
+	applyTouchDefault(player)
 end)
 
 -- Keeps the distance the server just applied, so it is what the next join gets.

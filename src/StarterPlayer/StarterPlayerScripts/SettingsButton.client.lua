@@ -66,6 +66,18 @@ local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local RequestViewDistance = Remotes.wait("RequestViewDistance")
 local ViewDistanceChanged = Remotes.wait("ViewDistanceChanged")
 
+-- A phone or tablet starts on a shorter view distance unless its player has
+-- saved one (SettingsServer). Off the main thread: the remote may not exist
+-- yet, and nothing below should wait for it.
+if Responsive.isTouch() then
+	task.spawn(function()
+		local deviceProfile = Remotes.wait("DeviceProfile", 30)
+		if deviceProfile then
+			deviceProfile:FireServer("touch")
+		end
+	end)
+end
+
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 

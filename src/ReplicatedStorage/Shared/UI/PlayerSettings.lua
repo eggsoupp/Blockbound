@@ -36,6 +36,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local Music = require(Shared.Audio:WaitForChild("Music"))
+local Responsive = require(script.Parent:WaitForChild("Responsive"))
 
 local PlayerSettings = {}
 
@@ -50,8 +51,14 @@ PlayerSettings.Definitions = {
 	damageNumbers = { kind = "toggle", default = true },
 	hitFlash = { kind = "toggle", default = true },
 	-- Whether ground cover is drawn: Low hides flowers, plants, rocks and logs,
-	-- High shows them. Read by GroundCoverLOD.
-	detailLevel = { kind = "choice", options = { "Low", "High" }, default = "High" },
+	-- High shows them. Read by GroundCoverLOD. Phones and tablets start on Low,
+	-- since thousands of plant meshes are what a phone's GPU feels first; a
+	-- level the player has saved still wins.
+	detailLevel = {
+		kind = "choice",
+		options = { "Low", "High" },
+		default = if Responsive.isTouch() then "Low" else "High",
+	},
 }
 
 -- How long after the last change the save is sent.

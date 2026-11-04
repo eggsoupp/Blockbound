@@ -333,6 +333,15 @@ TerrainConfig.EditZone = {
 -- single cube - same image, face, colour and transparency, one tile per block.
 TerrainConfig.ConvertDecalsToTextures = true
 
+--[[
+	Leave a block face's images off while the face is covered by a solid,
+	opaque neighbour, and put them back when it is uncovered (TerrainManager,
+	HIDDEN FACES). Covered faces can never be seen, and they held about 60% of
+	the face images - most of what the terrain sends to each client. false
+	draws every face, for ruling it out when something looks wrong.
+]]
+TerrainConfig.CullHiddenFaces = true
+
 TerrainConfig.CastTerrainShadows = false
 TerrainConfig.CastStructureShadows = true
 

@@ -261,6 +261,15 @@ local visibleBlocks = 0
 ]]
 local partRect = setmetatable({}, { __mode = "k" })
 
+--[[
+	Covered-face culling, filled in under HIDDEN FACES. One table rather than a
+	run of locals: this module is close to Luau's 200-local limit.
+
+	textures: part -> { [NormalId name] = { face images } }, every image the
+	part owns, whether it is showing it or not.
+]]
+local Faces = { textures = setmetatable({}, { __mode = "k" }) }
+
 local baseSeed = 0
 local isInitialized = false
 -- How many chunk coroutines are in flight. Replaces a boolean: chunks may now
@@ -720,11 +729,26 @@ local function getPooledPart(name)
 	-- run of ten blocks shows ten tiles instead of one smeared image. On a 1x1
 	-- part this is exactly what an untiled texture already did, so it changes
 	-- nothing for blocks that never get merged.
+	local faces = {}
 	for _, child in ipairs(part:GetChildren()) do
 		if child:IsA("Texture") then
 			child.StudsPerTileU = STUD_SIZE
 			child.StudsPerTileV = STUD_SIZE
 		end
+		-- Decal covers Texture too. Each face image is filed under its face, so
+		-- Faces.show can take it off and put it back without cloning anything.
+		if child:IsA("Decal") then
+			local name = child.Face.Name
+			local list = faces[name]
+			if not list then
+				list = {}
+				faces[name] = list
+			end
+			table.insert(list, child)
+		end
+	end
+	if next(faces) then
+		Faces.textures[part] = faces
 	end
 
 	Profiler.count("Terrain.partCloned")
@@ -1137,6 +1161,250 @@ local function isMergeable(blockName)
 end
 
 --[[
+	HIDDEN FACES
+
+	Every block template carries an image on each of its six faces, and each
+	image is an Instance the server sends to every client: a Part plus six
+	Textures is seven objects, and the Textures were about 65% of everything the
+	terrain replicated. Most of them can never be seen. The bottom of a surface
+	block lies on the ground under it, and most sides press against the next
+	column. Measured against the block data at view distance 7: 64% of face
+	images in plains, 60% in snowy hills, were on faces covered completely.
+
+	So a face shows its images only while something next to it is not a solid,
+	opaque cube - air, water, the world's edge, or a block of another shape. A
+	covered face looks exactly the same without its image, because nobody can
+	see it. The images stay on the Part in Faces.textures, unparented, and go back
+	the moment the face is uncovered:
+
+	  * a new Part is decided as it is emitted, from the block data, before it
+	    is in the world;
+	  * every change to whether a cell is solid (Faces.noteSolidChange) re-decides the
+	    Parts on all six sides of it, across chunk borders, in the same step
+	    as the edit's own redraw (Faces.processChanges);
+	  * a chunk that finishes loading re-decides its neighbours' border Parts,
+	    which were decided against the generated heightmap and may not have
+	    seen its structures or player edits (refreshEdgeFaces);
+	  * inside an edit zone every face keeps its images. Those Parts are drawn
+	    early on purpose, so the block a swing uncovers is already whole on
+	    every client before the swing lands.
+
+	TerrainConfig.CullHiddenFaces = false draws every face again.
+]]
+do
+	local CULL_HIDDEN_FACES = TerrainConfig.CullHiddenFaces ~= false
+
+	-- NormalId name -> the step from a block to the cell that face looks at.
+	local FACE_STEP = {
+		Top = { 0, 1, 0 },
+		Bottom = { 0, -1, 0 },
+		Right = { 1, 0, 0 },
+		Left = { -1, 0, 0 },
+		Back = { 0, 0, 1 },
+		Front = { 0, 0, -1 },
+	}
+
+	-- Can a block of this name hide the face behind it? Full opaque cubes only:
+	-- water is see-through, and a wedge or mesh leaves gaps.
+	local opaqueByName = {}
+
+	local function isOpaqueBlock(name)
+		local cached = opaqueByName[name]
+		if cached == nil then
+			local template = getBlockPartTemplate(name)
+			cached = template ~= nil
+				and template:IsA("Part")
+				and template.Shape == Enum.PartType.Block
+				and BlockConfig.surfaceFor(name) == nil
+			opaqueByName[name] = cached
+		end
+		return cached
+	end
+
+	--[[
+		Does the cell at (cx, cz, bx, bz, by) hide whatever face looks at it?
+		bx/bz may have walked off the chunk. Natural ground is always an opaque
+		cube; only blocks something put there or restyled are looked up by name.
+		A chunk that is not loaded answers from the generated heightmap, and is
+		corrected when it loads (Faces.refreshEdge).
+	]]
+	local function coversFace(cx, cz, bx, bz, by)
+		cx, cz, bx, bz = normalizeCell(cx, cz, bx, bz)
+
+		local data = chunks[chunkKey(cx, cz)]
+		if not data then
+			return isBlockPresent(cx, cz, bx, bz, by)
+		end
+
+		local cell = bx * CHUNK_SIZE + bz + 1
+		if not isPresentInData(data, cell, by) then
+			return false
+		end
+
+		local override = data.override[cell]
+		local name = override and override[by]
+		if not name then
+			local extra = data.extra[cell]
+			name = extra and extra[by]
+		end
+		return name == nil or isOpaqueBlock(name)
+	end
+
+	-- Is every block of this rectangle's face against something that hides it?
+	local function faceCovered(data, rect, step)
+		local cx, cz = data.cx, data.cz
+		local by = rect.by + step[2]
+		local x0, z0 = rect.bx, rect.bz
+		local x1, z1 = x0 + rect.sizeX - 1, z0 + rect.sizeZ - 1
+
+		if step[1] > 0 then
+			x0, x1 = x1 + 1, x1 + 1
+		elseif step[1] < 0 then
+			x0, x1 = x0 - 1, x0 - 1
+		elseif step[3] > 0 then
+			z0, z1 = z1 + 1, z1 + 1
+		elseif step[3] < 0 then
+			z0, z1 = z0 - 1, z0 - 1
+		end
+
+		for x = x0, x1 do
+			for z = z0, z1 do
+				if not coversFace(cx, cz, x, z, by) then
+					return false
+				end
+			end
+		end
+		return true
+	end
+
+	local function rectIsHot(data, rect)
+		local hot = data.hot
+		for x = rect.bx, rect.bx + rect.sizeX - 1 do
+			for z = rect.bz, rect.bz + rect.sizeZ - 1 do
+				if hot[cellOf(x, z)] then
+					return true
+				end
+			end
+		end
+		return false
+	end
+
+	-- Puts each face's images on the Part or takes them off. See HIDDEN FACES.
+	local function showFaces(data, part)
+		local faces = Faces.textures[part]
+		local rect = partRect[part]
+		if not faces or not rect then
+			return
+		end
+
+		local everything = not CULL_HIDDEN_FACES or (data.hotCount > 0 and rectIsHot(data, rect))
+
+		for face, textures in pairs(faces) do
+			local parent = if everything or not faceCovered(data, rect, FACE_STEP[face]) then part else nil
+			for _, texture in ipairs(textures) do
+				if texture.Parent ~= parent then
+					texture.Parent = parent
+				end
+			end
+		end
+	end
+
+	-- Cells whose solidity changed since the last processFaceChanges, as flat
+	-- data, cell, by triples.
+	local faceChanges = {}
+	local faceChangeCount = 0
+
+	-- The cells around a changed one whose Parts face it.
+	local FACE_NEIGHBOURS = { { 1, 0, 0 }, { -1, 0, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 0, 1, 0 }, { 0, -1, 0 } }
+
+	--[[
+		Records that a cell became solid or empty, once the chunk is being drawn
+		(data.trackFaces). Before that nothing has a Part yet, and every Part will
+		be decided from the finished data when it is emitted.
+	]]
+	local function noteSolidChange(data, cell, by)
+		if not data.trackFaces then
+			return
+		end
+		faceChanges[faceChangeCount + 1] = data
+		faceChanges[faceChangeCount + 2] = cell
+		faceChanges[faceChangeCount + 3] = by
+		faceChangeCount += 3
+	end
+
+	-- Re-decides the faces of every drawn Part next to a recorded change.
+	local function processFaceChanges()
+		if faceChangeCount == 0 then
+			return
+		end
+
+		local seen = {}
+
+		for i = 1, faceChangeCount, 3 do
+			local data, cell, by = faceChanges[i], faceChanges[i + 1], faceChanges[i + 2]
+
+			-- A chunk that has since unloaded has no Parts left to fix.
+			if chunks[chunkKey(data.cx, data.cz)] == data then
+				local index = cell - 1
+				local bx, bz = index // CHUNK_SIZE, index % CHUNK_SIZE
+
+				for _, offset in ipairs(FACE_NEIGHBOURS) do
+					local ncx, ncz, nbx, nbz = normalizeCell(data.cx, data.cz, bx + offset[1], bz + offset[3])
+					local neighbour = chunks[chunkKey(ncx, ncz)]
+					local bucket = neighbour and neighbour.layerParts[by + offset[2]]
+
+					if bucket then
+						for _, part in ipairs(bucket) do
+							local rect = partRect[part]
+							if
+								rect
+								and not seen[part]
+								and nbx >= rect.bx and nbx < rect.bx + rect.sizeX
+								and nbz >= rect.bz and nbz < rect.bz + rect.sizeZ
+							then
+								seen[part] = true
+								showFaces(neighbour, part)
+							end
+						end
+					end
+				end
+			end
+		end
+
+		table.clear(faceChanges)
+		faceChangeCount = 0
+	end
+
+	--[[
+		Re-decides the Parts of `data` along the edge facing (dx, dz), the step
+		from data to the chunk that changed.
+	]]
+	local function refreshEdgeFaces(data, dx, dz)
+		for _, bucket in pairs(data.layerParts) do
+			for _, part in ipairs(bucket) do
+				local rect = partRect[part]
+				if
+					rect
+					and (
+						(dx == 1 and rect.bx + rect.sizeX == CHUNK_SIZE)
+						or (dx == -1 and rect.bx == 0)
+						or (dz == 1 and rect.bz + rect.sizeZ == CHUNK_SIZE)
+						or (dz == -1 and rect.bz == 0)
+					)
+				then
+					showFaces(data, part)
+				end
+			end
+		end
+	end
+
+	Faces.show = showFaces
+	Faces.noteSolidChange = noteSolidChange
+	Faces.processChanges = processFaceChanges
+	Faces.refreshEdge = refreshEdgeFaces
+end
+
+--[[
 	Emits one rectangle of identical blocks as a single Part.
 
 	sizeX / sizeZ are in blocks. A 1x1 rectangle is exactly the cube the old
@@ -1165,6 +1433,9 @@ local function emitMeshPart(data, bx, bz, sizeX, sizeZ, by, blockName)
 		sizeZ = sizeZ,
 		by = by,
 	}
+
+	-- Before it is in the world, so a client never receives a covered face.
+	Faces.show(data, part)
 
 	part.Parent = data.model
 	renderedParts += 1
@@ -1454,6 +1725,10 @@ local function applyLayerPlans(plans, immediate)
 					plan.data, rects[base + 1], rects[base + 2], rects[base + 3], rects[base + 4],
 					plan.by, rects[base + 5]
 				) or false
+			else
+				-- Kept as it was, but an edit zone may have opened or closed over
+				-- it, or the ground around it changed.
+				Faces.show(plan.data, plan.parts[r])
 			end
 		end
 	end
@@ -1510,6 +1785,10 @@ local function flushChunks(list, immediate)
 	if #plans > 0 then
 		applyLayerPlans(plans, immediate)
 	end
+
+	-- In the same step as the redraw, so a face an edit uncovers gets its
+	-- images back in the same frame the block beside it goes.
+	Faces.processChanges()
 end
 
 local function flushChunkMesh(data)
@@ -2123,6 +2402,13 @@ local function refreshChunkBorders(cx, cz)
 			-- rebuilt as complete rows rather than sixteen times over.
 			flushChunkMesh(neighbour)
 		end
+
+		-- Its border faces were decided against the heightmap, which knows
+		-- nothing of this chunk's structures or edits. Still generating or not:
+		-- some of its Parts may already be drawn.
+		if neighbour then
+			Faces.refreshEdge(neighbour, -DIR_X[i], -DIR_Z[i])
+		end
 	end
 end
 
@@ -2139,6 +2425,7 @@ end
 ]]
 local function markRemoved(data, cell, by)
 	local currentHeight = data.currentHeight[cell]
+	Faces.noteSolidChange(data, cell, by)
 
 	if by == currentHeight - 1 then
 		local newHeight = currentHeight - 1
@@ -2169,6 +2456,7 @@ local function applyRemoval(data, cell, by)
 	if extra and extra[by] then
 		extra[by] = nil
 		markDisturbed(data, cell, by)
+		Faces.noteSolidChange(data, cell, by)
 		return
 	end
 
@@ -2190,6 +2478,7 @@ local function applyPlacement(data, cell, by, name)
 
 	extra[by] = name
 	markDisturbed(data, cell, by)
+	Faces.noteSolidChange(data, cell, by)
 	if by + 1 > data.topScan[cell] then
 		data.topScan[cell] = by + 1
 	end
@@ -2837,6 +3126,10 @@ local function generateChunk(cx, cz)
 	-- Phase 3: render.
 	phaseStart = chunkCpuSpent(ctx)
 
+	-- From here on the chunk has Parts whose faces depend on its cells, so a
+	-- change to a cell has to reach them. See HIDDEN FACES.
+	data.trackFaces = true
+
 	-- Neighbours that finished before this point are read in full below.
 	data.bordersStale = nil
 	for index = 0, CHUNK_AREA - 1 do
@@ -3279,6 +3572,9 @@ local function onHeartbeatGenerate(dt)
 	processPendingUnloads()
 	trimPoolsIfNeeded()
 	closeExpiredEditZones()
+
+	-- Anything an edit changed without flushing a redraw of its own.
+	Faces.processChanges()
 end
 
 --[[
@@ -3612,6 +3908,7 @@ local function removeResolvedBlock(data, cell, by, refresh)
 
 		extra[by] = nil
 		markDisturbed(data, cell, by)
+		Faces.noteSolidChange(data, cell, by)
 	else
 		local override = data.override[cell]
 		if override and override[by] then

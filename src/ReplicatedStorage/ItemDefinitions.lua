@@ -570,6 +570,9 @@ local ItemDefinitions = {
 	--   maxHealth / maxMana             flat amounts
 	--   abilityDamage / weaponDamage    fractions: 0.15 is +15%
 	--   dash                            dash charges on Q (Leather Boots)
+	--   flight                          seconds of flight per take-off (FlightClient)
+	-- `gearGroup` names a kind only one of may be worn at a time - "Wings":
+	-- InventoryClass refuses a second pair in the accessory column.
 	-- No art exists yet, so `look` has Shared.UI.ItemModels build a simple
 	-- model in code for the slot and the tooltip to show.
 	VitalityAmulet = {
@@ -1566,11 +1569,13 @@ ItemDefinitions.AncientDust = {
 
 ItemDefinitions.AngelWings = {
 	displayName = "Angel Wings",
-	description = "A pair of angel wings mounted on a wearable frame.",
+	description = "A pair of angel wings mounted on a wearable frame. Grants 20 seconds of flight while worn.",
 	rarity = "Epic",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_angel",
+	buffs = { flight = 20 },
+	gearGroup = "Wings",
 	catalogOnly = true,
 }
 
@@ -1685,11 +1690,13 @@ ItemDefinitions.BatWing = {
 
 ItemDefinitions.BatWings = {
 	displayName = "Bat Wings",
-	description = "A pair of bat wings mounted on a wearable frame.",
+	description = "A pair of bat wings mounted on a wearable frame. Grants 13 seconds of flight while worn.",
 	rarity = "Rare",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_bat",
+	buffs = { flight = 13 },
+	gearGroup = "Wings",
 	catalogOnly = true,
 }
 
@@ -2515,11 +2522,13 @@ ItemDefinitions.Deathweed = {
 
 ItemDefinitions.DemonWings = {
 	displayName = "Demon Wings",
-	description = "A pair of demon wings mounted on a wearable frame.",
+	description = "A pair of demon wings mounted on a wearable frame. Grants 19 seconds of flight while worn.",
 	rarity = "Epic",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_demon",
+	buffs = { flight = 19 },
+	gearGroup = "Wings",
 	catalogOnly = true,
 }
 
@@ -2662,11 +2671,13 @@ ItemDefinitions.EyePouch = {
 
 ItemDefinitions.FairyWings = {
 	displayName = "Fairy Wings",
-	description = "A pair of fairy wings mounted on a wearable frame.",
+	description = "A pair of fairy wings mounted on a wearable frame. Grants 14 seconds of flight while worn.",
 	rarity = "Rare",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_fairy",
+	buffs = { flight = 14 },
+	gearGroup = "Wings",
 	catalogOnly = true,
 }
 
@@ -2740,11 +2751,13 @@ ItemDefinitions.Fireblossom = {
 
 ItemDefinitions.FlameWings = {
 	displayName = "Flame Wings",
-	description = "A pair of flame wings mounted on a wearable frame.",
+	description = "A pair of flame wings mounted on a wearable frame. Grants 18 seconds of flight while worn.",
 	rarity = "Epic",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_flame",
+	buffs = { flight = 18 },
+	gearGroup = "Wings",
 	catalogOnly = true,
 }
 
@@ -2899,11 +2912,13 @@ ItemDefinitions.FrostTome = {
 
 ItemDefinitions.FrostWings = {
 	displayName = "Frost Wings",
-	description = "A pair of frost wings mounted on a wearable frame.",
+	description = "A pair of frost wings mounted on a wearable frame. Grants 15 seconds of flight while worn.",
 	rarity = "Rare",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_frost",
+	buffs = { flight = 15 },
+	gearGroup = "Wings",
 	catalogOnly = true,
 }
 
@@ -3515,11 +3530,13 @@ ItemDefinitions.LeadOre = {
 
 ItemDefinitions.LeafWings = {
 	displayName = "Leaf Wings",
-	description = "A pair of leaf wings mounted on a wearable frame.",
+	description = "A pair of leaf wings mounted on a wearable frame. Grants 12 seconds of flight while worn.",
 	rarity = "Rare",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_leaf",
+	buffs = { flight = 12 },
+	gearGroup = "Wings",
 	catalogOnly = true,
 }
 

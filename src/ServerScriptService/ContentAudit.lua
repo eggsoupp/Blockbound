@@ -119,6 +119,7 @@ ContentAudit.KnownItemFields = {
 	miningPower = true, weaponClass = true, weaponSubclass = true, rarity = true, animation = true, iconPose = true, iconAngle = true, iconRoll = true, thumbnail = true,
 	modelId = true, icon = true, description = true, value = true, buffs = true,
 	displayName = true, look = true, dropOnly = true, sprite = true, catalogOnly = true,
+	gearGroup = true,
 }
 
 -- Ids in this range were typed in as placeholders before there was any art;

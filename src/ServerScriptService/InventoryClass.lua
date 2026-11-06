@@ -60,8 +60,10 @@ local function inRange(index)
 	return type(index) == "number" and index % 1 == 0 and index >= 1 and index <= SLOTS
 end
 
--- Whether `itemName` is allowed in `index`, given that slot's restriction.
-local function slotAccepts(index, itemName)
+-- Whether `itemName` is allowed in `index`, given that slot's restriction and,
+-- for a one-of-a-kind accessory such as wings, what else is worn.
+-- `vacatedIndex` is the other slot of the move (see gearGroupClash).
+local function slotAccepts(inventory, index, itemName, vacatedIndex)
 	local restriction = InventoryConstants.getSlotRestriction(index)
 	if not restriction then
 		return true
@@ -71,7 +73,14 @@ local function slotAccepts(index, itemName)
 	end
 
 	local def = ItemDefinitions[itemName]
-	return def ~= nil and def.classification == restriction
+	if def == nil or def.classification ~= restriction then
+		return false
+	end
+
+	local data = inventory.data
+	return not InventoryConstants.gearGroupClash(function(slotIndex)
+		return data[slotIndex] and data[slotIndex].name
+	end, ItemDefinitions, index, itemName, vacatedIndex)
 end
 
 --[[
@@ -122,10 +131,10 @@ function Inventory:SwapSlots(index1, index2)
 		return true, "Binned", discarded
 	end
 
-	if not slotAccepts(index1, item2.name) then
+	if not slotAccepts(self, index1, item2.name, index2) then
 		return false, "Item does not match slot restriction for slot " .. index1
 	end
-	if not slotAccepts(index2, item1.name) then
+	if not slotAccepts(self, index2, item1.name, index1) then
 		return false, "Item does not match slot restriction for slot " .. index2
 	end
 
@@ -166,7 +175,7 @@ function Inventory:TransferStack(srcIndex, dstIndex, amount)
 		return false, "Source slot empty"
 	end
 
-	if not slotAccepts(dstIndex, src.name) then
+	if not slotAccepts(self, dstIndex, src.name, srcIndex) then
 		return false, "Destination slot restriction prevents placing this item"
 	end
 

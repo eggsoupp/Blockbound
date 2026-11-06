@@ -252,7 +252,13 @@ local function takeOut(tool)
 	if not WeaponConfig.get(itemNameFor(tool)) then return end
 	putAway()
 	held = {tool = tool, connections = {
-		tool.Activated:Connect(function() WeaponInput:FireServer(tool, true) end),
+		-- No swings in the air: FlightClient marks the character Flying, and a
+		-- swing held when take-off happens is let go (abilities still cast).
+		tool.Activated:Connect(function()
+			local character = tool.Parent
+			if character and character:GetAttribute("Flying") == true then return end
+			WeaponInput:FireServer(tool, true)
+		end),
 		tool.Deactivated:Connect(function() WeaponInput:FireServer(tool, false) end),
 	}}
 end
@@ -266,6 +272,11 @@ local function watchCharacter(character)
 	end)
 	character.ChildRemoved:Connect(function(child)
 		if held and held.tool == child then putAway() end
+	end)
+	character:GetAttributeChangedSignal("Flying"):Connect(function()
+		if held and character:GetAttribute("Flying") == true then
+			WeaponInput:FireServer(held.tool, false)
+		end
 	end)
 end
 player.CharacterAdded:Connect(watchCharacter)

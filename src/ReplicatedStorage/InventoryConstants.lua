@@ -70,4 +70,44 @@ function InventoryConstants.isGeneralSlot(slotIndex)
 		and not InventoryConstants.isBinSlot(slotIndex)
 end
 
+--[[
+	ONE OF A KIND IN THE ACCESSORY COLUMN
+
+	An item with a `gearGroup` (every pair of wings is "Wings") may be worn
+	only while no other accessory slot holds one of the same group. Shared so
+	the server's Inventory, which enforces it, and the client's drag tint,
+	which only predicts it, cannot disagree.
+
+	  nameAt(index)   the item name in a slot, or nil
+	  definitions     ItemDefinitions (passed in: this module requires nothing)
+	  targetIndex     where `itemName` is about to go
+	  vacatedIndex    the other side of the move, emptied or swapped by it, so
+	                  a pair moving between two accessory slots is not blocked
+	                  by itself
+
+	Returns true when the move would put a second item of the group on.
+]]
+function InventoryConstants.gearGroupClash(nameAt, definitions, targetIndex, itemName, vacatedIndex)
+	if InventoryConstants.getSlotRestriction(targetIndex) ~= "Accessory" then
+		return false
+	end
+	local definition = itemName and definitions[itemName]
+	local group = definition and definition.gearGroup
+	if not group then
+		return false
+	end
+
+	local range = InventoryConstants.AccessoryRange
+	for index = range.first, range.last do
+		if index ~= targetIndex and index ~= vacatedIndex then
+			local other = nameAt(index)
+			local otherDefinition = other and definitions[other]
+			if otherDefinition and otherDefinition.gearGroup == group then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 return InventoryConstants

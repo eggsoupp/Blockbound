@@ -93,6 +93,15 @@ local coordinateRanges = {}
 local lastHoverSlot    = nil
 local inventoryVisible = false
 local inventory        = {}
+
+-- Whether moving `from` onto `to` would wear a second item of a one-of-a-kind
+-- group (wings), either way round, since a swap moves both items. The server
+-- refuses it in InventoryClass; this only keeps the tint and the drop honest.
+local function wearClash(from, to)
+	local function nameAt(index) return slotItemNames[index] end
+	return InventoryConstants.gearGroupClash(nameAt, ItemDefinitions, to, slotItemNames[from], from)
+		or InventoryConstants.gearGroupClash(nameAt, ItemDefinitions, from, slotItemNames[to], to)
+end
 local equippedSlot     = nil -- index 1..9 for hotbar; nil means nothing equipped
 local lastToggleTime = 0
 local lastDisplayedName = nil
@@ -824,7 +833,7 @@ UserInputService.InputChanged:Connect(function(input)
 			local itemName = slotItemNames[sourceIndex]
 			local itemDef = ItemDefinitions[itemName]
 
-			if restriction and (not itemDef or itemDef.classification ~= restriction) then
+			if (restriction and (not itemDef or itemDef.classification ~= restriction)) or wearClash(sourceIndex, overSlot) then
 				slots[overSlot].ImageColor3 = Theme.Color.Bad
 			elseif InventoryConstants.isBinSlot(overSlot) and slotItemNames[overSlot] then
 				-- The bin takes anything, so red here does not mean "refused" -
@@ -860,7 +869,7 @@ UserInputService.InputEnded:Connect(function(input)
 			local restriction = InventoryConstants.getSlotRestriction(targetIndex)
 			local itemName = slotItemNames[sourceIndex]
 			local itemDef = ItemDefinitions[itemName]
-			if restriction and (not itemDef or itemDef.classification ~= restriction) then
+			if (restriction and (not itemDef or itemDef.classification ~= restriction)) or wearClash(sourceIndex, targetIndex) then
 				log("cannot place due to slot restriction")
 			elseif InventoryConstants.isBinSlot(targetIndex) then
 				-- A drop onto the bin is always a REPLACEMENT, never a merge.

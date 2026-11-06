@@ -117,6 +117,12 @@
             "Disabled": false
           }
         },
+        "FlightClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/FlightClient.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
         "BenchClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/BenchClient.client.lua",
           "$properties": {

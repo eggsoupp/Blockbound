@@ -12,6 +12,8 @@ local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
 local GearService = require(ServerScriptService:WaitForChild("GearService"))
+local WeaponShotService = require(ServerScriptService:WaitForChild("WeaponShotService"))
+local WeaponShots = require(Shared.Combat:WaitForChild("WeaponShots"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 --[[
@@ -211,6 +213,13 @@ local function comboFor(player, tool, stats)
 		local hitAt = started + step.hit / combo.speed
 		local endsAt = started + step.hitEnd / combo.speed
 		task.wait(math.max(0, hitAt - os.clock()))
+		-- A legendary throws its shot on the same beat the blade lands; the
+		-- combo's last step throws the empowered one.
+		if valid(token) and WeaponShots.profileFor(stats.name) then
+			local swing = stats.damage * step.damage * GearService.weaponMultiplier(player)
+			local steps = WeaponAnimations.forClass(stats.weaponClass).steps
+			WeaponShotService.fire(player, stats.name, swing, index == #steps)
+		end
 		repeat
 			if not valid(token) then return end
 			count += strike(player, stats, step, hitModels, cap - count) or 0

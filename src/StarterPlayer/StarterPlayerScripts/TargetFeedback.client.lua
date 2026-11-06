@@ -205,8 +205,13 @@ local function confirmSound(position, killed: boolean)
 	if typeof(position) ~= "Vector3" then
 		return
 	end
+	local now = workspace:GetServerTimeNow()
 	local swungAt = player:GetAttribute("WeaponSwingAt")
-	if swungAt and workspace:GetServerTimeNow() - swungAt < SWING_WINDOW then
+	-- A legendary's shot landing has its own impact sound (WeaponShotClient
+	-- marks it just before the damage arrives).
+	local shotAt = player:GetAttribute("WeaponShotHitAt")
+	local shot = shotAt and now - shotAt < 0.15
+	if swungAt and now - swungAt < SWING_WINDOW and not shot then
 		local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
 		local stats = tool and WeaponConfig.get(tool.Name)
 		CombatAudio.play(HIT_SOUNDS[stats and stats.weaponClass] or "melee.Blunt", position, 0.6, 1)

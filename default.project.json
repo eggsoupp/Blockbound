@@ -111,6 +111,12 @@
             "Disabled": false
           }
         },
+        "WeaponShotClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/WeaponShotClient.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
         "BenchClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/BenchClient.client.lua",
           "$properties": {
@@ -266,6 +272,9 @@
       },
       "AbilityVFXLibrary": {
         "$path": "assets/vfx-library/AbilityVFXLibrary.rbxm"
+      },
+      "WeaponShotLibrary": {
+        "$path": "assets/vfx-library/WeaponShotLibrary.rbxm"
       },
       "WorldBorderForceField": {
         "$path": "assets/vfx-library/WorldBorderForceField.rbxm"
@@ -455,6 +464,9 @@
           },
           "CombatCues": {
             "$path": "src/ReplicatedStorage/Shared/Audio/CombatCues.lua"
+          },
+          "CombatRecipes": {
+            "$path": "src/ReplicatedStorage/Shared/Audio/CombatRecipes.lua"
           }
         },
         "UI": {
@@ -594,6 +606,9 @@
           },
           "CreatureRigs": {
             "$path": "src/ReplicatedStorage/Shared/Enemies/CreatureRigs.lua"
+          },
+          "SignusClips": {
+            "$path": "src/ReplicatedStorage/Shared/Enemies/SignusClips.lua"
           }
         },
         "Combat": {
@@ -607,6 +622,9 @@
           },
           "WeaponClasses": {
             "$path": "src/ReplicatedStorage/Shared/Combat/WeaponClasses.lua"
+          },
+          "WeaponShots": {
+            "$path": "src/ReplicatedStorage/Shared/Combat/WeaponShots.lua"
           },
           "SwordCombo": {
             "$path": "src/ReplicatedStorage/Shared/Combat/SwordCombo.lua"
@@ -659,6 +677,15 @@
             },
             "SignusVisuals": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusVisuals.lua"
+            },
+            "SignusRig": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusRig.lua"
+            },
+            "SignusSky": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/SignusSky.lua"
+            },
+            "WeaponShotVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/WeaponShotVFX.lua"
             },
             "BlightborerVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/BlightborerVFX.lua"
@@ -1266,6 +1293,9 @@
       },
       "BossAudio": {
         "$path": "src/ServerScriptService/BossAudio.lua"
+      },
+      "WeaponShotService": {
+        "$path": "src/ServerScriptService/WeaponShotService.lua"
       }
     }
   }

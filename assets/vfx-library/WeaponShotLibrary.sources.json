@@ -1,0 +1,23 @@
+{
+  "pack": "SoulShroud Ultimate VFX Pack V1.9",
+  "sourcePlace": "SoulShroud Ultimate VFX Pack V1.9.rbxl",
+  "destinationPlace": 127569658424596,
+  "format": "Engine-serialized .rbxm built with Rojo 7.7 from `rojo syncback` of the source place file; complete assemblies, no source-library edits, no scripts",
+  "purpose": "Legendary weapon shots (Shared.Abilities.VFX.WeaponShotVFX). Chosen by staging every candidate in Studio edit mode with its emitters running.",
+  "assemblies": [
+    { "name": "LanceStar", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #19", "use": "Light Lance: the radiant star at the head of the shot" },
+    { "name": "LanceBeam", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #8", "use": "Light Lance: its pillar of light, stretched along the flight as the shaft" },
+    { "name": "LanceImpact", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #1", "use": "Light Lance impact" },
+    { "name": "ThunderFlash", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #18", "use": "Thunderveil impact flash" },
+    { "name": "ThunderImpact", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #10", "use": "Thunderveil impact sparks" },
+    { "name": "DragonOrb", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #22", "use": "Dragonfang: the flaming fang orb" },
+    { "name": "DragonImpact", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #43", "use": "Dragonfang impact" },
+    { "name": "ValhallaOrb", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #11", "use": "Valhalla Axe: the blue spirit-flame core of the spinning axe" },
+    { "name": "ValhallaImpact", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #4", "use": "Valhalla Axe impact" },
+    { "name": "Crescents", "path": "Workspace.SoulShroud VFX Packs.Crescents", "use": "Crescent slash decals: the red one is the Bloodmoon wave, the cyan one the Valhalla Axe's spinning edge" },
+    { "name": "BloodImpact", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #22", "use": "Bloodmoon Greatsword impact" },
+    { "name": "VoidOrb", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #3", "use": "Void Reaver: the swirling void orb" },
+    { "name": "VoidImpact", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #32", "use": "Void Reaver impact" }
+  ],
+  "alsoUsed": "Thunderveil's bolt is AbilityVFXLibrary.KiBlast2 stretched short, crackling with AbilityVFXLibrary.LightningSurge."
+}

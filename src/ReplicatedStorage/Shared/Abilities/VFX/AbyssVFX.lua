@@ -32,9 +32,9 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_CALL = CombatAudio.ids.magic_warp
-local SOUND_BOOM = CombatAudio.ids.boom_deep2
-local SOUND_HIT = CombatAudio.ids.synth_blast
+local SOUND_CALL = "cast.dark"
+local SOUND_BOOM = "impact.dark"
+local SOUND_HIT = "impact.heavy"
 
 function VFX.preload()
 	Pack.preload()

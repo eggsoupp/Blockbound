@@ -42,6 +42,13 @@ local WorldFeedback = require(Shared.UI:WaitForChild("WorldFeedback"))
 local Theme = require(Shared.UI:WaitForChild("Theme"))
 local WeaponConfig = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponConfig"))
 local EnemyConfig = require(Shared:WaitForChild("Enemies"):WaitForChild("EnemyConfig"))
+local CombatAudio = require(Shared:WaitForChild("Audio"):WaitForChild("CombatAudio"))
+
+-- What a weapon sounds like connecting, by class (CombatRecipes). A report that
+-- comes this long after the last swing was an ability's hit, which has its own
+-- impact sound already.
+local HIT_SOUNDS = { Sword = "melee.Sword", HeavySword = "melee.HeavySword", Axe = "melee.Axe", Lance = "melee.Lance" }
+local SWING_WINDOW = 0.6
 
 local CombatFeedback = Remotes.wait("CombatFeedback")
 
@@ -192,7 +199,27 @@ local function isBoss(enemyName)
 	return definition ~= nil and definition ~= false and definition.boss == true
 end
 
+-- The confirm the attacker hears: the weapon's own hit if a swing just landed,
+-- and on a kill a pop and the body going down on top of it.
+local function confirmSound(position, killed: boolean)
+	if typeof(position) ~= "Vector3" then
+		return
+	end
+	local swungAt = player:GetAttribute("WeaponSwingAt")
+	if swungAt and workspace:GetServerTimeNow() - swungAt < SWING_WINDOW then
+		local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+		local stats = tool and WeaponConfig.get(tool.Name)
+		CombatAudio.play(HIT_SOUNDS[stats and stats.weaponClass] or "melee.Blunt", position, 0.6, 1)
+	end
+	if killed then
+		CombatAudio.play("melee.kill", position, 0.6, 1)
+	end
+end
+
 CombatFeedback.OnClientEvent:Connect(function(kind, model, position, enemyName, height)
+	if kind == "hit" or kind == "kill" then
+		confirmSound(position, kind == "kill")
+	end
 	if kind == "hit" then
 		WorldFeedback.flash(model, if isBoss(enemyName) then "HitOutline" else "Hit", 0.16)
 	elseif kind == "kill" then

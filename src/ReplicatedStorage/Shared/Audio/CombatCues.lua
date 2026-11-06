@@ -2,50 +2,54 @@
 -- boss cues use the same BossEffect packets as their presentation.
 local Audio = require(script.Parent.CombatAudio)
 local Cues = {}
+-- Each entry is a list of { recipe or bank key, volume, pitch }; CombatRecipes
+-- builds the layered impacts these name.
 local references = {
-	Fireball = {cast={{"ability_magic_poof",.25,1.2}}, release={{"flame_blast3",.3,1.2}}, hit={{"flame_blast1",.5,1.1}}},
-	VioletTempest = {cast={{"ability_magic_cast",.4,.85}}, strike={{"ability_lightning",.5,1},{"boom_deep1",.23,1.2}}},
-	CelestialLance = {cast={{"charge_short",.4,1}}, release={{"plasma_cast",.5,1.1}}, hit={{"energy_blast",.6,1.1},{"metal_pound",.22,1}}},
-	WraithfireOrb = {cast={{"ability_magic_cast",.4,.7}}, release={{"flame_blast3",.4,.8}}, hit={{"flame_blast2",.65,.85},{"synth_blast",.3,.8}}},
-	RiftMaelstrom = {cast={{"air_suction",.4,.8}}, pulse={{"ability_portal",.25,1.1}}, collapse={{"portal_close",.5,.8},{"boom_deep2",.65,.8}}},
+	Fireball = {cast={{"cast.magic",.4,1.15}}, release={{"cast.launch",.45,1.15}}, hit={{"impact.fire",.65,1.05}}},
+	VioletTempest = {cast={{"cast.magic",.45,.85}}, strike={{"impact.lightning",.62,1.05}}},
+	CelestialLance = {cast={{"charge.energy",.45,1}}, release={{"cast.launch",.5,1.2},{"laser_shot",.3,1.1}}, hit={{"impact.energy",.65,1.05}}},
+	WraithfireOrb = {cast={{"cast.dark",.45,.8}}, release={{"cast.launch",.45,.85}}, hit={{"impact.fire",.6,.8},{"impact.dark",.36,1.15}}},
+	RiftMaelstrom = {cast={{"air_suction",.4,.8}}, pulse={{"ability_portal",.25,1.1}}, collapse={{"portal_close",.45,.8},{"impact.dark",.65,.9}}},
 }
 
 local bosses = {
 	Signus = {
-		cast={{"magic_warp",.4,.8}}, beamCharge={{"electric_hum",.4,.75}},
-		beamFire={{"blast_short",.6,.8},{"electric_shock",.35,.8}}, beamImpact={{"plasma_cut",.24,.8}},
-		referenceImpact={{"synth_blast",.6,.8},{"boom_deep2",.4,.9}},
-		crescentBreak={{"glass_break2",.3,1.15}}, lungeImpact={{"explosive_whoosh",.5,.9}},
-		shatter={{"glass_break1",.4,.85}}, impact={{"blast_short",.5,.9}}, erupt={{"boom_deep1",.6,.8}},
-		blackSun={{"lightning_close",.6,.8},{"bass_drop",.65,.85}},
-		totality={{"lightning_close",.65,.7},{"boom_deep2",.65,.7}},
-		crown={{"force_hit",.5,.65}}, nova={{"synth_blast",.65,.65}},
-		death={{"portal_close",.6,.7},{"boom_deep1",.6,.65}},
+		cast={{"signus.cast",.5,1}}, beamCharge={{"electric_hum",.4,.75},{"charge.energy",.35,.7}},
+		beamFire={{"signus.beamFire",.65,1}}, beamImpact={{"signus.beamImpact",.5,1}},
+		referenceImpact={{"signus.spellImpact",.65,1}},
+		thunderStrike={{"signus.thunder",.62,1}},
+		crescentBreak={{"signus.break",.5,1}},
+		shatter={{"signus.break",.55,.9}}, impact={{"impact.heavy",.5,.85}}, erupt={{"signus.erupt",.6,1}},
+		blackSun={{"signus.blackSun",.7,1}},
+		totality={{"signus.totality",.72,1}},
+		crown={{"orb_chime",.4,.7}},
+		step={{"signus.blink",.45,1}},
+		death={{"signus.death",.7,1}},
 		takeoff={{"heavy_whoosh",.3,.85}}, land={{"impact_body",.25,.7}},
 	},
 	Blightborer = {
-		rumble={{"earth_crumble",.35,.6}}, erupt={{"earth_crumble",.55,.85},{"punch_heavy2",.5,.65}},
-		dive={{"alien_bug2",.3,.7},{"earth_crumble",.35,.8}},
-		furrowline={{"earth_crumble",.3,.65}}, furrow={{"ice_chunk",.3,.7}},
-		spit={{"alien_bug1",.45,.8}}, splash={{"water_walk",.5,.7},{"slime_pop",.3,.8}},
-		sinkwarn={{"bass_drop",.4,.7}}, collapse={{"earth_crumble",.6,.65},{"boom_deep1",.55,.8}},
-		burst={{"alien_bug3",.5,.8},{"slime_pop",.35,.8}}, brood={{"alien_chirp",.5,.65}},
-		death={{"monster_roar",.5,.8},{"earth_crumble",.5,.7}},
+		rumble={{"earth_crumble",.35,.6}}, erupt={{"boss.groundErupt",.65,1},{"alien_bug3",.3,.7}},
+		dive={{"alien_bug2",.3,.7},{"boss.rock",.45,.85}},
+		furrowline={{"earth_crumble",.3,.65}}, furrow={{"impact.debris",.4,.8}},
+		spit={{"alien_bug1",.45,.8}}, splash={{"boss.splat",.5,.9}},
+		sinkwarn={{"bass_drop",.4,.7}}, collapse={{"boss.collapse",.7,1}},
+		burst={{"alien_bug3",.45,.8},{"boss.splat",.45,.8}}, brood={{"alien_chirp",.5,.65}},
+		death={{"monster_roar",.5,.8},{"boss.death",.6,.9}},
 	},
 	SlimeEmperor = {
-		pancake={{"air_suction",.35,.8}}, slam={{"water_walk",.6,.7},{"punch_heavy2",.5,.7}},
+		pancake={{"air_suction",.35,.8}}, slam={{"boss.bodySlam",.7,1}},
 		claim={{"bubbles",.5,.7}}, absorb={{"air_suction",.5,.65}}, decree={{"magic_lock",.5,.8}},
-		coronation={{"power_up",.5,.75}}, coronationImpact={{"force_hit",.65,.7},{"boom_deep1",.5,.85}},
-		rain={{"bubbles",.4,1.1}}, rainImpact={{"slime_pop",.4,1.1}}, shift={{"ability_shield_on",.45,.75}},
-		land={{"slime_pop",.22,.65}}, death={{"water_walk",.6,.65},{"ability_shield_off",.4,.7}},
+		coronation={{"power_up",.5,.75}}, coronationImpact={{"impact.grand",.68,.8}},
+		rain={{"bubbles",.4,1.1}}, rainImpact={{"boss.splat",.32,1.1}}, shift={{"ability_shield_on",.45,.75}},
+		land={{"boss.splat",.4,.7},{"body_fall1",.35,.6}}, death={{"boss.bodySlam",.6,.8},{"ability_shield_off",.4,.7}},
 	},
 	AllSeeingEye = {
-		charge={{"heavy_whoosh",.45,.7}}, dash={{"explosive_whoosh",.45,.8}},
-		gaze={{"electric_hum",.45,.8}}, beam={{"electric_shock",.5,.8}},
-		summon={{"alien_chirp",.5,.7}}, uproot={{"earth_crumble",.5,.7}},
-		rockImpact={{"metal_crash",.4,.7}}, tears={{"bubbles",.45,.8}}, tearImpact={{"slime_pop",.4,.7}},
-		transform={{"monster_roar",.55,.85},{"force_hit",.45,.65}},
-		death={{"monster_roar",.5,.65},{"poof_punch",.6,.6}},
+		charge={{"heavy_whoosh",.45,.7}}, dash={{"boss.dash",.6,1}},
+		gaze={{"electric_hum",.45,.8}}, beam={{"electric_shock",.45,.8},{"rail_fire",.45,.85}},
+		summon={{"alien_chirp",.5,.7}}, uproot={{"boss.groundErupt",.55,1.05}},
+		rockImpact={{"boss.rock",.55,1}}, tears={{"bubbles",.45,.8}}, tearImpact={{"boss.splat",.4,.9}},
+		transform={{"boss.transform",.7,1}},
+		death={{"monster_roar",.45,.65},{"boss.death",.65,1}},
 	},
 }
 Cues.ReferenceProfiles, Cues.BossProfiles = references, bosses
@@ -79,8 +83,9 @@ function Cues.boss(payload)
 	local profile = bosses[payload.boss]
 	local layers = profile and profile[payload.kind]
 	if not layers or workspace:GetServerTimeNow()-(payload.startedAt or 0)>.65 then return end
+	-- A Mirror Veil decoy broken by a blow shatters; a spell on the ground only cracks.
 	if payload.boss=="Signus" and payload.kind=="crescentBreak" and payload.struck then
-		layers={{"glass_break1",.4,.9}}
+		layers={{"signus.shatter",.6,1}}
 	end
 	local p = payload.position
 	local bucket = payload.boss..":"..payload.kind..":"..math.floor(p.X/24)..":"..math.floor(p.Z/24)

@@ -47,7 +47,7 @@ local Sheets = {
 }
 
 local SOUND_GATHER = CombatAudio.ids.bubbles
-local SOUND_SPLASH = CombatAudio.ids.water_walk
+local SOUND_SPLASH = "impact.water"
 local SOUND_BOOM = CombatAudio.ids.boom_deep1
 
 function VFX.preload()

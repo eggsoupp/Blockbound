@@ -343,8 +343,23 @@ local function makeChannel(name: string)
 	return channel
 end
 
+-- Ducking: a heavy hit dips the music for a moment (CombatAudio recipes). It
+-- holds for `hold` seconds and comes back over DUCK_RELEASE. A deeper duck
+-- arriving during a shallower one takes over; a shallower one is ignored.
+local DUCK_RELEASE = 0.8
+local duck = { depth = 0, at = -math.huge, hold = 0 }
+
+local function duckFactor(): number
+	local t = os.clock() - duck.at
+	local depth = duck.depth
+	if t > duck.hold then
+		depth *= math.max(0, 1 - (t - duck.hold) / DUCK_RELEASE)
+	end
+	return 1 - depth
+end
+
 local function applyVolume(channel)
-	local level = volume * channel.gain
+	local level = volume * channel.gain * duckFactor()
 	if channel.sound.Volume ~= level then
 		channel.sound.Volume = level
 	end
@@ -550,6 +565,15 @@ end
 
 function Music.getVolume(): number
 	return volume
+end
+
+-- Dips the music by `depth` (0..1 of its level) for `hold` seconds, then lets
+-- it back. See duckFactor.
+function Music.duck(depth: number, hold: number?)
+	depth = math.clamp(tonumber(depth) or 0, 0, 0.9)
+	if depth >= 1 - duckFactor() then
+		duck.depth, duck.at, duck.hold = depth, os.clock(), hold or 0.3
+	end
 end
 
 --[[

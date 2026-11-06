@@ -31,8 +31,8 @@ local Sheets = {
 }
 
 local SOUND_SWISH = CombatAudio.ids.plasma_trail
-local SOUND_BOOM = CombatAudio.ids.flame_blast3
-local SOUND_HIT = CombatAudio.ids.flame_blast5
+local SOUND_BOOM = "impact.fire"
+local SOUND_HIT = "impact.explosion"
 
 function VFX.preload()
 	if preloaded then return end

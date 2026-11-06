@@ -40,8 +40,8 @@ local Sheets = {
 }
 
 local SOUND_DRAW = CombatAudio.ids.charge_short
-local SOUND_THUNK = CombatAudio.ids.impact_body
-local SOUND_FINALE = CombatAudio.ids.heavy_whoosh
+local SOUND_THUNK = "impact.light"
+local SOUND_FINALE = "impact.heavy"
 
 function VFX.preload()
 	if preloaded then return end

@@ -34,6 +34,7 @@ local PlayerSettings = require(Shared.UI:WaitForChild("PlayerSettings"))
 local Responsive = require(Shared.UI:WaitForChild("Responsive"))
 local MenuState = require(Shared.UI:WaitForChild("MenuState"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
+local CombatAudio = require(Shared:WaitForChild("Audio"):WaitForChild("CombatAudio"))
 
 local CombatStats = Remotes.wait("CombatStats", 30)
 
@@ -340,9 +341,20 @@ end
 	Both halves can be switched off in the settings window (Shared.UI.
 	PlayerSettings: hitFlash and damageNumbers). The bar itself always moves.
 ]]
+-- Being hurt is heard as well as seen: a dull low thump, heavier for a big
+-- hit, never the bright crack of your own weapon. Fast ticks (a beam) share one.
+local HURT_GAP = 0.18
+local lastHurtSound = -math.huge
+
 local function flashDamage(damage, maxHealth)
 	local severity = math.clamp(damage / math.max(1, (maxHealth or 100) * 0.25), 0.15, 1)
 	local peak = 1 - severity * 0.55
+
+	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if root and os.clock() - lastHurtSound >= HURT_GAP then
+		lastHurtSound = os.clock()
+		CombatAudio.play(if severity >= 0.5 then "player.hurtHeavy" else "player.hurt", root, 0.45 + 0.25 * severity, 1)
+	end
 
 	if PlayerSettings.get("hitFlash") then
 		for _, strip in ipairs(edges) do

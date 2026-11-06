@@ -303,7 +303,7 @@ local function render(payload, scope, previewAge)
 		local charge = CombatAudio.play("charge_short",ground,.4,.8)
 		if charge then scope:add(charge) end
 		scope:delay(Plan.Tuning.Windup-initialAge,function()
-			local fall = CombatAudio.play("explosive_whoosh",ground,.45,.8)
+			local fall = CombatAudio.play("whoosh.heavy",ground,.6,.75)
 			if fall then scope:add(fall) end
 		end)
 	end
@@ -337,8 +337,8 @@ local function render(payload, scope, previewAge)
 			impacted = true
 			warning:Clear(); warningSwirl:Clear()
 			if age < .3 and previewAge == nil then
-				CombatAudio.play("boom_deep1",impact,.85,.8,false,{range=360,near=28})
-				CombatAudio.play("bass_drop",impact,.6,.9,false,{range=360,near=28})
+				CombatAudio.play("impact.explosion",impact,.85,.8,false,{range=360,near=28})
+				CombatAudio.play("impact.slam",impact,.5,.75,false,{range=360,near=28});CombatAudio.play("distant_boom",impact,.4,.9,false,{range=360,near=28})
 			end
 		end
 		flashLight.Brightness = if age >= 0 then math.exp(-age*8)*8 else 0

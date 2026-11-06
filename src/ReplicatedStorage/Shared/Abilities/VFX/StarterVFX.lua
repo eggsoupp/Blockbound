@@ -117,7 +117,7 @@ local function fireBlast(scope,folder,point,direction,tint,silent)
 	mount("Impact45",1.1):burst(1)
 	mount("Impact1",1.4):burst(.9)
 	mount("FireVFX5",.95):burst(.45)
-	if not silent then sound(p,ImportedAudio.ability_impact_heavy,.6,1.25) end
+	if not silent then sound(p,"impact.fire",.62,1.1) end
 	ImpactFX.shake(point,1.4,.4,70);ImpactFX.punch(point,4,.35,70)
 	-- Second beat: the fireball itself rolls out, then breaks into embers and smoke.
 	scope:delay(.17,function()
@@ -125,7 +125,7 @@ local function fireBlast(scope,folder,point,direction,tint,silent)
 		mount("FireVFX8",1.8):burst(1)
 		mount("Impact20",1.15):burst(1)
 		Pack.mount(scope,folder,"Rocks",{cframe=CFrame.new(point),scale=.5,tint=tint,brightness=2}):burst(1)
-		if not silent then sound(p,ImportedAudio.ability_impact_heavy,.5,.8) end
+		if not silent then sound(p,"impact.explosion",.42,.95) end
 	end)
 	local smoke=Color3.fromRGB(22,14,14)
 	scope:delay(.34,function()
@@ -152,7 +152,7 @@ local function waterSplash(scope,folder,point,direction,tint)
 	local drops=mount("Droplets69",.55,36)
 	drops:stream(true)
 	scope:delay(.3,function() drops:stream(false) end)
-	sound(p,CombatAudio.ids.water_walk,.6,1.3)
+	sound(p,"impact.water",.6,1.15)
 	ImpactFX.shake(point,.9,.3,60);ImpactFX.punch(point,2,.3,60)
 end
 
@@ -211,7 +211,7 @@ local function projectile(payload,scope,folder,age)
 			body:rescale(shot.body[2])
 			glow:stream(true);tail:beamsOn(true);body:beamsOn(true)
 			Pack.mount(scope,folder,shot.muzzle[1],{cframe=frame,scale=shot.muzzle[2],tint=shot.tint,brightness=2}):burst(shot.muzzle[3])
-			sound(p,CombatAudio.ids.swing_air,.3,shot.launch)
+			sound(p,"whoosh.light",.36,shot.launch)
 		end
 		if launched then tail:stretch(at,at-direction*math.min(travel,shot.length)) end
 		if elapsed>tuning.windup+tuning.range/tuning.speed+.3 then stop({position=p.Position}) end
@@ -227,7 +227,7 @@ local function wind(payload,scope,folder,at)
 	local root=host(folder,"WindGather",origin+direction*2,direction)
 	burst("Wind",root,1,{Size=ns(4,1),Lifetime=NumberRange.new(.16),Speed=NumberRange.new(.001),SpreadAngle=Vector2.zero,EmissionDirection=Enum.NormalId.Front,Color=ColorSequence.new(WIND),Transparency=ns(.7,.2)})
 	at(Plan.WindBurst.windup,function()
-		sound(root,CombatAudio.ids.poof_punch,.5,.8)
+		sound(root,"whoosh.heavy",.55,.9)
 		-- Fixed emitter stations and widening arcs read as a short shove, not a ball.
 		for i=1,3 do
 			local p=host(folder,"WindFan",origin+direction*(2+i*3),direction)
@@ -259,7 +259,7 @@ local function echo(payload,scope,folder,at)
 		ring(to,FOAM,2,9,.35)
 		burst("Embers",to,16,{Size=ns(.25,0),Lifetime=NumberRange.new(.3,.6),Speed=NumberRange.new(5,15),Color=ColorSequence.new(FOAM,ECHO),LightEmission=1})
 	end)
-	sound(from,CombatAudio.ids.magic_warp,.35,1.2)
+	sound(from,"cast.blink",.45,1.1)
 	scope:add(RunService.Heartbeat:Connect(function()
 		beam.Transparency=NumberSequence.new(math.clamp(.2+(workspace:GetServerTimeNow()-payload.startedAt)/.35,0,1))
 	end))
@@ -285,7 +285,7 @@ local function wall(payload,scope,folder,at)
 		for _,v in ipairs(movers) do
 			burst("Smoke",v.host,3,{Size=ns(2,4),Lifetime=NumberRange.new(.35,.6),Speed=NumberRange.new(3,8),Color=ColorSequence.new(EARTH),Transparency=ns(.5,1),LightEmission=.1})
 		end
-		if movers[1] then sound(movers[1].host,CombatAudio.ids.metal_pound,.4,.85) end
+		if movers[1] then sound(movers[1].host,"impact.slam",.6,1) end
 	end)
 end
 

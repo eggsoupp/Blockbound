@@ -46,8 +46,8 @@ local Sheets = {
 }
 
 local SOUND_GUST = CombatAudio.ids.poof_air
-local SOUND_BLOOM = CombatAudio.ids.alien_chirp
-local SOUND_FINALE = CombatAudio.ids.sparkle
+local SOUND_BLOOM = "orb_chime"
+local SOUND_FINALE = "impact.light"
 
 function VFX.preload()
 	if preloaded then return end

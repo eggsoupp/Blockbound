@@ -33,9 +33,9 @@ local Sheets = {
 }
 
 local SOUND_CHIME = CombatAudio.ids.ability_magic_glow
-local SOUND_SWISH = CombatAudio.ids.sword_swing
-local SOUND_BOOM = CombatAudio.ids.energy_blast
-local SOUND_HIT = CombatAudio.ids.sword_hit
+local SOUND_SWISH = "whoosh.blade"
+local SOUND_BOOM = "impact.grand"
+local SOUND_HIT = "impact.blade"
 
 function VFX.preload()
 	if preloaded then return end

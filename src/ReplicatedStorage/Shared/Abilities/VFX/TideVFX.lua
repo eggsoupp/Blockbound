@@ -30,8 +30,8 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_WATER = CombatAudio.ids.water_walk
-local SOUND_SWISH = CombatAudio.ids.swing_air
+local SOUND_WATER = "impact.water"
+local SOUND_SWISH = "whoosh.light"
 
 function VFX.preload()
 	if preloaded then return end

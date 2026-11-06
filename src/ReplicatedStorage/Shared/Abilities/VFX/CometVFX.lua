@@ -29,8 +29,8 @@ local live = 0
 local preloaded = false
 
 local SOUND_SWISH = CombatAudio.ids.plasma_trail
-local SOUND_BOOM = CombatAudio.ids.blast_short
-local SOUND_HIT = CombatAudio.ids.ice_chunk
+local SOUND_BOOM = "impact.explosion"
+local SOUND_HIT = "impact.ice"
 
 function VFX.preload()
 	Pack.preload()

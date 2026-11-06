@@ -178,10 +178,13 @@ function Kit.preload(textures, sounds)
 			decal.Texture = id
 			table.insert(assets, decal)
 		end
-		for _, id in ipairs(sounds or {}) do
-			local sound = Instance.new("Sound")
-			sound.SoundId = id
-			table.insert(assets, sound)
+		for _, key in ipairs(sounds or {}) do
+			-- A recipe preloads every clip it layers.
+			for _, id in ipairs(CombatAudio.idsOf(key)) do
+				local sound = Instance.new("Sound")
+				sound.SoundId = id
+				table.insert(assets, sound)
+			end
 		end
 		pcall(function() game:GetService("ContentProvider"):PreloadAsync(assets) end)
 		for _, asset in ipairs(assets) do asset:Destroy() end

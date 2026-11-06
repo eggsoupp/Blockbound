@@ -8,6 +8,11 @@ local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local WeaponAnimations = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponAnimations"))
 local WeaponInput = require(Shared:WaitForChild("Net"):WaitForChild("Remotes")).wait("WeaponInput")
 local WeaponConfig = require(Shared:WaitForChild("Combat"):WaitForChild("WeaponConfig"))
+local CombatAudio = require(Shared:WaitForChild("Audio"):WaitForChild("CombatAudio"))
+
+-- The swing's air, by weapon class (CombatRecipes); anything else keeps the
+-- plain tool swing.
+local SWING_SOUNDS = { Sword = "whoosh.blade", HeavySword = "whoosh.heavy", Axe = "whoosh.heavy", Lance = "whoosh.light" }
 
 local player = Players.LocalPlayer
 
@@ -203,7 +208,18 @@ local function watchAnimator(character)
 					while track.IsPlaying and track.TimePosition < swing.swingTime do
 						RunService.RenderStepped:Wait()
 					end
-					if track.IsPlaying then Sounds.play("tool.swing") end
+					if track.IsPlaying then
+						-- TargetFeedback reads this to tell a weapon's hit from an ability's.
+						player:SetAttribute("WeaponSwingAt", workspace:GetServerTimeNow())
+						local tool = character:FindFirstChildOfClass("Tool")
+						local stats = tool and WeaponConfig.get(tool.Name)
+						local key = stats and SWING_SOUNDS[stats.weaponClass]
+						if key then
+							CombatAudio.play(key, character:FindFirstChild("HumanoidRootPart"), 0.45, 1)
+						else
+							Sounds.play("tool.swing")
+						end
+					end
 				end)
 			end
 		end

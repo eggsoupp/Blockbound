@@ -36,8 +36,8 @@ local Sheets = {
 	},
 }
 
-local SOUND_SWING = CombatAudio.ids.energy_sword
-local SOUND_BURST = CombatAudio.ids.punch_heavy2
+local SOUND_SWING = "whoosh.blade"
+local SOUND_BURST = "impact.energy"
 
 function VFX.preload()
 	if preloaded then return end

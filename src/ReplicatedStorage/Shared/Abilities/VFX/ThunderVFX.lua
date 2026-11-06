@@ -27,8 +27,8 @@ local live = 0
 local preloaded = false
 
 local SOUND_RUMBLE = CombatAudio.ids.electric_hum
-local SOUND_BOOM = CombatAudio.ids.lightning_close
-local SOUND_HIT = CombatAudio.ids.electric_shock
+local SOUND_BOOM = "impact.lightning"
+local SOUND_HIT = "zap_quick"
 
 function VFX.preload()
 	Pack.preload()

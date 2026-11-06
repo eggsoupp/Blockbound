@@ -33,7 +33,7 @@ local Sheets = {
 }
 
 local SOUND_CHARGE = CombatAudio.ids.power_up
-local SOUND_BOOM = CombatAudio.ids.flame_blast4
+local SOUND_BOOM = "impact.fire"
 
 function VFX.preload()
 	if preloaded then return end

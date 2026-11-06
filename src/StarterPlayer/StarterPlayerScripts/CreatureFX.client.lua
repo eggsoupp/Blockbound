@@ -32,7 +32,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
+local CombatAudio = require(Shared:WaitForChild("Audio"):WaitForChild("CombatAudio"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Library = require(Shared:WaitForChild("Enemies"):WaitForChild("CreatureParticles"))
 local Rigs = require(Shared:WaitForChild("Enemies"):WaitForChild("CreatureRigs"))
@@ -104,13 +104,10 @@ function Kit.opacity(beam, value)
 	if beam.Enabled ~= on then beam.Enabled = on end
 end
 
+-- Through CombatAudio, so a creature's moves share the combat bank's levels,
+-- recipes, voice cap and the SFX slider. `id` is a recipe, a bank key or an id.
 function Kit.sound(parent, id, volume, pitch)
-	local s = Instance.new("Sound")
-	s.SoundId, s.Volume, s.PlaybackSpeed = id, Sounds.volume(volume), pitch or 1
-	s.RollOffMinDistance, s.RollOffMaxDistance = 12, 180
-	s.Parent = parent
-	s:Play()
-	return s
+	return CombatAudio.play(id, parent, volume, pitch, false, { range = 180 })
 end
 
 -- Fetches the textures and sounds in the background, each through a Decal or
@@ -123,10 +120,12 @@ function Kit.preload(library, sounds)
 			decal.Texture = data.Texture
 			table.insert(assets, decal)
 		end
-		for _, id in ipairs(sounds) do
-			local sound = Instance.new("Sound")
-			sound.SoundId = id
-			table.insert(assets, sound)
+		for _, key in ipairs(sounds) do
+			for _, id in ipairs(CombatAudio.idsOf(key)) do
+				local sound = Instance.new("Sound")
+				sound.SoundId = id
+				table.insert(assets, sound)
+			end
 		end
 		pcall(function() game:GetService("ContentProvider"):PreloadAsync(assets) end)
 		for _, asset in ipairs(assets) do asset:Destroy() end
@@ -134,8 +133,6 @@ function Kit.preload(library, sounds)
 end
 
 local CreatureFX = Remotes.wait("CreatureFX")
-
-local SOUND_HIT = "rbxasset://sounds/hit.wav"
 
 local LASER_RED = Color3.fromRGB(255, 45, 30)
 local LASER_HOT = Color3.fromRGB(255, 110, 80)
@@ -145,7 +142,10 @@ local folder = Instance.new("Folder")
 folder.Name = "CreatureFX"
 folder.Parent = workspace
 
-Kit.preload(Library, { SOUND_HIT, "rbxassetid://5540424854" })
+Kit.preload(Library, {
+	"creature.hit", "impact.slam", "impact.ice", "impact.blade", "impact.heavy", "impact.explosion",
+	"whoosh.heavy", "whoosh.blade", "whoosh.light", "cast.blink", "boss.splat", "boss.groundErupt",
+})
 
 local function emitter(kind, parent, props)
 	return Kit.emitter(Library, kind, parent, props)
@@ -405,7 +405,7 @@ function handlers.sweep(model, eye: Vector3, base: Vector3, pitch: number, from:
 	local a0, a1 = Kit.attachment(host), Kit.attachment(far)
 	local layers = laserBeam(host, a0, a1, 1)
 	local emitters, eyeLight, endLight = laserEnds(host, far)
-	Kit.sound(host, SOUND_HIT, 0.5, 0.55)
+	Kit.sound(host, "zap_quick", 0.45, 0.8)
 
 	during(seconds + 0.25, function(elapsed)
 		local t = math.clamp(elapsed / seconds, 0, 1)
@@ -447,7 +447,7 @@ function handlers.laser(model, eye: Vector3, finish: Vector3, seconds: number)
 		{ "BoomSparks", 22, { Color = ColorSequence.new(Color3.fromRGB(255, 120, 60)), Speed = NumberRange.new(30, 45) } },
 		{ "Puff", 4, { Color = ColorSequence.new(SCORCH), Size = NumberSequence.new(3) } },
 	}, 2)
-	Kit.sound(far, SOUND_HIT, 0.6, 0.6)
+	Kit.sound(far, "laser_shot", 0.5, 0.8)
 
 	during(seconds + 0.2, function(elapsed)
 		local fade = math.clamp(1 - (elapsed - seconds * 0.6) / (seconds * 0.4 + 0.2), 0, 1)
@@ -589,7 +589,7 @@ function handlers.splash(id: string, point: Vector3, styleName: string?)
 	end
 	local style = STYLES[styleName or "snow"] or STYLES.snow
 	local host = burst(point, style.burst, 2)
-	Kit.sound(host, SOUND_HIT, 0.4, style.pitch)
+	Kit.sound(host, "boss.splat", 0.45, style.pitch)
 end
 
 -- The broom spin: a ring of snow thrown out to its reach, and the broom's
@@ -630,7 +630,7 @@ function handlers.spin(model, seconds: number, radius: number)
 	end, function()
 		Debris:AddItem(at, 0.4)
 	end)
-	Kit.sound(part, SOUND_HIT, 0.5, 0.8)
+	Kit.sound(part, "whoosh.heavy", 0.5, 1)
 end
 
 -- ---------------------------------------------------------------------------
@@ -681,7 +681,6 @@ end
 -- ---------------------------------------------------------------------------
 
 local DUST = Color3.fromRGB(150, 120, 85)
-local SOUND_BOOM = "rbxassetid://5540424854"
 
 -- The chest pound: a ring of pressure off its chest with every beat.
 function handlers.roar(model, seconds: number)
@@ -707,7 +706,7 @@ function handlers.roar(model, seconds: number)
 	end, function()
 		Debris:AddItem(at, 0.5)
 	end)
-	Kit.sound(part, SOUND_HIT, 0.6, 0.45)
+	Kit.sound(part, "monster_roar", 0.45, 1.05)
 end
 
 -- The slam: a ring of dust thrown out to its reach and a shockwave.
@@ -724,7 +723,7 @@ function handlers.slam(position: Vector3, radius: number)
 		{ "BoomSparks", 18, { Color = ColorSequence.new(DUST), Speed = NumberRange.new(25, 40), LightEmission = 0 } },
 		{ "Puff", 5, { Color = ColorSequence.new(DUST), Size = NumberSequence.new(4.5), Speed = NumberRange.new(1, 3) } },
 	}, 3)
-	Kit.sound(host, SOUND_BOOM, 0.8, 0.8)
+	Kit.sound(host, "impact.slam", 0.65, 0.95)
 end
 
 -- ---------------------------------------------------------------------------
@@ -769,7 +768,7 @@ function handlers.frostspike(point: Vector3, radius: number)
 		{ "Puff", 5, { Color = ColorSequence.new(Color3.fromRGB(235, 245, 255)), Size = NumberSequence.new(2.4), Speed = NumberRange.new(3, 6), SpreadAngle = Vector2.new(70, 70) } },
 		{ "BoomSparks", 10, { Color = ColorSequence.new(FROST), Speed = NumberRange.new(20, 30), Acceleration = Vector3.new(0, -40, 0) } },
 	}, 2)
-	Kit.sound(host, SOUND_HIT, 0.5, 1.5)
+	Kit.sound(host, "impact.ice", 0.55, 1.05)
 end
 
 -- ---------------------------------------------------------------------------
@@ -807,7 +806,7 @@ function handlers.orbpop(position: Vector3)
 		{ "Flare", 1, { Color = ColorSequence.new(HOLY), Size = NumberSequence.new(4), Lifetime = NumberRange.new(0.3) } },
 		{ "Glints", 10, { Color = ColorSequence.new(HOLY), Size = NumberSequence.new(0.8), Speed = NumberRange.new(4, 8), SpreadAngle = Vector2.new(180, 180) } },
 	}, 1.5)
-	Kit.sound(host, SOUND_HIT, 0.4, 1.8)
+	Kit.sound(host, "slime_pop", 0.45, 1.2)
 end
 
 -- Mending: a ring of light round the cleric while it calls the heal.
@@ -878,7 +877,7 @@ function handlers.impale(point: Vector3, radius: number)
 		{ "Puff", 6, { Color = ColorSequence.new(Color3.fromRGB(70, 50, 80)), Size = NumberSequence.new(2.2), Speed = NumberRange.new(3, 6), SpreadAngle = Vector2.new(70, 70) } },
 		{ "BoomSparks", 10, { Color = ColorSequence.new(ICHOR), Speed = NumberRange.new(18, 28), LightEmission = 0.6 } },
 	}, 2)
-	Kit.sound(host, SOUND_HIT, 0.6, 0.5)
+	Kit.sound(host, "impact.blade", 0.55, 0.8)
 end
 
 -- ---------------------------------------------------------------------------
@@ -963,7 +962,7 @@ function handlers.blink(position: Vector3)
 	during(0.4, function(elapsed)
 		glow.Brightness = 3 * (1 - elapsed / 0.4)
 	end)
-	Kit.sound(host, SOUND_BOOM, 0.5, 1.6)
+	Kit.sound(host, "cast.blink", 0.45, 1.2)
 end
 
 -- The halberd's sweep: a fiery slash in front of it.
@@ -982,7 +981,7 @@ function handlers.cleave(model)
 	}):Emit(1)
 	emitter("BoomSparks", at, { Color = ColorSequence.new(Color3.fromRGB(255, 190, 90)) }):Emit(8)
 	Debris:AddItem(at, 1)
-	Kit.sound(part, SOUND_HIT, 0.5, 0.7)
+	Kit.sound(part, "whoosh.blade", 0.5, 0.85)
 end
 
 -- ---------------------------------------------------------------------------
@@ -1004,7 +1003,7 @@ function handlers.clank(model)
 		{ "BoomSparks", 10, { Color = ColorSequence.new(Color3.fromRGB(255, 230, 170)) } },
 		{ "Glints", 4, { Color = ColorSequence.new(Color3.fromRGB(220, 170, 255)), Size = NumberSequence.new(0.8) } },
 	}, 1.5)
-	Kit.sound(host, SOUND_HIT, 0.6, 1.9)
+	Kit.sound(host, "metal_crack", 0.45, 1)
 end
 
 -- The pincers snapping shut: a short slash where they meet, and a crunch
@@ -1021,7 +1020,7 @@ function handlers.snap(model, caught: boolean?)
 		table.insert(layers, { "Puff", 3, { Color = ColorSequence.new(Color3.fromRGB(120, 160, 110)), Size = NumberSequence.new(1.6), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(180, 180) } })
 	end
 	local host = burst(clawFront(model), layers, 1.5)
-	Kit.sound(host, SOUND_HIT, if caught then 0.7 else 0.4, if caught then 0.6 else 1.4)
+	Kit.sound(host, if caught then "creature.hit" else "whoosh.light", if caught then 0.6 else 0.4, if caught then 0.9 else 1.3)
 end
 
 -- ---------------------------------------------------------------------------
@@ -1054,8 +1053,8 @@ function handlers.shriek(model)
 	burst(cframe.Position - Vector3.new(0, size.Y * 0.5 - 0.4, 0), {
 		{ "Puff", 8, { Color = ColorSequence.new(Color3.fromRGB(70, 60, 90)), Size = NumberSequence.new(2.6), Speed = NumberRange.new(4, 9), SpreadAngle = Vector2.new(80, 10) } },
 	}, 2)
-	Kit.sound(host, SOUND_BOOM, 0.6, 2.2)
-	Kit.sound(host, SOUND_HIT, 0.5, 0.35)
+	Kit.sound(host, "alien_bug3", 0.45, 1.2)
+	Kit.sound(host, "alien_bug1", 0.4, 0.8)
 end
 
 -- The head lashed down: a slash where it lands.
@@ -1072,7 +1071,7 @@ function handlers.lash(model)
 		Color = ColorSequence.new(Color3.fromRGB(170, 140, 230)), Size = NumberSequence.new(5), LockedToPart = false,
 	}):Emit(1)
 	Debris:AddItem(at, 1)
-	Kit.sound(part, SOUND_HIT, 0.5, 0.5)
+	Kit.sound(part, "whoosh.light", 0.5, 0.8)
 end
 
 -- ---------------------------------------------------------------------------
@@ -1087,7 +1086,7 @@ function handlers.chop(position: Vector3)
 		{ "Puff", 9, { Color = ColorSequence.new(DUST), Size = NumberSequence.new(2.8), Speed = NumberRange.new(4, 9), SpreadAngle = Vector2.new(70, 20) } },
 		{ "BoomSparks", 10, { Color = ColorSequence.new(STEEL) } },
 	}, 2)
-	Kit.sound(host, SOUND_BOOM, 0.6, 1.2)
+	Kit.sound(host, "impact.heavy", 0.5, 1.1)
 end
 
 -- The whirlwind: steel slashes all the way round it while it turns, and sand
@@ -1126,7 +1125,7 @@ function handlers.whirl(model, seconds: number, radius: number)
 		Debris:AddItem(at, 0.5)
 		Debris:AddItem(feet, 1)
 	end)
-	Kit.sound(part, SOUND_HIT, 0.5, 0.6)
+	Kit.sound(part, "whoosh.blade", 0.5, 0.8)
 end
 
 -- The thrown axe in flight: a glint trail off the blade and a whoosh.
@@ -1139,7 +1138,7 @@ function handlers.axeflight(axe, seconds: number)
 		Enabled = true, Rate = 40, Color = ColorSequence.new(STEEL), Size = NumberSequence.new(0.7), LockedToPart = false,
 	})
 	Debris:AddItem(at, seconds)
-	Kit.sound(axe, SOUND_HIT, 0.4, 1.7)
+	Kit.sound(axe, "whoosh.light", 0.4, 1.4)
 end
 
 -- ---------------------------------------------------------------------------
@@ -1152,7 +1151,7 @@ function handlers.poof(position: Vector3)
 		{ "Puff", 10, { Color = ColorSequence.new(Color3.fromRGB(190, 185, 205)), Size = NumberSequence.new(3.2), Speed = NumberRange.new(2, 5), SpreadAngle = Vector2.new(180, 180), Lifetime = NumberRange.new(0.8, 1.2) } },
 		{ "Glints", 8, { Color = ColorSequence.new(Color3.fromRGB(255, 240, 160)), Size = NumberSequence.new(0.9) } },
 	}, 2.5)
-	Kit.sound(host, SOUND_HIT, 0.4, 2.4)
+	Kit.sound(host, "poof_air", 0.45, 1.2)
 end
 
 -- ---------------------------------------------------------------------------
@@ -1187,7 +1186,7 @@ function handlers.blizzard(id: string, center: Vector3, radius: number, seconds:
 	})
 	local storm = { sky = sky, ground = ground, emitters = { snow, drift, flakes } }
 	blizzards[id] = storm
-	Kit.sound(ground, SOUND_HIT, 0.4, 0.3)
+	Kit.sound(ground, "whoosh.heavy", 0.35, 0.6)
 	task.delay(seconds + 0.5, function()
 		if blizzards[id] == storm then
 			handlers.blizzardend(id)
@@ -1227,7 +1226,7 @@ function handlers.parry(model)
 		{ "Flare", 1, { Color = ColorSequence.new(Color3.fromRGB(255, 250, 230)), Size = NumberSequence.new(4) } },
 		{ "BoomSparks", 16, { Color = ColorSequence.new(Color3.fromRGB(255, 230, 160)) } },
 	}, 1.5)
-	Kit.sound(host, SOUND_HIT, 0.7, 2.2)
+	Kit.sound(host, "metal_crack", 0.55, 1.2)
 end
 
 -- One cut of the blades: a slash across in front of it.
@@ -1242,7 +1241,7 @@ function handlers.cut(model)
 		Color = ColorSequence.new(Color3.fromRGB(240, 245, 255)), Size = NumberSequence.new(4.5), LockedToPart = false,
 	}):Emit(1)
 	Debris:AddItem(at, 1)
-	Kit.sound(part, SOUND_HIT, 0.45, 1.5)
+	Kit.sound(part, "impact.blade", 0.45, 1.2)
 end
 
 -- The dash: dust kicked off its heels for as long as it runs, and a glint
@@ -1281,7 +1280,7 @@ function handlers.collapse(position: Vector3)
 	local host = burst(position + Vector3.new(0, 0.6, 0), {
 		{ "Puff", 7, { Color = ColorSequence.new(ROT), Size = NumberSequence.new(2), Speed = NumberRange.new(1, 3), SpreadAngle = Vector2.new(180, 180) } },
 	}, 2)
-	Kit.sound(host, SOUND_HIT, 0.4, 0.5)
+	Kit.sound(host, "body_fall3", 0.45, 1.1)
 end
 
 -- Dragging itself back up: rot wells out of it, motes rising.
@@ -1290,7 +1289,7 @@ function handlers.rise(position: Vector3)
 		{ "Puff", 9, { Color = ColorSequence.new(Color3.fromRGB(70, 90, 50)), Size = NumberSequence.new(2.4), Speed = NumberRange.new(2, 4), SpreadAngle = Vector2.new(40, 40) } },
 		{ "Glints", 10, { Color = ColorSequence.new(Color3.fromRGB(170, 230, 90)), Size = NumberSequence.new(0.7) } },
 	}, 2)
-	Kit.sound(host, SOUND_HIT, 0.5, 0.35)
+	Kit.sound(host, "earth_crumble", 0.4, 0.9)
 end
 
 -- Rot in a bite wound: a green seep off the bitten for as long as it hurts.
@@ -1349,7 +1348,7 @@ function handlers.erupt(position: Vector3, radius: number)
 		{ "BoomSparks", 16, { Color = ColorSequence.new(Color3.fromRGB(255, 180, 70)), SpreadAngle = Vector2.new(25, 25) } },
 		{ "Puff", 4, { Color = ColorSequence.new(Color3.fromRGB(70, 36, 30)), Size = NumberSequence.new(2.6), Speed = NumberRange.new(5, 9), SpreadAngle = Vector2.new(20, 20) } },
 	}, 2)
-	Kit.sound(host, SOUND_BOOM, 0.4, 1.4)
+	Kit.sound(host, "boss.groundErupt", 0.5, 1.15)
 end
 
 -- ---------------------------------------------------------------------------
@@ -1373,7 +1372,7 @@ function handlers.screech(origin: Vector3, facing: Vector3, range: number)
 	local host = burst(origin, {
 		{ "Flare", 1, { Color = ColorSequence.new(SCREECH), Size = NumberSequence.new(2.5) } },
 	}, 1.5)
-	Kit.sound(host, SOUND_HIT, 0.6, 3)
+	Kit.sound(host, "alien_bug2", 0.5, 1.3)
 end
 
 -- ---------------------------------------------------------------------------
@@ -1391,8 +1390,8 @@ function handlers.crow(model)
 		{ "Flare", 1, { Color = ColorSequence.new(Color3.fromRGB(255, 210, 120)), Size = NumberSequence.new(4) } },
 		{ "Glints", 12, { Color = ColorSequence.new(RALLY), Size = NumberSequence.new(0.9) } },
 	}, 2)
-	Kit.sound(host, SOUND_BOOM, 0.5, 2.6)
-	Kit.sound(host, SOUND_HIT, 0.5, 1.8)
+	Kit.sound(host, "alien_chirp", 0.45, 0.9)
+	Kit.sound(host, "poof_air", 0.35, 1.4)
 end
 
 -- Rallied: a red glow of sparks round a creature for as long as it lasts.
@@ -1462,7 +1461,7 @@ function handlers.shockwave(center: Vector3, speed: number, radius: number, coun
 					}, 0.8)
 				end
 			end)
-			Kit.sound(burst(center, {}, 1), SOUND_BOOM, 0.4, 0.7)
+			Kit.sound(burst(center, {}, 1), "impact.slam", 0.45, 0.9)
 		end)
 	end
 end
@@ -1531,7 +1530,7 @@ function handlers.inhale(model, seconds: number, range: number, arc: number, pul
 			inhaling[model] = nil
 		end
 	end)
-	Kit.sound(part, SOUND_BOOM, 0.4, 0.4)
+	Kit.sound(part, "air_suction", 0.45, 0.8)
 end
 
 function handlers.inhaleend(model)
@@ -1549,7 +1548,7 @@ function handlers.muzzle(position: Vector3, facing: Vector3)
 		{ "Puff", 8, { Color = ColorSequence.new(Color3.fromRGB(150, 145, 140)), Size = NumberSequence.new(2.6), Speed = NumberRange.new(4, 9), SpreadAngle = Vector2.new(25, 25) } },
 	}, 2.5)
 	host.CFrame = CFrame.lookAt(position, position + facing) * CFrame.Angles(-math.pi / 2, 0, 0)
-	Kit.sound(host, SOUND_BOOM, 0.7, 1)
+	Kit.sound(host, "impact.explosion", 0.55, 1.15)
 end
 
 function handlers.flare(model, color: Color3?)

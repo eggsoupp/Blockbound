@@ -40,6 +40,9 @@ end
 function Visuals.start()
  if started then return end;started=true
  VFX.preload()
+ -- The body (clips, aura, eyes) and the eclipse sky.
+ require(script.Parent.SignusRig).start()
+ require(script.Parent.SignusSky).start()
  Collection:GetInstanceAddedSignal("SignusVisual"):Connect(observe)
  Collection:GetInstanceRemovedSignal("SignusVisual"):Connect(remove)
  for _,p in Collection:GetTagged("SignusVisual") do observe(p) end

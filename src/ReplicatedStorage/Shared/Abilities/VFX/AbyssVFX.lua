@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Abyss Gate, built from complete pack assemblies round its ground sigil:
 --   call     Impact #48 flares at the caster's hand
 --   sigil    two rings, a turning band of runes and a pentagram draw
@@ -31,9 +32,9 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_CALL = "rbxassetid://12222208"
-local SOUND_BOOM = "rbxassetid://5540424854"
-local SOUND_HIT = "rbxasset://sounds/hit.wav"
+local SOUND_CALL = CombatAudio.ids.magic_warp
+local SOUND_BOOM = CombatAudio.ids.boom_deep2
+local SOUND_HIT = CombatAudio.ids.synth_blast
 
 function VFX.preload()
 	Pack.preload()

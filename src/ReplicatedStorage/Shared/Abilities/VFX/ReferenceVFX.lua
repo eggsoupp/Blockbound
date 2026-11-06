@@ -1,3 +1,4 @@
+local CombatCues = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatCues)
 -- The four reference spells use intact SoulShroud assemblies, cloned by PackAssembly.
 -- No texture reconstruction, visible carriers, audio, global grade or camera takeover.
 local RS=game:GetService("ReplicatedStorage")
@@ -76,6 +77,7 @@ function VFX.play(payload,scope,fireballImpact)
 		if tool then scope:add(tool.Unequipped:Connect(function() scope:destroy() end)) end
 	end
 	scope:delay(math.max(0,duration-age),function() scope:destroy() end)
+	CombatCues.cast(payload,scope)
 	local signal,update
 
 	if starter or payload.ability=="CelestialLance" or payload.ability=="WraithfireOrb" then
@@ -256,7 +258,7 @@ function VFX.play(payload,scope,fireballImpact)
 		if scope:isDead() then return end
 		if packet.cancelled or packet.event=="cancel" then scope:destroy();return end
 		if starter and not packet.event then packet=table.clone(packet);packet.event="hit" end
-		if typeof(packet.position)=="Vector3" and type(packet.startedAt)=="number" then signal(packet) end
+		if typeof(packet.position)=="Vector3" and type(packet.startedAt)=="number" then CombatCues.packet(packet);signal(packet) end
 	end
 	local queued=pending[payload.id];pending[payload.id]=nil
 	if queued then for _,packet in ipairs(queued) do if scope:isDead() then break end;receivers[payload.id](packet) end end

@@ -1,0 +1,468 @@
+{
+  "clips": {
+    "magic_lock": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "plasma_cast": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_magic_poof": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_portal": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "charge_short": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "punch_heavy1": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "alien_bug2": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "alien_bug3": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "alien_bug1": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "sword_swing": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "monster_roar": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "lightning_close": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "plasma_trail": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "slime_pop": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "glass_break2": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "air_suction": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "blast_short": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.043,
+      "playing": true
+    },
+    "ability_whoosh": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "swing_air": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "electric_hum": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_charge": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "punch_heavy2": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "bass_drop": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "synth_blast": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "energy_sword": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "water_walk": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "ability_lightning": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "poof_punch": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "boom_deep1": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_magic_glow": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_shield_on": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "poof_air": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "alien_chirp": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "magic_warp": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "sword_hit": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "flame_blast1": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "metal_crash": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_magic_cast": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "earth_crumble": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "power_up": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "plasma_cut": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "ice_chunk": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "impact_body": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "heavy_whoosh": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "flame_blast3": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "sparkle": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "flame_blast2": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.128,
+      "playing": true
+    },
+    "explosive_whoosh": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "flame_blast5": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_impact_heavy": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "flame_blast4": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "portal_close": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "glass_break1": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "boom_deep2": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_ice_break": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "metal_pound": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "bubbles": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    },
+    "force_hit": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "ability_shield_off": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "electric_shock": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.085,
+      "playing": true
+    },
+    "energy_blast": {
+      "loaded": true,
+      "spatial": true,
+      "position": 0.064,
+      "playing": true
+    }
+  },
+  "observed": {
+    "magic_lock": 2,
+    "plasma_cast": 2,
+    "ability_magic_poof": 2,
+    "ability_portal": 2,
+    "charge_short": 3,
+    "punch_heavy1": 2,
+    "alien_bug2": 1,
+    "alien_bug3": 1,
+    "alien_bug1": 2,
+    "sword_swing": 2,
+    "monster_roar": 2,
+    "lightning_close": 1,
+    "plasma_trail": 1,
+    "slime_pop": 4,
+    "glass_break2": 2,
+    "air_suction": 2,
+    "blast_short": 2,
+    "ability_whoosh": 2,
+    "swing_air": 2,
+    "electric_hum": 1,
+    "ability_charge": 2,
+    "punch_heavy2": 2,
+    "bass_drop": 2,
+    "synth_blast": 2,
+    "energy_sword": 2,
+    "water_walk": 2,
+    "ability_lightning": 2,
+    "poof_punch": 2,
+    "boom_deep1": 2,
+    "ability_magic_glow": 2,
+    "ability_shield_on": 2,
+    "poof_air": 1,
+    "alien_chirp": 2,
+    "magic_warp": 2,
+    "sword_hit": 2,
+    "flame_blast1": 2,
+    "metal_crash": 2,
+    "ability_magic_cast": 2,
+    "earth_crumble": 2,
+    "power_up": 3,
+    "plasma_cut": 1,
+    "ice_chunk": 1,
+    "impact_body": 1,
+    "heavy_whoosh": 1,
+    "flame_blast3": 1,
+    "sparkle": 1,
+    "flame_blast2": 1,
+    "explosive_whoosh": 1,
+    "flame_blast5": 1,
+    "ability_impact_heavy": 1,
+    "flame_blast4": 1,
+    "portal_close": 2,
+    "glass_break1": 2,
+    "boom_deep2": 2,
+    "ability_ice_break": 1,
+    "metal_pound": 1,
+    "bubbles": 2,
+    "force_hit": 2,
+    "ability_shield_off": 2,
+    "electric_shock": 1,
+    "energy_blast": 3
+  },
+  "checks": {
+    "detachedTail": true,
+    "clipCleanup": true,
+    "voiceCap": true,
+    "cancelCleanup": true,
+    "liveUnmute": true,
+    "voiceCleanup": true,
+    "spatialThrottle": true,
+    "liveMute": true
+  },
+  "coreComplete": true,
+  "modules": {
+    "Fireball": true,
+    "VioletTempest": true,
+    "Dawnbreaker": true,
+    "CelestialLance": true,
+    "WraithfireOrb": true,
+    "WindBurst": true,
+    "RiftMaelstrom": true,
+    "Tidecaller": true,
+    "Thunderhead": true,
+    "WaterBlade": true,
+    "AbyssGate": true,
+    "EchoStep": true,
+    "BlossomRoad": true,
+    "SumiWhirl": true,
+    "BlockWall": true,
+    "AzureComet": true,
+    "SkyfallVolley": true,
+    "Cataclysm": true,
+    "SerpentFlare": true,
+    "HeliosLance": true,
+    "Deluge": true,
+    "AstralVerdict": true
+  }
+}

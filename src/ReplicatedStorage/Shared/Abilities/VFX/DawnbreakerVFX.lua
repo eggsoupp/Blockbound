@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Dawnbreaker, drawn from one message:
 --   swing   a golden swipe at the caster's chest as the crescent leaves
 --   flight  a wide crescent of light (three layered curved beams) leaving a
@@ -35,8 +36,8 @@ local Sheets = {
 	},
 }
 
-local SOUND_SWING = "rbxassetid://12222208"
-local SOUND_BURST = "rbxassetid://5540424854"
+local SOUND_SWING = CombatAudio.ids.energy_sword
+local SOUND_BURST = CombatAudio.ids.punch_heavy2
 
 function VFX.preload()
 	if preloaded then return end

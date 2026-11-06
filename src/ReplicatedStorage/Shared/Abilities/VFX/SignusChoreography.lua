@@ -2,6 +2,7 @@
 local FX=require(script.Parent.SignusFX)
 local A=require(script.Parent.SignusAssemblies)
 local VFX=require(script.Parent.SignusVFX)
+local Pack=require(script.Parent.PackAssembly)
 local C=FX.Colors
 local Choreo={}
 local TAU=math.pi*2
@@ -45,11 +46,12 @@ local function lineWith(parent,col,texture,dark)
  end,b
 end
 local function line(parent,col,texture,dark)return (lineWith(parent,col,texture,dark))end
-local function sigils(parent,frame,radius,scope)
+local function sigils(parent,frame,radius,scope,palette)
  local a=FX.attachment(parent,frame)
+ palette=palette or A.Violet
  -- Preserve the established pair of counter-rotating ornate/star spell circles.
- local outer=FX.circle(a,"SigilOrnate",radius*2.6,C.violet,{RotSpeed=NumberRange.new(-25),Brightness=1.2})
- local inner=FX.circle(a,"SigilStar",radius*1.9,C.orchid,{RotSpeed=NumberRange.new(45),Brightness=1.2})
+ local outer=FX.circle(a,"SigilOrnate",radius*2.6,palette.main,{RotSpeed=NumberRange.new(-25),Brightness=1.2})
+ local inner=FX.circle(a,"SigilStar",radius*1.9,palette.edge,{RotSpeed=NumberRange.new(45),Brightness=1.2})
  return function(alpha)
   outer.Enabled=alpha>.02;inner.Enabled=alpha>.02
   -- Alpha rather than extra layers is what makes a warning intensify.
@@ -72,37 +74,51 @@ function Choreo.mount(part,scope)
   local v=part:FindFirstChild("FXOpacity");return math.clamp(v and v.Value or 1,0,1)
  end
  if kind=="SpiralCast" or kind=="Ascension" then
-  local circle=sigils(root,CFrame.new(0,.35,0)*CFrame.Angles(math.pi/2,0,0),radius,scope)
+  local circle=sigils(root,CFrame.new(0,.35,0)*CFrame.Angles(math.pi/2,0,0),radius,scope,if strong and kind~="Ascension" then A.Dusk else A.Violet)
   local s=radius/12*.7
-  local storm=A.mount(scope,"Storm",CFrame.new(part.Position+Vector3.yAxis*8*s),s)
-  local swirl=A.mount(scope,"Swirl",CFrame.new(part.Position+Vector3.yAxis*.6),radius*2/125,3)
-  local upper=A.mount(scope,"Swirl",part.CFrame,radius*1.25/125,8)
   local spineScale=(strong and 1.8 or 1.2)*radius/12
-  local spine=A.mount(scope,"Column",CFrame.new(part.Position+Vector3.yAxis*20*spineScale)*CFrame.Angles(0,0,math.pi/2),spineScale)
   local ascending=kind=="Ascension"
+  -- Phase two's storms burn a deep purple. Totality's Ascension carries both
+  -- colourways and darkens from violet to dusk on the ignition.
+  local function layers(palette)
+   return {
+    storm=A.mount(scope,"Storm",CFrame.new(part.Position+Vector3.yAxis*8*s),s,nil,palette),
+    swirl=A.mount(scope,"Swirl",CFrame.new(part.Position+Vector3.yAxis*.6),radius*2/125,3,palette),
+    upper=A.mount(scope,"Swirl",part.CFrame,radius*1.25/125,8,palette),
+    spine=A.mount(scope,"Column",CFrame.new(part.Position+Vector3.yAxis*20*spineScale)*CFrame.Angles(0,0,math.pi/2),spineScale,nil,palette),
+   }
+  end
+  local sets={}
+  if ascending then sets={{l=layers(A.Violet),before=true},{l=layers(A.Dusk)}}
+  else sets={{l=layers(if strong then A.Dusk else A.Violet)}} end
   local warning=part:GetAttribute("Warning") or 1.25
   local strike=part:GetAttribute("StrikeAt") or 2.35
   return function(near)
    local t=age();local fade=(1-smooth((t-duration+.6)/.6))*(near==false and 0 or 1)
    local release=smooth((t-warning)/.22)
-   local intensity=(.06+.28*release)*fade
-   circle(fade*(.6+.4*smooth(t/warning)))
-   -- The authored portal layers climb from their original lower attachment.
-   storm:set(CFrame.new(part.Position+Vector3.yAxis*8*s),intensity,true)
-   swirl:set(CFrame.new(part.Position+Vector3.yAxis*(.6+release*2))*CFrame.Angles(0,t*(ascending and -1.8 or -2.8),0),fade*(.15+.6*release),false)
-   upper:set(CFrame.new(part.Position+Vector3.yAxis*(6+release*(strong and 30 or 18)))*CFrame.Angles(.35,t*3.5,.12),release*fade*.65,false)
-   spine:set(nil,release*fade*.42*(1-smooth((t-strike-.65)/.4)),true)
+   local turned=smooth((t-strike)/.15)
+   circle(fade*(.7+.3*smooth(t/warning)))
+   for _,set in sets do
+    local share=if not ascending then 1 elseif set.before then 1-turned else turned
+    local l=set.l;local f=fade*share
+    -- The authored portal layers climb from their original lower attachment.
+    l.storm:set(CFrame.new(part.Position+Vector3.yAxis*8*s),(.22+.55*release)*f,true)
+    l.swirl:set(CFrame.new(part.Position+Vector3.yAxis*(.6+release*2))*CFrame.Angles(0,t*(ascending and -1.8 or -2.8),0),f*(.35+.6*release),false)
+    l.upper:set(CFrame.new(part.Position+Vector3.yAxis*(6+release*(strong and 30 or 18)))*CFrame.Angles(.35,t*3.5,.12),release*f*.85,false)
+    l.spine:set(nil,release*f*.75*(1-smooth((t-strike-.65)/.4)),true)
+   end
   end
  elseif kind=="LanceCast" then
   local warning=part:GetAttribute("Warning") or 1.3
   local travel=part:GetAttribute("Travel") or .65
   local strike=part:GetAttribute("StrikeAt") or 2.5595
-  local circle=sigils(root,CFrame.new(offset+Vector3.yAxis*.3)*CFrame.Angles(math.pi/2,0,0),radius,scope)
-  local orb=A.mount(scope,"Orb",part.CFrame,.35)
-  local colScale=if strong then 1.25 else 1
-  local column=A.mount(scope,"Column",CFrame.new(target+Vector3.yAxis*20*colScale)*CFrame.Angles(0,0,math.pi/2),colScale)
-  local shafts={line(root,C.violet,FX.Pack.JetBeam.Texture),line(root,C.orchid),line(root,C.pearl,FX.Pack.Lightning.Texture)}
-  local draw,b=lineWith(root,C.pearl,FX.Pack.BoltBeamWide.Texture)
+  local circle=sigils(root,CFrame.new(offset+Vector3.yAxis*.3)*CFrame.Angles(math.pi/2,0,0),radius,scope,if strong then A.Dusk else A.Violet)
+  local palette=if strong then A.Dusk else A.Violet
+  local orb=A.mount(scope,"Orb",part.CFrame,.35,nil,palette)
+  local colScale=(if strong then 1.25 else 1)*math.clamp(radius/16,.55,1)
+  local column=A.mount(scope,"Column",CFrame.new(target+Vector3.yAxis*20*colScale)*CFrame.Angles(0,0,math.pi/2),colScale,nil,palette)
+  local shafts={line(root,palette.main,FX.Pack.JetBeam.Texture),line(root,palette.edge),line(root,palette.hot,FX.Pack.Lightning.Texture)}
+  local draw,b=lineWith(root,palette.hot,FX.Pack.BoltBeamWide.Texture)
   b.TextureMode=Enum.TextureMode.Stretch;b.TextureLength=1;b.TextureSpeed=4;b.Brightness=3;b.ZOffset=.3
   table.insert(shafts,draw)
   local void=strong and line(root,C.black,nil,true) or nil
@@ -113,10 +129,11 @@ function Choreo.mount(part,scope)
    local active=smooth((t-strike)/.08)*(1-smooth((t-strike-.7)/.4))*visible
    local fade=(1-smooth((t-duration+.65)/.65))*visible
    circle(fade)
-   orb:set(CFrame.new(point),fade*(1-smooth((t-strike)/.12))*.7,true)
-   column:set(nil,active*.4,true)
+   orb:set(CFrame.new(point),fade*(1-smooth((t-strike)/.12))*.95,true)
+   column:set(nil,active*.75,true)
    local top=offset+Vector3.yAxis*((strong and 140 or 95)*smooth((t-strike)/.12))
-   for i,shaft in shafts do shaft(offset,top,({13,7,2.3,6})[i]*(strong and 1.3 or 1),active*({.65,.9,1,.9})[i]) end
+   local w=math.clamp(radius/16,.55,1)*(strong and 1.3 or 1)
+   for i,shaft in shafts do shaft(offset,top,({13,7,2.3,6})[i]*w,active*({.75,.95,1,.95})[i]) end
    if void then void(offset,top,2.4,active) end
   end
  elseif kind=="RiftBeam" then
@@ -149,7 +166,7 @@ function Choreo.mount(part,scope)
   local endColumn=A.mount(scope,"Column",CFrame.new(target),.22*big)
   local sight=line(root,C.orchid,FX.Pack.Lightning.Texture)
   local lamp=Instance.new("PointLight");lamp.Color=C.orchid;lamp.Range=18;lamp.Shadows=false;lamp.Parent=root
-  local hum=FX.sound(part,.35,.42,FX.Sounds.roar,true);scope:add(function()hum:Stop();hum:Destroy()end)
+  local hum=FX.sound(part,.35,.42,FX.Sounds.roar,true);scope:add(function()if hum then hum:Stop();hum:Destroy()end end)
   local shown=offset;local last=os.clock();local lastRumble=0
   return function(near)
    local now=os.clock();local dt=math.min(now-last,.1);last=now
@@ -192,72 +209,72 @@ function Choreo.mount(part,scope)
    orb:set(CFrame.new(part.Position),muzzleAlpha*.6,true)
    endColumn:set(CFrame.new(part.Position+shown+normal*4.4*big)*CFrame.Angles(0,0,math.pi/2),hit and on*.35 or 0,true)
    lamp.Brightness=charging and c*.7*visible or on
-   hum.Volume=on*.5+(charging and c*.25*visible or 0)
+   FX.setSoundVolume(hum,on*.5+(charging and c*.25*visible or 0))
    if on>.2 and now-lastRumble>.2 and near~=false then lastRumble=now;VFX.rumble(part.Position+tip*.5,.15*on,.22) end
   end
- elseif kind=="CrescentLunge" then
-  local scale=radius*2/12*1.3
-  local blade=A.mount(scope,"LungeBlade",part.CFrame,scale)
-  local wake=A.mount(scope,"LungeWake",part.CFrame,.23*(strong and 1.15 or 1))
-  local edgeAnchor=FX.attachment(root,CFrame.new(0,2.5,0))
-  local edge=FX.emitter("CrescentEdge",edgeAnchor,{Rate=10,Lifetime=NumberRange.new(.2),Speed=NumberRange.new(.01),EmissionDirection=Enum.NormalId.Front,LockedToPart=true,Color=ColorSequence.new(C.orchid),Brightness=1.5,Rotation=NumberRange.new(0),Transparency=NumberSequence.new(.12,1)})
-  local sight=line(root,C.orchid,FX.Pack.Lightning.Texture)
-  local trail=Instance.new("Trail")
-  trail.Name="CrescentWake";trail.Attachment0=FX.attachment(root,CFrame.new(0,-2,0));trail.Attachment1=FX.attachment(root,CFrame.new(0,2,0))
-  trail.Texture=FX.Pack.JetBeam.Texture;trail.Color=ColorSequence.new(C.orchid,C.violet)
-  trail.Lifetime=.18;trail.FaceCamera=true;trail.MinLength=.25;trail.LightEmission=1;trail.Brightness=1.3
-  trail.Transparency=NumberSequence.new(.15,1);trail.WidthScale=NumberSequence.new(1,0)
-  trail.Enabled=false;trail.Parent=root
-  local released=false
+ elseif kind=="Thunder" then
+  -- Umbral Thunder's mark: the phase's sigils opening on the ground and the
+  -- pack's Lightning Surge crackling over it as it closes. The bolt itself is
+  -- a burst on the moment it lands (SignusVFX thunderStrike).
+  local warning=part:GetAttribute("Warning") or .8
+  local palette=if strong then A.Dusk else A.Violet
+  local circle=sigils(root,CFrame.new(0,.3,0)*CFrame.Angles(math.pi/2,0,0),radius*.78,scope,palette)
+  local surge=Pack.mount(scope,workspace,"LightningSurge",{cframe=CFrame.new(part.Position+Vector3.yAxis),scale=radius/8,
+   tint={deep=palette.main,main=palette.main:Lerp(palette.edge,.5),hot=palette.edge},brightness=2,budget=24})
   return function(near)
-   local stage=part:GetAttribute("Stage") or "Charge"
-   local visible=near==false and 0 or 1
-   local charge=part:GetAttribute("Charge") or .6
-   local a=smooth(age()/charge)
-   local rushAt=part:GetAttribute("RushAt")
-   local travel=part:GetAttribute("Travel") or .4
-   local rush=if rushAt then math.clamp((workspace:GetServerTimeNow()-rushAt)/travel,0,1) else 0
-   local decayAt=part:GetAttribute("DecayAt")
-   local decay=if decayAt then 1-smooth((workspace:GetServerTimeNow()-decayAt)/.4) else 1
-   local charging=stage=="Charge"
-   trail.Enabled=stage=="Rush" and visible>0
-   local locked=age()>=charge-(part:GetAttribute("Lock") or .22)
-   local opacity=visible*decay*(if charging then (if locked then .95 else .15+.65*a) else 1)
-   -- One curved authored blade, swept once. No continuously spinning discs.
-   local roll=if charging then mix(-.6,-.25,a) else mix(-.25,.55,smooth(rush))
-   edgeAnchor.CFrame=CFrame.new(0,2.5,0)*CFrame.Angles(0,0,roll)
-   edge.Size=ns(radius*2.6*(if charging then .3+.7*a else 1))
-   edge.Enabled=visible>0 and stage~="Decay"
-   local frame=(part.CFrame+Vector3.yAxis*2.5)*CFrame.Angles(0,0,roll)*CFrame.Angles(0,math.pi/2,0)
-   if blade.model then blade.model:ScaleTo(scale*(if charging then .3+.7*a else 1)) end
-   blade:set(frame,opacity,stage=="Rush")
-   wake:set(part.CFrame*CFrame.Angles(math.pi/2,0,0),visible*(if stage=="Rush" then .8 else 0),stage=="Rush")
-   local to=(part:GetAttribute("Target") or part.Position)-part.Position
-   local localTo=part.CFrame:VectorToObjectSpace(to)
-   sight(Vector3.zero,localTo,.22,charging and visible*(if locked then .65 else .32*a) or 0)
-   if stage=="Rush" and not released then
-    released=true;blade:burst(1);wake:burst(.65)
-    FX.sound(part,.45,1.2,FX.Sounds.wind)
-   end
+   local t=age();local visible=near==false and 0 or 1
+   local close=smooth(t/warning)
+   local fade=1-smooth((t-warning)/.3)
+   circle(visible*fade*(.4+.6*close))
+   surge:stream(visible>0 and t>warning*.4 and t<warning+.05)
   end
  elseif kind=="Aura" then
-  local circles=sigils(root,CFrame.new(0,-5.6,0)*CFrame.Angles(math.pi/2,0,0),strong and 9 or 6.5,scope)
-  local shroud=A.mount(scope,"Column",part.CFrame,.16)
-  local eclipse=strong and A.mount(scope,"EclipseCore",part.CFrame,3.1) or nil
-  local corona=strong and A.mount(scope,"EclipseCorona",part.CFrame,2.4) or nil
-  local sunAnchor=strong and FX.attachment(root) or nil
-  local rim=sunAnchor and FX.circle(sunAnchor,"CoronaRing",24,C.orchid,{Orientation=Enum.ParticleOrientation.FacingCamera,RotSpeed=NumberRange.new(-12),Brightness=1.4,Rate=1.8,ZOffset=-.5}) or nil
+  local circles=sigils(root,CFrame.new(0,-5.6,0)*CFrame.Angles(math.pi/2,0,0),strong and 9 or 6.5,scope,if strong then A.Dusk else A.Violet)
+  local shroud=A.mount(scope,"Column",part.CFrame,.16,nil,if strong then A.Dusk else nil)
+  local eclipse=strong and A.eclipse(scope,part.CFrame,.6) or nil
+  local worn=1
   return function(near)
    local a=alpha()*(near==false and 0 or 1);local t=workspace:GetServerTimeNow()
    circles(a*.75)
    shroud:set(part.CFrame*CFrame.new(0,0,2)*CFrame.Angles(0,0,math.pi/2),a*.18,true)
    if eclipse then
-    local frame=part.CFrame*CFrame.new(0,7.5,14)
-    eclipse:set(frame,math.min(a*2,1),true)
-    corona:set(frame,a*.55,true)
-    sunAnchor.CFrame=CFrame.new(0,7.5,14)
-    rim.Enabled=a>.02;rim.Size=ns(24+.45*math.sin(t*1.8))
+    -- The eclipse worn as a halo behind the hood, high enough that the robe
+    -- still reads against it; it breathes slightly. Under Mirror Veil every
+    -- image folds it away (Veiled), so it tells nobody which one is real.
+    worn+=((if part:GetAttribute("Veiled") then 0 else 1)-worn)*.15
+    eclipse:set(part.CFrame*CFrame.new(0,13,4.5),math.min(a*1.5,1)*worn,.6*(1+.03*math.sin(t*1.8)))
    end
+  end
+ elseif kind=="BlackSun" then
+  -- A black sun held overhead: the eclipse swelling over the charge, a
+  -- purple storm feeding it, and the warning ring on the ground closing in
+  -- its last second.
+  local charge=part:GetAttribute("Charge") or 2.4
+  local ground=target
+  local sun=A.eclipse(scope,part.CFrame,.3)
+  local storm=A.mount(scope,"Storm",part.CFrame,.5,nil,A.Dusk)
+  local floorAnchor=FX.attachment(root)
+  local outer=FX.circle(floorAnchor,"SigilOrnate",radius*2.15,A.Dusk.main,{RotSpeed=NumberRange.new(-20),Brightness=1.6})
+  local inner=FX.circle(floorAnchor,"SigilStar",radius*1.55,A.Dusk.edge,{RotSpeed=NumberRange.new(34),Brightness=1.6})
+  local tether=line(root,A.Dusk.edge,FX.Pack.Lightning.Texture)
+  return function(near)
+   local t=age();local visible=near==false and 0 or 1
+   local detonated=part:GetAttribute("DetonatedAt")
+   local after=if detonated then workspace:GetServerTimeNow()-detonated else -1
+   local fade=(if after>=0 then 1-smooth(after/.25) else 1)*visible
+   local grow=smooth(t/charge)
+   -- A three-stud core swelling to twenty-four, trembling as it nears the slam.
+   sun:set(part.CFrame,fade,(.3+2.1*grow)*(1+(if charge-t<.5 then .03*math.sin(t*40) else 0)))
+   storm:set(part.CFrame*CFrame.Angles(0,t*2.2,0),fade*(.2+.3*grow),true)
+   -- The ground ring: steady through the hold, flickering bright in the last
+   -- half second so the slam is never a surprise.
+   floorAnchor.WorldCFrame=CFrame.new(ground+Vector3.yAxis*.4)*CFrame.Angles(math.pi/2,0,0)
+   local warn=.45+.4*grow+(if charge-t<.5 then .15*math.sin(t*40) else 0)
+   local alpha=math.clamp(warn,0,1)*fade
+   outer.Enabled=alpha>.02;inner.Enabled=outer.Enabled
+   outer.Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1),NumberSequenceKeypoint.new(.2,1-.85*alpha),NumberSequenceKeypoint.new(.75,1-.85*alpha),NumberSequenceKeypoint.new(1,1)})
+   inner.Transparency=outer.Transparency
+   tether(Vector3.zero,part.CFrame:PointToObjectSpace(ground),.6,fade*grow*.5)
   end
  elseif kind=="Sigil" or kind=="Ring" or kind=="Disc" then
   local size=math.max(part.Size.X,part.Size.Y,part.Size.Z)

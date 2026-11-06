@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Building blocks shared by the ability VFX modules: invisible emitter hosts,
 -- emitters built from curated library entries, beams, trails, lights, sounds
 -- and a timeline driven by the server clock.
@@ -138,12 +139,7 @@ function Kit.light(parent, color, range)
 end
 
 function Kit.sound(parent, id, volume, pitch)
-	local s = Instance.new("Sound")
-	s.SoundId, s.Volume, s.PlaybackSpeed = id, Sounds.volume(volume), pitch or 1
-	s.RollOffMinDistance, s.RollOffMaxDistance = 12, 180
-	s.Parent = parent
-	s:Play()
-	return s
+	return CombatAudio.play(id, parent, volume, pitch)
 end
 
 function Kit.rayParams(extra)

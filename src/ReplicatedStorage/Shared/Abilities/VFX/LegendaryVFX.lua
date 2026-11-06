@@ -1,3 +1,4 @@
+local CombatCues = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatCues)
 -- Four reference abilities. Every visual layer is a complete purchased assembly.
 -- Existing PackAssembly/AbilityScope own cloning and lifetime; no cosmetic geometry.
 local RS = game:GetService("ReplicatedStorage")
@@ -171,6 +172,7 @@ function VFX.play(payload,scope)
 		if tool then scope:add(tool.Unequipped:Connect(function() scope:destroy() end)) end
 	end
 	scope:delay(math.max(0,T.duration-age),function() scope:destroy() end)
+	CombatCues.cast(payload,scope)
 	local signal,update
 	if celestial or orb then
 		local origin=payload.origin.Position+Vector3.yAxis*.8
@@ -461,7 +463,7 @@ function VFX.play(payload,scope)
 	receivers[payload.id]=function(packet)
 		if scope:isDead() then return end
 		if packet.cancelled or packet.event=="cancel" then scope:destroy();return end
-		if typeof(packet.position)=="Vector3" and type(packet.startedAt)=="number" then signal(packet) end
+		if typeof(packet.position)=="Vector3" and type(packet.startedAt)=="number" then CombatCues.packet(packet);signal(packet) end
 	end
 	local queued=pending[payload.id];pending[payload.id]=nil
 	if queued then for _,packet in ipairs(queued) do if scope:isDead() then break end;receivers[payload.id](packet) end end

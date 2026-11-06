@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Tidecaller, drawn from two kinds of message:
 --   summon  the caster stamps a tide pool open at their feet: mist, a toon
 --           splash and a ring; the pool ripples and bubbles, and eight water
@@ -29,8 +30,8 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_WATER = "rbxasset://sounds/impact_water.mp3"
-local SOUND_SWISH = "rbxassetid://12222208"
+local SOUND_WATER = CombatAudio.ids.water_walk
+local SOUND_SWISH = CombatAudio.ids.swing_air
 
 function VFX.preload()
 	if preloaded then return end

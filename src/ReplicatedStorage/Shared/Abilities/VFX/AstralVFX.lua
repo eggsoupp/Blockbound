@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 local ImportedAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.DownloadedSounds)
 -- Astral Verdict, drawn from one message:
 --   chart    stars pop into the sky over the aim one by one and are joined
@@ -31,10 +32,10 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_CHIME = ImportedAudio.ability_magic_glow
-local SOUND_SWISH = ImportedAudio.ability_whoosh
-local SOUND_BOOM = ImportedAudio.ability_impact_heavy
-local SOUND_HIT = "rbxasset://sounds/hit.wav"
+local SOUND_CHIME = CombatAudio.ids.ability_magic_glow
+local SOUND_SWISH = CombatAudio.ids.sword_swing
+local SOUND_BOOM = CombatAudio.ids.energy_blast
+local SOUND_HIT = CombatAudio.ids.sword_hit
 
 function VFX.preload()
 	if preloaded then return end

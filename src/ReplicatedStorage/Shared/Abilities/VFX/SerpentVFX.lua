@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Serpent Flare, drawn from one message:
 --   rouse   fire flares off the caster as six flame serpents burst out
 --           round them
@@ -29,9 +30,9 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_SWISH = "rbxassetid://12222208"
-local SOUND_BOOM = "rbxassetid://5540424854"
-local SOUND_HIT = "rbxasset://sounds/hit.wav"
+local SOUND_SWISH = CombatAudio.ids.plasma_trail
+local SOUND_BOOM = CombatAudio.ids.flame_blast3
+local SOUND_HIT = CombatAudio.ids.flame_blast5
 
 function VFX.preload()
 	if preloaded then return end

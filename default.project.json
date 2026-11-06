@@ -261,6 +261,9 @@
       "SignusLibrary": {
         "$path": "assets/signus-hallow/roblox/SignusLibrary.rbxm"
       },
+      "SignusEclipseLibrary": {
+        "$path": "assets/signus-hallow/roblox/SignusEclipseLibrary.rbxm"
+      },
       "AbilityVFXLibrary": {
         "$path": "assets/vfx-library/AbilityVFXLibrary.rbxm"
       },
@@ -443,6 +446,15 @@
           },
           "Ambience": {
             "$path": "src/ReplicatedStorage/Shared/Audio/Ambience.lua"
+          },
+          "CombatSoundBank": {
+            "$path": "src/ReplicatedStorage/Shared/Audio/CombatSoundBank.lua"
+          },
+          "CombatAudio": {
+            "$path": "src/ReplicatedStorage/Shared/Audio/CombatAudio.lua"
+          },
+          "CombatCues": {
+            "$path": "src/ReplicatedStorage/Shared/Audio/CombatCues.lua"
           }
         },
         "UI": {
@@ -1251,6 +1263,9 @@
       },
       "CaveAudit": {
         "$path": "src/ServerScriptService/CaveAudit.lua"
+      },
+      "BossAudio": {
+        "$path": "src/ServerScriptService/BossAudio.lua"
       }
     }
   }

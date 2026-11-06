@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 local RunService = game:GetService("RunService")
 local RS = game:GetService("ReplicatedStorage")
 local ContentProvider = game:GetService("ContentProvider")
@@ -87,7 +88,7 @@ function VFX.preload()
 	task.spawn(function()
 		-- Preload audio as a Sound; a bare content string can be fetched as an image.
 		local audio = Instance.new("Sound")
-		audio.SoundId = "rbxassetid://5540424854"
+		audio.SoundId = CombatAudio.ids.boom_deep1
 		local assets = {audio}
 		for _, data in pairs(Library) do table.insert(assets, data.Texture) end
 		local ok, err = pcall(function()
@@ -298,11 +299,14 @@ local function render(payload, scope, previewAge)
 	local flashLight = Instance.new("PointLight")
 	flashLight.Range, flashLight.Color, flashLight.Brightness = 85, GOLD, 0
 	flashLight.Parent = impact
-	local sound = Instance.new("Sound")
-	sound.Name, sound.SoundId = "MeteorImpact", "rbxassetid://5540424854"
-	sound.Volume, sound.PlaybackSpeed = require(game:GetService("ReplicatedStorage").Shared.Audio.Sounds).volume(1.3), .68
-	sound.RollOffMinDistance, sound.RollOffMaxDistance = 35, 320
-	sound.Parent = impact
+	if previewAge == nil and initialAge < Plan.Tuning.Windup then
+		local charge = CombatAudio.play("charge_short",ground,.4,.8)
+		if charge then scope:add(charge) end
+		scope:delay(Plan.Tuning.Windup-initialAge,function()
+			local fall = CombatAudio.play("explosive_whoosh",ground,.45,.8)
+			if fall then scope:add(fall) end
+		end)
+	end
 	local impacted = false
 	if initialAge < hit then
 		local remaining = hit - math.max(0,initialAge)
@@ -332,7 +336,10 @@ local function render(payload, scope, previewAge)
 		if age >= 0 and not impacted then
 			impacted = true
 			warning:Clear(); warningSwirl:Clear()
-			if age < .3 and previewAge == nil then sound:Play() end
+			if age < .3 and previewAge == nil then
+				CombatAudio.play("boom_deep1",impact,.85,.8,false,{range=360,near=28})
+				CombatAudio.play("bass_drop",impact,.6,.9,false,{range=360,near=28})
+			end
 		end
 		flashLight.Brightness = if age >= 0 then math.exp(-age*8)*8 else 0
 		for _, entry in ipairs(bursts) do

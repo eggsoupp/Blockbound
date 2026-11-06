@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Sumi Whirl, drawn from one message:
 --   stroke  one brushstroke paints a ring of ink around the caster, thick
 --           where it starts and flicking thin at the tail, spattering drops
@@ -56,9 +57,9 @@ local Sheets = {
 	},
 }
 
-local SOUND_SWISH = "rbxassetid://12222208"
-local SOUND_CUT = "rbxassetid://5540424854"
-local SOUND_HIT = "rbxasset://sounds/hit.wav"
+local SOUND_SWISH = CombatAudio.ids.sword_swing
+local SOUND_CUT = CombatAudio.ids.plasma_cut
+local SOUND_HIT = CombatAudio.ids.punch_heavy1
 
 function VFX.preload()
 	if preloaded then return end

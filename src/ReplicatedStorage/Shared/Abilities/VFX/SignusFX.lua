@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Shared particle/beam construction. Every texture comes from the supplied packs.
 local Pack=require(script.Parent.SignusParticles)
 local FX={Pack=Pack}
@@ -58,21 +59,12 @@ function FX.beam(parent,from,to,width,color,texture)
  beam.Transparency=NumberSequence.new(.15);beam.Parent=parent
  return beam,a,b
 end
--- The boom, and sounds bundled with the engine, which always load. (The two
--- ability ids in SoundConfig are not authorised for this place.)
-FX.Sounds={
- boom="rbxassetid://5540424854",
- roar="rbxasset://sounds/Rocket whoosh 01.wav", -- charging, and a firing beam, looped
- blast="rbxasset://sounds/Launching rocket.wav",
- thunder="rbxasset://sounds/HalloweenThunder.wav",
- wind="rbxasset://sounds/action_falling.ogg",
-}
-local Sounds = require(game:GetService("ReplicatedStorage").Shared.Audio.Sounds)
+-- Verified library sources also cover persistent boss sound callers.
+FX.Sounds={boom=CombatAudio.ids.boom_deep2,roar=CombatAudio.ids.electric_hum,
+ blast=CombatAudio.ids.blast_short,thunder=CombatAudio.ids.lightning_close,wind=CombatAudio.ids.plasma_trail}
 function FX.sound(parent,volume,pitch,id,looped)
- local sound=Instance.new("Sound");sound.SoundId=id or FX.Sounds.boom
- sound.Volume=Sounds.volume(volume);sound.PlaybackSpeed=pitch or 1;sound.RollOffMinDistance=15;sound.RollOffMaxDistance=220
- sound.Looped=looped==true;sound.Parent=parent;sound:Play()
- return sound
+ return CombatAudio.play(id or FX.Sounds.boom,parent,volume,pitch,looped,{throttle=if looped then 0 else .055})
 end
+FX.setSoundVolume=CombatAudio.setVolume
 return FX
 

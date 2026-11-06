@@ -1,3 +1,4 @@
+local BossAudio = require(game:GetService("ServerScriptService").BossAudio)
 --[[
 	SlimeEmperor
 
@@ -1263,6 +1264,7 @@ local function pancake(entry)
 		return
 	end
 
+	BossAudio.emit(SELF,"slam",here)
 	damageCircle(here, body:radius(), P.damage)
 
 	-- The wave runs to `reach`, which is the width he is about to BE and not
@@ -1781,6 +1783,7 @@ local function coronation(entry)
 			return
 		end
 
+		BossAudio.emit(SELF,"coronationImpact",landing)
 		damageCircle(landing, C.radius, C.damage)
 		ripple(landing, C.radius, 0.45, Theme.Color.Accent)
 		splatter(landing, C.radius, 18)
@@ -1924,6 +1927,7 @@ local function slimeRain(entry, phase: number)
 
 			blob:Destroy()
 			if entry.slimeFinished then return end
+			BossAudio.emit(SELF,"rainImpact",spot)
 			damageCircle(spot, R.radius, R.damage)
 			ripple(spot, R.radius, 0.34, color)
 			splatter(spot, R.radius, 8)
@@ -2558,6 +2562,7 @@ local function performAttack(entry, phase: number, target: Player)
 		entry.previousAttack = entry.lastAttack
 		entry.lastAttack = pick
 	end
+	BossAudio.emit(SELF,pick,feetOf(entry))
 	entry.bossPhase = ATTACK_NAMES[pick]
 	entry.busy = true
 
@@ -2941,6 +2946,7 @@ end
 	throws is a puddle that fades on its own.
 ]]
 local function dissolve(entry)
+	BossAudio.emit(SELF,"death",feetOf(entry))
 	local D = Tuning.death
 	local body = entry.body
 

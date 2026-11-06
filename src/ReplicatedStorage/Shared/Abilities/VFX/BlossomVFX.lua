@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 local ImportedAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.DownloadedSounds)
 -- Blossom Road, drawn from one message:
 --   gust    a ribbon of petals runs out along the lane from the caster's feet
@@ -44,9 +45,9 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_GUST = ImportedAudio.ability_magic_cast
-local SOUND_BLOOM = ImportedAudio.ability_magic_glow
-local SOUND_FINALE = ImportedAudio.ability_magic_poof
+local SOUND_GUST = CombatAudio.ids.poof_air
+local SOUND_BLOOM = CombatAudio.ids.alien_chirp
+local SOUND_FINALE = CombatAudio.ids.sparkle
 
 function VFX.preload()
 	if preloaded then return end

@@ -1,0 +1,10 @@
+{
+  "finalCleanup": true,
+  "animatedLoopMute": true,
+  "outOfRangeSafe": true,
+  "animatedLoopUnmute": true,
+  "voiceCapSafe": true,
+  "loopPlaying": true,
+  "loopCleanup": true,
+  "struckCrescent": true
+}

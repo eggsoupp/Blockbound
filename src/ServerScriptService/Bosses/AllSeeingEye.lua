@@ -1,3 +1,4 @@
+local BossAudio = require(game:GetService("ServerScriptService").BossAudio)
 --[[
 	AllSeeingEye
 
@@ -1076,6 +1077,7 @@ local function dash(entry, target: Player?, ledger, key: string, options): boole
 		task.wait()
 	end
 
+	BossAudio.emit(SELF,"dash",pupilOf(entry))
 	-- COMMIT. A target who died during the wind-up is not re-aimed at; the
 	-- dash goes where it was already locked.
 	if not gouge and livingRoot(target) == root then
@@ -1283,6 +1285,7 @@ local function watchfulGaze(entry, _phase: number)
 		task.wait()
 	end
 
+	BossAudio.emit(SELF,"beam",pupilOf(entry))
 	-- THE VERDICT, on the line as it is now.
 	local from = pupilOf(entry)
 	local hit = sightBlock(from, root.Position)
@@ -1456,6 +1459,7 @@ local function uproot(entry, _phase: number)
 				position = rock.from:Lerp(rock.to, alpha) + Vector3.new(0, math.sin(alpha * math.pi) * U.arc, 0)
 
 				if alpha >= 1 then
+					BossAudio.emit(SELF,"rockImpact",rock.to)
 					for _, player in ipairs(playersInCircle(rock.to, U.radius)) do
 						hitOnce(ledger, "rock" .. index, player, U.damage, U.cap)
 					end
@@ -1503,6 +1507,7 @@ local function tear(entry, scope, spot: Vector3, ledger, key: string)
 			end
 			task.wait()
 		end
+		BossAudio.emit(SELF,"tearImpact",spot)
 		drop:Destroy()
 
 		for _, player in ipairs(playersInCircle(spot, T.radius)) do
@@ -1693,6 +1698,7 @@ end
 local function performAttack(entry, phase: number)
 	local pick = if phase == 2 and not entry.transformed then "transform" else nextInCycle(entry, phase)
 
+	BossAudio.emit(SELF,pick,pupilOf(entry))
 	entry.bossPhase = if pick == "charge" and phase == 2 then ATTACK_NAMES.gouge else ATTACK_NAMES[pick]
 	entry.busy = true
 	BossService.update(entry)
@@ -1913,6 +1919,7 @@ function AllSeeingEye.finish(entry, reason: string?)
 
 	-- Only a death gets a death; leaving takes nothing with it.
 	if reason == "died" and entry.position then
+		BossAudio.emit(SELF,"death",entry.position)
 		pcall(function()
 			gore(entry.position, entry.radius * 1.6, 34, { Colors.blood, Colors.bloodBright, Colors.sclera, Colors.iris })
 			flare(entry.position, entry.radius * 6, 0.9, Colors.gaze)

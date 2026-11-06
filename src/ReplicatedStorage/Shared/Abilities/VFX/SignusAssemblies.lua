@@ -3,11 +3,22 @@ local RS=game:GetService("ReplicatedStorage")
 local Content=game:GetService("ContentProvider")
 local Run=game:GetService("RunService")
 local Library=RS:WaitForChild("SignusLibrary")
+-- Phase two's additions: the aura colourways, the black and blood bursts, the
+-- impact rings, the eye flare and the eclipse (see its sources.json).
+local Eclipse=RS:WaitForChild("SignusEclipseLibrary")
 local A={}
 local violet=Color3.fromRGB(145,38,245)
 local orchid=Color3.fromRGB(206,90,255)
 local pearl=Color3.fromRGB(243,215,255)
-local counts={Storm=42,Column=28,Orb=28,EclipseCore=6,Impact=0,Slash=0,Swirl=0,LungeBlade=38,LungeWake=90,LungeImpact=0,EclipseCorona=7}
+-- A palette recolours an assembly: `main` for its body, `hot` for its
+-- brightest layers. Phase one is the violet herald; phase two is a darker,
+-- deeper purple.
+A.Violet={main=violet,hot=pearl,edge=orchid}
+A.Dusk={main=Color3.fromRGB(84,14,165),hot=Color3.fromRGB(205,160,255),edge=Color3.fromRGB(140,46,250)}
+local function template(name)
+ return Library:FindFirstChild(name) or Eclipse:FindFirstChild(name)
+end
+local counts={Storm=42,Column=28,Orb=28,Impact=0,Slash=0,Swirl=0,LungeBlade=38,LungeWake=90,LungeImpact=0}
 local active=0
 local folder
 local function world()
@@ -22,12 +33,13 @@ end
 function A.preload()
  task.spawn(function()pcall(function()Content:PreloadAsync(Library:GetChildren())end)end)
 end
-function A.mount(scope,name,cf,scale,heightScale)
+function A.mount(scope,name,cf,scale,heightScale,palette)
  local blank={set=function()end,burst=function()end}
- if active>=32 and name~="EclipseCore" and name~="EclipseCorona" then return blank end
- local template=Library:FindFirstChild(if name=="EclipseCore" then "Orb" else name)
- if not template then warn("[Signus] Missing assembly "..name) return blank end
- local model=scope:add(template:Clone())
+ if active>=32 then return blank end
+ palette=palette or A.Violet
+ local source=template(name)
+ if not source then warn("[Signus] Missing assembly "..name) return blank end
+ local model=scope:add(source:Clone())
  model.Name="Signus_"..name
  model:ScaleTo(math.clamp(scale or 1,.015,6))
  model:PivotTo(cf)
@@ -41,32 +53,35 @@ function A.mount(scope,name,cf,scale,heightScale)
    if v:IsA("MeshPart") then
     if name=="LungeBlade" then v.DoubleSided=true end
     if name=="Swirl" and heightScale then v.Size=Vector3.new(v.Size.X,v.Size.Y*heightScale,v.Size.Z) end
-    v.Material=if name=="EclipseCore" then Enum.Material.SmoothPlastic else Enum.Material.Neon
-    v.Color=if name=="EclipseCore" then Color3.new(0,0,0) elseif v.Name=="Inner" then pearl else violet
-    table.insert(meshes,{v=v,opacity=if name=="EclipseCore" then 1 elseif name=="LungeBlade" then .95 elseif name=="Swirl" then .55 elseif name=="Slash" then .85 else .5})
+    v.Material=Enum.Material.Neon
+    v.Color=if v.Name=="Inner" then palette.hot else palette.main
+    -- Solid bodies: a pack mesh reads as a shape, not a tint.
+    table.insert(meshes,{v=v,opacity=if name=="LungeBlade" then .95 elseif name=="Swirl" then .72 elseif name=="Slash" then .95 else .8})
    else v.Transparency=1 end
   elseif v:IsA("ParticleEmitter") then
    local keys={}
    for _,k in v.Color.Keypoints do
     local c=k.Value
     local lum=math.max(c.R,c.G,c.B)
-    local color=if name=="EclipseCorona" and lum<.25 then c else violet:Lerp(pearl,math.clamp((lum-.5)*.25,0,.18))
+    -- Bright source layers take the edge colour, the rest the body. Additive
+    -- white washes out in daylight; saturated colour over the dark layers
+    -- and solid meshes is what keeps the contrast.
+    local color=if lum>=.92 then palette.edge:Lerp(palette.hot,.25) elseif lum>=.55 then palette.edge else palette.main
     table.insert(keys,ColorSequenceKeypoint.new(k.Time,color))
    end
    v.Color=ColorSequence.new(keys)
    -- These energy textures composite additively. Keep the black backing invisible;
    -- use emission/count/alpha for restraint instead of exposing the backing.
-   v.LightEmission=1;v.LightInfluence=0;v.Brightness=math.min(v.Brightness,1.3)
+   v.LightEmission=1;v.LightInfluence=0;v.Brightness=math.min(v.Brightness,1.4)
    v.Enabled=false
-   if name=="EclipseCorona" or name=="EclipseCore" then v.LockedToPart=true end
    v.Lifetime=NumberRange.new(math.min(v.Lifetime.Min,1.2),math.min(v.Lifetime.Max,1.5))
-   local rate=if name=="EclipseCore" then math.min(v.Rate*factor,2) else v.Rate*factor
+   local rate=v.Rate*factor
    table.insert(emitters,{v=v,rate=rate,alpha=v.Transparency,burst=math.clamp(math.floor(v.Rate*.055+.5),1,14)})
    v.Rate=0
   elseif v:IsA("Beam") then
    -- Keep the source's dark beam cores and alpha masks; flattening all layers
    -- into additive light erases the column's authored silhouette.
-   v.Color=if v.LightEmission==0 then ColorSequence.new(Color3.fromRGB(40,8,65)) else ColorSequence.new(orchid,violet)
+   v.Color=if v.LightEmission==0 then ColorSequence.new(Color3.fromRGB(40,8,65)) else ColorSequence.new(palette.edge,palette.main)
    v.LightInfluence=0;v.Brightness=math.min(v.Brightness,1.2)
    table.insert(beams,{v=v,alpha=v.Transparency})
    v.Enabled=false
@@ -184,5 +199,161 @@ function A.explode(scope,cf,scale,strength,grand)
   end
  end
  return life+.15
+end
+
+--[[
+	One authored burst from either library, its own colours, curves and
+	flipbooks intact: each layer emits once, in proportion to its authored
+	rate. `scale` multiplies sizes, speeds and acceleration (part templates
+	have no ScaleTo). `tint`, a palette, recolours bright layers by brightness and
+	leaves dark ones dark - the same black-and-blood VoidBurst/BloodBurst pair
+	can then read as one eruption.
+]]
+function A.emit(scope,name,cf,scale,strength,tint)
+ if scope:isDead() then return 0 end
+ local source=template(name)
+ if not source then warn("[Signus] Missing assembly "..name);return 0 end
+ local copy=scope:add(source:Clone())
+ copy.Name="Signus_"..name
+ scale=scale or 1;strength=strength or 1
+ local life=0
+ for _,v in copy:GetDescendants() do
+  if v:IsA("BasePart") then
+   v.Anchored=true;v.CanCollide=false;v.CanTouch=false;v.CanQuery=false;v.CastShadow=false;v.Transparency=1
+  elseif v:IsA("Attachment") then
+   v.Position*=scale
+  elseif v:IsA("ParticleEmitter") then
+   v.Enabled=false;v.LightInfluence=0
+   local keys={}
+   for _,k in v.Size.Keypoints do table.insert(keys,NumberSequenceKeypoint.new(k.Time,k.Value*scale,k.Envelope*scale)) end
+   v.Size=NumberSequence.new(keys)
+   v.Speed=NumberRange.new(v.Speed.Min*scale,v.Speed.Max*scale);v.Acceleration*=scale
+   if tint then
+    -- A palette: each bright keypoint takes the palette by its brightness,
+    -- dark keypoints stay dark, so the authored gradient survives.
+    local keys={}
+    for _,k in v.Color.Keypoints do
+     local c=k.Value;local lum=math.max(c.R,c.G,c.B)
+     local color=if lum<.25 then c elseif lum>=.9 then tint.edge:Lerp(tint.hot,.35) elseif lum>=.6 then tint.edge else tint.main
+     table.insert(keys,ColorSequenceKeypoint.new(k.Time,color))
+    end
+    v.Color=ColorSequence.new(keys)
+   end
+   local count=if v.Rate<=0 then 3 else math.clamp(math.ceil(v.Rate*.1),2,28)
+   v:SetAttribute("SignusCount",math.max(1,math.floor(count*strength+.5)))
+   life=math.max(life,v.Lifetime.Max)
+  elseif v:IsA("LuaSourceContainer") or v:IsA("PointLight") then v:Destroy() end
+ end
+ if copy:IsA("Model") then copy:PivotTo(cf) elseif copy:IsA("BasePart") then copy.CFrame=cf end
+ copy.Parent=world()
+ for _,v in copy:GetDescendants() do
+  if v:IsA("ParticleEmitter") then v:Emit(v:GetAttribute("SignusCount") or 1) end
+ end
+ return life
+end
+
+--[[
+	The eclipse: the place's own `eclipse` attachment (a black disc inside
+	violet crescents, shine and smoke), cloned whole onto an invisible host.
+	Around it go discs made from its own layers and the pack's corona ring: a
+	tilted disc of crescents turning about it, a counter-turning ring, a slow
+	ripple outward, and a soft purple aura behind. `scale` multiplies every
+	authored size and speed: 1 is the attachment as authored, a ten-stud core.
+	`set(frame, alpha, scale)` moves, fades and resizes it.
+]]
+local CORONA_RING="rbxassetid://122514726839250" -- SignusParticles.CoronaRing
+function A.eclipse(scope,cf,scale)
+ local blank={set=function()end}
+ local source=template("Eclipse")
+ if not source then warn("[Signus] Missing assembly Eclipse") return blank end
+ local host=scope:add(Instance.new("Part"))
+ host.Name="Signus_Eclipse";host.Size=Vector3.one*.1;host.Transparency=1
+ host.Anchored=true;host.CanCollide=false;host.CanQuery=false;host.CanTouch=false;host.CastShadow=false
+ host.CFrame=cf
+ local core=source:Clone();core.Name="Eclipse";core.CFrame=CFrame.identity;core.Parent=host
+ local authored={}
+ for _,v in core:GetChildren() do if v:IsA("ParticleEmitter") and not authored[v.Name] then authored[v.Name]=v end end
+ local function derive(from,parent,props)
+  local e=from:Clone()
+  for k,v in props do e[k]=v end
+  e.Parent=parent
+  return e
+ end
+ local function ring(parent,props)
+  local e=Instance.new("ParticleEmitter")
+  e.Texture=CORONA_RING;e.Orientation=Enum.ParticleOrientation.FacingCamera;e.LockedToPart=true
+  e.LightEmission=1;e.LightInfluence=0;e.Speed=NumberRange.new(0);e.Rotation=NumberRange.new(0,360)
+  for k,v in props do e[k]=v end
+  e.Parent=parent
+  return e
+ end
+ -- The disc lies in the attachment's XZ plane: tilted toward the viewer.
+ local tilt=Instance.new("Attachment");tilt.Name="EclipseDisc";tilt.CFrame=CFrame.Angles(math.rad(70),0,math.rad(14));tilt.Parent=host
+ -- The authored layers are faint by design; these added discs carry the
+ -- shape, bright enough to read against a daylight sky.
+ local function hold(alpha)
+  return NumberSequence.new({NumberSequenceKeypoint.new(0,1),NumberSequenceKeypoint.new(.2,alpha),NumberSequenceKeypoint.new(.75,alpha),NumberSequenceKeypoint.new(1,1)})
+ end
+ local edge,deep=Color3.fromRGB(176,90,255),Color3.fromRGB(120,30,235)
+ if authored.Cres2 then
+  derive(authored.Cres2,tilt,{Name="Disc",Orientation=Enum.ParticleOrientation.VelocityPerpendicular,EmissionDirection=Enum.NormalId.Top,
+   Speed=NumberRange.new(.01),Size=NumberSequence.new(30,34),Rate=10,Lifetime=NumberRange.new(1.4),RotSpeed=NumberRange.new(80),
+   Color=ColorSequence.new(deep),Brightness=2.4,Transparency=hold(.45),ZOffset=-.2})
+ end
+ if authored.Cres then
+  derive(authored.Cres,tilt,{Name="DiscInner",Orientation=Enum.ParticleOrientation.VelocityPerpendicular,EmissionDirection=Enum.NormalId.Top,
+   Speed=NumberRange.new(.01),Size=NumberSequence.new(19,21),Rate=8,Lifetime=NumberRange.new(1.4),RotSpeed=NumberRange.new(-120),
+   Color=ColorSequence.new(edge),Brightness=2.4,Transparency=hold(.4),ZOffset=.4})
+ end
+ if authored.Shine then
+  -- The corona: a bright rim just outside the black disc, behind it.
+  derive(authored.Shine,core,{Name="Corona",Color=ColorSequence.new(edge),Size=NumberSequence.new(14,15),Brightness=3,
+   Rate=10,Lifetime=NumberRange.new(.8),RotSpeed=NumberRange.new(-60,60),Transparency=hold(.1),ZOffset=-.1})
+ end
+ ring(core,{Name="Ring",Color=ColorSequence.new(edge),Size=NumberSequence.new(13),Brightness=3,
+  Rate=2.6,Lifetime=NumberRange.new(1.2),RotSpeed=NumberRange.new(-30),ZOffset=.6,Transparency=hold(0)})
+ ring(core,{Name="Ripple",Color=ColorSequence.new(edge,Color3.fromRGB(84,14,165)),
+  Size=NumberSequence.new({NumberSequenceKeypoint.new(0,12),NumberSequenceKeypoint.new(1,32)}),Brightness=1.6,
+  Rate=1.2,Lifetime=NumberRange.new(1.8),RotSpeed=NumberRange.new(12),ZOffset=-.8,
+  Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,.05),NumberSequenceKeypoint.new(1,1)})})
+ if authored.Shine then
+  -- The aura: the attachment's own shine, wide and soft behind everything.
+  derive(authored.Shine,core,{Name="Aura",Color=ColorSequence.new(Color3.fromRGB(104,24,200)),Size=NumberSequence.new(24,28),
+   Brightness=1,Rate=8,Lifetime=NumberRange.new(1.6),RotSpeed=NumberRange.new(-20,20),ZOffset=-2,
+   Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1),NumberSequenceKeypoint.new(.3,.35),NumberSequenceKeypoint.new(1,1)})})
+ end
+ local emitters={}
+ for _,v in host:GetDescendants() do
+  if v:IsA("ParticleEmitter") then
+   v.Enabled=false
+   table.insert(emitters,{v=v,size=v.Size,speed=v.Speed,rate=v.Rate,alpha=v.Transparency})
+  end
+ end
+ host.Parent=world()
+ local result={host=host}
+ local lastAlpha,lastScale=-1,-1
+ function result:set(frame,alpha,size)
+  if not host.Parent then return end
+  if frame then host.CFrame=frame end
+  alpha=math.clamp(alpha or 1,0,1)
+  size=size or scale or 1
+  local resize=math.abs(size-lastScale)>.01
+  local refade=math.abs(alpha-lastAlpha)>.025
+  for _,e in emitters do
+   e.v.Enabled=alpha>.015
+   e.v.Rate=e.rate*alpha
+   if resize then
+    local keys={}
+    for _,k in e.size.Keypoints do table.insert(keys,NumberSequenceKeypoint.new(k.Time,k.Value*size,k.Envelope*size)) end
+    e.v.Size=NumberSequence.new(keys)
+    e.v.Speed=NumberRange.new(e.speed.Min*size,e.speed.Max*size)
+   end
+   if refade then e.v.Transparency=nsScale(e.alpha,alpha) end
+  end
+  if resize then lastScale=size end
+  if refade then lastAlpha=alpha end
+ end
+ result:set(cf,0,scale)
+ return result
 end
 return A

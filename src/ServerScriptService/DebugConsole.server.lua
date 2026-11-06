@@ -24,7 +24,7 @@
 	  /bosshp <percent>   bring every live boss down to that much health, through
 	                      the real damage path, so its phase changes fire
 	  /signus <spell>     make every Signus cast that spell next: spiral, lance,
-	                      beam, lunge, step or totality
+	                      beam, thunder, blacksun, mirror, step or totality
 	  /bbface <enemy> <n> turn an enemy's model n degrees about Y, live, on
 	                      everything of that kind already in the world. For
 	                      finding the right EnemyConfig `modelRotation` without

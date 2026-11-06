@@ -1,3 +1,5 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
+local CombatCues = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatCues)
 --[[
 	BossEffectClient
 
@@ -37,6 +39,7 @@ local AbilityScope = require(Shared:WaitForChild("Abilities"):WaitForChild("Abil
 local VFXFolder = Shared:WaitForChild("Abilities"):WaitForChild("VFX")
 
 local BossEffect = Remotes.wait("BossEffect")
+CombatAudio.preload()
 
 -- Persistent effects must also exist for observers arriving mid-encounter.
 require(VFXFolder:WaitForChild("SignusVisuals")).start()
@@ -81,6 +84,9 @@ BossEffect.OnClientEvent:Connect(function(payload)
 	if typeof(payload.position) ~= "Vector3" then
 		return
 	end
+
+	CombatCues.boss(payload)
+	if payload.audioOnly then return end
 
 	if active >= MAX_CONCURRENT then
 		return

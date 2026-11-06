@@ -1,0 +1,350 @@
+{
+  "magic_lock": {
+    "status": "Success",
+    "id": "7846700665",
+    "duration": 2.1942857142857144,
+    "loaded": true
+  },
+  "plasma_cast": {
+    "status": "Success",
+    "id": "9558660562",
+    "duration": 1.3121995464852607,
+    "loaded": true
+  },
+  "alien_chirp": {
+    "status": "Success",
+    "id": "9114279576",
+    "duration": 1.1339791666666668,
+    "loaded": true
+  },
+  "bubbles": {
+    "status": "Success",
+    "id": "9112752575",
+    "duration": 13.885083333333334,
+    "loaded": true
+  },
+  "ability_arc2": {
+    "status": "Failure",
+    "id": "129902575001546",
+    "duration": 0,
+    "loaded": false
+  },
+  "alien_bug1": {
+    "status": "Success",
+    "id": "136128007074351",
+    "duration": 1.2150113378684808,
+    "loaded": true
+  },
+  "sword_swing": {
+    "status": "Success",
+    "id": "7171591581",
+    "duration": 1.3463718820861679,
+    "loaded": true
+  },
+  "monster_roar": {
+    "status": "Success",
+    "id": "18929141493",
+    "duration": 7.845541666666667,
+    "loaded": true
+  },
+  "ability_arc5": {
+    "status": "Failure",
+    "id": "130263250308439",
+    "duration": 0,
+    "loaded": false
+  },
+  "metal_pound": {
+    "status": "Success",
+    "id": "9116908179",
+    "duration": 0.9063333333333333,
+    "loaded": true
+  },
+  "slime_pop": {
+    "status": "Success",
+    "id": "9119668788",
+    "duration": 0.6116458333333333,
+    "loaded": true
+  },
+  "glass_break2": {
+    "status": "Success",
+    "id": "6737582452",
+    "duration": 1.8393541666666666,
+    "loaded": true
+  },
+  "air_suction": {
+    "status": "Success",
+    "id": "411286671",
+    "duration": 1.0088662131519275,
+    "loaded": true
+  },
+  "blast_short": {
+    "status": "Success",
+    "id": "104406219115733",
+    "duration": 1.4712471655328798,
+    "loaded": true
+  },
+  "water_walk": {
+    "status": "Success",
+    "id": "122684680935247",
+    "duration": 1.6670068027210885,
+    "loaded": true
+  },
+  "swing_air": {
+    "status": "Success",
+    "id": "9113305311",
+    "duration": 0.4666666666666667,
+    "loaded": true
+  },
+  "force_hit": {
+    "status": "Success",
+    "id": "8844155653",
+    "duration": 1.590875,
+    "loaded": true
+  },
+  "charge_short": {
+    "status": "Success",
+    "id": "9125980459",
+    "duration": 1.7706666666666666,
+    "loaded": true
+  },
+  "punch_heavy2": {
+    "status": "Success",
+    "id": "9117969717",
+    "duration": 0.9046875,
+    "loaded": true
+  },
+  "bass_drop": {
+    "status": "Success",
+    "id": "9045206449",
+    "duration": 3.9706122448979593,
+    "loaded": true
+  },
+  "synth_blast": {
+    "status": "Success",
+    "id": "9119783432",
+    "duration": 2.933333333333333,
+    "loaded": true
+  },
+  "energy_sword": {
+    "status": "Success",
+    "id": "187747824",
+    "duration": 1.3506875,
+    "loaded": true
+  },
+  "punch_heavy1": {
+    "status": "Success",
+    "id": "9117969687",
+    "duration": 0.617625,
+    "loaded": true
+  },
+  "ability_arc4": {
+    "status": "Failure",
+    "id": "95960607362953",
+    "duration": 0,
+    "loaded": false
+  },
+  "poof_punch": {
+    "status": "Success",
+    "id": "9116406151",
+    "duration": 1.4893541666666668,
+    "loaded": true
+  },
+  "boom_deep1": {
+    "status": "Success",
+    "id": "9125401975",
+    "duration": 2.9223958333333333,
+    "loaded": true
+  },
+  "ability_arc1": {
+    "status": "Failure",
+    "id": "77831158396083",
+    "duration": 0,
+    "loaded": false
+  },
+  "alien_bug3": {
+    "status": "Success",
+    "id": "96071203271536",
+    "duration": 1.5686621315192744,
+    "loaded": true
+  },
+  "earth_crumble": {
+    "status": "Success",
+    "id": "8044058354",
+    "duration": 1.6602267573696146,
+    "loaded": true
+  },
+  "impact_body": {
+    "status": "Success",
+    "id": "9113312550",
+    "duration": 1.0093958333333333,
+    "loaded": true
+  },
+  "phantom": {
+    "status": "Failure",
+    "id": "114996101720631",
+    "duration": 0,
+    "loaded": false
+  },
+  "explosive_whoosh": {
+    "status": "Success",
+    "id": "9120705982",
+    "duration": 1.754125,
+    "loaded": true
+  },
+  "portal_close": {
+    "status": "Success",
+    "id": "89974036761299",
+    "duration": 0.6826666666666666,
+    "loaded": true
+  },
+  "metal_crash": {
+    "status": "Success",
+    "id": "9125819216",
+    "duration": 1.1256041666666667,
+    "loaded": true
+  },
+  "sword_hit": {
+    "status": "Success",
+    "id": "86812684303392",
+    "duration": 0.8770748299319728,
+    "loaded": true
+  },
+  "glass_break1": {
+    "status": "Success",
+    "id": "6737582037",
+    "duration": 1.9191666666666667,
+    "loaded": true
+  },
+  "power_up": {
+    "status": "Success",
+    "id": "9065783664",
+    "duration": 2.7687083333333335,
+    "loaded": true
+  },
+  "poof_air": {
+    "status": "Success",
+    "id": "9125639499",
+    "duration": 0.9688125,
+    "loaded": true
+  },
+  "ice_chunk": {
+    "status": "Success",
+    "id": "9114857307",
+    "duration": 2.115270833333333,
+    "loaded": true
+  },
+  "flame_blast5": {
+    "status": "Success",
+    "id": "9120009533",
+    "duration": 2.112,
+    "loaded": true
+  },
+  "heavy_whoosh": {
+    "status": "Success",
+    "id": "9120728815",
+    "duration": 0.6659791666666667,
+    "loaded": true
+  },
+  "alien_bug2": {
+    "status": "Success",
+    "id": "137326052365300",
+    "duration": 1.230544217687075,
+    "loaded": true
+  },
+  "flame_blast2": {
+    "status": "Success",
+    "id": "9120010041",
+    "duration": 2.3466666666666667,
+    "loaded": true
+  },
+  "flame_blast3": {
+    "status": "Success",
+    "id": "9120010568",
+    "duration": 1.6186666666666667,
+    "loaded": true
+  },
+  "flame_blast1": {
+    "status": "Success",
+    "id": "9120009740",
+    "duration": 2.368,
+    "loaded": true
+  },
+  "teleport": {
+    "status": "Failure",
+    "id": "10821190986",
+    "duration": 0,
+    "loaded": false
+  },
+  "sparkle": {
+    "status": "Success",
+    "id": "9119834423",
+    "duration": 0.59,
+    "loaded": true
+  },
+  "flame_blast4": {
+    "status": "Success",
+    "id": "9120009225",
+    "duration": 2.6346666666666665,
+    "loaded": true
+  },
+  "magic_warp": {
+    "status": "Success",
+    "id": "96643104586269",
+    "duration": 1.933061224489796,
+    "loaded": true
+  },
+  "ability_arc3": {
+    "status": "Failure",
+    "id": "121284587843183",
+    "duration": 0,
+    "loaded": false
+  },
+  "electric_hum": {
+    "status": "Success",
+    "id": "6987804397",
+    "duration": 1.119591836734694,
+    "loaded": true
+  },
+  "plasma_cut": {
+    "status": "Success",
+    "id": "4882986173",
+    "duration": 0.7,
+    "loaded": true
+  },
+  "plasma_trail": {
+    "status": "Success",
+    "id": "9125742262",
+    "duration": 33.16266666666667,
+    "loaded": true
+  },
+  "boom_deep2": {
+    "status": "Success",
+    "id": "9125402735",
+    "duration": 2.8817291666666667,
+    "loaded": true
+  },
+  "lightning_close": {
+    "status": "Success",
+    "id": "18650085033",
+    "duration": 5.52,
+    "loaded": true
+  },
+  "burst_quick": {
+    "status": "Failure",
+    "id": "116650161653939",
+    "duration": 0,
+    "loaded": false
+  },
+  "electric_shock": {
+    "status": "Success",
+    "id": "8060079174",
+    "duration": 1.5936281179138323,
+    "loaded": true
+  },
+  "energy_blast": {
+    "status": "Success",
+    "id": "1841310110",
+    "duration": 4.41469387755102,
+    "loaded": true
+  }
+}

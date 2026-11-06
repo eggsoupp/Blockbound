@@ -1,0 +1,61 @@
+-- Download library asset IDs verified in a normal client. See assets/audio/abilities/.
+-- Runtime gain leaves headroom across differently mastered source clips.
+local Bank = {
+	air_suction = {id="rbxassetid://411286671", gain=0.419, duration=1.009},
+	energy_blast = {id="rbxassetid://1841310110", gain=0.536, duration=4.415},
+	electric_shock = {id="rbxassetid://8060079174", gain=0.541, duration=1.594},
+	electric_hum = {id="rbxassetid://6987804397", gain=0.599, duration=1.120},
+	energy_sword = {id="rbxassetid://187747824", gain=1.813, duration=1.351},
+	magic_warp = {id="rbxassetid://96643104586269", gain=0.272, duration=1.933},
+	magic_lock = {id="rbxassetid://7846700665", gain=0.896, duration=2.194},
+	plasma_cast = {id="rbxassetid://9558660562", gain=0.417, duration=1.312},
+	plasma_cut = {id="rbxassetid://4882986173", gain=1.426, duration=0.700},
+	plasma_trail = {id="rbxassetid://9125742262", gain=1.079, duration=33.163, clip=1.65},
+	portal_close = {id="rbxassetid://89974036761299", gain=0.286, duration=0.683},
+	power_up = {id="rbxassetid://9065783664", gain=0.727, duration=2.769},
+	charge_short = {id="rbxassetid://9125980459", gain=1.223, duration=1.771},
+	alien_chirp = {id="rbxassetid://9114279576", gain=3.000, duration=1.134},
+	alien_bug1 = {id="rbxassetid://136128007074351", gain=0.874, duration=1.215},
+	alien_bug2 = {id="rbxassetid://137326052365300", gain=0.814, duration=1.231},
+	alien_bug3 = {id="rbxassetid://96071203271536", gain=0.791, duration=1.569},
+	lightning_close = {id="rbxassetid://18650085033", gain=0.482, duration=5.520},
+	boom_deep1 = {id="rbxassetid://9125401975", gain=0.638, duration=2.922},
+	boom_deep2 = {id="rbxassetid://9125402735", gain=0.556, duration=2.882},
+	ice_chunk = {id="rbxassetid://9114857307", gain=1.664, duration=2.115},
+	poof_punch = {id="rbxassetid://9116406151", gain=2.002, duration=1.489},
+	poof_air = {id="rbxassetid://9125639499", gain=2.158, duration=0.969},
+	metal_pound = {id="rbxassetid://9116908179", gain=0.450, duration=0.906},
+	punch_heavy1 = {id="rbxassetid://9117969687", gain=0.328, duration=0.618},
+	punch_heavy2 = {id="rbxassetid://9117969717", gain=0.324, duration=0.905},
+	metal_crash = {id="rbxassetid://9125819216", gain=0.312, duration=1.126},
+	bass_drop = {id="rbxassetid://9045206449", gain=0.481, duration=3.971},
+	sword_hit = {id="rbxassetid://86812684303392", gain=0.925, duration=0.877},
+	sword_swing = {id="rbxassetid://7171591581", gain=0.724, duration=1.346},
+	synth_blast = {id="rbxassetid://9119783432", gain=1.590, duration=2.933},
+	sparkle = {id="rbxassetid://9119834423", gain=1.626, duration=0.590},
+	flame_blast1 = {id="rbxassetid://9120009740", gain=1.035, duration=2.368},
+	flame_blast2 = {id="rbxassetid://9120010041", gain=1.190, duration=2.347},
+	flame_blast3 = {id="rbxassetid://9120010568", gain=0.957, duration=1.619},
+	flame_blast4 = {id="rbxassetid://9120009225", gain=0.844, duration=2.635},
+	flame_blast5 = {id="rbxassetid://9120009533", gain=0.796, duration=2.112},
+	explosive_whoosh = {id="rbxassetid://9120705982", gain=0.476, duration=1.754},
+	heavy_whoosh = {id="rbxassetid://9120728815", gain=0.773, duration=0.666},
+	swing_air = {id="rbxassetid://9113305311", gain=1.312, duration=0.467},
+	impact_body = {id="rbxassetid://9113312550", gain=0.679, duration=1.009},
+	slime_pop = {id="rbxassetid://9119668788", gain=0.787, duration=0.612},
+	bubbles = {id="rbxassetid://9112752575", gain=1.989, duration=13.885, clip=0.85},
+	earth_crumble = {id="rbxassetid://8044058354", gain=1.186, duration=1.660},
+	monster_roar = {id="rbxassetid://18929141493", gain=0.735, duration=7.846, clip=2.6},
+	glass_break1 = {id="rbxassetid://6737582037", gain=0.270, duration=1.919},
+	glass_break2 = {id="rbxassetid://6737582452", gain=0.380, duration=1.839},
+	blast_short = {id="rbxassetid://104406219115733", gain=0.215, duration=1.471},
+	force_hit = {id="rbxassetid://8844155653", gain=0.695, duration=1.591},
+	water_walk = {id="rbxassetid://122684680935247", gain=3.000, duration=1.667},
+}
+local Imported = require(script.Parent.DownloadedSounds)
+for key, id in pairs(Imported) do
+	if string.sub(key, 1, 8) == "ability_" then
+		Bank[key] = {id=id, gain=1, duration=if key=="ability_charge" then 10 else 7}
+	end
+end
+return Bank

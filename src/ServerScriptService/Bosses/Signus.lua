@@ -4,61 +4,72 @@
 	A hooded lunar spellcaster. It floats, it keeps its distance, and it
 	fights with the ground and the sky rather than with its body.
 
-	WHAT IT DOES
+	WHAT IT DOES (SignusMoves has the numbers)
 
-	  UMBRAL MAELSTROM  a fixed warning tightens into coiling violet ribbons;
-	                    terrain rises into orbit, then is flung onto the rim.
-	  ECLIPSE JUDGMENT  charges and launches an orb; the target compresses,
-	                    then erupts into a towering beam with orbiting rings.
-	                    Real terrain rises and lands around a lasting crater.
-	  WORLDREND         a sustained violet beam with no end of its own: it runs
-	                    until it meets a block, bores on through natural ground
-	                    and fades out at its range. The aim locks before it fires.
-	  TOTALITY          the half-health transformation raises an orbit of
-	                    terrain, darkens the sky, lifts it into the air on wings
-	                    of violet fire and ignites the eclipse crown behind its
-	                    hood.
+	Phase one, the Herald: violet over black, pearl eyes.
+	  UMBRAL MAELSTROM  a fixed warning tightens into coiling ribbons; terrain
+	                    rises into orbit and the slam erupts, flinging it onto
+	                    the rim.
+	  ECLIPSE JUDGMENT  a sigil opens on the target and a sun of judgment
+	                    forms over it, then falls into a towering column. Real
+	                    terrain rises and lands around a lasting crater.
+	  WORLDREND         a sustained beam with no end of its own: it runs until
+	                    it meets a block, bores on through natural ground and
+	                    fades out at its range. The aim locks before it fires.
+	  UMBRAL THUNDER    a sleeve raised to the sky; marks open one by one where
+	                    you are heading and violet lightning lands on each. A
+	                    block overhead is cover.
+	  MIRROR VEIL       it splits into itself and two fainter decoys that
+	                    circle you. Strike the real one and the decoys
+	                    scatter, leaving it stunned; too slow and every image
+	                    calls the thunder down on you in turn.
+	  VEIL STEP         a blink away from someone hugging it.
 
-	In phase two every spell is cast from the air and is bigger: a second
-	Maelstrom beside the first, two more Judgment columns either side, and a
-	wider, black-cored Worldrend that keeps turning after you.
-	  CRESCENT LUNGE    a short charge followed by a vulnerable recovery.
-	  VEIL STEP         a short reposition with a crescent and departure burst.
+	It is a mage: it never charges or dashes at you. It hovers, blinks and
+	casts.
 
-	SignusMoves owns the three reference attacks and Totality. The earlier
-	attack helpers remain private below and are not in the active ATTACKS map.
+	TOTALITY at half health: it cannot be hurt while it gathers; the ground
+	orbits it, and on the release the air darkens to a purple dusk, its eyes
+	burn violet, its aura deepens and an eclipse rises behind its hood.
+
+	Phase two, the Eclipse: it flies, casts from the air, and lands spent
+	after each spell. The Maelstrom walks after you in two aftershocks, the
+	Judgment falls as a cross with safe diagonals, the Worldrend turns after
+	you with a black core, the Thunder becomes a storm ending in a crown of
+	strikes with one way out, the Mirror Veil
+	makes four decoys that are hard to tell from it and trade places, and
+	the BLACK SUN - held overhead while a thirty-stud ring closes, then
+	slammed down - burns everyone who can see it: get out, or get a block
+	between you and it.
 
 	HOW IT MOVES
 
 	It holds a casting ring twenty-odd studs from whoever it is after, hem a
 	couple of studs off the ground, drifting slowly round and going still
 	while it casts. That puts its pivot inside a sword's reach when you stand
-	beside it. It rises only for Moonfall and Totality, and sinks to the
-	ground for the Fissure, the Nova and the end of a Lunge.
-
-	After Totality it flies (Tuning.flight): it circles high and wide,
-	banking into its turns, casts from the air, and comes down after every
-	spell to recover for a few seconds before taking off again.
+	beside it. After Totality it flies (Tuning.flight): it circles high and
+	wide, casts from the air, and comes down after every spell to recover
+	before taking off again.
 
 	THE RIG
 
 	EnemyAssets.Signus is a Motor6D rig: an anchored, invisible RootPart and
 	four jointed MeshParts (see assets/signus-hallow/roblox). This module only
-	ever moves the RootPart, through applyPose -> Model:PivotTo, exactly as
-	the All Seeing Eye does. The joints are posed by EnemyAnimator when a
-	track is published and by short C0 tweens on the Motor6Ds (POSES below)
-	when it is not; the two never run on the same move, and the RootPart is
-	no joint's Part1, so nothing here can move it.
+	ever moves the RootPart, through applyPose -> Model:PivotTo. The joints
+	play retargeted pack clips (Shared.Enemies.SignusClips): a move plans a
+	clip here, writes it to the SignusClip attribute, and times its damage
+	from the clip's own markers; every client (SignusRig) poses the joints
+	from the same plan. SignusPhase and SignusStance pick its aura, eyes and
+	idle.
 
 	TERRAIN
 
 	Every block it takes goes through TerrainManager's PlanExcavation and
-	ExecuteExcavation: natural, loaded, breakable, dry ground only, never a
-	placed block, a structure, a cave wall or bedrock, under the caps in
-	Tuning, with no loot. Cells are chosen BEFORE the warning is drawn and
-	nothing re-aims after it. Clients are told what really went over
-	BossEffect; particle shards stream out of the actual excavated cells into
-	the halo. No cosmetic terrain clones are made.
+	ExecuteExcavation or a boss displacement: natural, loaded, breakable, dry
+	ground only, never a placed block, a structure, a cave wall or bedrock,
+	under the caps in SignusMoves, with no loot. Cells are chosen BEFORE the
+	warning is drawn and nothing re-aims after it. A placed block is always
+	cover.
 
 	EFFECTS
 
@@ -70,7 +81,7 @@
 	CLEANUP
 
 	Every spell runs inside `entry.scope`, destroyed when it ends however it
-	ends. Persistent encounter effects (lights, halo, eclipse, sky) live in
+	ends. Persistent encounter effects (lights, aura, eclipse, sky) live in
 	`entry.encounterScope`, destroyed in finish. Every wait goes through
 	`pause`, which stops the moment `entry.signusFinished` is set.
 ]]
@@ -84,13 +95,12 @@ local TweenService = game:GetService("TweenService")
 local CollectionService = game:GetService("CollectionService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local EnemyConfig = require(Shared:WaitForChild("Enemies"):WaitForChild("EnemyConfig"))
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local AbilityScope = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityScope"))
+local SignusClips = require(Shared:WaitForChild("Enemies"):WaitForChild("SignusClips"))
 
 local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
-local EnemyAnimator = require(ServerScriptService:WaitForChild("EnemyAnimator"))
 local CombatService = require(ServerScriptService:WaitForChild("CombatService"))
 local BossService = require(ServerScriptService:WaitForChild("BossService"))
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
@@ -100,6 +110,9 @@ local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedbac
 local BossEffect = Remotes.ensure("BossEffect", "RemoteEvent")
 
 local Signus = {}
+
+-- The rig every Mirror Veil decoy is cloned from: the boss's own asset.
+local SIGNUS_ASSET = ReplicatedStorage:WaitForChild("EnemyAssets"):WaitForChild("Signus")
 
 local SOURCE = "Signus"
 local SELF = "Signus"
@@ -128,7 +141,8 @@ local Colors = {
 	base movement (walk 16, sprint 25), commitment and direction changes
 	beat the fixed telegraphs; simply circling no longer clears every spell.
 	Major hits cost roughly a third of unarmoured health. Phase two uses
-	reacquired follow-ups and two committed lunges, with a per-action cap.
+	reacquired follow-ups and more, better-hidden decoys, with a per-action
+	cap.
 	Short grounded recoveries remain the melee opening.
 ]]
 local Tuning = {
@@ -155,64 +169,31 @@ local Tuning = {
 	-- out is in range to hit it and out of range to be touched.
 	contact = { damage = 8, interval = 0.8, reach = 4.5, height = 10 },
 
-	volley = {
-		count = { 3, 5 },
-		gather = 0.9,
-		gap = 0.15,
-		speed = 70,
-		hitRadius = 3.5,
-		damage = 8,
-		cap = 16,
-		life = 1.6,
-		homing = { 0, 22 }, -- degrees a second a crescent bends toward you
-		radius = 2.6, -- of the crescent arc
-		segments = 7,
-		recover = 0.7,
-	},
-
-	moonfall = {
-		hem = 7,
-		track = 0.6,
-		fall = 0.8,
-		radius = 7,
-		damage = 18,
-		cap = 36,
-		depth = { 1, 2 },
-		cap_cells = { 9, 18 },
-		sigils = { 1, 2 },
-		halo = 4, -- fragments the crater feeds into the halo
-		recover = 0.8,
-	},
-
-	fissure = {
-		cracks = { 1, 2 },
-		fan = 35, -- degrees between the two cracks
-		length = 40,
-		start = 5, -- the crack begins this far from its hem
-		raise = 0.45,
-		warn = 1.2,
-		stagger = 0.05, -- seconds between cells erupting
-		width = 3.5,
-		safeHeight = 6.5, -- root this far above the cell is clear of it
-		damage = 14,
-		cap = 24,
-		recover = 1.2,
-	},
-
-	lunge = {
+	-- Mirror Veil. Per phase where there are two numbers.
+	mirror = {
 		farDistance = 34,
 		farSeconds = 2,
 		hiddenSeconds = 2.5,
-		windup = { 0.6, 0.5 },
-		rearBack = 4,
-		speed = { 90, 108 },
-		overshoot = 6,
-		reach = { 7, 8.5 },
-		damage = { 28, 34 },
-		cap = { 28, 48 },
-		cooldown = { 8, 5.5 },
+		cooldown = { 9, 7 },
+		images = { 3, 5 }, -- Signus and its decoys
+		decoyAlpha = { 0.55, 0.18 }, -- a decoy robe's Transparency; Signus is solid
+		ring = { 15, 17 }, -- studs from the target they circle at
+		spin = { 0.55, 0.85 }, -- radians a second round the ring: slower than you can walk
+		follow = 0.5, -- how quickly the ring's centre drifts after its target
+		split = 0.8, -- phase one: seconds fanning out from where it stood
+		window = { 6, 6.5 }, -- seconds to find it before the images strike
+		shuffle = { {}, { 2.2, 4.2 } }, -- seconds in at which the images trade places
+		glide = 0.4, -- seconds a trade takes
+		stun = { 1.8, 1.5 }, -- seconds it stays down, spent, once found
+		-- When it is not found: each image calls a thunder strike in turn.
+		stagger = { 0.5, 0.38 }, -- seconds between images; Signus goes last
+		warn = { 0.8, 0.65 }, -- each mark's warning
+		lead = 0.45, -- seconds ahead of its target that a mark is laid
+		radius = { 6.5, 6 },
+		finalRadius = { 9, 9.5 }, -- Signus's own strike
+		damage = { 22, 26 },
+		cap = { 34, 48 },
 		recover = { 0.85, 0.7 },
-		bladeRadius = 4.2,
 	},
 
 	step = {
@@ -220,36 +201,8 @@ local Tuning = {
 		nearSeconds = 2.5,
 		fold = 0.25,
 		distance = 18,
-		glide = 0.35,
+		unfold = 0.35, -- seconds the crescent takes to open again where it arrives
 		cooldown = { 7, 5 },
-	},
-
-	totality = {
-		hem = 10,
-		ring = { 8, 11 },
-		columns = 16,
-		cap = 16,
-		warn = 1.4,
-		settle = 1.6,
-		haloMax = 12,
-	},
-
-	nova = {
-		radius = 26,
-		channel = 2.4,
-		hold = 0.15,
-		damage = 24,
-		scorch = { 9, 12 },
-		columns = 16,
-		cap = 24,
-		recover = 3,
-	},
-
-	halo = {
-		radius = 8.5,
-		spin = 0.9,
-		lift = 1.5,
-		size = 3.2,
 	},
 
 	-- Phase two: it takes to the air. It circles high and casts from there,
@@ -259,8 +212,8 @@ local Tuning = {
 		hem = 13, -- studs of air under the robe while it circles
 		castHem = 15, -- and while it casts
 		ring = 30,
-		speed = 26,
-		drift = 1.8, -- the ring slides round this much faster
+		speed = 30,
+		drift = 2.1, -- the ring slides round this much faster
 		bobAmplitude = 0.4,
 		bank = 0, -- an upright, weightless glide rather than banking the robe
 		perch = { 1.25, 1.7 }, -- a deliberate melee punish window
@@ -274,24 +227,23 @@ local Tuning = {
 	leaveSeconds = 2.4,
 }
 
--- Lunge is part of the pressure cycle as well as the answer to distant
--- targets. Veil Step remains a response to prolonged close pressure.
+-- Mirror Veil is part of the pressure cycle as well as the answer to distant
+-- or hidden targets. Veil Step remains a response to prolonged close pressure.
 local CYCLES = {
-	{ "spiral", "lunge", "lance", "beam", "spiral", "lance" },
-	{ "lance", "lunge", "spiral", "beam", "lunge", "lance", "spiral", "beam" },
+	{ "spiral", "thunder", "lance", "beam", "mirror", "thunder", "spiral", "lance" },
+	{ "blacksun", "lance", "thunder", "spiral", "beam", "mirror", "lance", "blacksun", "spiral", "thunder", "beam", "mirror" },
 }
 
+-- Phase two's names for the spells that change.
 local ATTACK_NAMES = {
-	spiral = "Umbral Maelstrom",
-	lance = "Eclipse Judgment",
-	beam = "Worldrend",
-	volley = "Crescent Volley",
-	moonfall = "Moonfall",
-	fissure = "Umbral Fissure",
-	lunge = "Crescent Lunge",
-	step = "Veil Step",
-	totality = "Totality",
-	nova = "Eclipse Nova",
+	spiral = { "Umbral Maelstrom", "Walking Maelstrom" },
+	lance = { "Eclipse Judgment", "Judgment Cross" },
+	beam = { "Worldrend", "Worldrend" },
+	thunder = { "Umbral Thunder", "Eclipse Storm" },
+	blacksun = { "Black Sun", "Black Sun" },
+	mirror = { "Mirror Veil", "Hall of Mirrors" },
+	step = { "Veil Step", "Veil Step" },
+	totality = { "Totality", "Totality" },
 }
 
 -- Points on the rig, in RootPart space, from the export's pivots: where the
@@ -369,20 +321,6 @@ local function pickTarget(entry, within: number?): Player?
 	return best
 end
 
--- Another living player than `first`, for a second sigil or a second crack.
-local function otherPlayer(entry, first: Player?): Player?
-	local best, bestScore = nil, -math.huge
-	for _, player in ipairs(livingPlayers()) do
-		if player ~= first and rootOf(player) then
-			local score = math.random()
-			if score > bestScore then
-				best, bestScore = player, score
-			end
-		end
-	end
-	return best
-end
-
 -- Damage with a memory: each `key` hits a player once, and one cast never
 -- deals more than `cap` to anyone.
 local function hitOnce(ledger, key, player: Player, amount: number, cap: number): number
@@ -449,24 +387,6 @@ local function newPart(size: Vector3, color: Color3, transparency: number, kind:
  return part
 end
 
-local function tweenFX(scope,part,info,goals)
- local values=table.clone(goals)
- if values.Transparency~=nil then
-  scope:tween(part.FXOpacity,info,{Value=1-values.Transparency})
-  values.Transparency=nil
- end
- if next(values) then scope:tween(part,info,values) end
-end
-
--- A Cylinder's length runs along X, so it is turned on its side to lie flat.
-local function newDisc(centre: Vector3, radius: number, color: Color3, transparency: number): Part
-	local disc = newPart(Vector3.new(0.2, radius * 2, radius * 2), color, transparency, "Disc")
-	disc.Shape = Enum.PartType.Cylinder
-	disc.CFrame = CFrame.new(centre) * CFrame.Angles(0, 0, math.rad(90))
-	disc.Parent = workspace
-	return disc
-end
-
 local function newLight(parent: Instance, color: Color3, range: number, brightness: number): PointLight
 	local light = Instance.new("PointLight")
 	light.Color = color
@@ -513,21 +433,7 @@ local function layArc(parts: {Part}, frame: CFrame, radius: number, _from: numbe
  part:SetAttribute("SignusKind",if taper then "Crescent" else "Ring")
 end
 
--- A frame lying flat on the ground at `centre`, turned by `spin`, whose local
--- XY plane is the world XZ plane.
-local function groundFrame(centre: Vector3, spin: number): CFrame
-	return CFrame.new(centre) * CFrame.Angles(math.rad(90), 0, 0) * CFrame.Angles(0, 0, spin)
-end
-
 local TAU = math.pi * 2
-
-local function layRing(parts: { Part }, centre: Vector3, radius: number, spin: number, thick: number)
-	layArc(parts, groundFrame(centre, spin), radius, 0, TAU, thick)
-end
-
-local function flare(_scope, centre: Vector3, radius: number, seconds: number, color: Color3)
- fx("flare",centre,{radius=radius,seconds=seconds,color=color})
-end
 
 -- A steady stream of motes on a part: the only emitters the server makes,
 -- and only ever Enabled ones, which replicate as a property.
@@ -556,27 +462,24 @@ local function moteStream(parent: Instance, color: Color3, rate: number, size: n
 	return emitter
 end
 
--- The server still removes the exact terrain cells. Their absorption is
--- presented as particle rock shards and violet streams, not cloned blocks.
-local function broadcastDebris(centre: Vector3, blocks, seconds: number)
- if #blocks>0 then fx("harvest",centre,{blocks=blocks,seconds=seconds}) end
-end
-
 -- ---------------------------------------------------------------------------
 -- The sky
 -- ---------------------------------------------------------------------------
 
 --[[
-	While it lives the world cools toward violet twilight, and goes to eclipse
-	in phase two. A ColorCorrectionEffect in Lighting, left in place neutral
+	While it lives the world cools toward violet twilight, and darkens to a
+	deep purple dusk in phase two (SignusSky adds the haze on each client).
+	A ColorCorrectionEffect in Lighting, left in place neutral
 	when the fight ends so a second Signus cannot have its sky deleted from
 	under it. It never touches the clock.
 ]]
 local SKY = {
 	[1] = { TintColor = Color3.fromRGB(230, 220, 255), Saturation = -0.08, Contrast = 0.02, Brightness = 0 },
-	-- Eclipse: drained colour and a hard violet cast, but only a touch darker,
-	-- so night terrain is not crushed to black.
-	[2] = { TintColor = Color3.fromRGB(198, 168, 244), Saturation = -0.3, Contrast = 0.1, Brightness = -0.03 },
+	-- The gather before Totality: the colour drains out first.
+	gather = { TintColor = Color3.fromRGB(214, 198, 246), Saturation = -0.22, Contrast = 0.08, Brightness = -0.02 },
+	-- Dusk: drained colour and a deep purple cast, and no darker: each client's
+	-- SignusSky sets the exposure for the hour, so night is never crushed.
+	[2] = { TintColor = Color3.fromRGB(206, 184, 246), Saturation = -0.26, Contrast = 0.12, Brightness = 0 },
 	clear = { TintColor = Color3.new(1, 1, 1), Saturation = 0, Contrast = 0, Brightness = 0 },
 }
 
@@ -637,24 +540,6 @@ local function turnFlat(from: Vector3, to: Vector3, maxRadians: number): Vector3
 	return (CFrame.Angles(0, sign * maxRadians, 0) * from).Unit
 end
 
--- Turns a 3D direction toward another by at most `maxRadians`, for a
--- homing crescent.
-local function turnToward(from: Vector3, to: Vector3, maxRadians: number): Vector3
-	if to.Magnitude < 1e-3 then
-		return from
-	end
-	to = to.Unit
-	local angle = math.acos(math.clamp(from:Dot(to), -1, 1))
-	if angle <= maxRadians then
-		return to
-	end
-	local axis = from:Cross(to)
-	if axis.Magnitude < 1e-4 then
-		return from
-	end
-	return (CFrame.fromAxisAngle(axis.Unit, maxRadians) * from).Unit
-end
-
 -- ---------------------------------------------------------------------------
 -- Where it is, and how it stands
 -- ---------------------------------------------------------------------------
@@ -696,141 +581,57 @@ local function moveToward(entry, goal: Vector3, dt: number, maxSpeed: number)
 end
 
 -- ---------------------------------------------------------------------------
--- The rig: procedural poses on the joints
+-- The rig: retargeted pack clips
 -- ---------------------------------------------------------------------------
 
-local JOINTS = {
-	core = "CoreJoint",
-	hood = "HoodJoint",
-	left = "LeftSleeveJoint",
-	right = "RightSleeveJoint",
-}
-
 --[[
-	Casting poses, as offsets from each joint's resting C0.
-
-	A sleeve hangs below its shoulder hinge, so a negative pitch raises it
-	forward; a hood sits above its hinge, so a positive pitch tips it forward.
-	Roll moves the sleeves out to the sides: negative for the left one,
-	positive for the right.
-
-	Only used for a move whose published track is missing. C0 replicates, so
-	every client sees the pose; Motor6D.Transform would not. Each change is a
-	short tween, and a new pose cancels the previous tween, so poses never
-	race each other.
+	Every move is a clip from Shared.Enemies.SignusClips, planned here and
+	drawn by each client (SignusRig) from the SignusClip attribute, so the
+	server only ever moves the RootPart. `playClip` returns the plan's marks:
+	seconds from now to its Swing, Hit, resume (after any hold), Reset and
+	finish. Attacks wait on those, so damage lands on the frame the clip
+	releases. Between clips the stance picks a procedural idle.
 ]]
-local function sleeves(pitch: number, out: number, extra: { [string]: CFrame }?)
-	local pose = {
-		left = CFrame.Angles(pitch, 0, -out),
-		right = CFrame.Angles(pitch, 0, out),
-	}
-	if extra then
-		for key, value in pairs(extra) do
-			pose[key] = value
-		end
-	end
-	return pose
+local function clipPlan(name: string, options)
+	return SignusClips.plan(name, options)
 end
 
-local POSES = {
-	rest = {},
-	flight = sleeves(0.06, 0.2),
-	gather = sleeves(-1.25, 0.15, { hood = CFrame.Angles(-0.18, 0, 0) }),
-	release = sleeves(-0.85, 0.55, { hood = CFrame.Angles(0.22, 0, 0), core = CFrame.Angles(0.08, 0, 0) }),
-	raise = sleeves(-2.6, 0.45, { hood = CFrame.Angles(-0.3, 0, 0) }),
-	slam = sleeves(-0.3, 0.95, { hood = CFrame.Angles(0.35, 0, 0), core = CFrame.Angles(0.15, 0, 0) }),
-	lunge = sleeves(1.1, 0.6, { hood = CFrame.Angles(0.3, 0, 0) }),
-	droop = sleeves(0.15, 0.5, { hood = CFrame.Angles(0.4, 0, 0), core = CFrame.Angles(0.1, 0, 0) }),
-	channel = sleeves(-1.6, 1.2, { hood = CFrame.Angles(-0.25, 0, 0) }),
-	stepFold = sleeves(-0.4, -0.3, { hood = CFrame.Angles(0.15, 0, 0) }),
-}
-
--- Which published track stands in for each procedural pose.
-local POSE_TRACK = {
-	gather = "Cast",
-	release = "Cast",
-	raise = "Cast",
-	slam = "Cast",
-	channel = "Cast",
-	lunge = "Lunge",
-	droop = "Hover",
-	stepFold = "Hover",
-	rest = "Hover",
-}
-
-local function findRig(entry)
-	local motors, rest = {}, {}
-	for key, name in pairs(JOINTS) do
-		local motor = entry.model:FindFirstChild(name, true)
-		if motor and motor:IsA("Motor6D") and motor.Part1 ~= entry.root then
-			motors[key] = motor
-			rest[key] = motor.C0
-		end
-	end
-	entry.rig = { motors = motors, rest = rest }
+-- The same on any Signus rig: its decoys play clips too.
+local function clipOn(model: Model, name: string, options)
+	local plan = SignusClips.plan(name, options)
+	model:SetAttribute("SignusClip", SignusClips.encode(plan, workspace:GetServerTimeNow()))
+	return plan.marks
 end
 
---[[
-	Moves the joints to a named pose over `seconds`, unless the published
-	track that covers it exists - then the track is played instead (once per
-	call for a one-shot, left alone for the loop) and the joints are not
-	touched, so the two never fight.
-]]
-local function setPose(entry, name: string, seconds: number)
-	local flying = name == "rest" and entry.transformed and os.clock() >= (entry.perchUntil or 0)
-	local pose = POSES[if flying then "flight" else name] or POSES.rest
-	entry.poseName = name
-	entry.flightPose = flying == true
-	entry.poseSettledAt = os.clock() + seconds
-	local trackName = POSE_TRACK[name]
-	local animator = entry.animator
+local function playClip(entry, name: string, options)
+	local marks = clipOn(entry.model, name, options)
+	entry.clipEndsAt = os.clock() + marks.finish
+	return marks
+end
 
-	if animator and trackName and animator:has(trackName) then
-		-- A one-shot already running covers the whole move: gather and
-		-- release are two poses here but one published Cast.
-		if trackName ~= "Hover" and not animator:isPlaying(trackName) then
-			animator:play(trackName, { fadeTime = 0.08 })
-		end
-		return
-	end
-
-	local rig = entry.rig
-	if not rig then
-		return
-	end
-
-	if entry.poseScope then
-		entry.poseScope:destroy()
-	end
-	local scope = AbilityScope.new()
-	entry.poseScope = scope
-
-	local info = TweenInfo.new(seconds, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-	for key, motor in pairs(rig.motors) do
-		if motor.Parent then
-			scope:tween(motor, info, { C0 = rig.rest[key] * (pose[key] or CFrame.identity) })
-		end
+-- "hover", "flight" or "spent".
+local function setStance(entry, stance: string)
+	if entry.stance ~= stance then
+		entry.stance = stance
+		entry.model:SetAttribute("SignusStance", stance)
 	end
 end
 
--- A short jolt of the core when hit, if there is no Hurt track.
+-- The idle between spells: aloft in phase two, down and spent while it
+-- recovers on the ground, else hovering.
+local function restStance(entry): string
+	if not entry.transformed then
+		return "hover"
+	end
+	return if os.clock() >= (entry.perchUntil or 0) then "flight" else "spent"
+end
+
+-- Blocking-hit recoil, only when nothing else is playing.
 local function flinch(entry)
-	local animator = entry.animator
-	if animator and animator:has("Hurt") then
-		animator:play("Hurt", { fadeTime = 0.05 })
+	if entry.busy or os.clock() < (entry.clipEndsAt or 0) then
 		return
 	end
-	local rig = entry.rig
-	local motor = rig and rig.motors.core
-	if not (motor and motor.Parent) then
-		return
-	end
-	local base = motor.C0
-	local side = if math.random() < 0.5 then -1 else 1
-	local tween = TweenService:Create(motor, TweenInfo.new(0.07, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true), {
-		C0 = base * CFrame.Angles(0.05, 0, side * 0.07),
-	})
-	tween:Play()
+	playClip(entry, "BlockHit", { speed = 1.3 })
 end
 
 -- ---------------------------------------------------------------------------
@@ -858,104 +659,9 @@ local function setBossPhase(entry, text: string?)
 	BossService.update(entry)
 end
 
--- A glowing orb held between the sleeves for as long as `scope` lives.
-local function handOrb(entry, scope, color: Color3, size: number): Part
-	local orb = newPart(Vector3.one * size, color, 0.1)
-	orb.Shape = Enum.PartType.Ball
-	orb.Position = rigPoint(entry, HANDS)
-	orb.Parent = workspace
-	scope:add(orb)
-	newLight(orb, color, 18, 2)
-	moteStream(orb, color, 30, 0.9, 5)
-	scope:spawn(function()
-		while orb.Parent and not entry.signusFinished do
-			orb.Position = rigPoint(entry, HANDS)
-			task.wait()
-		end
-	end)
-	return orb
-end
-
--- ---------------------------------------------------------------------------
--- The halo and the eclipse: phase two's persistent spectacle
--- ---------------------------------------------------------------------------
-
--- Fragments of ground it tore up, kept in orbit. Cosmetic parts made from
--- the excavation samples; the blocks themselves are gone.
-local function addHalo(entry, samples, count: number)
-	local halo = entry.halo
-	if not halo then
-		return
-	end
-	local scope = entry.encounterScope
-	local H = Tuning.halo
-	for index = 1, math.min(count, #samples) do
-		if #halo.parts >= Tuning.totality.haloMax then
-			break
-		end
-		local fragment = newPart(Vector3.one,Colors.violet,.1,"Halo")
-		fragment.Size = Vector3.one * H.size
-		fragment.CFrame = CFrame.new(samples[index].position)
-		fragment.Parent = workspace
-		scope:add(fragment)
-		newLight(fragment, Colors.violet, 9, 0.8)
-		table.insert(halo.parts, {
-			part = fragment,
-			angle = math.random() * TAU,
-			lift = (math.random() - 0.5) * 2 * H.lift,
-			from = fragment.Position,
-			bornAt = os.clock(),
-		})
-	end
-end
-
-local function stepHalo(entry, dt: number)
-	local halo = entry.halo
-	if not halo or #halo.parts == 0 then
-		return
-	end
-	local H = Tuning.halo
-	halo.spin += dt * H.spin * (halo.speed or 1)
-	local now = os.clock()
-	for _, fragment in ipairs(halo.parts) do
-		local part = fragment.part
-		if not part.Parent then
-			continue
-		end
-		local angle = fragment.angle + halo.spin
-		local orbit = entry.position + Vector3.new(math.cos(angle) * H.radius, fragment.lift, math.sin(angle) * H.radius)
-		-- Newly taken fragments rise into orbit over a second rather than
-		-- appearing there.
-		local alpha = math.clamp((now - fragment.bornAt) / 1.1, 0, 1)
-		local eased = alpha * alpha * (3 - 2 * alpha)
-		local position = fragment.from:Lerp(orbit, eased)
-		part.CFrame = CFrame.new(position) * CFrame.Angles(halo.spin * 0.7, angle, halo.spin * 0.3)
-	end
-end
-
--- Hurls every fragment outward and destroys it: the Nova spends the halo.
-local function spendHalo(entry, scope)
-	local halo = entry.halo
-	if not halo then
-		return
-	end
-	for _, fragment in ipairs(halo.parts) do
-		local part = fragment.part
-		if part.Parent then
-			local away = flat(part.Position - entry.position)
-			tweenFX(scope,part, TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-				CFrame = CFrame.new(part.Position + away * 34 + Vector3.new(0, 6, 0)) * CFrame.Angles(2, 1, 0),
-				Transparency = 1,
-			})
-			Debris:AddItem(part, 0.8)
-		end
-	end
-	halo.parts = {}
-end
-
--- The black sun of phase two is worn as a crown behind the hood: the aura
--- carrier draws it once its Phase is 2 (SignusChoreography). This is the
--- moment it ignites.
+-- Phase two's eclipse is worn as a halo behind the hood: the aura carrier
+-- draws it once its Phase is 2 (SignusChoreography). This is the moment it
+-- ignites.
 local function buildEclipse(entry)
  fx("crown",rigPoint(entry,CROWN))
  entry.eclipse={}
@@ -965,650 +671,280 @@ end
 -- The spells
 -- ---------------------------------------------------------------------------
 
---[[
-	CRESCENT VOLLEY
 
-	It tilts back, the sleeves rise, and a lunar orb kindles between them.
-	Crescents fan out around the orb, turning, and are flung one after
-	another, each locking its line the instant it leaves. Any block stops
-	one; in phase two there are five and they bend after you.
-]]
-local function volley(entry, phase: number)
-	local V = Tuning.volley
-	local scope = entry.scope
+-- While Totality plays it takes no damage: EnemyService asks a trait's
+-- guard what share of a blow lands. While the Mirror Veil is up, the guard
+-- decides whether a blow found Signus or one of its decoys.
+local IMMUNE = { guard = function() return 0 end }
 
-	local target = pickTarget(entry) or nearestPlayer(entry.position)
-	if not livingRoot(target) then
-		return
-	end
-	entry.focus = target
-	entry.motion = "hold"
-	entry.leanGoal = -0.12
+-- SignusMoves, created further down: Mirror Veil borrows its thunder.
+local Spells
 
-	setPose(entry, "gather", 0.4)
-	local orb = handOrb(entry, scope, Colors.orchid, 0.6)
-	tweenFX(scope,orb, TweenInfo.new(V.gather, Enum.EasingStyle.Quad), { Size = Vector3.one * 2.2 })
+-- A decoy breaks where it stands: a veil flash and a crescent shatter.
+local function breakImage(entry, image)
+ if image.gone then return end
+ image.gone=true
+ if image.model.Parent then
+  local at=image.model:GetPivot().Position
+  fx("step",at-Vector3.new(0,3,0),{phase=entry.mirrorPhase})
+  fx("crescentBreak",at,{phase=entry.mirrorPhase,struck=true})
+  image.model:Destroy()
+ end
+ if image.aura then image.aura:Destroy() end
+end
 
-	-- The crescents, forming around the orb.
-	local count = V.count[phase]
-	local crescents = {}
-	for index = 1, count do
-		local parts = makeArc(scope, V.segments, Colors.orchid, 0.1)
-		local middle = parts[1]
-		local a0 = Instance.new("Attachment")
-		a0.Position = Vector3.new(0, 1.4, 0)
-		a0.Parent = middle
-		local a1 = Instance.new("Attachment")
-		a1.Position = Vector3.new(0, -1.4, 0)
-		a1.Parent = middle
-		local trail = Instance.new("Trail")
-		trail.Attachment0 = a0
-		trail.Attachment1 = a1
-		trail.Color = ColorSequence.new({
-			ColorSequenceKeypoint.new(0, Colors.pearl),
-			ColorSequenceKeypoint.new(1, Colors.violet),
-		})
-		trail.Transparency = NumberSequence.new(0.2, 1)
-		trail.Texture = "rbxassetid://12781812529" -- supplied aura ribbon
-		trail.Lifetime = 0.35
-		trail.WidthScale = NumberSequence.new(1, 0.2)
-		trail.LightEmission = 1
-		trail.Enabled = false
-		trail.Parent = middle
-		crescents[index] = {
-			parts = parts,
-			trail = trail,
-			fan = (index - (count + 1) * 0.5) * (0.5 / math.max(1, count - 1)) * 2,
-			state = "form",
-			spin = math.random() * TAU,
-		}
-	end
+local MIRROR = { guard = function(entry)
+ -- nearestPoint was asked a moment ago by whatever aimed this blow. A blow
+ -- nothing aimed (a burn ticking, rubble) lands but finds nothing.
+ local query=entry.imageQuery
+ local image=query and os.clock()-query.at<.25 and query.image
+ if not image then return 1 end
+ entry.imageQuery=nil
+ if not image.real then
+  breakImage(entry,image)
+  return 0
+ end
+ entry.mirrorFound=true
+ return 1
+end }
 
-	-- GATHER: the crescents grow in a fan in front of the orb.
-	local began = os.clock()
-	while os.clock() - began < V.gather do
-		if entry.signusFinished then
-			return
+-- `on` is true for Totality's immunity, a trait table for another guard, or
+-- false to give back whatever trait it had.
+local function setGuard(entry, on)
+	local trait = if on == true then IMMUNE elseif type(on) == "table" then on else nil
+	if trait then
+		if entry.trait ~= IMMUNE and entry.trait ~= MIRROR then
+			entry.guardedTrait = entry.trait
 		end
-		local alpha = math.clamp((os.clock() - began) / V.gather, 0, 1)
-		local eased = alpha * alpha * (3 - 2 * alpha)
-		local pivot = entry.model:GetPivot()
-		for _, crescent in ipairs(crescents) do
-			if crescent.state == "form" then
-				crescent.spin += 0.05
-				local offset = CFrame.new(math.sin(crescent.fan) * 4.5, 0.5 + math.cos(crescent.fan) * 1.5, -5.5)
-				local frame = pivot * HANDS * offset * CFrame.Angles(0, math.rad(90), 0) * CFrame.Angles(crescent.spin, 0, 0)
-				layArc(crescent.parts, frame, V.radius * eased, math.pi * 0.55, math.pi * 1.45, 0.45 * eased + 0.05, true)
-			end
-		end
-		task.wait()
+		entry.trait = trait
+	elseif entry.trait == IMMUNE or entry.trait == MIRROR then
+		entry.trait = entry.guardedTrait
+		entry.guardedTrait = nil
 	end
-
-	-- RELEASE, one after another; each flies in its own thread.
-	setPose(entry, "release", 0.12)
-	entry.leanGoal = 0.1
-	fx("cast", rigPoint(entry, HANDS), { color = Colors.orchid })
-
-	local ledger = {}
-	local flying = 0
-
-	local function fly(crescent, index: number)
-		local root = livingRoot(target) or rootOf((nearestPlayer(entry.position)))
-		local middle = crescent.parts[1]
-		local position = middle.Position
-		local aim = if root then root.Position + Vector3.new(0, 1.5, 0) else position + flat(entry.look) * 40
-		local direction = (aim - position).Unit
-		local homing = math.rad(V.homing[phase])
-		crescent.state = "fly"
-		crescent.trail.Enabled = true
-
-		local launched = os.clock()
-		local last = launched
-		local spin = crescent.spin
-		while os.clock() - launched < V.life do
-			if entry.signusFinished then
-				return
-			end
-			local now = os.clock()
-			local dt = math.min(now - last, 0.1)
-			last = now
-
-			if homing > 0 and livingRoot(target) then
-				local victim = rootOf(target)
-				direction = turnToward(direction, (victim.Position + Vector3.new(0, 1.5, 0)) - position, homing * dt)
-			end
-
-			local next_ = position + direction * V.speed * dt
-			local hit = sightBlock(position, next_)
-			if hit then
-				fx("shatter", hit.Position, { color = Colors.orchid, normal = hit.Normal })
-				break
-			end
-
-			local struck = false
-			for _, player in ipairs(livingPlayers()) do
-				local victim = rootOf(player)
-				if victim and (victim.Position - next_).Magnitude <= V.hitRadius then
-					hitOnce(ledger, "crescent" .. index, player, V.damage, V.cap)
-					fx("shatter", victim.Position, { color = Colors.pearl })
-					struck = true
-				end
-			end
-			if struck then
-				break
-			end
-
-			position = next_
-			spin += dt * 9
-			local frame = CFrame.lookAt(position, position + direction) * CFrame.Angles(0, math.rad(90), 0) * CFrame.Angles(spin, 0, 0)
-			layArc(crescent.parts, frame, V.radius, math.pi * 0.55, math.pi * 1.45, 0.5, true)
-			task.wait()
-		end
-
-		for _, part in ipairs(crescent.parts) do
-			part:Destroy()
-		end
-		flying -= 1
-	end
-
-	for index, crescent in ipairs(crescents) do
-		flying += 1
-		scope:spawn(function()
-			fly(crescent, index)
-		end)
-		if not pause(entry, V.gap) then
-			return
-		end
-	end
-
-	tweenFX(scope,orb, TweenInfo.new(0.3), { Size = Vector3.one * 0.2, Transparency = 1 })
-	setPose(entry, "rest", 0.5)
-	entry.leanGoal = 0
-
-	-- The last crescent lands before the scope goes.
-	local deadline = os.clock() + V.life + 0.2
-	while flying > 0 and os.clock() < deadline do
-		if not pause(entry, 0.05) then
-			return
-		end
-	end
-	pause(entry, V.recover)
 end
 
 --[[
-	THE LUNAR SIGIL: two rings, six ticks and a turning crescent, pearl on
-	violet. Made once and re-laid as it tracks, swells and locks.
+	MIRROR VEIL
+
+	Its answer to being kept away from or hidden from, and a test of your
+	eye. It folds into its veil and splits into images that circle whoever it
+	is after, facing in. One is Signus; the rest are decoys. Strike the real
+	one and the decoys scatter, leaving it down and spent; strike a decoy and
+	only that one breaks. Find it too late and every image raises its sleeve
+	in turn and calls Umbral Thunder down where you are heading, Signus last
+	and widest.
+
+	Phase one: two decoys, see-through, with a thin aura and no eyes, and
+	they fan out from where it stood, so it can be followed. Phase two: four
+	decoys, barely fainter than it, wearing its aura and eyes; they appear
+	already on the ring and trade places twice.
+
+	Weapons and abilities find the images through Signus.nearestPoint below;
+	the MIRROR guard then decides what the blow hit.
 ]]
-local function makeSigil(scope)
- local carrier=newPart(Vector3.one*.1,Colors.orchid,.2,"Sigil")
- carrier.Parent=workspace;scope:add(carrier)
- return {outer={carrier},spin=0}
+local function mirrorImage(entry, phase: number): Model
+ local image=SIGNUS_ASSET:Clone()
+ image.Name="SignusImage"
+ for _,d in image:GetDescendants() do
+  if d:IsA("BasePart") then
+   d.CanCollide=false;d.CanQuery=false;d.CanTouch=false
+   d.Anchored=d.Name=="RootPart"
+   if d.Name~="RootPart" then d.Transparency=Tuning.mirror.decoyAlpha[phase] end
+  end
+ end
+ -- SignusRig draws a decoy from these: its phase's colours, and (phase one)
+ -- the thinner aura and no eyes.
+ -- The eye light Signus.start gives the real one.
+ local root=image:FindFirstChild("RootPart")
+ if root then newLight(root,Colors.pearl,22,1.2) end
+ image:SetAttribute("SignusDecoy",phase)
+ image:SetAttribute("SignusPhase",entry.model:GetAttribute("SignusPhase"))
+ image:SetAttribute("SignusStance","hover")
+ image:PivotTo(entry.model:GetPivot())
+ image.Parent=workspace
+ CollectionService:AddTag(image,"SignusRig")
+ entry.scope:add(image)
+ return image
 end
 
-local function laySigil(sigil,centre: Vector3,radius: number,spin: number,bright: number)
- local carrier=sigil.outer[1]
- carrier.Size=Vector3.new(radius*2,radius*2,.1)
- carrier.CFrame=groundFrame(centre+Vector3.new(0,.25,0),spin)
- carrier.FXOpacity.Value=.65+bright*.35
+-- Its own aura carrier (the sigil under it and, in phase two, the eclipse
+-- halo): faint on phase one's decoys, as strong as the real one's on phase two's.
+local function imageAura(entry, phase: number, image: Model): Part
+ local aura=newPart(Vector3.new(14,18,14),Colors.violet,if phase==1 then .6 else 0,"Aura")
+ aura:SetAttribute("Phase",entry.aura and entry.aura:GetAttribute("Phase") or phase)
+ aura:SetAttribute("Veiled",true)
+ aura.CFrame=image:GetPivot()
+ aura.Parent=workspace
+ entry.scope:add(aura)
+ return aura
 end
 
--- Flat marks on the cells an excavation will take: the honest half of a
--- terrain telegraph. Returns the marks so a spell can light them in order.
-local function markCells(scope, plan, color: Color3, transparency: number): { Part }
-	local marks = {}
-	for index, cell in ipairs(plan) do
-		local mark = newPart(Vector3.new(STUD_SIZE * 0.9, 0.18, STUD_SIZE * 0.9), color, transparency, "Mark")
-		mark.Position = cell.position + Vector3.new(0, STUD_SIZE * 0.5 + 0.1, 0)
-		mark.Parent = workspace
-		scope:add(mark)
-		marks[index] = mark
-	end
-	return marks
+local function smoothstep(a: number): number
+ a=math.clamp(a,0,1)
+ return a*a*(3-2*a)
 end
 
---[[
-	MOONFALL
-
-	A sigil opens under you and follows you for a moment, then LOCKS: the
-	outer ring snaps in to the real radius, the crater's cells are chosen and
-	marked, and a pillar of light drops from the sky. A shard of the moon
-	comes down it. The stone it breaks out streams up into Signus's clasp and
-	joins its halo.
-]]
-local function moonShard(entry, scope, target: Player?, ledger, key: string, phase: number)
-	local M = Tuning.moonfall
-	local root = livingRoot(target) or rootOf((nearestPlayer(entry.position)))
-	if not root then
-		return
-	end
-
-	local sigil = makeSigil(scope)
-	local centre = groundUnder(root.Position)
-
-	-- TRACK.
-	local began = os.clock()
-	while os.clock() - began < M.track do
-		if entry.signusFinished then
-			return
-		end
-		local alpha = math.clamp((os.clock() - began) / M.track, 0, 1)
-		local victim = livingRoot(target)
-		if victim then
-			centre = groundUnder(victim.Position)
-		end
-		sigil.spin += 0.04
-		laySigil(sigil, centre, M.radius * (1.25 - 0.25 * alpha) * (0.3 + 0.7 * alpha), sigil.spin, alpha * 0.5)
-		task.wait()
-	end
-
-	-- LOCK. The crater is planned now, before its cells are marked.
-	fx("lock", centre, { radius = M.radius })
-	local columns = {}
-	for dx = -1, 1 do
-		for dz = -1, 1 do
-			table.insert(columns, {
-				x = centre.X + dx * STUD_SIZE,
-				z = centre.Z + dz * STUD_SIZE,
-				y = centre.Y,
-				depth = M.depth[phase],
-			})
-		end
-	end
-	local plan = TerrainManager:PlanExcavation(columns, { maxCells = M.cap_cells[phase] })
-	local marks = markCells(scope, plan, Colors.pearl, 0.55)
-
-	-- The pillar from the sky, and the shard at the top of it.
-	local top = centre + Vector3.new(0, 70, 0)
-	local pillar = newPart(Vector3.new(0.6, 70, 0.6), Colors.pearl, 0.6, "Pillar")
-	pillar.CFrame = CFrame.new(centre:Lerp(top, 0.5))
-	pillar.Parent = workspace
-	scope:add(pillar)
-	tweenFX(scope,pillar, TweenInfo.new(M.fall, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-		Size = Vector3.new(3.2, 70, 3.2),
-		Transparency = 0.25,
-	})
-	local shard = newPart(Vector3.new(2.4, 11, 2.4), Colors.pearl, 0.05, "Shard")
-	shard.Shape = Enum.PartType.Ball
-	shard.CFrame = CFrame.new(top)
-	shard.Parent = workspace
-	scope:add(shard)
-	newLight(shard, Colors.orchid, 30, 3)
-	moteStream(shard, Colors.orchid, 50, 1.4, 8)
-	tweenFX(scope,shard, TweenInfo.new(M.fall, Enum.EasingStyle.Quart, Enum.EasingDirection.In), {
-		CFrame = CFrame.new(centre + Vector3.new(0, 2, 0)),
-	})
-
-	began = os.clock()
-	while os.clock() - began < M.fall do
-		if entry.signusFinished then
-			return
-		end
-		local alpha = (os.clock() - began) / M.fall
-		sigil.spin += 0.09 + alpha * 0.1
-		laySigil(sigil, centre, M.radius * (1 + math.sin(alpha * TAU * 3) * 0.03), sigil.spin, 0.5 + alpha * 0.5)
-		for _, mark in ipairs(marks) do
-			mark.FXOpacity.Value = 1-(0.55 - alpha * 0.4)
-		end
-		task.wait()
-	end
-
-	-- IMPACT.
-	for _, player in ipairs(playersInCircle(centre, M.radius)) do
-		hitOnce(ledger, key, player, M.damage, M.cap)
-	end
-	shard:Destroy()
-	pillar:Destroy()
-	for _, part in ipairs(sigil.outer) do
-		part.FXOpacity.Value = 1-(1)
-	end
-	fx("impact", centre, { radius = M.radius })
-	flare(scope, centre + Vector3.new(0, 1, 0), M.radius * 0.8, 0.4, Colors.pearl)
-
-	local removed, samples = TerrainManager:ExecuteExcavation(plan)
-	for _, mark in ipairs(marks) do
-		mark:Destroy()
-	end
-	if removed > 0 then
-		broadcastDebris(rigPoint(entry, CLASP), samples, 0.8)
-		addHalo(entry, samples, math.min(removed, M.halo))
-	end
-end
-
-local function moonfall(entry, phase: number)
-	local M = Tuning.moonfall
-	local scope = entry.scope
-
-	local target = pickTarget(entry) or nearestPlayer(entry.position)
-	if not livingRoot(target) then
-		return
-	end
-	entry.focus = target
-	entry.motion = "hold"
-	entry.hem = M.hem
-	entry.leanGoal = -0.18
-
-	setPose(entry, "raise", 0.5)
-	local orb = handOrb(entry, scope, Colors.pearl, 1.2)
-	fx("cast", rigPoint(entry, HANDS), { color = Colors.pearl })
-
-	local ledger = {}
-	local running = 1
-	if M.sigils[phase] > 1 then
-		local second = otherPlayer(entry, target) or target
-		running += 1
-		scope:spawn(function()
-			pause(entry, 0.3)
-			moonShard(entry, scope, second, ledger, "shard2", phase)
-			running -= 1
-		end)
-	end
-	moonShard(entry, scope, target, ledger, "shard1", phase)
-	running -= 1
-
-	while running > 0 do
-		if not pause(entry, 0.05) then
-			return
-		end
-	end
-
-	tweenFX(scope,orb, TweenInfo.new(0.3), { Size = Vector3.one * 0.2, Transparency = 1 })
-	setPose(entry, "rest", 0.5)
-	entry.hem = Tuning.hover.hem
-	entry.leanGoal = 0
-	pause(entry, M.recover)
-end
-
---[[
-	UMBRAL FISSURE
-
-	It drops to the ground, sweeps its sleeves up over its hood and slams
-	them down. From its hem a crack races at you: every sampled point along
-	the line is marked, and every natural cell among them gets a pearl seam
-	that lights in sequence. Then the line erupts in order: the planned cells
-	are torn out and flung upward, and anyone standing on the line, within
-	six and a half studs of the ground, is hit. Standing two blocks up is
-	safety; so is stepping off the line.
-]]
-local function planCrack(entry, scope, from: Vector3, direction: Vector3, length: number)
-	local F = Tuning.fissure
-	local points, columns = {}, {}
-	local side = Vector3.new(-direction.Z, 0, direction.X)
-	local index = 0
-	for distance = F.start, length, STUD_SIZE do
-		index += 1
-		local jag = side * ((index % 2 == 0) and STUD_SIZE * 0.45 or -STUD_SIZE * 0.45) * ((index % 3 == 0) and 1 or 0.5)
-		local point = groundUnder(from + direction * distance + jag)
-		table.insert(points, point)
-		table.insert(columns, { x = point.X, z = point.Z, y = point.Y, depth = 1 })
-	end
-	if #points == 0 then
-		return nil
-	end
-
-	local plan = TerrainManager:PlanExcavation(columns, { maxCells = F.cap })
-
-	-- Every point is marked: the line is the danger whatever is under it.
-	local marks = {}
-	for i, point in ipairs(points) do
-		local mark = newPart(Vector3.new(STUD_SIZE * 0.8, 0.16, STUD_SIZE * 0.8), Colors.violet, 0.6, "Mark")
-		mark.CFrame = CFrame.new(point + Vector3.new(0, 0.12, 0)) * CFrame.Angles(0, (i % 2) * 0.3, 0)
-		mark.Parent = workspace
-		scope:add(mark)
-		marks[i] = mark
-	end
-
-	-- And the cells that will go get a seam along the crack.
-	local seams = {}
-	for i, cell in ipairs(plan) do
-		cell.along = (cell.position - from):Dot(direction)
-		local seam = newPart(Vector3.new(0.3, 0.22, STUD_SIZE * 1.05), Colors.pearl, 0.6, "Seam")
-		seam.CFrame = CFrame.lookAt(cell.position + Vector3.new(0, STUD_SIZE * 0.5 + 0.16, 0), cell.position + direction + Vector3.new(0, STUD_SIZE * 0.5 + 0.16, 0))
-		seam.Parent = workspace
-		scope:add(seam)
-		seams[i] = seam
-	end
-	table.sort(plan, function(a, b)
-		return a.along < b.along
-	end)
-
-	return { points = points, plan = plan, marks = marks, seams = seams, from = from, direction = direction }
-end
-
-local function fissure(entry, phase: number)
-	local F = Tuning.fissure
-	local scope = entry.scope
-
-	local target = pickTarget(entry) or nearestPlayer(entry.position)
-	local root = livingRoot(target)
-	if not root then
-		return
-	end
-	entry.focus = target
-	entry.motion = "ground"
-	entry.leanGoal = -0.2
-
-	-- RAISE: sleeves up over the hood, the hem settling to the floor.
-	setPose(entry, "raise", F.raise)
-	local orb = handOrb(entry, scope, Colors.violet, 1.4)
-	if not pause(entry, F.raise) then
-		return
-	end
-
-	-- SLAM, and the crack is planned from where it now stands.
-	setPose(entry, "slam", 0.12)
-	entry.leanGoal = 0.25
-	local from = groundUnder(entry.position)
-	flare(scope, from + Vector3.new(0, 0.5, 0), 9, 0.5, Colors.violet)
-	fx("cast", from + Vector3.new(0, 0.5, 0), { color = Colors.violet })
-	tweenFX(scope,orb, TweenInfo.new(0.2), { Size = Vector3.one * 0.2, Transparency = 1 })
-
-	local toward = flat(root.Position - from)
-	local length = math.min((root.Position - from).Magnitude + 8, F.length)
-	local cracks = {}
-	local first = planCrack(entry, scope, from, toward, length)
-	if first then
-		table.insert(cracks, first)
-	end
-	if F.cracks[phase] > 1 then
-		local second = otherPlayer(entry, target)
-		local secondRoot = second and livingRoot(second)
-		local direction
-		if secondRoot and flat(secondRoot.Position - from):Dot(toward) < 0.8 then
-			direction = flat(secondRoot.Position - from)
-		else
-			local sign = if math.random() < 0.5 then -1 else 1
-			direction = (CFrame.Angles(0, math.rad(F.fan) * sign, 0) * toward).Unit
-		end
-		local crack = planCrack(entry, scope, from, direction, length)
-		if crack then
-			table.insert(cracks, crack)
-		end
-	end
-	if #cracks == 0 then
-		pause(entry, F.recover)
-		return
-	end
-
-	-- WARN: the seams light in order as the crack runs out.
-	local began = os.clock()
-	while os.clock() - began < F.warn do
-		if entry.signusFinished then
-			return
-		end
-		local alpha = (os.clock() - began) / F.warn
-		local pulse = 0.5 + 0.5 * math.sin(alpha * alpha * 40)
-		for _, crack in ipairs(cracks) do
-			local reach = alpha * 1.25
-			for i, mark in ipairs(crack.marks) do
-				local t = i / #crack.marks
-				mark.FXOpacity.Value = 1-(if t <= reach then 0.35 - pulse * 0.15 else 0.65)
-			end
-			for i, seam in ipairs(crack.seams) do
-				local t = i / #crack.seams
-				seam.FXOpacity.Value = 1-(if t <= reach then 0.05 + (1 - alpha) * 0.3 else 0.6)
-			end
-		end
-		task.wait()
-	end
-
-	-- ERUPT. The ground goes now, all of it, exactly as planned; the
-	-- eruption is drawn and the line is checked cell by cell in order.
-	local ledger = {}
-	for _, crack in ipairs(cracks) do
-		local removed, samples = TerrainManager:ExecuteExcavation(crack.plan)
-		local middle = crack.from + crack.direction * length * 0.5
-		if removed > 0 then
-			broadcastDebris(middle + Vector3.new(0, 18, 0), samples, 1.0)
-		end
-		for _, seam in ipairs(crack.seams) do
-			seam:Destroy()
-		end
-
-		local positions, delays = {}, {}
-		for i, point in ipairs(crack.points) do
-			if i > 24 then
-				break
-			end
-			positions[i] = point
-			delays[i] = (i - 1) * F.stagger
-		end
-		fx("erupt", middle, { positions = positions, delays = delays })
-
-		scope:spawn(function()
-			for i, point in ipairs(crack.points) do
-				if entry.signusFinished then
-					return
-				end
-				for _, player in ipairs(livingPlayers()) do
-					local victim = rootOf(player)
-					if victim then
-						local offset = victim.Position - point
-						local lateral = Vector3.new(offset.X, 0, offset.Z).Magnitude
-						if lateral <= F.width and offset.Y >= -3 and offset.Y <= F.safeHeight then
-							hitOnce(ledger, "fissure", player, F.damage, F.damage)
-						end
-					end
-				end
-				local mark = crack.marks[i]
-				if mark then
-					mark.Color = Colors.pearl
-					mark.FXOpacity.Value = 1-(0.1)
-					tweenFX(scope,mark, TweenInfo.new(0.5), { Transparency = 1 })
-				end
-				task.wait(F.stagger)
-			end
-		end)
-	end
-
-	setPose(entry, "droop", 0.6)
-	entry.leanGoal = 0.08
-	pause(entry, F.stagger * 12 + F.recover)
-	setPose(entry, "rest", 0.5)
-	entry.leanGoal = 0
-end
-
---[[
-	CRESCENT LUNGE
-
-	Its answer to being kept away from or hidden from. It rears back with a
-	crescent blade forming edge-on at its front, eyes flaring, then dashes
-	along a shallow arc. The blade cuts whoever is near its path. It arrives
-	low, hem on the ground, spent, and stays there for the recovery.
-]]
-local function lunge(entry, phase: number)
- local L=Tuning.lunge
- local target=entry.lungeTarget or pickTarget(entry) or nearestPlayer(entry.position)
- entry.lungeTarget=nil
+local function mirror(entry, phase: number)
+ local M=Tuning.mirror
+ local target=entry.mirrorTarget or pickTarget(entry) or nearestPlayer(entry.position)
+ entry.mirrorTarget=nil
  local root=livingRoot(target);if not root then return end
  entry.focus=target
+ entry.nextMirrorAt=os.clock()+M.cooldown[phase]
+ entry.motion="scripted";entry.lean=0;entry.roll=0;entry.bob=0
+ setStance(entry,"hover")
+
+ -- The veil folds.
+ local from=entry.position
+ fx("step",from-Vector3.new(0,3,0),{phase=phase})
+ playClip(entry,"Parry",{speed=1.2})
+ if not pause(entry,.25) then return end
+
+ local count=M.images[phase]
+ local real=math.random(count)
+ local images={}
+ for k=1,count do
+  local isReal=k==real
+  local model=if isReal then entry.model else mirrorImage(entry,phase)
+  table.insert(images,{real=isReal,slot=k,bob=math.random()*TAU,model=model,aura=if isReal then nil else imageAura(entry,phase,model)})
+ end
+ entry.images=images;entry.mirrorPhase=phase;entry.mirrorFound=false
+ -- Its name plate would point straight at it, and five halos crowd the
+ -- screen: every image folds its eclipse away while the veil is up.
+ local plate=entry.model:FindFirstChild("NamePlate")
+ local plateWas=plate and plate:IsA("BillboardGui") and plate.Enabled
+ if plateWas then plate.Enabled=false end
+ local aura=entry.aura
+ if aura then aura:SetAttribute("Veiled",true) end
+ entry.scope:add(function()
+  entry.images=nil;entry.imageQuery=nil
+  if plateWas and plate.Parent then plate.Enabled=true end
+  if aura and aura.Parent then aura:SetAttribute("Veiled",nil) end
+ end)
+ setGuard(entry,MIRROR)
+
+ local function place(image,position,look,lean)
+  if image.gone then return end
+  if image.real then
+   entry.position=position;entry.look=look;entry.lean=lean or 0;applyPose(entry)
+  elseif image.model.Parent then
+   image.model:PivotTo(CFrame.lookAt(position,position+look)*CFrame.Angles(lean or 0,0,0))
+   if image.aura then image.aura.CFrame=image.model:GetPivot() end
+  end
+ end
+ local function positionOf(image): Vector3
+  return if image.real then entry.position else image.model:GetPivot().Position
+ end
+
+ -- The circle. Phase two's images are simply there, each in a veil flash.
+ local first=phase==2
+ local centre=root.Position
+ local base=math.atan2(from.Z-centre.Z,from.X-centre.X)
+ local spin,dir=0,if math.random()<.5 then 1 else -1
+ local shuffles=M.shuffle[phase]
+ local nextShuffle,glideAt=1,nil
+ local began,last=os.clock(),os.clock()
+ while os.clock()-began<M.window[phase] and not entry.mirrorFound do
+  if entry.signusFinished or entry.scope:isDead() then return end
+  local now=os.clock();local dt=math.min(now-last,.1);last=now
+  local live=livingRoot(target);if not live then break end
+  local t=now-began
+  -- The ring drifts after its target slowly enough that an image can be walked up to.
+  centre=centre:Lerp(live.Position,math.clamp(dt*M.follow,0,1))
+  spin+=dir*M.spin[phase]*dt
+  if shuffles[nextShuffle] and t>=shuffles[nextShuffle] then
+   -- They trade places: every image takes another's slot, sliding round
+   -- the ring through each other, behind a veil flash each.
+   nextShuffle+=1
+   local order={}
+   for k=1,count do order[k]=k end
+   for k=count,2,-1 do local j=math.random(k);order[k],order[j]=order[j],order[k] end
+   for i,image in images do
+    image.fromSlot=image.slot;image.slot=order[i]
+    if not image.gone then fx("step",positionOf(image)-Vector3.new(0,3,0),{phase=phase}) end
+   end
+   glideAt=now
+  end
+  local glide=if glideAt then smoothstep((now-glideAt)/M.glide) else 1
+  local spread=if phase==1 then smoothstep(t/M.split) else 1
+  for _,image in images do
+   local slot=if glideAt and image.fromSlot then image.fromSlot+(image.slot-image.fromSlot)*glide else image.slot
+   local angle=base+(slot-1)*TAU/count+spin
+   local ring=centre+Vector3.new(math.cos(angle),0,math.sin(angle))*M.ring[phase]
+   local ground=groundUnder(Vector3.new(ring.X,centre.Y,ring.Z))
+   local spot=Vector3.new(ring.X,pivotHeight(entry,ground,Tuning.hover.hem),ring.Z)+Vector3.yAxis*math.sin(t*2.2+image.bob)*.6
+   local position=if spread<1 then from:Lerp(spot,spread) else spot
+   place(image,position,flat(live.Position-position))
+   if first then fx("step",position-Vector3.new(0,3,0),{phase=phase}) end
+  end
+  first=false
+  if glideAt and glide>=1 then glideAt=nil end
+  task.wait()
+ end
+
+ local function scatter()
+  for _,image in images do if not image.real then breakImage(entry,image) end end
+  entry.images=nil
+  setGuard(entry,false)
+ end
+ local function found()
+  -- Found: the decoys scatter and it is left down and spent.
+  scatter()
+  fx("crescentBreak",rigPoint(entry,CLASP),{phase=phase,struck=true})
+  playClip(entry,"BlockHit",{speed=.9})
+  entry.motion="ground";entry.lean=0;applyPose(entry);setStance(entry,"spent")
+  pause(entry,M.stun[phase])
+ end
+ if entry.mirrorFound then return found() end
+ if not livingRoot(target) then scatter() return end
+
+ -- Not found in time: one after another each image raises its sleeve and
+ -- calls Umbral Thunder down on you, Signus last and widest. Every mark
+ -- opens where you are heading and closes on its own warning.
  local ledger={}
- entry.nextLungeAt=os.clock()+L.cooldown[phase]
- for rush=1,(if phase==2 then 2 else 1) do
-  if entry.signusFinished or not livingRoot(target) then return end
-  entry.motion="scripted";entry.lean=0;entry.bob=0;entry.roll=0
-  setPose(entry,"gather",.18)
-  local windup=L.windup[phase]
-  local lockDuration=if phase==2 then .28 else .22
-  local blade=newPart(Vector3.one,Colors.orchid,0,"CrescentLunge")
-  blade:SetAttribute("Phase",phase);blade:SetAttribute("Stage","Charge")
-  blade:SetAttribute("StartedAt",workspace:GetServerTimeNow());blade:SetAttribute("Charge",windup)
-  blade:SetAttribute("Lock",lockDuration)
-  blade:SetAttribute("Radius",L.reach[phase]);blade:SetAttribute("Rush",rush)
-  blade.CFrame=entry.model:GetPivot()*CFrame.new(0,-2,-6)
-  blade.Parent=workspace;entry.scope:add(blade)
-  local start=entry.position
-  local direction=flat(root.Position-entry.position)
-  local lockedAim=root.Position
-  local began,last=os.clock(),os.clock()
-  while os.clock()-began<windup do
-   if entry.signusFinished or entry.scope:isDead() then return end
-   local now=os.clock();local dt=math.min(now-last,.1);last=now
-   local live=livingRoot(target);if not live then return end
+ local order={}
+ for _,image in images do if not image.real and not image.gone then table.insert(order,image) end end
+ for k=#order,2,-1 do local j=math.random(k);order[k],order[j]=order[j],order[k] end
+ for _,image in images do if image.real then table.insert(order,image) end end
+
+ local pending=0
+ for index,image in order do
+  if entry.mirrorFound or entry.signusFinished or entry.scope:isDead() then break end
+  local live=livingRoot(target)
+  if live and not image.gone then
+   local marks=clipOn(image.model,"UpTilt",{windup=.2,hold=M.warn[phase]+.2})
+   if image.real then entry.clipEndsAt=os.clock()+marks.finish end
    local velocity=Vector3.new(live.AssemblyLinearVelocity.X,0,live.AssemblyLinearVelocity.Z)
    if velocity.Magnitude>25 then velocity=velocity.Unit*25 end
-   if now-began<windup-lockDuration then lockedAim=live.Position+velocity*.16 end
-   direction=flat(lockedAim-entry.position)
-   entry.look=turnFlat(entry.look,direction,math.rad(360)*dt)
-   local a=math.clamp((now-began)/windup,0,1);local eased=a*a*(3-2*a)
-   entry.position=start-direction*L.rearBack*eased
-   entry.lean=-.1*eased;applyPose(entry)
-   blade.CFrame=entry.model:GetPivot()*CFrame.new(0,-2,-6)
-   blade:SetAttribute("Target",blade.Position+direction*50)
-   task.wait()
-  end
-  local live=livingRoot(target);if not live then return end
-  -- The final, brightly marked part of the warning and the rush keep this aim.
-  -- A deliberate dodge has a real window; circling is predicted, not tracked forever.
-  local aim=lockedAim
-  direction=flat(aim-entry.position);entry.look=direction
-  local landing=groundUnder(aim+direction*L.overshoot)
-  local goal=Vector3.new(landing.X,pivotHeight(entry,landing,.6),landing.Z)
-  local from=entry.position
-  local seconds=math.clamp((goal-from).Magnitude/L.speed[phase],.22,1.15)
-  blade:SetAttribute("Stage","Rush");blade:SetAttribute("RushAt",workspace:GetServerTimeNow())
-  blade:SetAttribute("Travel",seconds);blade:SetAttribute("Target",goal-Vector3.yAxis*entry.feetOffset*.6)
-  setPose(entry,"lunge",.1)
-  local previous=entry.position-Vector3.yAxis*entry.feetOffset*.6
-  began=os.clock()
-  repeat
-   if entry.signusFinished or entry.scope:isDead() then return end
-   local a=math.clamp((os.clock()-began)/seconds,0,1)
-   entry.position=from:Lerp(goal,a)+Vector3.yAxis*math.sin(a*math.pi)*1.2
-   entry.lean=.12*math.sin(a*math.pi);applyPose(entry)
-   local cutter=entry.position-Vector3.yAxis*entry.feetOffset*.6
-   blade.CFrame=CFrame.lookAt(cutter+direction*3,cutter+direction*4)
-   local delta=cutter-previous
-   for _,player in livingPlayers() do
-    local victim=rootOf(player)
-    if victim then
-     local f=math.clamp((victim.Position-previous):Dot(delta)/math.max(delta:Dot(delta),.001),0,1)
-     local closest=previous+delta*f
-     if (victim.Position-closest).Magnitude<=L.reach[phase] and not sightBlock(closest,victim.Position) then
-      hitOnce(ledger,"rush"..rush,player,L.damage[phase],L.cap[phase])
-     end
-    end
+   local mark=groundUnder(live.Position+velocity*M.lead)
+   local radius=if image.real then M.finalRadius[phase] else M.radius[phase]
+   pending+=1
+   entry.scope:spawn(function()
+    Spells.bolt(entry,phase,mark,radius,M.warn[phase],M.damage[phase],ledger,"image"..index,M.cap[phase])
+    pending-=1
+   end)
+   -- A decoy is spent by its spell: it breaks as the bolt lands.
+   if not image.real then
+    entry.scope:spawn(function()
+     if pause(entry,M.warn[phase]) then breakImage(entry,image) end
+    end)
    end
-   previous=cutter
-   if a>=1 then break end
-   task.wait()
-  until false
-  entry.position=goal;entry.lean=0;applyPose(entry)
-  blade:SetAttribute("Stage","Decay");blade:SetAttribute("DecayAt",workspace:GetServerTimeNow())
-  Debris:AddItem(blade,.45)
-  fx("lungeImpact",previous,{direction=direction,phase=phase,radius=L.reach[phase]})
-  setPose(entry,"droop",.18)
-  if rush==1 and phase==2 and not pause(entry,.18) then return end
+  end
+  if index<#order and not pause(entry,M.stagger[phase]) then return end
  end
- entry.motion="ground";entry.leanGoal=0
- pause(entry,L.recover[phase]);setPose(entry,"rest",.3)
+ while pending>0 and not entry.signusFinished and not entry.scope:isDead() do task.wait() end
+ if entry.mirrorFound then return found() end
+ scatter()
+ entry.motion="ground";entry.leanGoal=0;entry.lean=0;setStance(entry,"spent")
+ pause(entry,M.recover[phase])
 end
 
 --[[
 	VEIL STEP
 
-	Hugged too long, it folds into a crescent of light and glides away along
-	a curve, unfolding eighteen studs off in a ripple of motes. Never further
-	than that: it buys a moment, not an escape.
+	Hugged too long, it folds into a crescent of light and blinks: gone in a
+	veil flash, unfolding eighteen studs off in another. No glide and no
+	dash, and never further than that: it buys a moment, not an escape.
 ]]
 local function veilStep(entry, _phase: number)
 	local S = Tuning.step
@@ -1618,7 +954,7 @@ local function veilStep(entry, _phase: number)
 	local away = if nearRoot then flat(entry.position - nearRoot.Position) else -flat(entry.look)
 
 	entry.motion = "scripted"
-	setPose(entry, "stepFold", S.fold)
+	playClip(entry, "Parry", { speed = 1.2 })
 
 	-- The crescent that wraps it: upright, around the robe.
 	local wrap = makeArc(scope, 11, Colors.pearl, 0.1)
@@ -1642,270 +978,64 @@ local function veilStep(entry, _phase: number)
 		task.wait()
 	end
 
-	-- A curve to the side rather than a straight slide.
-	local side = Vector3.new(-away.Z, 0, away.X) * (if math.random() < 0.5 then -1 else 1)
+	-- The blink: gone from here, there in the same instant.
 	local from = entry.position
 	local landing = groundUnder(from + away * S.distance)
 	local goal = Vector3.new(landing.X, pivotHeight(entry, landing, Tuning.hover.hem), landing.Z)
-
-	began = os.clock()
-	while os.clock() - began < S.glide do
-		if entry.signusFinished then
-			return
-		end
-		local alpha = math.clamp((os.clock() - began) / S.glide, 0, 1)
-		local eased = alpha * alpha * (3 - 2 * alpha)
-		entry.position = from:Lerp(goal, eased) + side * math.sin(alpha * math.pi) * 5
-		entry.roll = 0.2 * (1 - alpha)
-		applyPose(entry)
-		layWrap(1 - alpha * 0.4, 2 + alpha * 6)
-		task.wait()
-	end
-
+	fx("step", from - Vector3.new(0, 3, 0))
 	entry.position = goal
 	entry.roll = 0
 	applyPose(entry)
+	fx("step", goal - Vector3.new(0, 3, 0))
+	began = os.clock()
+	while os.clock() - began < S.unfold do
+		if entry.signusFinished then
+			return
+		end
+		local alpha = math.clamp((os.clock() - began) / S.unfold, 0, 1)
+		layWrap(1 - alpha, 2 + alpha * 6)
+		task.wait()
+	end
 	for _, part in ipairs(wrap) do
 		part:Destroy()
 	end
-	fx("step", entry.position - Vector3.new(0, 3, 0))
-	setPose(entry, "rest", 0.4)
+	setStance(entry, restStance(entry))
 	entry.motion = "hover"
 end
 
---[[
-	A ring of columns around a point, between two radii, for the Totality's
-	halo and the Nova's scorch. Planned at once, so the caller marks exactly
-	what will go.
-]]
-local function ringColumns(centre: Vector3, inner: number, outer: number, count: number)
-	local columns = {}
-	local base = math.random() * TAU
-	for index = 1, count do
-		local angle = base + (index - 1) / count * TAU
-		local radius = inner + (outer - inner) * ((index % 3) / 2)
-		local spot = groundUnder(centre + Vector3.new(math.cos(angle) * radius, 0, math.sin(angle) * radius))
-		table.insert(columns, { x = spot.X, z = spot.Z, y = spot.Y, depth = 1 })
-	end
-	return columns
-end
-
---[[
-	TOTALITY
-
-	The phase change. It rises, spreads its sleeves, and the sky goes to
-	eclipse. The ring of ground beneath it is chosen and marked, cracks with
-	light, and lifts into orbit around it as the Moonstone Halo. The black sun
-	forms overhead and stays for the rest of the fight. Nothing here hurts
-	anyone: the player just did something good.
-]]
-local function totality(entry, _phase: number)
-	local T = Tuning.totality
-	local scope = entry.scope
-
-	entry.focus = pickTarget(entry) or entry.focus
-	entry.motion = "hold"
-	entry.hem = T.hem
-	entry.leanGoal = -0.15
-
-	announce("The moon swallows the sun. Signus enters Totality.", "bad")
-	setBossPhase(entry, ATTACK_NAMES.totality)
-	setPose(entry, "channel", 0.8)
-	setSky(2, 2.5)
-
-	local orb = handOrb(entry, scope, Colors.pearl, 1.6)
-	tweenFX(scope,orb, TweenInfo.new(T.warn, Enum.EasingStyle.Quad), { Size = Vector3.one * 4 })
-
-	local shadow = groundUnder(entry.position)
-	local plan = TerrainManager:PlanExcavation(ringColumns(shadow, T.ring[1], T.ring[2], T.columns), { maxCells = T.cap })
-	local marks = markCells(scope, plan, Colors.pearl, 0.5)
-	local ring = makeArc(scope, 24, Colors.orchid, 0.2)
-
-	local began = os.clock()
-	while os.clock() - began < T.warn do
-		if entry.signusFinished then
-			return
-		end
-		local alpha = (os.clock() - began) / T.warn
-		layRing(ring, shadow + Vector3.new(0, 0.3, 0), T.ring[2] + 1.5, alpha * 2, 0.3 + alpha * 0.4)
-		for _, mark in ipairs(marks) do
-			mark.FXOpacity.Value = 1-(0.5 - alpha * 0.4)
-		end
-		task.wait()
-	end
-
-	local removed, samples = TerrainManager:ExecuteExcavation(plan)
-	for _, mark in ipairs(marks) do
-		mark:Destroy()
-	end
-	for _, part in ipairs(ring) do
-		part:Destroy()
-	end
-	if removed > 0 then
-		broadcastDebris(rigPoint(entry, CLASP), samples, 1.2)
-		addHalo(entry, samples, math.min(removed, T.haloMax))
-	end
-
-	fx("totality", entry.position, { drop = entry.position.Y - shadow.Y })
-	flare(scope, entry.position, 14, 0.9, Colors.pearl)
-	buildEclipse(entry)
-	tweenFX(scope,orb, TweenInfo.new(0.4), { Size = Vector3.one * 0.2, Transparency = 1 })
-
-	entry.transformed = true
-	if entry.aura then entry.aura:SetAttribute("Phase",2) end
-	pause(entry, T.settle)
-	setPose(entry, "rest", 0.6)
-	entry.hem = Tuning.hover.hem
-	entry.leanGoal = 0
-end
-
---[[
-	ECLIPSE NOVA
-
-	It comes down to the ground and channels. A sigil twenty-six studs wide
-	opens under it, rings close inward across it, spokes drag toward the
-	core, the halo spins faster, and the scorch ring is marked. The last
-	fraction of a second is silent and the core goes black. Then it
-	detonates: everyone within reach who can be SEEN from the core is hit,
-	a block of any kind between you and it is enough, and the ring of ground
-	around it is torn away and flung up into the dark. It hangs there spent
-	afterwards, sleeves down, for three seconds.
-]]
-local function nova(entry, _phase: number)
-	local N = Tuning.nova
-	local scope = entry.scope
-
-	entry.focus = pickTarget(entry) or entry.focus
-	entry.motion = "ground"
-	entry.leanGoal = -0.22
-	if entry.halo then
-		entry.halo.speed = 3.5
-	end
-
-	setPose(entry, "channel", 0.7)
-	local orb = handOrb(entry, scope, Colors.orchid, 1.2)
-	tweenFX(scope,orb, TweenInfo.new(N.channel, Enum.EasingStyle.Quad), { Size = Vector3.one * 5 })
-
-	-- The sigil and the scorch ring, chosen and marked before anything moves.
-	local centre = groundUnder(entry.position)
-	local plan = TerrainManager:PlanExcavation(ringColumns(centre, N.scorch[1], N.scorch[2], N.columns), { maxCells = N.cap })
-	local marks = markCells(scope, plan, Colors.pearl, 0.5)
-
-	local outer = makeArc(scope, 28, Colors.pearl, 0.2)
-	local closing1 = makeArc(scope, 20, Colors.orchid, 0.15)
-	local closing2 = makeArc(scope, 16, Colors.violet, 0.15)
-	local spokes = {}
-	for index = 1, 12 do
-		local spoke = newPart(Vector3.new(1, 0.22, 0.22), Colors.pearl, 0.4, "Spoke")
-		spoke.Parent = workspace
-		scope:add(spoke)
-		spokes[index] = spoke
-	end
-	local fill = newDisc(centre + Vector3.new(0, 0.1, 0), N.radius, Colors.plum, 0.8)
-	scope:add(fill)
-	local core = newPart(Vector3.one * 0.5, Colors.black, 0, "Void")
-	core.Shape = Enum.PartType.Ball
-	core.Material = Enum.Material.SmoothPlastic
-	core.Parent = workspace
-	scope:add(core)
-
-	local began = os.clock()
-	local lifted = centre + Vector3.new(0, 0.25, 0)
-	while os.clock() - began < N.channel do
-		if entry.signusFinished then
-			return
-		end
-		local alpha = (os.clock() - began) / N.channel
-		local spin = alpha * 3
-		layRing(outer, lifted, N.radius, spin * 0.5, 0.4 + alpha * 0.5)
-		layRing(closing1, lifted + Vector3.new(0, 0.05, 0), N.radius * (1 - alpha * 0.92), -spin, 0.35)
-		layRing(closing2, lifted + Vector3.new(0, 0.1, 0), N.radius * (1 - ((alpha * 1.6) % 1) * 0.9), spin * 1.3, 0.3)
-		for index, spoke in ipairs(spokes) do
-			local angle = spin * 0.5 + (index - 1) / 12 * TAU
-			local reach = N.radius * (1 - alpha * 0.7)
-			local mid = lifted + Vector3.new(math.cos(angle) * reach * 0.5, 0.08, math.sin(angle) * reach * 0.5)
-			spoke.Size = Vector3.new(reach, 0.22, 0.22)
-			spoke.CFrame = CFrame.new(mid) * CFrame.Angles(0, -angle, 0)
-			spoke.FXOpacity.Value = 1-(0.5 - alpha * 0.4)
-		end
-		fill.FXOpacity.Value = 1-(0.8 - alpha * 0.3)
-		for _, mark in ipairs(marks) do
-			mark.FXOpacity.Value = 1-(0.5 - alpha * 0.4)
-		end
-		core.Position = rigPoint(entry, CLASP)
-		core.Size = Vector3.one * (0.5 + alpha * 3)
-		task.wait()
-	end
-
-	-- THE HELD BREATH: the orb is gone, the core is black, nothing moves.
-	orb.FXOpacity.Value = 1-(1)
-	for _, spoke in ipairs(spokes) do
-		spoke.FXOpacity.Value = 1-(1)
-	end
-	if not pause(entry, N.hold) then
-		return
-	end
-
-	-- DETONATION.
-	local origin = rigPoint(entry, CLASP)
-	for _, player in ipairs(livingPlayers()) do
-		local victim = rootOf(player)
-		if victim and (victim.Position - origin).Magnitude <= N.radius then
-			if not sightBlock(origin, victim.Position) then
-				CombatService.applyDamage(player, N.damage, SOURCE)
-			end
-		end
-	end
-
-	core:Destroy()
-	fill:Destroy()
-	for _, list in ipairs({ outer, closing1, closing2 }) do
-		for _, part in ipairs(list) do
-			part:Destroy()
-		end
-	end
-	fx("nova", origin, { radius = N.radius })
-	flare(scope, origin, N.radius * 0.5, 0.5, Colors.pearl)
-	spendHalo(entry, scope)
-	if entry.halo then
-		entry.halo.speed = 1
-	end
-
-	local removed, samples = TerrainManager:ExecuteExcavation(plan)
-	for _, mark in ipairs(marks) do
-		mark:Destroy()
-	end
-	if removed > 0 then
-		broadcastDebris(entry.position + Vector3.new(0, 26, 0), samples, 1.0)
-	end
-
-	-- SPENT.
-	setPose(entry, "droop", 0.5)
-	entry.leanGoal = 0.12
-	pause(entry, N.recover)
-	setPose(entry, "rest", 0.6)
-	entry.leanGoal = 0
-end
 
 -- ---------------------------------------------------------------------------
 -- The fight
 -- ---------------------------------------------------------------------------
 
-local referenceMoves=require(script.Parent.SignusMoves).create({
+
+-- The moment of Totality: the eyes, aura and crown turn, for every client.
+local function ignite(entry)
+	entry.transformed = true
+	entry.model:SetAttribute("SignusPhase", 2)
+	if entry.aura then entry.aura:SetAttribute("Phase", 2) end
+	buildEclipse(entry)
+end
+
+local moves=require(script.Parent.SignusMoves).create({
 	carrier=newPart,pickTarget=pickTarget,root=livingRoot,ground=groundUnder,
-	pose=setPose,pause=pause,playersInCircle=playersInCircle,players=livingPlayers,
+	clip=playClip,clipPlan=clipPlan,stance=setStance,pause=pause,
+	playersInCircle=playersInCircle,players=livingPlayers,
 	cover=sightBlock,hit=hitOnce,fx=fx,flat=flat,applyPose=applyPose,
 	hand=function(entry) return rigPoint(entry,HANDS) end,
-	sky=setSky,eclipse=buildEclipse,other=otherPlayer,announce=announce,
+	sky=setSky,ignite=ignite,guard=setGuard,announce=announce,
 	airHem=Tuning.flight.castHem,
 })
+Spells=moves
 local ATTACKS = {
-	spiral = referenceMoves.spiral,
-	lance = referenceMoves.lance,
-	beam = referenceMoves.beam,
-	lunge = lunge,
+	spiral = moves.spiral,
+	lance = moves.lance,
+	beam = moves.beam,
+	thunder = moves.thunder,
+	blacksun = moves.blacksun,
+	mirror = mirror,
 	step = veilStep,
-	totality = referenceMoves.totality,
+	totality = moves.totality,
 }
 
 local function nextInCycle(entry, phase: number): string
@@ -1920,7 +1050,7 @@ end
 	time it acts below half health.
 ]]
 local function performAttack(entry, pick: string, phase: number)
-	setBossPhase(entry, ATTACK_NAMES[pick])
+	setBossPhase(entry, ATTACK_NAMES[pick] and ATTACK_NAMES[pick][phase] or pick)
 	entry.busy = true
 	entry.activeAttack = pick
 
@@ -1949,13 +1079,11 @@ local function performAttack(entry, pick: string, phase: number)
 		entry.leanGoal = 0
 		entry.roll = 0
 		entry.velocity = Vector3.zero
-		if entry.halo then
-			entry.halo.speed = 1
-		end
-		setPose(entry, "rest", 0.5)
+		-- However the spell ended, Totality's immunity or the veil's guard ends with it.
+		setGuard(entry, false)
 
 		local now = phaseOf(entry)
-		local rest = if pick == "step" or pick == "lunge"
+		local rest = if pick == "step" or pick == "mirror"
 			then 0.3
 			else math.random() * (Tuning.restMax[now] - Tuning.restMin[now]) + Tuning.restMin[now]
 		-- Aloft, every spell but a step ends on the ground, spent; it takes off
@@ -1966,6 +1094,7 @@ local function performAttack(entry, pick: string, phase: number)
 			entry.perchUntil = os.clock() + perch
 			rest = perch + F.airTime
 		end
+		setStance(entry, restStance(entry))
 		entry.nextAttackAt = os.clock() + rest
 		entry.busy = false
 		setBossPhase(entry, nil)
@@ -1974,8 +1103,8 @@ end
 
 -- Touching the robe: a short cylinder around its centre.
 local function contactDamage(entry, now: number)
-	-- The rush capsule owns lunge damage, including its shared two-rush cap.
-	if entry.activeAttack == "lunge" then return end
+	-- The rush capsules own Mirror Veil's damage, under its shared cap.
+	if entry.activeAttack == "mirror" then return end
 	local C = Tuning.contact
 	for _, player in ipairs(livingPlayers()) do
 		local root = rootOf(player)
@@ -1995,7 +1124,7 @@ local function leave(entry)
 	entry.leaving = true
 	entry.busy = true
 	entry.motion = "scripted"
-	setPose(entry, "rest", 0.6)
+	setStance(entry, restStance(entry))
 	task.spawn(function()
 		local from = entry.position
 		local began = os.clock()
@@ -2013,12 +1142,12 @@ local function leave(entry)
 end
 
 --[[
-	Decides whether something other than the cycle is called for: a lunge
+	Decides whether something other than the cycle is called for: a veil
 	at someone who keeps away or hides, or a step away from someone who will
 	not leave it alone. Returns the pick, or nil for the cycle.
 ]]
 local function situational(entry, now: number, phase: number): string?
-	local L = Tuning.lunge
+	local L = Tuning.mirror
 	local S = Tuning.step
 
 	local near, nearDistance = nearestPlayer(entry.position)
@@ -2052,14 +1181,14 @@ local function situational(entry, now: number, phase: number): string?
 	else
 		entry.hiddenSince = nil
 	end
-	local lungeDue = (entry.farSince and now - entry.farSince >= L.farSeconds)
+	local mirrorDue = (entry.farSince and now - entry.farSince >= L.farSeconds)
 		or (entry.hiddenSince and now - entry.hiddenSince >= L.hiddenSeconds)
-	if lungeDue and now >= (entry.nextLungeAt or 0) then
+	if mirrorDue and now >= (entry.nextMirrorAt or 0) then
 		entry.farSince = nil
 		entry.hiddenSince = nil
-		entry.nextLungeAt = now + L.cooldown[phase]
-		entry.lungeTarget = focusPlayer
-		return "lunge"
+		entry.nextMirrorAt = now + L.cooldown[phase]
+		entry.mirrorTarget = focusPlayer
+		return "mirror"
 	end
 
 	return nil
@@ -2098,38 +1227,16 @@ local function deathHusk(entry)
 	husk.Parent = workspace
 	Debris:AddItem(husk, 2.6)
 
-	local played = false
-	local ids = EnemyConfig.Animations and EnemyConfig.Animations.Signus
-	local deathId = ids and ids.Death
-	local controller = husk:FindFirstChildOfClass("AnimationController")
-	local animator = controller and controller:FindFirstChildOfClass("Animator")
-	if animator and (type(deathId) == "number" or (type(deathId) == "string" and string.match(deathId, "%d+$")
-		and not string.match(deathId, "^PUBLISH"))) then
-		local animation = Instance.new("Animation")
-		animation.AnimationId = if type(deathId) == "number" then "rbxassetid://" .. deathId
-			elseif string.match(deathId, "^rbxassetid://") then deathId
-			else "rbxassetid://" .. deathId
-		local ok, track = pcall(animator.LoadAnimation, animator, animation)
-		if ok and track then
-			track.Priority = Enum.AnimationPriority.Action4
-			track:Play(0.05)
-			played = true
-		end
-	end
+	-- The copy keeps the SignusRig tag, so clients pose it: the last of Heavy's
+	-- sweep, slowed, settling into the spent stance. No aura, no eyes.
+	husk:SetAttribute("SignusPhase", 0)
+	husk:SetAttribute("SignusStance", "spent")
+	husk:SetAttribute("SignusClip", SignusClips.encode(
+		SignusClips.plan("Heavy", { from = SignusClips.Data.Heavy.markers.Hit, speed = 0.7 }),
+		workspace:GetServerTimeNow()
+	))
 
 	local sink = TweenInfo.new(1.4, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-	if not played then
-		for key, name in pairs(JOINTS) do
-			local motor = husk:FindFirstChild(name, true)
-			if motor and motor:IsA("Motor6D") then
-				local pose = if key == "hood" then CFrame.Angles(0.7, 0, 0.2)
-					elseif key == "left" then CFrame.Angles(0.3, 0, -0.9)
-					elseif key == "right" then CFrame.Angles(0.3, 0, 0.9)
-					else CFrame.Angles(0.25, 0, 0)
-				TweenService:Create(motor, sink, { C0 = motor.C0 * pose }):Play()
-			end
-		end
-	end
 	if root then
 		TweenService:Create(root, sink, { CFrame = root.CFrame * CFrame.new(0, -3, 0) * CFrame.Angles(0.15, 0, 0) }):Play()
 	end
@@ -2156,7 +1263,7 @@ function Signus.start(entry)
 	entry.perchUntil = nil
 	entry.perched = false
 	entry.scope = nil
-	entry.poseScope = nil
+	entry.stance = nil
 	entry.encounterScope = AbilityScope.new()
 	entry.motion = "hover"
 	entry.focus = nil
@@ -2174,7 +1281,6 @@ function Signus.start(entry)
 	entry.contactAt = setmetatable({}, { __mode = "k" })
 	entry.lastSeenAt = os.clock()
 	entry.lastHurtAt = 0
-	entry.halo = { parts = {}, spin = 0, speed = 1 }
 
 	local placed = entry.model:GetPivot().Position
 	entry.position = placed
@@ -2184,19 +1290,16 @@ function Signus.start(entry)
 		entry.ringAngle = math.atan2(placed.Z - first.Position.Z, placed.X - first.Position.X)
 	end
 
-	findRig(entry)
 	entry.aura=newPart(Vector3.new(14,18,14),Colors.violet,0,"Aura")
 	entry.aura:SetAttribute("Phase",1)
 	entry.aura.Parent=workspace
 	entry.encounterScope:add(entry.aura)
 
-	local animator, reason = EnemyAnimator.new(entry.model, EnemyConfig.Animations.Signus)
-	if animator then
-		entry.animator = animator
-		animator:play("Hover")
-	else
-		warn("[Signus] no animator: " .. tostring(reason))
-	end
+	-- The body: clients pose it from these (SignusRig).
+	entry.model:SetAttribute("SignusPhase", 1)
+	entry.model:SetAttribute("SignusClip", nil)
+	setStance(entry, "hover")
+	CollectionService:AddTag(entry.model, "SignusRig")
 
 	-- Its lights: the eyes and the clasp, for as long as it lives.
 	local eyeLight = newLight(entry.root, Colors.pearl, 22, 1.2)
@@ -2285,24 +1388,13 @@ function Signus.step(entry, dt: number, now: number)
 			entry.look = turnFlat(entry.look, focus.Position - entry.position, math.rad(H.turnRate) * dt)
 		end
 
-		-- The silhouette stays upright; only the hanging sleeves breathe in flight.
+		-- The silhouette stays upright; the stance shows whether it is aloft
+		-- (sleeves swept back) or down recovering.
 		if entry.transformed and entry.motion == "hover" then
 			entry.roll += (0 - entry.roll) * math.clamp(dt * 6, 0, 1)
 			entry.leanGoal = 0
 			if not entry.busy then
-				if entry.poseName ~= "rest" or entry.flightPose ~= flying then
-					setPose(entry, "rest", 0.35)
-				elseif flying and now >= (entry.poseSettledAt or 0) and entry.rig
-					and not (entry.animator and entry.animator:has("Hover")) then
-					for _, key in { "left", "right" } do
-						local motor = entry.rig.motors[key]
-						if motor and motor.Parent then
-							local phaseOffset = if key == "left" then 0 else 0.8
-							local flutter = math.sin(entry.bobPhase * 2.1 + phaseOffset) * 0.025
-							motor.C0 = entry.rig.rest[key] * POSES.flight[key] * CFrame.Angles(flutter, 0, 0)
-						end
-					end
-				end
+				setStance(entry, restStance(entry))
 			end
 		end
 
@@ -2321,8 +1413,6 @@ function Signus.step(entry, dt: number, now: number)
 			fx("land", ground)
 		end
 	end
-
-	stepHalo(entry, dt)
 
 	if not entry.leaving then
 		contactDamage(entry, now)
@@ -2368,6 +1458,42 @@ function Signus.damaged(entry, _dealt: number)
 	flinch(entry)
 end
 
+--[[
+	Where its body is, for a swing or an ability looking from `position`.
+	While the Mirror Veil is up that is whichever image is nearest - Signus or
+	a decoy - remembered so the MIRROR guard can tell which the blow found.
+	Otherwise nil, and EnemyService uses the pivot.
+]]
+function Signus.nearestPoint(entry, position: Vector3): Vector3?
+	local images = entry.images
+	if not images then
+		return nil
+	end
+	local best, bestPoint, bestDistance = nil, nil, math.huge
+	for _, image in images do
+		if not image.gone and image.model.Parent then
+			local point = image.model:GetPivot().Position
+			local distance = (point - position).Magnitude
+			if distance < bestDistance then
+				best, bestPoint, bestDistance = image, point, distance
+			end
+		end
+	end
+	if best then
+		entry.imageQuery = { image = best, at = os.clock() }
+	end
+	return bestPoint
+end
+
+-- The damage number goes on the image that was struck.
+function Signus.impactPoint(entry, _dealer): Vector3?
+	local query = entry.imageQuery
+	if entry.images and query and os.clock() - query.at < 0.25 and query.image.model.Parent then
+		return query.image.model:GetPivot().Position
+	end
+	return nil
+end
+
 function Signus.finish(entry, reason: string?)
 	entry.signusFinished = true
 	entry.busy = false
@@ -2376,10 +1502,7 @@ function Signus.finish(entry, reason: string?)
 		entry.scope:destroy()
 		entry.scope = nil
 	end
-	if entry.poseScope then
-		entry.poseScope:destroy()
-		entry.poseScope = nil
-	end
+	setGuard(entry, false)
 
 	-- The death is presented BEFORE the encounter effects go, on a copy of
 	-- the model as it stands now.
@@ -2396,14 +1519,9 @@ function Signus.finish(entry, reason: string?)
 		entry.encounterScope:destroy()
 		entry.encounterScope = nil
 	end
-	entry.halo = nil
 	entry.eclipse = nil
 	entry.aura = nil
-
-	if entry.animator then
-		entry.animator:destroy()
-		entry.animator = nil
-	end
+	entry.model:SetAttribute("SignusClip", nil)
 
 	-- The sky clears, unless another of it is still out there.
 	if #EnemyService.allOf(SELF) == 0 then

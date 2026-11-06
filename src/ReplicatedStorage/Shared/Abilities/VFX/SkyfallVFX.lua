@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Skyfall Volley, drawn from one message:
 --   draw    jade energy gathers at the caster's bow hand
 --   loose   a signal arrow streaks straight up off a burst at their feet
@@ -38,9 +39,9 @@ local Sheets = {
 	},
 }
 
-local SOUND_DRAW = "rbxassetid://12222208"
-local SOUND_THUNK = "rbxasset://sounds/hit.wav"
-local SOUND_FINALE = "rbxassetid://5540424854"
+local SOUND_DRAW = CombatAudio.ids.charge_short
+local SOUND_THUNK = CombatAudio.ids.impact_body
+local SOUND_FINALE = CombatAudio.ids.heavy_whoosh
 
 function VFX.preload()
 	if preloaded then return end

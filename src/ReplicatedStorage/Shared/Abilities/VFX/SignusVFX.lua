@@ -3,7 +3,13 @@ local Run=game:GetService("RunService")
 local Players=game:GetService("Players")
 local FX=require(script.Parent.SignusFX)
 local A=require(script.Parent.SignusAssemblies)
+local Pack=require(script.Parent.PackAssembly)
 local VFX={}
+-- Umbral Thunder's bolts: white-hot cores edged in the phase's purple.
+local BOLT={
+ {deep=Color3.fromRGB(140,40,240),main=Color3.fromRGB(196,140,255),hot=Color3.fromRGB(245,235,255)},
+ {deep=Color3.fromRGB(80,16,190),main=Color3.fromRGB(160,90,250),hot=Color3.fromRGB(230,210,255)},
+}
 local active={}
 local lastImpact={}
 local lastMajor=-math.huge
@@ -46,6 +52,16 @@ local function bind()
   previousApplied=camera.CFrame*CFrame.new(x,y,0)*CFrame.Angles(y*.018,x*.012,0);camera.CFrame=previousApplied
  end)
 end
+-- A hard kick with impact frames (a flash, then a contrast slam), for the
+-- two releases that end a phase: Totality's ignition and the Black Sun.
+local function kickFrames(point,power,scope)
+ local tint=scope:add(Instance.new("ColorCorrectionEffect"));tint.Name="SignusImpactFrames"
+ tint.Parent=game:GetService("Lighting")
+ local e={point=point,power=power,at=workspace:GetServerTimeNow(),tint=tint,frames=true}
+ kicks[e]=true;bind()
+ task.delay(.45,function() kicks[e]=nil;release() end)
+end
+VFX.kickFrames=kickFrames
 -- A steady shake for something sustained, such as a beam that is firing.
 -- Callers renew it every few frames; it lapses on its own when they stop.
 function VFX.rumble(point,power,seconds)
@@ -90,13 +106,55 @@ function VFX.play(payload,scope)
  end
  active[scope]=kind;scope:add(function()active[scope]=nil end)
  local p=payload.position
- if kind=="lungeImpact" then
-  local direction=payload.direction or Vector3.zAxis
-  local impact=A.mount(scope,"LungeImpact",CFrame.lookAt(p,p+direction)*CFrame.Angles(-math.pi/2,0,0),1.1)
-  impact:burst(1.4)
-  local host=FX.host(scope,p,"SignusCrescentImpact")
-  FX.sound(host,.55,1.1,FX.Sounds.blast);VFX.rumble(p,.12,.18)
-  return .65
+ -- TOTALITY's ignition: black then deep purple, one eruption from the sleeves,
+ -- over the complete SS3 explosion; a hard camera kick and impact frames.
+ if kind=="totality" then
+  local up=CFrame.new(p)
+  local life=math.max(
+   A.emit(scope,"VoidBurst",up,1.9,1.4),
+   A.emit(scope,"BloodBurst",up,1.7,1.2,A.Dusk),
+   A.emit(scope,"ImpactViolet",up,2.6,1.3,A.Dusk),
+   A.explode(scope,up,1.8,1.4,true))
+  kickFrames(p,.55,scope)
+
+  return life+.4
+ elseif kind=="blackSun" then
+  -- The slam: a black core bursting through deep purple, with the ring torn up.
+  local radius=payload.radius or 30
+  local ground=payload.ground or p
+  local life=math.max(
+   A.emit(scope,"VoidBurst",CFrame.new(p),2.2,1.5),
+   A.emit(scope,"BloodBurst",CFrame.new(p),2,1.3,A.Dusk),
+   A.emit(scope,"ImpactViolet",CFrame.new(ground+Vector3.yAxis),radius/8,1.2,A.Dusk),
+   A.explode(scope,CFrame.new(ground+Vector3.yAxis*1.5),1.8,1.3,true))
+  kickFrames(p,.5,scope)
+
+  return life+.4
+ elseif kind=="crescentBreak" then
+  -- A thrown blade breaking on a block or on someone.
+  local life=A.emit(scope,"ImpactViolet",CFrame.new(p),.55,.7,if payload.phase==2 then A.Dusk else nil)
+  local impact=A.mount(scope,"LungeImpact",CFrame.new(p),.45,nil,payload.phase==2 and A.Dusk or nil)
+  impact:burst(.8)
+  if payload.struck then VFX.rumble(p,.1,.15) end
+  return math.max(life,.6)
+ end
+ if kind=="thunderStrike" then
+  -- Umbral Thunder landing: Stylized Thunder's bolts on the mark, a column
+  -- for the instant it connects, and the phase's impact ring and sparks.
+  local radius=payload.radius or 7
+  local s=radius/7
+  local tint=BOLT[payload.phase or 1] or BOLT[1]
+  local function mount(name,cf,scale) return Pack.mount(scope,workspace,name,{cframe=cf,scale=scale,tint=tint,brightness=2.5}) end
+  Pack.bolt(scope,workspace,p,{tint=tint,scale=4.4*s,height=12*s,width=5*s})
+  local column=mount("KiBlast4",CFrame.new(p),.6*s)
+  column:taper(.55);column:stretch(p+Vector3.yAxis*90,p);column:beamsOn(true)
+  scope:delay(.13,function() column:beamsOn(false) end)
+  local frame=CFrame.lookAt(p+Vector3.yAxis*1.5,p+Vector3.yAxis*10)
+  mount("Impact12",frame,2.2*s):burst(1)
+  mount("Impact36",frame,2.6*s):burst(1)
+  local life=A.emit(scope,"ImpactViolet",CFrame.new(p+Vector3.yAxis),radius/9,1,if payload.phase==2 then A.Dusk else nil)
+  VFX.rumble(p,.14,.2)
+  return math.max(life,1)
  end
  local radius=payload.radius or 8
  local major=kind=="death" or kind=="totality" or kind=="crown" or kind=="nova"
@@ -109,6 +167,13 @@ function VFX.play(payload,scope)
    elseif beam then .3 elseif kind=="shatter" then .35 else math.clamp(radius/10,1.2,1.55)
   life=A.explode(scope,CFrame.new(p+Vector3.yAxis*math.min(scale,1.5)),scale,
    if major then 1.3 elseif beam then .25 else 1,major or kind=="referenceImpact")
+  if kind=="referenceImpact" then
+   -- The ring that says where it landed, in the phase's colour; phase two
+   -- adds the deep purple burst on top.
+   local ground=CFrame.new(p+Vector3.yAxis)
+   life=math.max(life,A.emit(scope,"ImpactViolet",ground,radius/9,1,if payload.phase==2 then A.Dusk else nil))
+   if payload.phase==2 then life=math.max(life,A.emit(scope,"BloodBurst",ground,radius/14,.8,A.Dusk)) end
+  end
  else
   -- Small directional accents belong on hand releases/steps, never on the
   -- actual spell impacts. Those use the complete SS3 explosion above.
@@ -122,10 +187,8 @@ function VFX.play(payload,scope)
  end
  if major or kind=="referenceImpact" then
   VFX.rumble(p,major and .3 or .16,.25)
-  local host=FX.host(scope,p,"SignusImpactSound")
-  FX.sound(host,major and 1 or .55,major and .65 or .9,major and FX.Sounds.thunder or FX.Sounds.boom)
+
  elseif kind=="beamFire" then
-  local host=FX.host(scope,p,"SignusReleaseSound");FX.sound(host,.75,.7,FX.Sounds.blast)
  end
  return life+.25
 end

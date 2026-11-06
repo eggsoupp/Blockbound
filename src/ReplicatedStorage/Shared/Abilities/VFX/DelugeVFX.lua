@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Deluge, drawn from one message:
 --   gather  water spirals into a swelling orb over the caster
 --   flight  the orb arcs to the target, shedding spray and a wet ribbon
@@ -45,9 +46,9 @@ local Sheets = {
 	},
 }
 
-local SOUND_GATHER = "rbxasset://sounds/action_swim.mp3"
-local SOUND_SPLASH = "rbxasset://sounds/impact_water.mp3"
-local SOUND_BOOM = "rbxassetid://5540424854"
+local SOUND_GATHER = CombatAudio.ids.bubbles
+local SOUND_SPLASH = CombatAudio.ids.water_walk
+local SOUND_BOOM = CombatAudio.ids.boom_deep1
 
 function VFX.preload()
 	if preloaded then return end

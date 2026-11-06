@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 local ImportedAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.DownloadedSounds)
 -- Azure Comet, built from complete pack assemblies. Reference: a heavy blue
 -- comet out of the sky, then a white-cyan lightning detonation.
@@ -27,9 +28,9 @@ local VIEW_HEIGHT, VIEW_BEYOND = 38, 34
 local live = 0
 local preloaded = false
 
-local SOUND_SWISH = ImportedAudio.ability_whoosh
-local SOUND_BOOM = ImportedAudio.ability_impact_heavy
-local SOUND_HIT = ImportedAudio.ability_ice_break
+local SOUND_SWISH = CombatAudio.ids.plasma_trail
+local SOUND_BOOM = CombatAudio.ids.blast_short
+local SOUND_HIT = CombatAudio.ids.ice_chunk
 
 function VFX.preload()
 	Pack.preload()

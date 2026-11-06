@@ -1,0 +1,23 @@
+{
+  "pack": "SoulShroud Ultimate VFX Pack V1.9",
+  "sourcePlace": "SoulShroud Ultimate VFX Pack V1.9.rbxl",
+  "destinationPlace": 127569658424596,
+  "format": "Engine-serialized .rbxm built with Rojo 7.7 from `rojo syncback` of the source place file (and, for Eclipse, a SerializationService export of the destination place's own attachment); complete assemblies, no source-library edits, no scripts",
+  "route": "rojo syncback of the .rbxl into a scratch tree; the character aura was taken from Workspace.Auras (185 identically named StarterCharacters) by converting that folder to .rbxmx and selecting the model by its emitter signature, then renamed. Emitter textures, rates, lifetimes and ZOffsets were compared against the open source place. Eclipse was serialized from Workspace.eclipse in the destination place with SerializationService:SerializeInstancesAsync and built in unchanged (its EmitCount/EmitDelay attributes included).",
+  "assemblies": [
+    { "name": "AuraViolet", "path": "Workspace.Auras.StarterCharacter (child 152)", "selector": "Torso emitters 83758771665847/108949310371297/127446371303873, violet (210,28,255) over black", "emitters": 36, "scripts": 0 },
+    { "name": "VoidBurst", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #16", "emitters": 8, "scripts": 0 },
+    { "name": "BloodBurst", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #13", "emitters": 4, "scripts": 0 },
+    { "name": "ImpactViolet", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #32", "emitters": 3, "scripts": 0 },
+    { "name": "EyeFlare", "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #3.BZ1_SS3 VFX PART #46", "emitters": 1, "scripts": 0 },
+    { "name": "Eclipse", "path": "Destination place Workspace.eclipse (Attachment)", "selector": "Cres, Shine, Smoke x2, Cres2, Cres3, Circle", "emitters": 7, "scripts": 0 }
+  ],
+  "mapping": {
+    "AuraViolet": "Sustained aura: each R6 limb's emitter set on the matching robe piece (SignusRig); phase two recolours its bright keys a darker purple and thickens it",
+    "VoidBurst": "Black eruption layer of Totality's ignition and the Black Sun detonation",
+    "BloodBurst": "Twin of VoidBurst (same textures), tinted dark purple; ignition, Black Sun and phase-two impacts",
+    "ImpactViolet": "Landing ring on Maelstrom/Judgment impacts and crescent breaks; tinted darker in phase two",
+    "EyeFlare": "Eye glow: pearl and steady in phase one, violet with trailing streaks in phase two",
+    "Eclipse": "Phase two's halo behind the hood and the Black Sun's core (SignusAssemblies A.eclipse), with added discs, rings and aura derived from its own layers and the pack's corona ring"
+  }
+}

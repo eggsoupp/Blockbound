@@ -1,3 +1,4 @@
+local CombatAudio = require(game:GetService("ReplicatedStorage").Shared.Audio.CombatAudio)
 -- Helios Lance, drawn from one message:
 --   charge  a small sun gathers over the caster, embers rushing into it
 --   sweep   a lance of molten light pours from it to the ground and drags
@@ -31,8 +32,8 @@ local Sheets = {
 	Band = {Texture = "rbxassetid://16892374733"},
 }
 
-local SOUND_CHARGE = "rbxassetid://12222208"
-local SOUND_BOOM = "rbxassetid://5540424854"
+local SOUND_CHARGE = CombatAudio.ids.power_up
+local SOUND_BOOM = CombatAudio.ids.flame_blast4
 
 function VFX.preload()
 	if preloaded then return end

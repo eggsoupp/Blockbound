@@ -1,0 +1,354 @@
+[
+  {
+    "key": "air_suction",
+    "id": "411286671",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Air Pressure Suction_411286671.ogg",
+    "duration": 1.0089
+  },
+  {
+    "key": "energy_blast",
+    "id": "1841310110",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Archway Laser Quest Fierce Energy Blast 1_1841310110.ogg",
+    "duration": 4.4147
+  },
+  {
+    "key": "electric_shock",
+    "id": "8060079174",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Electric Shock_8060079174.ogg",
+    "duration": 1.5936
+  },
+  {
+    "key": "electric_hum",
+    "id": "6987804397",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Electric hum_6987804397.ogg",
+    "duration": 1.1196
+  },
+  {
+    "key": "energy_sword",
+    "id": "187747824",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Energy Sword_187747824.ogg",
+    "duration": 1.3507
+  },
+  {
+    "key": "magic_warp",
+    "id": "96643104586269",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Magic Circle Warp Sound_96643104586269.ogg",
+    "duration": 1.9331
+  },
+  {
+    "key": "magic_lock",
+    "id": "7846700665",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Magic Lock Sound Effect_7846700665.ogg",
+    "duration": 2.1943
+  },
+  {
+    "key": "phantom",
+    "id": "114996101720631",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Phantom_114996101720631.ogg",
+    "duration": 1.0617
+  },
+  {
+    "key": "plasma_cast",
+    "id": "9558660562",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Plasma Caster_9558660562.ogg",
+    "duration": 1.3122
+  },
+  {
+    "key": "plasma_cut",
+    "id": "4882986173",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Plasma Cut sound_4882986173.ogg",
+    "duration": 0.7
+  },
+  {
+    "key": "plasma_trail",
+    "id": "9125742262",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Plasma Trails Constant Airy Whooshing Windy  (SFX)_9125742262.ogg",
+    "duration": 33.1627
+  },
+  {
+    "key": "portal_close",
+    "id": "89974036761299",
+    "source": "downloaded\\SciFi_Magic_Abilities\\portal_rev_89974036761299.ogg",
+    "duration": 0.6827
+  },
+  {
+    "key": "power_up",
+    "id": "9065783664",
+    "source": "downloaded\\SciFi_Magic_Abilities\\power up sfx_9065783664.ogg",
+    "duration": 2.7687
+  },
+  {
+    "key": "charge_short",
+    "id": "9125980459",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Spaceship Pre Blast Electric Charge Up Buzzy (SFX)_9125980459.ogg",
+    "duration": 1.7707
+  },
+  {
+    "key": "teleport",
+    "id": "10821190986",
+    "source": "downloaded\\SciFi_Magic_Abilities\\teleporter_10821190986.ogg",
+    "duration": 4.0282
+  },
+  {
+    "key": "alien_chirp",
+    "id": "9114279576",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Electronic Beeps Alien Birds Chirps 5 (SFX)_9114279576.ogg",
+    "duration": 1.134
+  },
+  {
+    "key": "alien_bug1",
+    "id": "136128007074351",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Alien Bug Sound_136128007074351.ogg",
+    "duration": 1.215
+  },
+  {
+    "key": "alien_bug2",
+    "id": "137326052365300",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Alien Bug Sound 2_137326052365300.ogg",
+    "duration": 1.2305
+  },
+  {
+    "key": "alien_bug3",
+    "id": "96071203271536",
+    "source": "downloaded\\SciFi_Magic_Abilities\\Alien Bug Sound 5_96071203271536.ogg",
+    "duration": 1.5687
+  },
+  {
+    "key": "lightning_close",
+    "id": "18650085033",
+    "source": "downloaded\\Combat_Impacts\\Audio_lightning strike close up_18650085033.ogg",
+    "duration": 5.52
+  },
+  {
+    "key": "boom_deep1",
+    "id": "9125401975",
+    "source": "downloaded\\Combat_Impacts\\Boom Impact Deep Distant Thumping Hits Boomi (SFX)_9125401975.ogg",
+    "duration": 2.9224
+  },
+  {
+    "key": "boom_deep2",
+    "id": "9125402735",
+    "source": "downloaded\\Combat_Impacts\\Boom Impact Deep Distant Thumping Hits Boomi (SFX)_9125402735.ogg",
+    "duration": 2.8817
+  },
+  {
+    "key": "ice_chunk",
+    "id": "9114857307",
+    "source": "downloaded\\Combat_Impacts\\Ice Chunk Drop Onto Concrete Some Break 1 (SFX)_9114857307.ogg",
+    "duration": 2.1153
+  },
+  {
+    "key": "poof_punch",
+    "id": "9116406151",
+    "source": "downloaded\\Combat_Impacts\\Magic Poofs Short Breathy Bursts Punchy 1 (SFX)_9116406151.ogg",
+    "duration": 1.4894
+  },
+  {
+    "key": "poof_air",
+    "id": "9125639499",
+    "source": "downloaded\\Combat_Impacts\\Magic Poofs Short Breathy Bursts Wheezy Exha (SFX)_9125639499.ogg",
+    "duration": 0.9688
+  },
+  {
+    "key": "metal_pound",
+    "id": "9116908179",
+    "source": "downloaded\\Combat_Impacts\\Metal Whomps Deep Pounding Impacts 10 (SFX)_9116908179.ogg",
+    "duration": 0.9063
+  },
+  {
+    "key": "punch_heavy1",
+    "id": "9117969687",
+    "source": "downloaded\\Combat_Impacts\\Punch Kit Beefy Hit 2 (SFX)_9117969687.ogg",
+    "duration": 0.6176
+  },
+  {
+    "key": "punch_heavy2",
+    "id": "9117969717",
+    "source": "downloaded\\Combat_Impacts\\Punch Kit Beefy Hit 3 (SFX)_9117969717.ogg",
+    "duration": 0.9047
+  },
+  {
+    "key": "metal_crash",
+    "id": "9125819216",
+    "source": "downloaded\\Combat_Impacts\\Robot Impact Miscellaneous Metal Clangs Clun (SFX)_9125819216.ogg",
+    "duration": 1.1256
+  },
+  {
+    "key": "bass_drop",
+    "id": "9045206449",
+    "source": "downloaded\\Combat_Impacts\\Rocket Punch Bass Drop_9045206449.ogg",
+    "duration": 3.9179
+  },
+  {
+    "key": "sword_hit",
+    "id": "86812684303392",
+    "source": "downloaded\\Combat_Impacts\\Sword Hit_86812684303392.ogg",
+    "duration": 0.8771
+  },
+  {
+    "key": "sword_swing",
+    "id": "7171591581",
+    "source": "downloaded\\Combat_Impacts\\Sword Swing_7171591581.ogg",
+    "duration": 1.3464
+  },
+  {
+    "key": "synth_blast",
+    "id": "9119783432",
+    "source": "downloaded\\Combat_Impacts\\Synth Blast 3202 (SFX)_9119783432.ogg",
+    "duration": 2.9333
+  },
+  {
+    "key": "sparkle",
+    "id": "9119834423",
+    "source": "downloaded\\Combat_Impacts\\Synth Sparkle Tone High Pitch Tone Burst 7 (SFX)_9119834423.ogg",
+    "duration": 0.59
+  },
+  {
+    "key": "flame_blast1",
+    "id": "9120009740",
+    "source": "downloaded\\Combat_Impacts\\Thruster Blast 14 (SFX)_9120009740.ogg",
+    "duration": 2.368
+  },
+  {
+    "key": "flame_blast2",
+    "id": "9120010041",
+    "source": "downloaded\\Combat_Impacts\\Thruster Blast 17 (SFX)_9120010041.ogg",
+    "duration": 2.3467
+  },
+  {
+    "key": "flame_blast3",
+    "id": "9120010568",
+    "source": "downloaded\\Combat_Impacts\\Thruster Blast 23 (SFX)_9120010568.ogg",
+    "duration": 1.6187
+  },
+  {
+    "key": "flame_blast4",
+    "id": "9120009225",
+    "source": "downloaded\\Combat_Impacts\\Thruster Blast 5 (SFX)_9120009225.ogg",
+    "duration": 2.6347
+  },
+  {
+    "key": "flame_blast5",
+    "id": "9120009533",
+    "source": "downloaded\\Combat_Impacts\\Thruster Blast 9 (SFX)_9120009533.ogg",
+    "duration": 2.112
+  },
+  {
+    "key": "explosive_whoosh",
+    "id": "9120705982",
+    "source": "downloaded\\Combat_Impacts\\Whoosh Explosion 1 (SFX)_9120705982.ogg",
+    "duration": 1.7541
+  },
+  {
+    "key": "heavy_whoosh",
+    "id": "9120728815",
+    "source": "downloaded\\Combat_Impacts\\Whoosh Heavy Punches 1 (SFX)_9120728815.ogg",
+    "duration": 0.666
+  },
+  {
+    "key": "swing_air",
+    "id": "9113305311",
+    "source": "downloaded\\Combat_Impacts\\Baseball Bat Swing 3 (SFX)_9113305311.ogg",
+    "duration": 0.4667
+  },
+  {
+    "key": "impact_body",
+    "id": "9113312550",
+    "source": "downloaded\\Combat_Impacts\\Baseball Hits 4 (SFX)_9113312550.ogg",
+    "duration": 1.0094
+  },
+  {
+    "key": "slime_pop",
+    "id": "9119668788",
+    "source": "downloaded\\UI_Notifications\\Suction Pop 1 (SFX)_9119668788.ogg",
+    "duration": 0.6116
+  },
+  {
+    "key": "bubbles",
+    "id": "9112752575",
+    "source": "downloaded\\Ambience_Background\\Bubbles Dribble Small Bloops 3 (SFX)_9112752575.ogg",
+    "duration": 13.8851
+  },
+  {
+    "key": "earth_crumble",
+    "id": "8044058354",
+    "source": "downloaded\\Ambience_Background\\crumble_8044058354.ogg",
+    "duration": 1.6602
+  },
+  {
+    "key": "monster_roar",
+    "id": "18929141493",
+    "source": "downloaded\\Creatures_Voices\\Screaming monster_18929141493.ogg",
+    "duration": 7.8455
+  },
+  {
+    "key": "glass_break1",
+    "id": "6737582037",
+    "source": "downloaded\\Combat_Impacts\\Glass Break 3_6737582037.ogg",
+    "duration": 1.9192
+  },
+  {
+    "key": "glass_break2",
+    "id": "6737582452",
+    "source": "downloaded\\Combat_Impacts\\Glass Break 5_6737582452.ogg",
+    "duration": 1.8394
+  },
+  {
+    "key": "blast_short",
+    "id": "104406219115733",
+    "source": "downloaded\\Combat_Impacts\\blast_104406219115733.ogg",
+    "duration": 1.4712
+  },
+  {
+    "key": "burst_quick",
+    "id": "116650161653939",
+    "source": "downloaded\\Combat_Impacts\\Quick Burst_116650161653939.ogg",
+    "duration": 0.8156
+  },
+  {
+    "key": "force_hit",
+    "id": "8844155653",
+    "source": "downloaded\\Combat_Impacts\\ForcefieldHit_8844155653.ogg",
+    "duration": 1.5909
+  },
+  {
+    "key": "rock_impact",
+    "id": "9118598279"
+  },
+  {
+    "key": "water_walk",
+    "id": "122684680935247",
+    "source": "downloaded\\Movement_Vehicles\\Walking Through Water (almost) seamless_122684680935247.ogg",
+    "duration": 1.667
+  },
+  {
+    "key": "ability_arc1",
+    "id": "77831158396083",
+    "source": "downloaded\\SciFi_Magic_Abilities\\ability_1__77831158396083.ogg",
+    "duration": 2.5078
+  },
+  {
+    "key": "ability_arc2",
+    "id": "129902575001546",
+    "source": "downloaded\\SciFi_Magic_Abilities\\ability_2_129902575001546.ogg",
+    "duration": 2.1362
+  },
+  {
+    "key": "ability_arc3",
+    "id": "121284587843183",
+    "source": "downloaded\\SciFi_Magic_Abilities\\ability_3_121284587843183.ogg",
+    "duration": 2.9489
+  },
+  {
+    "key": "ability_arc4",
+    "id": "95960607362953",
+    "source": "downloaded\\SciFi_Magic_Abilities\\ability_4_95960607362953.ogg",
+    "duration": 2.8793
+  },
+  {
+    "key": "ability_arc5",
+    "id": "130263250308439",
+    "source": "downloaded\\SciFi_Magic_Abilities\\ability_5_130263250308439.ogg",
+    "duration": 2.7632
+  }
+]

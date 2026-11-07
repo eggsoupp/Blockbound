@@ -193,8 +193,14 @@ local function flightTime()
 	return math.max(0, tonumber(player:GetAttribute("FlightTime")) or 0)
 end
 
+-- Dev Flight (GearService mirrors its infiniteFlight buff): no wings needed,
+-- no stamina spent, no meter.
+local function infinite()
+	return player:GetAttribute("InfiniteFlight") == true
+end
+
 local function canFly()
-	return player:GetAttribute("CanFly") == true and flightTime() > 0
+	return player:GetAttribute("CanFly") == true and (infinite() or flightTime() > 0)
 end
 
 local function bodyOf()
@@ -321,7 +327,7 @@ local function stopFlight()
 end
 
 local function startFlight()
-	if flight or not canFly() or MenuState.isAnyOpen() or stamina < STAMINA.minimum then
+	if flight or not canFly() or MenuState.isAnyOpen() or (stamina < STAMINA.minimum and not infinite()) then
 		return
 	end
 	local character, humanoid, root = bodyOf()
@@ -440,13 +446,17 @@ local function step(dt)
 	local vertical = (if climbing then 1 else 0) - (if descending then 1 else 0)
 	wanted += Vector3.yAxis * (vertical * FLIGHT.climb)
 
-	-- Spend stamina; tired wings stop climbing and start to sink.
-	stamina = math.max(0, stamina - dt)
-	if stamina <= 0 then
-		stopFlight()
-		return
+	-- Spend stamina; tired wings stop climbing and start to sink. Dev Flight
+	-- spends nothing.
+	local tired = 0
+	if not infinite() then
+		stamina = math.max(0, stamina - dt)
+		if stamina <= 0 then
+			stopFlight()
+			return
+		end
+		tired = 1 - math.clamp(stamina / STAMINA.tiring, 0, 1)
 	end
-	local tired = 1 - math.clamp(stamina / STAMINA.tiring, 0, 1)
 	if tired > 0 then
 		local y = wanted.Y
 		if y > 0 then
@@ -653,7 +663,7 @@ RunService.PreSimulation:Connect(function(dt)
 		stamina += dt * maximum / STAMINA.refillTime
 	end
 	stamina = math.clamp(stamina, 0, maximum)
-	updateMeter(dt, maximum)
+	updateMeter(dt, if infinite() then 0 else maximum)
 
 	local ok, err = pcall(step, dt)
 	if not ok then

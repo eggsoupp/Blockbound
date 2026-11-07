@@ -73,6 +73,7 @@ ContentAudit.TestOnlyItems = {
 	TestSword = "Developer weapon (150 damage). Also AbilityConfig.DefaultCastWeapon, the blade Sacred Rain draws when the caster holds nothing.",
 	TestPickaxe = "Developer pickaxe (miningSpeed 40); stands in for an end-game pickaxe while tuning mining.",
 	TestAxe = "Developer axe for testing tree harvesting.",
+	DevFlight = "Developer accessory: unlimited flight with no wings worn.",
 }
 
 --[[

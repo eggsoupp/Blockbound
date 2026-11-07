@@ -571,6 +571,7 @@ local ItemDefinitions = {
 	--   abilityDamage / weaponDamage    fractions: 0.15 is +15%
 	--   dash                            dash charges on Q (Leather Boots)
 	--   flight                          seconds of flight per take-off (FlightClient)
+	--   infiniteFlight                  above 0: flight with no wings and no limit (DevFlight)
 	-- `gearGroup` names a kind only one of may be worn at a time - "Wings":
 	-- InventoryClass refuses a second pair in the accessory column.
 	-- No art exists yet, so `look` has Shared.UI.ItemModels build a simple
@@ -621,6 +622,20 @@ local ItemDefinitions = {
 		value = 90,
 		buffs = { weaponDamage = 0.15 },
 		look = { shape = "Ring", metal = Color3.fromRGB(214, 176, 82), gem = Color3.fromRGB(255, 136, 40) },
+		iconPose = "block",
+	},
+	-- Developer only (ContentAudit.TestOnlyItems): /give DevFlight. Flight with
+	-- no wings and no time limit; it is not in the Wings group, so it can be
+	-- worn beside a pair to test that pair's look with endless flight.
+	DevFlight = {
+		displayName = "Dev Flight",
+		description = "A developer charm that grants unlimited flight while worn. Not part of normal progression.",
+		rarity = "Unobtainable",
+		maxStack = 1,
+		classification = "Accessory",
+		value = 999,
+		buffs = { infiniteFlight = 1 },
+		look = { shape = "Ring", metal = Color3.fromRGB(236, 240, 248), gem = Color3.fromRGB(120, 220, 255) },
 		iconPose = "block",
 	},
 
@@ -1570,7 +1585,7 @@ ItemDefinitions.AncientDust = {
 ItemDefinitions.AngelWings = {
 	displayName = "Angel Wings",
 	description = "A pair of angel wings mounted on a wearable frame. Grants 20 seconds of flight while worn.",
-	rarity = "Epic",
+	rarity = "Legendary",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_angel",
@@ -1691,7 +1706,7 @@ ItemDefinitions.BatWing = {
 ItemDefinitions.BatWings = {
 	displayName = "Bat Wings",
 	description = "A pair of bat wings mounted on a wearable frame. Grants 13 seconds of flight while worn.",
-	rarity = "Rare",
+	rarity = "Epic",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_bat",
@@ -2672,7 +2687,7 @@ ItemDefinitions.EyePouch = {
 ItemDefinitions.FairyWings = {
 	displayName = "Fairy Wings",
 	description = "A pair of fairy wings mounted on a wearable frame. Grants 14 seconds of flight while worn.",
-	rarity = "Rare",
+	rarity = "Epic",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_fairy",
@@ -2913,7 +2928,7 @@ ItemDefinitions.FrostTome = {
 ItemDefinitions.FrostWings = {
 	displayName = "Frost Wings",
 	description = "A pair of frost wings mounted on a wearable frame. Grants 15 seconds of flight while worn.",
-	rarity = "Rare",
+	rarity = "Epic",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_frost",
@@ -3531,7 +3546,7 @@ ItemDefinitions.LeadOre = {
 ItemDefinitions.LeafWings = {
 	displayName = "Leaf Wings",
 	description = "A pair of leaf wings mounted on a wearable frame. Grants 12 seconds of flight while worn.",
-	rarity = "Rare",
+	rarity = "Epic",
 	classification = "Accessory",
 	maxStack = 1,
 	sprite = "wings_leaf",

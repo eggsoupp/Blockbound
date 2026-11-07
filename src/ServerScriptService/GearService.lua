@@ -18,6 +18,8 @@
 	                          DashCharges attribute for WeaponClient
 	  bonuses.flight          seconds of flight; above 0 lets the player fly.
 	                          Mirrored to CanFly and FlightTime for FlightClient
+	  bonuses.infiniteFlight  above 0: flight with no wings and no limit (Dev
+	                          Flight), mirrored to InfiniteFlight; also sets CanFly
 
 	WHERE THE NUMBERS COME FROM
 
@@ -54,7 +56,7 @@ local InventoryService = require(ServerScriptService:WaitForChild("InventoryServ
 local GearService = {}
 
 -- The buffs this module adds up, and so the fields every bonuses table has.
-local STATS = { "defense", "maxHealth", "maxMana", "abilityDamage", "weaponDamage", "dash", "flight" }
+local STATS = { "defense", "maxHealth", "maxMana", "abilityDamage", "weaponDamage", "dash", "flight", "infiniteFlight" }
 
 -- Read-only, for ServerScriptService.ContentAudit: which buffs gear actually does
 -- something with, so a buff nothing reads can be reported.
@@ -151,7 +153,8 @@ local function sweep()
 		if not sameBonuses(bonuses, lastReported[player]) then
 			lastReported[player] = bonuses
 			player:SetAttribute("DashCharges", bonuses.dash)
-			player:SetAttribute("CanFly", bonuses.flight > 0)
+			player:SetAttribute("CanFly", bonuses.flight > 0 or bonuses.infiniteFlight > 0)
+			player:SetAttribute("InfiniteFlight", bonuses.infiniteFlight > 0)
 			player:SetAttribute("FlightTime", bonuses.flight)
 			for _, listener in ipairs(listeners) do
 				task.spawn(listener, player, bonuses)

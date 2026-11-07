@@ -26,7 +26,7 @@
 	on the FlightState remote. The server keeps the character's Flying
 	attribute, which replicates to everyone: WingAnimator flaps by it, and
 	WeaponServer refuses swings while it is set. A report from a player who
-	cannot fly (no wings worn) is ignored.
+	cannot fly (no wings or Dev Flight worn) is ignored.
 ]]
 
 local Players = game:GetService("Players")
@@ -128,7 +128,8 @@ local function sweep()
 					remove(character)
 				end
 			end
-			if not wanted and character:GetAttribute("Flying") then
+			-- Lost the means to fly (Dev Flight needs no wings, so this is CanFly).
+			if player:GetAttribute("CanFly") ~= true and character:GetAttribute("Flying") then
 				character:SetAttribute("Flying", false)
 			end
 		end

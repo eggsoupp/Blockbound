@@ -1,0 +1,1540 @@
+{
+  "source": "src/ReplicatedStorage/ItemDefinitions.lua",
+  "design_reference": "Accessory names and descriptions only; no UI images",
+  "axes_vox": "X lateral, +Y rearward, +Z up. Integer coordinates are voxel centres.",
+  "axes_glb": "(X,Z,-Y) * 0.0625. +Y up; forward +Z. Each voxel is 0.0625 units.",
+  "vox_scene_translation": [
+    0,
+    0,
+    40
+  ],
+  "attachment": "Frame origin (0,0,0) goes at upper-back centre. Rotate as needed for target character convention.",
+  "models": {
+    "AngelWings": {
+      "size_voxels": [
+        139,
+        14,
+        68
+      ],
+      "size_units": [
+        8.6875,
+        0.875,
+        4.25
+      ],
+      "joints": {
+        "Frame": {
+          "parent": null,
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "role": "Attach to upper back; fixed wearable frame"
+        },
+        "R_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "R_Fan": {
+          "parent": "R_Arm",
+          "pivot": [
+            27,
+            4,
+            24
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "R_Feather01": {
+          "parent": "R_Fan",
+          "pivot": [
+            29,
+            4,
+            26
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "R_Feather02": {
+          "parent": "R_Fan",
+          "pivot": [
+            31,
+            4,
+            24
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "R_Feather03": {
+          "parent": "R_Fan",
+          "pivot": [
+            30,
+            4,
+            20
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "R_Feather04": {
+          "parent": "R_Fan",
+          "pivot": [
+            27,
+            4,
+            16
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "R_Feather05": {
+          "parent": "R_Fan",
+          "pivot": [
+            24,
+            4,
+            12
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "R_Feather06": {
+          "parent": "R_Fan",
+          "pivot": [
+            20,
+            4,
+            8
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "R_Feather07": {
+          "parent": "R_Fan",
+          "pivot": [
+            16,
+            4,
+            6
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "R_Feather08": {
+          "parent": "R_Fan",
+          "pivot": [
+            12,
+            4,
+            6
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "L_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            -7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "L_Fan": {
+          "parent": "L_Arm",
+          "pivot": [
+            -27,
+            4,
+            24
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "L_Feather01": {
+          "parent": "L_Fan",
+          "pivot": [
+            -29,
+            4,
+            26
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "L_Feather02": {
+          "parent": "L_Fan",
+          "pivot": [
+            -31,
+            4,
+            24
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "L_Feather03": {
+          "parent": "L_Fan",
+          "pivot": [
+            -30,
+            4,
+            20
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "L_Feather04": {
+          "parent": "L_Fan",
+          "pivot": [
+            -27,
+            4,
+            16
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "L_Feather05": {
+          "parent": "L_Fan",
+          "pivot": [
+            -24,
+            4,
+            12
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "L_Feather06": {
+          "parent": "L_Fan",
+          "pivot": [
+            -20,
+            4,
+            8
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "L_Feather07": {
+          "parent": "L_Fan",
+          "pivot": [
+            -16,
+            4,
+            6
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        },
+        "L_Feather08": {
+          "parent": "L_Fan",
+          "pivot": [
+            -12,
+            4,
+            6
+          ],
+          "role": "Primary feather splay / trailing follow-through"
+        }
+      },
+      "parts": {
+        "Frame": {
+          "voxels": 2040,
+          "triangles": 932,
+          "surface_voxel_faces": 1558
+        },
+        "R_Arm": {
+          "voxels": 963,
+          "triangles": 1258,
+          "surface_voxel_faces": 1132
+        },
+        "R_Fan": {
+          "voxels": 736,
+          "triangles": 614,
+          "surface_voxel_faces": 866
+        },
+        "R_Feather01": {
+          "voxels": 550,
+          "triangles": 434,
+          "surface_voxel_faces": 744
+        },
+        "R_Feather02": {
+          "voxels": 627,
+          "triangles": 360,
+          "surface_voxel_faces": 776
+        },
+        "R_Feather03": {
+          "voxels": 622,
+          "triangles": 290,
+          "surface_voxel_faces": 730
+        },
+        "R_Feather04": {
+          "voxels": 595,
+          "triangles": 430,
+          "surface_voxel_faces": 730
+        },
+        "R_Feather05": {
+          "voxels": 611,
+          "triangles": 608,
+          "surface_voxel_faces": 786
+        },
+        "R_Feather06": {
+          "voxels": 543,
+          "triangles": 608,
+          "surface_voxel_faces": 756
+        },
+        "R_Feather07": {
+          "voxels": 457,
+          "triangles": 470,
+          "surface_voxel_faces": 644
+        },
+        "R_Feather08": {
+          "voxels": 362,
+          "triangles": 380,
+          "surface_voxel_faces": 516
+        },
+        "L_Arm": {
+          "voxels": 963,
+          "triangles": 1256,
+          "surface_voxel_faces": 1132
+        },
+        "L_Fan": {
+          "voxels": 736,
+          "triangles": 614,
+          "surface_voxel_faces": 866
+        },
+        "L_Feather01": {
+          "voxels": 550,
+          "triangles": 436,
+          "surface_voxel_faces": 744
+        },
+        "L_Feather02": {
+          "voxels": 627,
+          "triangles": 358,
+          "surface_voxel_faces": 776
+        },
+        "L_Feather03": {
+          "voxels": 622,
+          "triangles": 288,
+          "surface_voxel_faces": 730
+        },
+        "L_Feather04": {
+          "voxels": 595,
+          "triangles": 430,
+          "surface_voxel_faces": 730
+        },
+        "L_Feather05": {
+          "voxels": 611,
+          "triangles": 600,
+          "surface_voxel_faces": 786
+        },
+        "L_Feather06": {
+          "voxels": 543,
+          "triangles": 620,
+          "surface_voxel_faces": 756
+        },
+        "L_Feather07": {
+          "voxels": 457,
+          "triangles": 464,
+          "surface_voxel_faces": 644
+        },
+        "L_Feather08": {
+          "voxels": 362,
+          "triangles": 372,
+          "surface_voxel_faces": 516
+        }
+      }
+    },
+    "BatWings": {
+      "size_voxels": [
+        137,
+        14,
+        64
+      ],
+      "size_units": [
+        8.5625,
+        0.875,
+        4.0
+      ],
+      "joints": {
+        "Frame": {
+          "parent": null,
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "role": "Attach to upper back; fixed wearable frame"
+        },
+        "R_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "R_Fan": {
+          "parent": "R_Arm",
+          "pivot": [
+            25,
+            3,
+            24
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "R_Claw": {
+          "parent": "R_Fan",
+          "pivot": [
+            25,
+            3,
+            24
+          ],
+          "role": "Leading claw accent"
+        },
+        "L_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            -7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "L_Fan": {
+          "parent": "L_Arm",
+          "pivot": [
+            -25,
+            3,
+            24
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "L_Claw": {
+          "parent": "L_Fan",
+          "pivot": [
+            -25,
+            3,
+            24
+          ],
+          "role": "Leading claw accent"
+        }
+      },
+      "parts": {
+        "Frame": {
+          "voxels": 2040,
+          "triangles": 932,
+          "surface_voxel_faces": 1558
+        },
+        "R_Arm": {
+          "voxels": 821,
+          "triangles": 1122,
+          "surface_voxel_faces": 908
+        },
+        "R_Fan": {
+          "voxels": 5348,
+          "triangles": 3624,
+          "surface_voxel_faces": 4968
+        },
+        "R_Claw": {
+          "voxels": 294,
+          "triangles": 376,
+          "surface_voxel_faces": 440
+        },
+        "L_Arm": {
+          "voxels": 821,
+          "triangles": 1126,
+          "surface_voxel_faces": 908
+        },
+        "L_Fan": {
+          "voxels": 5348,
+          "triangles": 3626,
+          "surface_voxel_faces": 4968
+        },
+        "L_Claw": {
+          "voxels": 294,
+          "triangles": 372,
+          "surface_voxel_faces": 440
+        }
+      }
+    },
+    "DemonWings": {
+      "size_voxels": [
+        149,
+        16,
+        84
+      ],
+      "size_units": [
+        9.3125,
+        1.0,
+        5.25
+      ],
+      "joints": {
+        "Frame": {
+          "parent": null,
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "role": "Attach to upper back; fixed wearable frame"
+        },
+        "R_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "R_Fan": {
+          "parent": "R_Arm",
+          "pivot": [
+            28,
+            3,
+            29
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "R_Claw": {
+          "parent": "R_Fan",
+          "pivot": [
+            28,
+            3,
+            29
+          ],
+          "role": "Leading claw accent"
+        },
+        "R_Thorn1": {
+          "parent": "R_Fan",
+          "pivot": [
+            66,
+            6.171189276596941,
+            -5
+          ],
+          "role": "Trailing thorn follow-through"
+        },
+        "R_Thorn2": {
+          "parent": "R_Fan",
+          "pivot": [
+            40,
+            7.438218257760912,
+            -23
+          ],
+          "role": "Trailing thorn follow-through"
+        },
+        "R_Thorn3": {
+          "parent": "R_Fan",
+          "pivot": [
+            16,
+            2.6635407538382614,
+            -25
+          ],
+          "role": "Trailing thorn follow-through"
+        },
+        "L_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            -7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "L_Fan": {
+          "parent": "L_Arm",
+          "pivot": [
+            -28,
+            3,
+            29
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "L_Claw": {
+          "parent": "L_Fan",
+          "pivot": [
+            -28,
+            3,
+            29
+          ],
+          "role": "Leading claw accent"
+        },
+        "L_Thorn1": {
+          "parent": "L_Fan",
+          "pivot": [
+            -66,
+            6.171189276596941,
+            -5
+          ],
+          "role": "Trailing thorn follow-through"
+        },
+        "L_Thorn2": {
+          "parent": "L_Fan",
+          "pivot": [
+            -40,
+            7.438218257760912,
+            -23
+          ],
+          "role": "Trailing thorn follow-through"
+        },
+        "L_Thorn3": {
+          "parent": "L_Fan",
+          "pivot": [
+            -16,
+            2.6635407538382614,
+            -25
+          ],
+          "role": "Trailing thorn follow-through"
+        }
+      },
+      "parts": {
+        "Frame": {
+          "voxels": 2040,
+          "triangles": 932,
+          "surface_voxel_faces": 1558
+        },
+        "R_Arm": {
+          "voxels": 982,
+          "triangles": 1344,
+          "surface_voxel_faces": 1076
+        },
+        "R_Fan": {
+          "voxels": 7509,
+          "triangles": 5206,
+          "surface_voxel_faces": 7078
+        },
+        "R_Claw": {
+          "voxels": 294,
+          "triangles": 376,
+          "surface_voxel_faces": 440
+        },
+        "R_Thorn1": {
+          "voxels": 57,
+          "triangles": 160,
+          "surface_voxel_faces": 130
+        },
+        "R_Thorn2": {
+          "voxels": 62,
+          "triangles": 94,
+          "surface_voxel_faces": 134
+        },
+        "R_Thorn3": {
+          "voxels": 61,
+          "triangles": 102,
+          "surface_voxel_faces": 130
+        },
+        "L_Arm": {
+          "voxels": 982,
+          "triangles": 1350,
+          "surface_voxel_faces": 1076
+        },
+        "L_Fan": {
+          "voxels": 7509,
+          "triangles": 5180,
+          "surface_voxel_faces": 7078
+        },
+        "L_Claw": {
+          "voxels": 294,
+          "triangles": 372,
+          "surface_voxel_faces": 440
+        },
+        "L_Thorn1": {
+          "voxels": 57,
+          "triangles": 152,
+          "surface_voxel_faces": 130
+        },
+        "L_Thorn2": {
+          "voxels": 62,
+          "triangles": 94,
+          "surface_voxel_faces": 134
+        },
+        "L_Thorn3": {
+          "voxels": 61,
+          "triangles": 110,
+          "surface_voxel_faces": 130
+        }
+      }
+    },
+    "FairyWings": {
+      "size_voxels": [
+        105,
+        14,
+        86
+      ],
+      "size_units": [
+        6.5625,
+        0.875,
+        5.375
+      ],
+      "joints": {
+        "Frame": {
+          "parent": null,
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "role": "Attach to upper back; fixed wearable frame"
+        },
+        "R_Upper": {
+          "parent": "Frame",
+          "pivot": [
+            7,
+            1,
+            5
+          ],
+          "role": "Independent butterfly lobe flap"
+        },
+        "R_Lower": {
+          "parent": "Frame",
+          "pivot": [
+            7,
+            2,
+            0
+          ],
+          "role": "Independent butterfly lobe flap"
+        },
+        "L_Upper": {
+          "parent": "Frame",
+          "pivot": [
+            -7,
+            1,
+            5
+          ],
+          "role": "Independent butterfly lobe flap"
+        },
+        "L_Lower": {
+          "parent": "Frame",
+          "pivot": [
+            -7,
+            2,
+            0
+          ],
+          "role": "Independent butterfly lobe flap"
+        }
+      },
+      "parts": {
+        "Frame": {
+          "voxels": 2284,
+          "triangles": 992,
+          "surface_voxel_faces": 1690
+        },
+        "R_Upper": {
+          "voxels": 4876,
+          "triangles": 2838,
+          "surface_voxel_faces": 4010
+        },
+        "R_Lower": {
+          "voxels": 3224,
+          "triangles": 1940,
+          "surface_voxel_faces": 2742
+        },
+        "L_Upper": {
+          "voxels": 4876,
+          "triangles": 2814,
+          "surface_voxel_faces": 4010
+        },
+        "L_Lower": {
+          "voxels": 3224,
+          "triangles": 1942,
+          "surface_voxel_faces": 2742
+        }
+      }
+    },
+    "FlameWings": {
+      "size_voxels": [
+        139,
+        18,
+        82
+      ],
+      "size_units": [
+        8.6875,
+        1.125,
+        5.125
+      ],
+      "joints": {
+        "Frame": {
+          "parent": null,
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "role": "Attach to upper back; fixed wearable frame"
+        },
+        "R_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "R_Fan": {
+          "parent": "R_Arm",
+          "pivot": [
+            25,
+            4,
+            18
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "R_Plume01": {
+          "parent": "R_Fan",
+          "pivot": [
+            29,
+            5,
+            19
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "R_Plume02": {
+          "parent": "R_Fan",
+          "pivot": [
+            35,
+            5,
+            16
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "R_Plume03": {
+          "parent": "R_Fan",
+          "pivot": [
+            38,
+            5,
+            10
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "R_Plume04": {
+          "parent": "R_Fan",
+          "pivot": [
+            34,
+            5,
+            3
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "R_Plume05": {
+          "parent": "R_Fan",
+          "pivot": [
+            27,
+            5,
+            -3
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "R_Plume06": {
+          "parent": "R_Fan",
+          "pivot": [
+            19,
+            5,
+            -4
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "L_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            -7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "L_Fan": {
+          "parent": "L_Arm",
+          "pivot": [
+            -25,
+            4,
+            18
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "L_Plume01": {
+          "parent": "L_Fan",
+          "pivot": [
+            -29,
+            5,
+            19
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "L_Plume02": {
+          "parent": "L_Fan",
+          "pivot": [
+            -35,
+            5,
+            16
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "L_Plume03": {
+          "parent": "L_Fan",
+          "pivot": [
+            -38,
+            5,
+            10
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "L_Plume04": {
+          "parent": "L_Fan",
+          "pivot": [
+            -34,
+            5,
+            3
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "L_Plume05": {
+          "parent": "L_Fan",
+          "pivot": [
+            -27,
+            5,
+            -3
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        },
+        "L_Plume06": {
+          "parent": "L_Fan",
+          "pivot": [
+            -19,
+            5,
+            -4
+          ],
+          "role": "Solid flame-shaped plume / secondary sway"
+        }
+      },
+      "parts": {
+        "Frame": {
+          "voxels": 2040,
+          "triangles": 932,
+          "surface_voxel_faces": 1558
+        },
+        "R_Arm": {
+          "voxels": 723,
+          "triangles": 854,
+          "surface_voxel_faces": 768
+        },
+        "R_Fan": {
+          "voxels": 6351,
+          "triangles": 912,
+          "surface_voxel_faces": 3454
+        },
+        "R_Plume01": {
+          "voxels": 1539,
+          "triangles": 1018,
+          "surface_voxel_faces": 1452
+        },
+        "R_Plume02": {
+          "voxels": 1592,
+          "triangles": 792,
+          "surface_voxel_faces": 1378
+        },
+        "R_Plume03": {
+          "voxels": 1257,
+          "triangles": 458,
+          "surface_voxel_faces": 1082
+        },
+        "R_Plume04": {
+          "voxels": 1148,
+          "triangles": 480,
+          "surface_voxel_faces": 1008
+        },
+        "R_Plume05": {
+          "voxels": 1051,
+          "triangles": 656,
+          "surface_voxel_faces": 1030
+        },
+        "R_Plume06": {
+          "voxels": 897,
+          "triangles": 504,
+          "surface_voxel_faces": 884
+        },
+        "L_Arm": {
+          "voxels": 723,
+          "triangles": 856,
+          "surface_voxel_faces": 768
+        },
+        "L_Fan": {
+          "voxels": 6351,
+          "triangles": 906,
+          "surface_voxel_faces": 3454
+        },
+        "L_Plume01": {
+          "voxels": 1539,
+          "triangles": 1018,
+          "surface_voxel_faces": 1452
+        },
+        "L_Plume02": {
+          "voxels": 1592,
+          "triangles": 790,
+          "surface_voxel_faces": 1378
+        },
+        "L_Plume03": {
+          "voxels": 1257,
+          "triangles": 460,
+          "surface_voxel_faces": 1082
+        },
+        "L_Plume04": {
+          "voxels": 1148,
+          "triangles": 478,
+          "surface_voxel_faces": 1008
+        },
+        "L_Plume05": {
+          "voxels": 1051,
+          "triangles": 644,
+          "surface_voxel_faces": 1030
+        },
+        "L_Plume06": {
+          "voxels": 897,
+          "triangles": 484,
+          "surface_voxel_faces": 884
+        }
+      }
+    },
+    "FrostWings": {
+      "size_voxels": [
+        137,
+        14,
+        76
+      ],
+      "size_units": [
+        8.5625,
+        0.875,
+        4.75
+      ],
+      "joints": {
+        "Frame": {
+          "parent": null,
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "role": "Attach to upper back; fixed wearable frame"
+        },
+        "R_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "R_Fan": {
+          "parent": "R_Arm",
+          "pivot": [
+            24,
+            4,
+            22
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "R_Crystal01": {
+          "parent": "R_Fan",
+          "pivot": [
+            27,
+            5,
+            24
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "R_Crystal02": {
+          "parent": "R_Fan",
+          "pivot": [
+            30,
+            5,
+            20
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "R_Crystal03": {
+          "parent": "R_Fan",
+          "pivot": [
+            29,
+            5,
+            15
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "R_Crystal04": {
+          "parent": "R_Fan",
+          "pivot": [
+            25,
+            5,
+            10
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "R_Crystal05": {
+          "parent": "R_Fan",
+          "pivot": [
+            19,
+            5,
+            5
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "R_Crystal06": {
+          "parent": "R_Fan",
+          "pivot": [
+            13,
+            5,
+            4
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "L_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            -7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "L_Fan": {
+          "parent": "L_Arm",
+          "pivot": [
+            -24,
+            4,
+            22
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "L_Crystal01": {
+          "parent": "L_Fan",
+          "pivot": [
+            -27,
+            5,
+            24
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "L_Crystal02": {
+          "parent": "L_Fan",
+          "pivot": [
+            -30,
+            5,
+            20
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "L_Crystal03": {
+          "parent": "L_Fan",
+          "pivot": [
+            -29,
+            5,
+            15
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "L_Crystal04": {
+          "parent": "L_Fan",
+          "pivot": [
+            -25,
+            5,
+            10
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "L_Crystal05": {
+          "parent": "L_Fan",
+          "pivot": [
+            -19,
+            5,
+            5
+          ],
+          "role": "Rigid ice crystal / spread"
+        },
+        "L_Crystal06": {
+          "parent": "L_Fan",
+          "pivot": [
+            -13,
+            5,
+            4
+          ],
+          "role": "Rigid ice crystal / spread"
+        }
+      },
+      "parts": {
+        "Frame": {
+          "voxels": 2040,
+          "triangles": 932,
+          "surface_voxel_faces": 1558
+        },
+        "R_Arm": {
+          "voxels": 1041,
+          "triangles": 1298,
+          "surface_voxel_faces": 1276
+        },
+        "R_Fan": {
+          "voxels": 677,
+          "triangles": 640,
+          "surface_voxel_faces": 832
+        },
+        "R_Crystal01": {
+          "voxels": 826,
+          "triangles": 648,
+          "surface_voxel_faces": 998
+        },
+        "R_Crystal02": {
+          "voxels": 923,
+          "triangles": 442,
+          "surface_voxel_faces": 1000
+        },
+        "R_Crystal03": {
+          "voxels": 887,
+          "triangles": 374,
+          "surface_voxel_faces": 942
+        },
+        "R_Crystal04": {
+          "voxels": 898,
+          "triangles": 724,
+          "surface_voxel_faces": 1064
+        },
+        "R_Crystal05": {
+          "voxels": 799,
+          "triangles": 614,
+          "surface_voxel_faces": 956
+        },
+        "R_Crystal06": {
+          "voxels": 590,
+          "triangles": 430,
+          "surface_voxel_faces": 724
+        },
+        "L_Arm": {
+          "voxels": 1041,
+          "triangles": 1292,
+          "surface_voxel_faces": 1276
+        },
+        "L_Fan": {
+          "voxels": 677,
+          "triangles": 642,
+          "surface_voxel_faces": 832
+        },
+        "L_Crystal01": {
+          "voxels": 826,
+          "triangles": 644,
+          "surface_voxel_faces": 998
+        },
+        "L_Crystal02": {
+          "voxels": 923,
+          "triangles": 438,
+          "surface_voxel_faces": 1000
+        },
+        "L_Crystal03": {
+          "voxels": 887,
+          "triangles": 368,
+          "surface_voxel_faces": 942
+        },
+        "L_Crystal04": {
+          "voxels": 898,
+          "triangles": 724,
+          "surface_voxel_faces": 1064
+        },
+        "L_Crystal05": {
+          "voxels": 799,
+          "triangles": 620,
+          "surface_voxel_faces": 956
+        },
+        "L_Crystal06": {
+          "voxels": 590,
+          "triangles": 432,
+          "surface_voxel_faces": 724
+        }
+      }
+    },
+    "LeafWings": {
+      "size_voxels": [
+        135,
+        15,
+        74
+      ],
+      "size_units": [
+        8.4375,
+        0.9375,
+        4.625
+      ],
+      "joints": {
+        "Frame": {
+          "parent": null,
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "role": "Attach to upper back; fixed wearable frame"
+        },
+        "R_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "R_Fan": {
+          "parent": "R_Arm",
+          "pivot": [
+            22,
+            4,
+            20
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "R_Leaf01": {
+          "parent": "R_Fan",
+          "pivot": [
+            37,
+            5,
+            30
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "R_Leaf02": {
+          "parent": "R_Fan",
+          "pivot": [
+            34,
+            5,
+            26
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "R_Leaf03": {
+          "parent": "R_Fan",
+          "pivot": [
+            29,
+            5,
+            21
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "R_Leaf04": {
+          "parent": "R_Fan",
+          "pivot": [
+            24,
+            5,
+            16
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "R_Leaf05": {
+          "parent": "R_Fan",
+          "pivot": [
+            18,
+            5,
+            10
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "R_Leaf06": {
+          "parent": "R_Fan",
+          "pivot": [
+            13,
+            5,
+            6
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "R_Leaf07": {
+          "parent": "R_Fan",
+          "pivot": [
+            26,
+            5,
+            23
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "R_Leaf08": {
+          "parent": "R_Fan",
+          "pivot": [
+            17,
+            5,
+            13
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "L_Arm": {
+          "parent": "Frame",
+          "pivot": [
+            -7,
+            0,
+            5
+          ],
+          "role": "Shoulder flap / sweep"
+        },
+        "L_Fan": {
+          "parent": "L_Arm",
+          "pivot": [
+            -22,
+            4,
+            20
+          ],
+          "role": "Elbow fold / feather fan"
+        },
+        "L_Leaf01": {
+          "parent": "L_Fan",
+          "pivot": [
+            -37,
+            5,
+            30
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "L_Leaf02": {
+          "parent": "L_Fan",
+          "pivot": [
+            -34,
+            5,
+            26
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "L_Leaf03": {
+          "parent": "L_Fan",
+          "pivot": [
+            -29,
+            5,
+            21
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "L_Leaf04": {
+          "parent": "L_Fan",
+          "pivot": [
+            -24,
+            5,
+            16
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "L_Leaf05": {
+          "parent": "L_Fan",
+          "pivot": [
+            -18,
+            5,
+            10
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "L_Leaf06": {
+          "parent": "L_Fan",
+          "pivot": [
+            -13,
+            5,
+            6
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "L_Leaf07": {
+          "parent": "L_Fan",
+          "pivot": [
+            -26,
+            5,
+            23
+          ],
+          "role": "Leaf fan / subtle rustle"
+        },
+        "L_Leaf08": {
+          "parent": "L_Fan",
+          "pivot": [
+            -17,
+            5,
+            13
+          ],
+          "role": "Leaf fan / subtle rustle"
+        }
+      },
+      "parts": {
+        "Frame": {
+          "voxels": 2129,
+          "triangles": 1142,
+          "surface_voxel_faces": 1690
+        },
+        "R_Arm": {
+          "voxels": 628,
+          "triangles": 840,
+          "surface_voxel_faces": 728
+        },
+        "R_Fan": {
+          "voxels": 411,
+          "triangles": 538,
+          "surface_voxel_faces": 584
+        },
+        "R_Leaf01": {
+          "voxels": 552,
+          "triangles": 636,
+          "surface_voxel_faces": 736
+        },
+        "R_Leaf02": {
+          "voxels": 887,
+          "triangles": 638,
+          "surface_voxel_faces": 1042
+        },
+        "R_Leaf03": {
+          "voxels": 1036,
+          "triangles": 686,
+          "surface_voxel_faces": 1114
+        },
+        "R_Leaf04": {
+          "voxels": 1036,
+          "triangles": 892,
+          "surface_voxel_faces": 1172
+        },
+        "R_Leaf05": {
+          "voxels": 967,
+          "triangles": 766,
+          "surface_voxel_faces": 1088
+        },
+        "R_Leaf06": {
+          "voxels": 630,
+          "triangles": 610,
+          "surface_voxel_faces": 794
+        },
+        "R_Leaf07": {
+          "voxels": 400,
+          "triangles": 412,
+          "surface_voxel_faces": 528
+        },
+        "R_Leaf08": {
+          "voxels": 333,
+          "triangles": 380,
+          "surface_voxel_faces": 474
+        },
+        "L_Arm": {
+          "voxels": 628,
+          "triangles": 840,
+          "surface_voxel_faces": 728
+        },
+        "L_Fan": {
+          "voxels": 411,
+          "triangles": 540,
+          "surface_voxel_faces": 584
+        },
+        "L_Leaf01": {
+          "voxels": 552,
+          "triangles": 636,
+          "surface_voxel_faces": 736
+        },
+        "L_Leaf02": {
+          "voxels": 887,
+          "triangles": 634,
+          "surface_voxel_faces": 1042
+        },
+        "L_Leaf03": {
+          "voxels": 1036,
+          "triangles": 680,
+          "surface_voxel_faces": 1114
+        },
+        "L_Leaf04": {
+          "voxels": 1036,
+          "triangles": 898,
+          "surface_voxel_faces": 1172
+        },
+        "L_Leaf05": {
+          "voxels": 967,
+          "triangles": 756,
+          "surface_voxel_faces": 1088
+        },
+        "L_Leaf06": {
+          "voxels": 630,
+          "triangles": 600,
+          "surface_voxel_faces": 794
+        },
+        "L_Leaf07": {
+          "voxels": 400,
+          "triangles": 410,
+          "surface_voxel_faces": 528
+        },
+        "L_Leaf08": {
+          "voxels": 333,
+          "triangles": 384,
+          "surface_voxel_faces": 474
+        }
+      }
+    }
+  }
+}

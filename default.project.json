@@ -123,6 +123,12 @@
             "Disabled": false
           }
         },
+        "WingAnimator": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/WingAnimator.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
         "BenchClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/BenchClient.client.lua",
           "$properties": {
@@ -1045,6 +1051,12 @@
       },
       "AbilityService": {
         "$path": "src/ServerScriptService/AbilityService.lua"
+      },
+      "WingService": {
+        "$path": "src/ServerScriptService/WingService.server.lua",
+        "$properties": {
+          "Disabled": false
+        }
       },
       "WeaponServer": {
         "$path": "src/ServerScriptService/WeaponServer.server.lua",

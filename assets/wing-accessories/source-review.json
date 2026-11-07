@@ -1,0 +1,53 @@
+{
+  "item_source": "src\\ReplicatedStorage\\ItemDefinitions.lua",
+  "items": [
+    {
+      "id": "AngelWings",
+      "line": 1570,
+      "description": "A pair of angel wings mounted on a wearable frame. Grants 20 seconds of flight while worn."
+    },
+    {
+      "id": "BatWings",
+      "line": 1691,
+      "description": "A pair of bat wings mounted on a wearable frame. Grants 13 seconds of flight while worn."
+    },
+    {
+      "id": "DemonWings",
+      "line": 2523,
+      "description": "A pair of demon wings mounted on a wearable frame. Grants 19 seconds of flight while worn."
+    },
+    {
+      "id": "FairyWings",
+      "line": 2672,
+      "description": "A pair of fairy wings mounted on a wearable frame. Grants 14 seconds of flight while worn."
+    },
+    {
+      "id": "FlameWings",
+      "line": 2752,
+      "description": "A pair of flame wings mounted on a wearable frame. Grants 18 seconds of flight while worn."
+    },
+    {
+      "id": "FrostWings",
+      "line": 2913,
+      "description": "A pair of frost wings mounted on a wearable frame. Grants 15 seconds of flight while worn."
+    },
+    {
+      "id": "LeafWings",
+      "line": 3531,
+      "description": "A pair of leaf wings mounted on a wearable frame. Grants 12 seconds of flight while worn."
+    }
+  ],
+  "place": "blockbound.rbxlx",
+  "place_instances_with_wing_in_name": [
+    {
+      "name": "Glowing-Eyes-01",
+      "class": "Part"
+    },
+    {
+      "name": "Growing-Lightning-01",
+      "class": "ParticleEmitter"
+    }
+  ],
+  "reference_policy": "No UI sprites/images used. Original models from item names and descriptions.",
+  "native_inspection": "AngelWings and the complete seven-set AllWings scene loaded in MagicaVoxel 0.99.7.2."
+}

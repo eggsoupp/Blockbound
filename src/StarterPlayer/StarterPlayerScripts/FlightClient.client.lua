@@ -55,8 +55,21 @@ local Workspace = game:GetService("Workspace")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
+local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 
 local player = Players.LocalPlayer
+
+-- Take-off and landing go to the server (WingService), which sets the
+-- character's Flying attribute for everyone: wing flaps, no swings.
+local FlightState = nil
+task.spawn(function()
+	FlightState = Remotes.wait("FlightState")
+end)
+local function report(flying)
+	if FlightState then
+		FlightState:FireServer(flying)
+	end
+end
 
 local FLIGHT = {
 	cruise = 30, -- studs/s flying forward
@@ -293,6 +306,7 @@ local function stopFlight()
 	local character, humanoid, root = current.character, current.humanoid, current.root
 	if character.Parent then
 		character:SetAttribute("Flying", false)
+		report(false)
 	end
 	if humanoid.Parent and humanoid.Health > 0 then
 		-- Stand the body back up before handing it to the Humanoid, which
@@ -345,6 +359,7 @@ local function startFlight()
 
 	humanoid.PlatformStand = true
 	character:SetAttribute("Flying", true)
+	report(true)
 
 	local tracks = {}
 	if animator then

@@ -1,0 +1,521 @@
+{
+  "status": "passed",
+  "checks": [
+    "VOX byte bounds, palette, graph, model coordinates",
+    "Individual parts reproduce assembled scenes; no detached voxel islands",
+    "GLB accessors, index bounds, winding, normals, surface areas",
+    "Bind matrices reproduce VOX geometry bounds",
+    "Skin weights normalized and one bone per piece",
+    "All joints animate; root fixed; flap loops; rigid transforms preserve edge lengths"
+  ],
+  "files": {
+    "AllWings.vox": {
+      "parts": 101,
+      "voxels": 129959
+    },
+    "AngelWings.vox": {
+      "parts": 21,
+      "voxels": 14172
+    },
+    "BatWings.vox": {
+      "parts": 7,
+      "voxels": 14966
+    },
+    "DemonWings.vox": {
+      "parts": 13,
+      "voxels": 19970
+    },
+    "FairyWings.vox": {
+      "parts": 5,
+      "voxels": 18484
+    },
+    "FlameWings.vox": {
+      "parts": 17,
+      "voxels": 31156
+    },
+    "FrostWings.vox": {
+      "parts": 17,
+      "voxels": 15322
+    },
+    "LeafWings.vox": {
+      "parts": 21,
+      "voxels": 15889
+    },
+    "parts\\AngelWings\\Frame.vox": {
+      "parts": 1,
+      "voxels": 2040
+    },
+    "parts\\AngelWings\\L_Arm.vox": {
+      "parts": 1,
+      "voxels": 963
+    },
+    "parts\\AngelWings\\L_Fan.vox": {
+      "parts": 1,
+      "voxels": 736
+    },
+    "parts\\AngelWings\\L_Feather01.vox": {
+      "parts": 1,
+      "voxels": 550
+    },
+    "parts\\AngelWings\\L_Feather02.vox": {
+      "parts": 1,
+      "voxels": 627
+    },
+    "parts\\AngelWings\\L_Feather03.vox": {
+      "parts": 1,
+      "voxels": 622
+    },
+    "parts\\AngelWings\\L_Feather04.vox": {
+      "parts": 1,
+      "voxels": 595
+    },
+    "parts\\AngelWings\\L_Feather05.vox": {
+      "parts": 1,
+      "voxels": 611
+    },
+    "parts\\AngelWings\\L_Feather06.vox": {
+      "parts": 1,
+      "voxels": 543
+    },
+    "parts\\AngelWings\\L_Feather07.vox": {
+      "parts": 1,
+      "voxels": 457
+    },
+    "parts\\AngelWings\\L_Feather08.vox": {
+      "parts": 1,
+      "voxels": 362
+    },
+    "parts\\AngelWings\\R_Arm.vox": {
+      "parts": 1,
+      "voxels": 963
+    },
+    "parts\\AngelWings\\R_Fan.vox": {
+      "parts": 1,
+      "voxels": 736
+    },
+    "parts\\AngelWings\\R_Feather01.vox": {
+      "parts": 1,
+      "voxels": 550
+    },
+    "parts\\AngelWings\\R_Feather02.vox": {
+      "parts": 1,
+      "voxels": 627
+    },
+    "parts\\AngelWings\\R_Feather03.vox": {
+      "parts": 1,
+      "voxels": 622
+    },
+    "parts\\AngelWings\\R_Feather04.vox": {
+      "parts": 1,
+      "voxels": 595
+    },
+    "parts\\AngelWings\\R_Feather05.vox": {
+      "parts": 1,
+      "voxels": 611
+    },
+    "parts\\AngelWings\\R_Feather06.vox": {
+      "parts": 1,
+      "voxels": 543
+    },
+    "parts\\AngelWings\\R_Feather07.vox": {
+      "parts": 1,
+      "voxels": 457
+    },
+    "parts\\AngelWings\\R_Feather08.vox": {
+      "parts": 1,
+      "voxels": 362
+    },
+    "parts\\BatWings\\Frame.vox": {
+      "parts": 1,
+      "voxels": 2040
+    },
+    "parts\\BatWings\\L_Arm.vox": {
+      "parts": 1,
+      "voxels": 821
+    },
+    "parts\\BatWings\\L_Claw.vox": {
+      "parts": 1,
+      "voxels": 294
+    },
+    "parts\\BatWings\\L_Fan.vox": {
+      "parts": 1,
+      "voxels": 5348
+    },
+    "parts\\BatWings\\R_Arm.vox": {
+      "parts": 1,
+      "voxels": 821
+    },
+    "parts\\BatWings\\R_Claw.vox": {
+      "parts": 1,
+      "voxels": 294
+    },
+    "parts\\BatWings\\R_Fan.vox": {
+      "parts": 1,
+      "voxels": 5348
+    },
+    "parts\\DemonWings\\Frame.vox": {
+      "parts": 1,
+      "voxels": 2040
+    },
+    "parts\\DemonWings\\L_Arm.vox": {
+      "parts": 1,
+      "voxels": 982
+    },
+    "parts\\DemonWings\\L_Claw.vox": {
+      "parts": 1,
+      "voxels": 294
+    },
+    "parts\\DemonWings\\L_Fan.vox": {
+      "parts": 1,
+      "voxels": 7509
+    },
+    "parts\\DemonWings\\L_Thorn1.vox": {
+      "parts": 1,
+      "voxels": 57
+    },
+    "parts\\DemonWings\\L_Thorn2.vox": {
+      "parts": 1,
+      "voxels": 62
+    },
+    "parts\\DemonWings\\L_Thorn3.vox": {
+      "parts": 1,
+      "voxels": 61
+    },
+    "parts\\DemonWings\\R_Arm.vox": {
+      "parts": 1,
+      "voxels": 982
+    },
+    "parts\\DemonWings\\R_Claw.vox": {
+      "parts": 1,
+      "voxels": 294
+    },
+    "parts\\DemonWings\\R_Fan.vox": {
+      "parts": 1,
+      "voxels": 7509
+    },
+    "parts\\DemonWings\\R_Thorn1.vox": {
+      "parts": 1,
+      "voxels": 57
+    },
+    "parts\\DemonWings\\R_Thorn2.vox": {
+      "parts": 1,
+      "voxels": 62
+    },
+    "parts\\DemonWings\\R_Thorn3.vox": {
+      "parts": 1,
+      "voxels": 61
+    },
+    "parts\\FairyWings\\Frame.vox": {
+      "parts": 1,
+      "voxels": 2284
+    },
+    "parts\\FairyWings\\L_Lower.vox": {
+      "parts": 1,
+      "voxels": 3224
+    },
+    "parts\\FairyWings\\L_Upper.vox": {
+      "parts": 1,
+      "voxels": 4876
+    },
+    "parts\\FairyWings\\R_Lower.vox": {
+      "parts": 1,
+      "voxels": 3224
+    },
+    "parts\\FairyWings\\R_Upper.vox": {
+      "parts": 1,
+      "voxels": 4876
+    },
+    "parts\\FlameWings\\Frame.vox": {
+      "parts": 1,
+      "voxels": 2040
+    },
+    "parts\\FlameWings\\L_Arm.vox": {
+      "parts": 1,
+      "voxels": 723
+    },
+    "parts\\FlameWings\\L_Fan.vox": {
+      "parts": 1,
+      "voxels": 6351
+    },
+    "parts\\FlameWings\\L_Plume01.vox": {
+      "parts": 1,
+      "voxels": 1539
+    },
+    "parts\\FlameWings\\L_Plume02.vox": {
+      "parts": 1,
+      "voxels": 1592
+    },
+    "parts\\FlameWings\\L_Plume03.vox": {
+      "parts": 1,
+      "voxels": 1257
+    },
+    "parts\\FlameWings\\L_Plume04.vox": {
+      "parts": 1,
+      "voxels": 1148
+    },
+    "parts\\FlameWings\\L_Plume05.vox": {
+      "parts": 1,
+      "voxels": 1051
+    },
+    "parts\\FlameWings\\L_Plume06.vox": {
+      "parts": 1,
+      "voxels": 897
+    },
+    "parts\\FlameWings\\R_Arm.vox": {
+      "parts": 1,
+      "voxels": 723
+    },
+    "parts\\FlameWings\\R_Fan.vox": {
+      "parts": 1,
+      "voxels": 6351
+    },
+    "parts\\FlameWings\\R_Plume01.vox": {
+      "parts": 1,
+      "voxels": 1539
+    },
+    "parts\\FlameWings\\R_Plume02.vox": {
+      "parts": 1,
+      "voxels": 1592
+    },
+    "parts\\FlameWings\\R_Plume03.vox": {
+      "parts": 1,
+      "voxels": 1257
+    },
+    "parts\\FlameWings\\R_Plume04.vox": {
+      "parts": 1,
+      "voxels": 1148
+    },
+    "parts\\FlameWings\\R_Plume05.vox": {
+      "parts": 1,
+      "voxels": 1051
+    },
+    "parts\\FlameWings\\R_Plume06.vox": {
+      "parts": 1,
+      "voxels": 897
+    },
+    "parts\\FrostWings\\Frame.vox": {
+      "parts": 1,
+      "voxels": 2040
+    },
+    "parts\\FrostWings\\L_Arm.vox": {
+      "parts": 1,
+      "voxels": 1041
+    },
+    "parts\\FrostWings\\L_Crystal01.vox": {
+      "parts": 1,
+      "voxels": 826
+    },
+    "parts\\FrostWings\\L_Crystal02.vox": {
+      "parts": 1,
+      "voxels": 923
+    },
+    "parts\\FrostWings\\L_Crystal03.vox": {
+      "parts": 1,
+      "voxels": 887
+    },
+    "parts\\FrostWings\\L_Crystal04.vox": {
+      "parts": 1,
+      "voxels": 898
+    },
+    "parts\\FrostWings\\L_Crystal05.vox": {
+      "parts": 1,
+      "voxels": 799
+    },
+    "parts\\FrostWings\\L_Crystal06.vox": {
+      "parts": 1,
+      "voxels": 590
+    },
+    "parts\\FrostWings\\L_Fan.vox": {
+      "parts": 1,
+      "voxels": 677
+    },
+    "parts\\FrostWings\\R_Arm.vox": {
+      "parts": 1,
+      "voxels": 1041
+    },
+    "parts\\FrostWings\\R_Crystal01.vox": {
+      "parts": 1,
+      "voxels": 826
+    },
+    "parts\\FrostWings\\R_Crystal02.vox": {
+      "parts": 1,
+      "voxels": 923
+    },
+    "parts\\FrostWings\\R_Crystal03.vox": {
+      "parts": 1,
+      "voxels": 887
+    },
+    "parts\\FrostWings\\R_Crystal04.vox": {
+      "parts": 1,
+      "voxels": 898
+    },
+    "parts\\FrostWings\\R_Crystal05.vox": {
+      "parts": 1,
+      "voxels": 799
+    },
+    "parts\\FrostWings\\R_Crystal06.vox": {
+      "parts": 1,
+      "voxels": 590
+    },
+    "parts\\FrostWings\\R_Fan.vox": {
+      "parts": 1,
+      "voxels": 677
+    },
+    "parts\\LeafWings\\Frame.vox": {
+      "parts": 1,
+      "voxels": 2129
+    },
+    "parts\\LeafWings\\L_Arm.vox": {
+      "parts": 1,
+      "voxels": 628
+    },
+    "parts\\LeafWings\\L_Fan.vox": {
+      "parts": 1,
+      "voxels": 411
+    },
+    "parts\\LeafWings\\L_Leaf01.vox": {
+      "parts": 1,
+      "voxels": 552
+    },
+    "parts\\LeafWings\\L_Leaf02.vox": {
+      "parts": 1,
+      "voxels": 887
+    },
+    "parts\\LeafWings\\L_Leaf03.vox": {
+      "parts": 1,
+      "voxels": 1036
+    },
+    "parts\\LeafWings\\L_Leaf04.vox": {
+      "parts": 1,
+      "voxels": 1036
+    },
+    "parts\\LeafWings\\L_Leaf05.vox": {
+      "parts": 1,
+      "voxels": 967
+    },
+    "parts\\LeafWings\\L_Leaf06.vox": {
+      "parts": 1,
+      "voxels": 630
+    },
+    "parts\\LeafWings\\L_Leaf07.vox": {
+      "parts": 1,
+      "voxels": 400
+    },
+    "parts\\LeafWings\\L_Leaf08.vox": {
+      "parts": 1,
+      "voxels": 333
+    },
+    "parts\\LeafWings\\R_Arm.vox": {
+      "parts": 1,
+      "voxels": 628
+    },
+    "parts\\LeafWings\\R_Fan.vox": {
+      "parts": 1,
+      "voxels": 411
+    },
+    "parts\\LeafWings\\R_Leaf01.vox": {
+      "parts": 1,
+      "voxels": 552
+    },
+    "parts\\LeafWings\\R_Leaf02.vox": {
+      "parts": 1,
+      "voxels": 887
+    },
+    "parts\\LeafWings\\R_Leaf03.vox": {
+      "parts": 1,
+      "voxels": 1036
+    },
+    "parts\\LeafWings\\R_Leaf04.vox": {
+      "parts": 1,
+      "voxels": 1036
+    },
+    "parts\\LeafWings\\R_Leaf05.vox": {
+      "parts": 1,
+      "voxels": 967
+    },
+    "parts\\LeafWings\\R_Leaf06.vox": {
+      "parts": 1,
+      "voxels": 630
+    },
+    "parts\\LeafWings\\R_Leaf07.vox": {
+      "parts": 1,
+      "voxels": 400
+    },
+    "parts\\LeafWings\\R_Leaf08.vox": {
+      "parts": 1,
+      "voxels": 333
+    }
+  },
+  "models": {
+    "AngelWings": {
+      "joints": 21,
+      "triangles": 11822,
+      "bind_max_error": 0,
+      "surface_area_max_error": 0,
+      "animations": [
+        "Flap",
+        "Fold"
+      ]
+    },
+    "BatWings": {
+      "joints": 7,
+      "triangles": 11178,
+      "bind_max_error": 0,
+      "surface_area_max_error": 0,
+      "animations": [
+        "Flap",
+        "Fold"
+      ]
+    },
+    "DemonWings": {
+      "joints": 13,
+      "triangles": 15472,
+      "bind_max_error": 8.812541141267616e-09,
+      "surface_area_max_error": 0,
+      "animations": [
+        "Flap",
+        "Fold"
+      ]
+    },
+    "FairyWings": {
+      "joints": 5,
+      "triangles": 10526,
+      "bind_max_error": 0,
+      "surface_area_max_error": 0,
+      "animations": [
+        "Flap",
+        "Fold"
+      ]
+    },
+    "FlameWings": {
+      "joints": 17,
+      "triangles": 12242,
+      "bind_max_error": 0,
+      "surface_area_max_error": 0,
+      "animations": [
+        "Flap",
+        "Fold"
+      ]
+    },
+    "FrostWings": {
+      "joints": 17,
+      "triangles": 11262,
+      "bind_max_error": 0,
+      "surface_area_max_error": 0,
+      "animations": [
+        "Flap",
+        "Fold"
+      ]
+    },
+    "LeafWings": {
+      "joints": 21,
+      "triangles": 13918,
+      "bind_max_error": 0,
+      "surface_area_max_error": 0,
+      "animations": [
+        "Flap",
+        "Fold"
+      ]
+    }
+  }
+}

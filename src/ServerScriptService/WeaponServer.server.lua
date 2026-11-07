@@ -274,6 +274,8 @@ WeaponInput.OnServerEvent:Connect(function(player, tool, down)
 		state.combo:release()
 		return
 	end
+	-- No swings in the air (WingService sets Flying from FlightClient's report).
+	if character:GetAttribute("Flying") == true then return end
 	local now = os.clock()
 	if now - (lastPressAt[player] or -math.huge) < 0.03 then return end
 	lastPressAt[player] = now

@@ -107,6 +107,24 @@ function GearService.get(player)
 	return bonuses
 end
 
+-- The item worn in the accessory column with this `gearGroup` (only one may
+-- be: InventoryConstants.gearGroupClash), or nil. WingService asks for "Wings".
+function GearService.wornInGroup(player, group)
+	local inventory = InventoryService.GetInventory(player)
+	if not inventory then
+		return nil
+	end
+	local range = InventoryConstants.AccessoryRange
+	for index = range.first, range.last do
+		local name = inventory:GetSlot(index)
+		local definition = name and ItemDefinitions[name]
+		if definition and definition.gearGroup == group then
+			return name
+		end
+	end
+	return nil
+end
+
 function GearService.weaponMultiplier(player)
 	return math.max(0, 1 + GearService.get(player).weaponDamage)
 end

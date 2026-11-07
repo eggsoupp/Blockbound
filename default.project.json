@@ -607,6 +607,13 @@
             "$path": "src/ReplicatedStorage/Shared/Inventory/DropConfig.lua"
           }
         },
+        "Flight": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "WingParticles": {
+            "$path": "src/ReplicatedStorage/Shared/Flight/WingParticles.lua"
+          }
+        },
         "Enemies": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,

@@ -4,6 +4,7 @@ local Run=game:GetService("RunService")
 local Scope=require(script.Parent.Parent.AbilityScope)
 local Choreo=require(script.Parent.SignusChoreography)
 local VFX=require(script.Parent.SignusVFX)
+local LoadingGate=require(script.Parent.Parent.Parent:WaitForChild("Loading"):WaitForChild("LoadingGate"))
 local Visuals={}
 local entries={}
 local started=false
@@ -39,7 +40,8 @@ local function observe(part)
 end
 function Visuals.start()
  if started then return end;started=true
- VFX.preload()
+ -- Boss assets wait for the loading screen to finish (Shared.Loading.LoadingGate).
+ LoadingGate.defer(VFX.preload)
  -- The body (clips, aura, eyes) and the eclipse sky.
  require(script.Parent.SignusRig).start()
  require(script.Parent.SignusSky).start()

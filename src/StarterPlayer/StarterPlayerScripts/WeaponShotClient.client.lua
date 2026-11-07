@@ -13,6 +13,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local VFX = require(Shared:WaitForChild("Abilities"):WaitForChild("VFX"):WaitForChild("WeaponShotVFX"))
+local LoadingGate = require(Shared:WaitForChild("Loading"):WaitForChild("LoadingGate"))
 
 local player = Players.LocalPlayer
 local WeaponShot = Remotes.wait("WeaponShot")
@@ -20,7 +21,9 @@ local WeaponShot = Remotes.wait("WeaponShot")
 -- id -> true for this player's own shots still in flight.
 local mine = {}
 
-VFX.preload()
+-- After the loading screen, which loads the shot library itself when a
+-- legendary is on the hotbar (Shared.Loading.PreloadPlan).
+LoadingGate.defer(VFX.preload)
 
 WeaponShot.OnClientEvent:Connect(function(packet)
 	if type(packet) ~= "table" or type(packet.id) ~= "string" then

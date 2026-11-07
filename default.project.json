@@ -24,6 +24,13 @@
         }
       }
     },
+    "ReplicatedFirst": {
+      "$className": "ReplicatedFirst",
+      "$ignoreUnknownInstances": true,
+      "LoadingScreen": {
+        "$path": "src/ReplicatedFirst/LoadingScreen.client.lua"
+      }
+    },
     "StarterPlayer": {
       "$className": "StarterPlayer",
       "$ignoreUnknownInstances": true,
@@ -612,6 +619,19 @@
           "$ignoreUnknownInstances": true,
           "WingParticles": {
             "$path": "src/ReplicatedStorage/Shared/Flight/WingParticles.lua"
+          }
+        },
+        "Loading": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "LoadingGate": {
+            "$path": "src/ReplicatedStorage/Shared/Loading/LoadingGate.lua"
+          },
+          "PreloadPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Loading/PreloadPlan.lua"
+          },
+          "PreloadQueue": {
+            "$path": "src/ReplicatedStorage/Shared/Loading/PreloadQueue.lua"
           }
         },
         "Enemies": {

@@ -38,8 +38,11 @@ local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local AbilityScope = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityScope"))
 local VFXFolder = Shared:WaitForChild("Abilities"):WaitForChild("VFX")
 
+local LoadingGate = require(Shared:WaitForChild("Loading"):WaitForChild("LoadingGate"))
+
 local BossEffect = Remotes.wait("BossEffect")
-CombatAudio.preload()
+-- After the loading screen, so the whole bank does not queue ahead of it.
+LoadingGate.defer(CombatAudio.preload)
 
 -- Persistent effects must also exist for observers arriving mid-encounter.
 require(VFXFolder:WaitForChild("SignusVisuals")).start()

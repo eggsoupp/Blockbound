@@ -36,6 +36,7 @@ local CombatAudio = require(Shared:WaitForChild("Audio"):WaitForChild("CombatAud
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local Library = require(Shared:WaitForChild("Enemies"):WaitForChild("CreatureParticles"))
 local Rigs = require(Shared:WaitForChild("Enemies"):WaitForChild("CreatureRigs"))
+local LoadingGate = require(Shared:WaitForChild("Loading"):WaitForChild("LoadingGate"))
 
 --[[
 	The few effect building blocks used below: invisible emitter hosts,
@@ -142,7 +143,9 @@ local folder = Instance.new("Folder")
 folder.Name = "CreatureFX"
 folder.Parent = workspace
 
-Kit.preload(Library, {
+-- After the loading screen (Shared.Loading.LoadingGate): nothing attacks
+-- while it is up.
+LoadingGate.defer(Kit.preload, Library, {
 	"creature.hit", "impact.slam", "impact.ice", "impact.blade", "impact.heavy", "impact.explosion",
 	"whoosh.heavy", "whoosh.blade", "whoosh.light", "cast.blink", "boss.splat", "boss.groundErupt",
 })

@@ -43,6 +43,7 @@ local AbilitiesShared = Shared:WaitForChild("Abilities")
 local AbilityConfig = require(AbilitiesShared:WaitForChild("AbilityConfig"))
 local AbilityScope = require(AbilitiesShared:WaitForChild("AbilityScope"))
 local VFXFolder = AbilitiesShared:WaitForChild("VFX")
+local LoadingGate = require(Shared:WaitForChild("Loading"):WaitForChild("LoadingGate"))
 
 local RequestAbility = Remotes.wait("RequestAbility")
 local AbilityEffect = Remotes.wait("AbilityEffect")
@@ -565,7 +566,9 @@ LoadoutChanged.OnClientEvent:Connect(function(abilities, reason)
 	-- Local only: lets a VFX module find the key that casts its ability.
 	player:SetAttribute("AbilityLoadout", table.concat(abilities, ","))
 	rebuildHud(loadout)
-	preload(loadout)
+	-- The loading screen fetches the equipped abilities' art itself, within
+	-- its budget; the modules' own (whole-library) preloads wait for it.
+	LoadingGate.defer(preload, loadout)
 	refreshPanel(loadout, gained)
 
 	log("loadout is now", #loadout, "abilit(ies)")

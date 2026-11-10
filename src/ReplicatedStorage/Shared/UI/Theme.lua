@@ -49,7 +49,7 @@ Theme.SlotPitch = 68
 	upload still draws every icon it had.
 ]]
 -- Group-owned Image; its Decal is 137466869144991.
-Theme.ItemAtlas = "rbxassetid://124349462246710"
+Theme.ItemAtlas = "rbxassetid://81667603345097"
 
 Theme.Pixel = {
 	-- assets/pixel-ui/atlas/pixel_ui_atlas.png, group-owned Image. Replaced

@@ -2522,7 +2522,6 @@ ItemDefinitions.Daybloom = {
 	classification = "Material",
 	maxStack = 999,
 	sprite = "daybloom",
-	catalogOnly = true,
 }
 
 ItemDefinitions.Deathweed = {
@@ -3863,17 +3862,15 @@ ItemDefinitions.Mushroom = {
 	classification = "Food",
 	maxStack = 99,
 	sprite = "mushroom",
-	catalogOnly = true,
 }
 
 ItemDefinitions.MushroomGlowing = {
-	displayName = "Mushroom Glowing",
+	displayName = "Glowing Mushroom",
 	description = "A luminous mushroom from a dark, damp place.",
 	rarity = "Uncommon",
 	classification = "Material",
 	maxStack = 999,
 	sprite = "mushroom_glowing",
-	catalogOnly = true,
 }
 
 ItemDefinitions.MythrilArmor = {
@@ -4111,7 +4108,6 @@ ItemDefinitions.Pumpkin = {
 	classification = "Food",
 	maxStack = 99,
 	sprite = "pumpkin",
-	catalogOnly = true,
 }
 
 ItemDefinitions.PurpleCape = {
@@ -4189,7 +4185,6 @@ ItemDefinitions.RedCloth = {
 	classification = "Material",
 	maxStack = 999,
 	sprite = "cloth_red",
-	catalogOnly = true,
 }
 
 ItemDefinitions.RedFeather = {
@@ -4249,7 +4244,6 @@ ItemDefinitions.Rope = {
 	classification = "Material",
 	maxStack = 999,
 	sprite = "rope",
-	catalogOnly = true,
 }
 
 ItemDefinitions.RottenChunk = {
@@ -4643,7 +4637,6 @@ ItemDefinitions.String = {
 	classification = "Material",
 	maxStack = 999,
 	sprite = "string",
-	catalogOnly = true,
 }
 
 ItemDefinitions.SummonerEmblem = {
@@ -4981,7 +4974,6 @@ ItemDefinitions.Watermelon = {
 	classification = "Food",
 	maxStack = 99,
 	sprite = "watermelon",
-	catalogOnly = true,
 }
 
 ItemDefinitions.WhitePumpkin = {
@@ -5041,6 +5033,88 @@ ItemDefinitions.WrathPotion = {
 	maxStack = 99,
 	sprite = "potion_wrath",
 	catalogOnly = true,
+}
+
+-- Crafting parts. Made from raw materials and used by the furniture and curio
+-- recipes (Shared.Building.DecorCatalog); see CraftingRecipes for each.
+ItemDefinitions.Glass = {
+	displayName = "Glass",
+	description = "A clear pane of glass, smelted from sand.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	value = 3,
+	sprite = "glass",
+}
+
+ItemDefinitions.Nails = {
+	displayName = "Nails",
+	description = "A handful of iron nails for joinery.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	value = 2,
+	sprite = "nails",
+}
+
+ItemDefinitions.Dye = {
+	displayName = "Dye",
+	description = "Bright pigment pressed from flowers, for cloth and paint.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	value = 3,
+	sprite = "dye",
+}
+
+ItemDefinitions.Wheat = {
+	displayName = "Wheat",
+	description = "A sheaf of golden wheat, cut from a field with an axe.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	value = 1,
+	sprite = "wheat",
+}
+
+ItemDefinitions.Wax = {
+	displayName = "Wax",
+	description = "A cake of amber wax, rendered down from gel.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	value = 3,
+	sprite = "wax",
+}
+
+ItemDefinitions.Gear = {
+	displayName = "Gear",
+	description = "A small copper cog, for clocks and instruments.",
+	rarity = "Uncommon",
+	classification = "Material",
+	maxStack = 999,
+	value = 6,
+	sprite = "gear",
+}
+
+ItemDefinitions.Clay = {
+	displayName = "Clay",
+	description = "A ball of wet clay, worked from dirt and sand.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	value = 2,
+	sprite = "clay",
+}
+
+ItemDefinitions.Canvas = {
+	displayName = "Canvas",
+	description = "A bolt of heavy woven cloth, for tents and paintings.",
+	rarity = "Common",
+	classification = "Material",
+	maxStack = 999,
+	value = 4,
+	sprite = "canvas",
 }
 
 --[[

@@ -423,5 +423,13 @@ return {
 		crystal_ball_nature = { offset = Vector2.new(102, 322), size = Vector2.new(16, 16) },
 		pumpkin_white = { offset = Vector2.new(122, 322), size = Vector2.new(16, 16) },
 		grapes_green = { offset = Vector2.new(142, 322), size = Vector2.new(16, 16) },
+		glass = { offset = Vector2.new(162, 322), size = Vector2.new(16, 16) },
+		nails = { offset = Vector2.new(182, 322), size = Vector2.new(16, 16) },
+		dye = { offset = Vector2.new(202, 322), size = Vector2.new(16, 16) },
+		wheat = { offset = Vector2.new(222, 322), size = Vector2.new(16, 16) },
+		wax = { offset = Vector2.new(242, 322), size = Vector2.new(16, 16) },
+		gear = { offset = Vector2.new(262, 322), size = Vector2.new(16, 16) },
+		clay = { offset = Vector2.new(282, 322), size = Vector2.new(16, 16) },
+		canvas = { offset = Vector2.new(302, 322), size = Vector2.new(16, 16) },
 	},
 }

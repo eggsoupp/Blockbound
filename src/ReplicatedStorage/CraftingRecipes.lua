@@ -138,6 +138,22 @@ local CraftingRecipes = {
 	},
 }
 
+-- ===========================================================================
+-- Crafting parts: what the furniture and curio recipes are built from. Each
+-- is one step from something a player already gathers.
+-- ===========================================================================
+CraftingRecipes.String = { ingredients = { Silk = 1 }, output = { item = "String", count = 3 } }
+CraftingRecipes.StringFromWool = { ingredients = { Wool = 1 }, output = { item = "String", count = 2 } }
+CraftingRecipes.Rope = { ingredients = { String = 3 } }
+CraftingRecipes.Dye = { ingredients = { Daybloom = 1 }, output = { item = "Dye", count = 2 } }
+CraftingRecipes.Clay = { ingredients = { Dirt = 2, Sand = 1 }, output = { item = "Clay", count = 2 } }
+CraftingRecipes.RedCloth = { ingredients = { Wool = 2, Dye = 1 }, output = { item = "RedCloth", count = 2 }, station = "CraftingTable" }
+CraftingRecipes.Canvas = { ingredients = { String = 4 }, station = "CraftingTable" }
+CraftingRecipes.Glass = { ingredients = { Sand = 2 }, output = { item = "Glass", count = 2 }, station = "Furnace" }
+CraftingRecipes.Wax = { ingredients = { Gel = 2 }, station = "Furnace" }
+CraftingRecipes.Nails = { ingredients = { IronIngot = 1 }, output = { item = "Nails", count = 8 }, station = "Anvil" }
+CraftingRecipes.Gear = { ingredients = { CopperIngot = 1 }, output = { item = "Gear", count = 2 }, station = "Anvil" }
+
 -- Building pieces and furniture: each Shared.Building.DecorCatalog row
 -- carries its own recipe.
 do

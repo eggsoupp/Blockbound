@@ -263,6 +263,17 @@ StructureConfig.GroundCover = {
 		surfaces = SOIL,
 		biomes = { Plains = 1.0, Swamp = 0.3 },
 		variants = MEADOW,
+
+		-- Cut with an axe for Daybloom. See HarvestServer.
+		tag = "FlowerPart",
+		health = 1,
+		harvest = {
+			item = "Daybloom",
+			min = 1,
+			max = 2,
+			toolClass = "Tool",
+			damage = 1,
+		},
 	}),
 	-- Wheat fields: wide, dense, rare.
 	cover({
@@ -274,6 +285,18 @@ StructureConfig.GroundCover = {
 		surfaces = { "Grass" },
 		biomes = { Plains = 1.0 },
 		variants = { Open = 12 },
+
+		-- Cut with an axe for Wheat. See HarvestServer.
+		tag = "WheatPart",
+		health = 1,
+		harvest = {
+			item = "Wheat",
+			min = 1,
+			max = 3,
+			bonus = { item = "Pumpkin", chance = 0.06, min = 1, max = 1 },
+			toolClass = "Tool",
+			damage = 1,
+		},
 	}),
 	-- Thickets at the edges of the woods.
 	cover({
@@ -287,6 +310,18 @@ StructureConfig.GroundCover = {
 		surfaces = SOIL,
 		biomes = { Plains = 1.0, Swamp = 1.5 },
 		variants = WOODS,
+
+		-- Cut with an axe for Herb. See HarvestServer.
+		tag = "ShrubPart",
+		health = 1,
+		harvest = {
+			item = "Herb",
+			min = 1,
+			max = 1,
+			bonus = { item = "Watermelon", chance = 0.05, min = 1, max = 1 },
+			toolClass = "Tool",
+			damage = 1,
+		},
 	}),
 	-- Small tight clusters of one kind.
 	cover({
@@ -299,6 +334,18 @@ StructureConfig.GroundCover = {
 		surfaces = { "Grass", "Dirt", "CrimsonDirt", "CorruptedDirt" },
 		biomes = { Plains = 1.0, Swamp = 2.0, Crimson = 3.0, Corruption = 3.0 },
 		variants = { OakForest = 1, BirchForest = 1 },
+
+		-- Cut with an axe for Mushroom. See HarvestServer.
+		tag = "MushroomPart",
+		health = 1,
+		harvest = {
+			item = "Mushroom",
+			min = 1,
+			max = 2,
+			bonus = { item = "MushroomGlowing", chance = 0.15, min = 1, max = 1 },
+			toolClass = "Tool",
+			damage = 1,
+		},
 	}),
 	-- Cactus groves with open sand between them.
 	cover({

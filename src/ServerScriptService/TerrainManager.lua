@@ -194,6 +194,8 @@ end
 
 local chunks = {} -- chunkKey -> chunk data
 TerrainManager._wallReservations, TerrainManager._wallChunkPins = {}, {}
+-- player -> { x, z }: where they are heading, in chunks. See _requeue.
+TerrainManager._lead = setmetatable({}, { __mode = "k" })
 local loadedChunkCount = 0 -- live size of `chunks`, kept incrementally
 local usageCounts = {} -- chunkKey -> how many players want it
 local pendingUnload = {} -- chunkKey -> { cx, cz, dueAt }
@@ -674,7 +676,178 @@ local function getBlockPartTemplate(name)
 	return nil
 end
 
-local function getPooledPart(name)
+--[[
+	FACE VARIANTS
+
+	A block template is a Part with an image on each of its six faces: seven
+	Instances. Cloning all seven for every new Part and then taking most of the
+	images off again (see HIDDEN FACES - about 60% of faces are covered) was the
+	largest single cost of drawing a chunk: 56 microseconds for the clone and 9
+	more to unparent four images, against 17 for the bare Part.
+
+	So a new Part is cloned from a template that already carries exactly the
+	images it is going to show. There is one such template per block name and
+	face mask, built the first time that combination is asked for and kept out
+	of the world. An image a Part was not born with is cloned onto it later, if
+	that face is ever uncovered (Faces.apply).
+
+	The mask is one bit per face, Faces.BIT. Faces.shown[part] is the mask a
+	Part currently shows, so re-deciding a Part whose faces have not changed
+	touches no Instance at all.
+]]
+do
+	local FACE_BIT = { Top = 1, Bottom = 2, Right = 4, Left = 8, Back = 16, Front = 32 }
+	Faces.BIT = FACE_BIT
+	Faces.shown = setmetatable({}, { __mode = "k" })
+	-- name -> { [face name] = { image templates } }, every image the block has.
+	Faces.images = {}
+	Faces.layouts = {} -- variant template -> face name per child, in order
+
+	local bases = {} -- name -> the configured Part with no images; false if none
+	local variants = {} -- name -> { [mask] = template }
+
+	local function baseFor(name)
+		local base = bases[name]
+		if base ~= nil then
+			return base
+		end
+
+		local template = getBlockPartTemplate(name)
+		if not template then
+			bases[name] = false
+			Faces.images[name] = {}
+			return false
+		end
+
+		--[[
+			Most blocks are solid opaque cubes and are forced to be, because an
+			authored template can carry anything. The exceptions are declared in
+			BlockConfig.Surfaces - water being the whole reason it exists: it has to
+			be see-through so the bed reads through it, non-solid so a player wades
+			instead of walking on it, and invisible to the mouse ray so aiming at a
+			shoreline targets the ground rather than the surface.
+
+			Set once per block name: every clone inherits all of it, tag included.
+		]]
+		local surface = BlockConfig.surfaceFor(name)
+
+		base = template:Clone()
+		base.Name = name
+		base.Size = Vector3.new(STUD_SIZE, STUD_SIZE, STUD_SIZE)
+		base.Anchored = true
+		base.CanCollide = if surface then surface.collides ~= false else true
+		base.CanQuery = if surface then surface.query ~= false else true
+		base.CanTouch = false
+		base.Transparency = if surface then surface.transparency or 0 else 0
+		base.TopSurface = Enum.SurfaceType.Smooth
+		base.BottomSurface = Enum.SurfaceType.Smooth
+		base.CastShadow = TerrainConfig.CastTerrainShadows
+		CollectionService:AddTag(base, "TerrainBlock")
+
+		local byFace = {}
+		for _, child in ipairs(base:GetChildren()) do
+			-- Pin every face texture to one tile per block, so a part stretched
+			-- over a run of ten blocks shows ten tiles instead of one smeared
+			-- image. On a 1x1 part this is exactly what an untiled texture
+			-- already did, so it changes nothing for blocks that never merge.
+			if child:IsA("Texture") then
+				child.StudsPerTileU = STUD_SIZE
+				child.StudsPerTileV = STUD_SIZE
+			end
+			-- Decal covers Texture too.
+			if child:IsA("Decal") then
+				local face = child.Face.Name
+				local list = byFace[face]
+				if not list then
+					list = {}
+					byFace[face] = list
+				end
+				table.insert(list, child)
+				child.Parent = nil
+			end
+		end
+
+		bases[name] = base
+		Faces.images[name] = byFace
+		return base
+	end
+
+	-- The template for `name` showing exactly the faces in `mask`, or false.
+	function Faces.variantFor(name, mask)
+		local set = variants[name]
+		if not set then
+			set = {}
+			variants[name] = set
+		end
+
+		local variant = set[mask]
+		if variant == nil then
+			local base = baseFor(name)
+			if not base then
+				set[mask] = false
+				return false
+			end
+
+			variant = base:Clone()
+			for face, list in pairs(Faces.images[name]) do
+				if bit32.btest(mask, FACE_BIT[face]) then
+					for _, image in ipairs(list) do
+						image:Clone().Parent = variant
+					end
+				end
+			end
+			set[mask] = variant
+
+			-- Which face each child is an image for, in child order, so a clone
+			-- can file its images without reading a property off each one.
+			-- Checked against a real clone once; a template whose clone came
+			-- back in another order gets no layout and is read the slow way.
+			local layout = {}
+			for index, child in ipairs(variant:GetChildren()) do
+				layout[index] = if child:IsA("Decal") then child.Face.Name else false
+			end
+			for index, child in ipairs(variant:Clone():GetChildren()) do
+				if layout[index] ~= (if child:IsA("Decal") then child.Face.Name else false) then
+					layout = nil
+					break
+				end
+			end
+			Faces.layouts[variant] = layout
+		end
+
+		return variant
+	end
+
+	-- Files a fresh clone's images under their faces, for Faces.apply.
+	function Faces.adopt(part, variant, mask)
+		local faces = {}
+		if mask ~= 0 then
+			local layout = Faces.layouts[variant]
+			for index, child in ipairs(part:GetChildren()) do
+				local face
+				if layout then
+					face = layout[index]
+				elseif child:IsA("Decal") then
+					face = child.Face.Name
+				end
+				if face then
+					local list = faces[face]
+					if list then
+						list[#list + 1] = child
+					else
+						faces[face] = { child }
+					end
+				end
+			end
+		end
+		Faces.textures[part] = faces
+		Faces.shown[part] = mask
+	end
+end
+
+-- `mask` is the faces a NEW Part should be born showing (see FACE VARIANTS). A
+-- Part out of the pool shows whatever it last did; Faces.apply corrects it.
+local function getPooledPart(name, mask)
 	local pool = partPool[name]
 	if pool then
 		local count = #pool
@@ -694,62 +867,14 @@ local function getPooledPart(name)
 		end
 	end
 
-	local template = getBlockPartTemplate(name)
-	if not template then
+	mask = mask or 63
+	local variant = Faces.variantFor(name, mask)
+	if not variant then
 		return nil
 	end
 
-	--[[
-		Most blocks are solid opaque cubes and are forced to be, because an
-		authored template can carry anything. The exceptions are declared in
-		BlockConfig.Surfaces - water being the whole reason it exists: it has to
-		be see-through so the bed reads through it, non-solid so a player wades
-		instead of walking on it, and invisible to the mouse ray so aiming at a
-		shoreline targets the ground rather than the surface.
-
-		Read once per CLONE, not per placement, which is safe because the pool
-		is keyed by block name: every part in a pool is the same kind of block.
-	]]
-	local surface = BlockConfig.surfaceFor(name)
-
-	local part = template:Clone()
-	part.Name = name
-	part.Size = Vector3.new(STUD_SIZE, STUD_SIZE, STUD_SIZE)
-	part.Anchored = true
-	part.CanCollide = if surface then surface.collides ~= false else true
-	part.CanQuery = if surface then surface.query ~= false else true
-	part.CanTouch = false
-	part.Transparency = if surface then surface.transparency or 0 else 0
-	part.TopSurface = Enum.SurfaceType.Smooth
-	part.BottomSurface = Enum.SurfaceType.Smooth
-	part.CastShadow = TerrainConfig.CastTerrainShadows
-	CollectionService:AddTag(part, "TerrainBlock")
-
-	-- Pin every face texture to one tile per block, so a part stretched over a
-	-- run of ten blocks shows ten tiles instead of one smeared image. On a 1x1
-	-- part this is exactly what an untiled texture already did, so it changes
-	-- nothing for blocks that never get merged.
-	local faces = {}
-	for _, child in ipairs(part:GetChildren()) do
-		if child:IsA("Texture") then
-			child.StudsPerTileU = STUD_SIZE
-			child.StudsPerTileV = STUD_SIZE
-		end
-		-- Decal covers Texture too. Each face image is filed under its face, so
-		-- Faces.show can take it off and put it back without cloning anything.
-		if child:IsA("Decal") then
-			local name = child.Face.Name
-			local list = faces[name]
-			if not list then
-				list = {}
-				faces[name] = list
-			end
-			table.insert(list, child)
-		end
-	end
-	if next(faces) then
-		Faces.textures[part] = faces
-	end
+	local part = variant:Clone()
+	Faces.adopt(part, variant, mask)
 
 	Profiler.count("Terrain.partCloned")
 	return part
@@ -1228,15 +1353,7 @@ do
 		A chunk that is not loaded answers from the generated heightmap, and is
 		corrected when it loads (Faces.refreshEdge).
 	]]
-	local function coversFace(cx, cz, bx, bz, by)
-		cx, cz, bx, bz = normalizeCell(cx, cz, bx, bz)
-
-		local data = chunks[chunkKey(cx, cz)]
-		if not data then
-			return isBlockPresent(cx, cz, bx, bz, by)
-		end
-
-		local cell = bx * CHUNK_SIZE + bz + 1
+	local function coversLocal(data, cell, by)
 		if not isPresentInData(data, cell, by) then
 			return false
 		end
@@ -1248,6 +1365,17 @@ do
 			name = extra and extra[by]
 		end
 		return name == nil or isOpaqueBlock(name)
+	end
+
+	local function coversFace(cx, cz, bx, bz, by)
+		cx, cz, bx, bz = normalizeCell(cx, cz, bx, bz)
+
+		local data = chunks[chunkKey(cx, cz)]
+		if not data then
+			return isBlockPresent(cx, cz, bx, bz, by)
+		end
+
+		return coversLocal(data, bx * CHUNK_SIZE + bz + 1, by)
 	end
 
 	-- Is every block of this rectangle's face against something that hides it?
@@ -1267,9 +1395,18 @@ do
 			z0, z1 = z0 - 1, z0 - 1
 		end
 
+		-- Nearly every cell asked about is in this same chunk, which is always
+		-- the one in `chunks` under these coordinates: read it directly.
+		local own = chunks[chunkKey(cx, cz)] == data
+
 		for x = x0, x1 do
+			local inside = own and x >= 0 and x < CHUNK_SIZE
 			for z = z0, z1 do
-				if not coversFace(cx, cz, x, z, by) then
+				if inside and z >= 0 and z < CHUNK_SIZE then
+					if not coversLocal(data, x * CHUNK_SIZE + z + 1, by) then
+						return false
+					end
+				elseif not coversFace(cx, cz, x, z, by) then
 					return false
 				end
 			end
@@ -1289,24 +1426,85 @@ do
 		return false
 	end
 
-	-- Puts each face's images on the Part or takes them off. See HIDDEN FACES.
-	local function showFaces(data, part)
-		local faces = Faces.textures[part]
-		local rect = partRect[part]
-		if not faces or not rect then
+	local FACE_ORDER = { "Top", "Bottom", "Right", "Left", "Back", "Front" }
+	local FACE_BIT = Faces.BIT
+	local shownMask = Faces.shown
+
+	-- Which faces of this rectangle should show their images, as a mask.
+	local function maskFor(data, rect)
+		if not CULL_HIDDEN_FACES or (data.hotCount > 0 and rectIsHot(data, rect)) then
+			return 63
+		end
+
+		local mask = 0
+		for i = 1, 6 do
+			local face = FACE_ORDER[i]
+			if not faceCovered(data, rect, FACE_STEP[face]) then
+				mask += FACE_BIT[face]
+			end
+		end
+		return mask
+	end
+
+	--[[
+		Makes a Part show exactly the faces in `mask`: images go on or come off
+		only for the faces that differ from what it shows now. An image the Part
+		was never given (see FACE VARIANTS) is cloned from the block's own.
+	]]
+	local function applyMask(part, name, mask)
+		local shown = shownMask[part]
+		if shown == mask then
 			return
 		end
 
-		local everything = not CULL_HIDDEN_FACES or (data.hotCount > 0 and rectIsHot(data, rect))
+		local faces = Faces.textures[part]
+		if not faces then
+			return
+		end
 
-		for face, textures in pairs(faces) do
-			local parent = if everything or not faceCovered(data, rect, FACE_STEP[face]) then part else nil
-			for _, texture in ipairs(textures) do
-				if texture.Parent ~= parent then
-					texture.Parent = parent
+		for i = 1, 6 do
+			local face = FACE_ORDER[i]
+			local bit = FACE_BIT[face]
+			local want = bit32.btest(mask, bit)
+
+			if shown == nil or want ~= bit32.btest(shown, bit) then
+				local list = faces[face]
+				if not want then
+					if list then
+						for _, texture in ipairs(list) do
+							texture.Parent = nil
+						end
+					end
+				elseif list then
+					for _, texture in ipairs(list) do
+						texture.Parent = part
+					end
+				else
+					local images = Faces.images[name]
+					local source = images and images[face]
+					if source then
+						list = table.create(#source)
+						for index, image in ipairs(source) do
+							local texture = image:Clone()
+							texture.Parent = part
+							list[index] = texture
+						end
+						faces[face] = list
+					end
 				end
 			end
 		end
+
+		shownMask[part] = mask
+	end
+
+	-- Puts each face's images on the Part or takes them off. See HIDDEN FACES.
+	local function showFaces(data, part)
+		local rect = partRect[part]
+		if not rect then
+			return
+		end
+		applyMask(part, rect.name or part.Name, maskFor(data, rect))
 	end
 
 	-- Cells whose solidity changed since the last processFaceChanges, as flat
@@ -1380,6 +1578,18 @@ do
 		from data to the chunk that changed.
 	]]
 	local function refreshEdgeFaces(data, dx, dz)
+		-- With every face drawn there is nothing a neighbour can change.
+		if not CULL_HIDDEN_FACES then
+			return
+		end
+
+		-- The one face that looks at the chunk that changed. Nothing that
+		-- chunk did can cover or uncover any other face of these Parts.
+		local face = if dx == 1 then "Right" elseif dx == -1 then "Left" elseif dz == 1 then "Back" else "Front"
+		local bit = FACE_BIT[face]
+		local step = FACE_STEP[face]
+		local zoned = data.hotCount > 0
+
 		for _, bucket in pairs(data.layerParts) do
 			for _, part in ipairs(bucket) do
 				local rect = partRect[part]
@@ -1392,12 +1602,23 @@ do
 						or (dz == -1 and rect.bz == 0)
 					)
 				then
-					showFaces(data, part)
+					local shown = shownMask[part]
+					if shown == nil then
+						showFaces(data, part)
+					elseif not (zoned and rectIsHot(data, rect)) then
+						-- (A Part in an edit zone keeps every face.)
+						local want = not faceCovered(data, rect, step)
+						if want ~= bit32.btest(shown, bit) then
+							applyMask(part, rect.name or part.Name, if want then shown + bit else shown - bit)
+						end
+					end
 				end
 			end
 		end
 	end
 
+	Faces.maskFor = maskFor
+	Faces.apply = applyMask
 	Faces.show = showFaces
 	Faces.noteSolidChange = noteSolidChange
 	Faces.processChanges = processFaceChanges
@@ -1411,20 +1632,7 @@ end
 	renderer drew, so the unmerged mode costs nothing extra here.
 ]]
 local function emitMeshPart(data, bx, bz, sizeX, sizeZ, by, blockName)
-	local part = getPooledPart(blockName)
-	if not part then
-		return nil
-	end
-
-	part.Name = blockName
-	part.Size = Vector3.new(sizeX * STUD_SIZE, STUD_SIZE, sizeZ * STUD_SIZE)
-	part.CFrame = CFrame.new(
-		(data.minBlockX + bx) * STUD_SIZE + sizeX * STUD_SIZE * 0.5,
-		by * STUD_SIZE + STUD_SIZE * 0.5,
-		(data.minBlockZ + bz) * STUD_SIZE + sizeZ * STUD_SIZE * 0.5
-	)
-
-	partRect[part] = {
+	local rect = {
 		cx = data.cx,
 		cz = data.cz,
 		bx = bx,
@@ -1432,10 +1640,31 @@ local function emitMeshPart(data, bx, bz, sizeX, sizeZ, by, blockName)
 		sizeX = sizeX,
 		sizeZ = sizeZ,
 		by = by,
+		name = blockName,
 	}
 
-	-- Before it is in the world, so a client never receives a covered face.
-	Faces.show(data, part)
+	-- Decided first, from the block data alone, so a new Part can be cloned
+	-- already carrying exactly these faces. See FACE VARIANTS.
+	local mask = Faces.maskFor(data, rect)
+
+	local part = getPooledPart(blockName, mask)
+	if not part then
+		return nil
+	end
+
+	-- (Its Name is already blockName: pools and templates are per block name.)
+	part.Size = Vector3.new(sizeX * STUD_SIZE, STUD_SIZE, sizeZ * STUD_SIZE)
+	part.CFrame = CFrame.new(
+		(data.minBlockX + bx) * STUD_SIZE + sizeX * STUD_SIZE * 0.5,
+		by * STUD_SIZE + STUD_SIZE * 0.5,
+		(data.minBlockZ + bz) * STUD_SIZE + sizeZ * STUD_SIZE * 0.5
+	)
+
+	partRect[part] = rect
+
+	-- Before it is in the world, so a client never receives a covered face. A
+	-- fresh clone already matches; one out of the pool is corrected here.
+	Faces.apply(part, blockName, mask)
 
 	part.Parent = data.model
 	renderedParts += 1
@@ -2655,8 +2884,8 @@ end
 
 -- Whether any chunk at URGENT_PRIORITY or less is building, or queued and
 -- still wanted. Only the first few buckets are looked at, and they are small.
-local function hasUrgentWork()
-	if urgentGenerations > 0 then
+local function hasUrgentWork(queuedOnly)
+	if urgentGenerations > 0 and not queuedOnly then
 		return true
 	end
 	for priority = 0, URGENT_PRIORITY do
@@ -2707,6 +2936,36 @@ local function yieldIfOverBudget(ctx)
 	-- The longest stretch generation ran without a chance to yield. Its max is
 	-- the worst frame hitch terrain can cause, whatever the budget says.
 	Profiler.sample("Terrain.sliceMs", spent * 1000, "ms")
+
+	--[[
+		Ground a player is standing on or beside goes first. Every chunk in
+		flight draws on the same frame allowance, and whichever coroutine wakes
+		first spends it - so a distant chunk could take the whole frame while the
+		one under a player's feet waited its turn. A distant chunk stands aside
+		until no urgent one is building.
+
+		Urgency is re-read here, not fixed when the chunk was started: a chunk
+		begun far ahead of a fast player is under them a second later.
+	]]
+	local job = ctx.job
+	if job and not job.urgent then
+		for _, info in pairs(playerChunk) do
+			local dx, dz = info.x - ctx.cx, info.z - ctx.cz
+			if dx >= -1 and dx <= 1 and dz >= -1 and dz <= 1 then
+				job.urgent = true
+				urgentGenerations += 1
+				break
+			end
+		end
+
+		if not job.urgent and urgentGenerations > 0 then
+			repeat
+				task.wait()
+			until urgentGenerations <= 0
+			ctx.sliceStart = os.clock()
+			return
+		end
+	end
 
 	if budgetRemaining() > 0 then
 		ctx.sliceStart = now
@@ -2924,7 +3183,7 @@ local function structureHasSupport(blockX, blockZ, radius)
 	return true
 end
 
-local function generateChunk(cx, cz)
+local function generateChunk(cx, cz, job)
 	if not isChunkInBounds(cx, cz) then
 		return
 	end
@@ -2935,6 +3194,7 @@ local function generateChunk(cx, cz)
 	end
 
 	local ctx = newGenBudget()
+	ctx.cx, ctx.cz, ctx.job = cx, cz, job
 	Profiler.count("Terrain.chunkGenerated")
 
 	local phaseStart = 0
@@ -3005,10 +3265,19 @@ local function generateChunk(cx, cz)
 		-- The neighbours' records too, while we can still yield: the
 		-- visibility pass asks about border columns in unloaded chunks, and
 		-- a record built from inside that pass could not be time-sliced.
-		for i = 1, 4 do
-			local ncx, ncz = cx + DIR_X[i], cz + DIR_Z[i]
-			if isChunkInBounds(ncx, ncz) then
-				CaveMap.prepareRecord(ncx, ncz, slice)
+		--
+		-- Three chunks out rather than one, because structure planning below
+		-- asks too: candidates come from the 5x5 chunks around this one, and
+		-- each tests the caves under its footprint, which can reach into the
+		-- next chunk again. Any record not built here was built there, whole,
+		-- inside one slice - the 30ms spikes in gen.1d_structurePlan. Already
+		-- built records cost one cache read each.
+		for dx = -3, 3 do
+			for dz = -3, 3 do
+				local ncx, ncz = cx + dx, cz + dz
+				if (dx ~= 0 or dz ~= 0) and isChunkInBounds(ncx, ncz) then
+					CaveMap.prepareRecord(ncx, ncz, slice)
+				end
 			end
 		end
 		Profiler.sample("Terrain.gen.1b_cavePlan", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
@@ -3038,7 +3307,24 @@ local function generateChunk(cx, cz)
 	-- about a third more server time than building them in a loose folder and
 	-- parenting that, and only the loose build can be sliced across frames.
 	-- It also means a client receives the chunk whole, not layer by layer.
-	local model = Instance.new("Folder")
+	--
+	-- A MODEL, NOT A FOLDER, and this one word is the largest performance fact
+	-- in the file. With chunks in Folders, the engine's instance streaming
+	-- (StreamingSolverV2 and its sender, in the MicroProfiler) spent 50-80ms
+	-- of EVERY server frame while chunks were loading and unloading - against
+	-- under 7ms for all of this script - and held the server near 14 frames a
+	-- second for as long as a player kept moving. Chunks reached clients late
+	-- for the same reason, which is what left players falling through ground
+	-- the server had already built. The same Parts under a Model: 58 frames a
+	-- second on the same route, and a mountain view filled in 7 seconds
+	-- instead of 18. Measured three times each way; why the engine cares is
+	-- its own business.
+	--
+	-- ModelStreamingMode is left at Default, so each Part still streams to a
+	-- client by distance exactly as it did under a Folder. Everything parented
+	-- to a chunk is a block Part or a structure Model, so the nearest Model
+	-- above a tree's part is still the tree.
+	local model = Instance.new("Model")
 	model.Name = string.format("Chunk_%d_%d", cx, cz)
 
 	local data = {
@@ -3224,6 +3510,18 @@ function TerrainManager:_UnloadChunk(cx, cz)
 	local startedAt = os.clock()
 	local released = 0
 
+	--[[
+		Out of the world FIRST, as one piece. Taking the Parts out of a chunk
+		that is still in the world is a separate removal for every Part - a
+		hundred or so per chunk, each one something the engine's streaming has
+		to account for and send to every client. Detached, the whole chunk
+		leaves as a single removal, and the Parts go back to the pool from a
+		folder nothing is watching.
+	]]
+	if data.model then
+		data.model.Parent = nil
+	end
+
 	for by, bucket in pairs(data.layerParts) do
 		for i = #bucket, 1, -1 do
 			releasePart(bucket[i])
@@ -3286,7 +3584,10 @@ local function enqueueChunk(cx, cz, priority)
 		-- Stamped on the FIRST request, not on a later re-queue at a better
 		-- priority: latency is "how long after a player wanted this chunk did
 		-- they get it", and re-prioritising does not restart that clock.
-		queuedAt[key] = os.clock()
+		-- (Kept across a queue rebuild, which empties queuedPriority.)
+		if queuedAt[key] == nil then
+			queuedAt[key] = os.clock()
+		end
 	end
 
 	queuedPriority[key] = priority
@@ -3321,6 +3622,60 @@ local function dequeueChunk()
 	end
 
 	return nil
+end
+
+--[[
+	Rebuilds the queue from where every player is NOW.
+
+	A queued chunk kept the priority it was given when it was first asked for,
+	and could only ever be moved up. So a player travelling fast left a trail of
+	chunks behind them still queued as "next to the player", and the generator
+	worked through those while the ground in front ran out - at view distance 7
+	one chunk of travel asks for fifteen new chunks, more than it can build, so
+	what it spends its time on decides whether there is ground to land on.
+
+	Priority is still squared chunk distance, lowest first, with two changes:
+
+	  * it is measured from where the player will be in about a second (their
+	    velocity, capped at two chunks), so the chunks ahead of a moving player
+	    come before the ones beside and behind;
+	  * the 3x3 they stand in keeps its true distance, 0..URGENT_PRIORITY, so
+	    nothing ahead can be put before the ground under their feet.
+
+	A chunk several players want takes the best of their priorities, as before.
+	Which chunks load, and what is in them, is unchanged: only the order.
+]]
+function TerrainManager._requeue()
+	TerrainManager._queueStale = nil
+
+	table.clear(queueBuckets)
+	table.clear(queuedPriority)
+	queuedCount = 0
+
+	for player, info in pairs(playerChunk) do
+		local lead = TerrainManager._lead[player]
+		local leadX, leadZ = 0, 0
+		if lead then
+			leadX, leadZ = lead.x, lead.z
+		end
+		local moving = leadX ~= 0 or leadZ ~= 0
+
+		for key, coord in pairs(info.active) do
+			if not chunks[key] and not generatingChunks[key] then
+				local dx, dz = coord.cx - info.x, coord.cz - info.z
+				local priority = dx * dx + dz * dz
+
+				if moving and priority > URGENT_PRIORITY then
+					local ax, az = dx - leadX, dz - leadZ
+					priority = math.clamp(
+						math.floor(ax * ax + az * az + 0.5), URGENT_PRIORITY + 1, MAX_PRIORITY
+					)
+				end
+
+				enqueueChunk(coord.cx, coord.cz, priority)
+			end
+		end
+	end
 end
 
 -- ---------------------------------------------------------------------------
@@ -3372,12 +3727,18 @@ local function refreshPlayerChunks(player, newCX, newCZ)
 
 				pendingUnload[key] = nil
 
-				if not chunks[key] then
+				-- Not one already being built: a second entry for it would be
+				-- dequeued and built a second time, side by side with the first.
+				if not chunks[key] and not generatingChunks[key] then
 					enqueueChunk(cx, cz, priority)
 				end
 			end
 		end
 	end
+
+	-- Everything still queued was prioritised from where its players stood
+	-- when it was asked for. See TerrainManager._requeue.
+	TerrainManager._queueStale = true
 
 	if previousActive then
 		for oldKey, coord in pairs(previousActive) do
@@ -3401,6 +3762,24 @@ local function onPlayerMoved(player)
 	local cx = getChunkCoordX(position.X)
 	local cz = getChunkCoordZ(position.Z)
 	local previous = playerChunk[player]
+
+	-- Where they will be in about a second, in chunks from where they are, for
+	-- ordering the queue (TerrainManager._requeue). Capped: a fling or a
+	-- teleport's velocity should not send generation off over the horizon.
+	local velocity = hrp.AssemblyLinearVelocity
+	local leadX, leadZ = velocity.X / CHUNK_STUDS, velocity.Z / CHUNK_STUDS
+	local leadLength = math.sqrt(leadX * leadX + leadZ * leadZ)
+	if leadLength < 0.25 then
+		leadX, leadZ = 0, 0
+	elseif leadLength > 2 then
+		leadX, leadZ = leadX / leadLength * 2, leadZ / leadLength * 2
+	end
+	local lead = TerrainManager._lead[player]
+	if not lead then
+		lead = {}
+		TerrainManager._lead[player] = lead
+	end
+	lead.x, lead.z = leadX, leadZ
 
 	if not previous or previous.x ~= cx or previous.z ~= cz then
 		refreshPlayerChunks(player, cx, cz)
@@ -3462,7 +3841,7 @@ end
 local function nextWantedItem()
 	local item = dequeueChunk()
 
-	while item and (chunks[item.key] or not isChunkWanted(item.key)) do
+	while item and (chunks[item.key] or generatingChunks[item.key] or not isChunkWanted(item.key)) do
 		queuedAt[item.key] = nil
 		item = dequeueChunk()
 	end
@@ -3475,8 +3854,10 @@ local pumpGeneration
 local function startGeneration(item)
 	activeGenerations += 1
 	generatingChunks[item.key] = true
-	local urgent = item.priority <= URGENT_PRIORITY
-	if urgent then
+	-- A table, because a chunk can BECOME urgent while it builds (see
+	-- yieldIfOverBudget), and the count has to come back down either way.
+	local job = { urgent = item.priority <= URGENT_PRIORITY }
+	if job.urgent then
 		urgentGenerations += 1
 	end
 
@@ -3490,10 +3871,10 @@ local function startGeneration(item)
 	end
 
 	task.spawn(function()
-		local ok, err = pcall(generateChunk, item.cx, item.cz)
+		local ok, err = pcall(generateChunk, item.cx, item.cz, job)
 		generatingChunks[item.key] = nil
 		activeGenerations -= 1
-		if urgent then
+		if job.urgent then
 			urgentGenerations -= 1
 		end
 
@@ -3508,7 +3889,7 @@ local function startGeneration(item)
 			-- number that decides whether a view distance feels playable, and
 			-- the one that CPU cost alone hides.
 			Profiler.sample("Terrain.chunkLatencyMs", (os.clock() - requestedAt) * 1000, "ms")
-			if urgent then
+			if job.urgent then
 				Profiler.sample("Terrain.urgentLatencyMs", (os.clock() - requestedAt) * 1000, "ms")
 			end
 		end
@@ -3541,10 +3922,20 @@ function pumpGeneration()
 	end
 	pumping = true
 
-	while
-		activeGenerations < TerrainConfig.MaxConcurrentChunks
-		and budgetRemaining() > 0
-	do
+	local maxConcurrent = TerrainConfig.MaxConcurrentChunks
+
+	while budgetRemaining() > 0 do
+		-- One slot over the limit, only for ground a player is standing at:
+		-- it must not have to wait for a distant chunk to finish first. The
+		-- distant ones stand aside while it builds (yieldIfOverBudget), so
+		-- this does not split the allowance any further.
+		if
+			activeGenerations >= maxConcurrent
+			and (activeGenerations > maxConcurrent or not hasUrgentWork(true))
+		then
+			break
+		end
+
 		local item = nextWantedItem()
 		if not item then
 			break
@@ -3562,6 +3953,12 @@ local function onHeartbeatGenerate(dt)
 		Profiler.sample("Terrain.genFrameWorkMs", budgetUsed * 1000, "ms")
 	end
 	frameTick += 1
+
+	-- Before the budget is set, which looks in the queue for urgent work.
+	if TerrainManager._queueStale then
+		TerrainManager._requeue()
+	end
+
 	updateGenerationBudget(dt)
 
 	Profiler.sample("Terrain.queueDepth", queuedCount, "chunks")

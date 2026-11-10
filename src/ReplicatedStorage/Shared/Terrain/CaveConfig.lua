@@ -431,9 +431,12 @@ CaveConfig.Biomes = {
 
 -- Per-chunk carve records and per-cell plans are pure functions of the seed,
 -- held in two generations like TerrainManager's column cache. The record
--- cache has to hold the loaded set plus a one-chunk halo; 600 covers view
--- distance 7 for one player with room to spare.
-CaveConfig.RecordCacheLimit = 600
+-- cache has to hold, in ONE generation (half the limit), the loaded set plus
+-- the three chunks around it that structure planning asks about: 21 x 21 =
+-- 441 records at view distance 7. It was 600, so 300 a generation, and at
+-- that distance records were dropped and carved again while still in use.
+-- Nearly every record is the one shared empty table, so this costs little.
+CaveConfig.RecordCacheLimit = 1600
 CaveConfig.PlanCacheLimit = 512
 
 -- ===========================================================================

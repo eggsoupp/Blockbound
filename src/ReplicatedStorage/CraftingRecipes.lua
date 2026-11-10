@@ -138,4 +138,21 @@ local CraftingRecipes = {
 	},
 }
 
+-- Building pieces and furniture: each Shared.Building.DecorCatalog row
+-- carries its own recipe.
+do
+	local Shared = script.Parent:WaitForChild("Shared")
+	local DecorCatalog = require(Shared:WaitForChild("Building"):WaitForChild("DecorCatalog"))
+	for _, entry in ipairs(DecorCatalog.Entries) do
+		local recipe = entry.recipe
+		if recipe and not CraftingRecipes[entry.id] then
+			CraftingRecipes[entry.id] = {
+				ingredients = recipe.ingredients,
+				station = recipe.station,
+				output = if recipe.count and recipe.count > 1 then { item = entry.id, count = recipe.count } else nil,
+			}
+		end
+	end
+end
+
 return CraftingRecipes

@@ -443,6 +443,19 @@
             "$path": "src/ReplicatedStorage/Shared/Crafting/RecipeBook.lua"
           }
         },
+        "Building": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "DecorCatalog": {
+            "$path": "src/ReplicatedStorage/Shared/Building/DecorCatalog.lua"
+          },
+          "DecorModels": {
+            "$path": "src/ReplicatedStorage/Shared/Building/DecorModels.lua"
+          },
+          "DecorShapes": {
+            "$path": "src/ReplicatedStorage/Shared/Building/DecorShapes.lua"
+          }
+        },
         "Debug": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
@@ -963,6 +976,12 @@
       },
       "CraftingServer": {
         "$path": "src/ServerScriptService/CraftingServer.server.lua",
+        "$properties": {
+          "Disabled": false
+        }
+      },
+      "DecorServer": {
+        "$path": "src/ServerScriptService/DecorServer.server.lua",
         "$properties": {
           "Disabled": false
         }

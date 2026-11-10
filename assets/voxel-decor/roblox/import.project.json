@@ -1,0 +1,8 @@
+{
+  "name": "DecorImport",
+  "tree": {
+    "$className": "Folder",
+    "BuildDecor": { "$path": "BuildDecor.lua" },
+    "Data": { "$path": "data" }
+  }
+}

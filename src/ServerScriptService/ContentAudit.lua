@@ -120,7 +120,7 @@ ContentAudit.KnownItemFields = {
 	miningPower = true, weaponClass = true, weaponSubclass = true, rarity = true, animation = true, iconPose = true, iconAngle = true, iconRoll = true, thumbnail = true,
 	modelId = true, icon = true, description = true, value = true, buffs = true,
 	displayName = true, look = true, dropOnly = true, sprite = true, catalogOnly = true,
-	gearGroup = true,
+	gearGroup = true, decor = true,
 }
 
 -- Ids in this range were typed in as placeholders before there was any art;
@@ -673,7 +673,7 @@ function ContentAudit.run()
 			if type(definition) == "table" and definition.classification == "Workbench" then
 				if not (StationConfig.Definitions and StationConfig.Definitions[name]) then
 					add(report, "Errors", "Stations", itemLabel(name), "is a Workbench with no StationConfig entry; it cannot be placed")
-				elseif not (modelFolder and modelFolder:FindFirstChild(name)) then
+				elseif not StationConfig.Definitions[name].decor and not (modelFolder and modelFolder:FindFirstChild(name)) then
 					add(report, "Placeholders", "Stations", "ReplicatedStorage.TerrainAssets." .. tostring(StationConfig.ModelFolderName) .. "." .. name,
 						"no authored model; placed as StationService's two-box stand-in")
 				end

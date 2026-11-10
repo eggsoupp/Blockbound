@@ -33,6 +33,8 @@ local WorldFeedback = require(Shared.UI:WaitForChild("WorldFeedback"))
 local Feedback = require(Shared.UI:WaitForChild("Feedback"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local PlacementGeometry = require(Shared:WaitForChild("Blocks"):WaitForChild("PlacementGeometry"))
+local DecorCatalog = require(Shared:WaitForChild("Building"):WaitForChild("DecorCatalog"))
+local DecorModels = require(Shared.Building:WaitForChild("DecorModels"))
 Sounds.preload({"place.hard", "place.soft"})
 local InventoryMirror =
 	require(Shared:WaitForChild("Inventory"):WaitForChild("InventoryMirror"))
@@ -217,7 +219,9 @@ local function ensurePreview(itemName)
 	preview = clonePreviewTemplate(itemName)
 	previewItemName = itemName
 	preview.Name = "PlacementPreview"
-	preview.Size = Vector3.new(Grid, Grid, Grid)
+	-- A decor piece's footprint, in cells (Shared.Building.DecorShapes).
+	local cells = DecorCatalog.get(itemName) and DecorModels.cells(itemName) or { 1, 1, 1 }
+	preview.Size = Vector3.new(Grid * cells[1], Grid * cells[2], Grid * cells[3])
 	preview.Anchored = true
 	preview.CanCollide = false
 	preview.CanQuery = false
@@ -334,8 +338,26 @@ local function updatePreview()
 	if ix ~= lastCellX or iy ~= lastCellY or iz ~= lastCellZ then
 		lastCellX, lastCellY, lastCellZ = ix, iy, iz
 		lastCellBlocked = isCellBlocked(worldCenter)
-		part.CFrame = CFrame.new(worldCenter)
 	end
+
+	-- A piece bigger than a cell shows its whole footprint, turned the way it
+	-- will face (StationService: its front toward the placer), so a sofa is
+	-- seen to reach into the cell to its right before it is put down.
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	local facing = 0
+	if root and DecorCatalog.get(slotData.name) then
+		local toward = root.Position - worldCenter
+		if math.abs(toward.X) > math.abs(toward.Z) then
+			facing = if toward.X > 0 then 1 else 3
+		else
+			facing = if toward.Z > 0 then 0 else 2
+		end
+	end
+	local size = part.Size
+	part.CFrame = CFrame.new(worldCenter)
+		* CFrame.Angles(0, facing * math.pi / 2, 0)
+		* CFrame.new((size.X - Grid) * 0.5, (size.Y - Grid) * 0.5, -(size.Z - Grid) * 0.5)
 
 	lastCanPlace = not lastCellBlocked and not overlapsCharacter(worldCenter)
 	setPreviewState(lastCanPlace)

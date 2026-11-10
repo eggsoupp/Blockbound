@@ -193,6 +193,32 @@ StationConfig.Order = {
 	"LegendaryChest",
 }
 
+--[[
+	DECOR - doors, lights, seats, stairs and furniture (Shared.Building.
+	DecorCatalog) - are stations too: placed, picked up and saved the same
+	way, but they craft nothing. `decor` is the piece's catalog row; its shape
+	is Shared.Building.DecorModels, its use ServerScriptService.DecorServer.
+	A piece with no prompt verb (a slab, a table) gets no prompt.
+]]
+local DecorCatalog = require(script.Parent.Parent:WaitForChild("Building"):WaitForChild("DecorCatalog"))
+
+for _, entry in ipairs(DecorCatalog.Entries) do
+	StationConfig.Definitions[entry.id] = {
+		id = entry.id,
+		displayName = entry.name,
+		actionText = DecorCatalog.actionText(entry),
+		useRange = 10,
+		facesPlacer = true,
+		decor = entry,
+	}
+	table.insert(StationConfig.Order, entry.id)
+end
+
+function StationConfig.isDecor(stationId)
+	local def = StationConfig.Definitions[stationId]
+	return def ~= nil and def.decor ~= nil
+end
+
 function StationConfig.get(stationId)
 	if type(stationId) ~= "string" then
 		return nil

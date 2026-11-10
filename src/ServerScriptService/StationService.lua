@@ -33,6 +33,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local StationConfig = require(Shared:WaitForChild("Crafting"):WaitForChild("StationConfig"))
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
 local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
+local DecorModels = require(Shared:WaitForChild("Building"):WaitForChild("DecorModels"))
 
 local StationService = {}
 
@@ -97,6 +98,41 @@ local function cellCentre(x, y, z)
 		y * STUD_SIZE + STUD_SIZE * 0.5,
 		z * STUD_SIZE + STUD_SIZE * 0.5
 	)
+end
+
+--[[
+	The cells a piece covers, as offsets from the cell it was placed in, turned
+	to its facing. A decor piece's footprint (DecorShapes `cells`: w across,
+	h up, d back) can be more than one cell any way - a door is two tall, a
+	sofa two wide, a tent two by two. Everything else is the one cell.
+]]
+local function footprintOf(def, facing)
+	local cells = if def.decor then DecorModels.cells(def.id) else nil
+	local w, h, d = 1, 1, 1
+	if cells then
+		w, h, d = cells[1], cells[2], cells[3]
+	end
+	local turn = CFrame.Angles(0, (facing or 0) * math.pi / 2, 0)
+	local offsets = {}
+	for i = 0, w - 1 do
+		for j = 0, h - 1 do
+			for k = 0, d - 1 do
+				local v = turn:VectorToWorldSpace(Vector3.new(i, j, -k))
+				table.insert(offsets, Vector3.new(math.round(v.X), math.round(v.Y), math.round(v.Z)))
+			end
+		end
+	end
+	return offsets, h
+end
+
+-- Which way a piece placed at `centre` by someone standing at `from` faces,
+-- in quarter turns: its +Z front toward them.
+local function facingToward(from, centre)
+	local toward = from - centre
+	if math.abs(toward.X) > math.abs(toward.Z) then
+		return if toward.X > 0 then 1 else 3
+	end
+	return if toward.Z > 0 then 0 else 2
 end
 
 -- ---------------------------------------------------------------------------
@@ -246,6 +282,17 @@ local function register(station)
 	stationsByCell[key] = station
 	station.key = key
 
+	-- A piece bigger than one cell (a door, a sofa, a tent) claims every cell
+	-- it covers, so nothing can be built into it.
+	station.extraKeys = {}
+	for _, offset in ipairs(station.offsets or {}) do
+		if offset ~= Vector3.zero then
+			local extra = gridKey(station.x + offset.X, station.y + offset.Y, station.z + offset.Z)
+			stationsByCell[extra] = station
+			table.insert(station.extraKeys, extra)
+		end
+	end
+
 	local bucket = bucketKey(station.x, station.z)
 	local list = stationsByBucket[bucket]
 	if not list then
@@ -260,6 +307,11 @@ end
 
 local function unregister(station)
 	stationsByCell[station.key] = nil
+	for _, extra in ipairs(station.extraKeys or {}) do
+		if stationsByCell[extra] == station then
+			stationsByCell[extra] = nil
+		end
+	end
 
 	local list = stationsByBucket[station.bucket]
 	if list then
@@ -363,30 +415,20 @@ function StationService.place(player, blockX, by, blockZ, stationId)
 		return false, string.format("%ss can only be placed on an island", def.displayName or def.id)
 	end
 
-	if stationsByCell[gridKey(blockX, by, blockZ)] then
-		return false, "Cell occupied"
-	end
-
-	if TerrainManager:IsSolidAt(blockX, by, blockZ) then
-		return false, "Cell occupied"
-	end
-
-	-- Must rest on something, so stations cannot be parked in mid-air.
-	if
-		not TerrainManager:IsSolidAt(blockX, by - 1, blockZ)
-		and not stationsByCell[gridKey(blockX, by - 1, blockZ)]
-	then
-		return false, "Needs support"
-	end
-
 	-- A chest turns to face whoever put it down, a quarter turn at a time.
-	local facing = 0
-	if def.facesPlacer then
-		local toward = hrp.Position - centre
-		if math.abs(toward.X) > math.abs(toward.Z) then
-			facing = if toward.X > 0 then 1 else 3
-		else
-			facing = if toward.Z > 0 then 0 else 2
+	-- Decided first: a piece wider than a cell covers different cells
+	-- depending on which way it faces.
+	local facing = if def.facesPlacer then facingToward(hrp.Position, centre) else 0
+
+	-- Every cell it covers must be free, and every cell along its bottom
+	-- must rest on something, so nothing is parked in mid-air.
+	for _, o in ipairs((footprintOf(def, facing))) do
+		local x, y, z = blockX + o.X, by + o.Y, blockZ + o.Z
+		if stationsByCell[gridKey(x, y, z)] or TerrainManager:IsSolidAt(x, y, z) then
+			return false, if o == Vector3.zero then "Cell occupied" else "Not enough room"
+		end
+		if o.Y == 0 and not TerrainManager:IsSolidAt(x, y - 1, z) and not stationsByCell[gridKey(x, y - 1, z)] then
+			return false, "Needs support"
 		end
 	end
 
@@ -419,8 +461,11 @@ function StationService.restore(stationId, blockX, by, blockZ, ownerUserId, item
 
 	blockX, by, blockZ = math.floor(blockX), math.floor(by), math.floor(blockZ)
 
-	if stationsByCell[gridKey(blockX, by, blockZ)] then
-		return false, "Cell occupied"
+	local turned = if type(facing) == "number" and facing % 1 == 0 and facing >= 0 and facing <= 3 then facing else 0
+	for _, o in ipairs((footprintOf(def, turned))) do
+		if stationsByCell[gridKey(blockX + o.X, by + o.Y, blockZ + o.Z)] then
+			return false, "Cell occupied"
+		end
 	end
 
 	return spawnStation(def, blockX, by, blockZ, ownerUserId, items, facing)
@@ -435,8 +480,9 @@ end
 ]]
 function StationService.exportAll()
 	local list = {}
-	for _, station in pairs(stationsByCell) do
-		if station.instance.Parent then
+	for key, station in pairs(stationsByCell) do
+		-- A tall piece is in the registry once per cell; saved once.
+		if key == station.key and station.instance.Parent then
 			local record = {
 				id = station.stationId,
 				x = station.x,
@@ -452,6 +498,11 @@ function StationService.exportAll()
 			table.insert(list, record)
 		end
 	end
+	-- Bottom up, so a restore puts back what a piece rests on before the
+	-- piece: a lantern on a table is lowered onto the table (see restingSink).
+	table.sort(list, function(a, b)
+		return a.y < b.y
+	end)
 	return list
 end
 
@@ -474,9 +525,12 @@ local function prepareParts(root, key)
 
 	for _, descendant in ipairs(parts) do
 		if descendant:IsA("BasePart") then
+			-- A decor piece marks what should not be solid (stair steps over
+			-- their ramp, effect hosts); an invisible marker is not clickable.
+			local noCollide = descendant:GetAttribute("NoCollide") == true
 			descendant.Anchored = true
-			descendant.CanCollide = true
-			descendant.CanQuery = true
+			descendant.CanCollide = not noCollide
+			descendant.CanQuery = not (noCollide and descendant.Transparency >= 1)
 			descendant.CanTouch = false
 			descendant:SetAttribute("StationCellKey", key)
 			CollectionService:AddTag(descendant, STATION_TAG)
@@ -617,12 +671,62 @@ local function buildStorage(def, blockX, by, blockZ, facing, key)
 end
 
 --[[
+	How far below its own cell floor a piece is set down, so it rests on what
+	is under it: a table's top is 3 studs up, so a lantern on it drops 1.
+	A piece on something already lowered drops with it. Purely visual - the
+	grid cell it claims is unchanged.
+]]
+local function restingSink(blockX, by, blockZ)
+	local below = stationsByCell[gridKey(blockX, by - 1, blockZ)]
+	if not below then
+		return 0
+	end
+	local surface = DecorModels.surface(below.stationId)
+	local sink = below.sink or 0
+	if surface and below.y + (below.height or 1) - 1 == by - 1 then
+		sink += STUD_SIZE - surface
+	end
+	return math.min(sink, STUD_SIZE - 0.5)
+end
+
+--[[
+	A decor piece's body: its DecorModels shape, turned to its facing and
+	stood on its cell's floor (less `sink`), plus an invisible anchor at the
+	cell centre for its prompt.
+]]
+local function buildDecor(def, blockX, by, blockZ, facing, key, sink)
+	local model = DecorModels.build(def.id, true)
+	if not model then
+		return nil
+	end
+	local centre = cellCentre(blockX, by, blockZ)
+	local turn = CFrame.Angles(0, facing * math.pi / 2, 0)
+	model:PivotTo(CFrame.new(centre.X, by * STUD_SIZE - sink, centre.Z) * turn)
+	prepareParts(model, key)
+
+	local anchor = Instance.new("Part")
+	anchor.Name = "PromptAnchor"
+	anchor.Size = Vector3.one
+	anchor.Transparency = 1
+	anchor.Anchored = true
+	anchor.CanCollide = false
+	anchor.CanQuery = false
+	anchor.CanTouch = false
+	anchor.CastShadow = false
+	anchor.CFrame = CFrame.new(centre - Vector3.new(0, sink, 0)) * turn
+	anchor:SetAttribute("StationCellKey", key)
+	anchor.Parent = model
+
+	return model, anchor
+end
+
+--[[
 	Builds a station into the world and registers it. Every check is the
 	caller's: place validates a player's request, restore a save's.
 ]]
 function spawnStation(def, blockX, by, blockZ, ownerUserId, items, facing)
-	local template = getTemplate(def)
-	if not template then
+	local template = if def.decor then nil else getTemplate(def)
+	if not template and not def.decor then
 		return false, "Missing template"
 	end
 
@@ -630,12 +734,20 @@ function spawnStation(def, blockX, by, blockZ, ownerUserId, items, facing)
 	local key = gridKey(blockX, by, blockZ)
 
 	-- A chest is not a bench: StationId is what the crafting window looks for.
-	local idAttribute = if def.storage then "StorageId" else "StationId"
+	-- Decor is neither, and DecorServer answers its prompts.
+	local idAttribute = if def.decor then "DecorId" elseif def.storage then "StorageId" else "StationId"
 
 	facing = if type(facing) == "number" and facing % 1 == 0 and facing >= 0 and facing <= 3 then facing else 0
 
+	local sink = if def.decor then restingSink(blockX, by, blockZ) else 0
+
 	local instance, promptParent, looks
-	if def.storage then
+	if def.decor then
+		instance, promptParent = buildDecor(def, blockX, by, blockZ, facing, key, sink)
+		if not instance then
+			return false, "Missing model"
+		end
+	elseif def.storage then
 		instance, promptParent, looks = buildStorage(def, blockX, by, blockZ, facing, key)
 	else
 		instance = template:Clone()
@@ -663,24 +775,31 @@ function spawnStation(def, blockX, by, blockZ, ownerUserId, items, facing)
 	instance:SetAttribute("StationCellKey", key)
 	instance:SetAttribute("OwnerUserId", ownerUserId)
 
-	local prompt = Instance.new("ProximityPrompt")
-	prompt.Name = "UsePrompt"
-	prompt.ActionText = def.actionText or "Use"
-	prompt.ObjectText = def.displayName or def.id
-	prompt.HoldDuration = 0
-	prompt.RequiresLineOfSight = false
-	prompt.MaxActivationDistance = def.useRange
-	prompt:SetAttribute(idAttribute, def.id)
-	prompt.Parent = promptParent
+	-- A slab or a table has nothing to do, so no prompt at all.
+	if def.actionText or not def.decor then
+		local prompt = Instance.new("ProximityPrompt")
+		prompt.Name = "UsePrompt"
+		prompt.ActionText = def.actionText or "Use"
+		prompt.ObjectText = def.displayName or def.id
+		prompt.HoldDuration = 0
+		prompt.RequiresLineOfSight = false
+		prompt.MaxActivationDistance = def.useRange
+		prompt:SetAttribute(idAttribute, def.id)
+		prompt.Parent = promptParent
+	end
 
 	instance.Parent = worldFolder
 
+	local offsets, height = footprintOf(def, facing)
 	register({
 		instance = instance,
 		stationId = def.id,
 		x = blockX,
 		y = by,
 		z = blockZ,
+		offsets = offsets,
+		height = height,
+		sink = sink,
 		ownerUserId = ownerUserId,
 		facing = if def.facesPlacer then facing else 0,
 		looks = looks,

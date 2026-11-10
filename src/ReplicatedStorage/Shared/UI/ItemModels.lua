@@ -21,6 +21,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"))
 local StationConfig = require(script.Parent.Parent:WaitForChild("Crafting"):WaitForChild("StationConfig"))
+local DecorModels = require(script.Parent.Parent:WaitForChild("Building"):WaitForChild("DecorModels"))
 
 local ItemModels = {}
 
@@ -185,7 +186,8 @@ function ItemModels.find(itemName: string?): Instance?
 	end
 
 	if not found then
-		found = buildFromLook(itemName) or buildFromStation(itemName)
+		-- Furniture and building pieces are built from their own shapes.
+		found = buildFromLook(itemName) or DecorModels.build(itemName) or buildFromStation(itemName)
 	end
 
 	-- A miss is deliberately NOT cached. ToolFactory builds missing tools at

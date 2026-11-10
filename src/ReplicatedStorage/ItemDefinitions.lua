@@ -5043,4 +5043,29 @@ ItemDefinitions.WrathPotion = {
 	catalogOnly = true,
 }
 
+--[[
+	Building pieces and furniture (Shared.Building.DecorCatalog): placed like a
+	station. A row there replaces any catalog-only entry of the same name - the
+	Lantern, Candle and Iron Crate icons were drawn before there was anything
+	to place.
+]]
+do
+	local Shared = script.Parent:WaitForChild("Shared")
+	local DecorCatalog = require(Shared:WaitForChild("Building"):WaitForChild("DecorCatalog"))
+	local VALUE = { Common = 8, Uncommon = 30, Rare = 80, Epic = 200, Legendary = 400 }
+	for _, entry in ipairs(DecorCatalog.Entries) do
+		local previous = ItemDefinitions[entry.id]
+		ItemDefinitions[entry.id] = {
+			displayName = entry.name,
+			description = entry.description,
+			rarity = entry.rarity,
+			classification = "Workbench",
+			maxStack = 64,
+			value = VALUE[entry.rarity] or 8,
+			sprite = entry.sprite or (previous and previous.sprite) or nil,
+			decor = true,
+		}
+	end
+end
+
 return ItemDefinitions

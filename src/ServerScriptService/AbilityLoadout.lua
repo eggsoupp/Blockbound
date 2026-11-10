@@ -500,6 +500,9 @@ local StorageChanged = Remotes.ensure("AbilityStorageChanged", "RemoteEvent")
 
 local SLOTS_PER_PURCHASE = StorageConfig.SlotsPerPurchase
 local MAX_SLOTS = StorageConfig.MaxSlots
+-- The most abilities storage can hold at all, bought or not: wishes go in past
+-- capacity (see grantWished), and this keeps the save record bounded.
+local HELD_MAX = 200
 local PRODUCT_ID = StorageConfig.AbilityStorageProductId
 
 -- The shortest gap between two storage requests from one player.
@@ -594,12 +597,15 @@ end, function(player, value)
 		end
 	end
 
+	-- Duplicates are kept: the wishing banner can hand out a second copy of an
+	-- ability, and storage is where it waits. Wishes also fill storage past its
+	-- bought capacity, so the cap here is HELD_MAX rather than MAX_SLOTS.
 	local entry = {}
 	for _, name in ipairs(names) do
-		if #entry >= MAX_SLOTS then
+		if #entry >= HELD_MAX then
 			break
 		end
-		if type(name) == "string" and AbilityConfig.get(name) and not table.find(entry, name) then
+		if type(name) == "string" and AbilityConfig.get(name) then
 			table.insert(entry, name)
 		end
 	end
@@ -613,6 +619,51 @@ end)
 
 function AbilityLoadout.isStored(player, name)
 	return table.find(stored[player] or {}, name) ~= nil
+end
+
+--[[
+	Whether a wish can be granted to this player right now: their storage
+	section has loaded from a real record and the session can save. WishService
+	asks before it spends anything.
+]]
+function AbilityLoadout.canReceive(player): boolean
+	return storageReady[player] == true and not InventoryStore.isReadOnly(player)
+		and #(stored[player] or {}) < HELD_MAX
+end
+
+--[[
+	A wished ability arrives. Into the loadout when there is a free slot and it
+	is not already there, otherwise into storage - past bought capacity if need
+	be, since a wish must never be lost. Returns where it went ("loadout" or
+	"storage") and whether the player owned no copy before, or nil if it could
+	not be granted at all.
+
+	Pushed with reason "wish", which AbilityClient treats like a restore: the
+	reveal is the celebration, and the Tab menu must not burst open under it.
+]]
+function AbilityLoadout.grantWished(player, name)
+	local bank = stored[player]
+	if not AbilityConfig.get(name) or not bank or not storageReady[player] then
+		return nil
+	end
+
+	local active = loadoutFor(player)
+	local isNew = not table.find(active, name) and not table.find(bank, name)
+	local where
+	if not table.find(active, name) and #active < SLOT_COUNT then
+		table.insert(active, name)
+		where = "loadout"
+	elseif #bank < HELD_MAX then
+		table.insert(bank, name)
+		where = "storage"
+	else
+		return nil
+	end
+
+	markDirty(player)
+	push(player, "wish")
+	storagePush(player)
+	return where, isNew
 end
 
 --[[
@@ -731,10 +782,7 @@ StorageRequest.OnServerEvent:Connect(function(player, action, name, other)
 				CommandFeedback.tell(player, "Storage is full. Open it to swap an ability.", "bad")
 				return
 			end
-			if table.find(bank, name) then
-				CommandFeedback.tell(player, "That ability is already stored.", "bad")
-				return
-			end
+			-- A copy may already be stored: duplicates are allowed since wishes.
 			table.remove(active, index)
 			table.insert(bank, name)
 		elseif action == "retrieve" then
@@ -752,7 +800,7 @@ StorageRequest.OnServerEvent:Connect(function(player, action, name, other)
 		elseif action == "swap" then
 			local from = table.find(bank, name)
 			local to = table.find(active, other)
-			if not from or not to or table.find(active, name) or table.find(bank, other) then
+			if not from or not to or table.find(active, name) then
 				return
 			end
 			active[to], bank[from] = bank[from], active[to]

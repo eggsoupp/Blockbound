@@ -56,6 +56,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 local MenuState = require(Shared:WaitForChild("UI"):WaitForChild("MenuState"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
+local WingParticles = require(Shared:WaitForChild("Flight"):WaitForChild("WingParticles"))
 
 local player = Players.LocalPlayer
 
@@ -97,6 +98,7 @@ local FLIGHT = {
 	bobRate = 0.55, -- cycles per second
 	fovBase = 70,
 	fovBoost = 14, -- added at full boost
+	beatLift = 3, -- studs/s of lift per unit of WingPulse: the body rises on each downstroke
 	trailSpeed = 0.85, -- fraction of cruise above which the wisps show
 	descendKeys = { Enum.KeyCode.LeftControl, Enum.KeyCode.C, Enum.KeyCode.ButtonL2 },
 	animations = {
@@ -500,7 +502,10 @@ local function step(dt)
 		current.wanted = root.AssemblyLinearVelocity
 	else
 		current.velocity.Enabled = true
-		current.velocity.VectorVelocity = current.wanted
+		-- The wings' beat (WingAnimator's WingPulse, zero on average) lifts the
+		-- body a touch on each downstroke and lets it settle on the upstroke.
+		local pulse = tonumber(character:GetAttribute("WingPulse")) or 0
+		current.velocity.VectorVelocity = current.wanted + Vector3.yAxis * (pulse * FLIGHT.beatLift)
 	end
 
 	local velocity = current.wanted
@@ -663,6 +668,17 @@ RunService.PreSimulation:Connect(function(dt)
 		stamina += dt * maximum / STAMINA.refillTime
 	end
 	stamina = math.clamp(stamina, 0, maximum)
+
+	-- Terminal velocity (WingParticles.Fall): there is no air resistance, so a
+	-- long fall would otherwise speed up for ever. WingAnimator draws the speed
+	-- lines once a fall gets close to it.
+	local root = humanoid and humanoid.RootPart
+	if not flight and root and humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+		local v = root.AssemblyLinearVelocity
+		if v.Y < -WingParticles.Fall.terminal then
+			root.AssemblyLinearVelocity = Vector3.new(v.X, -WingParticles.Fall.terminal, v.Z)
+		end
+	end
 	updateMeter(dt, if infinite() then 0 else maximum)
 
 	local ok, err = pcall(step, dt)

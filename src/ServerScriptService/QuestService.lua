@@ -70,6 +70,13 @@ local function check(player: Player)
 	else
 		CommandFeedback.tell(player, string.format("%d quests complete", #completed), "good")
 	end
+
+	-- Wish Stars for each one (see Shared.Wish.WishConfig.Earn).
+	local ok, WishService = pcall(require, script.Parent:FindFirstChild("WishService"))
+	if ok and WishService then
+		local Earn = require(game:GetService("ReplicatedStorage").Shared.Wish.WishConfig).Earn
+		WishService.award(player, Earn.Quest * #completed, if #completed == 1 then "quest complete" else "quests complete")
+	end
 end
 
 function QuestService.init()

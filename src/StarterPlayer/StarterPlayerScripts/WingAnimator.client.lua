@@ -2,48 +2,57 @@
 	WingAnimator
 
 	Moves the joints of every worn pair of wings (WingService puts a WornWings
-	model on the wearer's back), on every client, and gives them their particle
-	effects (Shared.Flight.WingParticles), from two things everyone can see:
-	the character's Flying attribute (set by the server) and how the body is
-	moving.
+	model on the wearer's back), on every client, gives them their effects
+	(Shared.Flight.WingParticles), and draws everyone's fall trail - all from
+	what every client can see: the character's Flying attribute (set by the
+	server) and how the body is moving.
 
-	  resting     open, much as built, breathing slowly with a little sway
-	  take-off    one big, deep beat
-	  hovering    full, quick strokes
-	  cruising    slower strokes, swept a little back
-	  boosting    tucked back for speed, barely beating
-	  sinking     held up and spread: a glide
+	  resting     held a little closed behind the shoulders, breathing
+	  take-off    big, quick beats
+	  hovering    full, steady beats
+	  cruising    two beats, then a glide on spread wings, and again
+	  boosting    tucked back for speed
+	  sinking     spread and held: a glide
 
-	THE STROKE
+	THE BEAT
 
-	A beat is not just up and down: that would push air sideways, not down. The
-	wing traces a figure of eight. It sweeps forward as it comes down and back
-	as it rises (sweep follows cos of the phase while flap follows sin), and
-	it twists along its length, leading edge down on the downstroke and up on
-	the way back, so it bites the air going down and slices it coming up. The
-	outer wing (fan) lags the arm and folds on the upstroke; every feather,
-	plume, crystal, leaf, claw or thorn trails a little more.
+	Shaped like a bird's, not a sine wave. The downstroke is the quicker part
+	of the beat (`down`, under half) and the wing is fully open for it: that
+	is the stroke that lifts. On the slower upstroke the outer wing folds back
+	and its tip trails low, so it slips up through the air, then flicks open
+	at the top, ready for the next downstroke. The shoulder barely sweeps:
+	a touch forward while pushing down, a touch back while rising. The wing
+	twists a little the same way (leading edge down on the push). Feathers,
+	plumes, crystals, leaves, claws and thorns lag the stroke, and quiver in
+	the airflow when the wings are held.
+
+	Between beats - gliding, boosting, resting - the wing eases to a held pose,
+	and the beat's weight eases in and out, so starting and stopping flapping
+	is never a jump. The local player's beat is also published as the
+	character's WingPulse attribute: FlightClient lifts the body a little on
+	each downstroke, so the bob and the beat line up.
 
 	Each pair has a Style (an attribute on its model, set by BuildWings):
 
 	  Feather   angel, flame, frost and leaf
-	  Membrane  bat and demon: the fan closes harder on the upstroke, like
-	            fingers, and claws and thorns flick
+	  Membrane  bat and demon: the outer wing folds harder on the upstroke
 	  Fairy     four lobes that clap behind the back, insect-fast in the air,
-	            with a small rise and fall and a twist of their own
+	            the lower pair a moment behind the upper
 
-	Joints are found by name: L_ / R_ picks the side, the rest the role. All
-	rotations are in the frame's axes (X across the back, Y up, Z rearward):
-	flap is about Z, sweep about Y, twist about X. The state's numbers are eased
-	rather than switched, and the stroke runs on a phase that only ever
-	advances, so a change of state never jumps a wing.
+	Joints are found by name: L_ / R_ picks the side, the rest the role.
+	Rotations are in the frame's axes (X across the back, Y up, Z rearward):
+	flap about Z and sweep about Y mirror between the wings; twist, about the
+	wing's own length (X), does not.
 
 	EFFECTS
 
-	Each wing's outer piece carries the pair's trail emitters, their Rate eased
-	between rest, flight and speed. The bottom of every full downstroke pushes
-	a swirl of air down from each wing. Take-off throws a ring of air and a
-	swirl at the feet, and dust if there is ground close below.
+	  auras       the pair's library assemblies on each outer piece, streaming
+	              in flight, with a burst at take-off
+	  take-off    a ring of air and a swirl at the feet, dust on the ground
+	  falling     for anyone falling at terminal velocity: a ribbon of wind
+	              behind them, streaks of air rushing past, and a ring of air
+	              when they reach it (every character, wings or not;
+	              FlightClient holds the fall at that speed)
 ]]
 
 local Players = game:GetService("Players")
@@ -51,44 +60,123 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
-local WingParticles = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Flight"):WaitForChild("WingParticles"))
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local WingParticles = require(Shared:WaitForChild("Flight"):WaitForChild("WingParticles"))
+local Pack = require(Shared:WaitForChild("Abilities"):WaitForChild("VFX"):WaitForChild("PackAssembly"))
+local Scope = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityScope"))
+
+local player = Players.LocalPlayer
 
 local MODEL_NAME = "WornWings"
-local CULL_DISTANCE = 250 -- studs from the camera beyond which wings are left still
-local TWO_PI = 2 * math.pi
+local CULL_DISTANCE = 250 -- studs from the camera beyond which nothing is animated
+local TAKEOFF_TIME = 0.6
+local EASE = 3.5 -- 1/s, how quickly a state's numbers are reached
+local WEIGHT_EASE = 5 -- 1/s, how quickly flapping starts and stops
+local MEMBRANE_FOLD = 1.4 -- membrane wings fold harder on the upstroke
+local AURA_BRIGHTNESS = 3
 
--- Per state: rate (beats/s), amp (degrees of flap), lift (flap angle the beat
--- centres on), sweep (degrees swept back at the shoulder), swing (fore-aft
--- sweep through the beat), twist (degrees of twist through the beat), fold
--- (fan folded back), upFold (extra fan fold on the upstroke), trail
--- (secondary lag, degrees), fx (trail rate: 0 rest, 1 flight, 2 speed).
+--[[
+	Per state (degrees unless said):
+
+	  stroke   0-1, how much the beat drives the wing; 0 holds it
+	  rate     beats per second
+	  down     share of the beat spent pushing down
+	  amp      half the beat's height, about `lift`
+	  sweep    shoulder swept back through the beat; fwd / back the little
+	           extra forward on the push and back on the rise
+	  fold     outer wing folded back at mid-upstroke; droop, its tip lowered
+	  twist    leading edge down on the push, up on the rise
+	  trail    feather follow-through
+	  hold*    the held pose: arm lift and sweep, outer wing fold and flap
+	  breath   1 at rest: slow breathing instead of airflow quiver
+	  beats / glide   flap-glide rhythm: this many beats, then glide this long
+]]
+local BASE = {
+	stroke = 0, rate = 1, down = 0.45, amp = 0, lift = 0, sweep = 0, fwd = 0, back = 0,
+	fold = 0, droop = 0, twist = 0, trail = 3,
+	holdLift = 0, holdSweep = 0, holdFold = 0, holdFan = 0, breath = 0,
+}
+
+local function state(values)
+	local full = table.clone(BASE)
+	for key, value in pairs(values) do
+		full[key] = value
+	end
+	return full
+end
+
 local STATES = {
-	rest = { rate = 0.25, amp = 3, lift = 2, sweep = 6, swing = 2, twist = 1, fold = 3, upFold = 0, trail = 2, fx = 0 },
-	takeoff = { rate = 2.2, amp = 46, lift = 6, sweep = 12, swing = 26, twist = 14, fold = 2, upFold = 28, trail = 10, fx = 1 },
-	hover = { rate = 1.7, amp = 32, lift = 8, sweep = 14, swing = 22, twist = 12, fold = 4, upFold = 24, trail = 8, fx = 1 },
-	cruise = { rate = 1.15, amp = 22, lift = 4, sweep = 20, swing = 14, twist = 9, fold = 8, upFold = 16, trail = 7, fx = 1.5 },
-	boost = { rate = 0.6, amp = 6, lift = 2, sweep = 48, swing = 4, twist = 3, fold = 22, upFold = 4, trail = 4, fx = 2 },
-	glide = { rate = 0.35, amp = 4, lift = 14, sweep = 10, swing = 2, twist = 2, fold = 0, upFold = 0, trail = 3, fx = 1 },
+	rest = state({ holdLift = -6, holdSweep = 22, holdFold = 18, holdFan = -8, trail = 2, breath = 1 }),
+	takeoff = state({
+		stroke = 1, rate = 1.9, down = 0.4, amp = 44, lift = 8, sweep = 6, fwd = 5, back = 9,
+		fold = 30, droop = 18, twist = 7, trail = 10, holdLift = 8, holdSweep = 6, holdFold = 4,
+	}),
+	hover = state({
+		stroke = 1, rate = 1.2, down = 0.44, amp = 36, lift = 10, sweep = 6, fwd = 5, back = 10,
+		fold = 32, droop = 20, twist = 7, trail = 9, holdLift = 10, holdSweep = 8, holdFold = 4,
+	}),
+	cruise = state({
+		stroke = 1, rate = 1.0, down = 0.42, amp = 28, lift = 6, sweep = 14, fwd = 4, back = 9,
+		fold = 26, droop = 14, twist = 6, trail = 7, holdLift = 8, holdSweep = 14, holdFold = 6, holdFan = 2,
+		beats = 2, glide = 1.3,
+	}),
+	boost = state({ holdLift = 4, holdSweep = 46, holdFold = 26, holdFan = -6, trail = 4 }),
+	glide = state({ holdLift = 12, holdSweep = 8, holdFold = 2, holdFan = 3, trail = 5 }),
 }
 
--- Fairy lobes clap about the vertical axis: a sweep that oscillates, with a
--- smaller rise and fall (rise) and twist on top.
+-- Fairy lobes clap about the vertical axis: a sweep that beats, with a rise
+-- and twist in step with it.
+local FAIRY_BASE = { stroke = 0, rate = 1, amp = 0, sweep = 0, rise = 0, twist = 0, holdSweep = 0, holdFlap = 0, breath = 0 }
+local function fairy(values)
+	local full = table.clone(FAIRY_BASE)
+	for key, value in pairs(values) do
+		full[key] = value
+	end
+	return full
+end
 local FAIRY = {
-	rest = { rate = 0.35, amp = 4, sweep = 10, rise = 2, twist = 1, fx = 0 },
-	takeoff = { rate = 9, amp = 34, sweep = 30, rise = 10, twist = 10, fx = 1 },
-	hover = { rate = 8, amp = 30, sweep = 32, rise = 9, twist = 9, fx = 1 },
-	cruise = { rate = 7, amp = 24, sweep = 40, rise = 7, twist = 7, fx = 1.5 },
-	boost = { rate = 6, amp = 12, sweep = 60, rise = 4, twist = 4, fx = 2 },
-	glide = { rate = 2, amp = 8, sweep = 24, rise = 3, twist = 2, fx = 1 },
+	rest = fairy({ holdSweep = 24, holdFlap = 2, breath = 1 }),
+	takeoff = fairy({ stroke = 1, rate = 6.5, amp = 34, sweep = 30, rise = 8, twist = 8, holdSweep = 30 }),
+	hover = fairy({ stroke = 1, rate = 5.5, amp = 30, sweep = 32, rise = 7, twist = 7, holdSweep = 30 }),
+	cruise = fairy({ stroke = 1, rate = 5, amp = 24, sweep = 40, rise = 6, twist = 6, holdSweep = 40 }),
+	boost = fairy({ stroke = 1, rate = 4.5, amp = 12, sweep = 58, rise = 3, twist = 3, holdSweep = 58 }),
+	glide = fairy({ stroke = 0.4, rate = 2, amp = 10, sweep = 26, rise = 3, twist = 2, holdSweep = 26 }),
 }
 
-local MEMBRANE_UPFOLD = 1.5 -- membrane fans close harder on the upstroke
-local EASE = 4 -- 1/s, how quickly a state's numbers are reached
-local TAKEOFF_TIME = 0.55
-local GUST_STATES = { takeoff = true, hover = true, cruise = true }
+-- model -> rig; character -> fall trail. Strong tables, cleared when the model
+-- or character goes: a weak table keyed by an Instance can lose the entry while
+-- the Instance lives on (its Lua wrapper is collected), which rebuilt rigs - and
+-- their effects - over and over.
+local rigs = {}
+local falls = {}
 
--- model -> rig { joints, style, params, phase, flying, flyingSince, fx }
-local rigs = setmetatable({}, { __mode = "k" })
+-- ---------------------------------------------------------------------------
+-- Helpers
+-- ---------------------------------------------------------------------------
+
+local rad = math.rad
+
+local function lerp(a, b, t)
+	return a + (b - a) * t
+end
+
+local function easeInOut(s)
+	return (1 - math.cos(math.pi * s)) / 2
+end
+
+--[[
+	Where a beat is at `u` (0-1, starting at the top): position F (+1 top,
+	-1 bottom), and how far into the push (Dn) or the rise (Up) it is, each a
+	bell that is 0 at both ends of its half.
+]]
+local function beatAt(u, down)
+	if u < down then
+		local s = u / down
+		return 1 - 2 * easeInOut(s), math.sin(math.pi * s), 0
+	end
+	local s = (u - down) / (1 - down)
+	return -1 + 2 * easeInOut(s), 0, math.sin(math.pi * s)
+end
 
 local function roleOf(name)
 	local side = if name:sub(1, 2) == "L_" then -1 elseif name:sub(1, 2) == "R_" then 1 else 0
@@ -97,50 +185,100 @@ local function roleOf(name)
 	return side, role or rest, tonumber(index) or 0
 end
 
--- The particle emitters: trails and gusts on each wing's outer pieces,
--- take-off ring, swirl and dust on the wearer's root.
-local function buildFx(model, character)
-	local style = WingParticles.Styles[model:GetAttribute("ItemName")]
-	if not style then
+local function joint(j, flap, sweep, twist)
+	j.joint.Transform = CFrame.Angles(rad(twist), -j.side * rad(sweep), j.side * rad(flap))
+end
+
+-- A mounted library assembly rides `part`: unanchored, weightless, welded.
+local function weld(model, part)
+	for _, d in ipairs(model:GetDescendants()) do
+		if d:IsA("BasePart") then
+			d.Anchored = false
+			d.Massless = true
+			local w = Instance.new("WeldConstraint")
+			w.Part0 = part
+			w.Part1 = d
+			w.Parent = d
+		end
+	end
+end
+
+local function mount(scope, parent, entry, host)
+	local template = WingParticles.template(entry)
+	if not template then
 		return nil
 	end
-	local fx = { trails = {}, gusts = {}, cycle = nil }
-	for _, part in ipairs(model:GetChildren()) do
-		if part:IsA("BasePart") then
-			local _, role = roleOf(part.Name)
-			if role == "Fan" or role == "Upper" or role == "Lower" then
-				for _, trail in ipairs(style.trails) do
-					local emitter = WingParticles.make(trail[1], { Color = trail[2], Rate = trail[3] })
-					emitter.Parent = part
-					table.insert(fx.trails, { emitter = emitter, rest = trail[3], fly = trail[4], rate = trail[3] })
-				end
-				if style.gust and role == "Fan" then
-					local gust = WingParticles.make("Gust", { Color = ColorSequence.new(style.gust), Enabled = false })
-					gust.Parent = part
-					table.insert(fx.gusts, gust)
+	local handle = Pack.mount(scope, parent, entry[1], {
+		template = template,
+		scale = entry[3],
+		tint = entry[4],
+		budget = entry[5],
+		brightness = AURA_BRIGHTNESS,
+		locked = entry.locked,
+		cframe = host.CFrame,
+	})
+	weld(handle.model, host)
+	if entry.zOffset then
+		for _, e in ipairs(handle.emitters) do
+			e.v.ZOffset += entry.zOffset
+		end
+	end
+	return handle
+end
+
+-- ---------------------------------------------------------------------------
+-- Rigs
+-- ---------------------------------------------------------------------------
+
+local function buildFx(rig, model, character)
+	local scope = Scope.new()
+	rig.scope = scope
+	local function finish()
+		scope:destroy()
+		rigs[model] = nil
+	end
+	model.Destroying:Connect(finish)
+	-- A respawn can drop the old character without destroying it.
+	scope:add(model.AncestryChanged:Connect(function()
+		if not model:IsDescendantOf(Workspace) then
+			finish()
+		end
+	end))
+
+	rig.auras = {}
+	local style = WingParticles.Styles[model:GetAttribute("ItemName")]
+	if style then
+		for _, part in ipairs(model:GetChildren()) do
+			if part:IsA("BasePart") then
+				local _, role = roleOf(part.Name)
+				if role == "Fan" or role == "Upper" or role == "Lower" then
+					for _, entry in ipairs(style) do
+						-- A stud nearer the camera, or the wing they sit inside hides them.
+						entry.zOffset = entry.zOffset or 1
+						local handle = mount(scope, model, entry, part)
+						if handle then
+							table.insert(rig.auras, handle)
+						end
+					end
 				end
 			end
 		end
 	end
+
 	local root = character:FindFirstChild("HumanoidRootPart")
 	if root then
 		local feet = Instance.new("Attachment")
 		feet.Name = "WingTakeoffFx"
 		feet.Position = Vector3.new(0, -2.6, 0)
 		feet.Parent = root
-		fx.feet = feet
-		fx.ring = WingParticles.make("Ring", { Enabled = false })
-		fx.ring.Parent = feet
-		fx.swirl = WingParticles.make("Swirl", { Enabled = false })
-		fx.swirl.Parent = feet
-		fx.puff = WingParticles.make("Puff", { Enabled = false })
-		fx.puff.Parent = feet
-		-- The attachment goes with the wings, not the character.
-		model.Destroying:Connect(function()
-			feet:Destroy()
-		end)
+		scope:add(feet)
+		rig.ring = WingParticles.make("Ring", { Enabled = false })
+		rig.ring.Parent = feet
+		rig.swirl = WingParticles.make("Swirl", { Enabled = false })
+		rig.swirl.Parent = feet
+		rig.puff = WingParticles.make("Puff", { Enabled = false })
+		rig.puff.Parent = feet
 	end
-	return fx
 end
 
 local function rigFor(model, character)
@@ -148,16 +286,26 @@ local function rigFor(model, character)
 	if rig then
 		return rig
 	end
-	rig = { joints = {}, style = model:GetAttribute("Style") or "Feather", phase = math.random() * 10, params = nil }
-	for _, joint in ipairs(model:GetDescendants()) do
-		if joint:IsA("Motor6D") then
-			local side, role, index = roleOf(joint.Name)
+	rig = {
+		joints = {},
+		style = model:GetAttribute("Style") or "Feather",
+		u = math.random(),
+		w = 0,
+		beating = true,
+		beats = 0,
+		glideUntil = 0,
+		params = nil,
+		aurasOn = false,
+	}
+	for _, j in ipairs(model:GetDescendants()) do
+		if j:IsA("Motor6D") then
+			local side, role, index = roleOf(j.Name)
 			if side ~= 0 then
-				table.insert(rig.joints, { joint = joint, side = side, role = role, index = index })
+				table.insert(rig.joints, { joint = j, side = side, role = role, index = index })
 			end
 		end
 	end
-	rig.fx = buildFx(model, character)
+	buildFx(rig, model, character)
 	rigs[model] = rig
 	return rig
 end
@@ -165,22 +313,25 @@ end
 local groundParams = RaycastParams.new()
 groundParams.FilterType = Enum.RaycastFilterType.Exclude
 
-local function takeoffFx(rig, character)
-	local fx = rig.fx
-	if not fx or not fx.feet then
-		return
-	end
-	fx.ring:Emit(2)
-	fx.swirl:Emit(2)
-	local root = character:FindFirstChild("HumanoidRootPart")
-	if root then
-		groundParams.FilterDescendantsInstances = { character }
-		if Workspace:Raycast(root.Position, Vector3.new(0, -6, 0), groundParams) then
-			fx.puff:Emit(10)
+local function takeOff(rig, character)
+	-- Start on a full downstroke, already half committed to it.
+	rig.u = 0
+	rig.beating = true
+	rig.beats = 0
+	rig.w = math.max(rig.w, 0.6)
+	if rig.ring then
+		rig.ring:Emit(2)
+		rig.swirl:Emit(2)
+		local root = character:FindFirstChild("HumanoidRootPart")
+		if root then
+			groundParams.FilterDescendantsInstances = { character }
+			if Workspace:Raycast(root.Position, Vector3.new(0, -6, 0), groundParams) then
+				rig.puff:Emit(10)
+			end
 		end
 	end
-	for _, trail in ipairs(fx.trails) do
-		trail.emitter:Emit(4)
+	for _, aura in ipairs(rig.auras) do
+		aura:burst(0.5)
 	end
 end
 
@@ -188,7 +339,7 @@ local function stateOf(character, rig, now)
 	local flying = character:GetAttribute("Flying") == true
 	if flying and not rig.flying then
 		rig.flyingSince = now
-		takeoffFx(rig, character)
+		takeOff(rig, character)
 	end
 	rig.flying = flying
 	if not flying then
@@ -220,84 +371,190 @@ local function ease(rig, target, dt)
 	end
 	local k = 1 - math.exp(-EASE * dt)
 	for key, value in pairs(target) do
-		params[key] += (value - params[key]) * k
+		if type(value) == "number" and type(params[key]) == "number" then
+			params[key] += (value - params[key]) * k
+		end
 	end
 	return params
 end
 
-local rad = math.rad
-
-local function joint(j, flap, sweep, twist)
-	-- Flap (Z) and sweep (Y) mirror between the wings; twist, about the wing's
-	-- own length (X), does not: a mirror leaves rotation about its normal alone.
-	-- Positive twist raises the leading (forward, -Z) edge.
-	j.joint.Transform = CFrame.Angles(rad(twist), -j.side * rad(sweep), j.side * rad(flap))
+-- Runs the beat clock and the flap-glide rhythm, and eases the beat's weight.
+local function advance(rig, target, p, now, dt)
+	if rig.beating then
+		rig.u += p.rate * dt
+		if rig.u >= 1 then
+			rig.u -= 1
+			rig.beats += 1
+			if target.beats and rig.beats >= target.beats then
+				rig.beating = false
+				rig.beats = 0
+				rig.glideUntil = now + (target.glide or 1)
+			end
+		end
+	elseif not target.beats or now >= rig.glideUntil then
+		rig.beating = true
+		rig.beats = 0
+		rig.u = 0
+	end
+	local want = if rig.beating then p.stroke else 0
+	rig.w += (want - rig.w) * (1 - math.exp(-WEIGHT_EASE * dt))
 end
 
-local function poseFeather(rig, p)
-	local phase = rig.phase
-	local stroke = math.sin(phase) -- +1 top of the stroke, -1 bottom
-	local travel = math.cos(phase) -- < 0 on the downstroke, > 0 rising
-	local upstroke = math.max(0, travel)
-	local upFold = p.upFold * (if rig.style == "Membrane" then MEMBRANE_UPFOLD else 1)
+local function poseFeather(rig, p, t)
+	local F, Dn, Up = beatAt(rig.u, p.down)
+	local w = rig.w
+	local still = 1 - w
+	local breath = p.breath * math.sin(t * 1.6)
+	local sway = still * (1 - p.breath) * math.sin(t * 1.1)
+	local fold = p.fold * (if rig.style == "Membrane" then MEMBRANE_FOLD else 1)
+	local quiver = still * lerp(1.2, 0.35, p.breath)
 	for _, j in ipairs(rig.joints) do
 		local role = j.role
 		if role == "Arm" then
-			-- Forward on the way down, back on the way up; leading edge down
-			-- while it bites, up while it returns.
-			joint(j, p.lift + p.amp * stroke, p.sweep + p.swing * travel, p.twist * travel)
+			joint(
+				j,
+				lerp(p.holdLift, p.lift + p.amp * F, w) + breath * 1.5 + sway * 1.5,
+				lerp(p.holdSweep, p.sweep + p.back * Up - p.fwd * Dn, w) + breath,
+				w * p.twist * (Up - Dn)
+			)
 		elseif role == "Fan" then
-			-- The outer wing lags the arm and closes as it rises.
-			local lagged = phase - 0.6
-			joint(j, p.amp * 0.35 * math.sin(lagged), p.fold + upFold * upstroke + p.swing * 0.4 * math.cos(lagged), p.twist * 0.6 * math.cos(lagged))
+			joint(
+				j,
+				lerp(p.holdFan, -p.droop * Up + 3 * Dn, w) + breath,
+				lerp(p.holdFold, fold * Up, w),
+				w * p.twist * 0.6 * (Up - Dn)
+			)
 		else
-			-- Feathers, plumes, crystals, leaves, claws, thorns: follow-through.
-			local lag = 1.0 + j.index * 0.18
-			local amount = if role == "Claw" or role == "Thorn" then p.trail * 1.6 else p.trail
-			joint(j, amount * math.sin(phase - lag), amount * 0.6 * math.sin(phase - lag - 0.8), amount * 0.5 * math.cos(phase - lag))
+			local reach = 1 + j.index * 0.08
+			local amount = p.trail * reach * (if role == "Claw" or role == "Thorn" then 1.5 else 1)
+			local shiver = quiver * math.sin(t * 9 + j.index * 1.7 + j.side)
+			joint(j, w * amount * (Dn - 0.6 * Up) + shiver, w * amount * 0.4 * Up, 0)
 		end
 	end
+	return w * (Dn - p.down * 2 / math.pi)
 end
 
-local function poseFairy(rig, p)
-	local phase = rig.phase
+local function poseFairy(rig, p, t)
+	local w = rig.w
 	for _, j in ipairs(rig.joints) do
 		local lower = j.role == "Lower"
-		local local_ = phase - (if lower then 0.5 else 0)
-		local beat = math.sin(local_)
-		local sweep = (p.sweep + p.amp * beat) * (if lower then 0.9 else 1)
-		local flap = (if lower then -4 else 4) + p.rise * math.cos(local_) * (if lower then -1 else 1)
-		joint(j, flap, sweep, p.twist * math.cos(local_))
+		local F = beatAt((rig.u - (if lower then 0.08 else 0)) % 1, 0.5)
+		local breath = p.breath * math.sin(t * 1.6 + (if lower then 0.6 else 0))
+		local sweep = lerp(p.holdSweep, p.sweep + p.amp * F, w) * (if lower then 0.9 else 1) + breath * 2
+		local flap = lerp(p.holdFlap, p.rise * F, w) * (if lower then -1 else 1)
+		joint(j, flap, sweep, w * p.twist * F)
+	end
+	return 0
+end
+
+local function updateAuras(rig)
+	local on = rig.flying == true
+	if rig.aurasOn ~= on then
+		rig.aurasOn = on
+		for _, aura in ipairs(rig.auras) do
+			aura:stream(on)
+		end
 	end
 end
 
-local function updateFx(rig, p, state, dt)
-	local fx = rig.fx
-	if not fx then
-		return
+-- ---------------------------------------------------------------------------
+-- Falling
+-- ---------------------------------------------------------------------------
+
+local Fall = WingParticles.Fall
+
+local function fallFor(character, root)
+	local fall = falls[character]
+	if fall then
+		return fall
 	end
-	-- Trails: ease the Rate, but only write it when it really changes - an
-	-- emitter whose Rate is rewritten every frame can stop emitting.
-	local k = 1 - math.exp(-3 * dt)
-	for _, trail in ipairs(fx.trails) do
-		local target = if p.fx < 0.5 then trail.rest else trail.fly * p.fx
-		trail.rate += (target - trail.rate) * k
-		local rounded = math.floor(trail.rate + 0.5)
-		if trail.emitter.Rate ~= rounded then
-			trail.emitter.Rate = rounded
+	fall = { on = false }
+	falls[character] = fall
+	local scope = Scope.new()
+	fall.scope = scope
+	scope:add(character.AncestryChanged:Connect(function()
+		if not character:IsDescendantOf(Workspace) then
+			scope:destroy()
+			falls[character] = nil
 		end
+	end))
+	fall.lines = mount(scope, character, Fall.lines, root)
+
+	-- The ribbon: a Trail between the shoulders.
+	local look = Fall.trail
+	local left = Instance.new("Attachment")
+	left.Name = "FallTrailLeft"
+	left.Position = Vector3.new(-look.span.X, look.span.Y, look.span.Z)
+	left.Parent = root
+	local right = Instance.new("Attachment")
+	right.Name = "FallTrailRight"
+	right.Position = look.span
+	right.Parent = root
+	local trail = Instance.new("Trail")
+	trail.Name = "FallTrail"
+	trail.Texture = look.texture
+	trail.TextureMode = Enum.TextureMode.Static
+	trail.TextureLength = look.textureLength
+	trail.Color = look.color
+	trail.Transparency = look.transparency
+	trail.WidthScale = look.widthScale
+	trail.Lifetime = look.lifetime
+	trail.LightEmission = look.lightEmission
+	trail.LightInfluence = 0
+	trail.FaceCamera = true
+	trail.Attachment0 = left
+	trail.Attachment1 = right
+	trail.Enabled = false
+	trail.Parent = root
+	fall.trail = trail
+	scope:add(left)
+	scope:add(right)
+	scope:add(trail)
+
+	-- The ring of air on reaching terminal velocity.
+	local waist = Instance.new("Attachment")
+	waist.Name = "FallRing"
+	waist.Parent = root
+	scope:add(waist)
+	fall.ring = WingParticles.make("Ring", { Enabled = false })
+	fall.ring.Parent = waist
+	return fall
+end
+
+local function updateFall(character, root)
+	local sinking = -root.AssemblyLinearVelocity.Y
+	local fall = falls[character]
+	local on
+	if character:GetAttribute("Flying") == true then
+		on = false
+	elseif fall and fall.on then
+		on = sinking > Fall.terminal * Fall.trailTo
+	else
+		on = sinking > Fall.terminal * Fall.trailFrom
 	end
-	-- Gusts: one swirl per wing at the bottom of each full downstroke.
-	if #fx.gusts > 0 then
-		local cycle = math.floor((rig.phase - 1.5 * math.pi) / TWO_PI)
-		if fx.cycle and cycle ~= fx.cycle and GUST_STATES[state] then
-			for _, gust in ipairs(fx.gusts) do
-				gust:Emit(1)
+	if on and not fall then
+		fall = fallFor(character, root)
+	end
+	if fall and fall.on ~= on then
+		fall.on = on
+		if fall.lines then
+			fall.lines:stream(on)
+		end
+		if fall.trail then
+			if on then
+				fall.trail:Clear()
 			end
+			fall.trail.Enabled = on
 		end
-		fx.cycle = cycle
+		if on and fall.ring then
+			fall.ring:Emit(2)
+		end
 	end
 end
+
+-- ---------------------------------------------------------------------------
+-- Each step
+-- ---------------------------------------------------------------------------
 
 -- PreSimulation, not RenderStepped: the character's Animator rewrites the
 -- Transform of every Motor6D under the character in its animation step, which
@@ -306,21 +563,25 @@ RunService.PreSimulation:Connect(function(dt)
 	local camera = Workspace.CurrentCamera
 	local eye = camera and camera.CFrame.Position or Vector3.zero
 	local now = os.clock()
-	for _, player in ipairs(Players:GetPlayers()) do
-		local character = player.Character
-		local model = character and character:FindFirstChild(MODEL_NAME)
-		local frame = model and model.PrimaryPart
-		if frame and (frame.Position - eye).Magnitude < CULL_DISTANCE then
-			local rig = rigFor(model, character)
-			local state = stateOf(character, rig, now)
-			local p = ease(rig, (if rig.style == "Fairy" then FAIRY else STATES)[state], dt)
-			rig.phase += p.rate * TWO_PI * dt
-			if rig.style == "Fairy" then
-				poseFairy(rig, p)
-			else
-				poseFeather(rig, p)
+	for _, other in ipairs(Players:GetPlayers()) do
+		local character = other.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if root and (root.Position - eye).Magnitude < CULL_DISTANCE then
+			updateFall(character, root)
+
+			local model = character:FindFirstChild(MODEL_NAME)
+			if model and model.PrimaryPart then
+				local rig = rigFor(model, character)
+				local name = stateOf(character, rig, now)
+				local target = (if rig.style == "Fairy" then FAIRY else STATES)[name]
+				local p = ease(rig, target, dt)
+				advance(rig, target, p, now, dt)
+				local pulse = if rig.style == "Fairy" then poseFairy(rig, p, now) else poseFeather(rig, p, now)
+				updateAuras(rig)
+				if other == player then
+					character:SetAttribute("WingPulse", if rig.flying then pulse else 0)
+				end
 			end
-			updateFx(rig, p, state, dt)
 		end
 	end
 end)

@@ -1,0 +1,8 @@
+{
+  "name": "EnemyRigImport",
+  "tree": {
+    "$className": "Folder",
+    "BuildEnemyRigs": { "$path": "BuildEnemyRigs.lua" },
+    "Data": { "$path": "data" }
+  }
+}

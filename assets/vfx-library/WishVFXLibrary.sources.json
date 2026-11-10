@@ -1,0 +1,19 @@
+{
+  "pack": "SoulShroud Ultimate VFX Pack V1.9",
+  "sourcePlace": "SoulShroud Ultimate VFX Pack V1.9.rbxl",
+  "destinationPlace": 127569658424596,
+  "format": "Engine-serialized .rbxm built with Rojo 7.7 from `rojo syncback` of the source place file; complete assemblies, no source-library edits, no scripts",
+  "purpose": "The Starfall wish reveal (Shared.Wish.WishCinematic). Chosen by staging candidates in Studio edit mode with their emitters running.",
+  "assemblies": [
+    { "name": "Comet", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #23", "use": "The meteor, tinted by the best result; its head alone is the orb behind each reveal card" },
+    { "name": "Flash", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #18", "use": "White starburst flash on impact" },
+    { "name": "Starfall", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #17", "use": "Far shooting-star streak beams in the night sky" },
+    { "name": "Twinkles", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #4", "use": "Twinkling stars across the sky and round the orb" },
+    { "name": "Pillar", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Alternate Effects Pack.SS_AVFX #8", "use": "Pillar of light behind Rare and better cards (gold, untinted, for Legendary)" },
+    { "name": "RadialBurst", "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #90", "use": "Radial burst on impact and as each card arrives" },
+    { "name": "GoldStar", "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #117", "use": "Legendary: four-pointed gold star" },
+    { "name": "GoldOrb", "path": "Workspace.SoulShroud VFX Packs.SoulShroud VFX Pack #1.BZ1_SS1 VFX PART #23", "use": "Legendary: sparkling gold sphere" },
+    { "name": "Spikes", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #43", "use": "Epic and Legendary impact spikes" },
+    { "name": "RingBurst", "path": "Workspace.SoulShroud VFX Packs.SoulShroud Impact VFX.BZ1 Impact VFX #54", "use": "Impact ring, tinted per tier" }
+  ]
+}

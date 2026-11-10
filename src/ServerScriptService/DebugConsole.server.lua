@@ -54,6 +54,12 @@
 	  /bbstorage buy      in Studio only: a "+3 ability storage" purchase, granted
 	                      and saved through the same path a real receipt takes
 	  /bbstorage reset    in Studio only: take those purchases back off the save
+	  /wish stars <n>     in Studio only: set your Wish Stars (the save is live)
+	  /wish pity <n>      in Studio only: wishes since your last Legendary
+	  /givewishes <n> [player]
+	                      give Wish Stars (one per wish) to yourself, or to the
+	                      player whose name starts with that; "all" for everyone.
+	                      Works on live servers too, admins only, and is saved
 	  /bbcaves edit       standing in a cave: place, mine and refill through
 	                      the real terrain API and confirm it is all recorded
 
@@ -665,6 +671,59 @@ local function onChatted(player, message)
 				if reset then "good" else "bad")
 		else
 			reply(player, "bbstorage", "Usage: /bbstorage buy | reset", "bad")
+		end
+	elseif command == "/wish" then
+		-- Studio only: free stars on a live server would be free wishes.
+		local value = tonumber(words[3])
+		if not RunService:IsStudio() then
+			reply(player, "wish", "Only in Studio.", "bad")
+		elseif (words[2] == "stars" or words[2] == "pity") and value then
+			local WishService = require(ServerScriptService:WaitForChild("WishService"))
+			local done = WishService.debugSet(player, words[2], value)
+			reply(player, "wish", if done then string.format("%s set to %d.", words[2], value) else "Your save has not loaded.",
+				if done then "good" else "bad")
+		else
+			reply(player, "wish", "Usage: /wish stars <n> | pity <n>", "bad")
+		end
+	elseif command == "/givewishes" or command == "/givewish" then
+		-- Adds rather than sets, through WishService.award, so the stars land
+		-- in the recipient's save with a toast on their screen.
+		local amount = math.floor(tonumber(words[2]) or 0)
+		local query = words[3]
+		if amount < 1 or amount > 10000 then
+			reply(player, "givewishes", "Usage: /givewishes <1-10000> [player | all]", "bad")
+		else
+			local WishService = require(ServerScriptService:WaitForChild("WishService"))
+			local targets = {}
+			if not query then
+				targets = { player }
+			elseif query == "all" then
+				targets = Players:GetPlayers()
+			else
+				for _, other in ipairs(Players:GetPlayers()) do
+					local name, shown = string.lower(other.Name), string.lower(other.DisplayName)
+					if string.sub(name, 1, #query) == query or string.sub(shown, 1, #query) == query then
+						table.insert(targets, other)
+					end
+				end
+			end
+			if #targets == 0 then
+				reply(player, "givewishes", "No player's name starts with '" .. query .. "'.", "bad")
+			elseif #targets > 1 and query ~= "all" then
+				reply(player, "givewishes", "More than one player matches '" .. query .. "'; type more of the name.", "bad")
+			else
+				local given = {}
+				for _, target in ipairs(targets) do
+					local from = if target == player then nil else player.Name
+					if WishService.award(target, amount, if from then "from " .. from else "admin gift") then
+						table.insert(given, target.Name)
+					end
+				end
+				reply(player, "givewishes", if #given > 0
+					then string.format("Gave %d Wish Star%s to %s.", amount, if amount == 1 then "" else "s", table.concat(given, ", "))
+					else "Nobody's save has loaded yet; nothing given.",
+					if #given > 0 then "good" else "bad")
+			end
 		end
 	elseif command == "/tutorial" then
 		TutorialService.Reset(player)

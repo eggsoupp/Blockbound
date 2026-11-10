@@ -1,27 +1,40 @@
 --[[
 	WingParticles
 
-	The particle effects worn wings give off, curated from the SoulShroud
-	Ultimate VFX Pack (Studio place "SoulShroud Ultimate VFX Pack V1.9", folder
-	Workspace["SoulShroud VFX Packs"]["SoulShroud VFX Pack #2"]
-	["Spellcasting + Small Impact VFX"]). Each template copies one authored
-	emitter (its pack path above it); the textures are the pack's own, and only
-	colour, size, speed and rate are changed to fit a 2-stud wing.
-	Code-backed so a Rojo install does not depend on the pack.
+	What flight looks like besides the wings themselves. Used by
+	StarterPlayerScripts.WingAnimator (every client, every wearer) and
+	FlightClient (the terminal velocity).
 
-	StarterPlayerScripts.WingAnimator uses them three ways:
+	WING AURAS - from the VFX library
 
-	  trail     on each wing's outer piece (the Fan, or a fairy's lobes), an
-	            emitter whose Rate follows the wings: a little at rest for the
-	            magical pairs, more in the air, most at speed
-	  gust      a soft swirl of air pushed down from each wing at the bottom of
-	            a full stroke (hover, take-off, cruise)
-	  takeoff   a ring of air and a swirl at the feet, and a puff of dust, on
-	            take-off
+	Each pair's effect is one or two complete assemblies from the game's VFX
+	library (ReplicatedStorage.AbilityVFXLibrary / WeaponShotLibrary, built
+	from the SoulShroud pack: assets/vfx-library), mounted through
+	Shared.Abilities.VFX.PackAssembly on each wing's outer piece and welded
+	there, so the authored layers, curves and flipbooks are kept and only
+	scale, tint and budget change. They stream while flying.
+	WingAnimator draws them a stud nearer the camera (ZOffset), or the wing
+	they sit inside hides them; `budget` is particles per second for the
+	whole assembly, shared between its layers by their authored rates.
 
-	WingParticles.make(name, overrides) builds an emitter from a template;
-	WingParticles.Styles[itemName] picks the trails and tints per pair.
+	  { assembly, library, scale, tint = {deep, main, hot}, budget }
+
+	TAKE-OFF - kept as it was
+
+	A ring of air and a swirl at the feet, and dust if there is ground below:
+	single SoulShroud emitters copied into the templates here (T.Ring, T.Swirl,
+	T.Puff) and built with WingParticles.make.
+
+	FALLING - terminal velocity
+
+	Roblox has no air resistance, so nothing stops a fall speeding up. A
+	falling character (not flying) is held at Fall.terminal studs/s by
+	FlightClient, and anyone falling that fast - seen from every client by
+	their velocity alone - streams the library's speed lines around them, with
+	a ring of air the moment they reach it, and a ribbon of wind behind them.
 ]]
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local function seq(...)
 	local points = {}
@@ -35,131 +48,92 @@ local function tint(a, b)
 	return ColorSequence.new(a, b or a)
 end
 
+local WingParticles = {}
+
+-- ---------------------------------------------------------------------------
+-- Wing auras
+-- ---------------------------------------------------------------------------
+
+local function palette(deep, main, hot)
+	return { deep = deep, main = main, hot = hot }
+end
+
+-- Resolved when first used: the libraries are big and may replicate after
+-- the scripts start.
+local LIBRARIES = {
+	ability = "AbilityVFXLibrary",
+	shot = "WeaponShotLibrary",
+	legend = "LegendaryAbilitySources",
+}
+
+function WingParticles.template(entry)
+	local folder = ReplicatedStorage:FindFirstChild(LIBRARIES[entry[2]])
+	return folder and folder:FindFirstChild(entry[1])
+end
+
+WingParticles.Styles = {
+	-- ValhallaOrb: drifting spirit glitter, warmed to gold.
+	AngelWings = {
+		{ "ValhallaOrb", "shot", 0.2, palette(rgb(150, 110, 40), rgb(255, 220, 140), rgb(255, 252, 235)), 30 },
+	},
+	-- VoidOrb: a slow dark swirl in plum.
+	BatWings = {
+		{ "VoidOrb", "shot", 0.16, palette(rgb(30, 14, 40), rgb(110, 60, 150), rgb(200, 170, 230)), 40 },
+	},
+	-- VoidOrb in crimson, with FireVFX6 embers.
+	DemonWings = {
+		{ "VoidOrb", "shot", 0.16, palette(rgb(40, 6, 10), rgb(170, 30, 40), rgb(255, 150, 120)), 36 },
+		{ "FireVFX6", "ability", 0.22, palette(rgb(90, 10, 10), rgb(230, 50, 30), rgb(255, 200, 150)), 40 },
+	},
+	-- ValhallaOrb glitter in lavender and turquoise: pixie dust.
+	FairyWings = {
+		{ "ValhallaOrb", "shot", 0.18, palette(rgb(70, 60, 150), rgb(170, 160, 255), rgb(170, 255, 240)), 30 },
+	},
+	-- FlameCore: real flame on the plumes.
+	FlameWings = {
+		{ "FlameCore", "ability", 0.2, nil, 160 },
+	},
+	-- ValhallaOrb as authored is a cold cyan: kept, whitened at the hot end.
+	FrostWings = {
+		{ "ValhallaOrb", "shot", 0.2, palette(rgb(40, 90, 150), rgb(150, 215, 255), rgb(240, 252, 255)), 30 },
+	},
+	-- Droplets69 in green: dew and pollen shaken from the leaves.
+	LeafWings = {
+		{ "Droplets69", "ability", 0.16, palette(rgb(30, 70, 30), rgb(120, 200, 80), rgb(230, 245, 170)), 50 },
+	},
+}
+
+-- ---------------------------------------------------------------------------
+-- Falling
+-- ---------------------------------------------------------------------------
+
+WingParticles.Fall = {
+	terminal = 120, -- studs/s: the fastest a falling (not flying) body goes
+	trailFrom = 0.92, -- share of terminal at which the speed lines start
+	trailTo = 0.8, -- and below which they stop again
+	-- LegendLines: tall streaks of air, whitened, riding the body so they rush
+	-- up past it. Unlocked, a fall this fast scatters them far above.
+	lines = { "LegendLines", "legend", 0.5, palette(rgb(120, 140, 170), rgb(220, 232, 255), rgb(255, 255, 255)), 120, locked = true },
+	-- A ribbon of wind left behind the body (the slash pack's wind texture,
+	-- as the dash streak), shoulder to shoulder.
+	trail = {
+		texture = "rbxassetid://16892374733",
+		textureLength = 5.14,
+		color = ColorSequence.new(rgb(240, 246, 255), rgb(200, 220, 255)),
+		transparency = seq({ 0, 0.35 }, { 0.6, 0.75 }, { 1, 1 }),
+		widthScale = seq({ 0, 1 }, { 1, 0.3 }),
+		lifetime = 0.22,
+		lightEmission = 0.6,
+		span = Vector3.new(0.9, 0.8, 0),
+	},
+	-- On reaching it: the take-off ring of air (T.Ring), at the waist.
+}
+
+-- ---------------------------------------------------------------------------
+-- Take-off templates (single emitters from the SoulShroud pack)
+-- ---------------------------------------------------------------------------
+
 local T = {}
-
--- Aura.ParticleEmitter (126447607395557): rising motes, retuned to drift.
-T.Mote = {
-	Texture = "rbxassetid://126447607395557",
-	Size = seq({ 0, 0 }, { 0.2, 0.48, 0.12 }, { 0.8, 0.27 }, { 1, 0 }),
-	ZOffset = 0.8,
-	Transparency = seq({ 0, 1 }, { 0.25, 0 }, { 1, 1 }),
-	Lifetime = NumberRange.new(0.7, 1.1),
-	Speed = NumberRange.new(0.5, 2),
-	Rotation = NumberRange.new(-90, -90),
-	SpreadAngle = Vector2.new(360, 360),
-	Acceleration = Vector3.new(0, 3, 0),
-	Drag = 2,
-	LightEmission = 1,
-	LightInfluence = 0,
-	Brightness = 1.6,
-	Orientation = Enum.ParticleOrientation.FacingCamera,
-}
-
--- Aura.ParticleEmitter (81480496984776): the second mote, for falling dust.
-T.Dust = {
-	Texture = "rbxassetid://81480496984776",
-	Size = seq({ 0, 0 }, { 0.2, 0.4, 0.12 }, { 1, 0 }),
-	ZOffset = 0.8,
-	Transparency = seq({ 0, 1 }, { 0.2, 0 }, { 1, 1 }),
-	Lifetime = NumberRange.new(0.8, 1.3),
-	Speed = NumberRange.new(0.3, 1.2),
-	Rotation = NumberRange.new(-90, -90),
-	SpreadAngle = Vector2.new(360, 360),
-	Acceleration = Vector3.new(0, -3, 0),
-	Drag = 1.5,
-	LightEmission = 1,
-	LightInfluence = 0,
-	Brightness = 1.6,
-	Orientation = Enum.ParticleOrientation.FacingCamera,
-}
-
--- Fire.ParticleEmitter (123446605457490): bright embers.
-T.Ember = {
-	Texture = "rbxassetid://123446605457490",
-	Size = seq({ 0, 0.42, 0.12 }, { 0.6, 0.24, 0.08 }, { 1, 0 }),
-	ZOffset = 1,
-	Transparency = seq({ 0, 1 }, { 0.2, 0 }, { 0.7, 0 }, { 1, 1 }),
-	Lifetime = NumberRange.new(0.5, 0.9),
-	Speed = NumberRange.new(1, 3),
-	RotSpeed = NumberRange.new(-115, 55),
-	SpreadAngle = Vector2.new(60, 60),
-	Acceleration = Vector3.new(0, 7, 0),
-	Drag = 1,
-	LightEmission = 1,
-	LightInfluence = 0,
-	Brightness = 6,
-	Orientation = Enum.ParticleOrientation.FacingCamera,
-}
-
--- Fire.ParticleEmitter (72672945547891): flame licks.
-T.Flame = {
-	Texture = "rbxassetid://72672945547891",
-	Size = seq({ 0, 0.5 }, { 1, 1.8 }),
-	Transparency = seq({ 0, 1 }, { 0.5, 0.15 }, { 1, 1 }),
-	Lifetime = NumberRange.new(0.35, 0.5),
-	Speed = NumberRange.new(1.5, 3),
-	Rotation = NumberRange.new(-360, 360),
-	SpreadAngle = Vector2.new(15, 23),
-	Acceleration = Vector3.new(0, 6, 0),
-	LightEmission = 1,
-	LightInfluence = 0,
-	Brightness = 2,
-	Orientation = Enum.ParticleOrientation.FacingCamera,
-	ZOffset = 0.6,
-}
-
--- Snow .ParticleEmitter (121114307164171): snowflakes.
-T.Snow = {
-	Texture = "rbxassetid://121114307164171",
-	Size = seq({ 0, 0.34 }, { 1, 0.24 }),
-	ZOffset = 0.8,
-	Transparency = seq({ 0, 0 }, { 0.8, 0 }, { 1, 1 }),
-	Lifetime = NumberRange.new(0.9, 1.3),
-	Speed = NumberRange.new(0.5, 2),
-	Rotation = NumberRange.new(-360, 360),
-	RotSpeed = NumberRange.new(-60, 60),
-	SpreadAngle = Vector2.new(360, 360),
-	Acceleration = Vector3.new(0, -4, 0),
-	Drag = 2,
-	LightEmission = 0.6,
-	LightInfluence = 0.4,
-	Orientation = Enum.ParticleOrientation.FacingCamera,
-}
-
--- Smoke.Attachment.ParticleEmitter (115360600857654): dark wisps.
-T.Smoke = {
-	Texture = "rbxassetid://115360600857654",
-	Size = seq({ 0, 0.4 }, { 0.6, 1.1 }, { 1, 1.6 }),
-	Transparency = seq({ 0, 1 }, { 0.2, 0.55 }, { 1, 1 }),
-	Lifetime = NumberRange.new(0.7, 1),
-	Speed = NumberRange.new(0.2, 0.6),
-	Rotation = NumberRange.new(0, 300),
-	RotSpeed = NumberRange.new(10, 30),
-	SpreadAngle = Vector2.new(360, 360),
-	Acceleration = Vector3.new(0, 0.5, 0),
-	LightEmission = 0,
-	LightInfluence = 0.6,
-	Orientation = Enum.ParticleOrientation.FacingCamera,
-}
-
--- Wind Swirls.Attachment.ParticleEmitter (102358170561426): the gust swirl.
--- The pack's is nearly invisible (transparency 0.95 at best); made readable.
-T.Gust = {
-	Texture = "rbxassetid://102358170561426",
-	Color = tint(rgb(235, 242, 255)),
-	Size = seq({ 0, 0.8 }, { 0.46, 1.6 }, { 1, 1.2 }),
-	Transparency = seq({ 0, 1 }, { 0.35, 0.55 }, { 1, 1 }),
-	Lifetime = NumberRange.new(0.45, 0.6),
-	Speed = NumberRange.new(0, 0),
-	Rotation = NumberRange.new(-180, 180),
-	Acceleration = Vector3.new(0, -22, 0),
-	LightEmission = 1,
-	LightInfluence = 0,
-	Brightness = 1.4,
-	Orientation = Enum.ParticleOrientation.FacingCamera,
-	FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4,
-	FlipbookMode = Enum.ParticleFlipbookMode.OneShot,
-}
 
 -- Stylized Wind.Attachment.ParticleEmitter (80077917507961): the take-off ring,
 -- lying flat under the feet (VelocityPerpendicular to a downward emission).
@@ -218,48 +192,7 @@ T.Puff = {
 	EmissionDirection = Enum.NormalId.Top,
 }
 
-local WingParticles = { Templates = T }
-
---[[
-	Per pair: `trails` are { template, color, rest, fly } - Rate at rest and in
-	flight (doubled at speed). `gust` tints the downstroke swirl.
-]]
-WingParticles.Styles = {
-	AngelWings = {
-		trails = { { "Mote", tint(rgb(255, 250, 230), rgb(255, 214, 140)), 2, 12 } },
-		gust = rgb(255, 250, 235),
-	},
-	BatWings = {
-		trails = { { "Smoke", tint(rgb(92, 60, 120), rgb(40, 28, 60)), 0, 6 } },
-		gust = rgb(210, 190, 235),
-	},
-	DemonWings = {
-		trails = {
-			{ "Smoke", tint(rgb(110, 30, 34), rgb(40, 12, 16)), 0, 5 },
-			{ "Ember", tint(rgb(255, 120, 60), rgb(220, 40, 30)), 1, 8 },
-		},
-		gust = rgb(255, 200, 190),
-	},
-	FairyWings = {
-		trails = { { "Dust", tint(rgb(200, 190, 255), rgb(130, 240, 225)), 3, 18 } },
-		gust = nil, -- insect wings make no gusts
-	},
-	FlameWings = {
-		trails = {
-			{ "Ember", tint(rgb(255, 225, 120), rgb(255, 110, 30)), 4, 18 },
-			{ "Flame", tint(rgb(255, 170, 60), rgb(230, 60, 20)), 1, 7 },
-		},
-		gust = rgb(255, 225, 190),
-	},
-	FrostWings = {
-		trails = { { "Snow", tint(rgb(240, 252, 255), rgb(170, 220, 245)), 2, 12 } },
-		gust = rgb(225, 245, 255),
-	},
-	LeafWings = {
-		trails = { { "Dust", tint(rgb(200, 235, 120), rgb(110, 180, 70)), 1, 8 } },
-		gust = rgb(235, 255, 220),
-	},
-}
+WingParticles.Templates = T
 
 function WingParticles.make(name, overrides)
 	local template = T[name]

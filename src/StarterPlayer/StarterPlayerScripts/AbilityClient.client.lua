@@ -439,7 +439,8 @@ end
 	its flourish every time you joined.
 ]]
 local function newlyGained(abilities: { string }, reason: string?): string?
-	if not previousLoadout or reason == "restore" then
+	-- "wish" too: the banner's reveal is the celebration (see WishClient).
+	if not previousLoadout or reason == "restore" or reason == "wish" then
 		return nil
 	end
 

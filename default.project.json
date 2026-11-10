@@ -124,6 +124,9 @@
             "Disabled": false
           }
         },
+        "WishClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/WishClient.client.lua"
+        },
         "FlightClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/FlightClient.client.lua",
           "$properties": {
@@ -174,6 +177,12 @@
         },
         "CreatureFX": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/CreatureFX.client.lua",
+          "$properties": {
+            "Disabled": false
+          }
+        },
+        "VoxelRigFX": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/VoxelRigFX.client.lua",
           "$properties": {
             "Disabled": false
           }
@@ -294,6 +303,9 @@
       },
       "WeaponShotLibrary": {
         "$path": "assets/vfx-library/WeaponShotLibrary.rbxm"
+      },
+      "WishVFXLibrary": {
+        "$path": "assets/vfx-library/WishVFXLibrary.rbxm"
       },
       "WorldBorderForceField": {
         "$path": "assets/vfx-library/WorldBorderForceField.rbxm"
@@ -634,6 +646,16 @@
             "$path": "src/ReplicatedStorage/Shared/Flight/WingParticles.lua"
           }
         },
+        "Wish": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "WishConfig": {
+            "$path": "src/ReplicatedStorage/Shared/Wish/WishConfig.lua"
+          },
+          "WishCinematic": {
+            "$path": "src/ReplicatedStorage/Shared/Wish/WishCinematic.lua"
+          }
+        },
         "Loading": {
           "$className": "Folder",
           "$ignoreUnknownInstances": true,
@@ -661,6 +683,9 @@
           },
           "SignusClips": {
             "$path": "src/ReplicatedStorage/Shared/Enemies/SignusClips.lua"
+          },
+          "VoxelRigs": {
+            "$path": "src/ReplicatedStorage/Shared/Enemies/VoxelRigs"
           }
         },
         "Combat": {
@@ -1116,6 +1141,12 @@
       "Purchases": {
         "$path": "src/ServerScriptService/Purchases.lua"
       },
+      "WishService": {
+        "$path": "src/ServerScriptService/WishService.lua"
+      },
+      "WishServer": {
+        "$path": "src/ServerScriptService/WishServer.server.lua"
+      },
       "PlayerBiome": {
         "$path": "src/ServerScriptService/PlayerBiome.server.lua"
       },
@@ -1269,6 +1300,39 @@
         },
         "WerewolfLord": {
           "$path": "src/ServerScriptService/Creatures/WerewolfLord.lua"
+        },
+        "VoxelMoves": {
+          "$path": "src/ServerScriptService/Creatures/VoxelMoves.lua"
+        },
+        "AshenLich": {
+          "$path": "src/ServerScriptService/Creatures/AshenLich.lua"
+        },
+        "BrassSentinel": {
+          "$path": "src/ServerScriptService/Creatures/BrassSentinel.lua"
+        },
+        "MantisReaver": {
+          "$path": "src/ServerScriptService/Creatures/MantisReaver.lua"
+        },
+        "MoonmothMatriarch": {
+          "$path": "src/ServerScriptService/Creatures/MoonmothMatriarch.lua"
+        },
+        "Sporeking": {
+          "$path": "src/ServerScriptService/Creatures/Sporeking.lua"
+        },
+        "RimewyrmDrake": {
+          "$path": "src/ServerScriptService/Creatures/RimewyrmDrake.lua"
+        },
+        "AbyssalKraken": {
+          "$path": "src/ServerScriptService/Creatures/AbyssalKraken.lua"
+        },
+        "Shardstinger": {
+          "$path": "src/ServerScriptService/Creatures/Shardstinger.lua"
+        },
+        "Gloomrider": {
+          "$path": "src/ServerScriptService/Creatures/Gloomrider.lua"
+        },
+        "TempestDjinn": {
+          "$path": "src/ServerScriptService/Creatures/TempestDjinn.lua"
         },
         "Beast": {
           "$path": "src/ServerScriptService/Creatures/Beast.lua"

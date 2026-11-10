@@ -6,6 +6,64 @@
 local EnemyDrops = {}
 
 EnemyDrops.Tables = {
+	AshenLich = {
+		{ item = "Bone", chance = 1, min = 2, max = 4 },
+		{ item = "Ectoplasm", chance = 0.8, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 1, min = 2, max = 4 },
+		{ item = "VoidCrystal", chance = 0.2, min = 1, max = 1 },
+	},
+	BrassSentinel = {
+		{ item = "IronOre", chance = 1, min = 4, max = 8 },
+		{ item = "GoldOre", chance = 0.6, min = 1, max = 3 },
+		{ item = "Coal", chance = 1, min = 2, max = 4 },
+		{ item = "EssenceShard", chance = 1, min = 2, max = 3 },
+	},
+	MantisReaver = {
+		{ item = "GreenScale", chance = 1, min = 1, max = 3 },
+		{ item = "Claws", chance = 0.5, min = 1, max = 1 },
+		{ item = "EssenceShard", chance = 1, min = 1, max = 3 },
+	},
+	MoonmothMatriarch = {
+		{ item = "Feather", chance = 0.8, min = 1, max = 3 },
+		{ item = "EssenceShard", chance = 1, min = 2, max = 4 },
+		{ item = "GoldOre", chance = 0.3, min = 1, max = 2 },
+	},
+	Sporeking = {
+		{ item = "Herb", chance = 1, min = 2, max = 5 },
+		{ item = "RottenChunk", chance = 0.4, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 1, min = 1, max = 3 },
+	},
+	RimewyrmDrake = {
+		{ item = "Leather", chance = 1, min = 2, max = 4 },
+		{ item = "Fang", chance = 0.6, min = 1, max = 2 },
+		{ item = "Claws", chance = 0.5, min = 1, max = 1 },
+		{ item = "EssenceShard", chance = 1, min = 2, max = 4 },
+		{ item = "MythrilOre", chance = 0.3, min = 1, max = 2 },
+	},
+	AbyssalKraken = {
+		{ item = "Gel", chance = 1, min = 3, max = 6 },
+		{ item = "Lens", chance = 0.5, min = 1, max = 2 },
+		{ item = "EssenceShard", chance = 1, min = 2, max = 4 },
+		{ item = "VoidCrystal", chance = 0.3, min = 1, max = 1 },
+	},
+	Shardstinger = {
+		{ item = "Claws", chance = 0.5, min = 1, max = 2 },
+		{ item = "MythrilOre", chance = 0.5, min = 1, max = 2 },
+		{ item = "VoidCrystal", chance = 0.4, min = 1, max = 1 },
+		{ item = "EssenceShard", chance = 1, min = 2, max = 3 },
+	},
+	Gloomrider = {
+		{ item = "Bone", chance = 1, min = 2, max = 4 },
+		{ item = "Ectoplasm", chance = 0.8, min = 1, max = 3 },
+		{ item = "IronOre", chance = 0.7, min = 2, max = 4 },
+		{ item = "DarkHorns", chance = 0.3, min = 1, max = 1 },
+		{ item = "EssenceShard", chance = 1, min = 2, max = 4 },
+	},
+	TempestDjinn = {
+		{ item = "GoldOre", chance = 1, min = 2, max = 4 },
+		{ item = "EssenceShard", chance = 1, min = 3, max = 5 },
+		{ item = "VoidCrystal", chance = 0.25, min = 1, max = 1 },
+	},
 	BlueSlime = {
 		{ item = "Gel", chance = 1, min = 1, max = 2 },
 	},

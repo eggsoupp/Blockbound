@@ -1824,4 +1824,14 @@ Rigs.AxeGolem = {
 -- (Creatures.Auroch), so it moves the same way too.
 Rigs.Auroch = Rigs.Pentasaurus
 
+-- The code-modelled voxel rigs (assets/voxel-enemies) animate through their
+-- own keyframe player: Shared.Enemies.VoxelRigs.
+local voxelRigs = script.Parent:FindFirstChild("VoxelRigs")
+if voxelRigs then
+	local VoxelPlayer = require(voxelRigs.Player)
+	for name, spec in pairs(VoxelPlayer.all()) do
+		Rigs[name] = VoxelPlayer.rig(spec)
+	end
+end
+
 return Rigs

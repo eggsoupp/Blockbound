@@ -1,0 +1,312 @@
+package VoxOut;
+# Writers for a finished VoxLib model: MagicaVoxel scene, Studio box data,
+# preview sheet and joint table.
+
+use strict;
+use warnings;
+use POSIX qw(floor);
+use Compress::Zlib;
+
+# ---------------------------------------------------------------- helpers
+
+sub parts_of {
+	my ($m) = @_;
+	my %by;
+	while (my ($k, $v) = each %{ $m->{grid} }) {
+		my ($x, $y, $z) = split /,/, $k;
+		push @{ $by{ $v->[0] } }, [ $x, $y, $z, $v->[1] ];
+	}
+	return \%by;
+}
+
+sub bounds {
+	my ($vox) = @_;
+	my @lo = (1e9) x 3; my @hi = (-1e9) x 3;
+	for my $v (@$vox) {
+		for (0 .. 2) { $lo[$_] = $v->[$_] if $v->[$_] < $lo[$_]; $hi[$_] = $v->[$_] if $v->[$_] > $hi[$_]; }
+	}
+	return (\@lo, \@hi);
+}
+
+# ---------------------------------------------------------------- .vox
+
+sub str { my $s = shift; return pack('V', length $s) . $s }
+sub dict { my %d = @_; my $o = pack('V', scalar keys %d); $o .= str($_) . str($d{$_}) for sort keys %d; return $o }
+sub chunk { my ($id, $content, $children) = @_; $children //= ''; return $id . pack('VV', length $content, length $children) . $content . $children }
+
+# Roblox (X, Y, Z) -> vox (-X, Z, Y): front (-Z) faces MagicaVoxel's front
+# (-y), z up, and the creature's right stays on its right (no mirror).
+sub to_vox { my ($x, $y, $z) = @_; return (-$x, $z, $y) }
+
+sub write_vox {
+	my ($m, $path) = @_;
+	my $by = parts_of($m);
+	my @models; my @nodes; my $body = '';
+	my @shapes;
+	for my $name (@{ $m->{parts} }) {
+		my @v = map { [ to_vox(@$_[0 .. 2]), $_->[3] ] } @{ $by->{$name} || [] };
+		next unless @v;
+		my ($lo, $hi) = bounds(\@v);
+		my @size = map { $hi->[$_] - $lo->[$_] + 1 } 0 .. 2;
+		die "$name too big (@size)\n" if grep { $_ > 256 } @size;
+		my $xyzi = pack('V', scalar @v);
+		$xyzi .= pack('CCCC', $_->[0] - $lo->[0], $_->[1] - $lo->[1], $_->[2] - $lo->[2], $_->[3]) for @v;
+		$body .= chunk('SIZE', pack('VVV', @size)) . chunk('XYZI', $xyzi);
+		my @t = map { $lo->[$_] + floor($size[$_] / 2) } 0 .. 2;
+		push @shapes, [ $name, "@t" ];
+	}
+	# Scene: root transform 0 -> group 1 -> (transform, shape) per part.
+	my $n = 2; my @kids;
+	my $scene = '';
+	for my $i (0 .. $#shapes) {
+		my ($name, $t) = @{ $shapes[$i] };
+		push @kids, $n;
+		$scene .= chunk('nTRN', pack('V', $n) . dict(_name => $name) . pack('VVVV', $n + 1, 0xffffffff, 0, 1) . dict(_t => $t));
+		$scene .= chunk('nSHP', pack('V', $n + 1) . dict() . pack('VV', 1, $i) . dict());
+		$n += 2;
+	}
+	my $root = chunk('nTRN', pack('V', 0) . dict(_name => $m->{name}) . pack('VVVV', 1, 0xffffffff, 0, 1) . dict());
+	my $grp = chunk('nGRP', pack('V', 1) . dict() . pack('V', scalar @kids) . pack('V*', @kids));
+	my $layer = chunk('LAYR', pack('V', 0) . dict(_name => $m->{name}) . pack('V', 0xffffffff));
+	my $rgba = '';
+	for my $i (0 .. 255) {
+		my $c = $m->{colors}[$i];
+		$rgba .= $c ? pack('CCCC', $c->[1], $c->[2], $c->[3], 255) : pack('CCCC', 0, 0, 0, 255);
+	}
+	my $matl = '';
+	for my $i (0 .. $#{ $m->{colors} }) {
+		next unless $m->{glow}{ $m->{colors}[$i][0] };
+		$matl .= chunk('MATL', pack('V', $i + 1) . dict(_type => '_emit', _emit => '0.6', _flux => '1', _ldr => '0'));
+	}
+	my $main = chunk(q{MAIN}, q{}, $body . $root . $grp . $scene . $layer . chunk('RGBA', $rgba) . $matl);
+	open my $fh, '>:raw', $path or die "$path: $!";
+	print $fh 'VOX ' . pack(q{V}, 200) . $main;
+	close $fh;
+	return scalar @shapes;
+}
+
+# ---------------------------------------------------------------- boxes
+
+# Greedy merge of one part into boxes. Voxels hidden inside the part (all six
+# neighbours in the same part) take any colour, so boxes run through them.
+sub boxes_of {
+	my ($vox) = @_;
+	my %cell; $cell{"$_->[0],$_->[1],$_->[2]"} = $_->[3] for @$vox;
+	my %vis;
+	for my $v (@$vox) {
+		my ($x, $y, $z) = @$v;
+		for ([ 1, 0, 0 ], [ -1, 0, 0 ], [ 0, 1, 0 ], [ 0, -1, 0 ], [ 0, 0, 1 ], [ 0, 0, -1 ]) {
+			unless (exists $cell{ ($x + $_->[0]) . ',' . ($y + $_->[1]) . ',' . ($z + $_->[2]) }) { $vis{"$x,$y,$z"} = 1; last }
+		}
+	}
+	my %done; my @boxes;
+	my @order = sort { $a->[1] <=> $b->[1] || $a->[2] <=> $b->[2] || $a->[0] <=> $b->[0] } grep { $vis{"$_->[0],$_->[1],$_->[2]"} } @$vox;
+	for my $v (@order) {
+		my ($x0, $y0, $z0, $c) = @$v;
+		next if $done{"$x0,$y0,$z0"};
+		my $ok = sub {
+			my $k = "$_[0],$_[1],$_[2]";
+			return 0 unless exists $cell{$k};
+			return 1 unless $vis{$k};
+			return $cell{$k} == $c;
+		};
+		my ($x1, $y1, $z1) = ($x0, $y0, $z0);
+		$x1++ while $ok->($x1 + 1, $y0, $z0);
+		ZROW: while (1) {
+			for my $x ($x0 .. $x1) { last ZROW unless $ok->($x, $y0, $z1 + 1) }
+			$z1++;
+		}
+		YSLAB: while (1) {
+			for my $x ($x0 .. $x1) { for my $z ($z0 .. $z1) { last YSLAB unless $ok->($x, $y1 + 1, $z) } }
+			$y1++;
+		}
+		for my $x ($x0 .. $x1) { for my $y ($y0 .. $y1) { for my $z ($z0 .. $z1) {
+			my $k = "$x,$y,$z";
+			$done{$k} = 1 if $vis{$k} && $cell{$k} == $c;
+		} } }
+		push @boxes, [ $x0, $y0, $z0, $x1 - $x0 + 1, $y1 - $y0 + 1, $z1 - $z0 + 1, $c ];
+	}
+	return \@boxes;
+}
+
+sub write_lua {
+	my ($m, $path) = @_;
+	my $by = parts_of($m);
+	my $o = "-- Generated by assets/voxel-enemies/source/build.pl. Roblox axes in voxels:\n";
+	$o .= "-- +X right, +Y up, front -Z; box = x,y,z (min voxel), w,h,d, colour index.\n";
+	$o .= "return {\n\tname = \"$m->{name}\",\n\tvoxel = $m->{voxel},\n\tcolors = {\n";
+	for (@{ $m->{colors} }) { $o .= sprintf "\t\t{ \"%s\", %d, %d, %d, %s },\n", @$_, $m->{glow}{ $_->[0] } ? 'true' : 'false' }
+	$o .= "\t},\n\tparts = {\n";
+	my $total = 0;
+	for my $name (@{ $m->{parts} }) {
+		my $j = $m->{joints}{$name};
+		my $b = boxes_of($by->{$name} || []);
+		$total += @$b;
+		$o .= sprintf "\t\t{ name = \"%s\", parent = %s, pivot = { %s }, role = \"%s\",\n\t\t\tboxes = \"%s\" },\n",
+			$name, defined $j->{parent} ? "\"$j->{parent}\"" : 'nil', join(', ', map { 0 + sprintf('%.2f', $_) } @{ $j->{pivot} }),
+			$j->{role}, join(';', map { join ',', @$_ } @$b);
+	}
+	$o .= "\t},\n}\n";
+	open my $fh, '>', $path or die "$path: $!"; print $fh $o; close $fh;
+	return $total;
+}
+
+# ---------------------------------------------------------------- preview
+
+my @DIRS = ([ 1, 0, 0 ], [ -1, 0, 0 ], [ 0, 1, 0 ], [ 0, -1, 0 ], [ 0, 0, 1 ], [ 0, 0, -1 ]);
+
+sub dot { $_[0][0] * $_[1][0] + $_[0][1] * $_[1][1] + $_[0][2] * $_[1][2] }
+sub cross { [ $_[0][1] * $_[1][2] - $_[0][2] * $_[1][1], $_[0][2] * $_[1][0] - $_[0][0] * $_[1][2], $_[0][0] * $_[1][1] - $_[0][1] * $_[1][0] ] }
+sub norm { my $l = sqrt(dot($_[0], $_[0])); [ map { $_ / $l } @{ $_[0] } ] }
+
+sub hsv {
+	my ($h, $s, $v) = @_;
+	my $i = floor($h * 6); my $f = $h * 6 - $i;
+	my ($p, $q, $t) = ($v * (1 - $s), $v * (1 - $f * $s), $v * (1 - (1 - $f) * $s));
+	my @c = ([ $v, $t, $p ], [ $q, $v, $p ], [ $p, $v, $t ], [ $p, $q, $v ], [ $t, $p, $v ], [ $v, $p, $q ])[ $i % 6 ];
+	return map { int($_ * 255) } @{ $c[0] };
+}
+
+# One view. yaw 0 = camera in front of the creature looking +Z.
+sub render_view {
+	my ($m, $yaw, $pitch, $scale, $mode) = @_;
+	my ($cy, $sy, $cp, $sp) = (cos($yaw), sin($yaw), cos($pitch), sin($pitch));
+	my $d = [ -$sy * $cp, -$sp, $cy * $cp ];
+	my $r = norm(cross($d, [ 0, 1, 0 ]));
+	my $u = cross($r, $d);
+	my $light = norm([ 0.35, 0.85, -0.45 ]);
+	my %partIdx; my $pi = 0; $partIdx{$_} = $pi++ for @{ $m->{parts} };
+	my $g = $m->{grid};
+
+	my ($minx, $maxx, $miny, $maxy) = (1e9, -1e9, 1e9, -1e9);
+	while (my ($k) = each %$g) {
+		my @p = split /,/, $k;
+		my ($a, $b) = (dot(\@p, $r), dot(\@p, $u));
+		$minx = $a if $a < $minx; $maxx = $a if $a > $maxx; $miny = $b if $b < $miny; $maxy = $b if $b > $maxy;
+	}
+	for (values %{ $m->{joints} }) {
+		my ($a, $b) = (dot($_->{pivot}, $r), dot($_->{pivot}, $u));
+		$minx = $a if $a < $minx; $maxx = $a if $a > $maxx; $miny = $b if $b < $miny; $maxy = $b if $b > $maxy;
+	}
+	my $pad = 3;
+	my $W = int(($maxx - $minx + 2 * $pad) * $scale); my $H = int(($maxy - $miny + 2 * $pad) * $scale);
+	my (@zb, @col);
+	my $proj = sub { (($_[0] - $minx + $pad) * $scale, ($maxy + $pad - $_[1]) * $scale) };
+
+	while (my ($k, $v) = each %$g) {
+		my ($x, $y, $z) = split /,/, $k;
+		my ($pn, $ci) = @$v;
+		my $c = $m->{colors}[ $ci - 1 ];
+		my $glow = $m->{glow}{ $c->[0] };
+		for my $n (@DIRS) {
+			my $dn = dot($n, $d);
+			next if $dn >= -1e-6;
+			next if exists $g->{ ($x + $n->[0]) . ',' . ($y + $n->[1]) . ',' . ($z + $n->[2]) };
+			my @fc = ($x + 0.5 * $n->[0], $y + 0.5 * $n->[1], $z + 0.5 * $n->[2]);
+			my @t1 = $n->[0] ? (0, 1, 0) : (1, 0, 0);
+			my @t2 = $n->[2] ? (0, 1, 0) : (0, 0, 1);
+			@t2 = (0, 0, 1) if $n->[0];
+			my @q;
+			for my $s ([ -1, -1 ], [ 1, -1 ], [ 1, 1 ], [ -1, 1 ]) {
+				my @p = map { $fc[$_] + 0.5 * $s->[0] * $t1[$_] + 0.5 * $s->[1] * $t2[$_] } 0 .. 2;
+				push @q, [ $proj->(dot(\@p, $r), dot(\@p, $u)) ];
+			}
+			my $shade = 0.42 + 0.58 * (dot($n, $light) > 0 ? dot($n, $light) : 0) + ($n->[1] == 0 ? 0.04 * $n->[0] : 0);
+			my @rgb;
+			if ($mode eq 'parts') {
+				my @h = hsv(($partIdx{$pn} * 0.61803) % 1 + (($partIdx{$pn} * 0.61803) - int($partIdx{$pn} * 0.61803)), 0.55, 0.95);
+				@rgb = map { int($_ * $shade) } @h;
+			} else {
+				my $k2 = $glow ? 1.1 : $shade;
+				@rgb = map { my $q2 = int($_ * $k2); $q2 > 255 ? 255 : $q2 } @$c[ 1 .. 3 ];
+			}
+			# plane depth: t = (c.n - sx r.n - sy u.n) / d.n
+			my $cn = dot(\@fc, $n); my ($rn, $un) = (dot($r, $n), dot($u, $n));
+			my ($x0, $x1, $y0, $y1) = (1e9, -1e9, 1e9, -1e9);
+			for (@q) { $x0 = $_->[0] if $_->[0] < $x0; $x1 = $_->[0] if $_->[0] > $x1; $y0 = $_->[1] if $_->[1] < $y0; $y1 = $_->[1] if $_->[1] > $y1; }
+			for my $py (floor($y0) .. floor($y1)) {
+				next if $py < 0 || $py >= $H;
+				my $cyp = $py + 0.5;
+				for my $px (floor($x0) .. floor($x1)) {
+					next if $px < 0 || $px >= $W;
+					my $cxp = $px + 0.5;
+					my ($pos, $neg) = (0, 0);
+					for my $i (0 .. 3) {
+						my ($a, $b) = ($q[$i], $q[ ($i + 1) % 4 ]);
+						my $e = ($b->[0] - $a->[0]) * ($cyp - $a->[1]) - ($b->[1] - $a->[1]) * ($cxp - $a->[0]);
+						$pos++ if $e >= 0; $neg++ if $e <= 0;
+					}
+					next unless $pos == 4 || $neg == 4;
+					my $sx = $cxp / $scale + $minx - $pad; my $syw = $maxy + $pad - $cyp / $scale;
+					my $t = ($cn - $sx * $rn - $syw * $un) / $dn;
+					my $i = $py * $W + $px;
+					if (!defined $zb[$i] || $t < $zb[$i]) { $zb[$i] = $t; $col[$i] = \@rgb; }
+				}
+			}
+		}
+	}
+	# Outlines where depth jumps.
+	my @img;
+	my $bg = $mode eq 'parts' ? [ 34, 36, 44 ] : [ 52, 58, 70 ];
+	for my $py (0 .. $H - 1) {
+		for my $px (0 .. $W - 1) {
+			my $i = $py * $W + $px;
+			my $c = $col[$i];
+			unless ($c) { $img[$i] = $bg; next }
+			my $edge = 0;
+			for ([ 1, 0 ], [ -1, 0 ], [ 0, 1 ], [ 0, -1 ]) {
+				my ($qx, $qy) = ($px + $_->[0], $py + $_->[1]);
+				next if $qx < 0 || $qy < 0 || $qx >= $W || $qy >= $H;
+				my $j = $qy * $W + $qx;
+				if (!defined $zb[$j] || $zb[$j] < $zb[$i] - 1.6) { $edge = 1; last }
+			}
+			$img[$i] = $edge ? [ map { int($_ * 0.55) } @$c ] : $c;
+		}
+	}
+	if ($mode eq 'parts') {
+		for (values %{ $m->{joints} }) {
+			my ($a, $b) = $proj->(dot($_->{pivot}, $r), dot($_->{pivot}, $u));
+			for my $o (-3 .. 3) {
+				for ([ $a + $o, $b ], [ $a, $b + $o ]) {
+					my ($qx, $qy) = (int($_->[0]), int($_->[1]));
+					next if $qx < 0 || $qy < 0 || $qx >= $W || $qy >= $H;
+					$img[ $qy * $W + $qx ] = abs($o) <= 1 ? [ 255, 255, 255 ] : [ 0, 0, 0 ];
+				}
+			}
+		}
+	}
+	return { w => $W, h => $H, px => \@img, bg => $bg };
+}
+
+sub png {
+	my ($path, $W, $H, $px) = @_;
+	my $raw = '';
+	for my $y (0 .. $H - 1) { $raw .= "\0" . join('', map { pack('CCC', @$_) } @{$px}[ $y * $W .. $y * $W + $W - 1 ]) }
+	my $ch = sub { my ($t, $d) = @_; pack('N', length $d) . $t . $d . pack('N', crc32($t . $d)) };
+	open my $fh, '>:raw', $path or die "$path: $!";
+	print $fh "\x89PNG\r\n\x1a\n" . $ch->('IHDR', pack('NNCCCCC', $W, $H, 8, 2, 0, 0, 0)) . $ch->('IDAT', compress($raw, 9)) . $ch->('IEND', '');
+	close $fh;
+}
+
+# Sheet: front 3/4, side, back 3/4 in colour, then part colours with pivots.
+sub write_preview {
+	my ($m, $path, $scale) = @_;
+	my $pi = 3.14159265;
+	my @views = (
+		render_view($m, 35 * $pi / 180, 18 * $pi / 180, $scale, 'color'),
+		render_view($m, 90 * $pi / 180, 8 * $pi / 180, $scale, 'color'),
+		render_view($m, 215 * $pi / 180, 22 * $pi / 180, $scale, 'color'),
+		render_view($m, 35 * $pi / 180, 18 * $pi / 180, $scale, 'parts'),
+	);
+	my $W = 0; my $H = 0;
+	for (@views) { $W += $_->{w}; $H = $_->{h} if $_->{h} > $H }
+	my @px = ([ 30, 32, 40 ]) x ($W * $H);
+	my $ox = 0;
+	for my $v (@views) {
+		for my $y (0 .. $v->{h} - 1) { for my $x (0 .. $v->{w} - 1) { $px[ ($y + $H - $v->{h}) * $W + $ox + $x ] = $v->{px}[ $y * $v->{w} + $x ] } }
+		$ox += $v->{w};
+	}
+	png($path, $W, $H, \@px);
+}
+
+1;

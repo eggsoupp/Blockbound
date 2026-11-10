@@ -93,6 +93,20 @@ function Bestiary.killed(player: Player?, name: string?)
 	record[name] = math.min((record[name] or 0) + 1, MAX_KILLS)
 	dirty[player] = true
 	InventoryStore.markDirty(player)
+
+	-- Wish Stars for the kill: always for a boss, now and then for anything
+	-- else. Required here, not at the top: WishService is a later addition and
+	-- this keeps the bestiary loading whatever happens to it.
+	local ok, WishService = pcall(require, script.Parent:FindFirstChild("WishService"))
+	if ok and WishService then
+		local Earn = require(game:GetService("ReplicatedStorage").Shared.Wish.WishConfig).Earn
+		local def = EnemyConfig.Definitions[name]
+		if def and def.boss then
+			WishService.award(player, Earn.Boss, (def.displayName or name) .. " defeated")
+		elseif math.random() < Earn.EnemyChance then
+			WishService.award(player, 1, "found on " .. (def and def.displayName or name))
+		end
+	end
 end
 
 -- The whole record, { [enemy] = kills }, or nil before it has loaded.

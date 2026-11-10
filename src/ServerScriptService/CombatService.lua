@@ -70,6 +70,11 @@ local suppressPush = setmetatable({}, { __mode = "k" })
 -- so leaving the server clears it whether or not anything remembered to.
 local invulnerable = setmetatable({}, { __mode = "k" })
 
+-- player -> os.clock() until which they take no damage: the wish reveal holds
+-- the camera in the sky, so WishService shields its watcher for at most a few
+-- seconds longer than the reveal can take, and lifts it when it closes.
+local shieldedUntil = setmetatable({}, { __mode = "k" })
+
 -- ---------------------------------------------------------------------------
 -- Stats
 -- ---------------------------------------------------------------------------
@@ -167,6 +172,10 @@ function CombatService.applyDamage(player, amount, source)
 	end
 
 	local now = os.clock()
+	-- A short shield while the player watches a wish reveal (see shield()).
+	if (shieldedUntil[player] or 0) > now then
+		return 0
+	end
 	if CombatConfig.InvulnerableSeconds > 0 then
 		local last = lastHitAt[player]
 		if last and now - last < CombatConfig.InvulnerableSeconds then
@@ -235,6 +244,12 @@ function CombatService.setInvulnerable(player, on: boolean): boolean
 	-- Replicated UI hint; server gameplay still uses the private table above.
 	player:SetAttribute("GodMode", on == true)
 	return invulnerable[player] == true
+end
+
+-- Shields a player from damage for `seconds` (0 lifts it). Not /god: it
+-- expires by itself and never shows the GodMode hint.
+function CombatService.shield(player, seconds: number)
+	shieldedUntil[player] = if seconds > 0 then os.clock() + seconds else nil
 end
 
 function CombatService.isInvulnerable(player): boolean

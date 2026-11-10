@@ -2735,6 +2735,506 @@ EnemyConfig.Definitions = {
 		hitFlashColor = Color3.fromRGB(255, 255, 255),
 		burstColor = Color3.fromRGB(255, 150, 230),
 	},
+
+	--[[
+		ASHEN LICH - a floating skeleton sorcerer-king: soul bolts from its staff, graves of soul fire opened under you, a soul nova that throws you back, and a raking claw. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.AshenLich, fighting through ServerScriptService.Creatures.AshenLich
+		(on Creatures.VoxelMoves).
+	]]
+	AshenLich = {
+		asset = "AshenLich",
+		displayName = "Ashen Lich",
+		health = 320,
+		movement = "Hop",
+		trait = "AshenLich",
+
+		spawnBiomes = { "Corruption" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 6,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 6,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(150, 220, 235),
+	},
+
+	--[[
+		BRASS SENTINEL - a clockwork colossus: a ground-shaking hammer fist, a rush behind its tower shield, and a furnace that roars fire from its chest. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.BrassSentinel, fighting through ServerScriptService.Creatures.BrassSentinel
+		(on Creatures.VoxelMoves).
+	]]
+	BrassSentinel = {
+		asset = "BrassSentinel",
+		displayName = "Brass Sentinel",
+		health = 420,
+		movement = "Hop",
+		trait = "BrassSentinel",
+
+		spawnBiomes = { "Desert" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 5.5,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 6,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(200, 150, 70),
+	},
+
+	--[[
+		MANTIS REAVER - a jade mantis, fast and relentless: crossed scythes that leave you bleeding, a winged pounce, and a spinning whirl of blades. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.MantisReaver, fighting through ServerScriptService.Creatures.MantisReaver
+		(on Creatures.VoxelMoves).
+	]]
+	MantisReaver = {
+		asset = "MantisReaver",
+		displayName = "Mantis Reaver",
+		health = 300,
+		movement = "Hop",
+		trait = "MantisReaver",
+
+		spawnBiomes = { "Plains" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 9,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 5,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 50,
+		lungeMaxDistance = 22,
+		lungeMaxSpeed = 28,
+		lungeWindup = 0.4,
+		lungeDamage = 14,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(90, 200, 110),
+	},
+
+	--[[
+		MOONMOTH MATRIARCH - a moth queen who calls down moonbeams, beats a gale of glittering dust, and dazzles with her eyespots. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.MoonmothMatriarch, fighting through ServerScriptService.Creatures.MoonmothMatriarch
+		(on Creatures.VoxelMoves).
+	]]
+	MoonmothMatriarch = {
+		asset = "MoonmothMatriarch",
+		displayName = "Moonmoth Matriarch",
+		health = 280,
+		movement = "Hop",
+		trait = "MoonmothMatriarch",
+
+		spawnBiomes = { "Hallow" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 7,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 5,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 5,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(190, 180, 240),
+	},
+
+	--[[
+		SPOREKING - a mushroom titan: a two-fisted smash, a choking spore cloud, and spore pods lobbed from afar. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.Sporeking, fighting through ServerScriptService.Creatures.Sporeking
+		(on Creatures.VoxelMoves).
+	]]
+	Sporeking = {
+		asset = "Sporeking",
+		displayName = "Sporeking",
+		health = 380,
+		movement = "Hop",
+		trait = "Sporeking",
+
+		spawnBiomes = { "Swamp" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 5,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 6,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(200, 60, 60),
+	},
+
+	--[[
+		RIMEWYRM DRAKE - a frost wyvern: a heavy bite, a sweeping frost breath that chills, a tail sweep and a leaping wingbeat that rains ice. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.RimewyrmDrake, fighting through ServerScriptService.Creatures.RimewyrmDrake
+		(on Creatures.VoxelMoves).
+	]]
+	RimewyrmDrake = {
+		asset = "RimewyrmDrake",
+		displayName = "Rimewyrm Drake",
+		health = 450,
+		movement = "Hop",
+		trait = "RimewyrmDrake",
+
+		spawnBiomes = { "Snow" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 7,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 7,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 7,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(120, 170, 220),
+	},
+
+	--[[
+		ABYSSAL KRAKEN - a hovering deep-sea horror: tentacle slams, a grab that hauls you in to its beak, and a blinding ink burst. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.AbyssalKraken, fighting through ServerScriptService.Creatures.AbyssalKraken
+		(on Creatures.VoxelMoves).
+	]]
+	AbyssalKraken = {
+		asset = "AbyssalKraken",
+		displayName = "Abyssal Kraken",
+		health = 400,
+		movement = "Hop",
+		trait = "AbyssalKraken",
+
+		spawnBiomes = { "Swamp" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 5.5,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 6,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(120, 80, 180),
+	},
+
+	--[[
+		SHARDSTINGER - a crystal-backed scorpion: crushing pincers, a venomous sting, and crystals that erupt from the ground toward you. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.Shardstinger, fighting through ServerScriptService.Creatures.Shardstinger
+		(on Creatures.VoxelMoves).
+	]]
+	Shardstinger = {
+		asset = "Shardstinger",
+		displayName = "Shardstinger",
+		health = 340,
+		movement = "Hop",
+		trait = "Shardstinger",
+
+		spawnBiomes = { "Hallow" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 8,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 6,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(170, 110, 240),
+	},
+
+	--[[
+		GLOOMRIDER - a death knight on a skeletal warhorse: a ghost-fire lance charge, a sweeping lance and a rearing stomp that leaves the ground burning. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.Gloomrider, fighting through ServerScriptService.Creatures.Gloomrider
+		(on Creatures.VoxelMoves).
+	]]
+	Gloomrider = {
+		asset = "Gloomrider",
+		displayName = "Gloomrider",
+		health = 380,
+		movement = "Hop",
+		trait = "Gloomrider",
+
+		spawnBiomes = { "Crimson" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 9,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 7,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 7,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(120, 240, 170),
+	},
+
+	--[[
+		TEMPEST DJINN - a four-armed storm spirit: a hurled storm orb, lightning called onto marks, a four-fisted flurry and a cyclone that drags you in. A big, rare voxel creature: rigged and animated by
+		Shared.Enemies.VoxelRigs.TempestDjinn, fighting through ServerScriptService.Creatures.TempestDjinn
+		(on Creatures.VoxelMoves).
+	]]
+	TempestDjinn = {
+		asset = "TempestDjinn",
+		displayName = "Tempest Djinn",
+		health = 360,
+		movement = "Hop",
+		trait = "TempestDjinn",
+
+		spawnBiomes = { "Desert" },
+		spawnWeight = 0.12,
+		packSize = NumberRange.new(1, 1),
+
+		speed = 7,
+		aggroRange = 60,
+		giveUpRange = 100,
+		despawnSeconds = 45,
+
+		contactRange = 4.5,
+		contactDamage = 6,
+		contactInterval = 1.2,
+
+		gravity = 120,
+		jumpPower = 42,
+		maxHopDistance = 7,
+		maxHopSpeed = 12,
+		groundedSeconds = 0.12,
+		windupSeconds = 0.1,
+
+		sizeVariance = 0.05,
+
+		stepUpBlocks = 1,
+		scanUpBlocks = 3,
+		scanDownBlocks = 8,
+
+		lungeRange = 0,
+		lungeJumpPower = 42,
+		lungeMaxDistance = 8,
+		lungeMaxSpeed = 12,
+		lungeWindup = 0.35,
+		lungeDamage = 6,
+		lungeCooldown = 99,
+
+		hitFlash = "Highlight",
+		burstColor = Color3.fromRGB(110, 170, 240),
+	},
 }
 
 --[[
@@ -2775,6 +3275,7 @@ EnemyConfig.Order = {
 	"SlimeEmperor", "AllSeeingEye", "Signus", "Blightborer",
 	"ServantEye", "Blightling",
 	"Lasereye", "Snowman", "GreenWasp", "Shrike", "Cobra", "RainbowSlime", "GreenSpider", "EvilRat", "Gorilla", "Pentasaurus", "WormyHorror", "RabbicCleric", "FootedPiranha", "BearidWizard", "PitDevil", "CrabMonster", "Longleg", "OgreBrute", "CatMagician", "GoatShaman", "TigerBlademaster", "ZombieRat", "LavaGolem", "BatMutant", "Rooster", "Auroch", "LizardWarrior", "VampireDuck", "SpottedDemon", "WerewolfLord", "Beagle", "BeisaOryx", "Bronto", "GreenRaptor", "CatMonk", "Cannon", "PinkyDemon", "HandlessNorg", "LemurianWarrior", "AxeGolem",
+	"AshenLich", "BrassSentinel", "MantisReaver", "MoonmothMatriarch", "Sporeking", "RimewyrmDrake", "AbyssalKraken", "Shardstinger", "Gloomrider", "TempestDjinn",
 }
 
 --[[

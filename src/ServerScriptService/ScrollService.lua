@@ -32,7 +32,8 @@
 	label and the glow, so nothing about the presentation has to be repeated on
 	every copy, and changing it here changes every scroll in the place.
 
-	The attribute is matched loosely (AbilityConfig.resolve), so "sacred rain"
+	The attribute is matched loosely (AspectConfig.resolveAny, which also takes
+	an ability name and gives its aspect), so "sacred rain"
 	and "SacredRain" both work. One that names nothing real warns with the name
 	it was given and is left inert rather than being deleted - somebody's typo
 	should cost them a warning, not their model.
@@ -70,15 +71,15 @@
 
 	THE ORDER: TEACH, THEN DESTROY
 
-	AbilityLoadout.add is the thing that can fail - three slots full is the
-	ordinary case, and the bin in the Tab menu is the answer to it. Destroying
+	AbilityLoadout.grantAspect is the thing that can fail - no room in storage
+	for another copy is the ordinary case. Destroying
 	the scroll first would delete an ability nobody received. So the scroll is
 	only removed once the ability is definitely in a slot, and a refusal puts
 	the prompt straight back.
 
 	NOBODY OPENS THE MENU FROM HERE
 
-	AbilityLoadout.add pushes the new loadout, StarterPlayerScripts.AbilityClient
+	AbilityLoadout.grantAspect pushes the new loadout, StarterPlayerScripts.AbilityClient
 	notices exactly one new name, and PauseMenu is asked to open so the
 	backdrop's flourish plays to a screen somebody is looking at. That path
 	already existed for /add; a scroll is just another thing that calls the same
@@ -93,7 +94,9 @@ local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local AbilityConfig = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityConfig"))
+-- Scrolls teach ASPECTS. The `Ability` attribute may name an aspect or one of
+-- its abilities (scrolls authored before aspects), and resolves to the aspect.
+local AspectConfig = require(Shared:WaitForChild("Abilities"):WaitForChild("AspectConfig"))
 local Theme = require(Shared:WaitForChild("UI"):WaitForChild("Theme"))
 
 local AbilityLoadout = require(ServerScriptService:WaitForChild("AbilityLoadout"))
@@ -294,7 +297,7 @@ end
 	it is would be the world telling the player one story and the menu another.
 ]]
 local function buildPlaceholder(abilityName: string): Model
-	local definition = AbilityConfig.get(abilityName)
+	local definition = AspectConfig.get(abilityName)
 	local tint = Theme.rarityColor(definition and definition.rarity)
 
 	local model = Instance.new("Model")
@@ -375,11 +378,10 @@ local function ensurePrompt(instance: Instance, anchor: BasePart, abilityName: s
 		prompt.Parent = anchor
 	end
 
-	local definition = AbilityConfig.get(abilityName)
-	local label = (definition and definition.displayName) or abilityName
+	local label = AspectConfig.displayName(abilityName)
 
 	prompt.Name = PROMPT_NAME
-	prompt.ObjectText = label .. " Scroll"
+	prompt.ObjectText = label .. " Aspect Scroll"
 	prompt.ActionText = "Learn"
 	prompt.HoldDuration = HOLD_SECONDS
 	prompt.RequiresLineOfSight = false
@@ -407,10 +409,10 @@ function ScrollService.adopt(instance: Instance): (string?, string?)
 		)
 	end
 
-	local abilityName = AbilityConfig.resolve(raw)
+	local abilityName = AspectConfig.resolveAny(raw)
 	if not abilityName then
 		return nil, string.format(
-			"%s teaches '%s', which is not an ability", instance:GetFullName(), raw
+			"%s teaches '%s', which is not an aspect or an ability", instance:GetFullName(), raw
 		)
 	end
 
@@ -500,9 +502,9 @@ end
 	teaches.
 ]]
 function ScrollService.place(abilityName: string, cframe: CFrame): (Instance?, string?)
-	local resolved = AbilityConfig.resolve(abilityName)
+	local resolved = AspectConfig.resolveAny(abilityName)
 	if not resolved then
-		return nil, string.format("There is no ability called '%s'.", tostring(abilityName))
+		return nil, string.format("There is no aspect or ability called '%s'.", tostring(abilityName))
 	end
 
 	local instance = authoredModel(resolved) or buildPlaceholder(resolved)
@@ -614,11 +616,14 @@ local function onTriggered(prompt: ProximityPrompt, player: Player)
 	record.claimed = true
 	prompt.Enabled = false
 
-	local added, reply = AbilityLoadout.add(player, record.ability)
+	-- The active aspect when there is none, otherwise storage.
+	-- (where, isNew, message) on success; (nil, why) on refusal.
+	local added, second, message = AbilityLoadout.grantAspect(player, record.ability, "scroll")
+	local reply = if added then message else second
 
 	if not added then
-		-- Three slots full, or they already carry it. The scroll is untouched
-		-- and goes straight back, because nothing was spent.
+		-- Storage has no room for another copy, or the save is not ready. The
+		-- scroll is untouched and goes straight back, because nothing was spent.
 		record.claimed = false
 		prompt.Enabled = true
 

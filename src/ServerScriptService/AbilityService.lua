@@ -352,11 +352,10 @@ local function onRequest(player: Player, abilityName: any, target: any)
 	--[[
 		THE permission check, and the only one.
 
-		Abilities used to be gated on holding the weapon that owned them. They
-		are universal now, so what a client may cast is exactly what it has put
-		in its loadout - which lives on the server and can only be changed
-		through AbilityLoadout. A modified client naming an ability it has not
-		added gets nothing.
+		What a client may cast is exactly what sits on its slots, and the slots
+		only ever hold abilities of the player's active aspect - which lives on
+		the server and can only be changed through AbilityLoadout. A modified
+		client naming any other ability gets nothing.
 	]]
 	if not AbilityLoadout.has(player, abilityName) then
 		log(player.Name, "asked for", abilityName, "without carrying it")
@@ -571,6 +570,8 @@ function AbilityService.init()
 	-- Catches a slot with no key, or a definition missing the module name it
 	-- would be required by, at start-up rather than on the first cast.
 	AbilityConfig.validate()
+	-- Every ability in exactly one aspect, or nobody could ever cast it.
+	require(AbilitiesShared:WaitForChild("AspectConfig")).validate()
 
 	RequestAbility.OnServerEvent:Connect(onRequest)
 

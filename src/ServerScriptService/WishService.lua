@@ -11,8 +11,8 @@
 
 	The client invokes WishPull with 1 or 10. Everything is checked here - the
 	save has loaded and can be written, storage can take what comes out, the
-	player has the stars - then the stars are taken, each wish is rolled and
-	granted through AbilityLoadout.grantWished, and the results go back in the
+	player has the stars - then the stars are taken, each wish rolls an ASPECT
+	and is granted through AbilityLoadout.grantWished, and the results go back in the
 	reply for the reveal to play. Nothing the client says picks a result.
 
 	The results are granted BEFORE the reply is sent, so a client that drops
@@ -33,7 +33,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
-local AbilityConfig = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityConfig"))
+local AspectConfig = require(Shared:WaitForChild("Abilities"):WaitForChild("AspectConfig"))
 local WishConfig = require(Shared:WaitForChild("Wish"):WaitForChild("WishConfig"))
 
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
@@ -71,15 +71,15 @@ local records = setmetatable({}, { __mode = "k" })
 local busy = {}
 local lastPull = {}
 
--- Every ability by rarity, built once: the pool each tier draws from.
+-- Every aspect by rarity, built once: the pool each tier draws from.
 local pools = {}
 do
 	local excluded = {}
 	for _, name in ipairs(WishConfig.Excluded) do
 		excluded[name] = true
 	end
-	for _, name in ipairs(AbilityConfig.names()) do
-		local definition = AbilityConfig.get(name)
+	for _, name in ipairs(AspectConfig.names()) do
+		local definition = AspectConfig.get(name)
 		local rarity = definition.rarity or "Common"
 		if not excluded[name] and WishConfig.Stars[rarity] then
 			pools[rarity] = pools[rarity] or {}
@@ -145,7 +145,7 @@ function WishService.award(player: Player, stars: number, why: string?)
 	return true
 end
 
--- One roll: a rarity by the odds and pity, then an ability of it.
+-- One roll: a rarity by the odds and pity, then an aspect of it.
 local function rollOne(record): (string, string)
 	local legendaryChance = WishConfig.legendaryChance(record.sinceLegendary)
 	local epicDue = record.sinceEpic + 1 >= WishConfig.EpicPity
@@ -204,7 +204,7 @@ local function pull(player: Player, count)
 		return { ok = false, message = "Your save is not ready. Please try again." }
 	end
 	if not AbilityLoadout.canReceive(player) then
-		return { ok = false, message = "Ability storage is full or not loaded yet." }
+		return { ok = false, message = "Aspect storage is full or not loaded yet." }
 	end
 
 	local cost = count * WishConfig.Cost
@@ -228,7 +228,7 @@ local function pull(player: Player, count)
 		table.insert(results, {
 			name = name,
 			rarity = rarity,
-			displayName = AbilityConfig.get(name).displayName or name,
+			displayName = AspectConfig.displayName(name),
 			where = where,
 			isNew = isNew,
 		})
@@ -364,7 +364,8 @@ end, function(player, value)
 	local history = {}
 	if type(value.history) == "table" then
 		for _, entry in ipairs(value.history) do
-			if type(entry) == "table" and AbilityConfig.get(entry.name) and WishConfig.Stars[entry.rarity] then
+			-- Entries from before aspects name abilities, and are dropped.
+			if type(entry) == "table" and AspectConfig.get(entry.name) and WishConfig.Stars[entry.rarity] then
 				table.insert(history, { name = entry.name, rarity = entry.rarity })
 			end
 		end

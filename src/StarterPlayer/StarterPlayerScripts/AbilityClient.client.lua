@@ -41,6 +41,7 @@ local TouchActions = require(Shared.UI:WaitForChild("TouchActions"))
 
 local AbilitiesShared = Shared:WaitForChild("Abilities")
 local AbilityConfig = require(AbilitiesShared:WaitForChild("AbilityConfig"))
+local AspectConfig = require(AbilitiesShared:WaitForChild("AspectConfig"))
 local AbilityScope = require(AbilitiesShared:WaitForChild("AbilityScope"))
 local VFXFolder = AbilitiesShared:WaitForChild("VFX")
 local LoadingGate = require(Shared:WaitForChild("Loading"):WaitForChild("LoadingGate"))
@@ -48,8 +49,6 @@ local LoadingGate = require(Shared:WaitForChild("Loading"):WaitForChild("Loading
 local RequestAbility = Remotes.wait("RequestAbility")
 local AbilityEffect = Remotes.wait("AbilityEffect")
 local LoadoutChanged = Remotes.wait("AbilityLoadoutChanged")
-local RequestReorder = Remotes.wait("RequestAbilityReorder")
-local RequestDrop = Remotes.wait("RequestAbilityDrop")
 
 local player = Players.LocalPlayer
 
@@ -374,6 +373,9 @@ local loadout: { string } = {}
 -- push arrives, which is what stops a join being announced as a gain.
 local previousLoadout: { string }? = nil
 
+-- The active aspect (AspectConfig name), or nil. The slots are its abilities.
+local aspect: string? = nil
+
 --[[
 	Preloaded on a loadout change rather than on equip, because there is no
 	equip any more.
@@ -424,153 +426,78 @@ local function cast(abilityName: string, definition)
 end
 
 --[[
-	What was gained since the last push, if it was exactly one thing.
+	The aspect that just became active, if one did: a scroll, the tutorial or
+	using one from the inventory.
 
-	Worked out by comparing, rather than by the server saying so, because then
-	every way of granting an ability announces itself - the chat command today,
-	whatever earns them later - without any of them having to remember to.
-
-	nil for the first push, which has nothing to compare against; nil for a
-	removal; and nil when several arrive at once.
-
-	nil for a "restore" too: the saved loadout arriving on join. It lands after
-	an empty push sent while the save was still loading, so a save holding one
-	ability looked exactly like picking one up - and opened the Tab menu with
-	its flourish every time you joined.
+	nil for the first push, which has nothing to compare against; for a
+	"restore" (the saved aspect arriving on join, after an empty push sent
+	while the save was loading); for a "wish" (the banner's reveal is the
+	celebration, see WishClient); and when the aspect was cleared.
 ]]
-local function newlyGained(abilities: { string }, reason: string?): string?
-	-- "wish" too: the banner's reveal is the celebration (see WishClient).
+local function newlyActive(newAspect: string?, reason: string?): string?
 	if not previousLoadout or reason == "restore" or reason == "wish" then
 		return nil
 	end
-
-	local gained = nil
-
-	for _, name in ipairs(abilities) do
-		if not table.find(previousLoadout, name) then
-			if gained then
-				return nil
-			end
-			gained = name
-		end
+	if newAspect ~= nil and newAspect ~= aspect then
+		return newAspect
 	end
-
-	return gained
+	return nil
 end
 
 --[[
-	The Tab menu's list: a line in capitals naming the slot and its key, the
-	ability's name under it, and its rarity under that. The reference's own
-	layout.
+	The Tab menu: the aspect in use on its card, and its tier as the colour of
+	the menu's wireframe solid. A newly active aspect also opens the menu and
+	throws the solid outward in its colour.
 
-	EVERY slot, not every ability. The empty ones are listed too, because this
-	is the screen the loadout is arranged on and a slot you cannot see is a slot
-	you do not know you have - which is the opposite of the HUD readout, where
-	an empty row would be a permanent widget saying nothing.
-
-	The rarity travels as the TIER NAME and not as a colour. The panel prints the
-	word and the backdrop tints the solid with it, and Theme is the one place
-	allowed to say which colour a tier is.
+	The tier travels as a NAME ("Legendary"), not a colour: Theme is the one
+	place allowed to say which colour a tier is.
 ]]
-local function panelSlots(abilities: { string }, gained: string?)
-	local entries = {}
-
-	for slot = 1, AbilityConfig.SlotCount do
-		local abilityName = abilities[slot]
-		local definition = abilityName and AbilityConfig.get(abilityName)
-
-		entries[slot] = {
-			-- No key to name on a touch screen: the slot's button is its ability.
-			label = if Responsive.isTouch()
-				then string.format("slot %d", slot)
-				else string.format("slot %d  ~  %s", slot, slotKeyLabel(slot)),
-			-- The keycap on the card; nil on touch, where the card shows the number.
-			key = if Responsive.isTouch() then nil else slotKeyLabel(slot),
-
-			-- The raw name for an ability this client has no definition for,
-			-- which is a server newer than the client rather than nothing at
-			-- all; nil only for a slot that is genuinely empty.
-			name = if definition then definition.displayName or abilityName else abilityName,
-			rarity = definition and definition.rarity or nil,
-			stats = definition and AbilityConfig.statsText(definition) or nil,
-			gained = abilityName ~= nil and abilityName == gained,
-		}
-	end
-
-	return entries
-end
-
---[[
-	Redraws the menu's list, and sets the backdrop off if this was a gain.
-
-	Called on EVERY push, including the ones nobody did on purpose - a reorder,
-	a removal, the restore on join - because the list has to match the keys
-	whatever moved them. Only a gain flourishes, and a reorder is not one, so
-	dragging a card rearranges the stack without the solid detonating each time.
-]]
-local function refreshPanel(abilities: { string }, gained: string?)
-	if gained then
+local function refreshPanel(gainedAspect: string?)
+	if gainedAspect then
 		--[[
-			OPENED BEFORE ANYTHING IS DRAWN INTO IT.
-
-			The flourish refuses to play to a hidden backdrop, and the menu is
-			shut for the one way of gaining an ability that matters - reading a
-			scroll, which happens out in the world. So the menu is asked for
-			first and the two calls below then land on a screen that exists.
-
-			It has to be this order and not a task.defer: PauseMenu.openMenu
-			makes the backdrop visible synchronously, so by the time this
-			returns there is something to flourish.
-
-			A no-op when the menu is already up, which is the /add case - chat
-			is only visible with it open.
+			OPENED BEFORE ANYTHING IS DRAWN INTO IT. The flourish refuses to play
+			to a hidden backdrop, and a scroll is read out in the world with the
+			menu shut. PauseMenu makes the backdrop visible synchronously, so by
+			the time this returns there is something to flourish. A no-op when
+			the menu is already up.
 		]]
 		MenuState.requestOpen("PauseMenu")
 	end
 
-	AbilityPanel.setSlots(panelSlots(abilities, gained))
+	local definition = AspectConfig.get(aspect)
+	AbilityPanel.setAspect(if definition then {
+		name = aspect,
+		displayName = definition.displayName or aspect,
+		rarity = definition.rarity,
+		abilityCount = #AspectConfig.abilitiesOf(aspect),
+	} else nil)
+	MenuBackdrop.setRestTint(definition and definition.rarity or nil)
 
-	if gained then
-		local definition = AbilityConfig.get(gained)
-		MenuBackdrop.flourish(definition and definition.rarity or nil)
+	if gainedAspect and definition then
+		MenuBackdrop.flourish(definition.rarity)
 	end
 end
 
---[[
-	What the Tab menu's drags mean.
-
-	Sent, not applied: the loadout is the server's, and it answers every one of
-	these with a push whether it accepted it or not. The panel has already moved
-	or removed the card and is waiting to be told what really happened.
-]]
-AbilityPanel.setHandlers({
-	reorder = function(from: number, to: number)
-		log("requesting reorder", from, "->", to)
-		RequestReorder:FireServer(from, to)
-	end,
-
-	drop = function(slot: number)
-		log("requesting drop of slot", slot)
-		RequestDrop:FireServer(slot)
-	end,
-})
-
-LoadoutChanged.OnClientEvent:Connect(function(abilities, reason)
+LoadoutChanged.OnClientEvent:Connect(function(abilities, reason, newAspect)
 	if type(abilities) ~= "table" then
 		return
 	end
+	newAspect = if type(newAspect) == "string" then newAspect else nil
 
-	local gained = newlyGained(abilities, reason)
+	local gainedAspect = newlyActive(newAspect, reason)
 
 	previousLoadout = abilities
 	loadout = abilities
+	aspect = newAspect
+	-- Read by the inventory page to say which aspect a use would replace.
+	player:SetAttribute("Aspect", newAspect)
 	-- Local only: lets a VFX module find the key that casts its ability.
 	player:SetAttribute("AbilityLoadout", table.concat(abilities, ","))
 	rebuildHud(loadout)
 	-- The loading screen fetches the equipped abilities' art itself, within
 	-- its budget; the modules' own (whole-library) preloads wait for it.
 	LoadingGate.defer(preload, loadout)
-	refreshPanel(loadout, gained)
+	refreshPanel(gainedAspect)
 
 	log("loadout is now", #loadout, "abilit(ies)")
 end)

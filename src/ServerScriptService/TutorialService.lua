@@ -41,6 +41,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
 local AbilityConfig = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityConfig"))
+local AspectConfig = require(Shared.Abilities:WaitForChild("AspectConfig"))
 
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
@@ -313,8 +314,9 @@ end
 function TutorialService.Reset(player)
 	local state = stateFor(player)
 
-	if state.ability and AbilityLoadout.has(player, state.ability) then
-		AbilityLoadout.remove(player, state.ability)
+	-- The tutorial granted the chosen ability's aspect; take that back.
+	if state.ability and AbilityLoadout.aspect(player) == AspectConfig.aspectOf(state.ability) then
+		AbilityLoadout.clearAspect(player)
 	end
 
 	state.chosen = nil
@@ -346,11 +348,16 @@ local function choose(player, abilityName)
 		return
 	end
 
-	-- Already carried: chosen, and nothing to add or later take back.
-	if not AbilityLoadout.has(player, abilityName) then
-		local ok, message = AbilityLoadout.add(player, abilityName)
-		if not ok then
-			say(player, message)
+	--[[
+		The choice is an ability, and what it grants is that ability's aspect
+		(Fireball -> Ember), which becomes the active one. A player who already
+		uses an aspect keeps it - the tutorial never replaces one, since a
+		replaced aspect is gone - and fights with what they have.
+	]]
+	if AbilityLoadout.aspect(player) == nil then
+		local where, why = AbilityLoadout.grantAspect(player, AspectConfig.aspectOf(abilityName), "tutorial")
+		if not where then
+			say(player, why)
 			return
 		end
 		state.ability = abilityName

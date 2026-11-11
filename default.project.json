@@ -585,6 +585,9 @@
           "AbilityStorage": {
             "$path": "src/ReplicatedStorage/Shared/UI/AbilityStorage.lua"
           },
+          "AspectInventoryWindow": {
+            "$path": "src/ReplicatedStorage/Shared/UI/AspectInventoryWindow.lua"
+          },
           "BestiaryState": {
             "$path": "src/ReplicatedStorage/Shared/UI/BestiaryState.lua"
           },
@@ -860,6 +863,9 @@
           },
           "StorageConfig": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/StorageConfig.lua"
+          },
+          "AspectConfig": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/AspectConfig.lua"
           },
           "CataclysmPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/CataclysmPlan.lua"

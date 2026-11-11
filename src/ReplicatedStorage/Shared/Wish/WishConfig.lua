@@ -7,9 +7,10 @@
 
 	THE ODDS
 
-	Each wish is one ability, chosen in two steps: a rarity, then an ability of
-	that rarity, evenly. Duplicates are allowed - a second Fireball goes to
-	ability storage like any other.
+	Each wish is one ASPECT (Shared.Abilities.AspectConfig), chosen in two
+	steps: a rarity, then an aspect of that rarity, evenly. Duplicates are
+	allowed - a second Ember goes to aspect storage like any other, even past
+	the bought extra slots, so a wish is never lost.
 
 	  Legendary  1.5%, rising from the 22nd wish without one, certain on the 30th
 	  Epic       7%, and at least one in every 10 wishes (a Legendary counts)
@@ -62,7 +63,7 @@ WishConfig.Tiers = { "Legendary", "Epic", "Rare", "Uncommon", "Common" }
 -- Stars on a reveal card, by rarity.
 WishConfig.Stars = { Common = 1, Uncommon = 2, Rare = 3, Epic = 4, Legendary = 5 }
 
--- Abilities that never come out of the banner (a name from AbilityConfig).
+-- Aspects that never come out of the banner (a name from AspectConfig).
 WishConfig.Excluded = {}
 
 -- Robux products: Wish Stars each one grants. Ids from the Creator Dashboard.

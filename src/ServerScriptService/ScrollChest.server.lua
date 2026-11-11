@@ -1,11 +1,13 @@
 -- Only this service chooses and grants chest rewards. No scroll reward is replicated globally.
+-- A chest's scroll teaches an ASPECT the player does not own yet; `ability` in the
+-- packet and the save keeps its old name but holds the aspect.
 local Players=game:GetService('Players')
 local RS=game:GetService('ReplicatedStorage')
 local SSS=game:GetService('ServerScriptService')
 local Http=game:GetService('HttpService')
 local Shared=RS:WaitForChild('Shared')
 local Remotes=require(Shared.Net.Remotes)
-local Config=require(Shared.Abilities.AbilityConfig)
+local Config=require(Shared.Abilities.AspectConfig)
 local Loadout=require(SSS.AbilityLoadout)
 local Inventory=require(SSS.InventoryService)
 local Store=require(SSS.InventoryStore)
@@ -34,7 +36,9 @@ Store.registerSection('privateScroll',function(player)
  return record and {ability=record.ability} or nil
 end,function(player,value)
  pending[player]=nil
- if type(value)=='table' and type(value.ability)=='string' and Config.get(value.ability) then pending[player]={ability=value.ability} end
+ -- resolveAny: a scroll saved before aspects names an ability, and becomes its aspect.
+ local aspect=type(value)=='table' and Config.resolveAny(value.ability)
+ if aspect then pending[player]={ability=aspect} end
  ready[player]=true;push(player,false)
 end)
 Request.OnServerEvent:Connect(function(player,action,value)
@@ -52,10 +56,10 @@ Request.OnServerEvent:Connect(function(player,action,value)
    local name,count=Inventory.GetSlot(player,value)
    if name~='ScrollChest' or count<1 then return end
    local pool={}
-   for _,ability in ipairs(Config.names()) do
-    if not Loadout.has(player,ability) and not Loadout.isStored(player,ability) then table.insert(pool,ability) end
+   for _,aspect in ipairs(Config.names()) do
+    if not Loadout.owns(player,aspect) then table.insert(pool,aspect) end
    end
-   if #pool==0 then Feedback.tell(player,'You already own every available ability. Your chest was kept.','bad');return end
+   if #pool==0 then Feedback.tell(player,'You already own every aspect. Your chest was kept.','bad');return end
    local record={ability=pool[random:NextInteger(1,#pool)]}
    if not locate(player,record) then return end
    -- The reward section is present when the same inventory record is marked dirty.
@@ -68,8 +72,8 @@ Request.OnServerEvent:Connect(function(player,action,value)
    local record=pending[player]
    if not record or type(value)~='string' or value~=record.token or not record.position then return end
    if os.clock()-record.spawned<.5 or (root.Position-record.position).Magnitude>12 then return end
-   local granted,message=Loadout.add(player,record.ability)
-   if not granted then Feedback.tell(player,message,'bad');return end
+   local granted,second,message=Loadout.grantAspect(player,record.ability,'scroll')
+   if not granted then Feedback.tell(player,second,'bad');return end
    pending[player]=nil;Store.markDirty(player);push(player,false)
    Feedback.tell(player,message,'good')
   end

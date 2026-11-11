@@ -1,58 +1,60 @@
 --[[
 	AbilityLoadout
 
-	Which abilities a player is carrying. Three slots, server-owned.
+	What a player carries: ONE active aspect, its abilities on the three slot
+	keys, and the aspects they keep in storage. Server-owned.
 
-	  AbilityLoadout.add(player, name)      -> ok, message, slot
-	  AbilityLoadout.remove(player, name)   -> ok, message
-	  AbilityLoadout.get(player)            -> array of names, in slot order
-	  AbilityLoadout.has(player, name)      -> boolean
-	  AbilityLoadout.clear(player)          -> how many were removed
-	  AbilityLoadout.reorder(player, a, b)  -> ok
+	  AbilityLoadout.aspect(player)                -> active aspect name, or nil
+	  AbilityLoadout.get(player)                   -> slot abilities, in key order
+	  AbilityLoadout.has(player, ability)          -> on a slot right now
+	  AbilityLoadout.grantAspect(player, aspect, reason, overflow)
+	                                               -> where, isNew, message | nil, message
+	  AbilityLoadout.useAspect(player, aspect)     -> make a stored aspect the active one
+	  AbilityLoadout.setAspect(player, aspect)     -> admin / tutorial: replace the active one
+	  AbilityLoadout.clearAspect(player)           -> no active aspect
+	  AbilityLoadout.owns(player, aspect)          -> active or stored
+
+	ASPECTS (Shared.Abilities.AspectConfig)
+
+	An aspect is a set of abilities. A player uses one at a time, and its
+	abilities sit on Z / X / V in the aspect's own order - always, with nothing
+	for the player to rearrange. Using a different aspect REPLACES the active
+	one, and the one it replaced is gone - it does not go back to storage.
+	Keeping a spare copy in storage is how a player keeps the option of
+	switching back.
+
+	STORAGE
+
+	Free: one copy of each aspect. Bought (the Developer Product below, three
+	slots a purchase): room for EXTRA copies of aspects already stored. So the
+	number that capacity limits is "stored copies beyond the first of each".
+	Wishes may overflow it (a wish is never lost), up to HELD_MAX in all.
 
 	THIS IS THE PERMISSION CHECK
 
-	Abilities used to hang off a weapon, and holding it was what let you cast.
-	Now this table is the only thing that does: AbilityService asks `has` before
-	it will run anything, so a modified client naming an ability it has not
-	added gets nothing. It lives on the server for exactly that reason.
+	AbilityService asks `has` before it runs anything, so a modified client
+	naming an ability that is not on one of its slots gets nothing. The slots
+	only ever hold abilities of the active aspect.
 
 	PERSISTED ALONGSIDE THE INVENTORY
 
-	Not in a DataStore of its own. It registers as a SECTION of the record
-	InventoryStore already keeps, so it inherits that module's session lock,
-	retries, autosave and shutdown save for nothing - and, more importantly,
-	cannot end up racing a second lock for the same player. Two locks
-	disagreeing about which server owns somebody is how a rejoin saves half a
-	session and loses the other half.
+	Two sections of the record InventoryStore keeps, so they share its session
+	lock, autosave and shutdown save:
 
-	Nothing here calls save(). A change marks the player dirty through the same
-	path an inventory change does, and the next autosave carries it.
+	  "abilities"       { aspect = "Ember", slots = { "Fireball", ... } }
+	  "abilityStorage"  { aspects = { ... }, purchases = n, receipts = { ... } }
 
-	THE ORDER OF THE ARRAY IS THE ORDER OF THE KEYS
+	`slots` is written for reading a save by eye; on load the slots are rebuilt
+	from the aspect, in its order. Saves from before aspects (an array of
+	ability names in "abilities", and `slots` of ability names in
+	"abilityStorage") are converted on load: the first carried ability's
+	aspect becomes the active one and every other aspect the player had an
+	ability of is stored, one copy each. Sections load in registration order,
+	so the loadout section runs first and hands its leftovers to the storage
+	section through `carry`.
 
-	Slot 1 is the first key in AbilityConfig.SlotKeys, and removing the middle
-	ability shuffles the third one down into its place. That is what makes the
-	readout honest: the panel is drawn from this array, so what it shows and
-	what the keys do cannot disagree.
-
-	It is also why `reorder` moves rather than swaps, and why it cannot leave a
-	gap. The array is DENSE - three abilities always occupy slots 1..3 and two
-	always occupy 1..2 - so "put this one on V and leave X empty" is not a state
-	this module can hold. Reordering is a permutation of what is already carried,
-	which is exactly what the Tab menu's drag does.
-
-	REORDERING IS A REQUEST FROM THE CLIENT, AND IS STILL CHECKED
-
-	Shared.UI.AbilityPanel fires RequestAbilityReorder with two slot numbers.
-	There is nothing to escalate - it is a permutation of the player's own
-	loadout, so the worst a modified client achieves is rearranging its own keys
-	- but the numbers are still validated and the rate is still capped, because
-	every one of them costs a push and a dirty mark.
-
-	Every request is answered with a push, including a refused one. The panel
-	moves the card on drop and waits to be corrected rather than snapping back
-	over a round trip, and that only works if the server always says something.
+	Nothing here calls save(). A change marks the record dirty and the next
+	autosave carries it - except a purchase, which saves before it confirms.
 ]]
 
 local Players = game:GetService("Players")
@@ -62,6 +64,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
 local AbilityConfig = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityConfig"))
+local AspectConfig = require(Shared.Abilities:WaitForChild("AspectConfig"))
 
 local InventoryStore = require(ServerScriptService:WaitForChild("InventoryStore"))
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
@@ -69,35 +72,24 @@ local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedbac
 local AbilityLoadout = {}
 
 local LoadoutChanged = Remotes.ensure("AbilityLoadoutChanged", "RemoteEvent")
-local RequestReorder = Remotes.ensure("RequestAbilityReorder", "RemoteEvent")
-local RequestDrop = Remotes.ensure("RequestAbilityDrop", "RemoteEvent")
 
 local SLOT_COUNT = AbilityConfig.SlotCount
 
 --[[
-	Reorder requests per player per second, before they are dropped.
+	player -> active aspect name, and player -> slot abilities.
 
-	Generous next to what a hand can do - a drag takes most of a second and ends
-	in exactly one request - and small enough that a client firing in a loop
-	cannot turn a free action into a stream of pushes to itself and a dirty mark
-	per frame on the record.
+	WEAK-KEYED, AND NOTHING CLEARS THEM ON PlayerRemoving. The leave save runs
+	through InventoryStore.release, which serialises every registered section,
+	and the order two server scripts connect to PlayerRemoving in is
+	undefined. Clear these on leave and about half the time the save reads an
+	empty loadout and writes it over a real one. The weak key collects them
+	once the save has read them. `stored` further down works the same way.
 ]]
-local REORDERS_PER_SECOND = 4
-
---[[
-	player -> array of ability names.
-
-	WEAK-KEYED, AND NOTHING CLEARS IT ON PlayerRemoving. Not an oversight - the
-	leave save runs through InventoryStore.release, which serialises every
-	registered section, and the order two server scripts connect to
-	PlayerRemoving in is undefined. Clear this on leave and about half the time
-	the save reads an empty loadout and writes it over a real one.
-
-	So the entry outlives the player until the save has read it, and the weak
-	key collects it afterwards. `stored`, further down, works the same way for
-	exactly the same reason.
-]]
+local aspects = setmetatable({}, { __mode = "k" })
 local loadouts = setmetatable({}, { __mode = "k" })
+
+-- Aspects found in a pre-aspect loadout, waiting for the storage section.
+local carry = setmetatable({}, { __mode = "k" })
 
 local function loadoutFor(player: Player): { string }
 	local entry = loadouts[player]
@@ -109,32 +101,46 @@ local function loadoutFor(player: Player): { string }
 end
 
 local function markDirty(player: Player)
-	-- The loadout rides on the inventory's record, so a change here is a change
-	-- to that record; the next autosave picks it up.
 	InventoryStore.markDirty(player)
 end
 
 --[[
-	Tells the client what it is carrying.
+	Tells the client what it is carrying: the slot abilities (a copy), why, and
+	the active aspect.
 
-	A copy, not the live table: the array is handed to FireClient, and passing
-	the one this module mutates would be a table the caller could still be
-	holding a reference to when it next changes.
-
-	`reason` is "restore" for the saved loadout arriving on join. The client
-	would otherwise compare it with the empty one it was sent first, see an
-	ability appear, and open the Tab menu to celebrate a pickup that never
-	happened.
+	`reason` is "restore" for the saved loadout arriving on join and "wish" for
+	a banner grant; the client does not celebrate either (the reveal does).
 ]]
 local function push(player: Player, reason: string?)
 	local entry = loadoutFor(player)
-
 	local copy = table.create(#entry)
 	for index, name in ipairs(entry) do
 		copy[index] = name
 	end
+	LoadoutChanged:FireClient(player, copy, reason, aspects[player])
+end
 
-	LoadoutChanged:FireClient(player, copy, reason)
+-- The slots: the aspect's abilities in its own order, as many as there are keys.
+local function fillSlots(entry: { string }, aspectName: string?)
+	table.clear(entry)
+	for _, abilityName in ipairs(AspectConfig.abilitiesOf(aspectName)) do
+		if #entry >= SLOT_COUNT then
+			break
+		end
+		table.insert(entry, abilityName)
+	end
+end
+
+-- Makes `aspectName` (or nothing) the active aspect, and refills the slots.
+local function setActive(player: Player, aspectName: string?, reason: string?)
+	aspects[player] = aspectName
+	fillSlots(loadoutFor(player), aspectName)
+	push(player, reason)
+	markDirty(player)
+end
+
+function AbilityLoadout.aspect(player: Player): string?
+	return aspects[player]
 end
 
 function AbilityLoadout.get(player: Player): { string }
@@ -145,349 +151,81 @@ function AbilityLoadout.has(player: Player, abilityName: string?): boolean
 	if type(abilityName) ~= "string" then
 		return false
 	end
-
-	for _, name in ipairs(loadoutFor(player)) do
-		if name == abilityName then
-			return true
-		end
-	end
-
-	return false
-end
-
---[[
-	Adds an ability, if there is room and it is not already carried.
-
-	Returns ok, message, slot. The message is written to be shown to the player
-	as it is - this is reached from a chat command, and "there is no ability
-	called that" is more use than a boolean.
-]]
-function AbilityLoadout.add(player: Player, abilityName: string)
-	local definition = AbilityConfig.get(abilityName)
-	if not definition then
-		return false, string.format("There is no ability called '%s'.", tostring(abilityName))
-	end
-
-	local entry = loadoutFor(player)
-
-	for slot, name in ipairs(entry) do
-		if name == abilityName then
-			return false, string.format(
-				"%s is already in slot %d.", definition.displayName or abilityName, slot
-			)
-		end
-	end
-
-	if #entry >= SLOT_COUNT then
-		return false, string.format(
-			"All %d slots are full. Remove one first.", SLOT_COUNT
-		)
-	end
-
-	table.insert(entry, abilityName)
-	push(player)
-	markDirty(player)
-
-	local slot = #entry
-	local key = AbilityConfig.keyForSlot(slot)
-
-	return true, string.format(
-		"%s added to slot %d%s.",
-		definition.displayName or abilityName,
-		slot,
-		if key then " (" .. key.Name .. ")" else ""
-	), slot
-end
-
---[[
-	Removes an ability. Everything after it moves up a slot, so the keys stay
-	contiguous - see the note at the top about why that matters.
-]]
-function AbilityLoadout.remove(player: Player, abilityName: string)
-	local definition = AbilityConfig.get(abilityName)
-	if not definition then
-		return false, string.format("There is no ability called '%s'.", tostring(abilityName))
-	end
-
-	local entry = loadoutFor(player)
-
-	for slot, name in ipairs(entry) do
-		if name == abilityName then
-			table.remove(entry, slot)
-			push(player)
-			markDirty(player)
-			return true, string.format("%s removed.", definition.displayName or abilityName)
-		end
-	end
-
-	return false, string.format(
-		"You are not carrying %s.", definition.displayName or abilityName
-	)
-end
-
---[[
-	Moves the ability in slot `from` to slot `to`, sliding the rest along.
-
-	A move rather than a swap, which is what a list being dragged does: pulling
-	slot 3 up to slot 1 pushes 1 and 2 down a place, it does not send 1 to the
-	bottom. Both ends are clamped into the filled range, so a drop past the last
-	ability lands on it instead of opening a gap - see the note at the top about
-	the array being dense.
-
-	Returns whether anything actually moved. A request that resolves to no
-	change is not an error and is not refused; it just has nothing to save.
-]]
-function AbilityLoadout.reorder(player: Player, from: number, to: number): boolean
-	local entry = loadoutFor(player)
-	local count = #entry
-
-	if count < 2 then
-		return false
-	end
-
-	if type(from) ~= "number" or type(to) ~= "number" then
-		return false
-	end
-
-	-- Rounded before clamping: a client is free to send 2.5, and math.clamp
-	-- would happily leave it there for table.remove to reject later.
-	from = math.clamp(math.floor(from + 0.5), 1, count)
-	to = math.clamp(math.floor(to + 0.5), 1, count)
-
-	if from == to then
-		return false
-	end
-
-	table.insert(entry, to, table.remove(entry, from))
-	push(player)
-	markDirty(player)
-
-	return true
-end
-
---[[
-	Drops whatever is in a slot, by SLOT rather than by name.
-
-	The Tab menu's bin is the only caller, and what it has is a position in a
-	list. Taking the slot instead of the name also means there is no name to
-	check against the loadout - a number either indexes something the player is
-	carrying or it does not - so the whole class of "asked to remove an ability
-	somebody else has" cannot be expressed.
-
-	Everything after it shuffles up, exactly as `remove` does; see the note at
-	the top about the array being dense.
-
-	Returns whether anything went, and the display name of what did, so the
-	caller can say so.
-]]
-function AbilityLoadout.dropSlot(player: Player, slot: number): (boolean, string?)
-	if type(slot) ~= "number" then
-		return false, nil
-	end
-
-	local entry = loadoutFor(player)
-	slot = math.floor(slot + 0.5)
-
-	if slot < 1 or slot > #entry then
-		return false, nil
-	end
-
-	local abilityName = table.remove(entry, slot)
-	push(player)
-	markDirty(player)
-
-	local definition = AbilityConfig.get(abilityName)
-	return true, (definition and definition.displayName) or abilityName
-end
-
-function AbilityLoadout.clear(player: Player): number
-	local entry = loadoutFor(player)
-	local count = #entry
-
-	if count > 0 then
-		table.clear(entry)
-		push(player)
-		markDirty(player)
-	end
-
-	return count
+	return table.find(loadoutFor(player), abilityName) ~= nil
 end
 
 -- ===========================================================================
--- THE REORDER REQUEST
+-- PERSISTENCE: THE ACTIVE ASPECT
 -- ===========================================================================
 
--- player -> { budget, budgetAt }. Weak-keyed; PlayerRemoving clears it too.
-local reorderBudgets = setmetatable({}, { __mode = "k" })
-
---[[
-	One token per request, refilled continuously.
-
-	The same shape as AbilityService's cast limiter, and for the same reason: a
-	bucket lets a burst through - a player really can drag twice in a second -
-	while a fixed "one every 250ms" would refuse the second drag of a pair that
-	a human genuinely did.
-]]
-local function takeReorderToken(player: Player): boolean
-	local now = os.clock()
-
-	local entry = reorderBudgets[player]
-	if not entry then
-		entry = { budget = REORDERS_PER_SECOND, budgetAt = now }
-		reorderBudgets[player] = entry
-	end
-
-	entry.budget = math.min(
-		REORDERS_PER_SECOND,
-		entry.budget + (now - entry.budgetAt) * REORDERS_PER_SECOND
-	)
-	entry.budgetAt = now
-
-	if entry.budget < 1 then
-		return false
-	end
-
-	entry.budget -= 1
-	return true
-end
-
-RequestReorder.OnServerEvent:Connect(function(player, from, to)
-	if not takeReorderToken(player) then
-		return
-	end
-
-	--[[
-		Answered whether or not anything moved, and whether or not the numbers
-		made sense.
-
-		The panel moves the card the moment it is dropped and relies on being
-		corrected. Staying silent on a refusal is what would leave a client
-		showing an order the server never agreed to, which is the one outcome
-		worth spending a push to avoid. A successful reorder has already pushed
-		for itself, which is why this one is only for the other case.
-	]]
-	if not AbilityLoadout.reorder(player, from, to) then
-		push(player)
-	end
-end)
-
---[[
-	The bin. Same budget as a reorder, and answered the same way whatever
-	happens, because the panel has already taken the card off screen.
-
-	Sharing one budget between the two is deliberate: they are the same gesture
-	from the same panel, and a client that has spent its allowance dragging
-	cards about has spent it.
-]]
-RequestDrop.OnServerEvent:Connect(function(player, slot)
-	if not takeReorderToken(player) then
-		return
-	end
-
-	local dropped, name = AbilityLoadout.dropSlot(player, slot)
-
-	if dropped then
-		-- Neutral, not "bad": the player meant to do this. The line exists
-		-- because a card vanishing off a panel is not, on its own, proof that
-		-- the server agreed - and this is sent only when it did.
-		CommandFeedback.tell(player, string.format("%s dropped.", name))
-	else
-		push(player)
-	end
-end)
-
--- ===========================================================================
--- PERSISTENCE
--- ===========================================================================
-
---[[
-	Stored as a plain array of names. The array order IS the slot order, so
-	there is nothing else to write down.
-]]
 local function saveSection(player: Player)
-	local entry = loadouts[player]
-	if not entry or #entry == 0 then
-		-- nil rather than an empty array: nothing to say, and the record stays
-		-- one field smaller.
+	local aspectName = aspects[player]
+	if not aspectName then
 		return nil
 	end
-
+	local entry = loadouts[player] or {}
 	local copy = table.create(#entry)
 	table.move(entry, 1, #entry, 1, copy)
-	return copy
+	return { aspect = aspectName, slots = copy }
 end
 
 --[[
-	Restores a stored loadout, re-checking it on the way in.
-
-	A save outlives the code that wrote it. An ability that has since been
-	renamed or removed leaves a name in somebody's record that means nothing
-	now, and SlotCount could come down - so names are looked up again,
-	duplicates dropped, and the cap re-applied. A slot handed back is better
-	than a slot holding a ghost.
-
-	Anything unreadable leaves the player on the empty loadout they already
-	have, which is a correct starting state rather than a lost one.
+	Restores the active aspect, re-checking it: one that has since been removed
+	leaves the player with none. The slots are rebuilt from the aspect rather
+	than read back, so they always follow its order and pick up abilities
+	added to it since.
 ]]
 local function loadSection(player: Player, value)
+	local entry = loadoutFor(player)
+	table.clear(entry)
+	aspects[player] = nil
+	carry[player] = nil
+
 	if type(value) ~= "table" then
+		push(player, "restore")
 		return
 	end
 
-	local entry = loadoutFor(player)
-	table.clear(entry)
-
-	for _, name in ipairs(value) do
-		if #entry >= SLOT_COUNT then
-			break
-		end
-
-		if type(name) == "string" and AbilityConfig.get(name) then
-			local seen = false
-			for _, existing in ipairs(entry) do
-				if existing == name then
-					seen = true
-					break
+	local aspectName
+	if type(value.aspect) == "string" then
+		aspectName = if AspectConfig.get(value.aspect) then value.aspect else nil
+	else
+		-- Before aspects: an array of ability names.
+		local extras = {}
+		for _, abilityName in ipairs(value) do
+			local owner = type(abilityName) == "string" and AspectConfig.aspectOf(abilityName)
+			if owner then
+				if not aspectName then
+					aspectName = owner
+				elseif owner ~= aspectName and not table.find(extras, owner) then
+					table.insert(extras, owner)
 				end
 			end
-			if not seen then
-				table.insert(entry, name)
-			end
 		end
+		carry[player] = extras
 	end
 
-	-- The client was told "nothing" a moment ago by onPlayerAdded; this is what
-	-- corrects it. Unconditional, because dropping every stored name is still a
-	-- change worth sending.
+	aspects[player] = aspectName
+	fillSlots(entry, aspectName)
 	push(player, "restore")
 end
 
 InventoryStore.registerSection("abilities", saveSection, loadSection)
 
 -- ===========================================================================
--- PAID STORAGE
+-- ASPECT STORAGE
 -- ===========================================================================
 
 --[[
-	Slots an ability can be parked in instead of thrown away, bought three at a
-	time as a Developer Product - as many times as a player likes, up to
-	StorageConfig.MaxSlots.
-
-	ALL OF IT IS OURS, AND ALL OF IT IS IN THE ONE SAVE RECORD
+	Aspects kept instead of used. One copy of each is free; extra copies need
+	slots bought as a Developer Product, three at a time, as many times as a
+	player likes up to StorageConfig.MaxSlots.
 
 	A Developer Product, unlike a Game Pass, is not remembered by Roblox: each
-	purchase is handed over exactly once, through ProcessReceipt. So what a
-	player has bought - the number of purchases, and the PurchaseIds of the
-	recent ones - goes in the same locked InventoryStore section as the stored
-	abilities themselves. Everything that protects the inventory therefore
-	protects these too: one key, one session lock, one autosave, and a
-	read-only session that refuses to write rather than writing a guess over
-	good data.
-
-	A purchase is only confirmed to Roblox once that record has been SAVED (see
-	grantPurchase). Until then the receipt stays open and comes back, which is
-	the difference between "the server hiccuped and you got your slots a minute
-	later" and "you paid and got nothing".
+	purchase is handed over once, through ProcessReceipt. So what a player has
+	bought - the number of purchases and the recent PurchaseIds - goes in the
+	same locked section as the stored aspects. A purchase is only confirmed to
+	Roblox once that record has been SAVED (see grantPurchase).
 ]]
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -500,33 +238,18 @@ local StorageChanged = Remotes.ensure("AbilityStorageChanged", "RemoteEvent")
 
 local SLOTS_PER_PURCHASE = StorageConfig.SlotsPerPurchase
 local MAX_SLOTS = StorageConfig.MaxSlots
--- The most abilities storage can hold at all, bought or not: wishes go in past
--- capacity (see grantWished), and this keeps the save record bounded.
+-- The most aspects storage holds at all, bought or not: wishes overflow
+-- bought capacity (see grantAspect), and this keeps the record bounded.
 local HELD_MAX = 200
 local PRODUCT_ID = StorageConfig.AbilityStorageProductId
 
 -- The shortest gap between two storage requests from one player.
 local STORAGE_COOLDOWN = 0.3
 
--- How many PurchaseIds are kept to recognise a receipt Roblox sends twice. It
--- only ever re-sends the latest few, so the record need not grow forever.
+-- How many PurchaseIds are kept to recognise a receipt Roblox sends twice.
 local RECEIPTS_KEPT = 20
 
---[[
-	Per player: the stored abilities, how many purchases they have made, and
-	the PurchaseIds already granted.
-
-	WEAK-KEYED, AND NOT CLEARED ON PlayerRemoving. That is deliberate and it is
-	load-bearing: InventoryManager saves on leave through InventoryStore.release,
-	which serialises every registered section - and the order two server scripts
-	connect to PlayerRemoving in is undefined. Clear these there and roughly half
-	the time the section save reads an empty table and writes it over a paying
-	player's storage.
-
-	So the entries outlive the player until the save has read them, and the weak
-	key is what collects them afterwards. `loadouts` above works the same way for
-	the same reason.
-]]
+-- Weak-keyed and not cleared on PlayerRemoving; see the note on `aspects`.
 local stored = setmetatable({}, { __mode = "k" })
 local purchases = setmetatable({}, { __mode = "k" })
 local receipts = setmetatable({}, { __mode = "k" })
@@ -534,8 +257,22 @@ local storageReady = {}
 local storageBusy = {}
 local storageLast = {}
 
+-- Bought slots: room for extra copies.
 local function capacityOf(player): number
 	return math.min((purchases[player] or 0) * SLOTS_PER_PURCHASE, MAX_SLOTS)
+end
+
+-- Stored copies beyond the first of each aspect: what bought slots hold.
+local function extrasOf(bank: { string }): number
+	local distinct = {}
+	local count = 0
+	for _, name in ipairs(bank) do
+		if not distinct[name] then
+			distinct[name] = true
+			count += 1
+		end
+	end
+	return #bank - count
 end
 
 local function onSale(): boolean
@@ -544,8 +281,10 @@ end
 
 local function storagePush(player)
 	local capacity = capacityOf(player)
+	local bank = stored[player] or {}
 	StorageChanged:FireClient(player, {
-		slots = table.clone(stored[player] or {}),
+		slots = table.clone(bank),
+		extras = extrasOf(bank),
 		capacity = capacity,
 		owned = capacity > 0,
 		ready = storageReady[player] == true,
@@ -557,33 +296,56 @@ local function storagePush(player)
 end
 
 --[[
-	The section: { slots = {...}, purchases = n, receipts = {...} }.
-
-	Stored names are re-validated on the way in against AbilityConfig, the same
-	as the active loadout is: a name that stopped existing between sessions is
-	dropped rather than carried around as a slot nobody can use. Duplicates are
-	dropped too, since the same ability cannot be in two places.
-
-	An older save holds a bare list of names, from when storage was a Game Pass
-	nobody had bought; it reads as those names and no purchases.
+	The section. Stored names are re-checked on the way in against
+	AspectConfig. A save from before aspects stored ABILITY names in `slots`;
+	those become one copy of each aspect they belong to. Aspects carried over
+	from a pre-aspect loadout (see loadSection) are added the same way.
 
 	The loader runs ONLY when a real record came back - see InventoryStore - so
-	storageReady stays false on every failure path. The request handler and the
-	purchase both refuse to touch anything until it is true. That is what stops
-	a read-only session presenting empty storage as if it were saved state.
+	storageReady stays false on every failure path, and nothing that writes
+	here runs until it is true.
 ]]
 InventoryStore.registerSection("abilityStorage", function(player)
 	return {
-		slots = table.clone(stored[player] or {}),
+		aspects = table.clone(stored[player] or {}),
+		-- Empty, and only for a server still running the pre-aspect code: it
+		-- reads `purchases` only when `slots` is a table, so without this it
+		-- would load (and then save) a paying player's storage as unbought.
+		slots = {},
 		purchases = purchases[player] or 0,
 		receipts = table.clone(receipts[player] or {}),
 	}
 end, function(player, value)
-	local names, bought, seen = {}, 0, {}
+	local entry, bought, seen = {}, 0, {}
+
+	local function addOnce(aspectName)
+		if aspectName and #entry < HELD_MAX and not table.find(entry, aspectName) then
+			table.insert(entry, aspectName)
+		end
+	end
 
 	if type(value) == "table" then
-		if type(value.slots) == "table" then
-			names = value.slots
+		if type(value.aspects) == "table" then
+			-- Duplicates are kept: they are the bought extra copies.
+			for _, name in ipairs(value.aspects) do
+				if #entry >= HELD_MAX then
+					break
+				end
+				if type(name) == "string" and AspectConfig.get(name) then
+					table.insert(entry, name)
+				end
+			end
+		else
+			-- Before aspects: ability names, in `slots` or (older still) bare.
+			local names = if type(value.slots) == "table" then value.slots else value
+			for _, name in ipairs(names) do
+				if type(name) == "string" then
+					addOnce(AspectConfig.aspectOf(name))
+				end
+			end
+		end
+
+		if type(value.slots) == "table" or type(value.aspects) == "table" then
 			bought = math.max(0, math.floor(tonumber(value.purchases) or 0))
 			if type(value.receipts) == "table" then
 				for _, id in ipairs(value.receipts) do
@@ -592,23 +354,13 @@ end, function(player, value)
 					end
 				end
 			end
-		else
-			names = value
 		end
 	end
 
-	-- Duplicates are kept: the wishing banner can hand out a second copy of an
-	-- ability, and storage is where it waits. Wishes also fill storage past its
-	-- bought capacity, so the cap here is HELD_MAX rather than MAX_SLOTS.
-	local entry = {}
-	for _, name in ipairs(names) do
-		if #entry >= HELD_MAX then
-			break
-		end
-		if type(name) == "string" and AbilityConfig.get(name) then
-			table.insert(entry, name)
-		end
+	for _, aspectName in ipairs(carry[player] or {}) do
+		addOnce(aspectName)
 	end
+	carry[player] = nil
 
 	stored[player] = entry
 	purchases[player] = bought
@@ -617,14 +369,43 @@ end, function(player, value)
 	storagePush(player)
 end)
 
-function AbilityLoadout.isStored(player, name)
-	return table.find(stored[player] or {}, name) ~= nil
+-- Whether the player has this aspect active or in storage.
+function AbilityLoadout.owns(player, aspectName): boolean
+	return aspects[player] == aspectName or table.find(stored[player] or {}, aspectName) ~= nil
+end
+
+-- Kept for older callers: "is this stored", by aspect name.
+function AbilityLoadout.isStored(player, aspectName): boolean
+	return table.find(stored[player] or {}, aspectName) ~= nil
 end
 
 --[[
-	Whether a wish can be granted to this player right now: their storage
-	section has loaded from a real record and the session can save. WishService
-	asks before it spends anything.
+	Whether storage would take another copy of this aspect. `overflow` (wishes)
+	ignores bought capacity; nothing ignores HELD_MAX.
+]]
+local function canStore(player, aspectName, overflow): (boolean, string?)
+	local bank = stored[player]
+	if not bank or #bank >= HELD_MAX then
+		return false, "Aspect storage is full."
+	end
+	if overflow or not table.find(bank, aspectName) then
+		return true
+	end
+	if extrasOf(bank) < capacityOf(player) then
+		return true
+	end
+	if capacityOf(player) == 0 then
+		return false, string.format(
+			"You already have a %s aspect stored. Get storage slots to keep extra copies.",
+			AspectConfig.displayName(aspectName)
+		)
+	end
+	return false, "Your extra storage slots are full."
+end
+
+--[[
+	Whether a wish can be granted right now: storage has loaded from a real
+	record and the session can save. WishService asks before it spends.
 ]]
 function AbilityLoadout.canReceive(player): boolean
 	return storageReady[player] == true and not InventoryStore.isReadOnly(player)
@@ -632,47 +413,110 @@ function AbilityLoadout.canReceive(player): boolean
 end
 
 --[[
-	A wished ability arrives. Into the loadout when there is a free slot and it
-	is not already there, otherwise into storage - past bought capacity if need
-	be, since a wish must never be lost. Returns where it went ("loadout" or
-	"storage") and whether the player owned no copy before, or nil if it could
-	not be granted at all.
+	An aspect arrives (wish, scroll, chest, tutorial). With no active aspect it
+	becomes the active one; otherwise it goes to storage, if storage takes it.
 
-	Pushed with reason "wish", which AbilityClient treats like a restore: the
-	reveal is the celebration, and the Tab menu must not burst open under it.
+	Returns where it went ("active" or "storage"), whether the player owned no
+	copy before, and a line to show them - or nil and why not.
 ]]
-function AbilityLoadout.grantWished(player, name)
-	local bank = stored[player]
-	if not AbilityConfig.get(name) or not bank or not storageReady[player] then
-		return nil
+function AbilityLoadout.grantAspect(player, aspectName, reason: string?, overflow: boolean?)
+	if not AspectConfig.get(aspectName) then
+		return nil, string.format("There is no aspect called '%s'.", tostring(aspectName))
+	end
+	if not storageReady[player] then
+		return nil, "Your save is not ready. Please try again."
 	end
 
-	local active = loadoutFor(player)
-	local isNew = not table.find(active, name) and not table.find(bank, name)
-	local where
-	if not table.find(active, name) and #active < SLOT_COUNT then
-		table.insert(active, name)
-		where = "loadout"
-	elseif #bank < HELD_MAX then
-		table.insert(bank, name)
-		where = "storage"
-	else
-		return nil
+	local label = AspectConfig.displayName(aspectName)
+	local isNew = not AbilityLoadout.owns(player, aspectName)
+
+	if aspects[player] == nil then
+		setActive(player, aspectName, reason)
+		storagePush(player)
+		return "active", isNew, string.format("%s is now your aspect.", label)
 	end
 
+	local ok, why = canStore(player, aspectName, overflow)
+	if not ok then
+		return nil, why
+	end
+
+	table.insert(stored[player], aspectName)
 	markDirty(player)
-	push(player, "wish")
 	storagePush(player)
-	return where, isNew
+	return "storage", isNew, string.format("%s aspect sent to storage (Tab).", label)
+end
+
+-- The wishing banner's grant: storage overflows rather than lose a wish.
+function AbilityLoadout.grantWished(player, aspectName)
+	local where, isNew = AbilityLoadout.grantAspect(player, aspectName, "wish", true)
+	return where, if where then isNew else nil
+end
+
+--[[
+	Makes a STORED aspect the active one. The aspect it replaces is gone.
+	Returns ok, message.
+]]
+function AbilityLoadout.useAspect(player, aspectName)
+	local bank = stored[player]
+	local index = bank and table.find(bank, aspectName)
+	if not index then
+		return false, "That aspect is not in your storage."
+	end
+	-- A spare copy of the aspect in use stays a spare; using it would only
+	-- spend it.
+	if aspects[player] == aspectName then
+		return false, string.format("%s is already your aspect.", AspectConfig.displayName(aspectName))
+	end
+
+	local previous = aspects[player]
+	table.remove(bank, index)
+	setActive(player, aspectName)
+	storagePush(player)
+
+	local label = AspectConfig.displayName(aspectName)
+	if previous and previous ~= aspectName then
+		return true, string.format("%s is now your aspect. %s is gone.", label, AspectConfig.displayName(previous))
+	end
+	return true, string.format("%s is now your aspect.", label)
+end
+
+-- Replaces the active aspect outright (admin commands, the tutorial).
+function AbilityLoadout.setAspect(player, aspectName, reason: string?)
+	if not AspectConfig.get(aspectName) then
+		return false
+	end
+	setActive(player, aspectName, reason)
+	return true
+end
+
+function AbilityLoadout.clearAspect(player)
+	if aspects[player] ~= nil then
+		setActive(player, nil)
+	end
+end
+
+-- Removes one stored copy (admin command). Returns whether one was there.
+function AbilityLoadout.unstore(player, aspectName): boolean
+	local bank = stored[player]
+	local index = bank and table.find(bank, aspectName)
+	if not index then
+		return false
+	end
+	table.remove(bank, index)
+	markDirty(player)
+	storagePush(player)
+	return true
+end
+
+function AbilityLoadout.stored(player): { string }
+	return table.clone(stored[player] or {})
 end
 
 --[[
 	A purchase landed. Grants three more slots and saves them, then says true;
 	anything short of a save says false, and Roblox offers the receipt again.
-
-	Idempotent on the PurchaseId: a receipt granted and saved, whose answer was
-	lost when the server went down, comes back and is answered true without
-	being granted twice.
+	Idempotent on the PurchaseId.
 ]]
 local function grantPurchase(player, receipt)
 	local purchaseId = tostring(receipt.PurchaseId)
@@ -707,7 +551,7 @@ local function grantPurchase(player, receipt)
 	if player.Parent then
 		storagePush(player)
 		CommandFeedback.tell(player, string.format(
-			"+%d ability storage slots. You now have %d.", SLOTS_PER_PURCHASE, capacityOf(player)
+			"+%d aspect storage slots. You now have %d.", SLOTS_PER_PURCHASE, capacityOf(player)
 		), "good")
 	end
 	return true
@@ -715,9 +559,8 @@ end
 
 Purchases.register(PRODUCT_ID, grantPurchase)
 
--- For DebugConsole's Studio-only /bbstorage, which tests this path without a
--- real product, and puts a tester's save back afterwards. Studio's DataStore is
--- the live one, so a test purchase is a real change to that player's record.
+-- For DebugConsole's Studio-only /bbstorage. Studio's DataStore is the live
+-- one, so a test purchase is a real change to that player's record.
 AbilityLoadout.grantStoragePurchase = grantPurchase
 
 function AbilityLoadout.resetStoragePurchases(player): boolean
@@ -732,7 +575,7 @@ function AbilityLoadout.resetStoragePurchases(player): boolean
 	return saved
 end
 
-StorageRequest.OnServerEvent:Connect(function(player, action, name, other)
+StorageRequest.OnServerEvent:Connect(function(player, action, name)
 	if storageBusy[player] or os.clock() - (storageLast[player] or -10) < STORAGE_COOLDOWN then
 		return
 	end
@@ -741,7 +584,7 @@ StorageRequest.OnServerEvent:Connect(function(player, action, name, other)
 	storageBusy[player] = true
 
 	local ok, err = pcall(function()
-		-- A pure read: the client sends it on join and every time the panel opens.
+		-- A pure read: the client sends it on join and when the panel opens.
 		if action == "sync" then
 			storagePush(player)
 			return
@@ -749,9 +592,9 @@ StorageRequest.OnServerEvent:Connect(function(player, action, name, other)
 
 		if action == "buy" then
 			if not onSale() then
-				CommandFeedback.tell(player, "Ability storage is not on sale yet.", "bad")
+				CommandFeedback.tell(player, "Aspect storage is not on sale yet.", "bad")
 			elseif capacityOf(player) + SLOTS_PER_PURCHASE > MAX_SLOTS then
-				CommandFeedback.tell(player, "You have the most ability storage there is.", "bad")
+				CommandFeedback.tell(player, "You have the most aspect storage there is.", "bad")
 			elseif not storageReady[player] or InventoryStore.isReadOnly(player) then
 				-- Bought now, it could not be saved; better not to take the money.
 				CommandFeedback.tell(player, "Your save is not ready. Please try again.", "bad")
@@ -766,71 +609,34 @@ StorageRequest.OnServerEvent:Connect(function(player, action, name, other)
 			return
 		end
 
-		local active = loadoutFor(player)
-		local bank = stored[player]
-
-		if action == "store" then
-			local index = table.find(active, name)
-			if not index then
-				return
+		if action == "use" and type(name) == "string" then
+			-- Confirmed on the client ("the current aspect will be gone").
+			local used, message = AbilityLoadout.useAspect(player, name)
+			CommandFeedback.tell(player, message, if used then "good" else "bad")
+			if not used then
+				storagePush(player)
 			end
-			if capacityOf(player) == 0 then
-				CommandFeedback.tell(player, "Get ability storage to keep abilities you are not using.", "bad")
-				return
-			end
-			if #bank >= capacityOf(player) then
-				CommandFeedback.tell(player, "Storage is full. Open it to swap an ability.", "bad")
-				return
-			end
-			-- A copy may already be stored: duplicates are allowed since wishes.
-			table.remove(active, index)
-			table.insert(bank, name)
-		elseif action == "retrieve" then
-			-- Always allowed, even past capacity: what is stored is never stuck.
-			local index = table.find(bank, name)
-			if not index then
-				return
-			end
-			if #active >= SLOT_COUNT or table.find(active, name) then
-				CommandFeedback.tell(player, "Choose an active ability to swap, or free a slot.", "bad")
-				return
-			end
-			table.remove(bank, index)
-			table.insert(active, name)
-		elseif action == "swap" then
-			local from = table.find(bank, name)
-			local to = table.find(active, other)
-			if not from or not to or table.find(active, name) then
-				return
-			end
-			active[to], bank[from] = bank[from], active[to]
-		elseif action == "move" then
-			-- Reordering the store itself, from the Tab menu's drag.
-			local from, to = tonumber(name), tonumber(other)
-			if not (from and to and bank[from] and to >= 1 and to <= #bank) or from == to then
-				return
-			end
-			table.insert(bank, to, table.remove(bank, from))
-		else
 			return
 		end
 
-		markDirty(player)
-		push(player)
+		-- Anything else ("store", "swap", "move" from older clients): storage
+		-- has one fixed order and the active aspect cannot be put back, so the
+		-- request is answered with the real state and nothing else.
 		storagePush(player)
+		push(player)
 	end)
 
 	storageBusy[player] = nil
 
 	if not ok then
-		warn("[AbilityStorage]", err)
+		warn("[AspectStorage]", err)
 		CommandFeedback.tell(player, "Storage is unavailable. Please try again.", "bad")
 	end
 end)
 
 Players.PlayerRemoving:Connect(function(player)
 	-- Everything EXCEPT the contents and purchases, which the leave save has not
-	-- necessarily read yet. See the note on `stored`.
+	-- necessarily read yet. See the note on `aspects`.
 	storageReady[player] = nil
 	storageBusy[player] = nil
 	storageLast[player] = nil
@@ -845,9 +651,8 @@ local function onPlayerAdded(player: Player)
 	-- loadout can already have arrived, and clearing it here would undo it.
 	loadoutFor(player)
 
-	-- Deferred for the same reason SettingsServer defers its first reply: the
-	-- client's own scripts are still starting, and a push that lands before the
-	-- ability panel is listening leaves it blank until something changes.
+	-- Deferred: the client's scripts are still starting, and a push that lands
+	-- before the ability panel is listening leaves it blank.
 	task.delay(1, function()
 		if player.Parent then
 			push(player)
@@ -856,16 +661,8 @@ local function onPlayerAdded(player: Player)
 end
 
 Players.PlayerAdded:Connect(onPlayerAdded)
-
--- PlayerAdded only fires for players who join after this module is first
--- required. In Studio the developer is usually already in.
 for _, player in ipairs(Players:GetPlayers()) do
 	onPlayerAdded(player)
 end
-
-Players.PlayerRemoving:Connect(function(player)
-	-- Weak keys retain the loadout until InventoryStore finishes its leave save.
-	reorderBudgets[player] = nil
-end)
 
 return AbilityLoadout

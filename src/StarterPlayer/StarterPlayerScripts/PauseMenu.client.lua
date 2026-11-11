@@ -21,11 +21,11 @@
 	on respawn, so an error mid-animation cannot leave the player frozen.
 
 	The backdrop art - the drifting wireframe solid - is Shared.UI.MenuBackdrop,
-	which animates only while it is up. The loadout listed over it, and dragged
-	around to reorder, is Shared.UI.AbilityPanel. Both are built into the same
-	dim frame and shown and hidden with it; neither is filled from here, because
-	neither has anything to do with the Tab key. StarterPlayerScripts.AbilityClient
-	is what puts abilities in them.
+	which animates only while it is up and wears the aspect's tier colour. The
+	aspect in use, shown over it, is Shared.UI.AbilityPanel. Both are built into
+	the same dim frame and shown and hidden with it; neither is filled from here,
+	because neither has anything to do with the Tab key.
+	StarterPlayerScripts.AbilityClient is what puts the aspect in them.
 ]]
 
 local Players = game:GetService("Players")
@@ -41,6 +41,7 @@ local MenuBackdrop = require(Shared.UI:WaitForChild("MenuBackdrop"))
 local AbilityPanel = require(Shared.UI:WaitForChild("AbilityPanel"))
 local QuestWindow = require(Shared.UI:WaitForChild("QuestWindow"))
 local BestiaryWindow = require(Shared.UI:WaitForChild("BestiaryWindow"))
+local AspectInventoryWindow = require(Shared.UI:WaitForChild("AspectInventoryWindow"))
 local Responsive = require(Shared.UI:WaitForChild("Responsive"))
 local Sounds = require(Shared:WaitForChild("Audio"):WaitForChild("Sounds"))
 
@@ -133,6 +134,13 @@ end
 panel.onBestiary = function()
 	showPage(bestiary)
 end
+-- The stored aspects, where one is picked to replace the aspect in use.
+local inventory = AspectInventoryWindow.new(backdrop, function()
+	showPage(nil)
+end)
+panel.onInventory = function()
+	showPage(inventory)
+end
 
 local hint = Instance.new("TextLabel")
 hint.AnchorPoint = Vector2.new(0.5, 1)
@@ -173,7 +181,7 @@ local function placeForScreen()
 	-- starts under the top bar.
 	local top = Responsive.topbarBottom() + 8
 	local bottom = Responsive.viewport().Y - safe.bottom - hint.Size.Y.Offset - 8
-	-- Shrunk only as far as the room needs; AbilityPanel scales its drags to match.
+	-- Shrunk only as far as the room needs.
 	local wide = (Responsive.viewport().X - safe.left - safe.right - 16) / math.max(1, root.Size.X.Offset)
 	panelScale.Scale = math.clamp(math.min((bottom - top) / math.max(1, root.Size.Y.Offset), wide), 0.5, 1)
 	local height = root.Size.Y.Offset * panelScale.Scale
@@ -183,6 +191,7 @@ local function placeForScreen()
 	local width = Responsive.viewport().X - safe.left - safe.right
 	guide:place(top, bottom, width)
 	bestiary:place(top, bottom, width)
+	inventory:place(top, bottom, width)
 end
 
 Responsive.bind(placeForScreen)

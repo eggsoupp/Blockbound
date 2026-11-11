@@ -1,15 +1,16 @@
 --[[
 	AbilityCommands
 
-	The chat commands that fill a player's ability slots.
+	The chat commands for aspects.
 
-	  /add <ability>       put one in the first free slot
-	  /remove <ability>    take one out
-	  /scroll <ability>    drop a scroll for it on the ground in front of you
-	  /abilities           what you are carrying, and what exists
+	  /add <aspect>        grant one: active if you have none, else to storage
+	  /aspect <aspect>     make it your active aspect now (the old one is gone)
+	  /remove <aspect>     clear it if active, else drop one stored copy
+	  /scroll <aspect>     drop a scroll for it on the ground in front of you
+	  /abilities           your aspect, its slots, your storage, what exists
 
-	Names are matched loosely, so "/add sacred rain" works as well as
-	"/add SacredRain" - see AbilityConfig.resolve.
+	An aspect can be named by itself ("ember") or by any of its abilities
+	("fireball" means Ember) - see AspectConfig.resolveAny.
 
 	ADMIN ONLY
 
@@ -20,9 +21,9 @@
 	/abilities stays open - it only reports what you are already carrying, which
 	is a readout rather than a grant.
 
-	That makes these a developer tool, not the eventual equipping story: when
-	abilities are earned, the earning is what should call AbilityLoadout.add and
-	this file is what should go.
+	That makes these a developer tool, not the equipping story: players earn
+	aspects from wishes, scrolls and the tutorial, which call
+	AbilityLoadout.grantAspect themselves.
 
 	WHERE THE REPLY GOES
 
@@ -39,6 +40,7 @@ local ServerScriptService = game:GetService("ServerScriptService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local AbilityConfig = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityConfig"))
+local AspectConfig = require(Shared.Abilities:WaitForChild("AspectConfig"))
 local Permissions = require(Shared:WaitForChild("Permissions"))
 
 local AbilityLoadout = require(ServerScriptService:WaitForChild("AbilityLoadout"))
@@ -67,28 +69,29 @@ local tell = CommandFeedback.tell
 	IS.
 ]]
 local function catalogue(): string
-	local names = AbilityConfig.names()
+	local names = AspectConfig.names()
 
 	local labels = table.create(#names)
 	for index, name in ipairs(names) do
-		local definition = AbilityConfig.Definitions[name]
-		labels[index] = definition.displayName or name
+		labels[index] = AspectConfig.displayName(name)
 	end
 
 	return table.concat(labels, ", ")
 end
 
 local function describeLoadout(player: Player): string
-	local carried = AbilityLoadout.get(player)
-	if #carried == 0 then
-		return string.format("No abilities. %d slots free.", AbilityConfig.SlotCount)
+	local aspect = AbilityLoadout.aspect(player)
+	if not aspect then
+		return "No aspect in use."
 	end
 
-	local parts = table.create(#carried)
+	local carried = AbilityLoadout.get(player)
+	local parts = table.create(#carried + 1)
+	table.insert(parts, AspectConfig.displayName(aspect) .. ":")
 	for slot, name in ipairs(carried) do
 		local definition = AbilityConfig.Definitions[name]
 		local key = AbilityConfig.keyForSlot(slot)
-		parts[slot] = string.format(
+		parts[slot + 1] = string.format(
 			"%d%s %s",
 			slot,
 			if key then " [" .. key.Name .. "]" else "",
@@ -107,7 +110,7 @@ local function onChatted(player: Player, message: string)
 
 	command = string.lower(command)
 	if
-		command ~= "/add" and command ~= "/remove"
+		command ~= "/add" and command ~= "/remove" and command ~= "/aspect"
 		and command ~= "/scroll" and command ~= "/abilities"
 	then
 		return
@@ -122,29 +125,35 @@ local function onChatted(player: Player, message: string)
 
 	if command == "/abilities" then
 		tell(player, describeLoadout(player))
-		tell(player, "Available: " .. catalogue())
+		local stored = AbilityLoadout.stored(player)
+		for index, name in ipairs(stored) do
+			stored[index] = AspectConfig.displayName(name)
+		end
+		tell(player, "Stored: " .. (if #stored > 0 then table.concat(stored, ", ") else "nothing"))
+		tell(player, "Aspects: " .. catalogue())
 		return
 	end
 
 	-- Granting is the owner's. Said out loud rather than ignored, so a second
 	-- account testing this is told why nothing happened.
 	if not Permissions.isAdmin(player) then
-		tell(player, "Only the place owner can change abilities.", "bad")
+		tell(player, "Only the place owner can change aspects.", "bad")
 		return
 	end
 
 	if argument == "" then
-		tell(player, string.format("Usage: %s <ability>. Available: %s", command, catalogue()), "bad")
+		tell(player, string.format("Usage: %s <aspect>. Aspects: %s", command, catalogue()), "bad")
 		return
 	end
 
-	local abilityName = AbilityConfig.resolve(argument)
-	if not abilityName then
+	local aspectName = AspectConfig.resolveAny(argument)
+	if not aspectName then
 		tell(player, string.format(
-			"There is no ability called '%s'. Available: %s", argument, catalogue()
+			"There is no aspect or ability called '%s'. Aspects: %s", argument, catalogue()
 		), "bad")
 		return
 	end
+	local label = AspectConfig.displayName(aspectName)
 
 	if command == "/scroll" then
 		--[[
@@ -166,7 +175,7 @@ local function onChatted(player: Player, message: string)
 
 		local spot = (root :: BasePart).CFrame * CFrame.new(0, 0, -SCROLL_DROP_DISTANCE)
 		local instance, problem = ScrollService.place(
-			abilityName, CFrame.new(spot.Position + Vector3.new(0, SCROLL_DROP_HEIGHT, 0))
+			aspectName, CFrame.new(spot.Position + Vector3.new(0, SCROLL_DROP_HEIGHT, 0))
 		)
 
 		if not instance then
@@ -174,21 +183,25 @@ local function onChatted(player: Player, message: string)
 			return
 		end
 
-		local definition = AbilityConfig.Definitions[abilityName]
-		tell(player, string.format(
-			"Dropped a %s scroll.", definition and definition.displayName or abilityName
-		), "good")
+		tell(player, string.format("Dropped a %s aspect scroll.", label), "good")
 		return
 	end
 
-	local ok, reply
 	if command == "/add" then
-		ok, reply = AbilityLoadout.add(player, abilityName)
+		-- Overflow like a wish: an admin grant is not refused for want of slots.
+		local where, second, line = AbilityLoadout.grantAspect(player, aspectName, nil, true)
+		tell(player, if where then line else second, if where then "good" else "bad")
+	elseif command == "/aspect" then
+		AbilityLoadout.setAspect(player, aspectName)
+		tell(player, string.format("%s is now your aspect.", label), "good")
+	elseif AbilityLoadout.aspect(player) == aspectName then
+		AbilityLoadout.clearAspect(player)
+		tell(player, string.format("%s is no longer your aspect.", label), "good")
+	elseif AbilityLoadout.unstore(player, aspectName) then
+		tell(player, string.format("Removed a stored %s.", label), "good")
 	else
-		ok, reply = AbilityLoadout.remove(player, abilityName)
+		tell(player, string.format("You do not have %s.", label), "bad")
 	end
-
-	tell(player, reply, if ok then "good" else "bad")
 end
 
 local function watch(player: Player)

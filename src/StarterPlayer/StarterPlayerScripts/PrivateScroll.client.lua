@@ -4,7 +4,7 @@ local RunService=game:GetService('RunService')
 local Shared=RS:WaitForChild('Shared')
 local Remotes=require(Shared.Net.Remotes)
 local Theme=require(Shared.UI.Theme)
-local Config=require(Shared.Abilities.AbilityConfig)
+local Config=require(Shared.Abilities.AspectConfig) -- the packet's `ability` is an aspect
 local Changed=Remotes.wait('PrivateScrollChanged')
 local Request=Remotes.wait('ScrollChestRequest')
 local model,spin,currentToken
@@ -31,7 +31,7 @@ Changed.OnClientEvent:Connect(function(packet)
  for _,y in ipairs({-.9,.9}) do
   part('Band',Vector3.new(.16,.8,.8),Theme.rarityColor(definition.rarity),y).Material=Enum.Material.Neon
  end
- local prompt=Instance.new('ProximityPrompt');prompt.ActionText='Learn';prompt.ObjectText=(definition.displayName or packet.ability)..' Scroll'
+ local prompt=Instance.new('ProximityPrompt');prompt.ActionText='Learn';prompt.ObjectText=(definition.displayName or packet.ability)..' Aspect Scroll'
  prompt.HoldDuration=.6;prompt.MaxActivationDistance=10;prompt.RequiresLineOfSight=false;prompt.Parent=paper
  prompt.Triggered:Connect(function() Request:FireServer('claim',packet.token) end)
  local start=os.clock()

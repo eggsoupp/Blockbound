@@ -329,6 +329,16 @@ local TINT_HOLD = 2
 local TINT_RELEASE = 1.1
 local STREAK_TINT = 0.5
 
+--[[
+	THE RESTING TINT: the colour of the aspect in use, worn by the menu's solid
+	all the time rather than only during a flourish (MenuBackdrop.setRestTint).
+	REST_TINT is how far towards it the solid sits at rest - most of the way,
+	so the tier reads at a glance, but not all, so a flourish in the same
+	colour still visibly brightens it.
+]]
+local REST_TINT = 0.8
+local restColor: Color3? = nil
+
 -- The clock runs until BOTH envelopes are done with it, then stops.
 local FLOURISH_LIFE = math.max(BURST_ATTACK + BURST_RELEASE, TINT_HOLD + TINT_RELEASE)
 
@@ -869,14 +879,24 @@ end
 	it is gold, exactly as it does when it is white.
 ]]
 function MenuBackdrop:_applyTint(tint: number)
-	if math.abs(tint - self.appliedTint) < 0.004 then
+	-- The menu's own solid rests in the aspect's colour (see REST_TINT); a
+	-- flourish blends from there to its own colour and back.
+	local rest = if self == live then restColor else nil
+	local rarity
+	if rest then
+		rarity = if self.tintColor and tint > 0 then rest:Lerp(self.tintColor, tint) else rest
+		tint = REST_TINT + (1 - REST_TINT) * tint
+	end
+
+	if math.abs(tint - self.appliedTint) < 0.004 and rarity == self.appliedRarity then
 		return
 	end
 	self.appliedTint = tint
+	self.appliedRarity = rarity
 
 	-- Irrelevant at tint 0, where every lerp returns its own starting colour;
 	-- named anyway so this cannot be reached with a nil to interpolate to.
-	local rarity = self.tintColor or Theme.Color.MenuWire
+	rarity = rarity or self.tintColor or Theme.Color.MenuWire
 
 	local wire = Theme.Color.MenuWire:Lerp(rarity, tint)
 	local glint = Theme.Color.MenuGlint:Lerp(rarity, tint)
@@ -1199,6 +1219,19 @@ end
 	The way in from outside. See `live` at the top for why this is a module
 	function rather than something you call on an instance you were handed.
 ]]
+--[[
+	The colour the menu's solid wears at rest: the tier of the aspect in use
+	("Legendary"), or nil for the plain white wire. Takes effect on the next
+	frame the menu is drawn; a flourish still plays over it.
+]]
+function MenuBackdrop.setRestTint(rarity: string?)
+	restColor = if rarity then Theme.rarityColor(rarity) else nil
+	if live then
+		-- Forces the next _applyTint to write, even with the amount unchanged.
+		live.appliedTint = -1
+	end
+end
+
 function MenuBackdrop.flourish(rarity: string?)
 	if live then
 		live:_flourish(rarity)

@@ -305,7 +305,7 @@ local function detailsText()
 	local left = WishConfig.LegendaryPity - state.sinceLegendary
 	local epicLeft = WishConfig.EpicPity - state.sinceEpic
 	return string.format(
-		"Legendary guaranteed within <b>%d</b> %s.\nThe chance rises every wish from wish %d.\n\nEpic or better within <b>%d</b> %s.\n\nWishes made: %d\nDuplicates go to ability storage.",
+		"Legendary guaranteed within <b>%d</b> %s.\nThe chance rises every wish from wish %d.\n\nEpic or better within <b>%d</b> %s.\n\nWishes made: %d\nEach wish is an aspect. With one in use, it goes to aspect storage.",
 		left, if left == 1 then "wish" else "wishes", WishConfig.SoftPityFrom,
 		epicLeft, if epicLeft == 1 then "wish" else "wishes", state.wishes
 	)

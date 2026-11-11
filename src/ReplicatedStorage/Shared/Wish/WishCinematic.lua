@@ -57,7 +57,7 @@ local Theme = require(UI:WaitForChild("Theme"))
 local PixelUI = require(UI:WaitForChild("PixelUI"))
 local ItemSprites = require(UI:WaitForChild("ItemSprites"))
 local AbilityScope = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityScope"))
-local AbilityConfig = require(Shared.Abilities:WaitForChild("AbilityConfig"))
+local AspectConfig = require(Shared.Abilities:WaitForChild("AspectConfig"))
 local Pack = require(Shared.Abilities:WaitForChild("VFX"):WaitForChild("PackAssembly"))
 local Audio = Shared:WaitForChild("Audio")
 local CombatAudio = require(Audio:WaitForChild("CombatAudio"))
@@ -108,8 +108,11 @@ local GLOW = {
 	Legendary = Color3.fromRGB(255, 200, 48),
 }
 
--- The ability's picture on its card, from the item icon atlas.
+-- The picture on a card, from the item icon atlas. Wishes hand out aspects
+-- now, whose icon is AspectConfig's `icon`; these ability entries stay for
+-- anything still showing one.
 local ICONS = {
+
 	Fireball = "tome_fire",
 	WindBurst = "feather",
 	WaterBlade = "tome_water",
@@ -819,7 +822,9 @@ end
 
 -- The ability's picture, off the item icon atlas, drawn pixelated.
 local function abilityIcon(parent, name, size, z)
-	local sprite = ItemSprites.Sprites[ICONS[name] or FALLBACK_ICON] or ItemSprites.Sprites[FALLBACK_ICON]
+	local aspect = AspectConfig.get(name)
+	local key = (aspect and aspect.icon) or ICONS[name] or FALLBACK_ICON
+	local sprite = ItemSprites.Sprites[key] or ItemSprites.Sprites[FALLBACK_ICON]
 	local image = Instance.new("ImageLabel")
 	image.Name = "Icon"
 	image.BackgroundTransparency = 1
@@ -1107,14 +1112,15 @@ local function buildCard(view, result)
 		star.Size = UDim2.fromOffset(0, 0)
 	end
 
-	local definition = AbilityConfig.get(result.name)
 	label(front, {
-		text = if result.where == "loadout" then "Added to your loadout" else "Sent to ability storage (Tab)",
+		text = if result.where == "active" or result.where == "loadout"
+			then "Now your aspect"
+			else "Sent to aspect storage (Tab)",
 		size = 15, font = Theme.Fonts.BodyBold, color = Color3.fromRGB(214, 220, 240),
 		at = UDim2.new(0.5, 0, 0.86, 0), anchor = Vector2.new(0.5, 0), box = UDim2.new(1, -20, 0, 18),
 	})
 	label(front, {
-		text = definition and AbilityConfig.statsText(definition) or "", size = 14, font = Theme.Fonts.Body,
+		text = AspectConfig.abilityLine(result.name), size = 14, font = Theme.Fonts.Body,
 		color = Color3.fromRGB(170, 178, 204),
 		at = UDim2.new(0.5, 0, 0.92, 0), anchor = Vector2.new(0.5, 0), box = UDim2.new(1, -20, 0, 16),
 	})

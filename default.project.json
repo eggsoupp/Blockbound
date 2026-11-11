@@ -370,6 +370,9 @@
           "TerrainConfig": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/TerrainConfig.lua"
           },
+          "TerrainGrid": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/TerrainGrid.lua"
+          },
           "BiomeConfig": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/BiomeConfig.lua"
           },
@@ -960,6 +963,52 @@
       "TerrainManager": {
         "$path": "src/ServerScriptService/TerrainManager.lua"
       },
+      "Terrain": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true,
+        "GeneratedColumns": {
+          "$path": "src/ServerScriptService/Terrain/GeneratedColumns.lua"
+        },
+        "ChunkData": {
+          "$path": "src/ServerScriptService/Terrain/ChunkData.lua"
+        },
+        "BlockParts": {
+          "$path": "src/ServerScriptService/Terrain/BlockParts.lua"
+        },
+        "FaceCulling": {
+          "$path": "src/ServerScriptService/Terrain/FaceCulling.lua"
+        },
+        "ChunkMesher": {
+          "$path": "src/ServerScriptService/Terrain/ChunkMesher.lua"
+        },
+        "TerrainWater": {
+          "$path": "src/ServerScriptService/Terrain/TerrainWater.lua"
+        },
+        "ColumnVisibility": {
+          "$path": "src/ServerScriptService/Terrain/ColumnVisibility.lua"
+        },
+        "EditZones": {
+          "$path": "src/ServerScriptService/Terrain/EditZones.lua"
+        },
+        "ChunkQueue": {
+          "$path": "src/ServerScriptService/Terrain/ChunkQueue.lua"
+        },
+        "GenerationBudget": {
+          "$path": "src/ServerScriptService/Terrain/GenerationBudget.lua"
+        },
+        "ChunkBuilder": {
+          "$path": "src/ServerScriptService/Terrain/ChunkBuilder.lua"
+        },
+        "ChunkStreaming": {
+          "$path": "src/ServerScriptService/Terrain/ChunkStreaming.lua"
+        },
+        "BlockEdits": {
+          "$path": "src/ServerScriptService/Terrain/BlockEdits.lua"
+        },
+        "TerrainExcavation": {
+          "$path": "src/ServerScriptService/Terrain/TerrainExcavation.lua"
+        }
+      },
       "AdminHandler": {
         "$path": "src/ServerScriptService/AdminHandler.server.lua",
         "$properties": {
@@ -1055,6 +1104,9 @@
       },
       "EnemyService": {
         "$path": "src/ServerScriptService/EnemyService.lua"
+      },
+      "EnemyFeedback": {
+        "$path": "src/ServerScriptService/EnemyFeedback.lua"
       },
       "InitCombat": {
         "$path": "src/ServerScriptService/InitCombat.server.lua",

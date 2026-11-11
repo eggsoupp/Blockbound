@@ -68,6 +68,7 @@ local TerrainFolder = script.Parent
 local TerrainConfig = require(TerrainFolder:WaitForChild("TerrainConfig"))
 local StrataConfig = require(TerrainFolder:WaitForChild("StrataConfig"))
 local CaveConfig = require(TerrainFolder:WaitForChild("CaveConfig"))
+local TerrainGrid = require(TerrainFolder:WaitForChild("TerrainGrid"))
 
 local CaveMap = {}
 
@@ -218,9 +219,8 @@ local function noise3(px, py, pz)
 	return Perlin:noise(px * INV_ROUGH_SCALE + noiseOffX, py * INV_ROUGH_SCALE + noiseOffY, pz * INV_ROUGH_SCALE + noiseOffZ)
 end
 
-local function chunkKeyOf(cx, cz)
-	return (cx + 8192) * 65536 + (cz + 8192)
-end
+-- The same packing TerrainManager and ChunkEdits use.
+local chunkKeyOf = TerrainGrid.chunkKey
 
 local function planKeyOf(catIndex, gx, gz)
 	return (catIndex * 65536 + (gx + 32768)) * 65536 + (gz + 32768)

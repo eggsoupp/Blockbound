@@ -77,6 +77,7 @@ local CollectionService = game:GetService("CollectionService")
 local TerrainFolder = script.Parent
 local StructureConfig = require(TerrainFolder:WaitForChild("StructureConfig"))
 local BiomeConfig = require(TerrainFolder:WaitForChild("BiomeConfig"))
+local TerrainGrid = require(TerrainFolder:WaitForChild("TerrainGrid"))
 
 local StructureRegistry = {}
 
@@ -103,8 +104,6 @@ local candidateCache = {}
 local candidateCacheCount = 0
 local oldCandidateCache = {}
 
-local KEY_OFFSET = 8192
-local KEY_STRIDE = 65536
 
 local SALT_ACCEPT = 1
 local SALT_JITTER_X = 2
@@ -145,9 +144,8 @@ local function hashUnit(a, b, c, salt)
 	return v - math.floor(v)
 end
 
-local function chunkKeyOf(cx, cz)
-	return (cx + KEY_OFFSET) * KEY_STRIDE + (cz + KEY_OFFSET)
-end
+-- The same packing TerrainManager and ChunkEdits use.
+local chunkKeyOf = TerrainGrid.chunkKey
 
 -- ---------------------------------------------------------------------------
 -- Definition preparation

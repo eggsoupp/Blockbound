@@ -12,7 +12,8 @@
 
 	    join      load, then register and sync
 	    change    flagged dirty via InventoryService's change listener
-	    every 90s a dirty player is written back
+	    every 30s a dirty player is written back; an unchanged one every few
+              minutes, to keep the session lock fresh
 	    leave     final save, then the session lock is released
 	    shutdown  BindToClose saves everyone still online, in parallel
 
@@ -63,8 +64,9 @@ end
 -- ---------------------------------------------------------------------------
 
 -- How long a dirty inventory may go unwritten. The ceiling on how much an
--- unexpected server death can cost a player.
-local AUTOSAVE_INTERVAL = 90
+-- unexpected server death can cost a player. Was 90; a write per changing
+-- player every half minute is still far inside the DataStore budget.
+local AUTOSAVE_INTERVAL = 30
 
 -- How often the autosave loop looks for work. Small relative to the interval so
 -- saves spread out across players instead of firing in one burst.
@@ -86,6 +88,31 @@ InventoryService.SetChangeListener(function(player)
 	InventoryStore.markDirty(player)
 end)
 
+--[[
+	A session that finds its save has been opened somewhere else stops saving
+	(see InventoryStore.mayWrite). Said to the player at once: carrying on
+	silently is how an hour of play turns out never to have been kept.
+]]
+InventoryStore.setLockLostListener(function(player)
+	if player.Parent then
+		CommandFeedback.tell(
+			player,
+			"Your save was opened in another session, so this one has stopped saving. "
+				.. "Rejoin to carry on from your latest save.",
+			"bad"
+		)
+	end
+end)
+
+-- Refusals that are already explained elsewhere, or are not faults at all.
+local QUIET_SAVE_ERRORS = {
+	["read-only session"] = true,
+	["datastore unavailable"] = true,
+	["session ending"] = true,
+	["no session"] = true,
+	["lock lost"] = true,
+}
+
 local function saveNow(player, reason)
 	local inv = InventoryService.GetInventory(player)
 	if not inv then
@@ -93,7 +120,7 @@ local function saveNow(player, reason)
 	end
 
 	local ok, err = InventoryStore.save(player, inv, reason)
-	if not ok and err ~= "read-only session" and err ~= "datastore unavailable" then
+	if not ok and not QUIET_SAVE_ERRORS[err] then
 		swarn(string.format("Save failed for %s (%s): %s", player.Name, tostring(reason), tostring(err)))
 	end
 	return ok

@@ -65,6 +65,8 @@ local StationService = require(ServerScriptService:WaitForChild("StationService"
 local IslandStore = require(ServerScriptService:WaitForChild("IslandStore"))
 local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 local IslandDirectory = require(ServerScriptService:WaitForChild("IslandDirectory"))
+local IslandSlotConfig = require(Shared:WaitForChild("IslandSlots"))
+local Travel = require(ServerScriptService:WaitForChild("Travel"))
 
 -- Restoring a station needs its world folder, which init creates. Idempotent,
 -- so it does not matter who calls it first.
@@ -77,8 +79,15 @@ local CHUNK_STUDS = TerrainConfig.ChunkStuds
 local AUTOSAVE_TICK = 5
 
 -- A frozen character is let go after this long no matter what, so a load
--- that hangs can never trap a player in the air for good.
-local CHARACTER_HOLD_LIMIT = 30
+-- that hangs can never trap a player in the air for good. Longer than the
+-- slowest load that still ends well: the owner lookup at its limit, then a
+-- wait for another server to finish saving the island.
+local CHARACTER_HOLD_LIMIT = 120
+
+-- How long to keep asking whose island this is before giving up, and the
+-- pause between rounds. See resolveOwner.
+local OWNER_LOOKUP_SECONDS = 45
+local OWNER_RETRY_DELAY = 3
 
 -- Joining players are told about a read-only island after this delay: their
 -- client needs a moment to start listening for messages.
@@ -99,6 +108,9 @@ local readOnly = true
 local readOnlyReason = nil
 local dirty = false
 local lastSaveAt = 0
+-- When this server's lock on the island was last written: by the load, a
+-- save, or a refresh.
+local lastLockAt = 0
 local saving = false
 
 local function log(...)
@@ -115,6 +127,56 @@ local function readOnlyMessage()
 		return "Couldn't tell whose island this is, so changes made here won't be saved."
 	end
 	return "This island couldn't be opened for saving, so changes made here won't be saved."
+end
+
+--[[
+	Tells a player this island is not being saved - or, when nobody could work
+	out whose island it is, takes them back to the world instead.
+
+	An island with no known owner is the bare template: it is not theirs to
+	look at and nothing built on it can ever be kept. A tester was left
+	building on one with only a line of chat to say so. Leaving is the honest
+	outcome, and the trip back in a minute later starts a fresh lookup. The
+	message is still shown if the teleport cannot be sent.
+]]
+local function announceReadOnly(player)
+	task.delay(MESSAGE_DELAY, function()
+		if not player.Parent then
+			return
+		end
+
+		if readOnlyReason == "owner unknown" then
+			CommandFeedback.tell(
+				player,
+				"Your island couldn't be opened just now, so you're being taken back to the world. "
+					.. "Nothing was lost - try again in a minute.",
+				"bad"
+			)
+			local ok, sent = pcall(Travel.go, player, "world")
+			if ok and sent then
+				return
+			end
+		end
+
+		CommandFeedback.tell(player, readOnlyMessage(), "bad")
+	end)
+end
+
+-- Turns saving off for the rest of this server's life and tells everyone.
+-- For an island that was saving and no longer can: another server claimed it.
+local function stopSaving(reason)
+	if readOnly then
+		return
+	end
+	readOnly = true
+	readOnlyReason = reason
+	workspace:SetAttribute("IslandSaving", false)
+	workspace:SetAttribute("IslandSaveProblem", reason)
+
+	local message = readOnlyMessage()
+	for _, player in ipairs(Players:GetPlayers()) do
+		CommandFeedback.tell(player, message, "bad")
+	end
 end
 
 -- ---------------------------------------------------------------------------
@@ -229,6 +291,7 @@ end
 local function finishLoading()
 	loaded = true
 	lastSaveAt = os.clock()
+	lastLockAt = lastSaveAt
 
 	workspace:SetAttribute("IslandOwnerId", ownerUserId)
 	workspace:SetAttribute("IslandSlot", islandSlot)
@@ -238,9 +301,8 @@ local function finishLoading()
 	TerrainManager:ReleaseGeneration(LOAD_HOLD)
 
 	if readOnly then
-		local message = readOnlyMessage()
 		for _, player in ipairs(Players:GetPlayers()) do
-			task.delay(MESSAGE_DELAY, CommandFeedback.tell, player, message, "bad")
+			announceReadOnly(player)
 		end
 	end
 end
@@ -251,21 +313,71 @@ end
 	A reserved server - which is what /island teleports into - looks its owner
 	up in IslandDirectory, keyed by its own PrivateServerId, so nobody can claim
 	it by arriving first. Anything else (Studio, a public server of the island
-	place) falls back to the first player in. If the lookup fails the island
-	still loads for the first player, but read-only, since it may not be theirs.
+	place) falls back to the first player in. If the owner cannot be found at
+	all the island is not loaded and never saved, since it may not be the
+	first player's, and everyone is taken back to the world (announceReadOnly).
 ]]
 local function resolveOwner(firstPlayer)
 	local serverId = game.PrivateServerId
-	if serverId ~= "" and game.PrivateServerOwnerId == 0 then
-		local owner, slotOrErr = IslandDirectory.ownerOfServer(serverId)
+	if serverId == "" or game.PrivateServerOwnerId ~= 0 then
+		return firstPlayer.UserId, false
+	end
+
+	--[[
+		This used to be one lookup, three quick tries, and then an island nobody
+		could save on. Two things went wrong with that:
+
+		  * a DataStore that was slow or failing for a few seconds as the server
+		    started was treated as final, though the island was fine;
+		  * the lookup reads the directory's reverse link, and if that one record
+		    was missing there was no second way to ask.
+
+		So: keep asking for a good while - players are held in place and told
+		the island is loading - and each round also ask the other way round,
+		whether this is the server reserved for one of the players standing
+		here (IslandDirectory.confirmOwner). Only the owner travels to an island
+		that is not running yet, so that is nearly always the first player.
+	]]
+	local deadline = os.clock() + OWNER_LOOKUP_SECONDS
+	local lastError = nil
+
+	while true do
+		local owner, slotOrErr, kind = IslandDirectory.ownerOfServer(serverId)
 		if owner then
 			return owner, false, slotOrErr
 		end
-		local err = slotOrErr
-		warn("[IslandService] Could not tell whose island this server is:", err)
-		return firstPlayer.UserId, true
+		lastError = slotOrErr
+
+		-- True while every question this round got an answer, i.e. the
+		-- directory is readable and simply does not know this server.
+		local answered = kind == "unlisted"
+
+		for _, player in ipairs(Players:GetPlayers()) do
+			for slot = 1, IslandSlotConfig.MaxIslands do
+				local confirmed, err = IslandDirectory.confirmOwner(serverId, player.UserId, slot)
+				if confirmed then
+					log(string.format(
+						"Found the owner from their reservation (%d, island %d); the directory link was repaired.",
+						player.UserId, slot
+					))
+					return player.UserId, false, slot
+				elseif confirmed == nil then
+					answered = false
+					lastError = err
+				end
+			end
+		end
+
+		if answered or os.clock() >= deadline then
+			break
+		end
+
+		warn("[IslandService] Could not tell whose island this server is yet, asking again:", lastError)
+		task.wait(OWNER_RETRY_DELAY)
 	end
-	return firstPlayer.UserId, false
+
+	warn("[IslandService] Could not tell whose island this server is:", lastError)
+	return firstPlayer.UserId, true
 end
 
 local function beginLoading(firstPlayer)
@@ -408,11 +520,17 @@ local function saveNow(reason, release)
 
 	if saved then
 		lastSaveAt = os.clock()
+		lastLockAt = lastSaveAt
 		workspace:SetAttribute("IslandLastSaved", os.time())
 		workspace:SetAttribute("IslandUnsaved", dirty)
 	else
 		dirty = true
 		warn(string.format("[IslandService] Island %d was not saved (%s): %s", ownerUserId, reason, tostring(err)))
+		if err == "lock lost" then
+			-- Another server has the island now, and this copy is the older one.
+			-- Say so, rather than failing the same save every minute in silence.
+			stopSaving("locked")
+		end
 	end
 
 	if release then
@@ -433,6 +551,20 @@ task.spawn(function()
 			and os.clock() - lastSaveAt >= IslandConfig.AutosaveInterval
 		then
 			saveNow("autosave")
+		elseif
+			loaded and not readOnly and not saving
+			and os.clock() - lastLockAt >= IslandStore.LockRefreshInterval
+		then
+			-- Nothing to save, but the lock must not be left to look abandoned
+			-- while players are still here. `saving` keeps a real save from
+			-- overlapping it.
+			saving = true
+			lastLockAt = os.clock()
+			local ok, held, err = pcall(IslandStore.touch, storeKey())
+			saving = false
+			if ok and not held and err == "lock lost" then
+				stopSaving("locked")
+			end
 		end
 	end
 end)
@@ -448,7 +580,7 @@ local function onPlayerAdded(player)
 		loadStarted = true
 		beginLoading(player)
 	elseif loaded and readOnly then
-		task.delay(MESSAGE_DELAY, CommandFeedback.tell, player, readOnlyMessage(), "bad")
+		announceReadOnly(player)
 	end
 
 	player.CharacterAdded:Connect(holdCharacter)

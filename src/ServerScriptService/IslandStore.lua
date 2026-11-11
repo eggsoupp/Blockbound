@@ -68,7 +68,6 @@
 
 local DataStoreService = game:GetService("DataStoreService")
 local HttpService = game:GetService("HttpService")
-local RunService = game:GetService("RunService")
 
 local IslandStore = {}
 
@@ -203,14 +202,27 @@ local function lockIsForeign(record)
 	end
 
 	local lockedAt = tonumber(record.lockedAt) or 0
-	-- A lock written BY Studio expires as fast as one seen from Studio: a
-	-- playtest often dies before releasing, and must not keep the live game off
-	-- the island for fifteen minutes. See the same rule in InventoryStore.
-	local timeout = if RunService:IsStudio() or string.sub(lockId, 1, 7) == "studio-"
+	-- A lock written BY Studio expires fast: a playtest often dies before
+	-- releasing, and must not keep the live game off the island for fifteen
+	-- minutes. A live server's lock gets the full timeout even when seen from
+	-- Studio, so a playtest cannot take an island away from the server its
+	-- owner is building on. See the same rule in InventoryStore.
+	local timeout = if string.sub(lockId, 1, 7) == "studio-"
 		then CONFIG.StudioSessionLockTimeout
 		else CONFIG.SessionLockTimeout
 
 	return (os.time() - lockedAt) < timeout
+end
+
+--[[
+	Whether this server may write over `record`: only while it still carries
+	this server's own lock. A record that is merely unlocked is NOT enough - it
+	may have been claimed, saved and released by another server in the
+	meantime, which makes this server's copy the older one. See
+	InventoryStore.mayWrite.
+]]
+local function mayWrite(record)
+	return type(record) == "table" and record.lockId == SERVER_ID
 end
 
 -- A record this code can read. Anything else is kept exactly as it is and
@@ -636,7 +648,7 @@ function IslandStore.save(ownerUserId, payload, reason, release)
 		store:UpdateAsync(keyFor(ownerUserId), function(old)
 			wrote = false
 
-			if lockIsForeign(old) or not isReadable(old) then
+			if not mayWrite(old) or not isReadable(old) then
 				return nil
 			end
 
@@ -661,9 +673,11 @@ function IslandStore.save(ownerUserId, payload, reason, release)
 
 	if not result then
 		swarn(string.format(
-			"Skipped saving island %s (%s): another server holds it now.",
+			"Skipped saving island %s (%s): another server has claimed it. Saving is off for this one.",
 			ownerUserId, tostring(reason)
 		))
+		-- Latched: this server's copy can no longer be trusted as the newest.
+		session.readOnly = true
 		return false, "lock lost"
 	end
 
@@ -704,6 +718,57 @@ function IslandStore.release(ownerUserId)
 		end)
 	end)
 end
+
+--[[
+	Rewrites the lock's timestamp without touching the island, for a server
+	with nothing new to save. Keeps the lock from looking abandoned while
+	players are still here, and is how an idle server finds out it has been
+	taken over.
+
+	Returns ok, err; err is "lock lost" when another server has claimed the
+	island, after which nothing more is written for it.
+]]
+function IslandStore.touch(ownerUserId)
+	local session = sessions[ownerUserId]
+	if not session or session.readOnly then
+		return false, "read-only"
+	end
+
+	local store = getStore()
+	if not store then
+		return false, "datastore unavailable"
+	end
+
+	local ok, result = withRetry("touch/UpdateAsync", function()
+		local held = false
+
+		store:UpdateAsync(keyFor(ownerUserId), function(old)
+			held = false
+			if not mayWrite(old) then
+				return nil
+			end
+			old.lockedAt = os.time()
+			held = true
+			return old
+		end)
+
+		return held
+	end)
+
+	if not ok then
+		return false, tostring(result)
+	end
+	if not result then
+		session.readOnly = true
+		swarn(string.format("Island %s has been claimed by another server. Saving is off for this one.", ownerUserId))
+		return false, "lock lost"
+	end
+	return true
+end
+
+-- How long a server with nothing to save may leave its lock untouched. Well
+-- under SessionLockTimeout, so a couple of failed refreshes are fine.
+IslandStore.LockRefreshInterval = 240
 
 function IslandStore.isReadOnly(ownerUserId)
 	local session = sessions[ownerUserId]

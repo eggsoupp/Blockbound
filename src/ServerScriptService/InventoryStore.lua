@@ -44,7 +44,6 @@
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
-local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -77,12 +76,18 @@ local CONFIG = {
 	-- longest plausible session-save gap.
 	SessionLockTimeout = 900,
 
-	-- Studio uses a much shorter timeout. A playtest that is killed hard - Studio
-	-- crashing, or being closed outright - never runs BindToClose, so it leaves
-	-- its lock behind. With the production timeout that would lock the developer
-	-- out of their own save for fifteen minutes and look exactly like broken
-	-- persistence. Studio is a single-session environment, so a short timeout
-	-- costs nothing there.
+	-- A session with nothing to save still rewrites its record this often, so
+	-- its lock never looks abandoned while the player is here. Without it a
+	-- player who idled for fifteen minutes could be taken over by another
+	-- session - and a session that has been taken over can no longer save.
+	-- Well under SessionLockTimeout, so a couple of failed refreshes are fine.
+	LockRefreshInterval = 240,
+
+	-- A lock WRITTEN BY STUDIO uses a much shorter timeout. A playtest that is
+	-- killed hard - Studio crashing, or being closed outright - never runs
+	-- BindToClose, so it leaves its lock behind. With the production timeout
+	-- that would lock the developer out of their own save for fifteen minutes
+	-- and look exactly like broken persistence.
 	StudioSessionLockTimeout = 30,
 
 	-- How long to wait for another server to let go of a live lock before
@@ -125,6 +130,32 @@ local storeUnavailableReason = nil
 
 -- userId -> session bookkeeping for players currently on this server.
 local sessions = {}
+
+--[[
+	Every session claims the record under its OWN lock id, not just this
+	server's: "<server>#<n>". A player who leaves and rejoins the same server
+	then has two sessions that can tell each other apart, so a late final save
+	from the old one is refused instead of landing on top of the new one.
+]]
+local sessionCounter = 0
+
+local function newSession(userId)
+	sessionCounter += 1
+	return {
+		userId = userId,
+		lockId = SERVER_ID .. "#" .. sessionCounter,
+		readOnly = false,
+		-- True once this session's lock is actually in the store.
+		claimed = false,
+		lastSaveAt = 0,
+		lockTouchedAt = 0,
+		dirty = false,
+	}
+end
+
+-- Called with (player, reason) when a session finds its save has been taken
+-- by another one and stops saving. InventoryManager tells the player.
+local lockLostListener = nil
 
 -- userId -> number of saves currently in flight, so a rejoin cannot read the key
 -- before the previous session has finished writing to it. A counter rather than
@@ -271,11 +302,79 @@ end
 local sections = {}
 local sectionOrder = {}
 
+--[[
+	A section whose loader threw is remembered on the session and never saved
+	for the rest of it: its module is sitting on defaults, and writing those
+	back would replace the real stored value with an empty one. The stored
+	value is carried through every save untouched instead (see serialize).
+]]
 local function runSectionLoad(name, player, value)
 	local ok, err = pcall(sections[name].load, player, value)
 	if not ok then
 		swarn(string.format("Section '%s' failed to load for %s: %s", name, player.Name, err))
+		local session = sessions[player.UserId]
+		if session then
+			session.sectionFailed = session.sectionFailed or {}
+			session.sectionFailed[name] = true
+		end
 	end
+end
+
+--[[
+	Why a value cannot go in a DataStore, or nil when it can.
+
+	One value a DataStore refuses makes the WHOLE write throw, and every section
+	shares one record - so a single bad table in one section would stop the
+	inventory and everything else saving for the rest of the session. Checked
+	per section so only the offender is held back.
+]]
+local function storableProblem(value, depth, seen)
+	local kind = type(value)
+	if kind == "number" or kind == "boolean" then
+		return nil
+	end
+	if kind == "string" then
+		return if utf8.len(value) then nil else "a string that is not valid UTF-8"
+	end
+	if kind ~= "table" then
+		return "a " .. typeof(value) .. " value"
+	end
+
+	depth = (depth or 0) + 1
+	if depth > 32 then
+		return "tables nested too deeply"
+	end
+	seen = seen or {}
+	if seen[value] then
+		return "a table that contains itself"
+	end
+	seen[value] = true
+
+	local hasString, hasNumber = false, false
+	for key, child in pairs(value) do
+		local keyKind = type(key)
+		if keyKind == "string" then
+			hasString = true
+			if not utf8.len(key) then
+				return "a key that is not valid UTF-8"
+			end
+		elseif keyKind == "number" and key == math.floor(key) and key >= 1 then
+			hasNumber = true
+		else
+			return "a table key that is not a string or an array index"
+		end
+		if hasString and hasNumber then
+			return "a table mixing array indexes and string keys"
+		end
+
+		local problem = storableProblem(child, depth, seen)
+		if problem then
+			return problem
+		end
+	end
+
+	seen[value] = nil
+	return nil
 end
 
 function InventoryStore.registerSection(name, save, load)
@@ -321,6 +420,7 @@ local function applySections(player, record)
 	local session = sessions[player.UserId]
 	if session then
 		session.sectionData = stored
+		session.sectionFailed = nil
 	end
 
 	for _, name in ipairs(sectionOrder) do
@@ -347,13 +447,66 @@ local function serialize(inventory, player)
 		end
 	end
 
+	--[[
+		The sections are rebuilt on every save, and a section missing from the
+		payload is a section deleted from the record. So nothing is ever left out
+		just because this server could not produce it:
+
+		  not registered here     a server running older code, or a module that
+		                          failed to start: what was stored is kept
+		  its loader threw        the module holds defaults, not this player's
+		                          data: what was stored is kept
+		  its saver threw         what was stored is kept
+		  it cannot be stored     what was stored is kept, rather than letting
+		                          one bad value fail the whole write
+
+		`stored` is what the record held when it was loaded, or what the last
+		successful save wrote.
+	]]
 	local extra = nil
 	if player then
+		local session = sessions[player.UserId]
+		local stored = session and session.sectionData
+		local failed = session and session.sectionFailed
+
+		if stored then
+			for name, value in pairs(stored) do
+				if sections[name] == nil then
+					extra = extra or {}
+					extra[name] = value
+				end
+			end
+		end
+
 		for _, name in ipairs(sectionOrder) do
-			local ok, value = pcall(sections[name].save, player)
-			if not ok then
-				swarn(string.format("Section '%s' failed to save for %s: %s", name, player.Name, value))
-			elseif value ~= nil then
+			local keep = stored and stored[name]
+			local value
+
+			if failed and failed[name] then
+				value = keep
+			else
+				local ok, result = pcall(sections[name].save, player)
+				if not ok then
+					swarn(string.format(
+						"Section '%s' failed to save for %s, keeping what was stored: %s",
+						name, player.Name, tostring(result)
+					))
+					value = keep
+				else
+					value = result
+					local problem = if value ~= nil then storableProblem(value) else nil
+					if problem then
+						swarn(string.format(
+							"Section '%s' for %s holds %s, which a DataStore cannot store. "
+								.. "Keeping what was stored; this section is NOT being saved.",
+							name, player.Name, problem
+						))
+						value = keep
+					end
+				end
+			end
+
+			if value ~= nil then
 				extra = extra or {}
 				extra[name] = value
 			end
@@ -528,21 +681,23 @@ end
 -- SESSION LOCKING
 -- ===========================================================================
 
-local function lockIsForeign(record)
+-- Whether `record` is claimed by some OTHER session that is still alive, so
+-- `session` must wait rather than take it.
+local function lockIsForeign(record, session)
 	if type(record) ~= "table" then
 		return false
 	end
 
 	local lockId = record.lockId
-	if type(lockId) ~= "string" or lockId == "" or lockId == SERVER_ID then
+	if type(lockId) ~= "string" or lockId == "" or lockId == session.lockId then
 		return false
 	end
 
 	local lockedAt = tonumber(record.lockedAt) or 0
 
 	--[[
-		The short timeout applies to a lock WRITTEN by Studio as well as to every
-		lock seen FROM Studio.
+		The short timeout applies to a lock WRITTEN by Studio, wherever it is
+		seen from.
 
 		Studio and live servers share one DataStore. A playtest stopped in Studio
 		often dies before its leave-save finishes, and the lock it leaves behind
@@ -550,14 +705,59 @@ local function lockIsForeign(record)
 		fifteen minutes - a live session then loaded an empty, unsaveable bag,
 		which looks exactly like "my inventory never saves". A Studio session is
 		one developer at a keyboard; thirty seconds is plenty.
+
+		It used to apply to every lock seen FROM Studio too, which let a playtest
+		take a save away from a live server the same account was playing on.
+		Whichever of the two then saved last won, and a playtest stopped after
+		the live session ended wrote its older copy over the newer one. A live
+		server's lock now gets the full timeout from Studio as well: the playtest
+		loads read-only and says so.
 	]]
-	local timeout = if RunService:IsStudio() or string.sub(lockId, 1, 7) == "studio-"
+	local timeout = if string.sub(lockId, 1, 7) == "studio-"
 		then CONFIG.StudioSessionLockTimeout
 		else CONFIG.SessionLockTimeout
 
 	-- A lock older than the timeout belonged to a server that went away without
 	-- releasing it, and is safe to take over.
 	return (os.time() - lockedAt) < timeout
+end
+
+--[[
+	Whether `session` may write over `record`: only while the record still
+	carries this session's own lock.
+
+	"Nobody else holds it right now" is not enough. A session can be taken over
+	(its lock expired, or was treated as expired) by another session that then
+	saves and releases, leaving the record unlocked - and looking free to the
+	first session, whose copy is now the OLDER one. Writing it would roll the
+	player back to before the other session. So the question asked at every
+	write is "is this still mine", and anything else ends the session's saving.
+
+	The one exception is a record deleted from under a live session by
+	InventoryStore.wipe.
+]]
+local function mayWrite(record, session)
+	if record == nil then
+		return session.wiped == true
+	end
+	return type(record) == "table" and record.lockId == session.lockId
+end
+
+-- Ends a session's saving after it found its lock gone. Latched: there is no
+-- way back, because this session's copy can no longer be trusted as newest.
+local function loseLock(player, session, reason)
+	if session.readOnly then
+		return
+	end
+	session.readOnly = true
+	session.readOnlyReason = "the save was opened by another session"
+	swarn(string.format(
+		"%s's save was claimed by another session (noticed on %s). Saving is off for this one.",
+		player.Name, tostring(reason)
+	))
+	if lockLostListener then
+		task.spawn(lockLostListener, player, reason)
+	end
 end
 
 -- ===========================================================================
@@ -576,7 +776,7 @@ end
 	                 current data. Never write over good data with a guess.
 	  info.repairs   how many slots had to be fixed up
 ]]
-function InventoryStore.load(player)
+local function loadSession(player, session)
 	local userId = player.UserId
 
 	-- If this player's previous session is still writing (a fast rejoin, or a
@@ -587,14 +787,6 @@ function InventoryStore.load(player)
 		task.wait(0.1)
 		waited += 0.1
 	end
-
-	local session = {
-		userId = userId,
-		readOnly = false,
-		lastSaveAt = 0,
-		dirty = false,
-	}
-	sessions[userId] = session
 
 	local store = getStore()
 	if not store then
@@ -625,7 +817,11 @@ function InventoryStore.load(player)
 			local blocked = nil
 
 			store:UpdateAsync(key, function(old)
-				if lockIsForeign(old) then
+				-- The callback can run more than once; start each run clean.
+				captured = nil
+				blocked = nil
+
+				if lockIsForeign(old, session) then
 					blocked = "locked"
 					return nil
 				end
@@ -646,7 +842,7 @@ function InventoryStore.load(player)
 				captured = migrated
 
 				local claimed = migrated or { version = CONFIG.SchemaVersion, slots = {} }
-				claimed.lockId = SERVER_ID
+				claimed.lockId = session.lockId
 				claimed.lockedAt = os.time()
 				return claimed
 			end)
@@ -726,6 +922,10 @@ function InventoryStore.load(player)
 		handed out once, to a player who has neither items nor the marker, and the
 		marker is written with their next save.
 	]]
+	-- The lock is in the store and it is this session's.
+	session.claimed = true
+	session.lockTouchedAt = os.clock()
+
 	-- `loaded` is nil for a player with no record at all, so both tests have to
 	-- tolerate that.
 	local hasItems = loaded ~= nil and type(loaded.slots) == "table" and #loaded.slots > 0
@@ -752,12 +952,32 @@ function InventoryStore.load(player)
 	return inventory, { source = "datastore", readOnly = false, repairs = repairs }
 end
 
+function InventoryStore.load(player)
+	local session = newSession(player.UserId)
+	-- While this is set, release leaves the session alone: the load may still
+	-- be about to claim the lock, and whoever is running it has to be able to
+	-- find the session afterwards to give that lock back.
+	session.loading = true
+	sessions[player.UserId] = session
+
+	local ok, inventory, info = pcall(loadSession, player, session)
+	session.loading = false
+
+	if not ok then
+		error(inventory, 0)
+	end
+	return inventory, info
+end
+
 --[[
 	Writes the inventory back.
 
 	Refuses when the session is read-only, and refuses again inside UpdateAsync
-	if the lock has since been taken by another server - checked at the moment of
-	writing rather than trusted from load time.
+	unless the record still carries this session's own lock - checked at the
+	moment of writing rather than trusted from load time. See mayWrite.
+
+	One write per player at a time: a second caller waits for the first, so two
+	saves can never land out of order and leave the older one in the store.
 
 	Returns ok, err.
 ]]
@@ -769,8 +989,18 @@ function InventoryStore.save(player, inventory, reason)
 		return false, "no inventory"
 	end
 
-	if session and session.readOnly then
+	if not session or session.loading then
+		return false, "no session"
+	end
+
+	if session.readOnly then
 		return false, "read-only session"
+	end
+
+	-- The final save is under way or done; it carries everything, and nothing
+	-- may re-claim the lock it gives up.
+	if session.releasing then
+		return false, "session ending"
 	end
 
 	local store = getStore()
@@ -778,11 +1008,26 @@ function InventoryStore.save(player, inventory, reason)
 		return false, "datastore unavailable"
 	end
 
+	while session.saving do
+		task.wait(0.1)
+	end
+	if session.readOnly then
+		return false, "read-only session"
+	end
+	if session.releasing or sessions[userId] ~= session then
+		return false, "session ending"
+	end
+
 	local payload = serialize(inventory, player)
+
+	-- Cleared now rather than after the write: a change made while the write is
+	-- in flight is not in this payload, and has to leave the session dirty.
+	session.dirty = false
+	session.saving = true
 
 	-- Records that this player has already been given the starting inventory, so
 	-- emptying their bag never re-triggers it. See the grant decision in load.
-	if session and session.granted then
+	if session.granted then
 		payload.granted = true
 	end
 
@@ -794,12 +1039,13 @@ function InventoryStore.save(player, inventory, reason)
 		local wrote = false
 
 		store:UpdateAsync(key, function(old)
-			if lockIsForeign(old) then
-				-- Another server owns this player now. Ours is the stale copy.
+			wrote = false
+			if not mayWrite(old, session) then
+				-- Another session has had this record since. Ours is the stale copy.
 				return nil
 			end
 
-			payload.lockId = SERVER_ID
+			payload.lockId = session.lockId
 			payload.lockedAt = os.time()
 			wrote = true
 			return payload
@@ -808,24 +1054,25 @@ function InventoryStore.save(player, inventory, reason)
 		return wrote
 	end)
 
+	session.saving = false
 	endSave(userId)
 
 	if not ok then
+		session.dirty = true
 		return false, tostring(result)
 	end
 
 	if not result then
-		swarn(string.format(
-			"Skipped save for %s (%s): the lock is held by another server.",
-			player.Name, tostring(reason)
-		))
+		session.dirty = true
+		loseLock(player, session, reason)
 		return false, "lock lost"
 	end
 
-	if session then
-		session.lastSaveAt = os.clock()
-		session.dirty = false
-	end
+	session.lastSaveAt = os.clock()
+	session.lockTouchedAt = session.lastSaveAt
+	session.wiped = nil
+	-- What the store holds now, for the sections serialize has to carry over.
+	session.sectionData = payload.sections or {}
 
 	return true
 end
@@ -851,6 +1098,13 @@ function InventoryStore.release(player, inventory, reason)
 		return true
 	end
 
+	-- Its load is still running and may yet claim the lock. Leave the session
+	-- where it is: InventoryManager calls again once the load lands, and that
+	-- call is the one that can give the lock back.
+	if session and session.loading then
+		return false, "still loading"
+	end
+
 	if session then
 		session.releasing = true
 	end
@@ -859,7 +1113,19 @@ function InventoryStore.release(player, inventory, reason)
 	local store = getStore()
 
 	if store then
+		-- Before any waiting, so BindToClose sees a write pending throughout.
 		beginSave(userId)
+
+		-- An autosave already on its way has to land first. Otherwise the two
+		-- race, and if the autosave lands second the store is left holding the
+		-- older copy with the lock still on it.
+		if session then
+			local held = 0
+			while session.saving and held < 20 do
+				task.wait(0.1)
+				held += 0.1
+			end
+		end
 
 		if inventory and session and not session.readOnly then
 			--[[
@@ -880,8 +1146,8 @@ function InventoryStore.release(player, inventory, reason)
 
 				store:UpdateAsync(keyFor(userId), function(old)
 					wrote = false
-					if lockIsForeign(old) then
-						-- Another server owns this player now. Ours is the stale copy.
+					if not mayWrite(old, session) then
+						-- Another session has had this record since. Ours is the stale copy.
 						return nil
 					end
 
@@ -899,13 +1165,13 @@ function InventoryStore.release(player, inventory, reason)
 			elseif not result then
 				err = "lock lost"
 				swarn(string.format(
-					"Skipped the final save for %s (%s): the lock is held by another server.",
+					"Skipped the final save for %s (%s): another session has claimed the save.",
 					player.Name, tostring(reason)
 				))
 			else
 				saved = true
 			end
-		else
+		elseif session and session.claimed then
 			--[[
 				Nothing to save, but drop the lock if this server still holds it.
 
@@ -917,7 +1183,7 @@ function InventoryStore.release(player, inventory, reason)
 			]]
 			withRetry("release/UpdateAsync", function()
 				store:UpdateAsync(keyFor(userId), function(old)
-					if type(old) ~= "table" or old.lockId ~= SERVER_ID then
+					if type(old) ~= "table" or old.lockId ~= session.lockId then
 						return nil
 					end
 					old.lockId = nil
@@ -953,10 +1219,25 @@ end
 
 function InventoryStore.shouldAutosave(player, minInterval)
 	local session = sessions[player.UserId]
-	if not session or session.readOnly or not session.dirty then
+	if
+		not session or session.readOnly or not session.claimed
+		or session.loading or session.saving or session.releasing
+	then
 		return false
 	end
-	return (os.clock() - session.lastSaveAt) >= (minInterval or 0)
+
+	local now = os.clock()
+	if session.dirty then
+		return (now - session.lastSaveAt) >= (minInterval or 0)
+	end
+
+	-- Nothing to save, but the lock still has to be kept fresh, and a save is
+	-- also how a session finds out it has been taken over.
+	return (now - session.lockTouchedAt) >= CONFIG.LockRefreshInterval
+end
+
+function InventoryStore.setLockLostListener(listener)
+	lockLostListener = listener
 end
 
 function InventoryStore.isReadOnly(player)
@@ -1013,7 +1294,7 @@ end
 function InventoryStore.setReadOnly(player, reason)
 	local session = sessions[player.UserId]
 	if not session then
-		session = { userId = player.UserId, lastSaveAt = 0, dirty = false }
+		session = newSession(player.UserId)
 		sessions[player.UserId] = session
 	end
 
@@ -1068,6 +1349,10 @@ function InventoryStore.wipe(player)
 		if session then
 			session.dirty = false
 			session.lastSaveAt = os.clock()
+			-- The record this session's lock was on is gone; let its next save
+			-- write a new one. See mayWrite.
+			session.wiped = true
+			session.sectionData = {}
 		end
 	end
 
@@ -1084,6 +1369,7 @@ function InventoryStore.describe(player)
 		storeAvailable = storeUnavailableReason == nil,
 		unavailableReason = storeUnavailableReason,
 		serverId = SERVER_ID,
+		lockId = session and session.lockId or nil,
 		key = keyFor(player.UserId),
 		hasSession = session ~= nil,
 		readOnly = session ~= nil and session.readOnly or false,

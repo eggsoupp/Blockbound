@@ -4,7 +4,8 @@
 	Which private server is whose island.
 
 		IslandDirectory.accessCodeFor(ownerUserId, slot?) -> accessCode?, err
-		IslandDirectory.ownerOfServer(privateServerId) -> ownerUserId?, slot | err
+		IslandDirectory.ownerOfServer(privateServerId) -> ownerUserId?, slot | err, kind
+		IslandDirectory.confirmOwner(privateServerId, userId, slot?) -> boolean?, err
 
 	A player can own more than one island (Shared.IslandSlots). Island 1 keeps
 	the keys it always had, so existing islands are found where they were;
@@ -151,23 +152,30 @@ end
 
 --[[
 	For an island server: whose island it is, from its own PrivateServerId.
-	nil when the server is not one this directory reserved.
+
+	Returns ownerUserId, slot - or nil, message, kind, where kind says which
+	of two very different things went wrong:
+
+	  "error"     the directory could not be read. Worth asking again.
+	  "unlisted"  it was read, and has no entry for this server. Asking again
+	              gives the same answer; IslandDirectory.confirmOwner is the
+	              other way to find out.
 ]]
 function IslandDirectory.ownerOfServer(privateServerId)
 	if type(privateServerId) ~= "string" or privateServerId == "" then
-		return nil, "not a reserved server"
+		return nil, "not a reserved server", "unlisted"
 	end
 
 	local dataStore, storeError = getStore()
 	if not dataStore then
-		return nil, storeError
+		return nil, storeError, "error"
 	end
 
 	local ok, result = withRetry(function()
 		return dataStore:GetAsync("server_" .. privateServerId)
 	end)
 	if not ok then
-		return nil, result
+		return nil, result, "error"
 	end
 
 	-- A number for island 1; "<id>_<slot>" for any later one.
@@ -177,7 +185,57 @@ function IslandDirectory.ownerOfServer(privateServerId)
 			return tonumber(owner), tonumber(slot)
 		end
 	end
-	return tonumber(result), 1
+
+	local owner = tonumber(result)
+	if owner then
+		return owner, 1
+	end
+	return nil, "this server has no entry in the island directory", "unlisted"
+end
+
+--[[
+	The same question asked the other way round: is `privateServerId` the
+	server reserved for island `slot` of `userId`?
+
+	ownerOfServer reads the reverse link, "server_<id>", which is a second
+	record written after the reservation and so can be missing when the
+	reservation itself is fine. This reads the reservation, "owner_<id>", which
+	is the record the access code came from in the first place. It is just as
+	safe to trust: only this module writes it, on the server, and it names the
+	one server that is that player's island.
+
+	Returns true, false, or nil with a message when it could not be read. A
+	confirmed owner has the missing reverse link written back, so the next
+	start of this server finds it the quick way.
+]]
+function IslandDirectory.confirmOwner(privateServerId, userId, slot)
+	slot = slot or 1
+	if type(privateServerId) ~= "string" or privateServerId == "" or type(userId) ~= "number" then
+		return false
+	end
+
+	local dataStore, storeError = getStore()
+	if not dataStore then
+		return nil, storeError
+	end
+
+	local suffix = if slot > 1 then "_" .. slot else ""
+	local ok, record = withRetry(function()
+		return dataStore:GetAsync("owner_" .. userId .. suffix)
+	end)
+	if not ok then
+		return nil, record
+	end
+
+	if type(record) ~= "table" or record.serverId ~= privateServerId then
+		return false
+	end
+
+	-- Best effort: the island is identified either way.
+	pcall(function()
+		dataStore:SetAsync("server_" .. privateServerId, if slot > 1 then tostring(userId) .. suffix else userId)
+	end)
+	return true
 end
 
 return IslandDirectory

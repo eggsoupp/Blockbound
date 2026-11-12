@@ -6,7 +6,8 @@
 	that shows them, and AbilityPanel shows the count on its INVENTORY button.
 
 		AbilityStorage.state()            the last push: { slots, extras, capacity, canBuy, ... }
-		AbilityStorage.groups()           { { name, count } } one per aspect, in AspectConfig order
+		AbilityStorage.groups()           { { name, count, permanent } } one per aspect, in AspectConfig order
+		AbilityStorage.isPermanent(name)  bought in the shop: never used up, never lost
 		AbilityStorage.Changed            fires after every push
 		AbilityStorage.use(aspectName)    make it the active aspect (the old one is lost)
 		AbilityStorage.buy()              prompt the extra-slots product
@@ -39,6 +40,7 @@ local FALLBACK_ICON = "scroll_arcane"
 
 local state = {
 	slots = {},
+	permanent = {},
 	extras = 0,
 	capacity = 0,
 	maxSlots = StorageConfig.MaxSlots,
@@ -59,19 +61,52 @@ function AbilityStorage.state()
 	return state
 end
 
+-- Whether the player owns this aspect permanently (bought in the shop).
+function AbilityStorage.isPermanent(aspectName: string?): boolean
+	return aspectName ~= nil and table.find(state.permanent or {}, aspectName) ~= nil
+end
+
+-- Whether this account has already bought the aspect's Game Pass. Roblox
+-- will not sell the same one twice, whatever became of what it bought.
+function AbilityStorage.isClaimed(aspectName: string?): boolean
+	return aspectName ~= nil and table.find(state.claimed or {}, aspectName) ~= nil
+end
+
+-- How many UNREDEEMED permanent passes for the aspect are in the inventory:
+-- each can be redeemed (permanent from then on) or traded.
+function AbilityStorage.passCount(aspectName: string?): number
+	local count = 0
+	for _, name in ipairs(state.passes or {}) do
+		if name == aspectName then
+			count += 1
+		end
+	end
+	return count
+end
+
+-- Uses up one permanent pass: the aspect is the player's for good, and can
+-- no longer be traded.
+function AbilityStorage.redeem(aspectName: string)
+	Request:FireServer("redeem", aspectName)
+end
+
 --[[
-	The stored copies as one entry per aspect, in AspectConfig order (commons
-	first, legendaries last), so the list does not reshuffle when a wish lands.
+	Everything in the inventory as one entry per aspect: { name, count,
+	permanent }. `count` is the stored copies (0 for a permanent aspect with
+	none stored). In AspectConfig order (commons first, legendaries last), so
+	the list does not reshuffle when something new lands.
 ]]
-function AbilityStorage.groups(): { { name: string, count: number } }
+function AbilityStorage.groups(): { { name: string, count: number, permanent: boolean, passes: number } }
 	local counts = {}
 	for _, name in ipairs(state.slots or {}) do
 		counts[name] = (counts[name] or 0) + 1
 	end
 	local groups = {}
 	for _, name in ipairs(Config.names()) do
-		if counts[name] then
-			table.insert(groups, { name = name, count = counts[name] })
+		local isPermanent = AbilityStorage.isPermanent(name)
+		local passCount = AbilityStorage.passCount(name)
+		if counts[name] or isPermanent or passCount > 0 then
+			table.insert(groups, { name = name, count = counts[name] or 0, permanent = isPermanent, passes = passCount })
 		end
 	end
 	return groups

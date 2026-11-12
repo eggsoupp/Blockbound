@@ -314,8 +314,13 @@ function AbilityPanel:_refreshAspect()
 		view.name.TextColor3 = Theme.Color.Text
 		view.tier.Text = string.upper(info.rarity or "") .. " ASPECT"
 		view.tier.TextColor3 = color
+		-- A permanent aspect (bought in the shop) says so in gold; any other
+		-- says how many abilities it holds.
 		local abilities = info.abilityCount or 0
-		view.count.Text = string.format("%d %s", abilities, if abilities == 1 then "ability" else "abilities")
+		view.count.Text = if info.permanent
+			then "PERMANENT"
+			else string.format("%d %s", abilities, if abilities == 1 then "ability" else "abilities")
+		view.count.TextColor3 = if info.permanent then Theme.PixelColor.Selection else Theme.Color.TextDim
 	else
 		view.name.Text = "No aspect"
 		view.name.TextColor3 = Theme.Color.TextFaint
@@ -384,6 +389,7 @@ end
 	  displayName  "Ember"
 	  rarity        its tier name, which colours the card
 	  abilityCount  how many abilities it holds
+	  permanent     bought in the shop (shown in gold instead of the count)
 
 	nil for no aspect. Kept until there is a panel to show it.
 ]]

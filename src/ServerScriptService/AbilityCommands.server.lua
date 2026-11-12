@@ -7,6 +7,8 @@
 	  /aspect <aspect>     make it your active aspect now (the old one is gone)
 	  /remove <aspect>     clear it if active, else drop one stored copy
 	  /scroll <aspect>     drop a scroll for it on the ground in front of you
+	  /permanent <aspect>  make it permanently yours (as if bought in the shop)
+	  /unpermanent <aspect> take that away again
 	  /abilities           your aspect, its slots, your storage, what exists
 
 	An aspect can be named by itself ("ember") or by any of its abilities
@@ -112,6 +114,7 @@ local function onChatted(player: Player, message: string)
 	if
 		command ~= "/add" and command ~= "/remove" and command ~= "/aspect"
 		and command ~= "/scroll" and command ~= "/abilities"
+		and command ~= "/permanent" and command ~= "/unpermanent"
 	then
 		return
 	end
@@ -191,6 +194,14 @@ local function onChatted(player: Player, message: string)
 		-- Overflow like a wish: an admin grant is not refused for want of slots.
 		local where, second, line = AbilityLoadout.grantAspect(player, aspectName, nil, true)
 		tell(player, if where then line else second, if where then "good" else "bad")
+	elseif command == "/permanent" then
+		local granted = AbilityLoadout.grantPermanent(player, aspectName)
+		tell(player, if granted then string.format("%s is now permanently yours.", label)
+			else string.format("%s is already permanent, or your save is not ready.", label), if granted then "good" else "bad")
+	elseif command == "/unpermanent" then
+		local revoked = AbilityLoadout.revokePermanent(player, aspectName)
+		tell(player, if revoked then string.format("%s is no longer permanent.", label)
+			else string.format("%s was not permanent.", label), if revoked then "good" else "bad")
 	elseif command == "/aspect" then
 		AbilityLoadout.setAspect(player, aspectName)
 		tell(player, string.format("%s is now your aspect.", label), "good")

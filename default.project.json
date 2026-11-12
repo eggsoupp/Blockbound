@@ -124,8 +124,11 @@
             "Disabled": false
           }
         },
-        "WishClient": {
-          "$path": "src/StarterPlayer/StarterPlayerScripts/WishClient.client.lua"
+        "ShopClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/ShopClient.client.lua"
+        },
+        "TradeClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/TradeClient.client.lua"
         },
         "FlightClient": {
           "$path": "src/StarterPlayer/StarterPlayerScripts/FlightClient.client.lua",
@@ -522,6 +525,9 @@
           "Theme": {
             "$path": "src/ReplicatedStorage/Shared/UI/Theme.lua"
           },
+          "TradeWindow": {
+            "$path": "src/ReplicatedStorage/Shared/UI/TradeWindow.lua"
+          },
           "Motion": {
             "$path": "src/ReplicatedStorage/Shared/UI/Motion.lua"
           },
@@ -864,6 +870,9 @@
           "StorageConfig": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/StorageConfig.lua"
           },
+          "AspectShopConfig": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/AspectShopConfig.lua"
+          },
           "AspectConfig": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/AspectConfig.lua"
           },
@@ -911,6 +920,13 @@
           },
           "ReferencePlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/ReferencePlan.lua"
+          }
+        },
+        "Trade": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "TradeConfig": {
+            "$path": "src/ReplicatedStorage/Shared/Trade/TradeConfig.lua"
           }
         },
         "Permissions": {
@@ -1196,6 +1212,9 @@
       "AbilityLoadout": {
         "$path": "src/ServerScriptService/AbilityLoadout.lua"
       },
+      "AspectShop": {
+        "$path": "src/ServerScriptService/AspectShop.server.lua"
+      },
       "Purchases": {
         "$path": "src/ServerScriptService/Purchases.lua"
       },
@@ -1464,6 +1483,22 @@
       },
       "TravelCommands": {
         "$path": "src/ServerScriptService/TravelCommands.server.lua"
+      },
+      "Trade": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true,
+        "TradeLedger": {
+          "$path": "src/ServerScriptService/Trade/TradeLedger.lua"
+        },
+        "TradeEscrow": {
+          "$path": "src/ServerScriptService/Trade/TradeEscrow.lua"
+        },
+        "TradeSettlement": {
+          "$path": "src/ServerScriptService/Trade/TradeSettlement.lua"
+        },
+        "TradeService": {
+          "$path": "src/ServerScriptService/Trade/TradeService.server.lua"
+        }
       },
       "GearService": {
         "$path": "src/ServerScriptService/GearService.lua"

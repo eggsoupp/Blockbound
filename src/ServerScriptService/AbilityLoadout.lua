@@ -12,7 +12,12 @@
 	  AbilityLoadout.useAspect(player, aspect)     -> make a stored aspect the active one
 	  AbilityLoadout.setAspect(player, aspect)     -> admin / tutorial: replace the active one
 	  AbilityLoadout.clearAspect(player)           -> no active aspect
-	  AbilityLoadout.owns(player, aspect)          -> active or stored
+	  AbilityLoadout.owns(player, aspect)          -> active, stored or permanent
+	  AbilityLoadout.grantPermanent(player, aspect) / ownsPermanent / revokePermanent
+
+	PERMANENT ASPECTS are bought in the Aspect Shop (AspectShop, Game Passes).
+	They are never used up and never destroyed: equipping one costs nothing,
+	and replacing it leaves it in the inventory.
 
 	ASPECTS (Shared.Abilities.AspectConfig)
 
@@ -253,6 +258,28 @@ local RECEIPTS_KEPT = 20
 local stored = setmetatable({}, { __mode = "k" })
 local purchases = setmetatable({}, { __mode = "k" })
 local receipts = setmetatable({}, { __mode = "k" })
+--[[
+	player -> { [aspectName] = true }: PERMANENT aspects, bought in the Aspect
+	Shop (ServerScriptService.AspectShop) or granted by an admin. Owned for
+	good: equipping one never uses it up, and replacing it never destroys it.
+	Saved with storage, and re-confirmed from Game Pass ownership on join.
+]]
+local permanent = setmetatable({}, { __mode = "k" })
+--[[
+	PERMANENT PASSES: what a Game Pass purchase turns into.
+
+	  passes   player -> { aspectName, ... }  unredeemed permanent passes, one
+	           entry per pass. A thing in the inventory: it can be TRADED
+	           (ServerScriptService.Trade) or REDEEMED, which uses it up and
+	           makes the aspect permanent. A redeemed aspect cannot be traded.
+	  claimed  player -> { [aspectName] = true }  aspects whose Game Pass this
+	           account has already been handed as a pass above. Roblox goes on
+	           saying the account owns the Game Pass for ever, whatever became
+	           of what it bought; this is what stops the join check handing it
+	           out a second time. See claimPass.
+]]
+local passes = setmetatable({}, { __mode = "k" })
+local claimed = setmetatable({}, { __mode = "k" })
 local storageReady = {}
 local storageBusy = {}
 local storageLast = {}
@@ -279,11 +306,36 @@ local function onSale(): boolean
 	return PRODUCT_ID > 0
 end
 
+-- The permanent aspects as a list, in AspectConfig order.
+local function permanentList(player): { string }
+	local owned = permanent[player] or {}
+	local list = {}
+	for _, name in ipairs(AspectConfig.names()) do
+		if owned[name] then
+			table.insert(list, name)
+		end
+	end
+	return list
+end
+
+-- The aspects whose Game Pass has been claimed, sorted so saves do not churn.
+local function claimedList(player): { string }
+	local list = {}
+	for name in pairs(claimed[player] or {}) do
+		table.insert(list, name)
+	end
+	table.sort(list)
+	return list
+end
+
 local function storagePush(player)
 	local capacity = capacityOf(player)
 	local bank = stored[player] or {}
 	StorageChanged:FireClient(player, {
 		slots = table.clone(bank),
+		permanent = permanentList(player),
+		passes = table.clone(passes[player] or {}),
+		claimed = claimedList(player),
 		extras = extrasOf(bank),
 		capacity = capacity,
 		owned = capacity > 0,
@@ -314,9 +366,40 @@ InventoryStore.registerSection("abilityStorage", function(player)
 		slots = {},
 		purchases = purchases[player] or 0,
 		receipts = table.clone(receipts[player] or {}),
+		permanent = permanentList(player),
+		passes = table.clone(passes[player] or {}),
+		claimed = claimedList(player),
 	}
 end, function(player, value)
-	local entry, bought, seen = {}, 0, {}
+	local entry, bought, seen, owned = {}, 0, {}, {}
+
+	local spent, held = {}, {}
+	if type(value) == "table" then
+		if type(value.claimed) == "table" then
+			for _, name in ipairs(value.claimed) do
+				if type(name) == "string" then
+					spent[name] = true
+				end
+			end
+		end
+		if type(value.passes) == "table" then
+			for _, name in ipairs(value.passes) do
+				if type(name) == "string" and AspectConfig.get(name) and #held < HELD_MAX then
+					table.insert(held, name)
+				end
+			end
+		end
+	end
+	claimed[player] = spent
+	passes[player] = held
+
+	if type(value) == "table" and type(value.permanent) == "table" then
+		for _, name in ipairs(value.permanent) do
+			if type(name) == "string" and AspectConfig.get(name) then
+				owned[name] = true
+			end
+		end
+	end
 
 	local function addOnce(aspectName)
 		if aspectName and #entry < HELD_MAX and not table.find(entry, aspectName) then
@@ -365,13 +448,143 @@ end, function(player, value)
 	stored[player] = entry
 	purchases[player] = bought
 	receipts[player] = seen
+	permanent[player] = owned
 	storageReady[player] = true
 	storagePush(player)
 end)
 
--- Whether the player has this aspect active or in storage.
+-- Whether the player has this aspect active, stored or permanently.
 function AbilityLoadout.owns(player, aspectName): boolean
-	return aspects[player] == aspectName or table.find(stored[player] or {}, aspectName) ~= nil
+	return aspects[player] == aspectName
+		or table.find(stored[player] or {}, aspectName) ~= nil
+		or (permanent[player] or {})[aspectName] == true
+end
+
+-- Whether storage has loaded from a real record (AspectShop waits for it).
+function AbilityLoadout.isReady(player): boolean
+	return storageReady[player] == true
+end
+
+function AbilityLoadout.ownsPermanent(player, aspectName): boolean
+	return type(aspectName) == "string" and (permanent[player] or {})[aspectName] == true
+end
+
+--[[
+	Makes an aspect permanently the player's (a shop purchase, a Game Pass
+	found on join, or an admin). With no aspect in use it is also equipped.
+	Returns whether it was new.
+]]
+function AbilityLoadout.grantPermanent(player, aspectName): boolean
+	if not AspectConfig.get(aspectName) or not storageReady[player] then
+		return false
+	end
+	local owned = permanent[player]
+	if owned[aspectName] then
+		return false
+	end
+	owned[aspectName] = true
+	markDirty(player)
+	if aspects[player] == nil then
+		setActive(player, aspectName)
+	end
+	storagePush(player)
+	return true
+end
+
+-- Whether this account's Game Pass for the aspect has already been handed over.
+function AbilityLoadout.passClaimed(player, aspectName): boolean
+	return (claimed[player] or {})[aspectName] == true
+end
+
+-- How many unredeemed permanent passes for the aspect the player holds.
+function AbilityLoadout.passCount(player, aspectName): number
+	local count = 0
+	for _, name in ipairs(passes[player] or {}) do
+		if name == aspectName then
+			count += 1
+		end
+	end
+	return count
+end
+
+-- Puts one permanent pass in the inventory (a claim, or a trade arriving).
+function AbilityLoadout.addPass(player, aspectName): boolean
+	local held = passes[player]
+	if not AspectConfig.get(aspectName) or not storageReady[player] or not held or #held >= HELD_MAX then
+		return false
+	end
+	table.insert(held, aspectName)
+	markDirty(player)
+	storagePush(player)
+	return true
+end
+
+-- Takes one permanent pass out (a trade leaving). Returns whether one was there.
+function AbilityLoadout.removePass(player, aspectName): boolean
+	local held = passes[player]
+	local index = held and table.find(held, aspectName)
+	if not index then
+		return false
+	end
+	table.remove(held, index)
+	markDirty(player)
+	storagePush(player)
+	return true
+end
+
+--[[
+	A Game Pass this account owns, handed over as a permanent pass in the
+	inventory - once. Returns whether one was handed over.
+
+	Nothing is equipped or made permanent here: the pass sits in the inventory
+	until its owner either redeems it or trades it. Marking the claim and
+	adding the pass happen together, in one section of one save, so there is no
+	moment where the pass has been handed over but could be claimed again.
+]]
+function AbilityLoadout.claimPass(player, aspectName): boolean
+	if not AspectConfig.get(aspectName) or not storageReady[player] or not claimed[player] then
+		return false
+	end
+	if claimed[player][aspectName] then
+		return false
+	end
+	if not AbilityLoadout.addPass(player, aspectName) then
+		return false
+	end
+	claimed[player][aspectName] = true
+	return true
+end
+
+--[[
+	Uses up one permanent pass and makes its aspect permanently the player's.
+	From here it is theirs for good and can no longer be traded. Returns ok and
+	a line to show them.
+]]
+function AbilityLoadout.redeemPass(player, aspectName): (boolean, string)
+	if type(aspectName) ~= "string" or not AspectConfig.get(aspectName) then
+		return false, "There is no such aspect."
+	end
+	local label = AspectConfig.displayName(aspectName)
+	if AbilityLoadout.ownsPermanent(player, aspectName) then
+		return false, string.format("%s is already permanently yours. This pass can still be traded.", label)
+	end
+	if not AbilityLoadout.removePass(player, aspectName) then
+		return false, "You have no permanent pass for that aspect."
+	end
+	AbilityLoadout.grantPermanent(player, aspectName)
+	return true, string.format("%s is permanently yours. It can no longer be traded.", label)
+end
+
+-- Takes one away again (admin command only). Returns whether it was owned.
+function AbilityLoadout.revokePermanent(player, aspectName): boolean
+	local owned = permanent[player]
+	if not (owned and owned[aspectName]) then
+		return false
+	end
+	owned[aspectName] = nil
+	markDirty(player)
+	storagePush(player)
+	return true
 end
 
 -- Kept for older callers: "is this stored", by aspect name.
@@ -454,28 +667,40 @@ function AbilityLoadout.grantWished(player, aspectName)
 end
 
 --[[
-	Makes a STORED aspect the active one. The aspect it replaces is gone.
-	Returns ok, message.
+	Makes an aspect the active one: a PERMANENT one if the player owns it that
+	way (nothing is used up), otherwise a stored copy (which is). The aspect it
+	replaces is gone - unless that one is permanent, in which case it simply
+	stays in the inventory to be equipped again. Returns ok, message.
 ]]
 function AbilityLoadout.useAspect(player, aspectName)
-	local bank = stored[player]
-	local index = bank and table.find(bank, aspectName)
-	if not index then
-		return false, "That aspect is not in your storage."
+	if type(aspectName) ~= "string" or not AspectConfig.get(aspectName) then
+		return false, "There is no such aspect."
 	end
 	-- A spare copy of the aspect in use stays a spare; using it would only
-	-- spend it.
+	-- spend it. Equipping a permanent one twice does nothing.
 	if aspects[player] == aspectName then
 		return false, string.format("%s is already your aspect.", AspectConfig.displayName(aspectName))
 	end
 
+	local isPermanent = AbilityLoadout.ownsPermanent(player, aspectName)
+	if not isPermanent then
+		local bank = stored[player]
+		local index = bank and table.find(bank, aspectName)
+		if not index then
+			return false, "That aspect is not in your inventory."
+		end
+		table.remove(bank, index)
+	end
+
 	local previous = aspects[player]
-	table.remove(bank, index)
 	setActive(player, aspectName)
 	storagePush(player)
 
 	local label = AspectConfig.displayName(aspectName)
 	if previous and previous ~= aspectName then
+		if AbilityLoadout.ownsPermanent(player, previous) then
+			return true, string.format("%s is now your aspect. %s stays in your inventory.", label, AspectConfig.displayName(previous))
+		end
 		return true, string.format("%s is now your aspect. %s is gone.", label, AspectConfig.displayName(previous))
 	end
 	return true, string.format("%s is now your aspect.", label)
@@ -511,6 +736,49 @@ end
 
 function AbilityLoadout.stored(player): { string }
 	return table.clone(stored[player] or {})
+end
+
+--[[
+	For trading (ServerScriptService.Trade): could storage give up the copies
+	in `removing` and then take the ones in `adding`? Changes nothing.
+
+	The same rules as canStore, applied to the whole exchange at once: every
+	copy given must be there, HELD_MAX holds, and copies beyond the first of
+	each aspect need bought slots. A player already over their slots (wishes
+	may overflow) is allowed to stay as far over as they are, not further.
+	With no aspect in use the first one to arrive is equipped, not stored.
+]]
+function AbilityLoadout.canExchange(player, removing: { string }, adding: { string }): (boolean, string?)
+	local bank = stored[player]
+	if not storageReady[player] or not bank then
+		return false, "the save is not ready"
+	end
+
+	local after = table.clone(bank)
+	for _, aspectName in ipairs(removing) do
+		local index = table.find(after, aspectName)
+		if not index then
+			return false, string.format("no spare %s aspect to give", AspectConfig.displayName(aspectName))
+		end
+		table.remove(after, index)
+	end
+
+	for index, aspectName in ipairs(adding) do
+		if not AspectConfig.get(aspectName) then
+			return false, "an aspect that does not exist"
+		end
+		if not (index == 1 and aspects[player] == nil) then
+			table.insert(after, aspectName)
+		end
+	end
+
+	if #after > HELD_MAX then
+		return false, "aspect storage is full"
+	end
+	if extrasOf(after) > math.max(capacityOf(player), extrasOf(bank)) then
+		return false, "no storage slots for another copy of an aspect already stored"
+	end
+	return true
 end
 
 --[[
@@ -606,6 +874,16 @@ StorageRequest.OnServerEvent:Connect(function(player, action, name)
 
 		if not storageReady[player] or InventoryStore.isReadOnly(player) then
 			CommandFeedback.tell(player, "Your save is not ready. Please try again.", "bad")
+			return
+		end
+
+		if action == "redeem" and type(name) == "string" then
+			-- Confirmed on the client ("it can no longer be traded").
+			local done, message = AbilityLoadout.redeemPass(player, name)
+			CommandFeedback.tell(player, message, if done then "good" else "bad")
+			if not done then
+				storagePush(player)
+			end
 			return
 		end
 

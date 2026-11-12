@@ -119,7 +119,7 @@ function AspectInventoryWindow.new(parent: Instance, onBack: () -> ())
 	empty.Size = UDim2.new(0, GRID_WIDTH, 0, 80)
 	empty.TextWrapped = true
 	empty.TextXAlignment = Enum.TextXAlignment.Center
-	empty.Text = "Nothing stored yet.\nWishes and scrolls land here while you already have an aspect."
+	empty.Text = "Nothing here yet.\nScrolls land here while you already have an aspect, and aspects from the shop stay here for good."
 
 	-- The extra-slots product, under the grid.
 	local buy = Instance.new("TextButton")
@@ -181,6 +181,21 @@ function AspectInventoryWindow.new(parent: Instance, onBack: () -> ())
 	infoBadge.Parent = info
 	round(infoBadge, 6)
 	local infoBadgeStroke = outline(infoBadge, PALETTE.Line, 0.2, 1)
+	-- A gold PERMANENT tag in the panel's corner for an aspect bought in the shop.
+	local infoPermanent = Instance.new("Frame")
+	infoPermanent.Name = "Permanent"
+	infoPermanent.Position = UDim2.fromOffset(10, 10)
+	infoPermanent.Size = UDim2.fromOffset(84, 18)
+	infoPermanent.BackgroundColor3 = GOLD
+	infoPermanent.BorderSizePixel = 0
+	infoPermanent.Visible = false
+	infoPermanent.Parent = info
+	round(infoPermanent, 4)
+	local infoPermanentText = text(infoPermanent, Theme.Fonts.Heading, 11, PALETTE.Deep)
+	infoPermanentText.Size = UDim2.fromScale(1, 1)
+	infoPermanentText.TextXAlignment = Enum.TextXAlignment.Center
+	infoPermanentText.Text = "PERMANENT"
+
 	local infoIcon = AbilityStorage.icon(infoBadge, nil, DETAIL_ICON)
 	infoIcon.AnchorPoint = Vector2.new(0.5, 0.5)
 	infoIcon.Position = UDim2.fromScale(0.5, 0.5)
@@ -271,6 +286,12 @@ function AspectInventoryWindow.new(parent: Instance, onBack: () -> ())
 		return selected ~= nil and selected ~= currentAspect()
 	end
 
+	-- An unredeemed permanent pass for the selected aspect, which is not yet
+	-- permanent: the button redeems it instead of using a copy.
+	local function canRedeem(): boolean
+		return selected ~= nil and AbilityStorage.passCount(selected) > 0 and not AbilityStorage.isPermanent(selected)
+	end
+
 	local function drawDetails()
 		local definition = AspectConfig.get(selected)
 		info.Visible = definition ~= nil
@@ -300,21 +321,40 @@ function AspectInventoryWindow.new(parent: Instance, onBack: () -> ())
 			end
 		end
 
+		infoPermanent.Visible = AbilityStorage.isPermanent(selected)
+
 		local current = currentAspect()
+		-- Whether using this one destroys the aspect in use (a permanent one
+		-- is never destroyed: it stays here to be equipped again).
+		local loses = current ~= nil and not AbilityStorage.isPermanent(current)
 		if selected == current then
 			warning.Text = ""
-			use.Text = "ALREADY IN USE"
+			use.Text = "EQUIPPED"
 		elseif current then
 			-- Short: the panel is narrow and this must be read whole.
-			warning.Text = string.format("Replaces %s for good", AspectConfig.displayName(current))
+			warning.Text = if loses
+				then string.format("Replaces %s for good", AspectConfig.displayName(current))
+				else string.format("%s stays here (permanent)", AspectConfig.displayName(current))
+			warning.TextColor3 = if loses then Theme.Color.Bad else GOLD
 			use.Text = "USE " .. string.upper(definition.displayName or selected)
 		else
 			warning.Text = ""
 			use.Text = "USE " .. string.upper(definition.displayName or selected)
 		end
 		local active = canUse()
+		if canRedeem() then
+			-- Said here because it is the one thing in this window that cannot
+			-- be undone and costs a trade: a redeemed pass stays with its owner.
+			warning.Text = "Unredeemed pass: redeem it, or trade it"
+			warning.TextColor3 = GOLD
+			use.Text = "REDEEM PASS"
+			active, loses = true, false
+		elseif AbilityStorage.passCount(selected) > 0 and warning.Text == "" then
+			warning.Text = "Spare pass: it can be traded"
+			warning.TextColor3 = GOLD
+		end
 		use.Active = active
-		use.BackgroundColor3 = if active then (if current then Theme.Color.Bad else Theme.Color.Good) else PALETTE.Deep
+		use.BackgroundColor3 = if active then (if loses then Theme.Color.Bad else Theme.Color.Good) else PALETTE.Deep
 		use.TextColor3 = if active then Color3.new(1, 1, 1) else Theme.Color.TextFaint
 		useStroke.Transparency = if active then 1 else 0
 		useStroke.Color = PALETTE.Line
@@ -370,8 +410,23 @@ function AspectInventoryWindow.new(parent: Instance, onBack: () -> ())
 		copies.Size = UDim2.fromOffset(40, 18)
 		copies.TextXAlignment = Enum.TextXAlignment.Right
 
+		-- PERMANENT: a gold ribbon across the top of the tile.
+		local ribbon = Instance.new("Frame")
+		ribbon.Name = "Permanent"
+		ribbon.Position = UDim2.fromOffset(0, 0)
+		ribbon.Size = UDim2.new(1, 0, 0, 16)
+		ribbon.BackgroundColor3 = GOLD
+		ribbon.BorderSizePixel = 0
+		ribbon.Visible = false
+		ribbon.Parent = b
+		round(ribbon, 6)
+		local ribbonText = text(ribbon, Theme.Fonts.Heading, 11, PALETTE.Deep)
+		ribbonText.Size = UDim2.fromScale(1, 1)
+		ribbonText.TextXAlignment = Enum.TextXAlignment.Center
+		ribbonText.Text = "PERMANENT"
+
 		tile = {
-			name = name, button = b, copies = copies, color = color, hovered = false,
+			name = name, button = b, copies = copies, ribbon = ribbon, ribbonText = ribbonText, color = color, hovered = false,
 			stroke = outline(b, color, 0.6),
 		}
 		tiles[name] = tile
@@ -405,7 +460,21 @@ function AspectInventoryWindow.new(parent: Instance, onBack: () -> ())
 			present[group.name] = true
 			local tile = tileFor(group.name)
 			tile.button.Visible = true
-			tile.copies.Text = if group.count > 1 then string.format("%dx", group.count) else ""
+			-- PERMANENT once redeemed; until then the ribbon says a pass is held
+			-- (and how many, when there are several to trade).
+			local passCount = group.passes or 0
+			local ribboned = group.permanent or passCount > 0
+			tile.ribbon.Visible = ribboned
+			tile.ribbonText.Text = if passCount > 1 then string.format("%d PASSES", passCount)
+				elseif passCount == 1 then (if group.permanent then "PERMANENT +PASS" else "PASS")
+				else "PERMANENT"
+			-- Under the ribbon on a ribboned tile, so the two do not overlap.
+			tile.copies.Position = UDim2.new(1, -8, 0, if ribboned then 18 else 6)
+			-- Stored copies: "3x"; on a permanent tile every stored copy is an
+			-- extra on top of the permanent one, so "+2".
+			tile.copies.Text = if group.permanent and group.count >= 1 then string.format("+%d", group.count)
+				elseif group.count > 1 then string.format("%dx", group.count)
+				else ""
 		end
 		for name, tile in pairs(tiles) do
 			if not present[name] then
@@ -446,6 +515,22 @@ function AspectInventoryWindow.new(parent: Instance, onBack: () -> ())
 		end
 	end)
 	use.Activated:Connect(function()
+		if canRedeem() then
+			local passName = selected
+			local passLabel = AspectConfig.displayName(passName)
+			Sounds.play("ui.click")
+			Confirm.ask({
+				title = string.format("Redeem the %s pass?", passLabel),
+				-- Two lines at most: the dialog does not grow to fit.
+				body = string.format("%s becomes permanently yours. A redeemed pass can no longer be traded.", passLabel),
+				accept = "Redeem",
+			}, function(accepted)
+				if accepted and passName then
+					AbilityStorage.redeem(passName)
+				end
+			end)
+			return
+		end
 		if not canUse() then
 			return
 		end
@@ -453,6 +538,13 @@ function AspectInventoryWindow.new(parent: Instance, onBack: () -> ())
 		local label = AspectConfig.displayName(name)
 		local current = currentAspect()
 		Sounds.play("ui.click")
+		-- Nothing is lost when the aspect in use is permanent (or there is
+		-- none): no question to ask.
+		if not current or AbilityStorage.isPermanent(current) then
+			AbilityStorage.use(name)
+			onBack()
+			return
+		end
 		Confirm.ask({
 			title = string.format("Use %s?", label),
 			-- Two lines at most: the dialog does not grow to fit.

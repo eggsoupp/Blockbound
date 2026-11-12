@@ -35,6 +35,7 @@ local Motion = require(Shared.UI:WaitForChild("Motion"))
 local PixelUI = require(Shared.UI:WaitForChild("PixelUI"))
 local MenuBackdrop = require(Shared.UI:WaitForChild("MenuBackdrop"))
 local AbilityPanel = require(Shared.UI:WaitForChild("AbilityPanel"))
+local AbilityStorage = require(Shared.UI:WaitForChild("AbilityStorage"))
 local Responsive = require(Shared.UI:WaitForChild("Responsive"))
 local Pointer = require(Shared.UI:WaitForChild("Pointer"))
 local TouchActions = require(Shared.UI:WaitForChild("TouchActions"))
@@ -470,6 +471,7 @@ local function refreshPanel(gainedAspect: string?)
 		displayName = definition.displayName or aspect,
 		rarity = definition.rarity,
 		abilityCount = #AspectConfig.abilitiesOf(aspect),
+		permanent = AbilityStorage.isPermanent(aspect),
 	} else nil)
 	MenuBackdrop.setRestTint(definition and definition.rarity or nil)
 
@@ -477,6 +479,11 @@ local function refreshPanel(gainedAspect: string?)
 		MenuBackdrop.flourish(definition.rarity)
 	end
 end
+
+-- Buying a permanent aspect changes how the one in use is labelled.
+AbilityStorage.Changed:Connect(function()
+	refreshPanel(nil)
+end)
 
 LoadoutChanged.OnClientEvent:Connect(function(abilities, reason, newAspect)
 	if type(abilities) ~= "table" then

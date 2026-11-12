@@ -48,8 +48,11 @@
 	  ChunkStreaming     view distances, active sets, unloads, Heartbeat work
 	  BlockEdits         click resolution, inspect / break / place
 	  TerrainExcavation  craters, boss bites, block walls, displacement
+	  ChunkRegeneration  abandoned open-world chunks go back to as generated
+	  OreDepletion       harvested ore, which does not come back with the rock
 
-	Shared.Terrain.TerrainGrid holds the coordinate helpers and key packing.
+	Shared.Terrain.TerrainGrid holds the coordinate helpers and key packing;
+	Shared.Terrain.WorldZones says what is protected or starter ground.
 
 	PUBLIC API
 	  TerrainManager:Init()
@@ -57,6 +60,8 @@
 	  TerrainManager:BreakBlock(part | x, y, z, initiator) -> ok, itemName, reason
 	  TerrainManager:PlaceBlock(player, blockX, by, blockZ, name) -> ok, reason
 	  TerrainManager:IsSolidAt(blockX, by, blockZ) -> boolean
+	  TerrainManager:CheckBuildZone(blockX, by, blockZ) -> ok, reason
+	  TerrainManager:NoteChange(blockX, blockZ) / :OnChunkReset(listener)
 	  TerrainManager:GetCaveInfo(worldPosition) -> info?
 	  TerrainManager:GetChunk(cx, cz)
 	  TerrainManager:HoldGeneration(reason) / :ReleaseGeneration(reason)
@@ -96,6 +101,8 @@ local ChunkBuilder = require(Modules:WaitForChild("ChunkBuilder"))
 local ChunkStreaming = require(Modules:WaitForChild("ChunkStreaming"))
 local BlockEdits = require(Modules:WaitForChild("BlockEdits"))
 local TerrainExcavation = require(Modules:WaitForChild("TerrainExcavation"))
+local ChunkRegeneration = require(Modules:WaitForChild("ChunkRegeneration"))
+local OreDepletion = require(Modules:WaitForChild("OreDepletion"))
 
 local TerrainManager = {}
 
@@ -129,6 +136,7 @@ TerrainManager.BreakBlock = BlockEdits.BreakBlock
 TerrainManager.OpenEditZone = BlockEdits.OpenEditZone
 TerrainManager.PlaceBlock = BlockEdits.PlaceBlock
 TerrainManager.IsSolidAt = BlockEdits.IsSolidAt
+TerrainManager.CheckBuildZone = BlockEdits.CheckBuildZone
 
 TerrainManager.MineMeteorCrater = TerrainExcavation.MineMeteorCrater
 TerrainManager.MineAbilityCrater = TerrainExcavation.MineAbilityCrater
@@ -215,6 +223,29 @@ function TerrainManager:Init()
 	BlockParts.warnForMissingTemplates()
 
 	ChunkStreaming.start()
+
+	-- Open world only; does nothing on an island, where everything is kept.
+	ChunkRegeneration.start()
+end
+
+-- ---------------------------------------------------------------------------
+-- Regeneration (ChunkRegeneration)
+-- ---------------------------------------------------------------------------
+
+-- Something that is not a terrain edit was built at this block column and
+-- should be cleared with the area when it is abandoned (a station).
+function TerrainManager:NoteChange(blockX, blockZ)
+	ChunkRegeneration.noteChange(blockX, blockZ)
+end
+
+-- listener(cx, cz) runs when an abandoned chunk goes back to as generated.
+function TerrainManager:OnChunkReset(listener)
+	ChunkRegeneration.onReset(listener)
+end
+
+-- Debug console: shorten the timers for a test, in seconds.
+function TerrainManager:SetRegenerationTimers(starter, wild)
+	ChunkRegeneration.setTimers(starter, wild)
 end
 
 function TerrainManager:GetChunk(cx, cz)
@@ -475,6 +506,8 @@ function TerrainManager:GetStats()
 		structures = StructureRegistry.getStats(),
 		ores = OreRegistry.getStats(),
 		edits = ChunkEdits.getStats(),
+		regeneration = ChunkRegeneration.getStats(),
+		oreDepletion = OreDepletion.getStats(),
 		caves = if CAVES_ENABLED then CaveMap.getStats() else { enabled = false },
 	}
 end

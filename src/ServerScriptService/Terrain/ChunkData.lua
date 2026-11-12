@@ -22,8 +22,11 @@ local OreRegistry = require(TerrainShared:WaitForChild("OreRegistry"))
 local CaveMap = require(TerrainShared:WaitForChild("CaveMap"))
 
 local GeneratedColumns = require(script.Parent:WaitForChild("GeneratedColumns"))
+local OreDepletion = require(script.Parent:WaitForChild("OreDepletion"))
 
 local ChunkData = {}
+
+local ORE_GONE_STRIDE = OreDepletion.STRIDE
 
 local CHUNK_SIZE = TerrainConfig.ChunkSize
 local FLOOR_Y = TerrainConfig.WorldFloorY
@@ -153,6 +156,8 @@ end
 --   override      [by] -> name, for column blocks a structure restyled
 --   complex       true once a column has holes or extras, which disables the
 --                 fast visibility path for it and its neighbours
+--   oreGone       (per chunk, may be nil) ore cells already harvested here,
+--                 which read as plain rock; see OreDepletion
 
 --[[
 	Is a block solid, given a loaded chunk's live data?
@@ -336,6 +341,15 @@ local function blockNameFor(data, cell, by)
 		base,
 		depth
 	)
+
+	-- Ore that was already harvested here stays plain rock when the ground
+	-- regrows. See OreDepletion; only reached for the few blocks that are ore.
+	if ore then
+		local gone = data.oreGone
+		if gone and gone[cell * ORE_GONE_STRIDE + (by - FLOOR_Y)] then
+			return base
+		end
+	end
 
 	return ore or base
 end

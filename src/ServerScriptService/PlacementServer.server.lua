@@ -33,6 +33,7 @@ local IS_ISLAND = PlaceConfig.isIsland()
 local InventoryService = require(ServerScriptService:WaitForChild("InventoryService"))
 local TerrainManager = require(ServerScriptService:WaitForChild("TerrainManager"))
 local StationService = require(ServerScriptService:WaitForChild("StationService"))
+local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
 
 local RequestPlaceBlock = Remotes.ensure("RequestPlaceBlock", "RemoteEvent")
 local PlacementResult = Remotes.ensure("PlacementResult", "RemoteEvent")
@@ -67,8 +68,37 @@ local function toGridCell(a, b, c)
 	return nil
 end
 
+--[[
+	Open-world building does not last: an area nobody has been near for a
+	while goes back to how it was generated, and whatever was built there goes
+	with it (Terrain.ChunkRegeneration). Said once for the first block and
+	once for the first station of a visit, at the moment it matters - when
+	something has just been put down - rather than in a rule nobody reads.
+]]
+local TEMPORARY_NOTICE = {
+	block = "Blocks placed out here are temporary. Abandoned areas grow back - build on your island to keep it.",
+	station = "Stations left out here are temporary. They vanish once the area is abandoned - your island keeps them.",
+}
+local noticeShown = {}
+
+local function warnTemporary(player, kind)
+	if IS_ISLAND or not TerrainConfig.Regeneration.Enabled then
+		return
+	end
+	local shown = noticeShown[player]
+	if not shown then
+		shown = {}
+		noticeShown[player] = shown
+	end
+	if not shown[kind] then
+		shown[kind] = true
+		CommandFeedback.tell(player, TEMPORARY_NOTICE[kind])
+	end
+end
+
 Players.PlayerRemoving:Connect(function(player)
 	lastRequestTime[player] = nil
+	noticeShown[player] = nil
 end)
 
 RequestPlaceBlock.OnServerEvent:Connect(function(player, slotIndex, a, b, c)
@@ -140,4 +170,6 @@ RequestPlaceBlock.OnServerEvent:Connect(function(player, slotIndex, a, b, c)
 	-- play the next request's material sound or lose its confirmation.
 	sendResult(player, true, "Placed", itemName,
 		Vector3.new((ix + .5) * GRID_SIZE, (iy + .5) * GRID_SIZE, (iz + .5) * GRID_SIZE))
+
+	warnTemporary(player, if StationService.isStationItem(itemName) then "station" else "block")
 end)

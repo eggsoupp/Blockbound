@@ -376,6 +376,9 @@
           "TerrainGrid": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/TerrainGrid.lua"
           },
+          "WorldZones": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/WorldZones.lua"
+          },
           "BiomeConfig": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/BiomeConfig.lua"
           },
@@ -1029,6 +1032,12 @@
         },
         "TerrainExcavation": {
           "$path": "src/ServerScriptService/Terrain/TerrainExcavation.lua"
+        },
+        "OreDepletion": {
+          "$path": "src/ServerScriptService/Terrain/OreDepletion.lua"
+        },
+        "ChunkRegeneration": {
+          "$path": "src/ServerScriptService/Terrain/ChunkRegeneration.lua"
         }
       },
       "AdminHandler": {

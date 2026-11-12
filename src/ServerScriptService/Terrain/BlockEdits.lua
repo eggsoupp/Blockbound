@@ -20,7 +20,11 @@ local ChunkEdits = require(TerrainShared:WaitForChild("ChunkEdits"))
 local BlockConfig = require(Shared:WaitForChild("Blocks"):WaitForChild("BlockConfig"))
 local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
+local WorldZones = require(TerrainShared:WaitForChild("WorldZones"))
+local OreRegistry = require(TerrainShared:WaitForChild("OreRegistry"))
+
 local ChunkData = require(script.Parent:WaitForChild("ChunkData"))
+local OreDepletion = require(script.Parent:WaitForChild("OreDepletion"))
 local BlockParts = require(script.Parent:WaitForChild("BlockParts"))
 local ChunkMesher = require(script.Parent:WaitForChild("ChunkMesher"))
 local ColumnVisibility = require(script.Parent:WaitForChild("ColumnVisibility"))
@@ -56,6 +60,40 @@ local getBlockPartTemplate = BlockParts.getBlockPartTemplate
 local clearVisible = ChunkMesher.clearVisible
 local refreshAdjacentColumns = ColumnVisibility.refreshAdjacentColumns
 local openEditZone = EditZones.open
+local isProtected = WorldZones.isProtected
+local isStarter = WorldZones.isStarter
+local isOre = OreRegistry.isOre
+local STARTER_BUILD_HEIGHT = WorldZones.StarterBuildHeight
+
+-- Ore taken in the open world is remembered so regrown rock does not carry
+-- it again (OreDepletion). An island never regrows, so it has no need.
+local TRACK_ORE = WorldZones.enabled
+
+--[[
+	SPAWN ZONES (Shared.Terrain.WorldZones)
+
+	The protected core is enforced at the two places every terrain change
+	passes: removeResolvedBlock for anything taken away - a pickaxe, a crater,
+	a boss bite, a wall's source blocks - and buildRefusal for anything put
+	down. A caller that plans ahead (TerrainExcavation) asks isProtected itself
+	so it never promises ground it will be refused.
+]]
+
+-- Why a block may not be put at this cell of a loaded chunk, or nil if it may.
+local function buildRefusal(data, cell, blockX, by, blockZ)
+	if isProtected(blockX, blockZ) then
+		return "The spawn area is protected"
+	end
+
+	if isStarter(blockX, blockZ) then
+		local ground = math.max(data.height[cell], data.waterTop[cell])
+		if by >= ground + STARTER_BUILD_HEIGHT then
+			return "Too high to build this close to spawn"
+		end
+	end
+
+	return nil
+end
 
 --[[
 	Resolves a block from a world position alone, trusting nothing about which
@@ -264,12 +302,19 @@ function BlockEdits:InspectBlock(wx, wy, wz, initiator)
 		return nil, nil, "no_block"
 	end
 
+	local index = cell - 1
+
+	-- No block name either: a caller that only checks for one (MiningServer)
+	-- then never starts a swing at ground it cannot break.
+	if isProtected(data.minBlockX + index // CHUNK_SIZE, data.minBlockZ + index % CHUNK_SIZE) then
+		return nil, nil, "protected"
+	end
+
 	local blockName = blockNameFor(data, cell, by)
 	if BlockConfig.isUnbreakable(blockName) then
 		return blockName, nil, "unbreakable"
 	end
 
-	local index = cell - 1
 	local centre = Vector3.new(
 		(data.minBlockX + index // CHUNK_SIZE + 0.5) * STUD_SIZE,
 		(by + 0.5) * STUD_SIZE,
@@ -286,6 +331,11 @@ end
 	BlockConfig's business, not the caller's.
 ]]
 local function removeResolvedBlock(data, cell, by, refresh)
+	local index = cell - 1
+	if isProtected(data.minBlockX + index // CHUNK_SIZE, data.minBlockZ + index % CHUNK_SIZE) then
+		return false, nil, "protected"
+	end
+
 	local blockName = blockNameFor(data, cell, by)
 	if BlockConfig.isUnbreakable(blockName) then
 		return false, nil, "unbreakable"
@@ -316,6 +366,11 @@ local function removeResolvedBlock(data, cell, by, refresh)
 
 		ChunkEdits.recordRemoval(key, cell, by)
 		markRemoved(data, cell, by)
+
+		-- Generated ore, whoever took it and whether or not it paid out.
+		if TRACK_ORE and isOre(blockName) then
+			data.oreGone = OreDepletion.record(key, cell, by)
+		end
 	end
 
 	-- The block stops being drawn; refreshAdjacentColumns below re-derives the
@@ -324,7 +379,6 @@ local function removeResolvedBlock(data, cell, by, refresh)
 	-- covering this block probably covers several others that are still there.
 	clearVisible(data, cell, by)
 
-	local index = cell - 1
 	if refresh ~= false then
 		refreshAdjacentColumns(data.cx, data.cz, index // CHUNK_SIZE, index % CHUNK_SIZE)
 	end
@@ -451,6 +505,12 @@ function BlockEdits:PlaceBlock(player, blockX, by, blockZ, blockName)
 	end
 
 	local cell = cellOf(bx, bz)
+
+	local refusal = buildRefusal(data, cell, blockX, by, blockZ)
+	if refusal then
+		return finish(false, refusal)
+	end
+
 	if reservedCells[key..":"..cell..":"..by] then return finish(false,"A block is moving here") end
 	if isPresentInData(data, cell, by) then
 		return finish(false, "Cell occupied")
@@ -501,6 +561,27 @@ function BlockEdits:IsSolidAt(blockX, by, blockZ)
 		blockX % CHUNK_SIZE, blockZ % CHUNK_SIZE)
 
 	return isBlockPresent(cx, cz, bx, bz, by)
+end
+
+--[[
+	May something be built into this grid cell, as far as the spawn zones are
+	concerned? Returns ok, reason. For builders that are not terrain blocks
+	(StationService), so stations obey the same zones as blocks do.
+]]
+function BlockEdits:CheckBuildZone(blockX, by, blockZ)
+	if not isStarter(blockX, blockZ) then
+		return true
+	end
+
+	local cx, cz, bx, bz = normalizeCell(blockX // CHUNK_SIZE, blockZ // CHUNK_SIZE,
+		blockX % CHUNK_SIZE, blockZ % CHUNK_SIZE)
+	local data = chunks[chunkKey(cx, cz)]
+	if not data then
+		return false, "Area not loaded"
+	end
+
+	local refusal = buildRefusal(data, cellOf(bx, bz), blockX, by, blockZ)
+	return refusal == nil, refusal
 end
 
 BlockEdits.removeResolvedBlock = removeResolvedBlock

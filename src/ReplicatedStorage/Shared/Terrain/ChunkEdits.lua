@@ -56,10 +56,12 @@ function ChunkEdits.setResidencyCheck(predicate)
 end
 
 --[[
-	Called with no arguments whenever a player's edit is recorded or forgotten.
-	Lets a place that saves its edits (an island) know it has unsaved work
-	without polling. Not called for imports or for replay onto a regenerated
-	chunk, which change nothing that is not already saved.
+	Called with the chunk's key whenever a player's edit is recorded or
+	forgotten. Lets a place that saves its edits (an island) know it has
+	unsaved work without polling, and tells the open world which chunks have
+	changed (ChunkRegeneration). One listener: a server is one or the other.
+	Not called for imports, for replay onto a regenerated chunk, or for
+	discard, which change nothing a listener needs to hear about.
 ]]
 local changeListener = nil
 
@@ -67,9 +69,9 @@ function ChunkEdits.setChangeListener(listener)
 	changeListener = listener
 end
 
-local function notifyChanged()
+local function notifyChanged(chunkKey)
 	if changeListener then
-		changeListener()
+		changeListener(chunkKey)
 	end
 end
 
@@ -201,7 +203,7 @@ function ChunkEdits.recordRemoval(chunkKey, cell, by)
 	setIn(entry.removed, cell, by, true)
 	entry.count += 1
 	totalEdits += 1
-	notifyChanged()
+	notifyChanged(chunkKey)
 end
 
 function ChunkEdits.recordPlacement(chunkKey, cell, by, blockName)
@@ -213,7 +215,7 @@ function ChunkEdits.recordPlacement(chunkKey, cell, by, blockName)
 	end
 
 	setIn(entry.placed, cell, by, blockName)
-	notifyChanged()
+	notifyChanged(chunkKey)
 end
 
 -- The placement is forgotten entirely rather than turned into a removal, so
@@ -234,7 +236,7 @@ function ChunkEdits.clearPlacement(chunkKey, cell, by)
 	lastTouched[chunkKey] = os.clock()
 
 	releaseIfEmpty(chunkKey, entry)
-	notifyChanged()
+	notifyChanged(chunkKey)
 end
 
 -- Mining needs to know: breaking a placed block and a structure block are
@@ -242,6 +244,25 @@ end
 function ChunkEdits.isPlaced(chunkKey, cell, by)
 	local entry = chunkStore[chunkKey]
 	return entry ~= nil and getIn(entry.placed, cell, by) ~= nil
+end
+
+--[[
+	Forgets every edit in a chunk, so it next builds exactly as generated.
+	Returns how many edits that was. For ChunkRegeneration, which decides
+	when a chunk has been abandoned; whoever calls this rebuilds the chunk if
+	it is loaded, since its drawn Parts still show the edits.
+]]
+function ChunkEdits.discard(chunkKey)
+	local entry = chunkStore[chunkKey]
+	if not entry then
+		return 0
+	end
+
+	chunkStore[chunkKey] = nil
+	lastTouched[chunkKey] = nil
+	editedChunks -= 1
+	totalEdits -= entry.count
+	return entry.count
 end
 
 -- ---------------------------------------------------------------------------

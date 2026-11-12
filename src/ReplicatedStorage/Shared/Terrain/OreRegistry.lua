@@ -59,6 +59,9 @@ local oreFillRatio = {}
 local oreHosts = {}
 local oreSalt = {}
 
+-- block name -> true for every ore this place generates. See isOre.
+local generatedOres = {}
+
 -- Widest band any ore covers, so a block outside it is rejected before the
 -- per-ore loop is entered at all. This is the check that makes surface
 -- rendering - the common case - cost essentially nothing.
@@ -102,6 +105,7 @@ local function buildTables()
 	table.clear(oreFillRatio)
 	table.clear(oreHosts)
 	table.clear(oreSalt)
+	table.clear(generatedOres)
 
 	globalMinDepth = math.huge
 	globalMaxDepth = -math.huge
@@ -153,6 +157,7 @@ local function buildTables()
 
 		oreCount += 1
 		oreBlock[oreCount] = def.block
+		generatedOres[def.block] = true
 		oreMinDepth[oreCount] = def.minDepth
 		orePeakDepth[oreCount] = def.peakDepth
 		oreMaxDepth[oreCount] = def.maxDepth
@@ -255,6 +260,11 @@ function OreRegistry.getBlockNames()
 		names[i] = oreBlock[i]
 	end
 	return names
+end
+
+-- Is this block name an ore the generator places here?
+function OreRegistry.isOre(blockName)
+	return generatedOres[blockName] == true
 end
 
 function OreRegistry.getStats()

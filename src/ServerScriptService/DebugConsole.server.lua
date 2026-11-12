@@ -10,6 +10,10 @@
 	  /bbprof off         stop measuring
 	  /bbprof             print what has been measured since it was turned on
 	  /bbprof reset       clear the accumulators, keep measuring
+	  /bbregen            what world regeneration is tracking (changed chunks,
+	                      resets, depleted ores)
+	  /bbregen <seconds>  set both regeneration timers for this server, to
+	                      watch an abandoned area reset without the wait
 	  /bbinv              inventory persistence state, and what would be saved
 	  /bbinv save         force a save right now instead of waiting for autosave
 	  /bbinv wipe         delete this player's save AND reset their live bag, so
@@ -747,6 +751,20 @@ local function onChatted(player, message)
 				applied, (2 * applied + 1) ^ 2
 			), "good")
 		end
+	elseif command == "/bbregen" then
+		-- /bbregen            what regeneration is tracking
+		-- /bbregen <seconds>  both timers for this server, to watch it happen
+		local seconds = tonumber(words[2])
+		if seconds then
+			TerrainManager:SetRegenerationTimers(seconds, seconds)
+		end
+		local stats = TerrainManager:GetStats()
+		local regen, ores = stats.regeneration, stats.oreDepletion
+		reply(player, "bbregen", string.format(
+			"%s: %d changed chunks, %d reset (%d rebuilt in view), timers %ds starter / %ds wild, %d ores depleted.",
+			if regen.active then "On" else "Off", regen.changedChunks, regen.resets, regen.rebuiltLoaded,
+			regen.starterSeconds, regen.wildSeconds, ores.depletedOres
+		), (if seconds then "good" else nil))
 	elseif command == "/bbbench" then
 		if TerrainBench.isRunning() then
 			reply(player, "bbbench", "Already running.", "bad")

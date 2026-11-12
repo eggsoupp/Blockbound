@@ -370,6 +370,7 @@ local REFUSALS = {
 	moved_too_far = "Moved out of reach",
 	no_pickaxe = "Hold a pickaxe to mine",
 	unbreakable = "That can't be broken",
+	protected = "The spawn area is protected",
 	too_weak = "Your pickaxe isn't strong enough for that",
 	no_block = "Nothing to mine there",
 	bad_target = "Nothing to mine there",

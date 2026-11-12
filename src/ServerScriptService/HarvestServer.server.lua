@@ -32,6 +32,9 @@ local ItemDefinitions = require(ReplicatedStorage:WaitForChild("ItemDefinitions"
 
 local GroundDrops = require(ServerScriptService:WaitForChild("GroundDrops"))
 local TutorialService = require(ServerScriptService:WaitForChild("TutorialService"))
+local CommandFeedback = require(ServerScriptService:WaitForChild("CommandFeedback"))
+local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
+local WorldZones = require(Shared:WaitForChild("Terrain"):WaitForChild("WorldZones"))
 
 local RequestHarvest = Remotes.ensure("RequestHarvest", "RemoteEvent")
 
@@ -117,6 +120,8 @@ local AUTO_HEALTH_MAX = 6
 local rulesByTag = {}
 local lastRequestAt = {}
 local lastChopAt = {}
+local lastProtectedNotice = {}
+local PROTECTED_NOTICE_SECONDS = 4
 local rng = Random.new()
 
 for _, def in ipairs(StructureConfig.Definitions) do
@@ -210,7 +215,55 @@ end
 	The model is checked every step: chunks stream out, and a tree can be
 	unloaded from under this while it is coming down.
 ]]
-local function fell(model: Model, awayFrom: Vector3)
+--[[
+	REGROWTH (the starter area only)
+
+	A tree comes back whenever its chunk is built again, which out in the
+	world is every time somebody walks away and returns. Round spawn that
+	never happens on a busy server - the chunks stay loaded - and new players
+	would arrive to a clearing of stumps with the tutorial asking for a tree.
+
+	So a tree felled in the starter area is put aside rather than destroyed,
+	and stood back up after Regeneration.TreeRegrowSeconds: same model, same
+	place, full health, tags back on. Not while a player is within
+	TreeClearStuds of it (nothing appears on top of anybody), and not if its
+	chunk has gone in the meantime - the rebuilt chunk has a tree of its own.
+]]
+local REGEN = TerrainConfig.Regeneration
+local REGROW_RETRY_SECONDS = 10
+
+local function regrow(record)
+	local model = record.model
+	if not record.home.Parent then
+		model:Destroy()
+		return
+	end
+
+	local where = record.pivot.Position
+	for _, player in ipairs(Players:GetPlayers()) do
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if root and (root.Position - where).Magnitude < REGEN.TreeClearStuds then
+			task.delay(REGROW_RETRY_SECONDS, regrow, record)
+			return
+		end
+	end
+
+	model:PivotTo(record.pivot)
+	local health = model:FindFirstChild("Health")
+	if health and record.fullHealth then
+		health.Value = record.fullHealth
+	end
+	for _, entry in ipairs(record.tags) do
+		CollectionService:AddTag(entry[1], entry[2])
+	end
+	model:SetAttribute("Felled", nil)
+	model.Parent = record.home
+end
+
+-- `regrowth`, when given, is { tags = ..., fullHealth = n }: the tree is put
+-- aside at the end of its fall and stood back up later. See REGROWTH.
+local function fell(model: Model, awayFrom: Vector3, regrowth)
 	local pivot = model:GetPivot()
 	local box, size = model:GetBoundingBox()
 
@@ -248,7 +301,17 @@ local function fell(model: Model, awayFrom: Vector3)
 			task.wait()
 		end
 
-		if model.Parent then
+		if not model.Parent then
+			return
+		end
+
+		if regrowth then
+			regrowth.model = model
+			regrowth.home = model.Parent
+			regrowth.pivot = pivot
+			model.Parent = nil
+			task.delay(REGEN.TreeRegrowSeconds, regrow, regrowth)
+		else
 			model:Destroy()
 		end
 	end)
@@ -302,6 +365,17 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 		return
 	end
 
+	-- The immediate spawn keeps its trees (Shared.Terrain.WorldZones). Said
+	-- out loud, or the swing just looks broken.
+	local treePosition = model:GetPivot().Position
+	if WorldZones.isProtectedPosition(treePosition) then
+		if now - (lastProtectedNotice[player] or 0) > PROTECTED_NOTICE_SECONDS then
+			lastProtectedNotice[player] = now
+			CommandFeedback.tell(player, "The spawn area is protected", "bad")
+		end
+		return
+	end
+
 	local character = player.Character
 	local hrp = character and character:FindFirstChild("HumanoidRootPart")
 	if not hrp or distanceToPart(target, hrp.Position) > MAX_REACH then
@@ -328,6 +402,11 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 		health.Name = "Health"
 		health.Value = healthFor(model, spec)
 		health.Parent = model
+	end
+
+	-- What a regrown tree goes back to; see REGROWTH.
+	if model:GetAttribute("FullHealth") == nil then
+		model:SetAttribute("FullHealth", health.Value)
 	end
 
 	local damage = rules.damage or 1
@@ -361,17 +440,25 @@ RequestHarvest.OnServerEvent:Connect(function(player, target)
 	if spec.tag == "TreePart" then
 		TutorialService.TreeFelled(player)
 	end
+	local regrowth = nil
+	if REGEN.Enabled and WorldZones.isStarterPosition(treePosition) then
+		regrowth = { tags = {}, fullHealth = model:GetAttribute("FullHealth") }
+	end
+
 	for _, descendant in ipairs(model:GetDescendants()) do
 		if descendant:IsA("BasePart") then
 			for tag in pairs(rulesByTag) do
 				if CollectionService:HasTag(descendant, tag) then
 					CollectionService:RemoveTag(descendant, tag)
+					if regrowth then
+						table.insert(regrowth.tags, { descendant, tag })
+					end
 				end
 			end
 		end
 	end
 
-	fell(model, hrp.Position)
+	fell(model, hrp.Position, regrowth)
 
 	-- On the chopper's side of the trunk, a few studs short of the chopper:
 	-- straight down from the trunk would leave the wood floating inside the
@@ -401,4 +488,5 @@ end)
 Players.PlayerRemoving:Connect(function(player)
 	lastRequestAt[player] = nil
 	lastChopAt[player] = nil
+	lastProtectedNotice[player] = nil
 end)

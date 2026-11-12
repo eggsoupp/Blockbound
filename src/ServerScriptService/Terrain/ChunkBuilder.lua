@@ -21,6 +21,7 @@ local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
 local GeneratedColumns = require(script.Parent:WaitForChild("GeneratedColumns"))
 local ChunkData = require(script.Parent:WaitForChild("ChunkData"))
+local OreDepletion = require(script.Parent:WaitForChild("OreDepletion"))
 local BlockParts = require(script.Parent:WaitForChild("BlockParts"))
 local ChunkMesher = require(script.Parent:WaitForChild("ChunkMesher"))
 local ColumnVisibility = require(script.Parent:WaitForChild("ColumnVisibility"))
@@ -416,6 +417,9 @@ local function generateChunk(cx, cz, job)
 		extra = {},
 		override = {},
 		complex = {},
+
+		-- Ore already harvested in this chunk, if any (see OreDepletion).
+		oreGone = OreDepletion.forChunk(key),
 
 		-- Edit zones (see EDIT ZONES): cell -> when its zone time runs out,
 		-- and the Parts on their way off screen.

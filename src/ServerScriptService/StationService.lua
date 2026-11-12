@@ -38,6 +38,7 @@ local DecorModels = require(Shared:WaitForChild("Building"):WaitForChild("DecorM
 local StationService = {}
 
 local STUD_SIZE = TerrainConfig.StudSize
+local CHUNK_SIZE = TerrainConfig.ChunkSize
 local STATION_TAG = "CraftingStation"
 
 local TerrainManager = nil -- injected by init, to avoid a require cycle
@@ -348,6 +349,39 @@ local function stationFromInstance(instance)
 	return nil
 end
 
+--[[
+	Removes every station standing in a chunk, with nothing handed back: the
+	area was abandoned and has regenerated (TerrainManager:OnChunkReset). A
+	piece belongs to the chunk of the cell it was placed in.
+]]
+local function removeInChunk(cx, cz)
+	local minX, minZ = cx * CHUNK_SIZE, cz * CHUNK_SIZE
+	local doomed = {}
+
+	for x = minX, minX + CHUNK_SIZE - 1, BUCKET_BLOCKS do
+		for z = minZ, minZ + CHUNK_SIZE - 1, BUCKET_BLOCKS do
+			local list = stationsByBucket[bucketKey(x, z)]
+			if list then
+				for _, station in pairs(list) do
+					if station.x // CHUNK_SIZE == cx and station.z // CHUNK_SIZE == cz then
+						table.insert(doomed, station)
+					end
+				end
+			end
+		end
+	end
+
+	for _, station in ipairs(doomed) do
+		unregister(station)
+		if station.looks then
+			for _, look in pairs(station.looks) do
+				look:Destroy()
+			end
+		end
+		station.instance:Destroy()
+	end
+end
+
 -- ---------------------------------------------------------------------------
 -- Public API
 -- ---------------------------------------------------------------------------
@@ -366,6 +400,10 @@ function StationService.init(terrainManager)
 		worldFolder.Name = StationConfig.WorldFolderName
 		worldFolder.Parent = workspace
 	end
+
+	-- Open-world stations are temporary: when an abandoned chunk regenerates
+	-- they go with the blocks placed there. Never fires on an island.
+	TerrainManager:OnChunkReset(removeInChunk)
 end
 
 --[[
@@ -427,6 +465,11 @@ function StationService.place(player, blockX, by, blockZ, stationId)
 		if stationsByCell[gridKey(x, y, z)] or TerrainManager:IsSolidAt(x, y, z) then
 			return false, if o == Vector3.zero then "Cell occupied" else "Not enough room"
 		end
+		-- The same spawn zones a block obeys (Shared.Terrain.WorldZones).
+		local allowed, zoneReason = TerrainManager:CheckBuildZone(x, y, z)
+		if not allowed then
+			return false, zoneReason
+		end
 		if o.Y == 0 and not TerrainManager:IsSolidAt(x, y - 1, z) and not stationsByCell[gridKey(x, y - 1, z)] then
 			return false, "Needs support"
 		end
@@ -434,6 +477,9 @@ function StationService.place(player, blockX, by, blockZ, stationId)
 
 	local ok, reason = spawnStation(def, blockX, by, blockZ, player.UserId, nil, facing)
 	if ok then
+		-- In the open world this chunk now has something to clear away once
+		-- it is abandoned; see removeInChunk.
+		TerrainManager:NoteChange(blockX, blockZ)
 		notifyChanged()
 	end
 	return ok, reason

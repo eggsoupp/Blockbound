@@ -46,6 +46,7 @@ local TutorialMarker = require(UI:WaitForChild("TutorialMarker"))
 local InventoryMirror = require(Shared:WaitForChild("Inventory"):WaitForChild("InventoryMirror"))
 local AbilityConfig = require(Shared:WaitForChild("Abilities"):WaitForChild("AbilityConfig"))
 local Remotes = require(Shared:WaitForChild("Net"):WaitForChild("Remotes"))
+local WorldZones = require(Shared:WaitForChild("Terrain"):WaitForChild("WorldZones"))
 
 local Action = Remotes.wait("TutorialAction")
 local Travel = Remotes.wait("TutorialTravel")
@@ -401,7 +402,10 @@ local function nearestTree(): Model?
 	local here = root.Position
 	local best, bestDistance = nil, TREE_RANGE
 	for model, part in pairs(treeModels) do
-		if model.Parent and part.Parent and not model:GetAttribute("Felled") then
+		-- Not a tree inside the protected spawn: it cannot be chopped.
+		if model.Parent and part.Parent and not model:GetAttribute("Felled")
+			and not WorldZones.isProtectedPosition(part.Position)
+		then
 			local distance = (part.Position - here).Magnitude
 			if distance < bestDistance then
 				best, bestDistance = model, distance

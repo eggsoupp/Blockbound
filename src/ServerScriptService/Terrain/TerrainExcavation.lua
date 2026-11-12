@@ -56,6 +56,7 @@ local updateColumnVisibility = ColumnVisibility.updateColumnVisibility
 local refreshAdjacentColumns = ColumnVisibility.refreshAdjacentColumns
 local syncColumnWater = TerrainWater.syncColumnWater
 local removeResolvedBlock = BlockEdits.removeResolvedBlock
+local isProtected = require(TerrainShared:WaitForChild("WorldZones")).isProtected
 
 -- Server-only meteor bowl. All edits use the normal persistence path; never
 -- deletes rendered slabs directly. Bound the volume and remesh each chunk once.
@@ -206,6 +207,7 @@ end
 	                    chunk data that is about to be replaced.
 	  world bounds      chunk bounds, the world floor and the ceiling.
 	  unbreakable       BlockConfig.isUnbreakable wins over everything.
+	  spawn             nothing inside the protected spawn (WorldZones).
 	  natural only      by default a cell is skipped if it is an ADDED block
 	                    (data.extra: a structure's block or a player's
 	                    placement - ChunkEdits tells them apart, and neither is
@@ -257,6 +259,13 @@ end
 
 local function cellAllowed(data, cell, by, options)
 	if not isPresentInData(data, cell, by) then
+		return false
+	end
+	-- Nothing eats, lifts or burns the spawn (Shared.Terrain.WorldZones).
+	-- removeResolvedBlock would refuse anyway; refusing here keeps a plan,
+	-- and the warning drawn from it, to ground that will really go.
+	local index = cell - 1
+	if isProtected(data.minBlockX + index // CHUNK_SIZE, data.minBlockZ + index % CHUNK_SIZE) then
 		return false
 	end
 	if options.naturalOnly ~= false and not isNaturalCell(data, cell, by) then
@@ -457,7 +466,8 @@ function TerrainExcavation:PlanBlockWall(origin, forward)
 		for row=0,2 do
 			local c=wallCell(tx,bottom+row,tz)
 			local data=chunks[c.key]
-			if not data or generatingChunks[c.key] or c.by>MAX_BLOCK_Y or reservedCells[c.id] or isPresentInData(data,c.cell,c.by) then
+			if not data or generatingChunks[c.key] or c.by>MAX_BLOCK_Y or reservedCells[c.id] or isPresentInData(data,c.cell,c.by)
+				or isProtected(tx,tz) then
 				return nil,"There is no room for a wall here."
 			end
 			table.insert(targets,c)
@@ -561,7 +571,7 @@ function TerrainExcavation:BeginBossDisplacement(plan, destinations)
 			local x=math.floor(desired.X/STUD_SIZE)+math.round(math.cos(angle)*radius)
 			local z=math.floor(desired.Z/STUD_SIZE)+math.round(math.sin(angle)*radius)
 			local seed=wallCell(x,0,z);local td=chunks[seed.key]
-			if not td or generatingChunks[seed.key] or not isChunkInBounds(seed.cx,seed.cz) then continue end
+			if not td or generatingChunks[seed.key] or not isChunkInBounds(seed.cx,seed.cz) or isProtected(x,z) then continue end
 			local height=td.currentHeight[seed.cell]
 			if not height or td.waterTop[seed.cell]>height then continue end
 			local top=height-1 -- currentHeight is the first empty cell, not the top solid cell

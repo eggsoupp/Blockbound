@@ -121,6 +121,62 @@ TerrainConfig.SpawnSafeRadiusBlocks = 300
 -- keep this comfortably under that or the transition has nowhere to happen.
 TerrainConfig.SpawnGuaranteeBlocks = 64
 
+--[[
+	Who may change the ground near spawn (Shared.Terrain.WorldZones answers;
+	the open world only, an island has no zones).
+
+	  ProtectedBlocks     radius in blocks round the origin where nothing may
+	                      change: no mining, building, stations, tree felling,
+	                      ability craters or boss damage.
+	  StarterBlocks       half-width in blocks of the square starter area
+	                      around it. Mining is normal here, building is capped
+	                      (StarterBuildHeight), and abandoned ground regrows on
+	                      the fast timer below. A multiple of ChunkSize, so the
+	                      area is whole chunks.
+	  StarterBuildHeight  how many blocks above its natural surface (or water)
+	                      a column in the starter area may be built up. Enough
+	                      for a bench and a step, not for a wall round spawn.
+]]
+TerrainConfig.SpawnZones = {
+	ProtectedBlocks = 12,
+	StarterBlocks = 64,
+	StarterBuildHeight = 3,
+}
+
+--[[
+	Open-world regeneration (ServerScriptService.Terrain.ChunkRegeneration).
+
+	A chunk somebody changed goes back to its generated state - mined blocks
+	return, placed blocks and stations are removed - once nobody has edited it
+	or stood within NearbyChunks of it for the zone's time. Islands never
+	regenerate.
+
+	  WildSeconds / StarterSeconds  how long a changed chunk must be left alone
+	  NearbyChunks        a player within this many chunks (square) keeps a
+	                      chunk as it is; 2 is at least 128 studs of clearance
+	  SweepSeconds        how often changed chunks are looked at
+	  MaxRebuildsPerSweep loaded chunks rebuilt per sweep (a rebuild is a full
+	                      chunk build; unloaded ones cost nothing and are not
+	                      counted)
+	  TreeRegrowSeconds   a felled tree in the starter area stands back up after
+	                      this long while its chunk stays loaded (elsewhere a
+	                      tree returns when its chunk next streams in)
+	  TreeClearStuds      ... but not while a player is this close to it
+	  MaxDepletedOres     ore blocks remembered as already harvested, so that
+	                      regrown rock does not carry its ore again (OreDepletion)
+]]
+TerrainConfig.Regeneration = {
+	Enabled = true,
+	WildSeconds = 20 * 60,
+	StarterSeconds = 4 * 60,
+	NearbyChunks = 2,
+	SweepSeconds = 10,
+	MaxRebuildsPerSweep = 2,
+	TreeRegrowSeconds = 3 * 60,
+	TreeClearStuds = 24,
+	MaxDepletedOres = 200000,
+}
+
 -- ===========================================================================
 -- STREAMING
 -- ===========================================================================
@@ -456,6 +512,11 @@ function TerrainConfig.validate()
 		TerrainConfig.SpawnGuaranteeBlocks < TerrainConfig.SpawnSafeRadiusBlocks,
 		"[TerrainConfig] SpawnGuaranteeBlocks must be smaller than SpawnSafeRadiusBlocks, "
 			.. "or the guaranteed area has no room to blend into the world"
+	)
+	assert(
+		TerrainConfig.SpawnZones.StarterBlocks % TerrainConfig.ChunkSize == 0
+			and TerrainConfig.SpawnZones.ProtectedBlocks < TerrainConfig.SpawnZones.StarterBlocks,
+		"[TerrainConfig] SpawnZones.StarterBlocks must be whole chunks and larger than ProtectedBlocks"
 	)
 	assert(
 		TerrainConfig.EdgeFalloffBlocks < TerrainConfig.WorldRadiusBlocks,

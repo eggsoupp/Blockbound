@@ -32,6 +32,14 @@ The work lives in `ServerScriptService/Terrain/`:
 | `ChunkStreaming` | view distances, active sets, unload grace, pump, Heartbeat work, buried-player rescue |
 | `BlockEdits` | click resolution, inspect / break / place |
 | `TerrainExcavation` | craters, boss bites, block walls, boss displacement |
+| `OreDepletion` | harvested ore cells (regrown rock does not carry its ore again); `data.oreGone` |
+| `ChunkRegeneration` | abandoned open-world chunks back to as generated; inactivity timers; reset listeners |
+
+`ReplicatedStorage/Shared/Terrain/WorldZones.lua` says which columns are the
+protected spawn or the starter area (`TerrainConfig.SpawnZones`). Anything
+that changes terrain must go through `BlockEdits.removeResolvedBlock` or pass
+`BlockEdits.CheckBuildZone`, which enforce it. Islands have no zones and never
+regenerate.
 
 `ReplicatedStorage/Shared/Terrain/TerrainGrid.lua` holds the coordinate
 helpers and the chunk-key packing. The packing is part of the save format
@@ -51,9 +59,10 @@ Per-creature behaviour goes in `Creatures/` (CreatureKit, VoxelMoves) or
 ## Dependency rules
 
 - Dependencies point one way. Terrain modules form a DAG, roughly:
-  GeneratedColumns -> ChunkData -> BlockParts / FaceCulling -> ChunkMesher
+  OreDepletion -> GeneratedColumns -> ChunkData -> BlockParts / FaceCulling -> ChunkMesher
   -> ColumnVisibility -> EditZones -> ChunkQueue -> GenerationBudget ->
-  ChunkBuilder -> ChunkStreaming, plus BlockEdits -> TerrainExcavation.
+  ChunkBuilder -> ChunkStreaming / ChunkRegeneration, plus BlockEdits ->
+  TerrainExcavation.
   Never require upward. If two modules both need some state, it belongs in
   the lower module (usually ChunkData), not in a cycle.
 - Shared tables (`ChunkData.chunks`, `.generating`, `.usage`...) keep their

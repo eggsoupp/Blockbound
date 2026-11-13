@@ -1,0 +1,8 @@
+{
+  "name": "CaveDecorImport",
+  "tree": {
+    "$className": "Folder",
+    "BuildCaveDecor": { "$path": "BuildCaveDecor.lua" },
+    "Data": { "$path": "data" }
+  }
+}

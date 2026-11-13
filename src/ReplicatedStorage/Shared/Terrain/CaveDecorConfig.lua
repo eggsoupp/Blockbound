@@ -10,18 +10,21 @@
 	other block uses, and costs one Part.
 
 	===========================================================================
-	PLACEHOLDERS, AND REPLACING THEM
+	ARTWORK, AND PLACEHOLDERS
 	===========================================================================
 
-	No decoration has artwork yet. Each is drawn as a plain 4 x 4 x 4 stud Part
-	in the colour and material its `placeholder` describes, named after its
-	`block` (so the Part in the world is called AmethystCrystal, Icicle ...).
+	Every decoration is a MagicaVoxel model in assets/voxel-cave-decor (one
+	per height it can grow to: Icicle, Icicle2, Icicle3), built into
+	ReplicatedStorage.TerrainAssets.Blocks by roblox/BuildCaveDecor.lua. A
+	piece several blocks tall is cut into one-block SEGMENTS, each a block of
+	its own: Icicle3_1 is the bottom block of a three-block icicle, Icicle3_3
+	the top (CaveDecor.segmentName). A one-block piece keeps the plain name.
 
-	To give one real artwork, put a Part or MeshPart with the SAME NAME in
-	ReplicatedStorage.TerrainAssets.Blocks. An authored template always wins
-	over the generated stand-in, and nothing here or in code has to change.
-	Decorations are never merged into runs (every one is its own Part), so a
-	template of any shape drops in one for one.
+	A template there is an invisible 4-stud cell Part (attribute CellArt)
+	carrying the voxel art as welded children. Where a template is missing
+	(the place lost its assets, a new type) the block is drawn as a plain
+	4 x 4 x 4 Part in the colour and material its `placeholder` describes.
+	Decorations are never merged into runs: every one is its own Part.
 
 	===========================================================================
 	TYPE FIELDS

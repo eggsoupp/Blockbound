@@ -7,7 +7,9 @@
 
 	  CaveDecor.init(seed)                 registers the decoration blocks
 	  CaveDecor.decorate(record, minX, minZ) -> count
-	  CaveDecor.blockName(typeIndex)       -> block name
+	  CaveDecor.blockName(segmentIndex)    -> block name
+	  CaveDecor.segmentName(block, tall, s) -> block name of one segment
+	  CaveDecor.stackOf(blockName)         -> segment names, which one
 	  CaveDecor.isCollectible(blockName)   -> boolean
 
 	HOW A DECORATION EXISTS
@@ -64,13 +66,22 @@ local DIR_Z = { 0, 0, 1, -1 }
 
 -- Flattened types, by index. Indices follow the sorted type names, so they
 -- are the same on every server for the same config.
-local typeBlock = {}
 local typeMinHeight = {}
 local typeHeightSpan = {}
 local typeOpen = {}
 local collectible = {} -- block name -> true
 
--- biome name -> { floor = { entry }, ceiling = { entry } }
+--[[
+	SEGMENTS. A piece several blocks tall is ONE model cut into one-block
+	segments, each its own block name, so a three-block icicle is drawn as
+	one icicle rather than the same block three times. Segment s of a piece
+	`tall` high is segmentName(block, tall, s), counted from the bottom; a
+	one-block piece keeps the plain block name. record.decor holds segment
+	indices, not type indices.
+]]
+local segmentBlock = {} -- segment index -> block name
+local typeSegmentStart = {} -- type index -> { [tall] = index of its bottom segment }
+local stackOf = {} -- block name -> { names = { bottom .. top }, segment = s }
 local biomeEntries = {}
 
 local hashSeed = 0
@@ -187,10 +198,11 @@ function CaveDecor.decorate(record, minX, minZ)
 						if raw[cell] == nil then
 							raw[cell] = table.clone(intervals)
 						end
+						local segment = typeSegmentStart[kind][tall] - lo
 						for by = lo, lo + tall - 1 do
 							decor[write + 1] = cell
 							decor[write + 2] = by
-							decor[write + 3] = kind
+							decor[write + 3] = segment + by
 							write += 3
 						end
 						intervals[i] = lo + tall
@@ -208,10 +220,12 @@ function CaveDecor.decorate(record, minX, minZ)
 							if raw[cell] == nil then
 								raw[cell] = table.clone(intervals)
 							end
-							for by = hi - tall + 1, hi do
+							local bottom = hi - tall + 1
+							local segment = typeSegmentStart[kind][tall] - bottom
+							for by = bottom, hi do
 								decor[write + 1] = cell
 								decor[write + 2] = by
-								decor[write + 3] = kind
+								decor[write + 3] = segment + by
 								write += 3
 							end
 							intervals[i + 1] = hi - tall
@@ -228,8 +242,32 @@ function CaveDecor.decorate(record, minX, minZ)
 	return placed
 end
 
-function CaveDecor.blockName(typeIndex)
-	return typeBlock[typeIndex]
+-- The block name of a record.decor entry (a segment index).
+function CaveDecor.blockName(segmentIndex)
+	return segmentBlock[segmentIndex]
+end
+
+-- Segment s (1 = bottom) of a piece `tall` blocks high. The voxel models in
+-- assets/voxel-cave-decor are cut and named the same way.
+function CaveDecor.segmentName(block, tall, segment)
+	if tall == 1 then
+		return block
+	end
+	return block .. tall .. "_" .. segment
+end
+
+--[[
+	The piece a decoration block belongs to: its segments' block names from
+	the bottom up, and which of them this one is. nil for anything that is
+	not a decoration. Breaking one segment takes the whole piece (BlockEdits),
+	so no half icicle is left hanging.
+]]
+function CaveDecor.stackOf(blockName)
+	local stack = stackOf[blockName]
+	if stack then
+		return stack.names, stack.segment
+	end
+	return nil
 end
 
 -- Does mining this block yield an item? Those are remembered once taken
@@ -252,7 +290,9 @@ function CaveDecor.init(seed)
 	CaveDecorConfig.validate()
 
 	hashSeed = ((seed or 0) % 4096) * 1.7320508076
-	table.clear(typeBlock)
+	table.clear(segmentBlock)
+	table.clear(typeSegmentStart)
+	table.clear(stackOf)
 	table.clear(typeMinHeight)
 	table.clear(typeHeightSpan)
 	table.clear(typeOpen)
@@ -274,7 +314,6 @@ function CaveDecor.init(seed)
 	for index, name in ipairs(names) do
 		local def = CaveDecorConfig.Types[name]
 		indexOf[name] = index
-		typeBlock[index] = def.block
 		typeMinHeight[index] = def.height.min
 		typeHeightSpan[index] = def.height.max - def.height.min + 0.999
 		typeOpen[index] = def.open == true
@@ -287,26 +326,41 @@ function CaveDecor.init(seed)
 			))
 			drop = false
 		end
-		if drop then
-			collectible[def.block] = true
-		end
+		-- Every height from 1, not just from height.min: decorate shortens a
+		-- piece that would block the passage.
+		local starts = {}
+		typeSegmentStart[index] = starts
+		for tall = 1, def.height.max do
+			starts[tall] = #segmentBlock + 1
+			local names = {}
+			for segment = 1, tall do
+				local blockName = CaveDecor.segmentName(def.block, tall, segment)
+				segmentBlock[#segmentBlock + 1] = blockName
+				names[segment] = blockName
+				stackOf[blockName] = { names = names, segment = segment }
+				if drop then
+					collectible[blockName] = true
+				end
 
-		BlockConfig.registerGenerated(def.block, def.placeholder)
-		BlockConfig.registerBlock(def.block, {
-			drop = drop,
-			breakSeconds = def.breakSeconds,
-			power = def.power,
-			unmerged = true,
-		})
+				-- The stand-in until TerrainAssets.Blocks holds its voxel art.
+				BlockConfig.registerGenerated(blockName, def.placeholder)
+				BlockConfig.registerBlock(blockName, {
+					drop = drop,
+					breakSeconds = def.breakSeconds,
+					power = def.power,
+					unmerged = true,
+				})
 
-		-- Anything see-through or walk-through is not an ordinary solid cube.
-		local transparency = def.placeholder.transparency or 0
-		if def.passable or transparency > 0 then
-			BlockConfig.registerSurface(def.block, {
-				collides = not def.passable,
-				transparency = transparency,
-				query = true,
-			})
+				-- Anything see-through or walk-through is not an ordinary solid cube.
+				local transparency = def.placeholder.transparency or 0
+				if def.passable or transparency > 0 then
+					BlockConfig.registerSurface(blockName, {
+						collides = not def.passable,
+						transparency = transparency,
+						query = true,
+					})
+				end
+			end
 		end
 	end
 

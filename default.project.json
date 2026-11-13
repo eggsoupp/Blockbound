@@ -942,6 +942,9 @@
           "PenumbraPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/PenumbraPlan.lua"
           },
+          "PenumbraMotion": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/PenumbraMotion.lua"
+          },
           "ThunderPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/ThunderPlan.lua"
           },

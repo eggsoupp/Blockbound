@@ -87,10 +87,11 @@ AbilityConfig.Definitions = {
   displayName="Eclipse Prison", rarity="Legendary", server="EclipsePrison", vfx="EclipseVFX",
   cooldown=20, manaCost=50, requiresTarget=true, castRange=90, maxConcurrent=1,
  },
- -- Celestial's F: a burst round the caster, cast on the ground or in the air.
+ -- Celestial's F: sink into the ground and come up where the mouse is (in the
+ -- air too, as a burst and a streak).
  Penumbra = {
   displayName="Penumbra", rarity="Legendary", server="Penumbra", vfx="PenumbraVFX",
-  cooldown=12, manaCost=34, requiresTarget=false, maxConcurrent=1,
+  cooldown=12, manaCost=34, requiresTarget=true, castRange=64, maxConcurrent=1,
  },
  Thunderhead = {
   displayName="Thunderhead", rarity="Epic", server="Thunderhead", vfx="ThunderVFX",

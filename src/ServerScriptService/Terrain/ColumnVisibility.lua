@@ -98,7 +98,27 @@ local syncColumnWater = TerrainWater.syncColumnWater
 	updateColumnVisibility: that runs once per column per chunk load, and a
 	closure there would allocate on every single call.
 ]]
+--[[
+	Is (cx, cz, bx, bz, by) a cave decoration? Those stand in a cell without
+	filling it (ChunkBuilder.applyDecor lists them in data.seeThrough), so a
+	block whose only open side faces one must still be drawn: the floor under
+	a crystal, the ceiling over an icicle. Asked only once the six-face test
+	has found a block buried, and only in or beside a chunk that has any.
+]]
+local function isSeeThrough(cx, cz, bx, bz, by)
+	cx, cz, bx, bz = normalizeCell(cx, cz, bx, bz)
+	local data = chunks[chunkKey(cx, cz)]
+	local set = data and data.seeThrough
+	if not set then
+		return false
+	end
+	local column = set[bx * CHUNK_SIZE + bz + 1]
+	return column ~= nil and column[by] == true
+end
+
 local function scanColumnRange(data, cx, cz, bx, bz, cell, column, low, high, waterLow, waterHigh, force)
+	local ownSeeThrough = data.seeThrough
+	local onBorder = bx == 0 or bz == 0 or bx == CHUNK_SIZE - 1 or bz == CHUNK_SIZE - 1
 	for by = low, high do
 		if not isPresentInData(data, cell, by) then
 			-- Anything in the water band belongs to the water pass below, which
@@ -124,6 +144,20 @@ local function scanColumnRange(data, cx, cz, bx, bz, cell, column, low, high, wa
 					if not isBlockPresent(cx, cz, bx + DIR_X[i], bz + DIR_Z[i], by) then
 						visible = true
 						break
+					end
+				end
+			end
+
+			if not visible and (ownSeeThrough or onBorder) then
+				local own = ownSeeThrough and ownSeeThrough[cell]
+				if own and (own[by + 1] or own[by - 1]) then
+					visible = true
+				else
+					for i = 1, 4 do
+						if isSeeThrough(cx, cz, bx + DIR_X[i], bz + DIR_Z[i], by) then
+							visible = true
+							break
+						end
 					end
 				end
 			end

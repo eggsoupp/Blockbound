@@ -384,6 +384,16 @@ do
 		base.CanQuery = if surface then surface.query ~= false else true
 		base.CanTouch = false
 		base.Transparency = if surface then surface.transparency or 0 else 0
+		--[[
+			Voxel art (the cave decorations, assets/voxel-cave-decor): the Part
+			is only the cell - collision and the thing the mouse ray hits - and
+			never shows. The art is its children, unanchored and Welded to it,
+			so they follow wherever the pooled Part is moved; they take no
+			collision or ray of their own.
+		]]
+		if template:GetAttribute("CellArt") then
+			base.Transparency = 1
+		end
 		base.TopSurface = Enum.SurfaceType.Smooth
 		base.BottomSurface = Enum.SurfaceType.Smooth
 		base.CastShadow = TerrainConfig.CastTerrainShadows

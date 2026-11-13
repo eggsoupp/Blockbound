@@ -276,9 +276,10 @@ R["eclipse.settle"] = recipe({
 }, { range = 400 })
 
 -- ---------------------------------------------------------------------------
--- Penumbra (PenumbraVFX): Celestial's F. The dark drawn in, a white-hot
--- burst the caster vanishes into, crescents whipping round it, and a shroud
--- that hums and crackles as it thins.
+-- Penumbra (PenumbraVFX): Celestial's F, a teleport through the ground. The
+-- dark drawn in, a white-hot burst, the caster sinking with a rumble under
+-- the ground, breaking back out where they aimed into a second burst, and
+-- shrouds that hum and crackle as they thin.
 -- ---------------------------------------------------------------------------
 
 R["penumbra.gather"] = recipe({
@@ -307,10 +308,22 @@ R["penumbra.tick"] = recipe({
 	{ "electric_shock", 0.32, 0.8, 0, 0.08 },
 	{ "zap_quick", 0.26, 0.75, 0, 0.1 },
 }, { range = 220 })
-R["penumbra.return"] = recipe({
-	{ "magic_warp", 0.32, 0.9, 0, 0.05 },
-	{ "poof_punch", 0.28, 0.75, 0, 0.06 },
+R["penumbra.sink"] = recipe({
+	{ "earth_crumble", 0.45, 0.8, 0, 0.06 },
+	{ "teleport_whomp", 0.34, 0.6, 0.04, 0.04 },
+	{ "grit_concrete1", 0.26, 0.8, 0.02, 0.08 },
+}, { range = 220 })
+R["penumbra.travel"] = recipe({
+	{ "earth_crumble", 0.3, 0.6, 0, 0.06 },
+	{ "distant_boom", 0.26, 0.7, 0.05, 0.05 },
+	{ "air_suction", 0.22, 0.6, 0.1, 0.05 },
 }, { range = 200 })
+R["penumbra.emerge"] = recipe({
+	{ "ground_slam", 0.4, 0.85, 0, 0.05 },
+	{ "earth_crumble", 0.42, 0.9, 0, 0.06 },
+	{ "grit_concrete2", 0.3, 0.9, 0.02, 0.08 },
+	{ "magic_warp", 0.26, 0.8, 0.03, 0.05 },
+}, { range = 240, near = 20 })
 R["penumbra.fade"] = recipe({
 	{ "portal_close", 0.3, 0.6, 0, 0.04 },
 	{ "swish_rise", 0.18, 0.7, 0.05, 0.08 },

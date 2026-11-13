@@ -109,6 +109,8 @@ local function isOpaqueBlock(name)
 			and template:IsA("Part")
 			and template.Shape == Enum.PartType.Block
 			and BlockConfig.surfaceFor(name) == nil
+			-- Cave decorations: voxel art in a cell it does not fill.
+			and not BlockConfig.isUnmerged(name)
 		opaqueByName[name] = cached
 	end
 	return cached

@@ -61,6 +61,7 @@ local pendingUnload = ChunkData.pendingUnload
 local pinnedChunks = ChunkData.pinnedChunks
 local isChunkWanted = ChunkData.isWanted
 local markRemoved = ChunkData.markRemoved
+local markDisturbed = ChunkData.markDisturbed
 local applyRemoval = ChunkData.applyRemoval
 local applyPlacement = ChunkData.applyPlacement
 local makeWriter = ChunkData.makeWriter
@@ -290,6 +291,16 @@ end
 local function applyDecor(data, record)
 	local decor = record.decor
 	local gone = data.oreGone
+	-- A decoration stands in its cell without filling it, so the floor or
+	-- ceiling it grows from and the walls beside it must stay drawn:
+	-- data.seeThrough[cell][by] tells ColumnVisibility and FaceCulling. The
+	-- cells above and below join the disturbed band so the general
+	-- visibility path looks at them.
+	local seeThrough = data.seeThrough
+	if not seeThrough then
+		seeThrough = {}
+		data.seeThrough = seeThrough
+	end
 	for i = 1, record.decorCount * 3, 3 do
 		local cell, by = decor[i], decor[i + 1]
 		if by < data.currentHeight[cell] then
@@ -297,6 +308,14 @@ local function applyDecor(data, record)
 				markRemoved(data, cell, by)
 			else
 				overrideNatural(data, cell, by, decorBlockName(decor[i + 2]))
+				local column = seeThrough[cell]
+				if not column then
+					column = {}
+					seeThrough[cell] = column
+				end
+				column[by] = true
+				markDisturbed(data, cell, by - 1)
+				markDisturbed(data, cell, by + 1)
 			end
 		end
 	end

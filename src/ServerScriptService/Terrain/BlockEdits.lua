@@ -65,6 +65,7 @@ local isProtected = WorldZones.isProtected
 local isStarter = WorldZones.isStarter
 local isOre = OreRegistry.isOre
 local isCollectibleDecor = CaveDecor.isCollectible
+local stackOf = CaveDecor.stackOf
 local STARTER_BUILD_HEIGHT = WorldZones.StarterBuildHeight
 
 -- Ore taken in the open world is remembered so regrown rock does not carry
@@ -415,7 +416,20 @@ function BlockEdits:BreakBlock(wx, wy, wz, initiator)
 	local index = cell - 1
 	openEditZone(data.minBlockX + index // CHUNK_SIZE, data.minBlockZ + index % CHUNK_SIZE)
 
-	local ok, item, reason = removeResolvedBlock(data, cell, by)
+	-- A cave decoration several blocks tall is one piece: breaking any of
+	-- its blocks takes the rest, so no icicle tip is left in mid-air.
+	local stack, segment = stackOf(blockNameFor(data, cell, by))
+
+	local ok, item, reason = removeResolvedBlock(data, cell, by, stack == nil)
+	if stack and ok then
+		for k = 1, #stack do
+			local y = by - segment + k
+			if k ~= segment and blockNameFor(data, cell, y) == stack[k] then
+				removeResolvedBlock(data, cell, y, false)
+			end
+		end
+		refreshAdjacentColumns(data.cx, data.cz, index // CHUNK_SIZE, index % CHUNK_SIZE)
+	end
 	return finish(ok, item, reason)
 end
 

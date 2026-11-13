@@ -7,7 +7,7 @@
 	  door   swings its Swing parts a quarter turn about its Hinge part and
 	         back, a little under a third of a second each way
 	  light  douses and relights: every LightFx emitter and light, on or off
-	  seat   sits the player on the piece's Seat
+	(Seats have no prompt: their Seat part sits whoever walks into it.)
 
 	Doors open away from whoever opens them, so a door never swings into the
 	player's face. Neither state is saved - a door comes back shut and a
@@ -145,18 +145,6 @@ local function toggleLight(model, prompt)
 	prompt.ActionText = if lit then "Douse" else "Light"
 end
 
--- ---------------------------------------------------------------------------
--- Seats
--- ---------------------------------------------------------------------------
-
-local function sit(model, player)
-	local seat = model:FindFirstChild("Seat", true)
-	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-	if seat and seat:IsA("Seat") and humanoid and humanoid.Health > 0 and not seat.Occupant then
-		seat:Sit(humanoid)
-	end
-end
-
 ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
 	local id = prompt:GetAttribute("DecorId")
 	local entry = type(id) == "string" and DecorCatalog.get(id)
@@ -172,7 +160,33 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
 		toggleDoor(model, prompt, player)
 	elseif entry.kind == "light" then
 		toggleLight(model, prompt)
-	elseif entry.kind == "seat" then
-		sit(model, player)
 	end
 end)
+
+-- ---------------------------------------------------------------------------
+-- Training dummies
+-- ---------------------------------------------------------------------------
+-- A placed Training Dummy is hit like an enemy: EnemyService registers the
+-- model where it stands (EnemyConfig.Definitions.TrainingDummy, behaviour
+-- Bosses.TrainingDummy). Picking it up removes the model, which ends the
+-- registration on the enemy service's next tick.
+
+local EnemyService = require(ServerScriptService:WaitForChild("EnemyService"))
+local StationConfig = require(Shared:WaitForChild("Crafting"):WaitForChild("StationConfig"))
+
+local function adoptDummy(instance)
+	if instance:IsA("Model") and instance:GetAttribute("DecorId") == "TrainingDummy" then
+		-- Deferred: the station is parented before its prompt and anchor are.
+		task.defer(function()
+			if instance.Parent then
+				EnemyService.adopt("TrainingDummy", instance)
+			end
+		end)
+	end
+end
+
+local stations = workspace:WaitForChild(StationConfig.WorldFolderName)
+stations.ChildAdded:Connect(adoptDummy)
+for _, child in ipairs(stations:GetChildren()) do
+	adoptDummy(child)
+end

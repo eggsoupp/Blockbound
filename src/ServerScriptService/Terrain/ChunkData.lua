@@ -145,6 +145,7 @@ end
 --   currentHeight surface height right now (drops as the top is mined)
 --   topName       surface block name, from the biome
 --   underName     subsurface block name, from the biome
+--   stoneName     the biome's stone, which is everything below the soil
 --   biomeName     dominant biome for the column
 --   jitter        per-column offset of the soil/stone boundary
 --   topScan       exclusive upper bound for a full column scan
@@ -331,7 +332,7 @@ local function blockNameFor(data, cell, by)
 	end
 
 	local depth = height - 1 - by
-	local base = StrataConfig.blockAt(depth, data.underName[cell], data.jitter[cell])
+	local base = StrataConfig.blockAt(depth, data.underName[cell], data.jitter[cell], data.stoneName[cell])
 
 	local index = cell - 1
 	local ore = OreRegistry.blockAt(

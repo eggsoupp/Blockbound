@@ -13,6 +13,11 @@
 	here for the life of the server, and ChunkData.blockNameFor answers with
 	the plain rock for those cells. The rock comes back; the ore does not.
 
+	The same record covers the two other generated resources a regrown chunk
+	would otherwise hand out again, both applied when the chunk is built
+	(ChunkBuilder): the extra ore that lines a cave's walls, and the cave
+	decorations that yield an item, whose cell is left empty once harvested.
+
 	One number per harvested ore block, in memory only: nothing is saved (the
 	world is new on every server) and nothing is written per block anywhere.
 	Bounded by TerrainConfig.Regeneration.MaxDepletedOres: past it the chunks

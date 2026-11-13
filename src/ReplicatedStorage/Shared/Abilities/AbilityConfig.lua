@@ -5,8 +5,8 @@ local AbilityConfig = {}
 AbilityConfig.RequestsPerSecond = 8
 AbilityConfig.MaxMana = 100
 AbilityConfig.ManaRegenPerSecond = 2
-AbilityConfig.SlotCount = 3
-AbilityConfig.SlotKeys = {Enum.KeyCode.Z, Enum.KeyCode.X, Enum.KeyCode.V}
+AbilityConfig.SlotCount = 4
+AbilityConfig.SlotKeys = {Enum.KeyCode.Z, Enum.KeyCode.X, Enum.KeyCode.V, Enum.KeyCode.F}
 AbilityConfig.DefaultCastWeapon = "TestSword"
 AbilityConfig.BroadcastRadius = 520
 AbilityConfig.Definitions = {
@@ -82,6 +82,15 @@ AbilityConfig.Definitions = {
  AzureComet = {
   displayName="Azure Comet", rarity="Rare", server="AzureComet", vfx="CometVFX",
   cooldown=11, manaCost=30, requiresTarget=true, castRange=85, maxConcurrent=1,
+ },
+ EclipsePrison = {
+  displayName="Eclipse Prison", rarity="Legendary", server="EclipsePrison", vfx="EclipseVFX",
+  cooldown=20, manaCost=50, requiresTarget=true, castRange=90, maxConcurrent=1,
+ },
+ -- Celestial's F: a burst round the caster, cast on the ground or in the air.
+ Penumbra = {
+  displayName="Penumbra", rarity="Legendary", server="Penumbra", vfx="PenumbraVFX",
+  cooldown=12, manaCost=34, requiresTarget=false, maxConcurrent=1,
  },
  Thunderhead = {
   displayName="Thunderhead", rarity="Epic", server="Thunderhead", vfx="ThunderVFX",

@@ -17,7 +17,7 @@
 	  kind     "plain"  nothing to do with it, no prompt
 	           "door"   opens and shuts (DecorServer swings its Leaf)
 	           "light"  lit when placed; the prompt douses and relights it
-	           "seat"   the prompt sits you down
+	           "seat"   no prompt: walking into its Seat sits you down
 	  footprint  every piece fills whole 4-stud grid cells (DecorShapes `cells`):
 	             a door is 1x2x1, a sofa 2x1x1, a tent 2x1x2. The placed cell is
 	             its front-left; it reaches right, up and back from there.
@@ -234,7 +234,6 @@ end
 local ACTION_TEXT = {
 	door = "Open",
 	light = "Douse",
-	seat = "Sit",
 }
 
 function DecorCatalog.get(id)
@@ -242,7 +241,11 @@ function DecorCatalog.get(id)
 end
 
 -- The prompt's verb for a piece, or nil for one that has no prompt at all.
+-- Seats have none: walking into one sits you down (its Seat is touchable).
 function DecorCatalog.actionText(entry)
+	if entry.kind == "seat" then
+		return nil
+	end
 	return entry.actionText or ACTION_TEXT[entry.kind]
 end
 

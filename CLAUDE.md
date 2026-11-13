@@ -46,6 +46,22 @@ helpers and the chunk-key packing. The packing is part of the save format
 through ChunkEdits, so never change it. CaveMap and StructureRegistry use it
 too.
 
+The underground is planned in `ReplicatedStorage/Shared/Terrain`, as pure
+functions of the seed:
+
+| Module | Owns |
+| --- | --- |
+| `CaveConfig` / `CaveMap` | where caves are and their shape (four categories: Small, Network, Large, Colossal); a chunk's carve record of air intervals |
+| `CaveDecorConfig` / `CaveDecor` | biome cave decorations: cells left solid on cave floors and ceilings (`record.decor`), registered as blocks |
+| `OreConfig` / `OreRegistry` | ore at a block: `blockAt` for sealed rock, `exposedBlockAt` for rock lining a generated cave |
+| `BiomeConfig` `stoneBlock` | each biome's own stone, used below the soil and for bare rock |
+
+`ChunkBuilder.applyCaves` is the only place these reach chunk data: it carves
+the record, writes exposed ore and decorations as overrides, and skips
+anything `OreDepletion` remembers as harvested. A cave costs Parts by how
+many layers its walls cross (layers never merge with each other), so keep
+new cave shapes low and level; see `CaveConfig.DensityMultiplier`.
+
 To add a new public terrain call, write it in the owning module and add
 one line to TerrainManager: `TerrainManager.X = Module.X`, or a short wrapper.
 
@@ -104,6 +120,9 @@ Per-creature behaviour goes in `Creatures/` (CreatureKit, VoxelMoves) or
   size, face set) and models (name, pivot). Dig fixed cells with
   TestPickaxe via `RequestMineBlock`, then hash again after the 30 s edit
   zone closes. Compare per-chunk hashes, never totals from different spots.
+- Caves: `/bbcaves` runs CaveAudit (determinism, chunk borders, cover,
+  spawn, decorations, connectivity, counts per category). `/tp cave
+  <small|network|large|colossal> inside` puts you in the nearest one.
 - Performance: `/bbprof on` ... `/bbprof`. Compare `Terrain.columnVisibility`
   per call, `chunkCpuMs`, `gen.*` and `chunkUnloadMs` on identical
   sequences. Studio runs differ by about 3%.

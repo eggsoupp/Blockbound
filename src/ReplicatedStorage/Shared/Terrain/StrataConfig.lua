@@ -31,8 +31,11 @@ StrataConfig.Layers = {
 	-- A short transition so the dirt-to-stone line is not a dead flat plane.
 	-- Handled by jitterBlocks below rather than by a separate layer.
 
-	-- Everything below is stone, which is also what ores replace.
-	{ maxDepth = math.huge, block = "Stone" },
+	-- Everything below is stone, which is also what ores replace. `biomeStone`
+	-- lets the column's biome put its own stone here (BiomeConfig `stoneBlock`:
+	-- sandstone under the desert, hallowed stone under the Hallow); `block` is
+	-- what a biome without one gets.
+	{ maxDepth = math.huge, block = "Stone", biomeStone = true },
 }
 
 -- The soil/stone boundary is nudged up or down by up to this many blocks using
@@ -50,17 +53,22 @@ StrataConfig.BedrockBlock = "Bedrock"
 	  underBlock       the biome's subsurface block name
 	  jitter           [-JitterBlocks, +JitterBlocks], derived from the column
 	                   by the caller so it is stable and seamless
+	  stoneBlock       the column's biome stone (BiomeConfig.stoneFor), or nil
+	                   for the layer's own block
 
 	Returns a block name. Bedrock is decided by the caller, which is the only
 	place that knows where the floor is.
 ]]
-function StrataConfig.blockAt(depth, underBlock, jitter)
+function StrataConfig.blockAt(depth, underBlock, jitter, stoneBlock)
 	local adjusted = depth - (jitter or 0)
 
 	for _, layer in ipairs(StrataConfig.Layers) do
 		if adjusted <= layer.maxDepth then
 			if layer.block == false then
 				return underBlock
+			end
+			if stoneBlock and layer.biomeStone then
+				return stoneBlock
 			end
 			return layer.block
 		end

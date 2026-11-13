@@ -279,6 +279,15 @@
           "$properties": {
             "Disabled": false
           }
+        },
+        "WishClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/WishClient.client.lua"
+        },
+        "NoticeBoardClient": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/NoticeBoardClient.client.lua"
+        },
+        "VillageAmbience": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/VillageAmbience.client.lua"
         }
       },
       "StarterCharacterScripts": {
@@ -430,6 +439,12 @@
           "CaveMap": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/CaveMap.lua"
           },
+          "CaveDecorConfig": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/CaveDecorConfig.lua"
+          },
+          "CaveDecor": {
+            "$path": "src/ReplicatedStorage/Shared/Terrain/CaveDecor.lua"
+          },
           "TerrainDebris": {
             "$path": "src/ReplicatedStorage/Shared/Terrain/TerrainDebris.lua"
           }
@@ -530,6 +545,9 @@
           },
           "TradeWindow": {
             "$path": "src/ReplicatedStorage/Shared/UI/TradeWindow.lua"
+          },
+          "Notices": {
+            "$path": "src/ReplicatedStorage/Shared/UI/Notices.lua"
           },
           "Motion": {
             "$path": "src/ReplicatedStorage/Shared/UI/Motion.lua"
@@ -842,6 +860,18 @@
             "CometVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CometVFX.lua"
             },
+            "EclipseVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/EclipseVFX.lua"
+            },
+            "EclipseParticles": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/EclipseParticles.lua"
+            },
+            "PenumbraVFX": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/PenumbraVFX.lua"
+            },
+            "CastPose": {
+              "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/CastPose.lua"
+            },
             "ThunderVFX": {
               "$path": "src/ReplicatedStorage/Shared/Abilities/VFX/ThunderVFX.lua"
             },
@@ -905,6 +935,12 @@
           },
           "CometPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/CometPlan.lua"
+          },
+          "EclipsePlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/EclipsePlan.lua"
+          },
+          "PenumbraPlan": {
+            "$path": "src/ReplicatedStorage/Shared/Abilities/PenumbraPlan.lua"
           },
           "ThunderPlan": {
             "$path": "src/ReplicatedStorage/Shared/Abilities/ThunderPlan.lua"
@@ -1178,6 +1214,12 @@
         "AzureComet": {
           "$path": "src/ServerScriptService/Abilities/AzureComet.lua"
         },
+        "EclipsePrison": {
+          "$path": "src/ServerScriptService/Abilities/EclipsePrison.lua"
+        },
+        "Penumbra": {
+          "$path": "src/ServerScriptService/Abilities/Penumbra.lua"
+        },
         "Thunderhead": {
           "$path": "src/ServerScriptService/Abilities/Thunderhead.lua"
         },
@@ -1277,6 +1319,9 @@
         "$ignoreUnknownInstances": true,
         "SlimeEmperor": {
           "$path": "src/ServerScriptService/Bosses/SlimeEmperor.lua"
+        },
+        "TrainingDummy": {
+          "$path": "src/ServerScriptService/Bosses/TrainingDummy.lua"
         },
         "AllSeeingEye": {
           "$path": "src/ServerScriptService/Bosses/AllSeeingEye.lua"
@@ -1507,6 +1552,9 @@
         },
         "TradeService": {
           "$path": "src/ServerScriptService/Trade/TradeService.server.lua"
+        },
+        "TradeStations": {
+          "$path": "src/ServerScriptService/Trade/TradeStations.lua"
         }
       },
       "GearService": {
@@ -1526,6 +1574,9 @@
       },
       "WeaponShotService": {
         "$path": "src/ServerScriptService/WeaponShotService.lua"
+      },
+      "SpawnHub": {
+        "$path": "src/ServerScriptService/SpawnHub.lua"
       }
     }
   }

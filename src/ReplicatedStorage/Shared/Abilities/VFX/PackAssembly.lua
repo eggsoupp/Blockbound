@@ -37,6 +37,10 @@ local function tinted(sequence, tint)
 	return ColorSequence.new(points)
 end
 
+-- The same recolouring for emitters a module builds from curated data
+-- (an "<Ability>Particles" table) rather than from a mounted assembly.
+Pack.tint = tinted
+
 --[[
 	mount(scope, parent, name, options) clones an assembly, silent until asked.
 	options: cframe, scale, tint = {deep, main, hot}, brightness (a cap),

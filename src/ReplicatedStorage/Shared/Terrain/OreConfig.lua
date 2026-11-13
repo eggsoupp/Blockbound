@@ -65,7 +65,11 @@
 	  priority     higher wins when two ores claim the same block. Keep rare ores
 	               above common ones so a mythril vein is not eaten by coal.
 	  hosts        set of base block names it may replace. Defaults to the
-	               deepest stratum (Stone).
+	               deepest stratum (Stone) and every biome's own stone
+	               (BiomeConfig `stoneBlock`), so an ore occurs under every
+	               biome alike.
+	  exposedMultiplier
+	               optional; this ore's own CaveExposure.CellChanceMultiplier.
 	  appearance   used to build a stand-in part when TerrainAssets.Blocks has no
 	               authored part of that name. Authored parts always win.
 
@@ -83,6 +87,50 @@ local OreConfig = {}
 -- Master switch, and one dial for "more/less ore everywhere".
 OreConfig.Enabled = true
 OreConfig.GlobalDensityMultiplier = 1.0
+
+--[[
+	WHERE ORE IS: BURIED OR ON SHOW
+
+	Every cellChance below is the ore's reference density. Two dials decide how
+	much of it a player actually meets, and which way of looking pays:
+
+	  BuriedDensityMultiplier   ore sealed in solid rock, which is what blind
+	                            tunnelling runs into. A little under 1, so a
+	                            straight shaft finds slightly less than it used to.
+
+	  CaveExposure              ore in the rock that lines a GENERATED cave - its
+	                            walls, floor and ceiling. Several times the
+	                            reference, so a cave wall is visibly streaked with
+	                            ore and walking a cave beats digging past one.
+
+	    CellChanceMultiplier    vein cells claimed on a cave surface, against the
+	                            reference cellChance
+	    FillBonus               veins on show are also a little more solid
+	    MaxCellChance           ceiling on the result, so no multiplier can turn
+	                            a cave wall into a solid sheet of one ore
+
+	Both use the SAME vein cells and the same fill hash, with a higher bar for
+	the buried case, so every buried vein that reaches a cave wall is still
+	there on the wall and the extra veins exist only on the surface. Depth
+	bands, priorities, hosts and pickaxe power are untouched: this changes how
+	often an ore occurs in its band, never where its band is.
+
+	Exposure is decided once, when a chunk is built, from the caves the world
+	generated (ChunkBuilder.applyCaves). Rock a player digs out never counts,
+	or tunnelling would create its own ore; and an exposed ore that has been
+	mined is remembered like any other (OreDepletion), so a chunk that regrows
+	does not put it back.
+
+	An ore may carry its own `exposedMultiplier` to replace CellChanceMultiplier.
+]]
+OreConfig.BuriedDensityMultiplier = 0.85
+
+OreConfig.CaveExposure = {
+	Enabled = true,
+	CellChanceMultiplier = 1.4,
+	FillBonus = 1.5,
+	MaxCellChance = 0.5,
+}
 
 OreConfig.Definitions = {
 	Coal = {
@@ -224,6 +272,27 @@ end
 ]]
 function OreConfig.validate()
 	local seenBlock = {}
+
+	assert(
+		type(OreConfig.BuriedDensityMultiplier) == "number" and OreConfig.BuriedDensityMultiplier >= 0,
+		"[OreConfig] BuriedDensityMultiplier must be a non-negative number"
+	)
+	local exposure = OreConfig.CaveExposure
+	assert(type(exposure) == "table", "[OreConfig] CaveExposure is required")
+	assert(
+		type(exposure.CellChanceMultiplier) == "number"
+			and exposure.CellChanceMultiplier >= OreConfig.BuriedDensityMultiplier,
+		"[OreConfig] CaveExposure.CellChanceMultiplier must be at least BuriedDensityMultiplier, "
+			.. "or a vein would vanish where it meets a cave wall"
+	)
+	assert(
+		type(exposure.FillBonus) == "number" and exposure.FillBonus >= 1,
+		"[OreConfig] CaveExposure.FillBonus must be at least 1"
+	)
+	assert(
+		type(exposure.MaxCellChance) == "number" and exposure.MaxCellChance > 0 and exposure.MaxCellChance <= 1,
+		"[OreConfig] CaveExposure.MaxCellChance must be in (0, 1]"
+	)
 
 	for _, name in ipairs(OreConfig.Order) do
 		local def = OreConfig.Definitions[name]

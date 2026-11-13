@@ -147,6 +147,9 @@ local biomeHumid = {}
 local biomeRegionWeight = {}
 local biomeTop = {}
 local biomeUnder = {}
+-- The biome's own stone (BiomeConfig `stoneBlock`), or the world's rock block
+-- for a biome that names none. What bare ridges, peaks and cold shores show.
+local biomeRock = {}
 
 -- The terrain profile, one array per field. Every one of these is blended
 -- across a border, which is what makes transitions geographical rather than
@@ -198,7 +201,7 @@ local spawnGuarantee = TerrainConfig.SpawnGuaranteeBlocks
 
 local function buildBiomeTables()
 	local arrays = {
-		biomeNames, biomeTemp, biomeHumid, biomeRegionWeight, biomeTop, biomeUnder,
+		biomeNames, biomeTemp, biomeHumid, biomeRegionWeight, biomeTop, biomeUnder, biomeRock,
 		biomeBase, biomeContinent, biomeHill, biomeRangeBias, biomeMountain, biomeSharpness,
 		biomeRoughness, biomeCliff, biomeRiver, biomeLake, biomeLandmark,
 		biomeAridity, biomeSnowLine,
@@ -229,6 +232,7 @@ local function buildBiomeTables()
 			biomeRegionWeight[i] = def.regionWeight
 			biomeTop[i] = def.topBlock
 			biomeUnder[i] = def.underBlock
+			biomeRock[i] = BiomeConfig.stoneFor(name, ROCK_BLOCK)
 
 			-- Every profile field falls back to TerrainDefaults, so a biome only
 			-- has to name what makes it different.
@@ -1198,20 +1202,22 @@ end
 local function surfaceBlock(dominant, height, mountain, mountainAmplitude, detail, shoreLevel)
 	local snowLine = biomeSnowLine[dominant] + detail * CONTOUR_VARIATION
 	local snowy = biomeTop[dominant] == SNOW_BLOCK or height >= snowLine
+	-- Bare rock is the biome's own stone (biomeRock), so a ridge in the Hallow
+	-- is hallowed stone and one in the snow country is plain stone.
 	if mountainAmplitude >= ROCK_MIN_AMPLITUDE and mountain > ROCK_RIDGE + 0.07 + detail * 0.025 then
-		return ROCK_BLOCK
+		return biomeRock[dominant]
 	end
 	if snowy then
 		return SNOW_BLOCK
 	end
 	if height >= ROCK_HEIGHT + detail * CONTOUR_VARIATION then
-		return ROCK_BLOCK
+		return biomeRock[dominant]
 	end
 	if shoreLevel > 0 and height >= shoreLevel and height <= shoreLevel + SHORE_HEIGHT then
 		-- Cold shores stay rocky. Inland temperate lakes retain grassy banks;
 		-- sand belongs to warm coasts and the desert, not every water contour.
 		if biomeTemp[dominant] < 0.35 then
-			return ROCK_BLOCK
+			return biomeRock[dominant]
 		end
 		if biomeTop[dominant] == SHORE_BLOCK or shoreLevel <= LandformConfig.SeaLevel then
 			return SHORE_BLOCK
@@ -1497,7 +1503,7 @@ function BiomeMap.sampleColumn(bx, bz)
 	local top
 	if waterTop > 0 then
 		local cold = biomeTemp[dominant] < 0.35 or height >= biomeSnowLine[dominant]
-		top = if cold then ROCK_BLOCK
+		top = if cold then biomeRock[dominant]
 			else if waterTop - height <= SHORE_HEIGHT then SHORE_BLOCK else under
 	else
 		top = surfaceBlock(dominant, height, mountainTerm, mountainAmp, detail, shoreLevel)

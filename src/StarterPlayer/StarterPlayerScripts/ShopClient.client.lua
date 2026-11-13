@@ -1,19 +1,19 @@
 --[[
 	ShopClient
 
-	The Aspect Shop: a coin button in the top bar (where the wish star was)
-	and the window it opens. Every aspect is on a tile; the panel beside the
-	grid shows the selected one - its tier, abilities and price - with one
-	button:
+	The Aspect Shop: a coin button in the top bar, and the Starfall
+	Merchant's prompt at spawn, open one window: a scrolling list with one
+	row per aspect - its icon, name, tier and three abilities - and that
+	row's button:
 
-	  BUY R$ 499    not bought yet: prompts its Game Pass. The purchase lands in
+	  R$ 499        not bought yet: prompts its Game Pass. The purchase lands in
 	                the inventory as a permanent PASS (ServerScriptService.AspectShop)
-	  REDEEM PASS   a pass is in the inventory: redeeming makes the aspect
+	  REDEEM        a pass is in the inventory: redeeming makes the aspect
 	                permanent; left unredeemed it can be traded
-	  TRADED AWAY   the pass was bought and traded; Roblox sells it only once
+	  TRADED        the pass was bought and traded; Roblox sells it only once
 	  EQUIP         owned permanently: makes it the aspect in use
 	  EQUIPPED      already in use
-	  NOT ON SALE   its Game Pass id in AspectShopConfig is still 0
+	  SOON          its Game Pass id in AspectShopConfig is still 0
 
 	Everything sold here is PERMANENT: owned for good, equipped any time, and
 	never destroyed when swapped out. The aspect in use is only lost when it
@@ -124,16 +124,16 @@ TopbarButtons.add(button, 4, function()
 end)
 
 -- ---------------------------------------------------------------------------
--- The window
+-- The window: a scrolling list, one row per aspect
 -- ---------------------------------------------------------------------------
 
-local WIDTH, HEIGHT = 700, 440
-local GRID_W, GRID_H = 392, 370
-local TILE_W, TILE_H = 86, 112
-local TILE_GAP = 6
-local TILE_ICON = 44
-local DETAIL_X = 26 + GRID_W + 12
-local DETAIL_W = WIDTH - DETAIL_X - 26
+local WIDTH, HEIGHT = 500, 470
+local LIST_X, LIST_Y = 22, 46
+local LIST_W, LIST_H = WIDTH - 44, 352
+local ROW_H = 88
+local ROW_GAP = 6
+local ROW_ICON = 52
+local BUTTON_W, BUTTON_H = 124, 46
 
 local window = PixelUI.image(screen, "frame_wood")
 window.Name = "Window"
@@ -185,97 +185,54 @@ local function text(parent, props)
 	return l
 end
 
--- Left: every aspect, on parchment.
-local gridPanel = PixelUI.image(window, "inset_parchment")
-gridPanel.Name = "Aspects"
-gridPanel.Position = UDim2.fromOffset(26, 44)
-gridPanel.Size = UDim2.fromOffset(GRID_W, GRID_H)
-gridPanel.ZIndex = 3
+local listPanel = PixelUI.image(window, "inset_parchment")
+listPanel.Name = "Aspects"
+listPanel.Position = UDim2.fromOffset(LIST_X, LIST_Y)
+listPanel.Size = UDim2.fromOffset(LIST_W, LIST_H)
+listPanel.ZIndex = 3
 
-local grid = Instance.new("Frame")
-grid.Name = "Grid"
-grid.BackgroundTransparency = 1
-grid.Size = UDim2.fromScale(1, 1)
-grid.ZIndex = 3
-grid.Parent = gridPanel
-local gridPad = Instance.new("UIPadding")
-gridPad.PaddingLeft = UDim.new(0, 12)
-gridPad.PaddingTop = UDim.new(0, 10)
-gridPad.Parent = grid
-local layout = Instance.new("UIGridLayout")
-layout.CellSize = UDim2.fromOffset(TILE_W, TILE_H)
-layout.CellPadding = UDim2.fromOffset(TILE_GAP, TILE_GAP)
-layout.SortOrder = Enum.SortOrder.LayoutOrder
-layout.Parent = grid
+local list = Instance.new("ScrollingFrame")
+list.Name = "List"
+list.BackgroundTransparency = 1
+list.BorderSizePixel = 0
+list.Position = UDim2.fromOffset(8, 8)
+list.Size = UDim2.new(1, -16, 1, -16)
+list.CanvasSize = UDim2.new()
+list.AutomaticCanvasSize = Enum.AutomaticSize.Y
+list.ScrollingDirection = Enum.ScrollingDirection.Y
+list.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+list.ZIndex = 4
+list.Parent = listPanel
+PixelUI.styleScrollBar(list)
+local listLayout = Instance.new("UIListLayout")
+listLayout.Padding = UDim.new(0, ROW_GAP)
+listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+listLayout.Parent = list
+local listPad = Instance.new("UIPadding")
+listPad.PaddingRight = UDim.new(0, 6)
+listPad.Parent = list
 
--- Right: the selected aspect.
-local detail = PixelUI.image(window, "inset_parchment")
-detail.Name = "Detail"
-detail.Position = UDim2.fromOffset(DETAIL_X, 44)
-detail.Size = UDim2.fromOffset(DETAIL_W, GRID_H)
-detail.ZIndex = 3
+-- What "permanent" means, said once, under the list.
+local note = text(window, { font = Theme.Fonts.Body, size = Theme.TextSize.Small, color = P.OnWood, wrap = true,
+	align = Enum.TextXAlignment.Center,
+	text = "Everything here is permanent: yours for good, never lost when swapped.",
+	at = UDim2.fromOffset(LIST_X, LIST_Y + LIST_H + 6), box = UDim2.fromOffset(LIST_W, 34) })
+note.TextStrokeColor3 = P.Outline
+note.TextStrokeTransparency = 0.4
 
-local detailBadge = PixelUI.image(detail, "slot")
-detailBadge.AnchorPoint = Vector2.new(0.5, 0)
-detailBadge.Position = UDim2.new(0.5, 0, 0, 12)
-detailBadge.Size = UDim2.fromOffset(76, 76)
-detailBadge.ZIndex = 4
-local detailIcon = AbilityStorage.icon(detailBadge, nil, 60)
-detailIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-detailIcon.Position = UDim2.fromScale(0.5, 0.5)
-detailIcon.ZIndex = 5
-
-local detailTier = text(detail, { font = Theme.Fonts.Heading, size = Theme.TextSize.Small, align = Enum.TextXAlignment.Center,
-	at = UDim2.fromOffset(0, 94), box = UDim2.new(1, 0, 0, 16) })
-local detailName = text(detail, { font = Theme.Fonts.Heading, size = Theme.TextSize.Heading, color = P.Heading,
-	align = Enum.TextXAlignment.Center, at = UDim2.fromOffset(0, 110), box = UDim2.new(1, 0, 0, 26) })
-local detailBlurb = text(detail, { font = Theme.Fonts.Body, size = Theme.TextSize.Small, align = Enum.TextXAlignment.Center,
-	at = UDim2.fromOffset(10, 136), box = UDim2.new(1, -20, 0, 16) })
-
-local listTop = 160
-text(detail, { text = "ABILITIES", font = Theme.Fonts.Heading, size = Theme.TextSize.Small, color = P.Heading,
-	at = UDim2.fromOffset(14, listTop), box = UDim2.new(1, -28, 0, 16) })
-local abilityRows = {}
-local function abilityRow(index)
-	local row = abilityRows[index]
-	if not row then
-		local y = listTop + 18 + (index - 1) * 20
-		row = {
-			-- Leaves room for the cost on the right: the panel is narrow.
-			name = text(detail, { size = Theme.TextSize.Small, at = UDim2.fromOffset(14, y), box = UDim2.new(1, -96, 0, 20) }),
-			cost = text(detail, { font = Theme.Fonts.Body, size = Theme.TextSize.Small, align = Enum.TextXAlignment.Right,
-				at = UDim2.fromOffset(14, y), box = UDim2.new(1, -28, 0, 20) }),
-		}
-		abilityRows[index] = row
-	end
-	return row
-end
-
--- What "permanent" means, said once where the decision is made.
-local note = text(detail, { font = Theme.Fonts.Body, size = Theme.TextSize.Small, wrap = true, align = Enum.TextXAlignment.Center,
-	-- Two lines at most at this width.
-	text = "Permanent: yours for good, never lost when swapped.",
-	at = UDim2.new(0, 12, 1, -112), box = UDim2.new(1, -24, 0, 36) })
-
-local status = text(detail, { size = Theme.TextSize.Small, color = P.BadLight, align = Enum.TextXAlignment.Center,
-	at = UDim2.new(0, 10, 1, -74), box = UDim2.new(1, -20, 0, 18) })
-
-local action = PixelUI.button(detail, { text = "", color = "green", size = UDim2.new(1, -28, 0, 48) })
-action.button.AnchorPoint = Vector2.new(0.5, 1)
-action.button.Position = UDim2.new(0.5, 0, 1, -12)
-action.button.ZIndex = 4
-action.label.TextSize = Theme.TextSize.Subheading
+local status = text(window, { size = Theme.TextSize.Small, color = P.BadLight, align = Enum.TextXAlignment.Center,
+	at = UDim2.fromOffset(LIST_X, LIST_Y + LIST_H + 40), box = UDim2.fromOffset(LIST_W, 18) })
 
 -- ---------------------------------------------------------------------------
 -- State and drawing
 -- ---------------------------------------------------------------------------
 
-local selected = AspectConfig.names()[1]
-local tiles = {}
+local rows = {}
 
 -- passId -> "R$ 499" once Roblox has said, "" while asking.
 local prices: { [number]: string } = {}
 local refresh -- below
+local perform -- below
 
 local function priceOf(aspectName: string): string?
 	local passId = ShopConfig.passFor(aspectName)
@@ -298,7 +255,7 @@ local function currentAspect(): string?
 	return if type(value) == "string" and value ~= "" then value else nil
 end
 
--- What the selected aspect's button does right now.
+-- What an aspect's button does right now.
 local function actionFor(aspectName: string): string
 	if AbilityStorage.isPermanent(aspectName) then
 		return if currentAspect() == aspectName then "equipped" else "equip"
@@ -316,177 +273,157 @@ local function actionFor(aspectName: string): string
 	return if ShopConfig.passFor(aspectName) > 0 then "buy" else "soon"
 end
 
-local function tileFor(aspectName: string)
-	local tile = tiles[aspectName]
-	if tile then
-		return tile
+local function rowFor(aspectName: string)
+	local row = rows[aspectName]
+	if row then
+		return row
 	end
 	local definition = AspectConfig.get(aspectName)
 
-	local b = Instance.new("ImageButton")
-	b.Name = aspectName
-	b.AutoButtonColor = false
-	b.BackgroundTransparency = 1
-	b.LayoutOrder = definition.order or 0
-	b.ZIndex = 4
-	b.Parent = grid
-	local content = Instance.new("Frame")
-	content.BackgroundTransparency = 1
-	content.Size = UDim2.fromScale(1, 1)
-	content.ZIndex = 4
-	content.Parent = b
-	PixelUI.bindButton(b, { idle = "slot", hover = "slot", pressed = "slot_dark", text = P.Ink }, content)
+	local frame = PixelUI.image(list, "slot")
+	frame.Name = aspectName
+	frame.LayoutOrder = definition.order or 0
+	frame.Size = UDim2.new(1, 0, 0, ROW_H)
+	frame.ZIndex = 4
 
-	local highlight = PixelUI.image(b, "slot_highlight")
-	highlight.AnchorPoint = Vector2.new(0.5, 0.5)
-	highlight.Position = UDim2.fromScale(0.5, 0.5)
-	highlight.Size = UDim2.new(1, RING_OUTSET * 2, 1, RING_OUTSET * 2)
-	highlight.ImageColor3 = GOLD
-	highlight.ZIndex = 7
-	highlight.Visible = false
-
-	local icon = AbilityStorage.icon(content, aspectName, TILE_ICON)
-	icon.AnchorPoint = Vector2.new(0.5, 0)
-	icon.Position = UDim2.new(0.5, 0, 0, 12)
+	local icon = AbilityStorage.icon(frame, aspectName, ROW_ICON)
+	icon.AnchorPoint = Vector2.new(0, 0.5)
+	icon.Position = UDim2.new(0, 12, 0, ROW_H / 2)
 	icon.ZIndex = 5
 
-	local name = text(content, { text = string.upper(definition.displayName or aspectName), font = Theme.Fonts.Heading,
-		size = Theme.TextSize.Small, color = Theme.rarityInk(definition.rarity), align = Enum.TextXAlignment.Center,
-		at = UDim2.fromOffset(2, 60), box = UDim2.new(1, -4, 0, 16), z = 5 })
-	name.Name = "AspectName"
-	local line = text(content, { font = Theme.Fonts.Number, size = Theme.TextSize.Small, align = Enum.TextXAlignment.Center,
-		at = UDim2.fromOffset(2, 80), box = UDim2.new(1, -4, 0, 16), z = 5 })
+	local textX = 12 + ROW_ICON + 12
+	local textW = -(textX + BUTTON_W + 18)
+	text(frame, { text = string.upper(definition.displayName or aspectName), font = Theme.Fonts.Heading,
+		size = Theme.TextSize.Subheading, color = Theme.rarityInk(definition.rarity),
+		at = UDim2.fromOffset(textX, 8), box = UDim2.new(1, textW, 0, 22), z = 5 })
+	local tier = text(frame, { font = Theme.Fonts.Heading, size = 12, color = P.Heading,
+		at = UDim2.fromOffset(textX, 30), box = UDim2.new(1, textW, 0, 16), z = 5 })
+	-- The three abilities, by name.
+	local names = {}
+	for _, abilityName in ipairs(AspectConfig.abilitiesOf(aspectName)) do
+		local ability = AbilityConfig.get(abilityName)
+		table.insert(names, ability and ability.displayName or abilityName)
+	end
+	-- Wraps onto a second line rather than cutting the last name off.
+	local abilities = text(frame, { text = table.concat(names, " · "), font = Theme.Fonts.Body, size = 13, wrap = true,
+		at = UDim2.fromOffset(textX, 47), box = UDim2.new(1, textW, 0, 34), z = 5 })
+	abilities.TextYAlignment = Enum.TextYAlignment.Top
 
-	-- Owned: a gold ribbon across the top, as in the inventory.
-	local ribbon = Instance.new("Frame")
-	ribbon.Name = "Owned"
-	ribbon.Position = UDim2.fromOffset(4, 3)
-	ribbon.Size = UDim2.new(1, -8, 0, 13)
-	ribbon.BackgroundColor3 = GOLD
-	ribbon.BorderSizePixel = 0
-	ribbon.ZIndex = 6
-	ribbon.Visible = false
-	ribbon.Parent = content
-	text(ribbon, { text = "PERMANENT", font = Theme.Fonts.Heading, size = 10, color = P.Outline,
-		align = Enum.TextXAlignment.Center, z = 6 })
+	local action = PixelUI.button(frame, {
+		text = "",
+		color = "green",
+		size = UDim2.fromOffset(BUTTON_W, BUTTON_H),
+		onClick = function()
+			perform(aspectName)
+		end,
+	})
+	action.button.AnchorPoint = Vector2.new(1, 0.5)
+	action.button.Position = UDim2.new(1, -12, 0, ROW_H / 2)
+	action.button.ZIndex = 5
+	action.label.TextSize = Theme.TextSize.Body
 
-	tile = { button = b, highlight = highlight, line = line, ribbon = ribbon }
-	tiles[aspectName] = tile
+	-- Clicking the row (anywhere but its button) opens it to list the aspect's
+	-- abilities with their rarity, mana and cooldown; clicking again closes it.
+	local toggle = text(frame, { text = "+", font = Theme.Fonts.Heading, size = Theme.TextSize.Heading, color = P.InkSoft,
+		align = Enum.TextXAlignment.Right, at = UDim2.new(1, -(BUTTON_W + 40), 0, 6), box = UDim2.fromOffset(20, 24), z = 5 })
 
-	b.MouseEnter:Connect(function()
+	local abilityNames = AspectConfig.abilitiesOf(aspectName)
+	local LINE_H = 26
+	local details = Instance.new("Frame")
+	details.Name = "Abilities"
+	details.BackgroundTransparency = 1
+	details.Position = UDim2.fromOffset(12, ROW_H - 2)
+	details.Size = UDim2.new(1, -24, 0, 10 + #abilityNames * LINE_H)
+	details.Visible = false
+	details.ZIndex = 5
+	details.Parent = frame
+	local divider = PixelUI.divider(details)
+	divider.Size = UDim2.new(1, 0, 0, 4)
+	divider.ZIndex = 5
+	for i, abilityName in ipairs(abilityNames) do
+		local ability = AbilityConfig.get(abilityName)
+		local y = 8 + (i - 1) * LINE_H
+		text(details, { text = ability and ability.displayName or abilityName, font = Theme.Fonts.Heading,
+			size = Theme.TextSize.Body, color = Theme.rarityInk(ability and ability.rarity),
+			at = UDim2.fromOffset(6, y), box = UDim2.new(0.42, 0, 0, LINE_H), z = 5 })
+		local stats = {}
+		if ability and ability.rarity then
+			table.insert(stats, string.upper(ability.rarity))
+		end
+		if ability and ability.manaCost then
+			table.insert(stats, string.format("%d MANA", ability.manaCost))
+		end
+		if ability and ability.cooldown then
+			table.insert(stats, string.format("%gs CD", ability.cooldown))
+		end
+		text(details, { text = table.concat(stats, "  ·  "), font = Theme.Fonts.Number, size = 12, color = P.InkSoft,
+			align = Enum.TextXAlignment.Right, at = UDim2.new(0.42, 0, 0, y), box = UDim2.new(0.58, -6, 0, LINE_H), z = 5 })
+	end
+
+	local open = false
+	local hit = Instance.new("TextButton")
+	hit.Name = "Toggle"
+	hit.Text = ""
+	hit.BackgroundTransparency = 1
+	hit.AutoButtonColor = false
+	hit.Size = UDim2.new(1, -(BUTTON_W + 24), 0, ROW_H)
+	hit.ZIndex = 6
+	hit.Parent = frame
+	hit.MouseButton1Click:Connect(function()
+		open = not open
+		Sounds.play("ui.click")
+		details.Visible = open
+		toggle.Text = if open then "-" else "+"
+		frame.Size = UDim2.new(1, 0, 0, if open then ROW_H + details.Size.Y.Offset else ROW_H)
+	end)
+	hit.MouseEnter:Connect(function()
 		Sounds.play("ui.hover")
 	end)
-	b.MouseButton1Click:Connect(function()
-		if selected ~= aspectName then
-			Sounds.play("ui.click")
-			selected = aspectName
-			status.Text = ""
-			refresh()
-		end
-	end)
-	return tile
+
+	row = { frame = frame, tier = tier, action = action, definition = definition }
+	rows[aspectName] = row
+	return row
 end
 
 function refresh()
-	local current = currentAspect()
-
 	for _, aspectName in ipairs(AspectConfig.names()) do
-		local tile = tileFor(aspectName)
+		local row = rowFor(aspectName)
 		local mode = actionFor(aspectName)
-		tile.highlight.Visible = aspectName == selected
-		tile.ribbon.Visible = AbilityStorage.isPermanent(aspectName)
-		if mode == "equipped" then
-			tile.line.Text = "EQUIPPED"
-			tile.line.TextColor3 = P.Heading
-		elseif mode == "equip" then
-			tile.line.Text = "OWNED"
-			tile.line.TextColor3 = P.Heading
-		elseif mode == "buy" then
+		local rarity = string.upper(row.definition.rarity or "")
+		row.tier.Text = if AbilityStorage.isPermanent(aspectName) then rarity .. " · PERMANENT" else rarity .. " ASPECT"
+		local action = row.action
+		if mode == "buy" then
 			local price = priceOf(aspectName)
-			tile.line.Text = if price and price ~= "" then price else "..."
-			tile.line.TextColor3 = P.Ink
+			action.label.Text = if price and price ~= "" then price else "BUY"
+			action.setColor("green")
+			action.setEnabled(true)
+		elseif mode == "equip" then
+			action.label.Text = "EQUIP"
+			action.setColor("tan")
+			action.setEnabled(true)
+		elseif mode == "equipped" then
+			action.label.Text = "EQUIPPED"
+			action.setEnabled(false)
 		elseif mode == "redeem" then
-			-- Short: the tile truncates anything longer.
-			tile.line.Text = "REDEEM"
-			tile.line.TextColor3 = P.Heading
+			action.label.Text = "REDEEM"
+			action.setColor("green")
+			action.setEnabled(true)
 		elseif mode == "traded" then
-			tile.line.Text = "TRADED"
-			tile.line.TextColor3 = Color3.fromRGB(120, 108, 92)
+			action.label.Text = "TRADED"
+			action.setEnabled(false)
 		else
-			tile.line.Text = "SOON"
-			tile.line.TextColor3 = Color3.fromRGB(120, 108, 92)
+			action.label.Text = "SOON"
+			action.setEnabled(false)
 		end
-	end
-
-	local definition = AspectConfig.get(selected)
-	if not definition then
-		return
-	end
-	AbilityStorage.setIcon(detailIcon, selected)
-	detailTier.Text = string.upper(definition.rarity or "") .. " ASPECT"
-	detailTier.TextColor3 = Theme.rarityInk(definition.rarity)
-	detailName.Text = string.upper(definition.displayName or selected)
-	detailBlurb.Text = definition.blurb or ""
-
-	local abilities = AspectConfig.abilitiesOf(selected)
-	for index = 1, math.max(#abilities, #abilityRows) do
-		local row = abilityRow(index)
-		local ability = abilities[index] and AbilityConfig.get(abilities[index])
-		row.name.Visible = ability ~= nil
-		row.cost.Visible = ability ~= nil
-		if ability then
-			row.name.Text = ability.displayName or abilities[index]
-			-- Mana only: with the cooldown too it runs into the name.
-			row.cost.Text = string.format("%d mana", ability.manaCost or 0)
-		end
-	end
-
-	local mode = actionFor(selected)
-	if mode == "buy" then
-		local price = priceOf(selected)
-		action.label.Text = if price and price ~= "" then "BUY  " .. price else "BUY"
-		action.setColor("green")
-		action.setEnabled(true)
-	elseif mode == "equip" then
-		action.label.Text = "EQUIP"
-		action.setColor("tan")
-		action.setEnabled(true)
-	elseif mode == "equipped" then
-		action.label.Text = "EQUIPPED"
-		action.setEnabled(false)
-	elseif mode == "redeem" then
-		action.label.Text = "REDEEM PASS"
-		action.setColor("green")
-		action.setEnabled(true)
-	elseif mode == "traded" then
-		action.label.Text = "TRADED AWAY"
-		action.setEnabled(false)
-	else
-		action.label.Text = "NOT ON SALE"
-		action.setEnabled(false)
-	end
-	note.Visible = mode ~= "soon"
-	note.Text = if mode == "traded" then "You traded this pass away. Another can only come from a trade."
-		elseif mode == "redeem" then "Redeem to keep it for good, or trade the pass instead."
-		elseif mode == "buy" then "Buys a pass: redeem it to keep, or trade it unredeemed."
-		else "Permanent: yours for good, never lost when swapped."
-	-- A permanent aspect in use is kept; anything else in use would be lost.
-	if mode == "equip" and current and not AbilityStorage.isPermanent(current) and status.Text == "" then
-		status.Text = string.format("Equipping replaces %s for good", AspectConfig.displayName(current))
-	elseif mode ~= "equip" and string.find(status.Text, "^Equipping") then
-		status.Text = ""
 	end
 end
 
-action.button.MouseButton1Click:Connect(function()
-	local aspectName = selected
+function perform(aspectName)
 	local mode = actionFor(aspectName)
 	if mode == "buy" then
-		Sounds.play("ui.click")
 		status.Text = ""
 		BuyRemote:FireServer(aspectName)
 	elseif mode == "redeem" then
-		Sounds.play("ui.click")
 		local label = AspectConfig.displayName(aspectName)
 		Confirm.ask({
 			title = string.format("Redeem the %s pass?", label),
@@ -499,9 +436,9 @@ action.button.MouseButton1Click:Connect(function()
 			end
 		end)
 	elseif mode == "equip" then
-		Sounds.play("ui.click")
 		local current = currentAspect()
 		if current and not AbilityStorage.isPermanent(current) then
+			-- A permanent aspect in use is kept; anything else in use is lost.
 			local label, currentLabel = AspectConfig.displayName(aspectName), AspectConfig.displayName(current)
 			Confirm.ask({
 				title = string.format("Equip %s?", label),
@@ -517,10 +454,8 @@ action.button.MouseButton1Click:Connect(function()
 		else
 			AbilityStorage.use(aspectName)
 		end
-	else
-		Sounds.play("ui.denied")
 	end
-end)
+end
 
 AbilityStorage.Changed:Connect(refresh)
 player:GetAttributeChangedSignal("Aspect"):Connect(function()
@@ -539,4 +474,13 @@ end)
 
 RunService.RenderStepped:Connect(function()
 	ring.Visible = window.Visible
+end)
+
+game:GetService("ProximityPromptService").PromptTriggered:Connect(function(prompt, triggeringPlayer)
+	if triggeringPlayer ~= player or prompt.Name ~= "StarfallShop" then return end
+	local hub = workspace:FindFirstChild("StarfallHub")
+	if not hub or not prompt:IsDescendantOf(hub.StarfallMerchant) then return end
+	window.Visible = true
+	status.Text = ""
+	refresh()
 end)

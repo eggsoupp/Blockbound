@@ -1,0 +1,8 @@
+{
+  "name": "VillageImport",
+  "tree": {
+    "$className": "Folder",
+    "BuildVillage": { "$path": "BuildVillage.lua" },
+    "Data": { "$path": "data" }
+  }
+}

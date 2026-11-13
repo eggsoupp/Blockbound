@@ -133,6 +133,26 @@ function BlockConfig.surfaceFor(blockName)
 	return BlockConfig.Surfaces[blockName]
 end
 
+-- Lets a registry (CaveDecor) declare one of its blocks see-through or
+-- walk-through. A hand-written Surfaces entry wins.
+function BlockConfig.registerSurface(blockName, surface)
+	if type(blockName) == "string" and type(surface) == "table" and BlockConfig.Surfaces[blockName] == nil then
+		BlockConfig.Surfaces[blockName] = surface
+	end
+end
+
+--[[
+	Blocks that are always drawn one Part per block, never merged into a run
+	with their neighbours (the terrain mesher asks isUnmerged). Cave
+	decorations register here: each is its own Part, so an authored template
+	of any shape can replace the stand-in one for one.
+]]
+BlockConfig.Unmerged = {}
+
+function BlockConfig.isUnmerged(blockName)
+	return BlockConfig.Unmerged[blockName] == true
+end
+
 -- ---------------------------------------------------------------------------
 -- Queries
 -- ---------------------------------------------------------------------------
@@ -241,6 +261,9 @@ function BlockConfig.registerBlock(blockName, facts)
 	end
 	if override.power == nil and facts.power ~= nil then
 		override.power = facts.power
+	end
+	if facts.unmerged then
+		BlockConfig.Unmerged[blockName] = true
 	end
 end
 

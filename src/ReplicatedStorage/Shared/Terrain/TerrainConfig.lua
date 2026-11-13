@@ -141,6 +141,11 @@ TerrainConfig.SpawnZones = {
 	ProtectedBlocks = 12,
 	StarterBlocks = 64,
 	StarterBuildHeight = 3,
+	-- Spawn village ground (GeneratedColumns): a level circle this many blocks
+	-- in radius, at the median natural height inside it, then a ring this
+	-- wide easing back to the natural ground in whole-block terraces.
+	VillageFlatBlocks = 13,
+	VillageBlendBlocks = 9,
 }
 
 --[[

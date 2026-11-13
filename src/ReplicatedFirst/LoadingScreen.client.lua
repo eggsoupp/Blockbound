@@ -118,7 +118,7 @@ local FONT = {
 local TIPS = {
 	desktop = {
 		"Press E to open your bag.",
-		"Z, X and V cast your abilities.",
+		"Z, X, V and F cast your abilities.",
 		"Tab opens your quests and the bestiary.",
 	},
 	mobile = {

@@ -118,6 +118,22 @@ else
 	spawn.CanCollide = true
 end
 
+-- The open world spawns in the village (SpawnHub), which stands on the level
+-- plateau the terrain generates round the origin, so the origin's surface is
+-- the village floor. The spawn sits on its south road, looking north.
+if not IS_ISLAND then
+	local SpawnHub = require(ServerScriptService:WaitForChild("SpawnHub"))
+	SpawnHub.build(surfaceY)
+	platform:Destroy()
+	local at = SpawnHub.SpawnPoint
+	spawn.CFrame = CFrame.new(at.X, surfaceY + 0.25 + height * 0.5, at.Z)
+	spawn.Transparency = 1
+	spawn.CanCollide, spawn.CanQuery, spawn.CanTouch = false, false, false
+	for _, child in ipairs(spawn:GetChildren()) do
+		if child:IsA("Decal") or child:IsA("Texture") then child.Transparency = 1 end
+	end
+end
+
 -- Belt and braces: a player who ends up under the world - spawning before the
 -- platform existed, or through a chunk that had not loaded - is put back
 -- rather than left falling forever.

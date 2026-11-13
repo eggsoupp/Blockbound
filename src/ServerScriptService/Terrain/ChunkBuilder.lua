@@ -14,9 +14,13 @@ local TerrainConfig = require(TerrainShared:WaitForChild("TerrainConfig"))
 local TerrainGrid = require(TerrainShared:WaitForChild("TerrainGrid"))
 local StructureRegistry = require(TerrainShared:WaitForChild("StructureRegistry"))
 local StrataConfig = require(TerrainShared:WaitForChild("StrataConfig"))
+local BiomeConfig = require(TerrainShared:WaitForChild("BiomeConfig"))
 local ChunkEdits = require(TerrainShared:WaitForChild("ChunkEdits"))
 local CaveConfig = require(TerrainShared:WaitForChild("CaveConfig"))
 local CaveMap = require(TerrainShared:WaitForChild("CaveMap"))
+local CaveDecor = require(TerrainShared:WaitForChild("CaveDecor"))
+local OreConfig = require(TerrainShared:WaitForChild("OreConfig"))
+local OreRegistry = require(TerrainShared:WaitForChild("OreRegistry"))
 local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
 local GeneratedColumns = require(script.Parent:WaitForChild("GeneratedColumns"))
@@ -35,6 +39,15 @@ local CHUNK_AREA = TerrainGrid.CHUNK_AREA
 local FLOOR_Y = TerrainConfig.WorldFloorY
 local BEDROCK_TOP_Y = FLOOR_Y + StrataConfig.BedrockThickness - 1
 local STRATA_JITTER = StrataConfig.JitterBlocks
+
+-- Biome name -> its own stone, and the stone of a biome that has none. A
+-- column's stone is its biome's from the soil down to bedrock (BiomeConfig
+-- `stoneBlock`); the Island's biome is not in the table, so it keeps Stone.
+local DEEP_BLOCK = StrataConfig.getDeepBlock()
+local STONE_BY_BIOME = {}
+for name, definition in pairs(BiomeConfig.Definitions) do
+	STONE_BY_BIOME[name] = definition.stoneBlock
+end
 local DIR_X = TerrainGrid.DIR_X
 local DIR_Z = TerrainGrid.DIR_Z
 
@@ -64,6 +77,15 @@ local refreshChunkBorders = ColumnVisibility.refreshChunkBorders
 local syncChunkWater = TerrainWater.syncChunkWater
 local clearChunkWater = TerrainWater.clearChunkWater
 
+-- Ore on cave surfaces (see ORE ON SHOW). The depth band is read per call:
+-- OreRegistry only knows it once it has been given the seed.
+local EXPOSE_ORES = OreConfig.Enabled and OreConfig.CaveExposure.Enabled
+local ORE_GONE_STRIDE = OreDepletion.STRIDE
+local ORE_MIN_DEPTH, ORE_MAX_DEPTH = 0, math.huge
+local exposedOreAt = OreRegistry.exposedBlockAt
+local decorBlockName = CaveDecor.blockName
+local intervalsContain = CaveMap.intervalsContain
+
 local chargeBudget = GenerationBudget.chargeBudget
 local newGenBudget = GenerationBudget.newGenBudget
 local chunkCpuSpent = GenerationBudget.chunkCpuSpent
@@ -79,8 +101,16 @@ end
 -- The world seed, set once at Init (strataJitter is a hash of it).
 local baseSeed = 0
 
+-- Called at Init, after OreRegistry has its seed.
 function ChunkBuilder.setSeed(seed)
 	baseSeed = seed
+
+	local ores = OreRegistry.getStats()
+	if ores.ores > 0 then
+		ORE_MIN_DEPTH, ORE_MAX_DEPTH = ores.minDepth, ores.maxDepth
+	else
+		ORE_MIN_DEPTH, ORE_MAX_DEPTH = math.huge, -math.huge
+	end
 end
 
 --[[
@@ -140,15 +170,149 @@ local function restyleHaloEdge(data, record, hx, hz, bx, bz)
 end
 
 --[[
-	Carves a chunk's caves into its data from the CaveMap record, then applies
-	the biome profile's materials to the surfaces that now face the air.
+	ORE ON SHOW
+
+	The rock lining a generated cave carries far more ore than rock sealed in
+	the ground (OreConfig.CaveExposure), which is what makes walking a cave
+	more rewarding than tunnelling blind. Every block that faces cave air - a
+	floor, a ceiling, a wall - is asked OreRegistry.exposedBlockAt once, here,
+	while the chunk is built, and an answer is written as an ordinary override.
+
+	Decided from the caves the WORLD carved, never from what players dig, so
+	mining cannot conjure ore; and an ore that has already been harvested
+	(data.oreGone, see OreDepletion) is left as rock, so a chunk that regrows
+	does not put it back.
+
+	A block's answer depends only on its own position, so the wall a chunk
+	shares with its neighbour comes out the same from either side.
+]]
+local exposedOres = 0
+
+local function exposeOre(data, cell, by)
+	if by <= BEDROCK_TOP_Y or by >= data.currentHeight[cell] then
+		return
+	end
+
+	local height = data.height[cell]
+	local depth = height - 1 - by
+	if depth < ORE_MIN_DEPTH or depth > ORE_MAX_DEPTH then
+		return
+	end
+
+	local override = data.override[cell]
+	if override and override[by] then
+		return -- already decided, by this pass or by a cave material
+	end
+
+	local base = StrataConfig.blockAt(depth, data.underName[cell], data.jitter[cell], data.stoneName[cell])
+	local index = cell - 1
+	local ore = exposedOreAt(data.minBlockX + index // CHUNK_SIZE, by, data.minBlockZ + index % CHUNK_SIZE, base, depth)
+	if not ore then
+		return
+	end
+
+	local gone = data.oreGone
+	if gone and gone[cell * ORE_GONE_STRIDE + (by - FLOOR_Y)] then
+		return
+	end
+
+	local removed = data.removed[cell]
+	if removed and removed[by] then
+		return
+	end
+	if not override then
+		override = {}
+		data.override[cell] = override
+	end
+	override[by] = ore
+	exposedOres += 1
+end
+
+-- The rows of `air` (a neighbouring column's cave air) beside which the
+-- column `cell` is solid: its wall. `own` is that column's own air, or nil.
+local function exposeWall(data, cell, air, own)
+	for i = 1, #air, 2 do
+		for by = air[i], air[i + 1] do
+			if own == nil or not intervalsContain(own, by) then
+				exposeOre(data, cell, by)
+			end
+		end
+	end
+end
+
+local function exposeHaloEdge(data, record, hx, hz, bx, bz)
+	local air = CaveMap.haloIntervals(record, hx, hz)
+	if air then
+		local cell = bx * CHUNK_SIZE + bz + 1
+		exposeWall(data, cell, air, record.cells[cell])
+	end
+end
+
+local function exposeCaveOres(data, record)
+	local cells = record.cells
+	exposedOres = 0
+
+	for cell, intervals in pairs(cells) do
+		local index = cell - 1
+		local bx, bz = index // CHUNK_SIZE, index % CHUNK_SIZE
+
+		for i = 1, #intervals, 2 do
+			exposeOre(data, cell, intervals[i] - 1)
+			exposeOre(data, cell, intervals[i + 1] + 1)
+		end
+
+		for d = 1, 4 do
+			local nbx, nbz = bx + DIR_X[d], bz + DIR_Z[d]
+			if nbx >= 0 and nbx < CHUNK_SIZE and nbz >= 0 and nbz < CHUNK_SIZE then
+				local neighbour = nbx * CHUNK_SIZE + nbz + 1
+				exposeWall(data, neighbour, intervals, cells[neighbour])
+			end
+		end
+	end
+
+	-- Our border blocks that face air in the chunk next door.
+	for i = 0, CHUNK_SIZE - 1 do
+		exposeHaloEdge(data, record, -1, i, 0, i)
+		exposeHaloEdge(data, record, CHUNK_SIZE, i, CHUNK_SIZE - 1, i)
+		exposeHaloEdge(data, record, i, -1, i, 0)
+		exposeHaloEdge(data, record, i, CHUNK_SIZE, i, CHUNK_SIZE - 1)
+	end
+
+	return exposedOres
+end
+
+--[[
+	Names the cells CaveDecor left standing on the cave's floors and ceilings
+	(record.decor). They were never carved, so they are ordinary solid cells
+	with a block name of their own. A collectible one that was harvested
+	before (OreDepletion) is carved away instead: the crystal does not regrow.
+]]
+local function applyDecor(data, record)
+	local decor = record.decor
+	local gone = data.oreGone
+	for i = 1, record.decorCount * 3, 3 do
+		local cell, by = decor[i], decor[i + 1]
+		if by < data.currentHeight[cell] then
+			if gone and gone[cell * ORE_GONE_STRIDE + (by - FLOOR_Y)] then
+				markRemoved(data, cell, by)
+			else
+				overrideNatural(data, cell, by, decorBlockName(decor[i + 2]))
+			end
+		end
+	end
+end
+
+--[[
+	Carves a chunk's caves into its data from the CaveMap record, then decides
+	what the surfaces that now face the air are made of: the biome profile's
+	materials where it names any, ore on show, and the decorations.
 
 	Air is marked top-down per column through markRemoved, so an entrance that
 	reaches the surface lowers the column exactly as mining its top would, and
 	a tunnel below the surface becomes a disturbed band the general visibility
-	path scans. Materials are plain overrides on the blocks around each
-	interval; walls shared with the next chunk are found through the record's
-	halo, so both sides of a border wall agree.
+	path scans. Materials and ores are plain overrides on the blocks around
+	each interval; walls shared with the next chunk are found through the
+	record's halo, so both sides of a border wall agree.
 ]]
 local function applyCaves(data, record)
 	local plans = record.plans
@@ -204,7 +368,18 @@ local function applyCaves(data, record)
 		restyleHaloEdge(data, record, i, CHUNK_SIZE, i, CHUNK_SIZE - 1)
 	end
 
-	return carved
+	-- Ore after the materials (a restyled block is not asked again) and the
+	-- decorations last, since a floor material lands on the cell under the
+	-- lowest air, which is where a floor decoration stands.
+	local ores = 0
+	if EXPOSE_ORES then
+		ores = exposeCaveOres(data, record)
+	end
+	if record.decorCount > 0 then
+		applyDecor(data, record)
+	end
+
+	return carved, ores
 end
 
 --[[
@@ -266,6 +441,7 @@ local function generateChunk(cx, cz, job)
 	local topName = table.create(CHUNK_AREA)
 	local underName = table.create(CHUNK_AREA)
 	local biomeName = table.create(CHUNK_AREA)
+	local stoneName = table.create(CHUNK_AREA)
 	local waterTop = table.create(CHUNK_AREA, 0)
 	local jitter = table.create(CHUNK_AREA, 0)
 	local topScan = table.create(CHUNK_AREA, 0)
@@ -289,6 +465,7 @@ local function generateChunk(cx, cz, job)
 		topName[cell] = top
 		underName[cell] = under
 		biomeName[cell] = biome
+		stoneName[cell] = STONE_BY_BIOME[biome] or DEEP_BLOCK
 		waterTop[cell] = water
 		jitter[cell] = strataJitter(blockX, blockZ)
 		visible[cell] = {}
@@ -398,6 +575,7 @@ local function generateChunk(cx, cz, job)
 		topName = topName,
 		underName = underName,
 		biomeName = biomeName,
+		stoneName = stoneName,
 		waterTop = waterTop,
 		jitter = jitter,
 		topScan = topScan,
@@ -449,9 +627,11 @@ local function generateChunk(cx, cz, job)
 	-- before edits, so a player's changes win over the cave. See CAVES.
 	if caveRecord and not caveRecord.empty then
 		phaseStart = chunkCpuSpent(ctx)
-		local carved = applyCaves(data, caveRecord)
+		local carved, ores = applyCaves(data, caveRecord)
 		Profiler.count("Terrain.cave.chunksWithCaves")
 		Profiler.sample("Terrain.cave.carvedBlocks", carved, "blocks")
+		Profiler.sample("Terrain.cave.exposedOres", ores, "blocks")
+		Profiler.sample("Terrain.cave.decorations", caveRecord.decorCount, "blocks")
 		Profiler.sample("Terrain.cave.plansInChunk", caveRecord.planCount, "plans")
 		Profiler.sample("Terrain.gen.1c_caveCarve", (chunkCpuSpent(ctx) - phaseStart) * 1000, "ms")
 		yieldIfOverBudget(ctx)

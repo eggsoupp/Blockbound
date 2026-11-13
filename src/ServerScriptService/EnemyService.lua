@@ -931,7 +931,9 @@ local function removeEntry(model, reason)
 
 	entries[model] = nil
 	held[model] = nil
-	aliveCount -= 1
+	if not entry.adopted then
+		aliveCount -= 1
+	end
 
 	traitCall(entry, "finish", reason)
 
@@ -950,7 +952,14 @@ local function removeEntry(model, reason)
 		BossService.ended(entry)
 	end
 
-	if model.Parent then
+	if entry.adopted then
+		-- Not ours to destroy (a placed training dummy): only what this
+		-- service added to it goes.
+		local plate = model:FindFirstChild("NamePlate", true)
+		if plate then
+			plate:Destroy()
+		end
+	elseif model.Parent then
 		model:Destroy()
 	end
 
@@ -1177,6 +1186,64 @@ function EnemyService.spawn(name, position)
 
 	Profiler.count("Enemy.spawned")
 
+	return model
+end
+
+--[[
+	Registers a model that is ALREADY in the world as an enemy of definition
+	`name`, where it stands: nothing is cloned, moved, re-anchored or made
+	non-colliding. For things that are hit like enemies but belong to someone
+	else - a placed training dummy (EnemyConfig.Definitions.TrainingDummy).
+
+	The definition should name a behaviour, which owns the tick (so nothing
+	here moves it) and decides what a fatal blow does. An adopted entry does
+	not count towards MaxAlive, and when it ends - its model removed, a
+	/despawn - the model is left alone and only its name plate goes.
+
+	Returns the model, or nil if the name or the model will not do.
+]]
+function EnemyService.adopt(name, model)
+	local def = EnemyConfig.Definitions[name]
+	if not def or typeof(model) ~= "Instance" or not model:IsA("Model") or entries[model] then
+		return nil
+	end
+	local root = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart", true)
+	if not root then
+		return nil
+	end
+	local boundsCFrame, boundsSize = model:GetBoundingBox()
+	local pivot = model:GetPivot()
+	local entry = {
+		name = name,
+		def = def,
+		model = model,
+		root = root,
+		height = boundsSize.Y,
+		feetOffset = pivot.Position.Y - (boundsCFrame.Position.Y - boundsSize.Y * 0.5),
+		health = def.health,
+		phase = 0,
+		state = "Grounded",
+		stateUntil = 0,
+		velocity = Vector3.zero,
+		facing = pivot.LookVector,
+		lunging = false,
+		nextGroundCheck = 0,
+		lastSeenPlayerAt = os.clock(),
+		lastHitAt = setmetatable({}, { __mode = "k" }),
+		orient = CFrame.identity,
+		adopted = true,
+	}
+	rollCrowdTraits(entry, boundsSize)
+	entry.behaviour = behaviourFor(def)
+	local _, healthFill = buildNamePlate(model, def, entry.height)
+	entry.healthFill = healthFill
+	entries[model] = entry
+	if entry.behaviour and entry.behaviour.start then
+		local ok, err = pcall(entry.behaviour.start, entry)
+		if not ok then
+			warn(string.format("[EnemyService] %s behaviour start errored: %s", name, tostring(err)))
+		end
+	end
 	return model
 end
 
@@ -2188,7 +2255,9 @@ local function onHeartbeat(dt)
 	local step = tickAccumulator
 	tickAccumulator = 0
 
-	if aliveCount == 0 then
+	-- Not aliveCount: adopted entries (training dummies) are not counted in
+	-- it but still need their tick.
+	if next(entries) == nil then
 		return
 	end
 

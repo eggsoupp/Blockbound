@@ -69,9 +69,11 @@ local playerGui = player:WaitForChild("PlayerGui")
 local ATTACK_SIZE = 72
 local ATTACK_OFFSET = Vector2.new(-95, 0)
 
-local ABILITY_SIZE = 56
-local ABILITY_RADIUS = 132
-local ABILITY_ANGLES = { 145, 115, 85 }
+-- Four along the arc (Z, X, V, F). 77 degrees keeps the last one on screen
+-- beside a phone's jump button; 145 keeps the first clear of RUN.
+local ABILITY_SIZE = 52
+local ABILITY_RADIUS = 140
+local ABILITY_ANGLES = { 145, 122, 100, 77 }
 
 --[[
 	Left of the ability arc rather than above it: above, they ran into the

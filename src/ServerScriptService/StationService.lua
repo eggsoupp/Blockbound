@@ -577,7 +577,8 @@ local function prepareParts(root, key)
 			descendant.Anchored = true
 			descendant.CanCollide = not noCollide
 			descendant.CanQuery = not (noCollide and descendant.Transparency >= 1)
-			descendant.CanTouch = false
+			-- A seat sits whoever walks into it, which needs touches.
+			descendant.CanTouch = descendant:IsA("Seat")
 			descendant:SetAttribute("StationCellKey", key)
 			CollectionService:AddTag(descendant, STATION_TAG)
 		elseif descendant:IsA("LuaSourceContainer") then

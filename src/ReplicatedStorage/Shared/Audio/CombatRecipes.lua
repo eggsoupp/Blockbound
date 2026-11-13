@@ -194,6 +194,129 @@ R["charge.energy"] = recipe({
 }, { range = 180 })
 
 -- ---------------------------------------------------------------------------
+-- Eclipse Prison (EclipseVFX): the Celestial capstone, so the biggest player
+-- sounds in the game - every stage pitched low, the flare as heavy as Signus's
+-- totality.
+-- ---------------------------------------------------------------------------
+
+R["eclipse.call"] = recipe({
+	{ "magic_cast", 0.45, 0.7, 0, 0.04 },
+	{ "power_up", 0.42, 0.75, 0, 0.04 },
+	{ "teleport_whomp", 0.36, 0.7, 0.02, 0.05 },
+	{ "electric_hum", 0.28, 0.6, 0.12, 0.05 },
+}, { range = 260 })
+R["eclipse.ground"] = recipe({
+	{ "ground_slam", 0.6, 0.75, 0, 0.04 },
+	{ "boom_deep1", 0.5, 0.65, 0, 0.03 },
+	{ "earth_crumble", 0.5, 0.8, 0.04, 0.06 },
+	{ "grit_concrete1", 0.36, 0.85, 0.02, 0.08 },
+	{ "magic_lock", 0.3, 0.7, 0.08, 0.04 },
+}, { duck = 0.45, range = 360, near = 24 })
+-- One per landing row; the caller raises the pitch row by row.
+R["eclipse.row"] = recipe({
+	{ "metal_pound", 0.4, 0.75, 0, 0.05 },
+	{ "thump_tight", 0.4, 0.6, 0, 0.05 },
+	{ "grit_concrete2", 0.26, 0.9, 0.01, 0.1 },
+}, { range = 320, near = 20 })
+R["eclipse.lid"] = recipe({
+	{ "metal_crash", 0.55, 0.65, 0, 0.04 },
+	{ "ground_slam", 0.55, 0.7, 0, 0.04 },
+	{ "boom_deep2", 0.5, 0.65, 0.01, 0.03 },
+	{ "ring_hit", 0.36, 0.55, 0.03, 0.03 },
+	{ "magic_lock", 0.4, 0.6, 0.05, 0.04 },
+}, { duck = 0.5, range = 380, near = 26 })
+R["eclipse.hum"] = recipe({
+	{ "electric_shock", 0.3, 0.75, 0, 0.08 },
+	{ "electric_hum", 0.26, 0.65, 0, 0.06 },
+}, { range = 260 })
+R["eclipse.swordAppear"] = recipe({
+	{ "swish_rise", 0.22, 1.15, 0, 0.1 },
+	{ "sparkle", 0.12, 0.8, 0, 0.1 },
+}, { range = 220 })
+R["eclipse.sword"] = recipe({
+	{ "knife_hit", 0.42, 0.85, 0, 0.08 },
+	{ "plasma_cut", 0.34, 0.75, 0, 0.08 },
+	{ "sword_hit", 0.3, 0.8, 0.005, 0.08 },
+	{ "grit_concrete2", 0.2, 0.9, 0.01, 0.12 },
+}, { range = 300, near = 20 })
+R["eclipse.charge"] = recipe({
+	{ "charge_short", 0.42, 0.6, 0, 0.03 },
+	{ "plasma_charged", 0.45, 0.65, 0, 0.03 },
+	{ "air_suction", 0.45, 0.55, 0.05, 0.04 },
+	{ "bass_drop", 0.4, 0.8, 0.1, 0.03 },
+	{ "electric_hum", 0.32, 0.55, 0.15, 0.04 },
+}, { duck = 0.4, range = 380, near = 26 })
+R["eclipse.bolt"] = recipe({
+	{ "bolt_impact", 0.5, 0.85, 0, 0.06 },
+	{ "lightning_close", 0.38, 0.8, 0, 0.05 },
+	{ "zap_quick", 0.3, 0.75, 0, 0.08 },
+}, { duck = 0.2, range = 360 })
+R["eclipse.flare"] = recipe({
+	{ "explosion", 0.65, 0.6, 0, 0.03 },
+	{ "cine_hit", 0.6, 0.65, 0, 0.03 },
+	{ "ring_hit", 0.52, 0.55, 0, 0.02 },
+	{ "boom_deep1", 0.7, 0.55, 0.01, 0.02 },
+	{ "boom_deep2", 0.55, 0.5, 0.03, 0.02 },
+	{ "glass_break1", 0.45, 0.7, 0.02, 0.05 },
+	{ "bass_drop", 0.5, 0.7, 0.04, 0.03 },
+	{ "distant_boom", 0.5, 0.75, 0.25, 0.04 },
+	{ "earth_crumble", 0.4, 0.75, 0.2, 0.06 },
+}, { duck = 1, range = 520, near = 40 })
+R["eclipse.aftershock"] = recipe({
+	{ "glass_break2", 0.45, 0.75, 0, 0.05 },
+	{ "glitch_blast", 0.4, 0.65, 0, 0.05 },
+	{ "explosion_round", 0.45, 0.65, 0.02, 0.04 },
+	{ "electric_shock", 0.32, 0.65, 0.04, 0.06 },
+	{ "grit_glass", 0.3, 0.8, 0.06, 0.08 },
+}, { duck = 0.5, range = 440, near = 30 })
+R["eclipse.settle"] = recipe({
+	{ "distant_boom", 0.36, 0.6, 0, 0.04 },
+	{ "portal_close", 0.34, 0.55, 0.05, 0.04 },
+	{ "earth_crumble", 0.28, 0.7, 0.1, 0.06 },
+}, { range = 400 })
+
+-- ---------------------------------------------------------------------------
+-- Penumbra (PenumbraVFX): Celestial's F. The dark drawn in, a white-hot
+-- burst the caster vanishes into, crescents whipping round it, and a shroud
+-- that hums and crackles as it thins.
+-- ---------------------------------------------------------------------------
+
+R["penumbra.gather"] = recipe({
+	{ "air_suction", 0.45, 0.85, 0, 0.04 },
+	{ "charge_short", 0.38, 0.8, 0, 0.04 },
+	{ "magic_warp", 0.3, 0.7, 0.04, 0.05 },
+}, { range = 220 })
+R["penumbra.burst"] = recipe({
+	{ "teleport_whomp", 0.6, 0.7, 0, 0.04 },
+	{ "energy_blast", 0.5, 0.75, 0, 0.04 },
+	{ "boom_deep1", 0.55, 0.7, 0, 0.03 },
+	{ "explosive_whoosh", 0.45, 0.8, 0.01, 0.05 },
+	{ "glitch_blast", 0.32, 0.8, 0.02, 0.05 },
+	{ "bass_drop", 0.36, 0.85, 0.03, 0.03 },
+}, { duck = 0.6, range = 340, near = 26 })
+R["penumbra.crescent"] = recipe({
+	{ "heavy_whoosh", 0.3, 1.0, 0, 0.12 },
+	{ "plasma_cut", 0.22, 0.85, 0, 0.1 },
+}, { range = 220 })
+R["penumbra.shroud"] = recipe({
+	{ "magic_lock", 0.32, 0.6, 0, 0.04 },
+	{ "electric_hum", 0.3, 0.55, 0, 0.05 },
+	{ "poof_air", 0.3, 0.6, 0.02, 0.06 },
+}, { range = 240 })
+R["penumbra.tick"] = recipe({
+	{ "electric_shock", 0.32, 0.8, 0, 0.08 },
+	{ "zap_quick", 0.26, 0.75, 0, 0.1 },
+}, { range = 220 })
+R["penumbra.return"] = recipe({
+	{ "magic_warp", 0.32, 0.9, 0, 0.05 },
+	{ "poof_punch", 0.28, 0.75, 0, 0.06 },
+}, { range = 200 })
+R["penumbra.fade"] = recipe({
+	{ "portal_close", 0.3, 0.6, 0, 0.04 },
+	{ "swish_rise", 0.18, 0.7, 0.05, 0.08 },
+}, { range = 220 })
+
+-- ---------------------------------------------------------------------------
 -- Signus
 -- ---------------------------------------------------------------------------
 

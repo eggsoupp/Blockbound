@@ -96,6 +96,7 @@ ContentAudit.VfxAssets = {
 	CataclysmVFX = {"CataclysmParticles", "CataclysmCamera"},
 	StarterVFX = {"StarterParticles", "CataclysmParticles", "PackAssembly"},
 	ThunderVFX = {"PackAssembly"},
+	PenumbraVFX = {"PackAssembly", "EclipseParticles", "CastPose", "ImpactFX", "AbilityKit"},
 	SignusVFX = {"SignusFX", "SignusParticles", "SignusVisuals", "SignusChoreography", "SignusAssemblies"},
 }
 
@@ -111,6 +112,7 @@ ContentAudit.NoCastAnimationByDesign = {
 	WaterBlade = "particle charge and crescent slash",
 	EchoStep = "departure, travel ribbon and arrival particles",
 	BlockWall = "physical terrain movement and dust particles",
+	Penumbra = "posed in code by CastPose (ground and flying poses differ)",
 }
 
 -- Every field ItemDefinitions documents or a system reads. Anything else is
@@ -308,6 +310,7 @@ function ContentAudit.run()
 	local LandformConfig = load(report, TerrainShared, "LandformConfig", "Shared.Terrain.LandformConfig")
 	local StrataConfig = load(report, TerrainShared, "StrataConfig", "Shared.Terrain.StrataConfig")
 	local OreConfig = load(report, TerrainShared, "OreConfig", "Shared.Terrain.OreConfig")
+	local CaveDecorConfig = load(report, TerrainShared, "CaveDecorConfig", "Shared.Terrain.CaveDecorConfig")
 	local StructureConfig = load(report, TerrainShared, "StructureConfig", "Shared.Terrain.StructureConfig")
 	local IslandConfig = load(report, TerrainShared, "IslandConfig", "Shared.Terrain.IslandConfig")
 
@@ -534,7 +537,10 @@ function ContentAudit.run()
 			local assetName = definition.asset
 			local asset = assetsFolder and type(assetName) == "string" and EnemyConfig.findAsset(assetsFolder, assetName)
 
-			if not asset then
+			if definition.adopted then
+				-- Never spawned: an existing model is registered (EnemyService.adopt).
+				continue
+			elseif not asset then
 				add(report, "Errors", "Enemies", subject, string.format(
 					"asset '%s' not found in ReplicatedStorage.%s; it cannot spawn",
 					tostring(assetName), tostring(EnemyConfig.AssetsFolder)
@@ -752,6 +758,14 @@ function ContentAudit.run()
 			local definition = OreConfig.Definitions and OreConfig.Definitions[ore]
 			if definition then
 				addSource(definition.item, "mined from " .. tostring(definition.block) .. " ore")
+			end
+		end
+	end
+	-- Cave decorations that yield an item when mined (the rest drop nothing).
+	if CaveDecorConfig and CaveDecorConfig.Enabled ~= false and CaveDecorConfig.Types then
+		for _, decor in pairs(CaveDecorConfig.Types) do
+			if type(decor.drop) == "string" then
+				addSource(decor.drop, "mined from " .. tostring(decor.block) .. " in caves")
 			end
 		end
 	end

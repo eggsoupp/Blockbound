@@ -1569,7 +1569,6 @@ ItemDefinitions.Amethyst = {
 	classification = "Material",
 	maxStack = 99,
 	sprite = "gem_amethyst",
-	catalogOnly = true,
 }
 
 ItemDefinitions.AncientDust = {
@@ -2325,7 +2324,6 @@ ItemDefinitions.CorruptedShard = {
 	classification = "Material",
 	maxStack = 99,
 	sprite = "shard_corrupt",
-	catalogOnly = true,
 }
 
 ItemDefinitions.CrabShell = {
@@ -2434,7 +2432,6 @@ ItemDefinitions.CrimsonShard = {
 	classification = "Material",
 	maxStack = 99,
 	sprite = "shard_crimson",
-	catalogOnly = true,
 }
 
 ItemDefinitions.CrimsonShield = {
@@ -2911,7 +2908,6 @@ ItemDefinitions.FrostShard = {
 	classification = "Material",
 	maxStack = 99,
 	sprite = "shard_frost",
-	catalogOnly = true,
 }
 
 ItemDefinitions.FrostTome = {
@@ -4598,7 +4594,6 @@ ItemDefinitions.Spores = {
 	classification = "Material",
 	maxStack = 999,
 	sprite = "spores",
-	catalogOnly = true,
 }
 
 ItemDefinitions.Stew = {

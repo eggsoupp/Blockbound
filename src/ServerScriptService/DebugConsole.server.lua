@@ -46,8 +46,10 @@
 	  /bbcaves here       what cave you are in, or where the nearest one is
 	  /tp <biome>         teleport to the nearest dry ground of that biome;
 	                      /tp list for the names
-	  /tp cave [large|small]  teleport to the nearest cave mouth (or nearest
-	                      plan origin when it has no mouth), for a look inside
+	  /tp cave [small|network|large|colossal] [inside]
+	                      teleport to the nearest cave mouth (or above the
+	                      nearest cave's origin when it has no mouth). With
+	                      `inside`, straight to the cave's hub underground
 	  /coords             your position in blocks, relative to spawn
 	  /time [when]        the time of day, in EVERY server (see WorldClock): day,
 	                      night, morning, dusk, noon, midnight, dawn, evening,
@@ -831,12 +833,40 @@ local function onChatted(player, message)
 				reply(player, "tp", "Caves are off in this place.", "bad")
 				return
 			end
-			local category = if words[3] == "large" then "Large" elseif words[3] == "small" then "Small" else nil
+			local category = nil
+			for _, name in ipairs(CaveMap.Categories) do
+				if words[3] == string.lower(name) then
+					category = name
+				end
+			end
 			local plan = CaveMap.findNearestPlan(
 				math.floor(root.Position.X / studs), math.floor(root.Position.Z / studs), 1500, category
 			)
 			if not plan then
 				reply(player, "tp", "No cave plan within 1500 blocks.", "bad")
+			elseif words[3] == "inside" or words[4] == "inside" then
+				-- Straight to the cave's hub, underground: most of the deep ones
+				-- have no mouth. Held still until the ground round it exists,
+				-- or the character would fall through the hole it is put in.
+				local hubCx = math.floor(plan.hubX) // TerrainConfig.ChunkSize
+				local hubCz = math.floor(plan.hubZ) // TerrainConfig.ChunkSize
+				root.Anchored = true
+				root.CFrame = CFrame.new(plan.hubX * studs, (plan.hubY + 0.5) * studs, plan.hubZ * studs)
+				reply(player, "tp", string.format(
+					"Inside %s cave %s (%s), %d blocks down. %d blocks of tunnel, %d mouth(s), %d link(s), %d shaft(s).",
+					string.lower(plan.category), plan.id, plan.biome, math.floor(plan.originY - plan.hubY),
+					math.floor(plan.length), #plan.entrances, plan.links, plan.shafts
+				), "good")
+				task.spawn(function()
+					local deadline = os.clock() + 15
+					while os.clock() < deadline and not TerrainManager:GetChunk(hubCx, hubCz) do
+						task.wait(0.2)
+					end
+					task.wait(0.5)
+					if root.Parent then
+						root.Anchored = false
+					end
+				end)
 			else
 				local x, z = plan.originX, plan.originZ
 				if plan.entrance then
@@ -872,7 +902,7 @@ local function onChatted(player, message)
 			end)
 		else
 			reply(player, "tp", string.format(
-				"Usage: /tp <biome> or /tp cave [large|small]. Biomes: %s",
+				"Usage: /tp <biome> or /tp cave [small|network|large|colossal] [inside]. Biomes: %s",
 				table.concat(BiomeConfig.Order, ", ")
 			), if argument == "list" then nil else "bad")
 		end

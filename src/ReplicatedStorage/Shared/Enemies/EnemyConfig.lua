@@ -3268,6 +3268,24 @@ EnemyConfig.Animations = {
 	},
 }
 
+--[[
+	The Training Dummy: a placed decor piece (Shared.Building.DecorCatalog)
+	that takes hits like an enemy. Never spawned: DecorServer hands each placed
+	one, and SpawnHub its own, to EnemyService.adopt, which registers the model
+	where it stands. Its behaviour (ServerScriptService.Bosses.TrainingDummy)
+	keeps it rooted and fills its health back up instead of letting it die, so
+	it shows a name plate, damage numbers and hit flashes, and drops nothing.
+	`adopted` keeps it out of the cap on live enemies, the spawner (no
+	spawnBiomes) and the bestiary (not in Order); `asset` is the decor id.
+]]
+EnemyConfig.Definitions.TrainingDummy = {
+	asset = "TrainingDummy",
+	displayName = "Training Dummy",
+	adopted = true,
+	behaviour = "TrainingDummy",
+	health = 500,
+}
+
 -- Stable order for anything that lists enemies to a human. The boss last,
 -- because /spawn prints this and it is the one you scroll to on purpose.
 EnemyConfig.Order = {

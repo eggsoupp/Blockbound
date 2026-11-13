@@ -83,6 +83,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local TerrainShared = Shared:WaitForChild("Terrain")
 local TerrainConfig = require(TerrainShared:WaitForChild("TerrainConfig"))
+local PlaceConfig = require(Shared:WaitForChild("PlaceConfig"))
 local TerrainGrid = require(TerrainShared:WaitForChild("TerrainGrid"))
 local StructureRegistry = require(TerrainShared:WaitForChild("StructureRegistry"))
 local OreRegistry = require(TerrainShared:WaitForChild("OreRegistry"))
@@ -217,7 +218,15 @@ function TerrainManager:Init()
 
 		-- The island keeps its spawn clearing and beach free of trees; the
 		-- open world keeps structures off ground a cave has hollowed out.
-		allowStructureAt = ChunkBuilder.structureHasSupport,
+		allowStructureAt = function(blockX, blockZ, radius)
+			-- Keep the protected sanctuary and its approaches free of trees/rocks.
+			-- Include structure footprint so neighbouring canopies do not intrude.
+			local clearance = TerrainConfig.SpawnZones.ProtectedBlocks + (radius or 0)
+			if not PlaceConfig.isIsland() and (blockX + .5)^2 + (blockZ + .5)^2 <= clearance^2 then
+				return false
+			end
+			return ChunkBuilder.structureHasSupport(blockX, blockZ, radius)
+		end,
 	})
 
 	BlockParts.warnForMissingTemplates()

@@ -22,7 +22,7 @@
 	ASPECTS (Shared.Abilities.AspectConfig)
 
 	An aspect is a set of abilities. A player uses one at a time, and its
-	abilities sit on Z / X / V in the aspect's own order - always, with nothing
+	abilities sit on Z / X / V / F in the aspect's own order - always, with nothing
 	for the player to rearrange. Using a different aspect REPLACES the active
 	one, and the one it replaced is gone - it does not go back to storage.
 	Keeping a spare copy in storage is how a player keeps the option of

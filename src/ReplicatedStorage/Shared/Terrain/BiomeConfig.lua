@@ -334,7 +334,13 @@ BiomeConfig.DangerRampBlocks = 700
 --                   its own average fit, so a claim out on a joint tail costs
 --                   share nothing
 --  topBlock         block name for the exposed surface layer
---  underBlock       block name for everything beneath it
+--  underBlock       block name for the few layers of soil beneath it
+--  stoneBlock       this biome's own stone: what its ground is made of below
+--                   the soil, down to bedrock, and what its bare ridges, peaks
+--                   and cold shores show. Leave it out and the biome uses
+--                   plain stone (Plains, Swamp, and Snow, which has no stone
+--                   block of its own yet - give it one here when it does).
+--                   Ores generate in every biome's stone (OreRegistry)
 --  structureDensity global multiplier on structures rolled in this biome
 --  danger           0 to 1; see above
 --  variants         optional sub-regions
@@ -529,6 +535,7 @@ BiomeConfig.Definitions = {
 		humidity = 0.20,
 		topBlock = "Sand",
 		underBlock = "Sandstone",
+		stoneBlock = "Sandstone",
 		structureDensity = 0.22,
 		danger = 0.12,
 
@@ -645,6 +652,7 @@ BiomeConfig.Definitions = {
 		humidity = 0.86,
 		topBlock = "HallowedDirt",
 		underBlock = "HallowedStone",
+		stoneBlock = "HallowedStone",
 		structureDensity = 0.40,
 		danger = 0.35,
 
@@ -678,6 +686,7 @@ BiomeConfig.Definitions = {
 		humidity = 0.62,
 		topBlock = "CrimsonDirt",
 		underBlock = "CrimsonStone",
+		stoneBlock = "CrimsonStone",
 		structureDensity = 0.28,
 		danger = 0.40,
 
@@ -716,6 +725,7 @@ BiomeConfig.Definitions = {
 		humidity = 0.76,
 		topBlock = "CorruptedDirt",
 		underBlock = "CorruptedStone",
+		stoneBlock = "CorruptedStone",
 		structureDensity = 0.28,
 		danger = 0.40,
 
@@ -740,6 +750,24 @@ BiomeConfig.Order = { "Plains", "Swamp", "Desert", "Snow", "Hallow", "Crimson", 
 
 -- Used when a lookup somehow fails, and as the default transition buffer.
 BiomeConfig.Fallback = "Plains"
+
+-- The stone a biome's ground is made of, or `default` for a biome that names
+-- none (and for a name that is not a biome at all, such as the Island's).
+function BiomeConfig.stoneFor(biomeName, default)
+	local def = BiomeConfig.Definitions[biomeName]
+	return (def and def.stoneBlock) or default
+end
+
+-- Every biome-specific stone block name, as a set.
+function BiomeConfig.stoneBlocks()
+	local set = {}
+	for _, def in pairs(BiomeConfig.Definitions) do
+		if def.stoneBlock then
+			set[def.stoneBlock] = true
+		end
+	end
+	return set
+end
 
 -- ===========================================================================
 -- COMPATIBILITY  (which biomes may not touch)
@@ -882,6 +910,10 @@ function BiomeConfig.validate()
 		assert(
 			type(def.topBlock) == "string" and type(def.underBlock) == "string",
 			string.format("[BiomeConfig] '%s' needs topBlock and underBlock names", name)
+		)
+		assert(
+			def.stoneBlock == nil or (type(def.stoneBlock) == "string" and def.stoneBlock ~= ""),
+			string.format("[BiomeConfig] '%s' stoneBlock must be a block name or left out", name)
 		)
 		assert(
 			def.danger == nil

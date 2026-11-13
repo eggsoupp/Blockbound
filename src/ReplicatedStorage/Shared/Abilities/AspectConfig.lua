@@ -10,7 +10,7 @@
 	THE RULES (enforced by AbilityLoadout on the server)
 
 	  - A player has ONE active aspect. Its abilities are the only ones they
-	    can put on Z / X / V and cast.
+	    can put on Z / X / V / F and cast.
 	  - Using another aspect replaces the active one, and the replaced aspect is
 	    gone for good.
 	  - Storage keeps aspects that are not in use: one copy of every aspect for
@@ -22,7 +22,7 @@
 	no aspect, in two, or is not a real ability.
 
 	`abilities` is in slot order: when an aspect becomes active, the first
-	SlotCount of them fill Z / X / V. The tutorial's three starters (Fireball,
+	SlotCount of them fill Z / X / V / F. The tutorial's three starters (Fireball,
 	Wind Burst, Water Blade) are first in their aspects for that reason.
 ]]
 
@@ -74,7 +74,7 @@ AspectConfig.Definitions = {
 	Celestial = {
 		displayName = "Celestial", rarity = "Legendary", order = 9, icon = "moon_charm_gold",
 		blurb = "Starlight and falling comets.",
-		abilities = { "CelestialLance", "AzureComet" },
+		abilities = { "CelestialLance", "AzureComet", "EclipsePrison", "Penumbra" },
 	},
 	Divinity = {
 		displayName = "Divinity", rarity = "Legendary", order = 10, icon = "sun_charm",

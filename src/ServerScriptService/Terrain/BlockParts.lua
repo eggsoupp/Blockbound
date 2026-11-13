@@ -655,6 +655,7 @@ local function warnForMissingTemplates()
 		local def = BiomeConfig.Definitions[biomeName]
 		check(def.topBlock)
 		check(def.underBlock)
+		check(def.stoneBlock)
 	end
 	for _, name in ipairs(OreRegistry.getBlockNames()) do
 		check(name)
@@ -700,7 +701,10 @@ local function isMergeable(blockName)
 
 	local mergeable = true
 	local template = getBlockPartTemplate(blockName)
-	if template then
+	if BlockConfig.isUnmerged(blockName) then
+		-- Declared one Part per block (cave decorations), whatever its shape.
+		mergeable = false
+	elseif template then
 		-- Stretching a wedge, sphere, or authored mesh across a rectangle
 		-- creates slivers and uncovered cells. Only full cubes can tile it.
 		mergeable = template:IsA("Part") and template.Shape == Enum.PartType.Block

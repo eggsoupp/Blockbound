@@ -342,15 +342,11 @@ local function resolveOwner(firstPlayer)
 	local lastError = nil
 
 	while true do
-		local owner, slotOrErr, kind = IslandDirectory.ownerOfServer(serverId)
+		local owner, slotOrErr = IslandDirectory.ownerOfServer(serverId)
 		if owner then
 			return owner, false, slotOrErr
 		end
 		lastError = slotOrErr
-
-		-- True while every question this round got an answer, i.e. the
-		-- directory is readable and simply does not know this server.
-		local answered = kind == "unlisted"
 
 		for _, player in ipairs(Players:GetPlayers()) do
 			for slot = 1, IslandSlotConfig.MaxIslands do
@@ -362,18 +358,21 @@ local function resolveOwner(firstPlayer)
 					))
 					return player.UserId, false, slot
 				elseif confirmed == nil then
-					answered = false
 					lastError = err
 				end
 			end
 		end
 
-		if answered or os.clock() >= deadline then
+		-- A successful read with no record is not final: a new reservation's
+		-- cross-server directory writes may not be visible on this first read.
+		-- Retry missing records just like service errors, without ever trusting
+		-- the first arrival or client teleport data as proof of ownership.
+		if os.clock() >= deadline then
 			break
 		end
 
 		warn("[IslandService] Could not tell whose island this server is yet, asking again:", lastError)
-		task.wait(OWNER_RETRY_DELAY)
+		task.wait(math.min(OWNER_RETRY_DELAY, deadline - os.clock()))
 	end
 
 	warn("[IslandService] Could not tell whose island this server is:", lastError)

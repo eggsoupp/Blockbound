@@ -7,8 +7,8 @@
 	ONE REMOTE, "Trade"
 
 	  client -> server
-	    "request", targetUserId          ask someone to trade
-	    "respond", fromUserId, accept    answer a request
+	    ("request" and "respond" are refused from clients: trades start at the
+	    spawn village's trade booths, see TradeStations)
 	    "offer", kind, name, count       set how many of one thing I am offering
 	                                     (kind "item" | "aspect" | "permanent";
 	                                     0 takes it out)
@@ -537,7 +537,32 @@ local function onMessage(player, action, ...)
 	end
 end
 
-Remote.OnServerEvent:Connect(onMessage)
+-- Trades start only at the spawn village's trade booths (TradeStations), so
+-- a client can no longer ask someone directly. The handlers stay for the
+-- Studio test hook below, which calls onMessage itself.
+local STATION_ONLY = { request = true, respond = true }
+Remote.OnServerEvent:Connect(function(player, action, ...)
+	if STATION_ONLY[action] then
+		return
+	end
+	onMessage(player, action, ...)
+end)
+
+-- A physical station supplies two fresh, server-validated consents. All
+-- inventory, session, confirmation and settlement rules stay in this service.
+task.spawn(function()
+	local hub = workspace:WaitForChild("StarfallHub", 90)
+	if not hub then return end
+	require(script.Parent:WaitForChild("TradeStations")).bind(hub, function(a, b)
+		local problem = obstacle(a, b)
+		if problem then
+			tell(a, problem, "bad")
+			tell(b, "Your partner cannot start a trade right now.", "bad")
+			return
+		end
+		begin(a, b)
+	end, tell)
+end)
 
 --[[
 	STUDIO ONLY: a way to test trading with two players and no hands.

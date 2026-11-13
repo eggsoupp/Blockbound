@@ -41,6 +41,11 @@ local MAX_ATTEMPTS = 3
 
 local store = nil
 
+-- Ownership checks run immediately after a cross-server reservation write.
+-- Cached misses must not hide the record throughout the startup retry loop.
+local freshRead = Instance.new("DataStoreGetOptions")
+freshRead.UseCache = false
+
 -- ownerUserId -> accessCode, so travelling twice in a session asks once.
 local codeCache = {}
 
@@ -157,9 +162,8 @@ end
 	of two very different things went wrong:
 
 	  "error"     the directory could not be read. Worth asking again.
-	  "unlisted"  it was read, and has no entry for this server. Asking again
-	              gives the same answer; IslandDirectory.confirmOwner is the
-	              other way to find out.
+	  "unlisted"  it was read, but has no entry yet. Retry during startup;
+	              IslandDirectory.confirmOwner is the other way to find out.
 ]]
 function IslandDirectory.ownerOfServer(privateServerId)
 	if type(privateServerId) ~= "string" or privateServerId == "" then
@@ -172,7 +176,7 @@ function IslandDirectory.ownerOfServer(privateServerId)
 	end
 
 	local ok, result = withRetry(function()
-		return dataStore:GetAsync("server_" .. privateServerId)
+		return dataStore:GetAsync("server_" .. privateServerId, freshRead)
 	end)
 	if not ok then
 		return nil, result, "error"
@@ -221,7 +225,7 @@ function IslandDirectory.confirmOwner(privateServerId, userId, slot)
 
 	local suffix = if slot > 1 then "_" .. slot else ""
 	local ok, record = withRetry(function()
-		return dataStore:GetAsync("owner_" .. userId .. suffix)
+		return dataStore:GetAsync("owner_" .. userId .. suffix, freshRead)
 	end)
 	if not ok then
 		return nil, record

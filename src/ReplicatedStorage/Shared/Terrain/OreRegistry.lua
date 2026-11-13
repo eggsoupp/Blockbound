@@ -36,6 +36,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TerrainFolder = script.Parent
 local OreConfig = require(TerrainFolder:WaitForChild("OreConfig"))
 local StrataConfig = require(TerrainFolder:WaitForChild("StrataConfig"))
+local BiomeConfig = require(TerrainFolder:WaitForChild("BiomeConfig"))
 local BlockConfig = require(
 	ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Blocks"):WaitForChild("BlockConfig")
 )
@@ -53,9 +54,13 @@ local oreBlock = {}
 local oreMinDepth = {}
 local orePeakDepth = {}
 local oreMaxDepth = {}
-local oreCellChance = {}
+local oreCellChance = {} -- sealed in rock (OreConfig.BuriedDensityMultiplier)
 local oreInvVeinSize = {}
 local oreFillRatio = {}
+-- The same two numbers for rock lining a generated cave (OreConfig.CaveExposure).
+-- Never below the buried ones, so the exposed veins are a superset of them.
+local oreExposedChance = {}
+local oreExposedFill = {}
 local oreHosts = {}
 local oreSalt = {}
 
@@ -103,6 +108,8 @@ local function buildTables()
 	table.clear(oreCellChance)
 	table.clear(oreInvVeinSize)
 	table.clear(oreFillRatio)
+	table.clear(oreExposedChance)
+	table.clear(oreExposedFill)
 	table.clear(oreHosts)
 	table.clear(oreSalt)
 	table.clear(generatedOres)
@@ -126,8 +133,14 @@ local function buildTables()
 		return a < b
 	end)
 
-	local defaultHost = StrataConfig.getDeepBlock()
+	-- Stone, and every biome's own stone: the deep rock is biome-specific
+	-- (BiomeConfig `stoneBlock`), and an ore belongs under all of them.
+	local defaultHosts = BiomeConfig.stoneBlocks()
+	defaultHosts[StrataConfig.getDeepBlock()] = true
+
 	local multiplier = OreConfig.GlobalDensityMultiplier
+	local buried = OreConfig.BuriedDensityMultiplier
+	local exposure = OreConfig.CaveExposure
 
 	local generateOnly = OreConfig.GenerateOnly
 
@@ -161,10 +174,21 @@ local function buildTables()
 		oreMinDepth[oreCount] = def.minDepth
 		orePeakDepth[oreCount] = def.peakDepth
 		oreMaxDepth[oreCount] = def.maxDepth
-		oreCellChance[oreCount] = math.min(1, def.cellChance * multiplier)
+		local reference = def.cellChance * multiplier
+		local buriedChance = math.min(1, reference * buried)
+		oreCellChance[oreCount] = buriedChance
 		oreInvVeinSize[oreCount] = 1 / def.veinSize
 		oreFillRatio[oreCount] = def.fillRatio
-		oreHosts[oreCount] = def.hosts or { [defaultHost] = true }
+		oreHosts[oreCount] = def.hosts or defaultHosts
+
+		if exposure.Enabled then
+			local boost = def.exposedMultiplier or exposure.CellChanceMultiplier
+			oreExposedChance[oreCount] = math.max(buriedChance, math.min(exposure.MaxCellChance, reference * boost))
+			oreExposedFill[oreCount] = math.min(1, def.fillRatio * exposure.FillBonus)
+		else
+			oreExposedChance[oreCount] = buriedChance
+			oreExposedFill[oreCount] = def.fillRatio
+		end
 
 		-- Distinct salt per ore so two ores never share a vein layout. The
 		-- stride of 2 leaves room for the fill hash at salt + 1. Keyed on the
@@ -241,6 +265,58 @@ function OreRegistry.blockAt(blockX, blockY, blockZ, baseBlock, depth)
 				if
 					cellHit < chance
 					and hashUnit(blockX, blockY, blockZ, salt + 1) < oreFillRatio[i]
+				then
+					return oreBlock[i]
+				end
+			end
+		end
+	end
+
+	return nil
+end
+
+--[[
+	The same question for a block that lines a generated cave: its wall, floor
+	or ceiling. Identical bands, hosts, priorities and vein cells; only the bar
+	a vein has to clear is lower (OreConfig.CaveExposure), which is what puts
+	ore on show in caves.
+
+	Asked once per exposed block when a chunk is built (ChunkBuilder), never
+	for rock a player has opened up. A separate function rather than a flag on
+	blockAt, which runs for every drawn block in the world.
+]]
+function OreRegistry.exposedBlockAt(blockX, blockY, blockZ, baseBlock, depth)
+	if not isReady or depth < globalMinDepth or depth > globalMaxDepth then
+		return nil
+	end
+
+	for i = 1, oreCount do
+		if depth >= oreMinDepth[i] and depth <= oreMaxDepth[i] and oreHosts[i][baseBlock] then
+			local chance = oreExposedChance[i]
+
+			local peak = orePeakDepth[i]
+			if depth < peak then
+				local minDepth = oreMinDepth[i]
+				local span = peak - minDepth
+				if span > 0 then
+					chance *= (depth - minDepth) / span
+				end
+			end
+
+			if chance > 0 then
+				local salt = oreSalt[i]
+				local inverseVein = oreInvVeinSize[i]
+
+				local cellHit = hashUnit(
+					math.floor(blockX * inverseVein),
+					math.floor(blockY * inverseVein),
+					math.floor(blockZ * inverseVein),
+					salt
+				)
+
+				if
+					cellHit < chance
+					and hashUnit(blockX, blockY, blockZ, salt + 1) < oreExposedFill[i]
 				then
 					return oreBlock[i]
 				end

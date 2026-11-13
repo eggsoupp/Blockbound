@@ -22,6 +22,7 @@ local Profiler = require(Shared:WaitForChild("Debug"):WaitForChild("Profiler"))
 
 local WorldZones = require(TerrainShared:WaitForChild("WorldZones"))
 local OreRegistry = require(TerrainShared:WaitForChild("OreRegistry"))
+local CaveDecor = require(TerrainShared:WaitForChild("CaveDecor"))
 
 local ChunkData = require(script.Parent:WaitForChild("ChunkData"))
 local OreDepletion = require(script.Parent:WaitForChild("OreDepletion"))
@@ -63,6 +64,7 @@ local openEditZone = EditZones.open
 local isProtected = WorldZones.isProtected
 local isStarter = WorldZones.isStarter
 local isOre = OreRegistry.isOre
+local isCollectibleDecor = CaveDecor.isCollectible
 local STARTER_BUILD_HEIGHT = WorldZones.StarterBuildHeight
 
 -- Ore taken in the open world is remembered so regrown rock does not carry
@@ -367,8 +369,10 @@ local function removeResolvedBlock(data, cell, by, refresh)
 		ChunkEdits.recordRemoval(key, cell, by)
 		markRemoved(data, cell, by)
 
-		-- Generated ore, whoever took it and whether or not it paid out.
-		if TRACK_ORE and isOre(blockName) then
+		-- Generated ore, whoever took it and whether or not it paid out; and
+		-- the cave decorations that yield an item, which are a resource in
+		-- exactly the same way.
+		if TRACK_ORE and (isOre(blockName) or isCollectibleDecor(blockName)) then
 			data.oreGone = OreDepletion.record(key, cell, by)
 		end
 	end

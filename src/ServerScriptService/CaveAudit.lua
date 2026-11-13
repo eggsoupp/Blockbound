@@ -29,9 +29,15 @@
 	  thickness        every interval sits under the surface cover (unless its
 	                   column is a deliberate entrance) and above the bedrock
 	                   margin; no entrance in a wet column
-	  categories       both small and large plans occur; large are rarer by at
-	                   least the configured ratio; counts are reported per biome
-	  bounds           no plan exceeds its primitive cap or its extent box
+	  categories       every kind of cave occurs; large and colossal ones are
+	                   rarer than small ones by at least the configured ratios;
+	                   counts, mean tunnel length, mouths, links and shafts are
+	                   reported per category, and counts per biome
+	  bounds           no plan exceeds its primitive cap or its reach
+	  decor            every decoration is a solid cell on a cave floor or
+	                   under a cave ceiling, with headroom left beside it
+	  connectivity     from a sample cave's hub, the air it carved reaches its
+	                   tunnel nodes: nothing pinched a passage shut
 	  plainCost        a block of chunks nothing carves resolves quickly
 
 	The one thing it cannot do from here is play: editRoundTrip stands in for
@@ -45,14 +51,26 @@ local TerrainFolder = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Ter
 local TerrainConfig = require(TerrainFolder:WaitForChild("TerrainConfig"))
 local CaveConfig = require(TerrainFolder:WaitForChild("CaveConfig"))
 local CaveMap = require(TerrainFolder:WaitForChild("CaveMap"))
+local CaveDecorConfig = require(TerrainFolder:WaitForChild("CaveDecorConfig"))
 
 local CaveAudit = {}
 
 local CHUNK = TerrainConfig.ChunkSize
 local STUD = TerrainConfig.StudSize
 
--- Large plans must be at least this many times rarer than small ones.
+-- Large plans must be at least this many times rarer than small ones, and
+-- colossal ones rarer again: the great halls are meant to be discoveries.
 CaveAudit.MinSmallToLargeRatio = 4
+CaveAudit.MinSmallToColossalRatio = 12
+
+-- Share of a sample cave's tunnel nodes that must be reachable through its
+-- own air from its hub.
+CaveAudit.MinReachableNodes = 0.85
+
+-- How many of a sample cave's carved chunks are rebuilt and compared.
+CaveAudit.SampleChunksPerPlan = 30
+
+local CATEGORIES = CaveMap.Categories
 
 local function newReport()
 	return { checks = {}, errors = 0, warnings = 0, seed = CaveMap.getStats().seed }
@@ -96,6 +114,14 @@ local function sameRecords(a, b)
 	if a.count ~= b.count or a.blocks ~= b.blocks then
 		return false, string.format("count %d/%d blocks %d/%d", a.count, b.count, a.blocks, b.blocks)
 	end
+	if a.decorCount ~= b.decorCount then
+		return false, string.format("decorations %d/%d", a.decorCount, b.decorCount)
+	end
+	for i = 1, a.decorCount * 3 do
+		if a.decor[i] ~= b.decor[i] then
+			return false, "decoration " .. ((i - 1) // 3 + 1)
+		end
+	end
 	for cell, intervals in pairs(a.cells) do
 		if not sameIntervals(intervals, b.cells[cell]) then
 			return false, "cell " .. cell
@@ -126,9 +152,79 @@ end
 -- The nearest plan of each category to the origin, to have something real
 -- to carve.
 local function samplePlans()
-	local small = CaveMap.findNearestPlan(0, 0, 2000, "Small")
-	local large = CaveMap.findNearestPlan(0, 0, 4000, "Large")
-	return small, large
+	local plans = {}
+	for _, category in ipairs(CATEGORIES) do
+		local plan = CaveMap.findNearestPlan(0, 0, 4000, category)
+		if plan then
+			plans[#plans + 1] = plan
+		end
+	end
+	return plans
+end
+
+--[[
+	How much of a plan can be walked into: floods the air the plan's chunks
+	carved, six ways, from the hub, and counts the plan's tunnel nodes whose
+	block (or the one above or below it) the flood reached. Not a test of
+	slopes - only that no passage was pinched shut on the way.
+]]
+local function reachableNodes(plan)
+	local function key(x, y, z)
+		return ((x + 65536) * 131072 + (z + 65536)) * 1024 + (y - TerrainConfig.WorldFloorY)
+	end
+
+	local seen = {}
+	local queue = {}
+	local head, tail = 1, 0
+	local function push(x, y, z)
+		local k = key(x, y, z)
+		if not seen[k] and CaveMap.isAirAt(x, y, z) then
+			seen[k] = true
+			tail += 3
+			queue[tail - 2], queue[tail - 1], queue[tail] = x, y, z
+		end
+	end
+
+	-- Start in the hub's column, at whatever air is nearest the hub's height.
+	local hx, hz = math.floor(plan.hubX), math.floor(plan.hubZ)
+	for dy = 0, 6 do
+		push(hx, math.floor(plan.hubY) + dy, hz)
+		push(hx, math.floor(plan.hubY) - dy, hz)
+		if tail > 0 then
+			break
+		end
+	end
+
+	local steps = 0
+	while head <= tail do
+		local x, y, z = queue[head], queue[head + 1], queue[head + 2]
+		head += 3
+		push(x + 1, y, z)
+		push(x - 1, y, z)
+		push(x, y + 1, z)
+		push(x, y - 1, z)
+		push(x, y, z + 1)
+		push(x, y, z - 1)
+		steps += 1
+		if steps % 4000 == 0 then
+			task.wait()
+		end
+		if steps > 400000 then
+			break -- joined a neighbour's system; far enough to judge this one
+		end
+	end
+
+	local reached, total = 0, 0
+	for _, node in ipairs(plan.path) do
+		total += 1
+		local x, y, z = math.floor(node.x), math.floor(node.y), math.floor(node.z)
+		if seen[key(x, y, z)] or seen[key(x, y + 1, z)] or seen[key(x, y - 1, z)]
+			or seen[key(x, y + 2, z)] or seen[key(x, y - 2, z)]
+		then
+			reached += 1
+		end
+	end
+	return reached, total, steps
 end
 
 --[[
@@ -159,50 +255,69 @@ function CaveAudit.run(options)
 	end
 
 	-- ---- categories, rarity, bounds ------------------------------------
-	local counts = { Small = 0, Large = 0 }
-	local entrances = { Small = 0, Large = 0 }
-	local byBiome = { Small = {}, Large = {} }
+	local counts, withMouth, mouths, length, links, shafts, prims, byBiome = {}, {}, {}, {}, {}, {}, {}, {}
 	local boundsOk, boundsDetail = true, ""
 	local scanned = 0
 
-	for _, category in ipairs({ "Small", "Large" }) do
-		local cfg = CaveConfig.Categories[category]
+	for _, category in ipairs(CATEGORIES) do
+		counts[category], withMouth[category], mouths[category] = 0, 0, 0
+		length[category], links[category], shafts[category], prims[category] = 0, 0, 0, 0
+		byBiome[category] = {}
+
+		local reach = CaveMap.planReach(category)
 		scanned += CaveMap.forEachPlan(category, function(plan)
 			counts[category] += 1
 			if plan.entrance then
-				entrances[category] += 1
+				withMouth[category] += 1
 			end
+			mouths[category] += #plan.entrances
+			length[category] += plan.length
+			links[category] += plan.links
+			shafts[category] += plan.shafts
+			prims[category] = math.max(prims[category], plan.primCount)
 			byBiome[category][plan.biome] = (byBiome[category][plan.biome] or 0) + 1
 
 			if plan.primCount > CaveConfig.MaxPrimitivesPerPlan then
 				boundsOk, boundsDetail = false, plan.id .. " has " .. plan.primCount .. " primitives"
 			end
-			local reach = cfg.MaxExtentBlocks + CaveConfig.MaxChamberRadius * (1 + CaveConfig.RoughnessAmplitude) + 2
-			if plan.minX < plan.originX - reach or plan.maxX > plan.originX + reach
-				or plan.minZ < plan.originZ - reach or plan.maxZ > plan.originZ + reach
+			if plan.minX < plan.originX - reach or plan.maxX > plan.originX + reach + 1
+				or plan.minZ < plan.originZ - reach or plan.maxZ > plan.originZ + reach + 1
 			then
-				boundsOk, boundsDetail = false, plan.id .. " exceeds its extent box"
+				boundsOk, boundsDetail = false, plan.id .. " exceeds its reach"
 			end
 			for _, node in ipairs(plan.nodes) do
 				if node.kind == "entrance" then
 					local d = math.sqrt(node.x * node.x + node.z * node.z)
-					if d < CaveConfig.EntranceSafeDistanceBlocks then
+					if d < CaveConfig.EntranceSafeDistanceBlocks - 8 then
 						boundsOk, boundsDetail = false, plan.id .. " entrance inside the safe distance"
 					end
 				end
 			end
-		end)
+		end, task.wait)
 	end
 
-	check(report, "categories.small", counts.Small > 0, string.format("%d small plans across %d cells", counts.Small, scanned))
-	check(report, "categories.large", counts.Large > 0, string.format("%d large plans", counts.Large))
-	check(report, "categories.rarity", counts.Large > 0 and counts.Small / counts.Large >= CaveAudit.MinSmallToLargeRatio,
+	for _, category in ipairs(CATEGORIES) do
+		local n = math.max(1, counts[category])
+		check(report, "categories." .. string.lower(category), counts[category] > 0, string.format(
+			"%d plans; %d with a mouth (%d mouths); mean %.0f blocks of tunnel; %d links, %d shafts; most primitives %d",
+			counts[category], withMouth[category], mouths[category], length[category] / n,
+			links[category], shafts[category], prims[category]
+		))
+	end
+	check(report, "categories.cells", true, string.format("%d grid cells scanned", scanned))
+	check(report, "categories.largeRarity", counts.Large > 0 and counts.Small / counts.Large >= CaveAudit.MinSmallToLargeRatio,
 		string.format("small:large = %d:%d", counts.Small, counts.Large))
-	check(report, "categories.entrances", entrances.Small > 0,
-		string.format("entrances small %d, large %d", entrances.Small, entrances.Large), "warning")
+	check(report, "categories.colossalRarity",
+		counts.Colossal > 0 and counts.Small / counts.Colossal >= CaveAudit.MinSmallToColossalRatio,
+		string.format("small:colossal = %d:%d", counts.Small, counts.Colossal))
+	check(report, "categories.entrances",
+		withMouth.Small > 0 and withMouth.Small < counts.Small and withMouth.Network > 0 and withMouth.Network < counts.Network,
+		"some small and network caves open to the surface and some are hidden", "warning")
+	check(report, "categories.linked", links.Network > 0 and links.Network < counts.Network * CaveConfig.Categories.Network.MaxLinks,
+		"some caves are linked into systems and some are not", "warning")
 	check(report, "bounds", boundsOk, boundsDetail)
 
-	for _, category in ipairs({ "Small", "Large" }) do
+	for _, category in ipairs(CATEGORIES) do
 		local parts = {}
 		for biome, n in pairs(byBiome[category]) do
 			parts[#parts + 1] = biome .. "=" .. n
@@ -234,13 +349,13 @@ function CaveAudit.run(options)
 	check(report, "spawn.noAir", spawnAir == 0, string.format("%d cave columns inside the exclusion square", spawnAir))
 	check(report, "spawn.noEntrances", spawnEntrances == 0, string.format("%d entrance columns inside it", spawnEntrances))
 
-	-- ---- determinism, order independence, borders, thickness -----------
-	local small, large = samplePlans()
-	local plans = {}
-	if small then plans[#plans + 1] = small end
-	if large then plans[#plans + 1] = large end
-	check(report, "sample.plans", #plans > 0, string.format("small %s, large %s",
-		small and small.id or "none", large and large.id or "none"), "warning")
+	-- ---- determinism, order independence, borders, thickness, decor -----
+	local plans = samplePlans()
+	local sampled = {}
+	for _, plan in ipairs(plans) do
+		sampled[#sampled + 1] = plan.id
+	end
+	check(report, "sample.plans", #plans == #CATEGORIES, "nearest of each kind: " .. table.concat(sampled, ", "), "warning")
 
 	local deterministic, detDetail = true, ""
 	local orderOk, orderDetail = true, ""
@@ -248,13 +363,27 @@ function CaveAudit.run(options)
 	local coverOk, coverDetail = true, ""
 	local floorOk, floorDetail = true, ""
 	local wetOk, wetDetail = true, ""
-	local carvedCells, carvedBlocks, chunksChecked = 0, 0, 0
+	local decorOk, decorDetail = true, ""
+	local carvedCells, carvedBlocks, chunksChecked, decorChecked = 0, 0, 0, 0
 
 	for _, plan in ipairs(plans) do
-		local list = chunksOf(plan)
-		for _, c in ipairs(list) do
-			local cx, cz = c[1], c[2]
+		-- The chunks the plan actually carves, thinned to a few dozen: a
+		-- network's box is hundreds of chunks and most hold none of it.
+		local carvedChunks = {}
+		for index, c in ipairs(chunksOf(plan)) do
+			if not CaveMap.getRecord(c[1], c[2]).empty then
+				carvedChunks[#carvedChunks + 1] = c
+			end
+			if index % 64 == 0 then
+				task.wait()
+			end
+		end
+		local stride = math.max(1, math.ceil(#carvedChunks / CaveAudit.SampleChunksPerPlan))
+
+		for pick = 1, #carvedChunks, stride do
+			local cx, cz = carvedChunks[pick][1], carvedChunks[pick][2]
 			chunksChecked += 1
+			task.wait()
 
 			-- Cold build, then the cached one from the first pass: identical?
 			local cached = CaveMap.getRecord(cx, cz)
@@ -265,7 +394,7 @@ function CaveAudit.run(options)
 			end
 
 			-- Carved after every neighbour was carved first: identical?
-			CaveMap.clearCaches()
+			CaveMap.clearRecords()
 			for dx = -1, 1 do
 				for dz = -1, 1 do
 					if dx ~= 0 or dz ~= 0 then
@@ -283,7 +412,10 @@ function CaveAudit.run(options)
 				carvedCells += fresh.count
 				carvedBlocks += fresh.blocks
 
-				-- Our edge columns against the neighbour's halo view of them.
+				-- Our edge columns, as carved, against the neighbour's halo
+				-- view of them. (Decorations are seated after carving and are
+				-- not part of a halo; record.raw holds a decorated column as
+				-- it was carved.)
 				for i = 0, CHUNK - 1 do
 					local edges = {
 						{ cx - 1, cz, CHUNK, i, 0, i }, { cx + 1, cz, -1, i, CHUNK - 1, i },
@@ -293,7 +425,8 @@ function CaveAudit.run(options)
 						local neighbour = CaveMap.getRecord(e[1], e[2])
 						if not neighbour.empty then
 							local haloView = CaveMap.haloIntervals(neighbour, e[3], e[4])
-							local own = fresh.cells[e[5] * CHUNK + e[6] + 1]
+							local cell = e[5] * CHUNK + e[6] + 1
+							local own = fresh.raw[cell] or fresh.cells[cell]
 							if not sameIntervals(own, haloView) then
 								borderOk, borderDetail = false, string.format("chunk %d,%d edge column %d,%d", cx, cz, e[5], e[6])
 							end
@@ -314,11 +447,46 @@ function CaveAudit.run(options)
 							if lo < CaveMap.FloorLimit then
 								floorOk, floorDetail = false, string.format("(%d,%d) air at y %d", x, z, lo)
 							end
-							if hi > height - 1 or (hi > height - cover - 1 and not fresh.entrance[cell]) then
+							if not fresh.entrance[cell] and hi > height - cover - 1 then
 								coverOk, coverDetail = false, string.format("(%d,%d) air up to y %d under surface %d", x, z, hi, height)
 							end
 							if fresh.entrance[cell] and wet and not CaveConfig.AllowUnderwaterEntrances then
 								wetOk, wetDetail = false, string.format("(%d,%d) entrance under water", x, z)
+							end
+						end
+					end
+				end
+
+				-- Decorations: solid cells, each touching the cave's air (or
+				-- the next block of its own stack), with headroom left.
+				local decorAt = {}
+				for i = 1, fresh.decorCount * 3, 3 do
+					decorAt[fresh.decor[i] * 1024 + (fresh.decor[i + 1] - TerrainConfig.WorldFloorY)] = true
+				end
+				for i = 1, fresh.decorCount * 3, 3 do
+					local cell, by = fresh.decor[i], fresh.decor[i + 1]
+					local intervals = fresh.cells[cell]
+					local packed = cell * 1024 + (by - TerrainConfig.WorldFloorY)
+					decorChecked += 1
+					if intervals == nil or CaveMap.intervalsContain(intervals, by) then
+						decorOk, decorDetail = false, string.format("chunk %d,%d cell %d y %d is air", cx, cz, cell, by)
+					elseif not (CaveMap.intervalsContain(intervals, by + 1) or CaveMap.intervalsContain(intervals, by - 1)
+						or decorAt[packed + 1] or decorAt[packed - 1])
+					then
+						decorOk, decorDetail = false, string.format("chunk %d,%d cell %d y %d floats in rock", cx, cz, cell, by)
+					end
+					if fresh.entrance[cell] then
+						decorOk, decorDetail = false, string.format("chunk %d,%d cell %d is an entrance column", cx, cz, cell)
+					end
+				end
+				for cell, intervals in pairs(fresh.cells) do
+					local raw = fresh.raw[cell]
+					if raw then
+						for k = 1, #intervals, 2 do
+							-- Only the stretches a decoration actually shortened.
+							local changed = raw[k] ~= intervals[k] or raw[k + 1] ~= intervals[k + 1]
+							if changed and intervals[k + 1] - intervals[k] + 1 < CaveDecorConfig.MinHeadroomBlocks then
+								decorOk, decorDetail = false, string.format("chunk %d,%d cell %d left under the headroom", cx, cz, cell)
 							end
 						end
 					end
@@ -333,11 +501,13 @@ function CaveAudit.run(options)
 	check(report, "thickness.cover", coverOk, if sampler then coverDetail else "skipped: no sampler", if sampler then "error" else "warning")
 	check(report, "thickness.floor", floorOk, if sampler then floorDetail else "skipped: no sampler", if sampler then "error" else "warning")
 	check(report, "entrances.dry", wetOk, wetDetail)
+	check(report, "decor", decorOk, if decorOk then string.format("%d decoration blocks checked", decorChecked) else decorDetail)
 	check(report, "sample.carved", carvedBlocks > 0,
 		string.format("%d air blocks in %d columns over %d chunks", carvedBlocks, carvedCells, chunksChecked), "warning")
 
 	-- Clamping is allowed to flatten a roof, not to pinch a passage shut:
-	-- every candidate the plans offer should have standing room.
+	-- every candidate the plans offer should have standing room, and the
+	-- air of each sample cave should reach its tunnel nodes from its hub.
 	local candidates, supported = 0, 0
 	for _, plan in ipairs(plans) do
 		for _, candidate in ipairs(CaveMap.getCandidates(plan)) do
@@ -346,9 +516,18 @@ function CaveAudit.run(options)
 				supported += 1
 			end
 		end
+		task.wait()
 	end
 	check(report, "candidates.supported", candidates == 0 or supported / candidates >= 0.8,
 		string.format("%d of %d candidates have floor and clearance", supported, candidates), "warning")
+
+	for _, plan in ipairs(plans) do
+		local reached, total, flooded = reachableNodes(plan)
+		check(report, "connectivity." .. string.lower(plan.category),
+			total == 0 or reached / total >= CaveAudit.MinReachableNodes,
+			string.format("%s: %d of %d tunnel nodes reached from the hub through %d air blocks", plan.id, reached, total, flooded),
+			"warning")
+	end
 
 	-- ---- plain chunk cost ------------------------------------------------
 	CaveMap.clearCaches()

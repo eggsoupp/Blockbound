@@ -51,6 +51,7 @@ local Feedback = require(Shared.UI:WaitForChild("Feedback"))
 local WorldFeedback = require(Shared.UI:WaitForChild("WorldFeedback"))
 local TerrainConfig = require(Shared:WaitForChild("Terrain"):WaitForChild("TerrainConfig"))
 local OreConfig = require(Shared.Terrain:WaitForChild("OreConfig"))
+local CaveDecorConfig = require(Shared.Terrain:WaitForChild("CaveDecorConfig"))
 local BlockConfig = require(Shared:WaitForChild("Blocks"):WaitForChild("BlockConfig"))
 local BreakOverlay = require(Shared.Blocks:WaitForChild("BreakOverlay"))
 local ToolConfig = require(Shared:WaitForChild("Tools"):WaitForChild("ToolConfig"))
@@ -69,6 +70,14 @@ local STUD_SIZE = TerrainConfig.StudSize
 ]]
 for _, ore in pairs(OreConfig.Definitions) do
 	BlockConfig.registerBlock(ore.block, { power = ore.power })
+end
+
+-- The same for cave decorations, a few of which ask for more than a wooden
+-- pickaxe (CaveDecor registers them on the server).
+for _, decor in pairs(CaveDecorConfig.Types) do
+	if decor.power then
+		BlockConfig.registerBlock(decor.block, { power = decor.power })
+	end
 end
 
 -- MiningServer's MAX_MINE_DISTANCE, measured the same way: root to hit point.

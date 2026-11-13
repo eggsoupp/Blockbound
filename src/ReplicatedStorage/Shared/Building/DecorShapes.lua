@@ -255,8 +255,8 @@ return {
 		size = { 4, 4, 4 },
 	},
 	Well = {
-		cells = { 1, 1, 1 },
-		size = { 4, 4, 4 },
+		cells = { 2, 2, 2 },
+		size = { 8, 8, 8 },
 	},
 	WeaponRack = {
 		cells = { 1, 1, 1 },

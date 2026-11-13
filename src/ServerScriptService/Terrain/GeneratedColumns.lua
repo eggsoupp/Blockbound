@@ -51,6 +51,67 @@ GeneratedColumns.source = ColumnSource
 local CAVES_ENABLED = CaveConfig.Enabled and (CaveConfig.EnabledOnIsland or not PlaceConfig.isIsland())
 GeneratedColumns.cavesEnabled = CAVES_ENABLED
 
+--[[
+	THE VILLAGE PLATEAU
+
+	The open world's spawn village stands on level ground: inside
+	SpawnZones.VillageFlatBlocks every column is generated at one height, and
+	over the next VillageBlendBlocks the ground eases back to its own height
+	in whole-block terraces. The height is the median of the natural ground
+	inside the flat circle, so the plateau sits in the land rather than on a
+	mound or in a pit. Applied here, to the column source's answer, so every
+	reader of generated ground (chunks, GetSurfaceY, structures) agrees.
+	Water is dried out inside the ring. Caves never reach this far in
+	(CaveConfig.SpawnExclusionBlocks). Islands have no village.
+]]
+local VILLAGE_ENABLED = not PlaceConfig.isIsland()
+local VILLAGE_FLAT = TerrainConfig.SpawnZones.VillageFlatBlocks
+local VILLAGE_OUTER = VILLAGE_FLAT + TerrainConfig.SpawnZones.VillageBlendBlocks
+local VILLAGE_OUTER_SQUARED = VILLAGE_OUTER * VILLAGE_OUTER
+local villageHeight = nil
+
+local function plateauHeight()
+	if villageHeight then
+		return villageHeight
+	end
+	local heights = {}
+	for bx = -VILLAGE_FLAT, VILLAGE_FLAT - 1 do
+		for bz = -VILLAGE_FLAT, VILLAGE_FLAT - 1 do
+			local x, z = bx + 0.5, bz + 0.5
+			if x * x + z * z <= VILLAGE_FLAT * VILLAGE_FLAT then
+				table.insert(heights, (ColumnSource.sampleColumn(bx, bz)))
+			end
+		end
+	end
+	table.sort(heights)
+	villageHeight = heights[math.ceil(#heights / 2)]
+	return villageHeight
+end
+
+-- Height and water of a column after the plateau, or the inputs unchanged.
+-- Only called on a cache miss, so its cost is per column, not per query.
+local function villageColumn(blockX, blockZ, height, water)
+	local x, z = blockX + 0.5, blockZ + 0.5
+	local d2 = x * x + z * z
+	if d2 >= VILLAGE_OUTER_SQUARED then
+		return height, water
+	end
+	local target = plateauHeight()
+	local d = math.sqrt(d2)
+	if d <= VILLAGE_FLAT then
+		return target, math.min(water, target)
+	end
+	local t = (d - VILLAGE_FLAT) / (VILLAGE_OUTER - VILLAGE_FLAT)
+	local ease = t * t * (3 - 2 * t)
+	local eased = math.floor(target + (height - target) * ease + 0.5)
+	return eased, math.min(water, eased)
+end
+
+-- The plateau's ground height in blocks (open world only).
+function GeneratedColumns.villageHeight()
+	return if VILLAGE_ENABLED then plateauHeight() else nil
+end
+
 -- ---------------------------------------------------------------------------
 -- Generated column cache
 -- ---------------------------------------------------------------------------
@@ -146,6 +207,9 @@ local function getGeneratedColumn(blockX, blockZ)
 
 	local biome, top, under, variant, water
 	height, biome, top, under, variant, water = ColumnSource.sampleColumn(blockX, blockZ)
+	if VILLAGE_ENABLED then
+		height, water = villageColumn(blockX, blockZ, height, water)
+	end
 
 	--[[
 		A dry column reports its water at or below its ground (BiomeMap uses 0).

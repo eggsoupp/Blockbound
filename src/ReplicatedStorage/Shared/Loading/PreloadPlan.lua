@@ -58,6 +58,8 @@ PreloadPlan.Budgets = {
 PreloadPlan.AbilitySources = {
 	StarterVFX = { modules = { "StarterParticles", "CataclysmParticles" }, folders = { "AbilityVFXLibrary" } },
 	CometVFX = { folders = { "AbilityVFXLibrary" } },
+	EclipseVFX = { modules = { "EclipseParticles" }, folders = { "AbilityVFXLibrary" } },
+	PenumbraVFX = { modules = { "EclipseParticles" }, folders = { "AbilityVFXLibrary" } },
 	AbyssVFX = { modules = { "AbyssParticles" }, folders = { "AbilityVFXLibrary" } },
 	ThunderVFX = { folders = { "AbilityVFXLibrary" } },
 	LegendaryVFX = { folders = { "LegendaryAbilitySources", "LegendaryExplosionSources", "ReferenceAbilitySources" } },

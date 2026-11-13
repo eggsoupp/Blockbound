@@ -64,21 +64,47 @@ piece('Scarecrow', sub {
 	box(-2, 15, -2, 1, 15, 1, tex('straw', 0.8));
 });
 
+# 2x2 cells, 2 high: a round cobblestone well with a brick rim, a roller
+# and bucket on two posts, and a little gabled roof.
 piece('Well', sub {
+	cells(2, 2, 2);
+	my ($cx, $cz) = (7.5, -8.5);
 	my $cob = tex('cobblestone');
-	box(-8, 0, -8, 7, 6, 7, $cob);
-	cutting(sub { box(-5, 2, -5, 4, 6, 4, 'x') });
-	box(-5, 2, -5, 4, 3, 4, tex('water'));
-	my $dark = tex('oak_plank', 0.62);
-	for my $x (-7, 5) { box($x, 7, -1, $x + 1, 12, 0, $dark) }
-	box(-6, 11, -1, 5, 11, 0, tex('bark'));
-	box(-1, 8, -1, 0, 10, 0, tex('straw'));
-	box(-2, 7, -2, 1, 8, 1, tex('oak_plank'));
-	my $roof = tex('oak_plank', 0.55);
-	for my $i (0 .. 3) {
-		box(-8, 12 + $i, -8 + $i * 2, 7, 12 + $i, -7 + $i * 2, $roof);
-		box(-8, 12 + $i, 6 - $i * 2, 7, 12 + $i, 7 - $i * 2, $roof);
+	my $bricks = tex('stone_bricks');
+	my $dark = tex('oak_plank', 0.6);
+	my $bark = tex('bark');
+	my $iron = tex('iron_dark');
+	my $rope = solid(rope => 150, 116, 70);
+
+	# Water deep in the shaft, the round wall, the brick rim.
+	cyl('y', $cx, $cz, 8, 0, 3, tex('water', 0.7));
+	cyl('y', $cx, $cz, 8, 4, 4, tex('water'));
+	cyl('y', $cx, $cz, 12.5, 0, 8, $cob, inner => 8.5);
+	cyl('y', $cx, $cz, 13.2, 9, 10, $bricks, inner => 8.2);
+	# Moss at the foot of the wall.
+	painting(sub { cyl('y', $cx, $cz, 12.5, 0, 1, sub { VoxLib::noise(@_, 4) < 0.45 ? tex('grass_top', 0.8)->(@_) : undef }, inner => 11) });
+
+	# Posts, roller, crank, rope and bucket.
+	for my $x (-3, 17) {
+		box($x, 9, $cz - 1.5, $x + 1, 24, $cz + 1.5, $dark);
 	}
+	cyl('x', $cz, 21, 1.5, -2, 17, $bark);
+	box(19, 21, -10, 19, 21, -10, $iron);
+	box(19, 18, -10, 19, 21, -10, $iron);
+	box(20, 18, -10, 21, 18, -10, $iron);
+	box(7, 13, -9, 7, 20, -9, $rope);
+	cyl('y', $cx, $cz, 2.2, 9, 12, tex('oak_plank', 0.85));
+	cyl('y', $cx, $cz, 2.4, 10, 10, $iron);
+	box(6, 13, -9, 9, 13, -9, $iron);
+
+	# The roof, gabled along X.
+	my $roof = tex('oak_plank', 0.5);
+	for my $z (-24 .. 7) {
+		my $d = abs($z - $cz);
+		my $y = 31 - int($d * 0.55);
+		box(-6, $y - 1, $z, 21, $y, $z, ($y % 3) ? $roof : tex('oak_plank', 0.42));
+	}
+	box(-6, 31, $cz - 1, 21, 31, $cz + 1, $dark);
 });
 
 piece('WeaponRack', sub {
